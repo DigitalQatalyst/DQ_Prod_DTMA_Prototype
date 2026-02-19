@@ -1,0 +1,304 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import { Button } from "@/components/ui/button";
+import { Shield, HelpCircle } from "lucide-react";
+
+interface VerificationData {
+  accreditationStatus: string;
+  accreditationBody: string;
+  accreditationDocument: File | null;
+  institutionalBio: string;
+  areaOfFocus: string;
+  yearsOfOperation: string;
+}
+
+const InstitutionVerification = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<"accreditation" | "eligibility">(
+    "accreditation"
+  );
+  const [verificationData, setVerificationData] = useState<VerificationData>({
+    accreditationStatus: "",
+    accreditationBody: "",
+    accreditationDocument: null,
+    institutionalBio: "",
+    areaOfFocus: "",
+    yearsOfOperation: "",
+  });
+
+  const accreditationStatuses = [
+    "Fully Accredited",
+    "Provisionally Accredited",
+    "In Process",
+    "Not Accredited",
+  ];
+
+  const yearsOfOperationLevels = [
+    "Less than 1 year",
+    "1-3 years",
+    "3-5 years",
+    "5-10 years",
+    "10+ years",
+  ];
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setVerificationData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      setVerificationData((prev) => ({
+        ...prev,
+        accreditationDocument: e.target.files![0],
+      }));
+    }
+  };
+
+  const handleSubmitVerification = () => {
+    console.log("Institution verification submitted:", verificationData);
+    // After verification is submitted, redirect to pending verification page
+    navigate("/provider-verification-pending");
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+
+      <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-3xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                <Shield className="w-8 h-8 text-primary" />
+              </div>
+              <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
+                Verify your institution to publish on BROWZ Beauty Academy
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Help us ensure quality by confirming your institutional credentials. This quick step protects
+                learners and maintains trust on our platform.
+              </p>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex gap-4 mb-8 border-b border-border">
+              <button
+                onClick={() => setActiveTab("accreditation")}
+                className={`pb-4 px-4 font-medium transition-colors ${
+                  activeTab === "accreditation"
+                    ? "text-primary border-b-2 border-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Accreditation
+              </button>
+              <button
+                onClick={() => setActiveTab("eligibility")}
+                className={`pb-4 px-4 font-medium transition-colors ${
+                  activeTab === "eligibility"
+                    ? "text-primary border-b-2 border-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Institution Details
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="bg-white rounded-2xl border border-border p-8 lg:p-12">
+              {activeTab === "accreditation" && (
+                <div>
+                  <h2 className="text-2xl font-semibold text-foreground mb-2">
+                    Accreditation Proof
+                  </h2>
+                  <p className="text-muted-foreground mb-8">
+                    Provide documentation of your institutional accreditation
+                  </p>
+
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Accreditation Status
+                      </label>
+                      <select
+                        name="accreditationStatus"
+                        value={verificationData.accreditationStatus}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="">Select accreditation status...</option>
+                        {accreditationStatuses.map((status) => (
+                          <option key={status} value={status}>
+                            {status}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Accrediting Body
+                      </label>
+                      <input
+                        type="text"
+                        name="accreditationBody"
+                        value={verificationData.accreditationBody}
+                        onChange={handleInputChange}
+                        placeholder="e.g., ACICS, SACSCOC, etc."
+                        className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <div className="flex gap-3">
+                        <HelpCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <h4 className="font-semibold text-blue-900 mb-1">
+                            Why we verify institutions
+                          </h4>
+                          <p className="text-sm text-blue-800">
+                            Verification helps us maintain quality standards and build trust with
+                            learners. Your information is reviewed by our team and kept confidential.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Upload Accreditation Document
+                      </label>
+                      <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
+                        <input
+                          type="file"
+                          onChange={handleFileChange}
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          className="hidden"
+                          id="document-upload"
+                        />
+                        <label htmlFor="document-upload" className="cursor-pointer">
+                          <div className="text-4xl mb-2">📄</div>
+                          <p className="text-sm font-medium text-foreground mb-1">
+                            {verificationData.accreditationDocument
+                              ? verificationData.accreditationDocument.name
+                              : "Click to upload or drag and drop"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            PDF, JPG, or PNG (Max 5MB)
+                          </p>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === "eligibility" && (
+                <div>
+                  <h2 className="text-2xl font-semibold text-foreground mb-2">
+                    Institution Details
+                  </h2>
+                  <p className="text-muted-foreground mb-8">
+                    Tell us about your institution and its educational focus
+                  </p>
+
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Institutional Bio *
+                      </label>
+                      <textarea
+                        name="institutionalBio"
+                        value={verificationData.institutionalBio}
+                        onChange={handleInputChange}
+                        placeholder="Describe your institution, its mission, programs, and what makes your courses valuable..."
+                        rows={5}
+                        className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Include your history, educational philosophy, and any notable achievements
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Primary Area of Focus
+                      </label>
+                      <input
+                        type="text"
+                        name="areaOfFocus"
+                        value={verificationData.areaOfFocus}
+                        onChange={handleInputChange}
+                        placeholder="e.g., Beauty Education, Professional Development, etc."
+                        className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Years of Operation
+                      </label>
+                      <select
+                        name="yearsOfOperation"
+                        value={verificationData.yearsOfOperation}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <option value="">Select years of operation...</option>
+                        {yearsOfOperationLevels.map((level) => (
+                          <option key={level} value={level}>
+                            {level}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation */}
+              <div className="flex gap-4 mt-12">
+                <Button variant="outline" size="lg" className="flex-1">
+                  Back
+                </Button>
+                <Button
+                  variant="hero"
+                  size="lg"
+                  onClick={handleSubmitVerification}
+                  className="flex-1"
+                >
+                  Submit for Verification
+                </Button>
+              </div>
+
+              {/* Help Link */}
+              <div className="text-center mt-6">
+                <p className="text-sm text-muted-foreground">
+                  Questions about verification?{" "}
+                  <a href="#" className="text-primary hover:underline font-medium">
+                    Visit our Help Center
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default InstitutionVerification;

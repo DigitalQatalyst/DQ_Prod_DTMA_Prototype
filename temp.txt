@@ -1,0 +1,190 @@
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useCourse, useIsEnrolled, useUpdateLessonProgress, useLessonProgress } from "@/hooks/useCourses";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  ChevronLeft,
+  PlayCircle,
+  FileText,
+  Award,
+  CheckCircle,
+  Lock,
+  Menu,
+  X,
+  Loader2,
+  GraduationCap,
+} from "lucide-react";
+
+const CourseLearning = () => {
+  const { id: courseId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const { data: course, isLoading: courseLoading } = useCourse(courseId || "");
+  const { data: isEnrolled, isLoading: enrollmentLoading } = useIsEnrolled(courseId || "");
+  const updateProgress = useUpdateLessonProgress();
+  
+  const [selectedLesson, setSelectedLesson] = useState<{
+    id: string;
+    title: string;
+    content: string | null;
+    videoUrl: string | null;
+  } | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Fetch lesson progress
+  const { data: lessonProgress } = useLessonProgress(courseId || "");
+
+  // Redirect if not logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate(`/auth?redirect=/courses/${courseId}/learn`);
+    }
+  }, [authLoading, user, navigate, courseId]);
+
+  // Redirect if not enrolled
+  useEffect(() => {
+    if (!enrollmentLoading && isEnrolled === false && user) {
+      navigate(`/courses/${courseId}`);
+    }
+  }, [enrollmentLoading, isEnrolled, navigate, courseId, user]);
+
+  // Set first lesson when course loads
+  useEffect(() => {
+    if (course?.modules && course.modules.length > 0 && !selectedLesson) {
+      const firstModule = course.modules[0];
+      if (firstModule.lessons && firstModule.lessons.length > 0) {
+        const firstLesson = firstModule.lessons[0];
+        setSelectedLesson({
+          id: firstLesson.id,
+          title: firstLesson.title,
+          content: firstLesson.content,
+          videoUrl: firstLesson.video_url,
+        });
+      }
+    }
+  }, [course, selectedLesson]);
+
+  const handleLessonSelect = (lesson: any) => {
+    setSelectedLesson({
+      id: lesson.id,
+      title: lesson.title,
+      content: lesson.content,
+      videoUrl: lesson.video_url,
+    });
+    // Close sidebar on mobile
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
+  };
+
+  const handleMarkComplete = async () => {
+    if (!selectedLesson) return;
+    
+    await updateProgress.mutateAsync({
+      lessonId: selectedLesson.id,
+      completed: true,
+      progressPercent: 100,
+    });
+  };
+
+  // Calculate progress
+  const totalLessons = course?.modules?.reduce((acc, m) => acc + (m.lessons?.length || 0), 0) || 0;
+  const completedLessons = Object.values(lessonProgress || {}).filter(Boolean).length;
+  const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+  if (authLoading || courseLoading || enrollmentLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <p className="text-muted-foreground">Course not found</p>
+        <Button asChild>
+          <Link to="/categories">Browse Courses</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-card border-b border-border">
+        <div className="flex items-center justify-between px-4 h-16">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+            
+            <Link to={`/courses/${courseId}`} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+              <ChevronLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Back to Course</span>
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                <GraduationCap className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="font-semibold text-foreground hidden sm:inline">BROWZ</span>
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">{progressPercent}% complete</span>
+              <Progress value={progressPercent} className="w-24 h-2" />
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex-1 flex">
+        {/* Sidebar */}
+        <aside
+          className={`${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0 fixed lg:static inset-y-16 left-0 z-40 w-80 bg-card border-r border-border transition-transform duration-200 ease-in-out`}
+        >
+          <ScrollArea className="h-full">
+            <div className="p-4">
+              <h2 className="font-semibold text-foreground mb-2 line-clamp-2">{course.title}</h2>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                <span>{completedLessons}/{totalLessons} lessons</span>
+                <span>•</span>
+                <span>{progressPercent}% complete</span>
+              </div>
+              <Progress value={progressPercent} className="h-2 mb-6" />
+
+              <Accordion type="multiple" defaultValue={course.modules?.map((_, i) => `module-${i}`) || []}>
+                {course.modules?.map((module, moduleIndex) => (
+                  <AccordionItem key={module.id} value={`module-${moduleIndex}`} className="border-b-0">
+                    <AccordionTrigger className="py-3 hover:no-underline">
+                      <span className="text-sm font-medium text-left">{module.title}</span>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <ul className="space-y-1">
+                        {module.lessons?.map((lesson) => {
+                          const isCompleted = lessonProgress?.[lesson.id];
+                          const isActive = selectedLesson?.id === lesson.id;

@@ -1,0 +1,2591 @@
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCourse } from "@/hooks/useCourses";
+import { useSubmitCourseForReview } from "@/hooks/useInstructor";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/Badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  ChevronLeft,
+  Save,
+  Eye,
+  CheckCircle,
+  Circle,
+  LogOut,
+  Plus,
+  Trash2,
+  GripVertical,
+  FileText,
+  Video,
+  Download,
+  AlertCircle,
+  Upload,
+  X,
+  Clock,
+  HelpCircle,
+  ChevronDown,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
+
+const STEPS = [
+  { id: "basics", label: "Course Basics" },
+  { id: "curriculum", label: "Curriculum" },
+  { id: "media", label: "Course Media" },
+  { id: "assessments", label: "Final Assessment" },
+  { id: "eligibility", label: "Eligibility & Certification" },
+  { id: "pricing", label: "Pricing & Settings" },
+  { id: "submit", label: "Submit for Review" },
+];
+
+const CourseBuilder = () => {
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+  const { profile, signOut } = useAuth();
+  const { data: course, isLoading } = useCourse(courseId || "");
+  const { toast } = useToast();
+  const [currentStep, setCurrentStep] = useState("basics");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [, setRefresh] = useState(0); // Force re-render for progress updates
+
+  // Get stored course data to check completion
+  const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
+
+  // Calculate step completion dynamically
+  const getStepCompletion = () => {
+    const curriculum = storedCourse.curriculum || [];
+    const hasSections = curriculum.length > 0;
+    const hasLessons = curriculum.some((section: any) => section.lessons && section.lessons.length > 0);
+    
+    return {
+      basics: !!(course?.title && course?.description), // Completed from course creation
+      curriculum: hasSections && hasLessons, // Only complete when sections AND lessons exist
+      media: !!storedCourse.thumbnail, // Only complete when thumbnail uploaded
+      assessments: !!storedCourse.assessmentsConfigured, // Only when assessment step visited
+      eligibility: !!storedCourse.eligibilityConfigured, // Only when configured
+      pricing: !!(storedCourse.pricingConfigured), // Only when pricing step visited and saved
+      submit: false, // Only complete after submission
+    };
+  };
+
+  const stepCompletion = getStepCompletion();
+  const completedSteps = Object.values(stepCompletion).filter(Boolean).length;
+  const progressPercent = (completedSteps / STEPS.length) * 100;
+
+  // Monitor localStorage changes to update progress
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRefresh(prev => prev + 1);
+      setLastSaved(new Date());
+    }, 2000); // Check every 2 seconds
+
+    return () => clearInterval(interval);
+  }, [courseId]);
+
+  const handleBack = () => {
+    navigate("/dashboard/instructor");
+  };
+
+  const handleSave = () => {
+    // Data is already being saved via useEffect in each step component
+    setLastSaved(new Date());
+    toast({
+      title: "Course saved",
+      description: "Your changes have been saved successfully.",
+    });
+  };
+
+  const handlePreview = () => {
+    // Navigate to the course detail page to preview
+    navigate(`/courses/${courseId}`);
+  };
+
+  const handleContinue = () => {
+    const currentIndex = STEPS.findIndex(s => s.id === currentStep);
+    if (currentIndex < STEPS.length - 1) {
+      setCurrentStep(STEPS[currentIndex + 1].id);
+      toast({
+        title: "Progress saved",
+        description: `Moving to ${STEPS[currentIndex + 1].label}`,
+      });
+    }
+  };
+
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case "basics":
+        return <CourseBasicsStep course={course} />;
+      case "curriculum":
+        return <CurriculumStep course={course} onSave={handleSave} onContinue={handleContinue} />;
+      case "media":
+        return <CourseMediaStep course={course} onSave={handleSave} onContinue={handleContinue} />;
+      case "assessments":
+        return <AssessmentsStep course={course} onSave={handleSave} onContinue={handleContinue} />;
+      case "eligibility":
+        return <EligibilityStep course={course} onSave={handleSave} onContinue={handleContinue} />;
+      case "pricing":
+        return <PricingStep course={course} onSave={handleSave} onContinue={handleContinue} />;
+      case "submit":
+        return <SubmitStep course={course} />;
+      default:
+        return null;
+    }
+  };
+
+  if (isLoading || !course) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="min-h-screen bg-background flex">
+      {/* Sidebar */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#F5F1ED] text-gray-600 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
+        <div className="flex flex-col h-full">
+          <div className="p-4 border-b border-gray-200">
+            <Link to="/" className="flex items-center gap-3">
+              <img
+                src="/log.svg"
+                alt="BROWZ Academy"
+                className="h-[28px] w-auto"
+              />
+            </Link>
+          </div>
+
+          <RoleSwitcher currentRole="instructor" />
+
+          {/* Course Builder Steps */}
+          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+            {STEPS.map((step) => {
+              const isCompleted = stepCompletion[step.id as keyof typeof stepCompletion];
+              return (
+                <button
+                  key={step.id}
+                  onClick={() => setCurrentStep(step.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left ${
+                    currentStep === step.id
+                      ? "bg-[#4A3428] text-white"
+                      : "text-gray-500 hover:bg-gray-200"
+                  }`}
+                >
+                  {isCompleted ? (
+                    <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                  ) : (
+                    <Circle className="w-5 h-5 flex-shrink-0" />
+                  )}
+                  <span className="text-sm">{step.label}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="p-4 border-t border-gray-200">
+            <div className="flex items-center gap-3 mb-4 px-2">
+              <div className="w-10 h-10 rounded-full bg-[#4A3428] flex items-center justify-center text-sm font-semibold text-white">
+                {profile?.full_name?.charAt(0) || 'I'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-medium truncate text-gray-800">{profile?.full_name || 'Instructor'}</div>
+                <div className="text-xs text-gray-500">Instructor</div>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-gray-500 hover:text-gray-800 hover:bg-gray-200 text-sm"
+              onClick={signOut}
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 lg:ml-64">
+        {/* Header */}
+        <header className="sticky top-0 z-40 bg-background border-b border-border">
+          <div className="p-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleBack}
+                className="p-2 hover:bg-accent rounded-lg transition-colors"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <div>
+                <h1 className="text-2xl font-semibold">{course.title || "New Course"}</h1>
+                <p className="text-sm text-muted-foreground">
+                  {lastSaved ? `Last saved ${lastSaved.toLocaleTimeString()}` : "Not saved yet"}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button variant="outline" size="sm" onClick={handlePreview}>
+                <Eye className="w-4 h-4 mr-2" />
+                Preview
+              </Button>
+              <Button size="sm" onClick={handleSave}>
+                <Save className="w-4 h-4 mr-2" />
+                Save
+              </Button>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="px-6 pb-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Progress</span>
+              <span className="text-sm text-muted-foreground">{completedSteps} of {STEPS.length}</span>
+            </div>
+            <Progress value={progressPercent} className="h-2" />
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="p-6 lg:p-8">
+          {renderStepContent()}
+        </main>
+      </div>
+    </div>
+  );
+};
+
+// Step Components
+const CourseBasicsStep = ({ course }: any) => (
+  <div className="max-w-2xl">
+    <div className="bg-card rounded-2xl p-6 border border-border">
+      <h2 className="text-xl font-semibold mb-4">Course Basics</h2>
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">Course Title</label>
+          <p className="text-lg font-semibold">{course.title}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Category</label>
+            <p className="text-sm capitalize">{course.category}</p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Level</label>
+            <p className="text-sm capitalize">{course.level}</p>
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Description</label>
+          <p className="text-sm text-muted-foreground">{course.description || "No description provided"}</p>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Price</label>
+          <p className="text-sm">${course.price}</p>
+        </div>
+        <Badge className="w-fit">Completed</Badge>
+      </div>
+    </div>
+  </div>
+);
+
+const CurriculumStep = ({ course, onSave, onContinue }: any) => {
+  const courseId = course?.id;
+  const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
+  const [sections, setSections] = useState<any[]>(storedCourse?.curriculum || course?.curriculum || []);
+  const [draggedItem, setDraggedItem] = useState<any>(null);
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
+  const [expandedQuizzes, setExpandedQuizzes] = useState<Set<string>>(new Set());
+
+  const hasValidCurriculum = sections.length > 0 && sections.some(s => s.lessons && s.lessons.length > 0);
+
+  // Save curriculum to localStorage whenever it changes
+  useEffect(() => {
+    if (courseId && sections.length >= 0) {
+      const existing = JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}');
+      localStorage.setItem(`course_${courseId}`, JSON.stringify({ ...existing, curriculum: sections }));
+    }
+  }, [sections, courseId]);
+
+  const addSection = () => {
+    const newSection = {
+      id: `section-${Date.now()}`,
+      title: `Section ${sections.length + 1}`,
+      lessons: [],
+      order: sections.length,
+    };
+    setSections([...sections, newSection]);
+    setExpandedSections(new Set([...expandedSections, newSection.id]));
+  };
+
+  const addLesson = (sectionId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: [...(section.lessons || []), {
+            id: `lesson-${Date.now()}`,
+            title: `Lesson ${(section.lessons?.length || 0) + 1}`,
+            resources: [],
+            order: section.lessons?.length || 0,
+          }]
+        };
+      }
+      return section;
+    }));
+  };
+
+  const updateSectionTitle = (sectionId: string, title: string) => {
+    setSections(sections.map(s => s.id === sectionId ? { ...s, title } : s));
+  };
+
+  const updateLessonTitle = (sectionId: string, lessonId: string, title: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(l => l.id === lessonId ? { ...l, title } : l)
+        };
+      }
+      return section;
+    }));
+  };
+
+  const deleteSection = (sectionId: string) => {
+    setSections(sections.filter(s => s.id !== sectionId));
+  };
+
+  const deleteLesson = (sectionId: string, lessonId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.filter(l => l.id !== lessonId)
+        };
+      }
+      return section;
+    }));
+  };
+
+  const handleFileUpload = (sectionId: string, lessonId: string, type: string, file: File) => {
+    // Create a URL for the file (in production, this would upload to a server)
+    const fileUrl = URL.createObjectURL(file);
+    
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(lesson => {
+            if (lesson.id === lessonId) {
+              return {
+                ...lesson,
+                resources: [...(lesson.resources || []), {
+                  id: `resource-${Date.now()}`,
+                  type,
+                  name: file.name,
+                  url: fileUrl,
+                  size: file.size,
+                  file: file, // Store the actual file object
+                }]
+              };
+            }
+            return lesson;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const triggerFileUpload = (sectionId: string, lessonId: string, type: string) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    
+    // Set accepted file types based on resource type
+    if (type === 'video') {
+      input.accept = 'video/*';
+    } else if (type === 'pdf') {
+      input.accept = 'application/pdf';
+    } else {
+      input.accept = '*/*'; // Accept any file for downloadable resources
+    }
+    
+    input.onchange = (e: any) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        handleFileUpload(sectionId, lessonId, type, file);
+      }
+    };
+    
+    input.click();
+  };
+
+  const deleteResource = (sectionId: string, lessonId: string, resourceId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(lesson => {
+            if (lesson.id === lessonId) {
+              return {
+                ...lesson,
+                resources: lesson.resources.filter(r => r.id !== resourceId)
+              };
+            }
+            return lesson;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  // Quiz management functions
+  const toggleQuiz = (lessonId: string) => {
+    const newExpanded = new Set(expandedQuizzes);
+    if (newExpanded.has(lessonId)) {
+      newExpanded.delete(lessonId);
+    } else {
+      newExpanded.add(lessonId);
+    }
+    setExpandedQuizzes(newExpanded);
+  };
+
+  const enableLessonQuiz = (sectionId: string, lessonId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(lesson => {
+            if (lesson.id === lessonId) {
+              return {
+                ...lesson,
+                quiz: {
+                  enabled: true,
+                  questions: [],
+                  passingScore: 70,
+                  required: false
+                }
+              };
+            }
+            return lesson;
+          })
+        };
+      }
+      return section;
+    }));
+    // Auto-expand the quiz section
+    setExpandedQuizzes(new Set([...expandedQuizzes, lessonId]));
+  };
+
+  const disableLessonQuiz = (sectionId: string, lessonId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(lesson => {
+            if (lesson.id === lessonId) {
+              const { quiz, ...lessonWithoutQuiz } = lesson;
+              return lessonWithoutQuiz;
+            }
+            return lesson;
+          })
+        };
+      }
+      return section;
+    }));
+    // Remove from expanded
+    const newExpanded = new Set(expandedQuizzes);
+    newExpanded.delete(lessonId);
+    setExpandedQuizzes(newExpanded);
+  };
+
+  const updateQuizSettings = (sectionId: string, lessonId: string, settings: any) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(lesson => {
+            if (lesson.id === lessonId && lesson.quiz) {
+              return {
+                ...lesson,
+                quiz: { ...lesson.quiz, ...settings }
+              };
+            }
+            return lesson;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const addQuizQuestion = (sectionId: string, lessonId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(lesson => {
+            if (lesson.id === lessonId && lesson.quiz) {
+              return {
+                ...lesson,
+                quiz: {
+                  ...lesson.quiz,
+                  questions: [...lesson.quiz.questions, {
+                    id: `question-${Date.now()}`,
+                    text: "",
+                    type: "mcq",
+                    options: ["", "", "", ""],
+                    correctAnswer: undefined,
+                    points: 1
+                  }]
+                }
+              };
+            }
+            return lesson;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const updateQuizQuestion = (sectionId: string, lessonId: string, questionId: string, updates: any) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(lesson => {
+            if (lesson.id === lessonId && lesson.quiz) {
+              return {
+                ...lesson,
+                quiz: {
+                  ...lesson.quiz,
+                  questions: lesson.quiz.questions.map((q: any) => 
+                    q.id === questionId ? { ...q, ...updates } : q
+                  )
+                }
+              };
+            }
+            return lesson;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const deleteQuizQuestion = (sectionId: string, lessonId: string, questionId: string) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          lessons: section.lessons.map(lesson => {
+            if (lesson.id === lessonId && lesson.quiz) {
+              return {
+                ...lesson,
+                quiz: {
+                  ...lesson.quiz,
+                  questions: lesson.quiz.questions.filter((q: any) => q.id !== questionId)
+                }
+              };
+            }
+            return lesson;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const toggleSection = (sectionId: string) => {
+    const newExpanded = new Set(expandedSections);
+    if (newExpanded.has(sectionId)) {
+      newExpanded.delete(sectionId);
+    } else {
+      newExpanded.add(sectionId);
+    }
+    setExpandedSections(newExpanded);
+  };
+
+  // Drag and drop handlers for sections
+  const handleSectionDragStart = (e: React.DragEvent, sectionId: string) => {
+    setDraggedItem({ type: 'section', id: sectionId });
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleSectionDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleSectionDrop = (e: React.DragEvent, targetSectionId: string) => {
+    e.preventDefault();
+    if (!draggedItem || draggedItem.type !== 'section') return;
+
+    const draggedSectionId = draggedItem.id;
+    if (draggedSectionId === targetSectionId) return;
+
+    const draggedIndex = sections.findIndex(s => s.id === draggedSectionId);
+    const targetIndex = sections.findIndex(s => s.id === targetSectionId);
+
+    const newSections = [...sections];
+    const [removed] = newSections.splice(draggedIndex, 1);
+    newSections.splice(targetIndex, 0, removed);
+
+    setSections(newSections.map((s, idx) => ({ ...s, order: idx })));
+    setDraggedItem(null);
+  };
+
+  // Drag and drop handlers for lessons
+  const handleLessonDragStart = (e: React.DragEvent, sectionId: string, lessonId: string) => {
+    e.stopPropagation();
+    setDraggedItem({ type: 'lesson', sectionId, id: lessonId });
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleLessonDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleLessonDrop = (e: React.DragEvent, targetSectionId: string, targetLessonId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!draggedItem || draggedItem.type !== 'lesson') return;
+
+    const draggedLessonId = draggedItem.id;
+    const draggedSectionId = draggedItem.sectionId;
+
+    if (draggedSectionId === targetSectionId && draggedLessonId === targetLessonId) return;
+
+    setSections(sections.map(section => {
+      // Remove lesson from source section
+      if (section.id === draggedSectionId) {
+        const lessons = section.lessons.filter(l => l.id !== draggedLessonId);
+        return { ...section, lessons };
+      }
+      return section;
+    }).map(section => {
+      // Add lesson to target section
+      if (section.id === targetSectionId) {
+        const draggedLesson = sections
+          .find(s => s.id === draggedSectionId)
+          ?.lessons.find(l => l.id === draggedLessonId);
+        
+        if (!draggedLesson) return section;
+
+        const targetIndex = section.lessons.findIndex(l => l.id === targetLessonId);
+        const newLessons = [...section.lessons];
+        newLessons.splice(targetIndex, 0, draggedLesson);
+        
+        return { ...section, lessons: newLessons.map((l, idx) => ({ ...l, order: idx })) };
+      }
+      return section;
+    }));
+
+    setDraggedItem(null);
+  };
+
+  return (
+    <div className="max-w-4xl">
+      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold mb-2">Curriculum</h2>
+            <p className="text-sm text-muted-foreground">Add sections and lessons to your course.</p>
+          </div>
+          <Button onClick={addSection} variant="hero" size="sm">
+            <Plus className="w-4 h-4 mr-2" />
+            Add Section
+          </Button>
+        </div>
+
+        {!hasValidCurriculum && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-amber-900">Curriculum requirements not met</p>
+              <p className="text-xs text-amber-800 mt-1">Add at least 1 section with at least 1 lesson to proceed.</p>
+            </div>
+          </div>
+        )}
+
+        {sections.length === 0 ? (
+          <div className="text-center py-12">
+            <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
+            <p className="text-muted-foreground mb-4">No sections yet. Create your first section to get started.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {sections.map((section) => (
+              <div 
+                key={section.id} 
+                className="border border-border rounded-lg overflow-hidden"
+                draggable
+                onDragStart={(e) => handleSectionDragStart(e, section.id)}
+                onDragOver={handleSectionDragOver}
+                onDrop={(e) => handleSectionDrop(e, section.id)}
+              >
+                <div className="bg-muted/50 p-4 flex items-center justify-between cursor-move hover:bg-muted" onClick={() => toggleSection(section.id)}>
+                  <div className="flex items-center gap-3 flex-1">
+                    <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
+                    <ChevronLeft className={`w-4 h-4 transition-transform ${expandedSections.has(section.id) ? 'rotate-90' : ''}`} />
+                    <Input
+                      value={section.title}
+                      onChange={(e) => updateSectionTitle(section.id, e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                      className="bg-transparent border-0 font-medium text-sm p-0 h-auto"
+                      placeholder="Section title"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">{section.lessons?.length || 0} lessons</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteSection(section.id);
+                      }}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                {expandedSections.has(section.id) && (
+                  <div className="p-4 space-y-3 border-t border-border bg-background">
+                    {section.lessons?.map((lesson: any) => (
+                      <div 
+                        key={lesson.id} 
+                        className="border border-border rounded-lg p-4 bg-card"
+                        draggable
+                        onDragStart={(e) => handleLessonDragStart(e, section.id, lesson.id)}
+                        onDragOver={handleLessonDragOver}
+                        onDrop={(e) => handleLessonDrop(e, section.id, lesson.id)}
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2 flex-1">
+                            <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing flex-shrink-0" />
+                            <Input
+                              value={lesson.title}
+                              onChange={(e) => updateLessonTitle(section.id, lesson.id, e.target.value)}
+                              className="bg-transparent border-0 font-medium text-sm p-0 h-auto flex-1"
+                              placeholder="Lesson title"
+                            />
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => deleteLesson(section.id, lesson.id)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+
+                        {lesson.resources && lesson.resources.length > 0 && (
+                          <div className="space-y-2 mb-3">
+                            {lesson.resources.map((resource: any) => (
+                              <div key={resource.id} className="flex items-center justify-between bg-muted/50 p-2 rounded text-sm">
+                                <div className="flex items-center gap-2 flex-1 min-w-0">
+                                  {resource.type === 'video' && <Video className="w-4 h-4 flex-shrink-0" />}
+                                  {resource.type === 'pdf' && <FileText className="w-4 h-4 flex-shrink-0" />}
+                                  {resource.type === 'download' && <Download className="w-4 h-4 flex-shrink-0" />}
+                                  <span className="truncate">{resource.name}</span>
+                                  {resource.size && (
+                                    <span className="text-xs text-muted-foreground flex-shrink-0">
+                                      ({(resource.size / 1024 / 1024).toFixed(2)} MB)
+                                    </span>
+                                  )}
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => deleteResource(section.id, lesson.id, resource.id)}
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => triggerFileUpload(section.id, lesson.id, 'video')}
+                            className="text-xs"
+                          >
+                            <Video className="w-3 h-3 mr-1" />
+                            Upload Video
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => triggerFileUpload(section.id, lesson.id, 'pdf')}
+                            className="text-xs"
+                          >
+                            <FileText className="w-3 h-3 mr-1" />
+                            Upload PDF
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => triggerFileUpload(section.id, lesson.id, 'download')}
+                            className="text-xs"
+                          >
+                            <Upload className="w-3 h-3 mr-1" />
+                            Upload Resource
+                          </Button>
+                          <Button
+                            variant={lesson.quiz?.enabled ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => lesson.quiz?.enabled ? toggleQuiz(lesson.id) : enableLessonQuiz(section.id, lesson.id)}
+                            className="text-xs"
+                          >
+                            <HelpCircle className="w-3 h-3 mr-1" />
+                            {lesson.quiz?.enabled ? `Quiz (${lesson.quiz.questions?.length || 0})` : 'Add Quiz'}
+                          </Button>
+                        </div>
+
+                        {/* Lesson Quiz Builder */}
+                        {lesson.quiz?.enabled && expandedQuizzes.has(lesson.id) && (
+                          <div className="mt-4 border-t border-border pt-4">
+                            <div className="flex items-center justify-between mb-4">
+                              <h4 className="text-sm font-semibold">Lesson Quiz</h4>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => disableLessonQuiz(section.id, lesson.id)}
+                                className="text-xs text-destructive hover:text-destructive"
+                              >
+                                <X className="w-3 h-3 mr-1" />
+                                Remove Quiz
+                              </Button>
+                            </div>
+
+                            {/* Quiz Settings */}
+                            <div className="bg-muted/30 rounded-lg p-3 mb-4 space-y-3">
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <label className="text-xs font-medium">Required to Continue</label>
+                                  <p className="text-xs text-muted-foreground">Students must pass to unlock next lesson</p>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={lesson.quiz.required}
+                                    onChange={(e) => updateQuizSettings(section.id, lesson.id, { required: e.target.checked })}
+                                    className="sr-only peer"
+                                  />
+                                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                              </div>
+
+                              <div>
+                                <label className="block text-xs font-medium mb-1">Passing Score (%)</label>
+                                <Input
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={lesson.quiz.passingScore}
+                                  onChange={(e) => updateQuizSettings(section.id, lesson.id, { passingScore: parseInt(e.target.value) || 70 })}
+                                  className="w-20 h-7 text-xs"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Quiz Questions */}
+                            <div className="space-y-3">
+                              {lesson.quiz.questions?.map((question: any, qIndex: number) => (
+                                <div key={question.id} className="border border-border rounded-lg p-3 bg-background">
+                                  <div className="flex items-start justify-between mb-2">
+                                    <label className="text-xs font-medium">Question {qIndex + 1}</label>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => deleteQuizQuestion(section.id, lesson.id, question.id)}
+                                      className="h-6 w-6 p-0"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </Button>
+                                  </div>
+
+                                  <Input
+                                    value={question.text}
+                                    onChange={(e) => updateQuizQuestion(section.id, lesson.id, question.id, { text: e.target.value })}
+                                    placeholder="Enter your question"
+                                    className="mb-2 text-xs h-8"
+                                  />
+
+                                  <div className="flex gap-2 mb-2">
+                                    <select
+                                      value={question.type}
+                                      onChange={(e) => {
+                                        const newType = e.target.value;
+                                        updateQuizQuestion(section.id, lesson.id, question.id, {
+                                          type: newType,
+                                          options: newType === "true-false" ? ["True", "False"] : ["", "", "", ""],
+                                          correctAnswer: undefined
+                                        });
+                                      }}
+                                      className="px-2 py-1 border border-border rounded-lg bg-background text-xs h-7"
+                                    >
+                                      <option value="mcq">Multiple Choice</option>
+                                      <option value="true-false">True/False</option>
+                                    </select>
+
+                                    <Input
+                                      type="number"
+                                      value={question.points}
+                                      onChange={(e) => updateQuizQuestion(section.id, lesson.id, question.id, { points: parseInt(e.target.value) || 1 })}
+                                      placeholder="Points"
+                                      className="w-16 text-xs h-7"
+                                    />
+                                  </div>
+
+                                  <div className="space-y-1">
+                                    <label className="block text-xs font-medium mb-1">Answer Options</label>
+                                    {question.options.map((option: string, oIndex: number) => (
+                                      <div key={oIndex} className="flex items-center gap-2">
+                                        <input
+                                          type="radio"
+                                          name={`question-${lesson.id}-${question.id}`}
+                                          checked={question.correctAnswer === oIndex}
+                                          onChange={() => updateQuizQuestion(section.id, lesson.id, question.id, { correctAnswer: oIndex })}
+                                          className="w-3 h-3"
+                                        />
+                                        <Input
+                                          value={option}
+                                          onChange={(e) => {
+                                            const newOptions = [...question.options];
+                                            newOptions[oIndex] = e.target.value;
+                                            updateQuizQuestion(section.id, lesson.id, question.id, { options: newOptions });
+                                          }}
+                                          placeholder={`Option ${oIndex + 1}`}
+                                          className="flex-1 text-xs h-7"
+                                          disabled={question.type === "true-false"}
+                                        />
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => addQuizQuestion(section.id, lesson.id)}
+                                className="w-full text-xs"
+                              >
+                                <Plus className="w-3 h-3 mr-1" />
+                                Add Question
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => addLesson(section.id)}
+                      className="w-full"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Lesson
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex gap-3">
+        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button disabled={!hasValidCurriculum} onClick={onContinue}>Continue to Next Step</Button>
+      </div>
+    </div>
+  );
+};
+
+const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
+  const courseId = course?.id;
+  const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
+  
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>(storedCourse.thumbnailPreview || "");
+  const [promoVideo, setPromoVideo] = useState<File | null>(null);
+  const [promoVideoPreview, setPromoVideoPreview] = useState<string>(storedCourse.promoVideoPreview || "");
+  const [learningObjectives, setLearningObjectives] = useState<string[]>(storedCourse.learningObjectives || [""]);
+  const [courseOutcomes, setCourseOutcomes] = useState<string[]>(storedCourse.courseOutcomes || [""]);
+  const [estimatedDuration, setEstimatedDuration] = useState(storedCourse.estimatedDuration || "");
+
+  const hasThumbnail = thumbnail !== null || thumbnailPreview !== "";
+
+  // Save media data to localStorage whenever it changes
+  useEffect(() => {
+    if (courseId) {
+      const existing = JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}');
+      localStorage.setItem(`course_${courseId}`, JSON.stringify({ 
+        ...existing, 
+        thumbnail: hasThumbnail,
+        thumbnailPreview,
+        promoVideoPreview,
+        learningObjectives,
+        courseOutcomes,
+        estimatedDuration
+      }));
+    }
+  }, [courseId, hasThumbnail, thumbnailPreview, promoVideoPreview, learningObjectives, courseOutcomes, estimatedDuration]);
+
+  const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setThumbnail(file);
+      setThumbnailPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handlePromoVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPromoVideo(file);
+      setPromoVideoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const addObjective = () => {
+    setLearningObjectives([...learningObjectives, ""]);
+  };
+
+  const updateObjective = (index: number, value: string) => {
+    const updated = [...learningObjectives];
+    updated[index] = value;
+    setLearningObjectives(updated);
+  };
+
+  const removeObjective = (index: number) => {
+    setLearningObjectives(learningObjectives.filter((_, i) => i !== index));
+  };
+
+  const addOutcome = () => {
+    setCourseOutcomes([...courseOutcomes, ""]);
+  };
+
+  const updateOutcome = (index: number, value: string) => {
+    const updated = [...courseOutcomes];
+    updated[index] = value;
+    setCourseOutcomes(updated);
+  };
+
+  const removeOutcome = (index: number) => {
+    setCourseOutcomes(courseOutcomes.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="max-w-4xl">
+      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
+        <h2 className="text-xl font-semibold mb-2">Course Media</h2>
+        <p className="text-sm text-muted-foreground mb-6">Upload course thumbnail, promo video, and define learning objectives.</p>
+
+        {!hasThumbnail && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-amber-900">Thumbnail required</p>
+              <p className="text-xs text-amber-800 mt-1">You must upload a course thumbnail before submission.</p>
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-6">
+          {/* Course Thumbnail */}
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Course Thumbnail <span className="text-destructive">*</span>
+            </label>
+            <p className="text-xs text-muted-foreground mb-3">Recommended size: 1280x720px (16:9 ratio)</p>
+            {thumbnailPreview ? (
+              <div className="relative w-full max-w-md">
+                <img src={thumbnailPreview} alt="Thumbnail preview" className="w-full rounded-lg border border-border" />
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="absolute top-2 right-2"
+                  onClick={() => {
+                    setThumbnail(null);
+                    setThumbnailPreview("");
+                  }}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : (
+              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleThumbnailUpload}
+                  className="hidden"
+                  id="thumbnail-upload"
+                />
+                <label htmlFor="thumbnail-upload" className="cursor-pointer">
+                  <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-sm font-medium">Click to upload thumbnail</p>
+                  <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 10MB</p>
+                </label>
+              </div>
+            )}
+          </div>
+
+          {/* Promo Video */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Promo Video (Optional)</label>
+            <p className="text-xs text-muted-foreground mb-3">A short video introducing your course</p>
+            {promoVideoPreview ? (
+              <div className="relative w-full max-w-md">
+                <video src={promoVideoPreview} controls className="w-full rounded-lg border border-border" />
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="absolute top-2 right-2"
+                  onClick={() => {
+                    setPromoVideo(null);
+                    setPromoVideoPreview("");
+                  }}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : (
+              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
+                <input
+                  type="file"
+                  accept="video/*"
+                  onChange={handlePromoVideoUpload}
+                  className="hidden"
+                  id="promo-video-upload"
+                />
+                <label htmlFor="promo-video-upload" className="cursor-pointer">
+                  <Video className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-sm font-medium">Click to upload promo video</p>
+                  <p className="text-xs text-muted-foreground mt-1">MP4, MOV up to 100MB</p>
+                </label>
+              </div>
+            )}
+          </div>
+
+          {/* Learning Objectives */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Learning Objectives</label>
+            <p className="text-xs text-muted-foreground mb-3">What will students learn in this course?</p>
+            <div className="space-y-2">
+              {learningObjectives.map((objective, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={objective}
+                    onChange={(e) => updateObjective(index, e.target.value)}
+                    placeholder={`Objective ${index + 1}`}
+                    className="flex-1"
+                  />
+                  {learningObjectives.length > 1 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeObjective(index)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button variant="outline" size="sm" onClick={addObjective}>
+                <Plus className="w-4 h-4 mr-2" />
+                Add Objective
+              </Button>
+            </div>
+          </div>
+
+          {/* Course Outcomes */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Course Outcomes</label>
+            <p className="text-xs text-muted-foreground mb-3">What will students be able to do after completing this course?</p>
+            <div className="space-y-2">
+              {courseOutcomes.map((outcome, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={outcome}
+                    onChange={(e) => updateOutcome(index, e.target.value)}
+                    placeholder={`Outcome ${index + 1}`}
+                    className="flex-1"
+                  />
+                  {courseOutcomes.length > 1 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeOutcome(index)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button variant="outline" size="sm" onClick={addOutcome}>
+                <Plus className="w-4 h-4 mr-2" />
+                Add Outcome
+              </Button>
+            </div>
+          </div>
+
+          {/* Estimated Duration */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Estimated Duration</label>
+            <p className="text-xs text-muted-foreground mb-3">How long will it take to complete this course?</p>
+            <div className="flex items-center gap-2 max-w-xs">
+              <Input
+                type="number"
+                value={estimatedDuration}
+                onChange={(e) => setEstimatedDuration(e.target.value)}
+                placeholder="0"
+                className="w-24"
+              />
+              <span className="text-sm text-muted-foreground">hours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-3">
+        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button disabled={!hasThumbnail} onClick={onContinue}>Continue to Next Step</Button>
+      </div>
+    </div>
+  );
+};
+
+const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
+  const courseId = course?.id;
+  const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
+  
+  const [certificationEnabled, setCertificationEnabled] = useState(storedCourse.certificationEnabled || false);
+  const [assessmentType, setAssessmentType] = useState<string>(storedCourse.assessmentType || "none");
+  const [passingScore, setPassingScore] = useState(storedCourse.passingScore || "70");
+  const [retakesAllowed, setRetakesAllowed] = useState(storedCourse.retakesAllowed !== undefined ? storedCourse.retakesAllowed : true);
+  const [maxRetakes, setMaxRetakes] = useState(storedCourse.maxRetakes || "3");
+  const [autoGrading, setAutoGrading] = useState(storedCourse.autoGrading !== undefined ? storedCourse.autoGrading : true);
+  
+  // Assessment content states
+  const [quizQuestions, setQuizQuestions] = useState<any[]>(storedCourse.quizQuestions || []);
+  const [assignmentTitle, setAssignmentTitle] = useState(storedCourse.assignmentTitle || "");
+  const [assignmentInstructions, setAssignmentInstructions] = useState(storedCourse.assignmentInstructions || "");
+  const [assignmentBrief, setAssignmentBrief] = useState<File | null>(null);
+  const [assignmentBriefUrl, setAssignmentBriefUrl] = useState(storedCourse.assignmentBriefUrl || "");
+  const [allowedFileTypes, setAllowedFileTypes] = useState(storedCourse.allowedFileTypes || "pdf,docx,zip");
+  const [practicalTitle, setPracticalTitle] = useState(storedCourse.practicalTitle || "");
+  const [practicalInstructions, setPracticalInstructions] = useState(storedCourse.practicalInstructions || "");
+  
+  // Assignment deadline states
+  const [enableDeadline, setEnableDeadline] = useState(storedCourse.enableDeadline || false);
+  const [dueDate, setDueDate] = useState(storedCourse.dueDate || "");
+  const [dueTime, setDueTime] = useState(storedCourse.dueTime || "23:59");
+  const [timezone, setTimezone] = useState(storedCourse.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone);
+  const [allowLateSubmissions, setAllowLateSubmissions] = useState(storedCourse.allowLateSubmissions || false);
+  const [lateWindow, setLateWindow] = useState(storedCourse.lateWindow || "24");
+  const [lateWindowUnit, setLateWindowUnit] = useState(storedCourse.lateWindowUnit || "hours");
+
+  const assessmentRequired = certificationEnabled && assessmentType === "none";
+  
+  // Validation for assessment content
+  const hasValidQuiz = quizQuestions.length > 0 && quizQuestions.every(q => q.correctAnswer !== undefined);
+  const hasValidAssignment = assignmentInstructions.trim() !== "" || assignmentBriefUrl !== "";
+  const hasValidPractical = practicalInstructions.trim() !== "";
+  
+  const hasValidContent = 
+    assessmentType === "none" ? true :
+    assessmentType === "quiz" ? hasValidQuiz :
+    assessmentType === "assignment" ? hasValidAssignment :
+    assessmentType === "practical" ? hasValidPractical : false;
+
+  // Save assessment data to localStorage whenever it changes
+  useEffect(() => {
+    if (courseId) {
+      const existing = JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}');
+      localStorage.setItem(`course_${courseId}`, JSON.stringify({ 
+        ...existing, 
+        certificationEnabled,
+        assessmentType,
+        passingScore,
+        retakesAllowed,
+        maxRetakes,
+        autoGrading,
+        quizQuestions,
+        assignmentTitle,
+        assignmentInstructions,
+        assignmentBriefUrl,
+        allowedFileTypes,
+        enableDeadline,
+        dueDate,
+        dueTime,
+        timezone,
+        allowLateSubmissions,
+        lateWindow,
+        lateWindowUnit,
+        practicalTitle,
+        practicalInstructions,
+        assessmentsConfigured: true,
+        hasValidAssessmentContent: hasValidContent
+      }));
+    }
+  }, [courseId, certificationEnabled, assessmentType, passingScore, retakesAllowed, maxRetakes, autoGrading, 
+      quizQuestions, assignmentTitle, assignmentInstructions, assignmentBriefUrl, allowedFileTypes, 
+      enableDeadline, dueDate, dueTime, timezone, allowLateSubmissions, lateWindow, lateWindowUnit,
+      practicalTitle, practicalInstructions, hasValidContent]);
+
+  return (
+    <div className="max-w-4xl">
+      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
+        <h2 className="text-xl font-semibold mb-2">Final Assessment</h2>
+        <p className="text-sm text-muted-foreground mb-6">Configure quizzes, assignments, and evaluation methods.</p>
+
+        {assessmentRequired && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-amber-900">Assessment required</p>
+              <p className="text-xs text-amber-800 mt-1">Certification is enabled. You must select an assessment type.</p>
+            </div>
+          </div>
+        )}
+
+        <div className="space-y-6">
+          {/* Certification Toggle */}
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+            <div>
+              <label className="text-sm font-medium">Enable Certification</label>
+              <p className="text-xs text-muted-foreground mt-1">Award certificates upon course completion</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={certificationEnabled}
+                onChange={(e) => setCertificationEnabled(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+
+          {/* Assessment Type */}
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Assessment Type {certificationEnabled && <span className="text-destructive">*</span>}
+            </label>
+            <p className="text-xs text-muted-foreground mb-3">Choose how students will be evaluated</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div
+                onClick={() => setAssessmentType("quiz")}
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  assessmentType === "quiz"
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-primary/50"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                    assessmentType === "quiz" ? "border-primary" : "border-muted-foreground"
+                  }`}>
+                    {assessmentType === "quiz" && <div className="w-3 h-3 rounded-full bg-primary" />}
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Quiz</p>
+                    <p className="text-xs text-muted-foreground mt-1">Multiple choice questions with auto-grading</p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                onClick={() => setAssessmentType("assignment")}
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  assessmentType === "assignment"
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-primary/50"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                    assessmentType === "assignment" ? "border-primary" : "border-muted-foreground"
+                  }`}>
+                    {assessmentType === "assignment" && <div className="w-3 h-3 rounded-full bg-primary" />}
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Assignment Upload</p>
+                    <p className="text-xs text-muted-foreground mt-1">Students submit files for manual review</p>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                onClick={() => setAssessmentType("practical")}
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  assessmentType === "practical"
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-primary/50"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                    assessmentType === "practical" ? "border-primary" : "border-muted-foreground"
+                  }`}>
+                    {assessmentType === "practical" && <div className="w-3 h-3 rounded-full bg-primary" />}
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Practical Evaluation</p>
+                    <p className="text-xs text-muted-foreground mt-1">Hands-on demonstration or performance</p>
+                  </div>
+                </div>
+              </div>
+
+              {!certificationEnabled && (
+                <div
+                  onClick={() => setAssessmentType("none")}
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    assessmentType === "none"
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/50"
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                      assessmentType === "none" ? "border-primary" : "border-muted-foreground"
+                    }`}>
+                      {assessmentType === "none" && <div className="w-3 h-3 rounded-full bg-primary" />}
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">No Assessment</p>
+                      <p className="text-xs text-muted-foreground mt-1">Course completion without evaluation</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Assessment Configuration (shown when assessment type is selected) */}
+          {assessmentType !== "none" && (
+            <>
+              {/* Passing Score */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Passing Score (%)</label>
+                <p className="text-xs text-muted-foreground mb-3">Minimum score required to pass</p>
+                <div className="flex items-center gap-3 max-w-xs">
+                  <Input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={passingScore}
+                    onChange={(e) => setPassingScore(e.target.value)}
+                    className="w-24"
+                  />
+                  <span className="text-sm text-muted-foreground">%</span>
+                </div>
+              </div>
+
+              {/* Retake Rules */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <label className="text-sm font-medium">Allow Retakes</label>
+                    <p className="text-xs text-muted-foreground mt-1">Let students retake the assessment if they fail</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={retakesAllowed}
+                      onChange={(e) => setRetakesAllowed(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  </label>
+                </div>
+
+                {retakesAllowed && (
+                  <div className="ml-0 mt-3">
+                    <label className="block text-sm font-medium mb-2">Maximum Retakes</label>
+                    <div className="flex items-center gap-3 max-w-xs">
+                      <Input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={maxRetakes}
+                        onChange={(e) => setMaxRetakes(e.target.value)}
+                        className="w-24"
+                      />
+                      <span className="text-sm text-muted-foreground">attempts</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Auto Grading (only for quizzes) */}
+              {assessmentType === "quiz" && (
+                <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                  <div>
+                    <label className="text-sm font-medium">Auto Grading</label>
+                    <p className="text-xs text-muted-foreground mt-1">Automatically grade quiz submissions</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={autoGrading}
+                      onChange={(e) => setAutoGrading(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  </label>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Quiz Builder */}
+          {assessmentType === "quiz" && (
+            <div className="border-t border-border pt-6">
+              <h3 className="text-lg font-semibold mb-4">Quiz Builder</h3>
+              
+              {!hasValidQuiz && quizQuestions.length > 0 && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-amber-900">Incomplete questions</p>
+                    <p className="text-xs text-amber-800 mt-1">All questions must have a correct answer marked.</p>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-4">
+                {quizQuestions.map((question, qIndex) => (
+                  <div key={qIndex} className="border border-border rounded-lg p-4 bg-background">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium mb-2">Question {qIndex + 1}</label>
+                        <Input
+                          value={question.text}
+                          onChange={(e) => {
+                            const updated = [...quizQuestions];
+                            updated[qIndex].text = e.target.value;
+                            setQuizQuestions(updated);
+                          }}
+                          placeholder="Enter your question"
+                          className="mb-3"
+                        />
+                        
+                        <div className="flex gap-2 mb-3">
+                          <select
+                            value={question.type}
+                            onChange={(e) => {
+                              const updated = [...quizQuestions];
+                              updated[qIndex].type = e.target.value;
+                              updated[qIndex].options = e.target.value === "true-false" 
+                                ? ["True", "False"] 
+                                : ["", "", "", ""];
+                              updated[qIndex].correctAnswer = undefined;
+                              setQuizQuestions(updated);
+                            }}
+                            className="px-3 py-2 border border-border rounded-lg bg-background text-sm"
+                          >
+                            <option value="mcq">Multiple Choice</option>
+                            <option value="true-false">True/False</option>
+                          </select>
+                          
+                          <Input
+                            type="number"
+                            value={question.points}
+                            onChange={(e) => {
+                              const updated = [...quizQuestions];
+                              updated[qIndex].points = parseInt(e.target.value) || 1;
+                              setQuizQuestions(updated);
+                            }}
+                            placeholder="Points"
+                            className="w-24"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium">Answer Options</label>
+                          {question.options.map((option: string, oIndex: number) => (
+                            <div key={oIndex} className="flex items-center gap-2">
+                              <input
+                                type="radio"
+                                name={`question-${qIndex}`}
+                                checked={question.correctAnswer === oIndex}
+                                onChange={() => {
+                                  const updated = [...quizQuestions];
+                                  updated[qIndex].correctAnswer = oIndex;
+                                  setQuizQuestions(updated);
+                                }}
+                                className="w-4 h-4"
+                              />
+                              <Input
+                                value={option}
+                                onChange={(e) => {
+                                  const updated = [...quizQuestions];
+                                  updated[qIndex].options[oIndex] = e.target.value;
+                                  setQuizQuestions(updated);
+                                }}
+                                placeholder={`Option ${oIndex + 1}`}
+                                className="flex-1"
+                                disabled={question.type === "true-false"}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setQuizQuestions(quizQuestions.filter((_, i) => i !== qIndex))}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+
+                <Button
+                  variant="outline"
+                  onClick={() => setQuizQuestions([...quizQuestions, {
+                    text: "",
+                    type: "mcq",
+                    options: ["", "", "", ""],
+                    correctAnswer: undefined,
+                    points: 1
+                  }])}
+                  className="w-full"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Question
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Assignment Setup */}
+          {assessmentType === "assignment" && (
+            <div className="border-t border-border pt-6">
+              <h3 className="text-lg font-semibold mb-4">Assignment Setup</h3>
+              
+              {!hasValidAssignment && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-amber-900">Instructions or brief required</p>
+                    <p className="text-xs text-amber-800 mt-1">Provide either written instructions or upload a brief document.</p>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Assignment Title</label>
+                  <Input
+                    value={assignmentTitle}
+                    onChange={(e) => setAssignmentTitle(e.target.value)}
+                    placeholder="e.g., Final Project Submission"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Instructions</label>
+                  <Textarea
+                    value={assignmentInstructions}
+                    onChange={(e) => setAssignmentInstructions(e.target.value)}
+                    placeholder="Provide detailed instructions for the assignment..."
+                    rows={6}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Assignment Brief (Optional PDF)</label>
+                  {assignmentBriefUrl ? (
+                    <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4" />
+                        <span className="text-sm">Brief uploaded</span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setAssignmentBrief(null);
+                          setAssignmentBriefUrl("");
+                        }}
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setAssignmentBrief(file);
+                            setAssignmentBriefUrl(URL.createObjectURL(file));
+                          }
+                        }}
+                        className="hidden"
+                        id="assignment-brief-upload"
+                      />
+                      <label htmlFor="assignment-brief-upload" className="cursor-pointer">
+                        <Upload className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+                        <p className="text-sm font-medium">Upload Assignment Brief</p>
+                        <p className="text-xs text-muted-foreground mt-1">PDF up to 10MB</p>
+                      </label>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Allowed File Types</label>
+                  <Input
+                    value={allowedFileTypes}
+                    onChange={(e) => setAllowedFileTypes(e.target.value)}
+                    placeholder="e.g., pdf,docx,zip"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">Comma-separated file extensions</p>
+                </div>
+
+                {/* Submission Deadline */}
+                <div className="border border-border rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <label className="text-sm font-medium">📅 Enable Deadline</label>
+                      <p className="text-xs text-muted-foreground mt-1">Set a submission deadline for this assignment</p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={enableDeadline}
+                        onChange={(e) => setEnableDeadline(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                  </div>
+
+                  {enableDeadline && (
+                    <div className="space-y-4 pt-4 border-t border-border">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">📆 Due Date</label>
+                          <Input
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                            className="w-full"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-2">⏰ Due Time</label>
+                          <Input
+                            type="time"
+                            value={dueTime}
+                            onChange={(e) => setDueTime(e.target.value)}
+                            className="w-full"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">🌍 Timezone</label>
+                        <select
+                          value={timezone}
+                          onChange={(e) => setTimezone(e.target.value)}
+                          className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                          <option value="America/New_York">Eastern Time (ET)</option>
+                          <option value="America/Chicago">Central Time (CT)</option>
+                          <option value="America/Denver">Mountain Time (MT)</option>
+                          <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                          <option value="Europe/London">London (GMT)</option>
+                          <option value="Europe/Paris">Paris (CET)</option>
+                          <option value="Asia/Tokyo">Tokyo (JST)</option>
+                          <option value="Asia/Shanghai">Shanghai (CST)</option>
+                          <option value="Australia/Sydney">Sydney (AEST)</option>
+                          <option value={Intl.DateTimeFormat().resolvedOptions().timeZone}>
+                            {Intl.DateTimeFormat().resolvedOptions().timeZone} (Auto-detected)
+                          </option>
+                        </select>
+                      </div>
+
+                      {/* Late Submissions */}
+                      <div className="border-t border-border pt-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <label className="text-sm font-medium">Allow Late Submissions</label>
+                            <p className="text-xs text-muted-foreground mt-1">Accept submissions after the deadline</p>
+                          </div>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={allowLateSubmissions}
+                              onChange={(e) => setAllowLateSubmissions(e.target.checked)}
+                              className="sr-only peer"
+                            />
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                          </label>
+                        </div>
+
+                        {allowLateSubmissions && (
+                          <div>
+                            <label className="block text-sm font-medium mb-2">Late Window</label>
+                            <div className="flex items-center gap-2">
+                              <Input
+                                type="number"
+                                min="1"
+                                value={lateWindow}
+                                onChange={(e) => setLateWindow(e.target.value)}
+                                placeholder="24"
+                                className="w-24"
+                              />
+                              <select
+                                value={lateWindowUnit}
+                                onChange={(e) => setLateWindowUnit(e.target.value)}
+                                className="px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                              >
+                                <option value="hours">Hours</option>
+                                <option value="days">Days</option>
+                              </select>
+                              <span className="text-xs text-muted-foreground">after deadline</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Practical Evaluation Setup */}
+          {assessmentType === "practical" && (
+            <div className="border-t border-border pt-6">
+              <h3 className="text-lg font-semibold mb-4">Practical Evaluation Setup</h3>
+              
+              {!hasValidPractical && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-amber-900">Instructions required</p>
+                    <p className="text-xs text-amber-800 mt-1">Provide instructions for the practical evaluation.</p>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Evaluation Title</label>
+                  <Input
+                    value={practicalTitle}
+                    onChange={(e) => setPracticalTitle(e.target.value)}
+                    placeholder="e.g., Hands-on Demonstration"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Evaluation Instructions</label>
+                  <Textarea
+                    value={practicalInstructions}
+                    onChange={(e) => setPracticalInstructions(e.target.value)}
+                    placeholder="Describe what students need to demonstrate and how they will be evaluated..."
+                    rows={6}
+                  />
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-sm text-blue-900">
+                    <strong>Note:</strong> Practical evaluations require manual grading by the instructor. Students will be notified when their evaluation has been reviewed.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex gap-3">
+        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button 
+          disabled={assessmentRequired || (assessmentType !== "none" && !hasValidContent)} 
+          onClick={onContinue}
+        >
+          Continue to Next Step
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const EligibilityStep = ({ course, onSave, onContinue }: any) => {
+  const courseId = course?.id;
+  const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
+  
+  const [certificationEnabled, setCertificationEnabled] = useState(storedCourse.eligibilityCertificationEnabled || false);
+  const [requireWatchAll, setRequireWatchAll] = useState(storedCourse.requireWatchAll !== undefined ? storedCourse.requireWatchAll : true);
+  const [requirePassAssessment, setRequirePassAssessment] = useState(storedCourse.requirePassAssessment !== undefined ? storedCourse.requirePassAssessment : true);
+  const [requireSubmitAssignment, setRequireSubmitAssignment] = useState(storedCourse.requireSubmitAssignment || false);
+  const [passingThreshold, setPassingThreshold] = useState(storedCourse.passingThreshold || "70");
+  const [showCertificatePreview, setShowCertificatePreview] = useState(false);
+
+  // Load certificate branding from Profile & Settings
+  const certificateBranding = JSON.parse(localStorage.getItem('certificate_branding') || '{}');
+
+  const hasCompletionRequirements = certificationEnabled && (requireWatchAll || requirePassAssessment || requireSubmitAssignment);
+
+  // Save eligibility data to localStorage whenever it changes
+  useEffect(() => {
+    if (courseId) {
+      const existing = JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}');
+      localStorage.setItem(`course_${courseId}`, JSON.stringify({ 
+        ...existing, 
+        eligibilityCertificationEnabled: certificationEnabled,
+        requireWatchAll,
+        requirePassAssessment,
+        requireSubmitAssignment,
+        passingThreshold,
+        eligibilityConfigured: true // Mark as configured
+      }));
+    }
+  }, [courseId, certificationEnabled, requireWatchAll, requirePassAssessment, requireSubmitAssignment, passingThreshold]);
+
+  return (
+    <div className="max-w-4xl">
+      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
+        <h2 className="text-xl font-semibold mb-2">Eligibility & Certification</h2>
+        <p className="text-sm text-muted-foreground mb-6">Configure certification rules and completion requirements.</p>
+
+        <div className="space-y-6">
+          {/* Certification Toggle */}
+          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+            <div>
+              <label className="text-sm font-medium">This course issues a certificate</label>
+              <p className="text-xs text-muted-foreground mt-1">Award certificates to students who complete the course</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={certificationEnabled}
+                onChange={(e) => setCertificationEnabled(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+
+          {/* Completion Requirements (shown when certification is enabled) */}
+          {certificationEnabled && (
+            <>
+              <div className="border border-border rounded-lg p-4">
+                <h3 className="text-sm font-semibold mb-3">Completion Requirements</h3>
+                <p className="text-xs text-muted-foreground mb-4">Students must meet all selected requirements to receive a certificate</p>
+
+                <div className="space-y-3">
+                  {/* Watch 100% of content */}
+                  <div className="flex items-center justify-between p-3 bg-background rounded-lg border border-border">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={requireWatchAll}
+                        onChange={(e) => setRequireWatchAll(e.target.checked)}
+                        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                      />
+                      <div>
+                        <label className="text-sm font-medium">Watch 100% of content</label>
+                        <p className="text-xs text-muted-foreground">Students must complete all lessons</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pass assessment */}
+                  <div className="flex items-center justify-between p-3 bg-background rounded-lg border border-border">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={requirePassAssessment}
+                        onChange={(e) => setRequirePassAssessment(e.target.checked)}
+                        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                      />
+                      <div>
+                        <label className="text-sm font-medium">Pass assessment</label>
+                        <p className="text-xs text-muted-foreground">Students must pass the course assessment</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Submit assignment */}
+                  <div className="flex items-center justify-between p-3 bg-background rounded-lg border border-border">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={requireSubmitAssignment}
+                        onChange={(e) => setRequireSubmitAssignment(e.target.checked)}
+                        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                      />
+                      <div>
+                        <label className="text-sm font-medium">Submit assignment</label>
+                        <p className="text-xs text-muted-foreground">Students must submit required assignments</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Passing Score Threshold */}
+              {requirePassAssessment && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">Passing Score Threshold</label>
+                  <p className="text-xs text-muted-foreground mb-3">Minimum score required to earn the certificate</p>
+                  <div className="flex items-center gap-3 max-w-xs">
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={passingThreshold}
+                      onChange={(e) => setPassingThreshold(e.target.value)}
+                      className="w-24"
+                    />
+                    <span className="text-sm text-muted-foreground">%</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Certificate Preview */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <label className="text-sm font-medium">Certificate Template</label>
+                    <p className="text-xs text-muted-foreground mt-1">Preview how the certificate will look</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowCertificatePreview(!showCertificatePreview)}
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    {showCertificatePreview ? "Hide" : "Show"} Preview
+                  </Button>
+                </div>
+
+                {showCertificatePreview && (
+                  <div className="border-2 border-border rounded-lg p-8 bg-gradient-to-br from-primary/5 to-background">
+                    <div className="max-w-2xl mx-auto text-center space-y-4">
+                      {certificateBranding.logo && (
+                        <img src={certificateBranding.logo} alt="Logo" className="h-12 w-auto mx-auto mb-4" />
+                      )}
+                      <div className="text-xs text-muted-foreground uppercase tracking-wider">Certificate of Completion</div>
+                      <h3 className="text-2xl font-serif font-bold">
+                        {certificateBranding.issuingEntityName || "BROWZ Beauty Academy"}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">This is to certify that</p>
+                      <div className="text-xl font-semibold border-b-2 border-primary inline-block px-8 pb-1">[Student Name]</div>
+                      <p className="text-sm text-muted-foreground">has successfully completed</p>
+                      <div className="text-lg font-semibold">{course?.title || "Course Title"}</div>
+                      <div className="flex justify-center gap-8 pt-6">
+                        <div className="text-center">
+                          {certificateBranding.signature ? (
+                            <img src={certificateBranding.signature} alt="Signature" className="h-12 w-auto mx-auto mb-2" />
+                          ) : (
+                            <div className="border-t border-foreground pt-1 px-8 mb-2">
+                              <p className="text-xs text-muted-foreground invisible">Signature</p>
+                            </div>
+                          )}
+                          <p className="text-xs text-muted-foreground">
+                            {certificateBranding.signatoryName || "Instructor Signature"}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <div className="border-t border-foreground pt-1 px-8 mb-2">
+                            <p className="text-xs text-muted-foreground invisible">Date</p>
+                          </div>
+                          <p className="text-xs text-muted-foreground">Date</p>
+                        </div>
+                      </div>
+                      {certificateBranding.accreditationNumber && (
+                        <p className="text-xs text-muted-foreground pt-4">
+                          Accreditation: {certificateBranding.accreditationNumber}
+                        </p>
+                      )}
+                      {certificateBranding.footerText && (
+                        <p className="text-xs text-muted-foreground pt-4">{certificateBranding.footerText}</p>
+                      )}
+                      <p className="text-xs text-muted-foreground">Certificate ID: [Auto-generated]</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Certification Logic Info */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-blue-900">Automatic Certificate Generation</p>
+                  <p className="text-xs text-blue-800 mt-1">
+                    Certificates will be automatically generated and issued when students meet all the selected completion requirements.
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* No Certification Message */}
+          {!certificationEnabled && (
+            <div className="text-center py-8 text-muted-foreground">
+              <p className="text-sm">Enable certification to configure completion requirements and issue certificates to students.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex gap-3">
+        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button onClick={onContinue}>Continue to Next Step</Button>
+      </div>
+    </div>
+  );
+};
+
+const PricingStep = ({ course, onSave, onContinue }: any) => {
+  const courseId = course?.id;
+  const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
+  
+  const [price, setPrice] = useState(storedCourse.price?.toString() || course?.price?.toString() || "0");
+  const [hasDiscount, setHasDiscount] = useState(storedCourse.hasDiscount || false);
+  const [discountType, setDiscountType] = useState<"percentage" | "fixed">(storedCourse.discountType || "percentage");
+  const [discountValue, setDiscountValue] = useState(storedCourse.discountValue || "");
+  const [hasEnrollmentCap, setHasEnrollmentCap] = useState(storedCourse.hasEnrollmentCap || false);
+  const [enrollmentCap, setEnrollmentCap] = useState(storedCourse.enrollmentCap || "");
+  const [language, setLanguage] = useState(storedCourse.language || "English");
+
+  // Save pricing data to localStorage whenever it changes
+  useEffect(() => {
+    if (courseId) {
+      const existing = JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}');
+      localStorage.setItem(`course_${courseId}`, JSON.stringify({ 
+        ...existing, 
+        price,
+        hasDiscount,
+        discountType,
+        discountValue,
+        hasEnrollmentCap,
+        enrollmentCap,
+        language,
+        pricingConfigured: true // Mark as configured
+      }));
+    }
+  }, [courseId, price, hasDiscount, discountType, discountValue, hasEnrollmentCap, enrollmentCap, language]);
+
+  const calculateDiscountedPrice = () => {
+    const originalPrice = parseFloat(price) || 0;
+    const discount = parseFloat(discountValue) || 0;
+    
+    if (discountType === "percentage") {
+      return originalPrice - (originalPrice * discount / 100);
+    } else {
+      return originalPrice - discount;
+    }
+  };
+
+  const discountedPrice = hasDiscount && discountValue ? calculateDiscountedPrice() : null;
+
+  return (
+    <div className="max-w-4xl">
+      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
+        <h2 className="text-xl font-semibold mb-2">Pricing & Settings</h2>
+        <p className="text-sm text-muted-foreground mb-6">Edit pricing, discounts, and course settings.</p>
+
+        <div className="space-y-6">
+          {/* Course Price */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Course Price</label>
+            <p className="text-xs text-muted-foreground mb-3">Set the price for your course</p>
+            <div className="flex items-center gap-2 max-w-xs">
+              <span className="text-sm text-muted-foreground">$</span>
+              <Input
+                type="number"
+                min="0"
+                step="0.01"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="0.00"
+                className="flex-1"
+              />
+            </div>
+          </div>
+
+          {/* Discount Option */}
+          <div className="border border-border rounded-lg p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <label className="text-sm font-medium">Enable Discount</label>
+                <p className="text-xs text-muted-foreground mt-1">Offer a promotional discount</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={hasDiscount}
+                  onChange={(e) => setHasDiscount(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+              </label>
+            </div>
+
+            {hasDiscount && (
+              <div className="space-y-4 pt-4 border-t border-border">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Discount Type</label>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setDiscountType("percentage")}
+                      className={`flex-1 p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                        discountType === "percentage"
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      Percentage (%)
+                    </button>
+                    <button
+                      onClick={() => setDiscountType("fixed")}
+                      className={`flex-1 p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                        discountType === "fixed"
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      Fixed Amount ($)
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Discount Value</label>
+                  <div className="flex items-center gap-2 max-w-xs">
+                    <span className="text-sm text-muted-foreground">
+                      {discountType === "percentage" ? "%" : "$"}
+                    </span>
+                    <Input
+                      type="number"
+                      min="0"
+                      max={discountType === "percentage" ? "100" : undefined}
+                      step={discountType === "percentage" ? "1" : "0.01"}
+                      value={discountValue}
+                      onChange={(e) => setDiscountValue(e.target.value)}
+                      placeholder="0"
+                      className="flex-1"
+                    />
+                  </div>
+                </div>
+
+                {discountedPrice !== null && discountedPrice >= 0 && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <p className="text-sm font-medium text-green-900">
+                      Discounted Price: <span className="line-through text-muted-foreground">${parseFloat(price).toFixed(2)}</span> → ${discountedPrice.toFixed(2)}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Enrollment Cap */}
+          <div className="border border-border rounded-lg p-4">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <label className="text-sm font-medium">Enrollment Cap</label>
+                <p className="text-xs text-muted-foreground mt-1">Limit the number of students who can enroll</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={hasEnrollmentCap}
+                  onChange={(e) => setHasEnrollmentCap(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+              </label>
+            </div>
+
+            {hasEnrollmentCap && (
+              <div className="pt-4 border-t border-border">
+                <label className="block text-sm font-medium mb-2">Maximum Students</label>
+                <div className="flex items-center gap-2 max-w-xs">
+                  <Input
+                    type="number"
+                    min="1"
+                    value={enrollmentCap}
+                    onChange={(e) => setEnrollmentCap(e.target.value)}
+                    placeholder="100"
+                    className="flex-1"
+                  />
+                  <span className="text-sm text-muted-foreground">students</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Course Language */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Course Language</label>
+            <p className="text-xs text-muted-foreground mb-3">Primary language of instruction</p>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="w-full max-w-xs px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="English">English</option>
+              <option value="Spanish">Spanish</option>
+              <option value="French">French</option>
+              <option value="German">German</option>
+              <option value="Italian">Italian</option>
+              <option value="Portuguese">Portuguese</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Korean">Korean</option>
+              <option value="Arabic">Arabic</option>
+            </select>
+          </div>
+
+          {/* Visibility Info */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-blue-900">Course Visibility</p>
+              <p className="text-xs text-blue-800 mt-1">
+                Your course will remain private until it is reviewed and approved by an administrator. Once approved, it will be visible to students.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-3">
+        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button onClick={onContinue}>Continue to Next Step</Button>
+      </div>
+    </div>
+  );
+};
+
+const SubmitStep = ({ course, onSave }: any) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const submitForReview = useSubmitCourseForReview();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Get actual course data from localStorage (where curriculum, media, etc. are stored)
+  const courseId = course?.id;
+  const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
+  
+  // Validate actual course data
+  const curriculum = storedCourse.curriculum || [];
+  const hasSections = curriculum.length > 0;
+  const hasLessons = curriculum.some((section: any) => section.lessons && section.lessons.length > 0);
+  const hasThumbnail = !!storedCourse.thumbnail;
+  const certificationEnabled = !!storedCourse.certificationEnabled;
+  const hasAssessment = storedCourse.assessmentType && storedCourse.assessmentType !== 'none';
+  const hasValidAssessmentContent = !!storedCourse.hasValidAssessmentContent;
+  
+  const validationData = {
+    hasTitle: !!course?.title,
+    hasDescription: !!course?.description,
+    hasSections,
+    hasLessons,
+    hasThumbnail,
+    certificationEnabled,
+    hasAssessment,
+    hasValidAssessmentContent,
+  };
+
+  const validationChecklist = [
+    { id: 'title', label: 'Course title', required: true, completed: validationData.hasTitle },
+    { id: 'description', label: 'Course description', required: true, completed: validationData.hasDescription },
+    { id: 'sections', label: 'At least 1 section', required: true, completed: validationData.hasSections },
+    { id: 'lessons', label: 'At least 1 lesson', required: true, completed: validationData.hasLessons },
+    { id: 'thumbnail', label: 'Course thumbnail uploaded', required: true, completed: validationData.hasThumbnail },
+    { 
+      id: 'assessment', 
+      label: 'Assessment type selected (required for certification)', 
+      required: validationData.certificationEnabled, 
+      completed: validationData.hasAssessment 
+    },
+    { 
+      id: 'assessmentContent', 
+      label: 'Assessment content created', 
+      required: validationData.hasAssessment, 
+      completed: validationData.hasValidAssessmentContent 
+    },
+  ];
+
+  const requiredItems = validationChecklist.filter(item => item.required);
+  const completedItems = requiredItems.filter(item => item.completed);
+  const missingItems = requiredItems.filter(item => !item.completed);
+  const isValid = missingItems.length === 0;
+  const progressPercent = (completedItems.length / requiredItems.length) * 100;
+
+  const handleSubmit = async () => {
+    if (!isValid) {
+      toast({
+        title: "Cannot submit",
+        description: "Please complete all required items before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Call the API to submit for review
+      await submitForReview.mutateAsync(courseId);
+      
+      toast({
+        title: "Course submitted!",
+        description: "Your course has been submitted for admin review.",
+      });
+      
+      // Navigate back to dashboard
+      navigate("/dashboard/instructor");
+    } catch (error) {
+      toast({
+        title: "Submission failed",
+        description: "There was an error submitting your course. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="max-w-4xl">
+      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
+        <h2 className="text-xl font-semibold mb-2">Submit for Review</h2>
+        <p className="text-sm text-muted-foreground mb-6">Review your course and submit for admin approval.</p>
+
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium">Completion Progress</span>
+            <span className="text-sm text-muted-foreground">{completedItems.length} of {requiredItems.length} completed</span>
+          </div>
+          <Progress value={progressPercent} className="h-2" />
+        </div>
+
+        {/* Validation Checklist */}
+        <div className="space-y-3 mb-6">
+          <h3 className="text-sm font-semibold">Submission Checklist</h3>
+          {validationChecklist.map((item) => (
+            item.required && (
+              <div
+                key={item.id}
+                className={`flex items-center gap-3 p-3 rounded-lg border ${
+                  item.completed
+                    ? "bg-green-50 border-green-200"
+                    : "bg-amber-50 border-amber-200"
+                }`}
+              >
+                {item.completed ? (
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                ) : (
+                  <Circle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                )}
+                <span className={`text-sm ${item.completed ? "text-green-900" : "text-amber-900"}`}>
+                  {item.label}
+                </span>
+              </div>
+            )
+          ))}
+        </div>
+
+        {/* Missing Items Warning */}
+        {!isValid && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-amber-900">Missing required items</p>
+              <p className="text-xs text-amber-800 mt-1">
+                Complete all checklist items before submitting for review.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Submission Info */}
+        {isValid && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-blue-900">Ready to submit</p>
+              <p className="text-xs text-blue-800 mt-1">
+                Once submitted, your course will be locked for review. You'll be able to make minor metadata edits, but curriculum, assessments, and certification settings will be locked until the review is complete.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* What happens after submission */}
+        <div className="border border-border rounded-lg p-4">
+          <h3 className="text-sm font-semibold mb-3">What happens after submission?</h3>
+          <div className="space-y-2 text-sm text-muted-foreground">
+            <div className="flex items-start gap-2">
+              <span className="text-primary mt-0.5">•</span>
+              <span>Course status changes to "Pending Review"</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-primary mt-0.5">•</span>
+              <span>Curriculum, assessments, and certification settings are locked</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-primary mt-0.5">•</span>
+              <span>Minor metadata edits (title, description, price) remain available</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-primary mt-0.5">•</span>
+              <span>Admin will review and either approve or request changes</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-primary mt-0.5">•</span>
+              <span>You'll receive a notification when the review is complete</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-3">
+        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button 
+          variant="hero" 
+          onClick={handleSubmit}
+          disabled={!isValid || isSubmitting}
+        >
+          {isSubmitting ? "Submitting..." : "Submit for Review"}
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default CourseBuilder;

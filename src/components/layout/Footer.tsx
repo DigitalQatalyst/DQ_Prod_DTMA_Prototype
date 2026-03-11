@@ -1,26 +1,54 @@
 import { Link } from "react-router-dom";
 import { Instagram, Facebook, Youtube, Linkedin, Twitter } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
-    explore: [
-      { label: "Hair Styling", href: "/courses/hair-styling" },
-      { label: "Nail Artistry", href: "/courses/nail-artistry" },
-      { label: "Skincare", href: "/courses/skincare" },
-      { label: "Makeup", href: "/courses/makeup" },
+    platform: [
+      { label: "Explore Courses", href: "/courses" },
+      { label: "Browse Categories", href: "/categories" },
+      { label: "Become an Instructor", href: "/become-provider" },
+      { label: "Partner as an Institution", href: "/institution-register/academy" },
+      { label: "Publish Courses (Organizations)", href: "/provider-apply" },
+    ],
+    learners: [
+      { label: "How Coursebay Works", href: "/about" },
+      { label: "Learning Paths", href: "/learning-paths" },
+      { label: "Certificates", href: "/certificates" },
+      { label: "Eligibility Tests", href: "/eligibility-tests" },
+      { label: "Learner Dashboard", href: "/dashboard" },
+    ],
+    providers: [
+      { label: "Teach on Coursebay", href: "/become-provider" },
+      { label: "Institution Partnerships", href: "/institution-partnerships" },
+      { label: "Tutor Guidelines", href: "/tutor-guidelines" },
+      { label: "Provider Verification", href: "/provider-verification" },
+      { label: "Course Publishing Guide", href: "/publishing-guide" },
+    ],
+    company: [
+      { label: "About Coursebay", href: "/about" },
+      { label: "Careers", href: "/careers" },
+      { label: "Blog / Insights", href: "/blog" },
+      { label: "Contact Us", href: "/contact" },
+    ],
+    support: [
+      { label: "Help Center", href: "/help" },
+      { label: "FAQs", href: "/faqs" },
+      { label: "Platform Support", href: "/support" },
+      { label: "Report an Issue", href: "/report" },
     ],
     legal: [
-      { label: "Refund Policy", href: "/refunds" },
+      { label: "Terms of Service", href: "/terms" },
       { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms Of Service", href: "/terms" },
-      { label: "Contact Information", href: "/contact" },
+      { label: "Cookie Policy", href: "/cookies" },
+      { label: "Data Protection", href: "/data-protection" },
     ],
   };
 
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook" },
     { icon: Linkedin, href: "#", label: "LinkedIn" },
     { icon: Twitter, href: "#", label: "Twitter" },
     { icon: Youtube, href: "#", label: "YouTube" },
@@ -30,96 +58,150 @@ const Footer = () => {
   return (
     <footer className="bg-white text-black">
       <div className="w-full">
-        {/* Main Footer - 3 Columns with Dividers */}
-        <div className="flex flex-col lg:flex-row border-b border-black/5">
+        {/* Main Footer */}
+        <div className="p-10 lg:p-20 border-b border-black/5">
+          
+          {/* First Row: Logo, Platform, For Learners, For Providers */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
 
-          {/* Column 1: Logo */}
-          <div className="flex-1 p-10 lg:p-20 lg:pl-16 flex flex-col items-start justify-start">
-            <Link to="/" className="inline-block mb-6">
-              <img
-                src="/log.svg"
-                alt="BROWZ Academy"
-                className="h-[60px] w-auto"
-              />
-            </Link>
-            <p className="text-black/70 text-sm leading-relaxed max-w-xs">
-              Empowering beauty professionals worldwide with industry-leading training, certifications, and career advancement opportunities
-            </p>
-          </div>
-
-          {/* Column 2: Navigation */}
-          <div className="flex-1 p-10 lg:p-20 border-t lg:border-t-0 lg:border-l border-black/10">
-            <h4 className="font-semibold text-lg mb-8">Courses</h4>
-            <ul className="space-y-4">
-              {footerLinks.explore.map((link) => (
-                <li key={link.label}>
-                  <Link to={link.href} className="text-sm text-black/70 hover:text-black transition-colors block">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 3: Contact & Info */}
-          <div className="flex-1 p-10 lg:p-20 border-t lg:border-t-0 lg:border-l border-black/10">
-
-            {/* Contact Block */}
-            <div className="mb-8">
-              <h4 className="font-semibold text-lg mb-4">Contact</h4>
-              <p className="text-sm text-black/70 mb-1">600 564 668</p>
-              <a href="mailto:hello@browz.ae" className="text-sm text-black/70 hover:text-black transition-colors">hello@browz.ae</a>
+            {/* Column 1: Logo & Description */}
+            <div>
+              <Link to="/" className="inline-block mb-6">
+                <img
+                  src="/logo.svg"
+                  alt="Coursebay"
+                  className="h-12 w-auto"
+                />
+              </Link>
+              <p className="text-black/70 text-sm leading-relaxed mb-6">
+                A trusted learning marketplace connecting learners with verified providers.
+              </p>
             </div>
 
-            {/* Company Links */}
-            <div className="mb-8">
-              <h4 className="font-semibold text-lg mb-4">Company</h4>
+            {/* Column 2: Platform/Marketplace */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">Platform</h4>
               <ul className="space-y-2">
-                <li><Link to="/about" className="text-sm text-black/70 hover:text-black transition-colors">About Us</Link></li>
-                <li><Link to="/instructors" className="text-sm text-black/70 hover:text-black transition-colors">Instructors</Link></li>
-                <li><Link to="/careers" className="text-sm text-black/70 hover:text-black transition-colors">Careers</Link></li>
-                <li><Link to="/contact" className="text-sm text-black/70 hover:text-black transition-colors">Contact</Link></li>
+                {footerLinks.platform.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            {/* Social Icons */}
-            <div className="flex gap-4 mt-8">
+            {/* Column 3: For Learners */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">For Learners</h4>
+              <ul className="space-y-2">
+                {footerLinks.learners.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 4: For Providers */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">For Providers</h4>
+              <ul className="space-y-2">
+                {footerLinks.providers.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Second Row: Company, Support, Legal */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            {/* Empty column to align with logo column */}
+            <div className="hidden lg:block"></div>
+
+            {/* Column 1: Company */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">Company</h4>
+              <ul className="space-y-2">
+                {footerLinks.company.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 2: Support */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">Support</h4>
+              <ul className="space-y-2">
+                {footerLinks.support.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 3: Legal */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">Legal</h4>
+              <ul className="space-y-2">
+                {footerLinks.legal.map((link) => (
+                  <li key={link.label}>
+                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Social Media Section - Separate */}
+        <div className="bg-white py-8 px-4 lg:px-12 border-b border-black/5">
+          <div className="text-center">
+            <h4 className="font-semibold text-sm mb-6 uppercase text-black/80">Follow Us</h4>
+            <div className="flex justify-center gap-4">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-8 h-8 rounded-full text-white flex items-center justify-center hover:opacity-80 transition-opacity"
-                  style={{ backgroundColor: "#4E382D" }}
+                  className="w-10 h-10 rounded-full text-white flex items-center justify-center hover:opacity-80 transition-opacity"
+                  style={{ backgroundColor: "#1E2348" }}
                 >
-                  <social.icon className="w-4 h-4" />
+                  <social.icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
-
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="bg-gray-100/50 py-6 px-4 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-black/60">
-
           {/* Left: Copyright */}
           <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2">
-            <span className="font-bold text-black/70">© {currentYear} BROWZ Beauty Academy. All rights reserved.</span>
+            <span className="font-bold text-black/70">© {currentYear} Coursebay. All rights reserved.</span>
+            <span className="hidden sm:inline">•</span>
+            <span>A trusted learning marketplace connecting learners with verified providers.</span>
           </div>
 
-          {/* Center: Legal Links */}
-          <div className="flex flex-wrap justify-center gap-6">
-            {footerLinks.legal.map((link) => (
-              <Link key={link.label} to={link.href} className="hover:text-black transition-colors">
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Right: Payment Icons (Placeholders) */}
+          {/* Right: Payment Icons */}
           <div className="flex items-center gap-2 grayscale opacity-70">
-            {/* Using simple divs representing card icons or text if no images available */}
             <div className="h-6 w-9 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-[8px]">VISA</div>
             <div className="h-6 w-9 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-[8px]">MC</div>
             <div className="h-6 w-9 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-[8px]">AMEX</div>

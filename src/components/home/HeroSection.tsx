@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 
+interface HeroSectionProps {
+  isActive?: boolean;
+  currentSlide?: number;
+  onDotClick?: (index: number) => void;
+  totalSlides?: number;
+}
+
 const featureImages = [
   {
     title: "Portfolio Ready",
@@ -20,104 +27,97 @@ const featureImages = [
   },
 ];
 
-const HeroSection = () => {
+const HeroSection = ({ isActive = true, currentSlide = 0, onDotClick, totalSlides = 2 }: HeroSectionProps) => {
   return (
     <>
-      <section className="relative h-screen bg-background overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 via-background to-secondary/20" />
+      <section className="relative h-screen bg-white overflow-visible">
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-white" />
 
         <div className="relative w-full h-full flex items-center">
           {/* Hero Card */}
-          <div className="w-full bg-gradient-to-br from-secondary/40 to-background/60 backdrop-blur-sm border-t border-b border-border/30">
-            <div className="p-8 md:p-12 lg:p-16">
-              <div className="grid md:grid-cols-[45fr_55fr] gap-8 lg:gap-12 items-center max-w-[1600px] mx-auto">
+          <div className="w-full bg-gradient-to-br from-white to-white backdrop-blur-sm border-t border-b border-border/30">
+            <div className="p-8 md:p-12 lg:p-16" style={{ paddingTop: '120px' }}>
+              <div className="grid md:grid-cols-[45fr_55fr] gap-12 lg:gap-12 items-start max-w-[1600px] mx-auto" style={{ gap: '48px' }}>
                 {/* Left Column - Text Content */}
-                <div className="space-y-4" style={{ paddingTop: '32px' }}>
-                  <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-muted-foreground/80">
-                    Premium Beauty Training
-                  </span>
-                  
-                  <h1 className="font-semibold text-foreground leading-[1.1]" style={{ fontSize: '60px' }}>
-                    Learn Beauty the BROWZ Way
+                <div className="space-y-3" style={{ paddingTop: '32px' }}>
+                  <h1 className="text-foreground font-semibold text-5xl md:text-6xl leading-tight">
+                    Learn Skills That Move You Forward
                   </h1>
                   
                   <p className="text-base md:text-lg text-muted-foreground/90 leading-relaxed max-w-lg">
-                    Professional beauty training built on real-world expertise, innovation, and results.
+                    Discover courses from experts across multiple disciplines
                   </p>
                   
-                  <div className="pt-4">
-                    <Link to="/courses">
-                      <Button variant="hero" size="lg" className="group">
-                        Explore Courses
-                        <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
+                  <div className="pt-3 flex gap-3 max-w-lg" style={{ width: '100%', maxWidth: '600px' }}>
+                    <div className="flex-1 flex items-center gap-3 bg-white border border-border rounded-lg px-4 py-3 shadow-sm">
+                      <svg className="w-5 h-5 text-muted-foreground flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      <input
+                        type="text"
+                        placeholder="What do you want to learn?"
+                        className="flex-1 bg-transparent text-foreground placeholder-muted-foreground outline-none text-sm"
+                      />
+                    </div>
+                    <button className="text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity text-sm flex-shrink-0" style={{ backgroundColor: '#2563EB' }}>
+                      Search
+                    </button>
+                  </div>
+
+                  <div className="pt-6">
+                    <p className="text-sm text-muted-foreground mb-3">Popular searches:</p>
+                    <div className="flex flex-wrap gap-3">
+                      <a href="#" className="text-sm text-primary hover:text-primary/80 transition-colors">Data Science</a>
+                      <span className="text-muted-foreground">•</span>
+                      <a href="#" className="text-sm text-primary hover:text-primary/80 transition-colors">UI/UX Design</a>
+                      <span className="text-muted-foreground">•</span>
+                      <a href="#" className="text-sm text-primary hover:text-primary/80 transition-colors">Business Analytics</a>
+                      <span className="text-muted-foreground">•</span>
+                      <a href="#" className="text-sm text-primary hover:text-primary/80 transition-colors">Digital Marketing</a>
+                    </div>
                   </div>
                 </div>
 
                 {/* Right Column - Hero Image */}
-                <div className="relative flex justify-start">
+                <div className="relative flex justify-end pr-16">
                   <div className="relative w-full">
                     <div className="absolute -inset-6 bg-gradient-to-br from-primary/5 to-secondary/10 rounded-[40px] blur-3xl opacity-60" />
-                    <div className="relative rounded-3xl bg-gradient-to-br from-background/50 to-secondary/30 p-6">
-                      <img
-                        src="/hero.browz%201.png"
-                        alt="BROWZ graduate holding certificate"
-                        className="relative w-full h-auto object-contain mix-blend-multiply opacity-95 rounded-3xl"
-                        style={{ 
-                          filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.04))",
-                          maxHeight: "75vh"
-                        }}
-                      />
-                    </div>
+                    <img
+                      src="/Hero.png"
+                      alt="Learning marketplace hero"
+                      className="relative w-full h-auto object-contain opacity-95 rounded-3xl"
+                      style={{ 
+                        filter: "drop-shadow(0 4px 16px rgba(0,0,0,0.04))",
+                        width: '579px',
+                        height: '494.56px'
+                      }}
+                    />
                     
                     {/* Floating Badge - moved outside overflow container */}
-                    <div className="absolute left-8 animate-float z-50" style={{ bottom: '-40px' }}>
-                      <div className="bg-background/95 backdrop-blur-md rounded-full px-6 py-4 shadow-lg border border-border/50 flex items-center gap-4">
-                        <div className="flex -space-x-2">
-                          <div className="w-10 h-10 rounded-full bg-primary border-2 border-background"></div>
-                          <div className="w-10 h-10 rounded-full bg-charcoal border-2 border-background"></div>
-                          <div className="w-10 h-10 rounded-full bg-primary/70 border-2 border-background"></div>
-                        </div>
-                        <div>
-                          <p className="text-base font-semibold text-foreground">Join 500+ learners</p>
-                          <p className="text-sm text-muted-foreground">enrolled this week</p>
-                        </div>
-                      </div>
-                    </div>
+                    {/* Badge removed */}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Bottom feature strip - separate section */}
-      <section className="py-8 bg-background">
-        <div className="grid md:grid-cols-3 gap-4 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16">
-          {featureImages.map((item, idx) => (
-            <div
-              key={item.title}
-              className="group overflow-hidden border border-border/50 bg-background/90 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl"
-              style={{ animationDelay: `${idx * 0.1}s` }}
-            >
-              <div className="relative">
-                <img
-                  src={item.src}
-                  alt={item.title}
-                  className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105 opacity-90"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent pointer-events-none" />
-              </div>
-              <div className="px-4 py-4 flex items-center justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/70">{item.subtitle}</p>
-                  <p className="text-base font-semibold text-foreground mt-1">{item.title}</p>
-                </div>
-                <span className="text-sm text-primary/70 font-medium">→</span>
-              </div>
-            </div>
+        {/* Carousel Dots */}
+        <div className="absolute bottom-8 flex gap-3 z-20" style={{ left: 'calc(8.333% + 2rem)' }}>
+          {Array.from({ length: totalSlides }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => onDotClick?.(index)}
+              className={`transition-all duration-300 rounded-full ${
+                index === currentSlide
+                  ? "w-12 h-3"
+                  : "w-3 h-3 hover:opacity-80"
+              }`}
+              style={{
+                backgroundColor: index === currentSlide ? '#4A5568' : '#D1D5DB'
+              }}
+              aria-label={`Go to slide ${index + 1}`}
+            />
           ))}
         </div>
       </section>

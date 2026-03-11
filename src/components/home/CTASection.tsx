@@ -10,26 +10,26 @@ const CTASection = () => {
   ];
 
   return (
-    <section className="py-20 relative overflow-hidden" style={{ backgroundColor: '#4E382D' }}>
+    <section className="py-20 relative overflow-hidden" style={{ backgroundColor: '#1E2348' }}>
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
         <div className="max-w-2xl">
           <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6">
-            Start Your Career Today
+            Start Learning Today
           </h2>
           <p className="text-lg text-white/90 mb-8">
-            Join thousands of beauty professionals advancing their skills with BROWZ Beauty Academy's expert-led, flexible courses
+            Discover courses from experts across multiple disciplines
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <Link to="/auth?mode=signup">
+            <Link to="/courses">
               <Button variant="hero" size="lg" className="group bg-white text-primary hover:bg-white/90">
-                Get Started
+                Explore Courses
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link to="/courses">
-              <Button size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white/10 rounded-full">
-                Explore Courses
+            <Link to="/auth?mode=signup">
+              <Button size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white/10">
+                Create a Free Account
               </Button>
             </Link>
           </div>

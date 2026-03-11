@@ -661,10 +661,10 @@ const Courses = () => {
         <section className="bg-secondary py-16">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-5xl font-semibold text-foreground mb-4">
+              <h1 className="text-4xl md:text-5xl font-semibold text-white mb-4">
                 Explore Our Courses
               </h1>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-lg text-white/80">
                 Discover expert-led courses designed to elevate your beauty skills and accelerate your career.
               </p>
             </div>

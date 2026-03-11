@@ -52,92 +52,127 @@ const Navbar = () => {
           <div className="flex items-center" style={{ maxWidth: '1600px', width: '100%', margin: '0 auto' }}>
             <div className="flex items-center justify-between w-full">
               {/* Logo */}
-              <Link to="/" className="flex items-center gap-3 group h-[60px]">
+              <Link to="/" className="flex items-center gap-3 group h-[44px]">
                 <img
-                  src="/log.svg"
+                  src="/logo.svg"
                   alt="BROWZ Academy"
-                  className="h-[50px] w-auto transition-transform duration-300 group-hover:scale-105"
+                  className="h-[44px] w-auto transition-transform duration-300 group-hover:scale-105"
                 />
               </Link>
 
               {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-4 ml-auto">
-                <div className="flex items-center" style={{ gap: "28px" }}>
-                  {/* Explore Dropdown */}
-                  <div className="relative">
-                    <button 
-                      onClick={() => setIsExploreOpen(!isExploreOpen)}
-                      className="text-sm font-medium transition-colors duration-200 hover:text-primary text-muted-foreground flex items-center gap-1"
-                    >
-                      Explore
-                      <ChevronDown className={`w-4 h-4 transition-transform ${isExploreOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    
-                    {/* Full Screen Overlay Dropdown */}
-                    {isExploreOpen && (
-                      <div className="fixed left-0 right-0 top-20 z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: '368px', borderColor: '#EEEDE9' }}>
-                        <div className="max-w-[1600px] mx-auto px-8 lg:px-16 h-full pointer-events-auto">
-                          <div className="grid grid-cols-2 h-full">
-                            {/* Left Column - Menu Items */}
-                            <div className="p-12 lg:p-16 space-y-8 flex flex-col justify-center">
-                              <Link
-                                to="/categories"
-                                onClick={() => setIsExploreOpen(false)}
-                                className="block group/item hover:no-underline"
-                              >
-                                <div className="mb-4">
-                                  <h3 className="text-lg font-semibold text-foreground uppercase tracking-wide group-hover/item:text-primary transition-colors">
-                                    Course Categories
-                                  </h3>
-                                  <div className="h-1 w-12 bg-primary opacity-0 group-hover/item:opacity-100 transition-all mt-2" />
-                                </div>
-                                <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
-                                  Explore our comprehensive range of beauty training programs designed to elevate your skills and career.
-                                </p>
-                              </Link>
+              <div className="hidden md:flex items-center gap-8 ml-8">
+                {/* Explore Dropdown */}
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsExploreOpen(!isExploreOpen)}
+                    className="text-sm font-medium transition-colors duration-200 hover:text-primary text-muted-foreground flex items-center gap-1"
+                  >
+                    Explore
+                    <ChevronDown className={`w-4 h-4 transition-transform ${isExploreOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {/* Full Screen Overlay Dropdown */}
+                  {isExploreOpen && (
+                    <div className="fixed left-0 right-0 top-20 z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'auto', borderColor: '#EEEDE9' }}>
+                      <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
+                        <div className="grid grid-cols-4 gap-12">
+                          {/* Explore Roles */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Explore roles</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Data Analyst</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Project Manager</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Cyber Security Analyst</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Data Scientist</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Business Intelligence Analyst</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Digital Marketing Specialist</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">UI / UX Designer</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Machine Learning Engineer</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Social Media Specialist</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Computer Support Specialist</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
+                          </div>
 
-                              <Link
-                                to="/masterclasses"
-                                onClick={() => setIsExploreOpen(false)}
-                                className="block group/item hover:no-underline"
-                              >
-                                <div className="mb-4">
-                                  <h3 className="text-lg font-semibold text-foreground uppercase tracking-wide group-hover/item:text-primary transition-colors">
-                                    In-Person Trainings
-                                  </h3>
-                                  <div className="h-1 w-12 bg-primary opacity-0 group-hover/item:opacity-100 transition-all mt-2" />
-                                </div>
-                                <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
-                                  Hands-on masterclasses with expert instructors in structured, practical environments.
-                                </p>
-                              </Link>
-                            </div>
+                          {/* Explore Categories */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Explore categories</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Artificial Intelligence</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Business</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Data Science</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Information Technology</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Computer Science</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Healthcare</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Physical Science and Engineering</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Personal Development</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Social Sciences</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Language Learning</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Arts and Humanities</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
+                          </div>
 
-                            {/* Right Column - Hero Content */}
-                            <div className="p-12 lg:p-16 flex items-center justify-center" style={{ marginTop: '-56px' }}>
-                              <div className="text-center">
-                                <img src="/hat.png" alt="Graduation Hat" className="w-72 h-72 object-contain opacity-60" />
-                              </div>
-                            </div>
+                          {/* Earn a Professional Certificate */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Earn a Professional Certificate</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Business</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Computer Science</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Data Science</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Information Technology</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
+                            
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6 mt-8">Earn an online degree</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Bachelor's Degrees</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Master's Degrees</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Postgraduate Programs</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
+                          </div>
+
+                          {/* Explore Trending Skills */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Explore trending skills</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Python</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Artificial Intelligence</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Excel</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Machine Learning</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">SQL</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Project Management</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Power BI</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Marketing</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
+                            
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6 mt-8">Prepare for a certification exam</h3>
+                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 inline-block">View all</a>
                           </div>
                         </div>
                       </div>
-                    )}
-                  </div>
-
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      to={link.href}
-                      className={`text-sm font-medium transition-colors duration-200 hover:text-primary ${
-                        isActive(link.href) ? "text-primary" : "text-muted-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                    </div>
+                  )}
                 </div>
 
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    className={`text-sm font-medium transition-colors duration-200 hover:text-primary ${
+                      isActive(link.href) ? "text-primary" : "text-muted-foreground"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Right Side - Auth & Dashboard */}
+              <div className="hidden md:flex items-center gap-4 ml-auto">
                 {!loading && user ? (
                   <>
                     <Link to="/dashboard">

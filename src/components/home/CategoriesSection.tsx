@@ -68,7 +68,7 @@ const CategoriesSection = () => {
   );
 
   return (
-    <section className="py-24 bg-secondary/30">
+    <section className="py-24 bg-white">
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         <div className="flex items-start justify-between mb-16">
           <div className="max-w-2xl">
@@ -108,7 +108,7 @@ const CategoriesSection = () => {
             <Link
               key={index}
               to={category.href}
-              className="group relative bg-secondary/50 rounded-3xl p-8 shadow-md hover:shadow-lg transition-all duration-500 overflow-hidden flex flex-col justify-between min-h-80"
+              className="group relative bg-white rounded-3xl p-8 shadow-md hover:shadow-lg transition-all duration-500 overflow-hidden flex flex-col justify-between min-h-80 border border-border/50"
             >
               {/* Ghost Background Image */}
               <div className="absolute inset-0 opacity-[0.02] pointer-events-none">
@@ -119,10 +119,10 @@ const CategoriesSection = () => {
               <div className="relative z-10">
                 {/* Top Section - Badge and Icon */}
                 <div className="flex items-start justify-between mb-8">
-                  <span className="inline-flex items-center px-4 py-2 rounded-full bg-background text-sm font-semibold text-foreground">
+                  <span className="inline-flex items-center px-4 py-2 rounded-full bg-muted text-sm font-semibold text-foreground">
                     {category.courses} Courses
                   </span>
-                  <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+                  <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                     <category.icon className="w-8 h-8 text-foreground opacity-50" />
                   </div>
                 </div>

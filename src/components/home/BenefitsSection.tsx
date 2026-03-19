@@ -37,7 +37,7 @@ const BenefitsSection = () => {
           <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
             The Digital Economy Is Here. Are You Ready?
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Discover what a Digital Cognitive Organization is and how to become one. Learn to deliver successful digital initiatives with confidence. Understand what it takes to operate and thrive in Economy 4.0.
           </p>
         </div>
@@ -57,7 +57,7 @@ const BenefitsSection = () => {
                 </div>
 
                 {/* Heading */}
-                <h3 className="text-xl font-semibold text-foreground mb-4">
+                <h3 className="text-lg font-semibold text-foreground mb-4">
                   {benefit.title}
                 </h3>
 

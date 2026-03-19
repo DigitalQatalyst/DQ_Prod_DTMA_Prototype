@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFlow } from "@/contexts/FlowContext";
-import { Menu, X, LogOut, LayoutDashboard, Search, ChevronDown, GraduationCap } from "lucide-react";
+import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 
 type SignInRole = "learner" | "instructor" | "admin";
 
@@ -11,7 +11,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
   const [isForYouOpen, setIsForYouOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const { user, profile, signOut, loading } = useAuth();
@@ -40,39 +39,25 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  const getSignInPath = (role: SignInRole) => {
-    if (role === "learner") return "/auth";
-    return role === "admin" ? "/auth/admin" : "/auth/instructor";
-  };
-
   const handleSignOut = async () => {
     await signOut();
     setIsOpen(false);
   };
 
   const handleSignIn = () => {
-    // Use flow context to determine which auth page to navigate to
     const path = flow === "provider" ? "/auth/instructor" : "/auth";
     navigate(path);
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/courses?search=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery("");
-    }
   };
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
       <nav className="w-full relative">
-        <div className="flex items-stretch w-full px-8 md:px-12 lg:px-16 py-6 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
+        <div className="flex items-center w-full px-8 md:px-12 lg:px-16 py-6 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
           {/* Left: Logo Area */}
           <div className="flex items-center flex-shrink-0 gap-6">
             <Link to="/" className="flex items-center gap-3 group">
               <img
-                src="/logo dtma.svg"
+                src="/dtma-logo.png"
                 alt="DTMA"
                 className="h-[48px] w-auto transition-transform duration-300 group-hover:scale-105"
               />
@@ -80,69 +65,10 @@ const Navbar = () => {
             <div className="h-[48px] w-[1px] bg-white/20"></div>
           </div>
 
-          {/* Right: Two Rows Main Content */}
-          <div className="flex flex-col flex-grow justify-center max-w-6xl" style={{ marginTop: '32px' }}>
-            {/* Top Row */}
-            <div className="flex justify-between items-end w-full pb-3 border-b border-white/20">
-              <h2 className="text-[20px] leading-[28px] font-normal text-white mb-1 tracking-tight">
-                Digital Transformation Management Academy
-              </h2>
-              
-              <div className="hidden md:flex items-center gap-6 mb-1">
-                {/* Auth / Right Side Actions */}
-                {!loading && user ? (
-                  <>
-                    <Link to="/dashboard">
-                      <Button variant="ghost" size="sm" className="gap-2 text-white hover:text-white/80 hover:bg-white/10">
-                        <LayoutDashboard className="w-4 h-4" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground">
-                        {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
-                      </div>
-                      <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white/80 hover:bg-white/10">
-                        <LogOut className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <button 
-                    onClick={handleSignIn}
-                    className="text-sm font-semibold transition-colors duration-200 hover:text-white text-white/90"
-                  >
-                    Log In
-                  </button>
-                )}
-
-
-                
-                {!loading && !user && (
-                  <Button 
-                    variant="hero" 
-                    size="sm" 
-                    onClick={handleSignIn}
-                    className="px-6 ml-2 bg-[#ff6b4d] hover:bg-[#e56045] text-white border-transparent"
-                  >
-                    Get Started
-                  </Button>
-                )}
-              </div>
-
-               {/* Mobile Toggle */}
-              <div className="md:hidden flex items-center gap-4 mb-1">
-                <button
-                  className="p-1 rounded-lg hover:bg-white/10 transition-colors text-white"
-                  onClick={() => setIsOpen(!isOpen)}
-                >
-                  {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </button>
-              </div>
-            </div>
-
-            {/* Bottom Row - Navigation Links */}
-            <div className="hidden md:flex items-center gap-8 pt-4">
+          {/* Right: Single Row with Nav Links and Auth */}
+          <div className="flex items-center justify-between flex-grow">
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center gap-8">
                 <Link to="/" className="text-sm font-medium transition-colors duration-200 text-white hover:text-white">
                   Home
                 </Link>
@@ -162,7 +88,7 @@ const Navbar = () => {
                   
                   {/* Full Screen Overlay Dropdown */}
                   {isExploreOpen && (
-                    <div className="fixed left-0 right-0 top-[160px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 160px)', borderColor: '#EEEDE9' }}>
+                    <div className="fixed left-0 right-0 top-[100px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 100px)', borderColor: '#EEEDE9' }}>
                       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
                         <div className="grid grid-cols-4 gap-12">
                           {/* Digital Workers */}
@@ -299,8 +225,57 @@ const Navbar = () => {
                   </Link>
                 ))}
               </div>
+
+            {/* Auth / Right Side Actions */}
+            <div className="hidden md:flex items-center gap-6">
+              {!loading && user ? (
+                <>
+                  <Link to="/dashboard">
+                    <Button variant="ghost" size="sm" className="gap-2 text-white hover:text-white/80 hover:bg-white/10">
+                      <LayoutDashboard className="w-4 h-4" />
+                      Dashboard
+                    </Button>
+                  </Link>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground">
+                      {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white/80 hover:bg-white/10">
+                      <LogOut className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button 
+                    onClick={handleSignIn}
+                    className="text-sm font-semibold transition-colors duration-200 hover:text-white text-white/90"
+                  >
+                    Log In
+                  </button>
+                  <Button 
+                    variant="hero" 
+                    size="sm" 
+                    onClick={handleSignIn}
+                    className="px-6 bg-[#ff6b4d] hover:bg-[#e56045] text-white border-transparent"
+                  >
+                    Get Started
+                  </Button>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Toggle */}
+            <div className="md:hidden flex items-center gap-4">
+              <button
+                className="p-1 rounded-lg hover:bg-white/10 transition-colors text-white"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
             </div>
           </div>
+        </div>
 
         {/* Mobile Menu */}
         {isOpen && (

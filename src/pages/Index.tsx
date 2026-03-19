@@ -7,6 +7,7 @@ import HowCoursebayHelpsSection from "@/components/home/HowCoursebayHelpsSection
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import BenefitsSection from "@/components/home/BenefitsSection";
 import FeaturedCoursesSection2 from "@/components/home/FeaturedCoursesSection2";
+import SixXDSection from "@/components/home/SixXDSection";
 import CTASection from "@/components/home/CTASection";
 
 const Index = () => {
@@ -18,6 +19,7 @@ const Index = () => {
         <TestimonialsSection />
         <BenefitsSection />
         <FeaturedCoursesSection2 />
+        <SixXDSection />
         <ExploreCategoriesSection />
         <TrustedProvidersSection />
         <HowCoursebayHelpsSection />

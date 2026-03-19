@@ -94,7 +94,7 @@ const FeaturedCoursesSection2 = () => {
           <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
             Find the Right Course for Where You Are
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             DTMA offers seven targeted courses built on the 6XD framework — each designed for your specific role and objectives. Find the right course for where you are in your digital transformation journey.
           </p>
         </div>
@@ -134,7 +134,7 @@ const FeaturedCoursesSection2 = () => {
               </div>
 
               {/* Course Title */}
-              <h3 className="text-xl font-semibold text-foreground mb-3">
+              <h3 className="text-lg font-semibold text-foreground mb-3">
                 {course.title}
               </h3>
 

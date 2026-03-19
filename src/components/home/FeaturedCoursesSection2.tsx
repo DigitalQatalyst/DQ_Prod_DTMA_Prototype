@@ -101,18 +101,24 @@ const FeaturedCoursesSection2 = () => {
 
         {/* Persona Tabs */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-white rounded-xl p-1 shadow-sm">
+          <div className="inline-flex gap-8 relative">
+            {/* Background line for all tabs */}
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-200"></div>
+            
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`px-4 py-3 text-base font-medium transition-all duration-200 relative ${
                   activeTab === tab.id
-                    ? "bg-[#ff6b4d] text-white"
+                    ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {tab.label}
+                {activeTab === tab.id && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ff6b4d] z-10"></span>
+                )}
               </button>
             ))}
           </div>

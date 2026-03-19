@@ -1,0 +1,225 @@
+import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const humanFaculty = [
+  {
+    name: "Stephane",
+    title: "Digital Strategy Lead",
+    bio: "Over 15 years driving enterprise digital transformations across EMEA. Specializes in cognitive organization design and strategic operating models.",
+    expertise: ["Digital Strategy", "Cognitive Organizations", "Change Management"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+  },
+  {
+    name: "Kaylyn",
+    title: "Innovation & Learning Architect",
+    bio: "Passionate about designing future-ready learning experiences. Brings deep expertise in instructional design and digital capability building.",
+    expertise: ["Learning Design", "Innovation Frameworks", "Capability Building"],
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop",
+  },
+  {
+    name: "Mark",
+    title: "Technology & Transformation Advisor",
+    bio: "Former CTO turned educator. Bridges the gap between emerging technology and practical business transformation.",
+    expertise: ["Emerging Tech", "Enterprise Architecture", "Transformation Delivery"],
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop",
+  },
+];
+
+const aiExperts = [
+  {
+    dimension: "Digital Economy (DE)",
+    avatar: "/ai-leadership.png",
+    color: "#ff6b4d",
+    specialization: "Deep expertise in Economy 4.0 dynamics, industry shifts, and competitive positioning.",
+    questions: "Why should organizations change? How is the digital economy reshaping industries?",
+  },
+  {
+    dimension: "Digital Cognitive Organisation (DCO)",
+    avatar: "/ai-operations.png",
+    color: "#4f46e5",
+    specialization: "Specialized knowledge in intelligent, adaptive, and data-driven organizational design.",
+    questions: "Where are organizations headed? How do we build cognitive maturity?",
+  },
+  {
+    dimension: "Digital Business Platform (DBP)",
+    avatar: "/ai-technology.png",
+    color: "#0891b2",
+    specialization: "Expert guidance on platform architecture, integration, and orchestration strategies.",
+    questions: "What unifies value creation? How do we design and deploy digital platforms?",
+  },
+  {
+    dimension: "Digital Transformation 2.0 (DT2.0)",
+    avatar: "/ai-culture.png",
+    color: "#16a34a",
+    specialization: "Advanced methodologies for architecting target states and deploying transformation at scale.",
+    questions: "How do we design the target? What approaches work for modern transformation?",
+  },
+  {
+    dimension: "Digital Worker & Workspace (DW/WS)",
+    avatar: "/ai-innovation.png",
+    color: "#dc2626",
+    specialization: "Insights on workforce models, digital skills, and transformation-ready environments.",
+    questions: "Who are the orchestrators? How do we redesign workforce and workspace?",
+  },
+  {
+    dimension: "Digital Accelerators (DA)",
+    avatar: "/ai-trust.png",
+    color: "#9333ea",
+    specialization: "Tools and methodologies that compress timescales and accelerate transformation delivery.",
+    questions: "When will we get there? How do we speed up transformation execution?",
+  },
+];
+
+const FacultySection = () => {
+  const [activeTab, setActiveTab] = useState<"human" | "ai">("human");
+
+  const tabs = [
+    { id: "human" as const, label: "Human Intelligence" },
+    { id: "ai" as const, label: "Artificial Intelligence" },
+  ];
+
+  return (
+    <section className="py-16 bg-white">
+      <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
+            Meet Your Trainers
+          </p>
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+            Learn from a Hybrid HI + AI Faculty
+          </h2>
+          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            DTMA's faculty combines three expert human instructors with six AI-powered specialists — one for each digital dimension. Together, they deliver a learning experience that blends real-world insight with deep, always-available expertise.
+          </p>
+        </div>
+
+        {/* Faculty Type Tabs */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex gap-8 relative">
+            {/* Background line for all tabs */}
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-200"></div>
+            
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-3 text-base font-medium transition-all duration-200 relative ${
+                  activeTab === tab.id
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab.label}
+                {activeTab === tab.id && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ff6b4d] z-10"></span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Human Faculty */}
+        {activeTab === "human" && (
+          <div className="mt-16 mb-20">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {humanFaculty.map((faculty) => (
+              <div
+                key={faculty.name}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group"
+              >
+                {/* Photo */}
+                <div className="h-64 overflow-hidden">
+                  <img
+                    src={faculty.image}
+                    alt={faculty.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                {/* Info */}
+                <div className="p-6">
+                  <h4 className="text-lg font-semibold text-foreground mb-1">
+                    {faculty.name}
+                  </h4>
+                  <p className="text-sm text-[#ff6b4d] font-medium mb-3">
+                    {faculty.title}
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    {faculty.bio}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {faculty.expertise.map((skill) => (
+                      <span
+                        key={skill}
+                        className="text-xs font-medium px-3 py-1 rounded-full bg-[#1e2348]/5 text-[#1e2348]"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        )}
+
+        {/* AI Faculty */}
+        {activeTab === "ai" && (
+          <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {aiExperts.map((expert) => (
+              <div
+                key={expert.dimension}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group border border-transparent hover:border-[#ff6b4d]/20"
+              >
+                {/* Avatar Image */}
+                <div className="h-48 overflow-hidden bg-[#1e2348]">
+                  <img
+                    src={expert.avatar}
+                    alt={`${expert.dimension} AI Expert`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                {/* Info */}
+                <div className="p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: expert.color }}
+                    />
+                    <h4 className="text-lg font-semibold text-foreground">
+                      {expert.dimension}
+                    </h4>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                    {expert.specialization}
+                  </p>
+                  <p className="text-xs text-muted-foreground/70 italic">
+                    "{expert.questions}"
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        )}
+
+        {/* CTA */}
+        <div className="text-center mt-12">
+          <Button
+            variant="outline"
+            className="px-8 py-6 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base gap-2"
+          >
+            Discover More
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FacultySection;
+

@@ -9,6 +9,10 @@ import BenefitsSection from "@/components/home/BenefitsSection";
 import FeaturedCoursesSection2 from "@/components/home/FeaturedCoursesSection2";
 import SixXDSection from "@/components/home/SixXDSection";
 import CTASection from "@/components/home/CTASection";
+import FacultySection from "@/components/home/FacultySection";
+import CredentialsSection from "@/components/home/CredentialsSection";
+import HowItWorksSection from "@/components/home/HowItWorksSection";
+import StartNowSection from "@/components/home/StartNowSection";
 
 const Index = () => {
   return (
@@ -20,10 +24,10 @@ const Index = () => {
         <BenefitsSection />
         <FeaturedCoursesSection2 />
         <SixXDSection />
-        <ExploreCategoriesSection />
-        <TrustedProvidersSection />
-        <HowCoursebayHelpsSection />
-        <CTASection />
+        <FacultySection />
+        <CredentialsSection />
+        <HowItWorksSection />
+        <StartNowSection />
       </main>
       <Footer />
     </div>

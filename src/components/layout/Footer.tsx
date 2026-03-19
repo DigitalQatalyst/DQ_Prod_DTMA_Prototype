@@ -1,210 +1,179 @@
 import { Link } from "react-router-dom";
-import { Instagram, Facebook, Youtube, Linkedin, Twitter } from "lucide-react";
+import { Linkedin, Youtube, Twitter, Award, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState("");
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle newsletter signup
+    console.log("Newsletter signup:", email);
+    setEmail("");
+  };
 
   const footerLinks = {
-    platform: [
-      { label: "Explore Courses", href: "/courses" },
-      { label: "Browse Categories", href: "/categories" },
-      { label: "Become an Instructor", href: "/become-provider" },
-      { label: "Partner as an Institution", href: "/institution-register/academy" },
-      { label: "Publish Courses (Organizations)", href: "/provider-apply" },
-    ],
-    learners: [
-      { label: "How Coursebay Works", href: "/about" },
-      { label: "Learning Paths", href: "/learning-paths" },
-      { label: "Certificates", href: "/certificates" },
-      { label: "Eligibility Tests", href: "/eligibility-tests" },
-      { label: "Learner Dashboard", href: "/dashboard" },
-    ],
-    providers: [
-      { label: "Teach on Coursebay", href: "/become-provider" },
-      { label: "Institution Partnerships", href: "/institution-partnerships" },
-      { label: "Tutor Guidelines", href: "/tutor-guidelines" },
-      { label: "Provider Verification", href: "/provider-verification" },
-      { label: "Course Publishing Guide", href: "/publishing-guide" },
-    ],
-    company: [
-      { label: "About Coursebay", href: "/about" },
-      { label: "Careers", href: "/careers" },
-      { label: "Blog / Insights", href: "/blog" },
-      { label: "Contact Us", href: "/contact" },
-    ],
-    support: [
-      { label: "Help Center", href: "/help" },
-      { label: "FAQs", href: "/faqs" },
-      { label: "Platform Support", href: "/support" },
-      { label: "Report an Issue", href: "/report" },
-    ],
-    legal: [
-      { label: "Terms of Service", href: "/terms" },
+    getToKnowUs: [
+      { label: "About Us", href: "/about" },
+      { label: "Discover the 6XD", href: "/6xd" },
+      { label: "Faculty", href: "/faculty" },
+      { label: "Help Centre", href: "/help" },
       { label: "Privacy Policy", href: "/privacy" },
-      { label: "Cookie Policy", href: "/cookies" },
-      { label: "Data Protection", href: "/data-protection" },
+      { label: "Terms of Use", href: "/terms" },
+      { label: "Accreditation & Credentials", href: "/accreditation" },
+    ],
+    forYou: [
+      { label: "Explore Courses", href: "/courses" },
+      { label: "For Organizational Leaders", href: "/organizational-leaders" },
+      { label: "For Transformation Specialists", href: "/transformation-specialists" },
+      { label: "For Digital Workers", href: "/digital-workers" },
+      { label: "Blog & Insights", href: "/blog" },
     ],
   };
 
   const socialLinks = [
     { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Twitter, href: "#", label: "Twitter" },
     { icon: Youtube, href: "#", label: "YouTube" },
-    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Twitter, href: "#", label: "X (Twitter)" },
   ];
 
   return (
-    <footer className="bg-white text-black">
+    <footer className="bg-[#1e2348] text-white">
       <div className="w-full">
         {/* Main Footer */}
-        <div className="p-10 lg:p-20 border-b border-black/5">
-          
-          {/* First Row: Logo, Platform, For Learners, For Providers */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-
-            {/* Column 1: Logo & Description */}
-            <div>
-              <Link to="/" className="inline-block mb-6">
+        <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            
+            {/* Column 1: Brand & Newsletter */}
+            <div className="lg:col-span-1">
+              <Link to="/" className="inline-block mb-4">
                 <img
-                  src="/logo.svg"
-                  alt="Coursebay"
+                  src="/dtma-logo.png"
+                  alt="DTMA"
                   className="h-12 w-auto"
                 />
               </Link>
-              <p className="text-black/70 text-sm leading-relaxed mb-6">
-                A trusted learning marketplace connecting learners with verified providers.
+              <h3 className="text-base font-semibold mb-3">
+                DTMA | Digital Transformation Management Academy
+              </h3>
+              <p className="text-sm text-white/70 leading-relaxed mb-6">
+                Master the skills to lead, deliver, and thrive in the new digital economy.
               </p>
-            </div>
-
-            {/* Column 2: Platform/Marketplace */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">Platform</h4>
-              <ul className="space-y-2">
-                {footerLinks.platform.map((link) => (
-                  <li key={link.label}>
-                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 3: For Learners */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">For Learners</h4>
-              <ul className="space-y-2">
-                {footerLinks.learners.map((link) => (
-                  <li key={link.label}>
-                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 4: For Providers */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">For Providers</h4>
-              <ul className="space-y-2">
-                {footerLinks.providers.map((link) => (
-                  <li key={link.label}>
-                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Second Row: Company, Support, Legal */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            
-            {/* Empty column to align with logo column */}
-            <div className="hidden lg:block"></div>
-
-            {/* Column 1: Company */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">Company</h4>
-              <ul className="space-y-2">
-                {footerLinks.company.map((link) => (
-                  <li key={link.label}>
-                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 2: Support */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">Support</h4>
-              <ul className="space-y-2">
-                {footerLinks.support.map((link) => (
-                  <li key={link.label}>
-                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 3: Legal */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase text-black/80">Legal</h4>
-              <ul className="space-y-2">
-                {footerLinks.legal.map((link) => (
-                  <li key={link.label}>
-                    <Link to={link.href} className="text-xs text-black/60 hover:text-black transition-colors">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Social Media Section - Separate */}
-        <div className="bg-white py-8 px-4 lg:px-12 border-b border-black/5">
-          <div className="text-center">
-            <h4 className="font-semibold text-sm mb-6 uppercase text-black/80">Follow Us</h4>
-            <div className="flex justify-center gap-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  aria-label={social.label}
-                  className="w-10 h-10 rounded-full text-white flex items-center justify-center hover:opacity-80 transition-opacity"
-                  style={{ backgroundColor: "#1E2348" }}
+              
+              {/* Newsletter Signup */}
+              <form onSubmit={handleNewsletterSubmit} className="relative">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pr-12 bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-[#ff6b4d]"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md bg-[#ff6b4d] hover:bg-[#e56045] flex items-center justify-center transition-colors"
+                  aria-label="Submit"
                 >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
+                  <ArrowRight className="w-4 h-4 text-white" />
+                </button>
+              </form>
+            </div>
+
+            {/* Column 2: Get to Know Us */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase tracking-wide text-white/90">
+                Get to Know Us
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.getToKnowUs.map((link) => (
+                  <li key={link.label}>
+                    <Link 
+                      to={link.href} 
+                      className="text-sm text-white/70 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 3: For You */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase tracking-wide text-white/90">
+                For You
+              </h4>
+              <ul className="space-y-3">
+                {footerLinks.forYou.map((link) => (
+                  <li key={link.label}>
+                    <Link 
+                      to={link.href} 
+                      className="text-sm text-white/70 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Column 4: Find Us */}
+            <div>
+              <h4 className="font-semibold text-sm mb-4 uppercase tracking-wide text-white/90">
+                Find Us
+              </h4>
+              <div className="flex gap-3 mb-6">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    aria-label={social.label}
+                    className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+                  >
+                    <social.icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+              <a 
+                href="#" 
+                className="text-sm text-white/70 hover:text-white transition-colors inline-block"
+              >
+                DTMA Website →
+              </a>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="bg-gray-100/50 py-6 px-4 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-black/60">
-          {/* Left: Copyright */}
-          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2">
-            <span className="font-bold text-black/70">© {currentYear} Coursebay. All rights reserved.</span>
-            <span className="hidden sm:inline">•</span>
-            <span>A trusted learning marketplace connecting learners with verified providers.</span>
-          </div>
+        <div className="border-t border-white/10">
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-6">
+            {/* Accreditation Strip */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
+                  <Award className="w-6 h-6 text-[#ff6b4d]" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-white">
+                    Licensed Training Institute — KHDA, Dubai
+                  </p>
+                  <p className="text-xs text-white/60">
+                    Training Institute Permit No. [TBD]
+                  </p>
+                </div>
+              </div>
+            </div>
 
-          {/* Right: Payment Icons */}
-          <div className="flex items-center gap-2 grayscale opacity-70">
-            <div className="h-6 w-9 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-[8px]">VISA</div>
-            <div className="h-6 w-9 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-[8px]">MC</div>
-            <div className="h-6 w-9 bg-white border border-gray-200 rounded flex items-center justify-center font-bold text-[8px]">AMEX</div>
+            {/* Copyright */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/60">
+              <p>
+                © 2026 DTMA | Digital Transformation Management Academy. All rights reserved.
+              </p>
+              <p>Version v1.0</p>
+            </div>
           </div>
         </div>
       </div>

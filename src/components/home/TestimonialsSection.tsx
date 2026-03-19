@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 const TestimonialsSection = () => {
@@ -7,24 +7,39 @@ const TestimonialsSection = () => {
 
   const testimonials = [
     {
-      quote: "Coursebay helped me discover a digital marketing course that improved my skills and helped me earn a promotion.",
+      quote: "The digital transformation courses at DTMA gave me the practical skills I needed to lead our company's modernization efforts. The instructors understand real-world challenges.",
       author: "Jane M.",
-      role: "Marketing Professional",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop",
+      role: "Chief Digital Officer",
+      organization: "TechCorp Industries",
     },
     {
-      quote: "The courses are well structured and the instructors are very knowledgeable. I completed my first certification within a few weeks.",
+      quote: "DTMA's approach to teaching digital leadership is unmatched. I've applied these frameworks directly to my team and seen immediate results in our transformation initiatives.",
       author: "David K.",
-      role: "Data Analyst",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop",
+      role: "VP of Digital Strategy",
+      organization: "Global Finance Group",
     },
     {
-      quote: "I love that I can compare courses from different providers before enrolling.",
+      quote: "As a transformation specialist, I needed cutting-edge knowledge. DTMA delivered exactly that - practical, relevant content that I use every day in my consulting work.",
       author: "Sarah L.",
-      role: "Entrepreneur",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
+      role: "Digital Transformation Consultant",
+      organization: "Innovation Partners",
+    },
+    {
+      quote: "The courses helped me transition from traditional management to digital leadership. The skills I gained have been instrumental in driving change across our organization.",
+      author: "Michael R.",
+      role: "Director of Operations",
+      organization: "Manufacturing Solutions Inc",
     },
   ];
+
+  // Auto-advance carousel every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
@@ -34,27 +49,27 @@ const TestimonialsSection = () => {
     setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
   };
 
-  const getTestimonial = (offset: number) => {
-    return testimonials[(currentIndex + offset) % testimonials.length];
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
   };
 
   return (
-    <section className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 bg-[#f8f9fa]">
+      <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Header */}
-        <div className="text-center" style={{ marginBottom: "72px" }}>
-          <h2 className="text-4xl font-bold text-foreground">
-            Learners Achieving More with Coursebay
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground">
+            Hear From Our Learners
           </h2>
         </div>
 
-        {/* Testimonials Carousel with Stacking Effect */}
-        <div className="relative flex items-center justify-center py-20">
+        {/* Carousel Container */}
+        <div className="relative">
           {/* Navigation Buttons */}
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-0 z-30 rounded-full hover:bg-slate-100"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg hover:bg-gray-50 -ml-4"
             onClick={handlePrev}
           >
             <ChevronLeft className="w-6 h-6 text-foreground" />
@@ -63,77 +78,76 @@ const TestimonialsSection = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-0 z-30 rounded-full hover:bg-slate-100"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white shadow-lg hover:bg-gray-50 -mr-4"
             onClick={handleNext}
           >
             <ChevronRight className="w-6 h-6 text-foreground" />
           </Button>
 
-          {/* Stacked Cards Container */}
-          <div className="relative w-full max-w-5xl px-16 h-96">
-            {/* Back cards (stacked effect) - visible behind main card */}
-            {[2, 1].map((offset) => {
-              return (
-                <div
-                  key={offset}
-                  className="absolute w-full max-w-4xl bg-white rounded-2xl"
-                  style={{
-                    height: '320px',
-                    bottom: `${-offset * 16}px`,
-                    left: `${offset * 12}px`,
-                    zIndex: 10 - offset,
-                    boxShadow: `0 ${8 + offset * 4}px ${20 + offset * 8}px rgba(0, 0, 0, ${0.1 + offset * 0.05})`,
-                  }}
-                />
-              );
-            })}
-
-            {/* Main Card */}
+          {/* Testimonial Cards */}
+          <div className="overflow-hidden">
             <div 
-              className="absolute w-full max-w-4xl flex items-end"
-              style={{
-                zIndex: 20,
-                bottom: '32px',
-              }}
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              {/* Left: Image (Taller, bottom-aligned) */}
-              <div 
-                className="w-2/5 bg-slate-600 overflow-hidden" 
-                style={{ 
-                  height: '420px',
-                  borderTopLeftRadius: '16px',
-                  borderTopRightRadius: '16px',
-                  borderBottomLeftRadius: '16px',
-                }}
-              >
-                <img
-                  src={getTestimonial(0).image}
-                  alt={getTestimonial(0).author}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="w-full flex-shrink-0 px-4">
+                  <div className="bg-white rounded-2xl p-12 shadow-sm max-w-4xl mx-auto">
+                    {/* Quote */}
+                    <div className="mb-8">
+                      <svg className="w-12 h-12 text-[#ff6b4d] mb-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                      </svg>
+                      <p className="text-lg md:text-xl text-foreground leading-relaxed">
+                        {testimonial.quote}
+                      </p>
+                    </div>
 
-              {/* Right: Content Card (Smaller) */}
-              <div 
-                className="w-3/5 bg-white p-8 flex flex-col justify-center"
-                style={{
-                  height: '320px',
-                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
-                  borderTopRightRadius: '16px',
-                  borderBottomRightRadius: '16px',
-                }}
-              >
-                <h3 className="text-2xl font-semibold text-foreground mb-2">
-                  {getTestimonial(0).author}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-6">
-                  {getTestimonial(0).role}
-                </p>
-                <p className="text-foreground/80 leading-relaxed text-sm">
-                  {getTestimonial(0).quote}
-                </p>
-              </div>
+                    {/* Author Info */}
+                    <div className="border-t border-gray-200 pt-6">
+                      <h4 className="text-lg font-semibold text-foreground mb-1">
+                        {testimonial.author}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        {testimonial.role}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {testimonial.organization}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
+
+          {/* Dots Navigation */}
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  index === currentIndex 
+                    ? 'bg-[#ff6b4d] w-8' 
+                    : 'bg-gray-300 hover:bg-gray-400'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="flex justify-center mt-8">
+            <a 
+              href="#" 
+              className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-base transition-colors inline-flex items-center gap-2"
+            >
+              Read More Stories
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>

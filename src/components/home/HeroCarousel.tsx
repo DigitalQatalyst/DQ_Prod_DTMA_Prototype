@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import HeroSection from "./HeroSection";
 import HeroSection2 from "./HeroSection2";
 
 const HeroCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [autoRotate, setAutoRotate] = useState(true);
-
   const slides = [
-    { component: HeroSection, id: "hero-1" },
     { component: HeroSection2, id: "hero-2" },
   ];
 
@@ -65,22 +62,26 @@ const HeroCarousel = () => {
         </div>
 
         {/* Left Arrow */}
-        <button
-          onClick={goToPrevious}
-          className="absolute left-8 top-1/2 transform -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 rounded-full bg-white/80 hover:bg-white shadow-lg"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="w-6 h-6 text-foreground" />
-        </button>
+        {slides.length > 1 && (
+          <button
+            onClick={goToPrevious}
+            className="absolute left-8 top-1/2 transform -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 rounded-full bg-white/80 hover:bg-white shadow-lg"
+            aria-label="Previous slide"
+          >
+            <ChevronLeft className="w-6 h-6 text-foreground" />
+          </button>
+        )}
 
         {/* Right Arrow */}
-        <button
-          onClick={goToNext}
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 rounded-full bg-white/80 hover:bg-white shadow-lg"
-          aria-label="Next slide"
-        >
-          <ChevronRight className="w-6 h-6 text-foreground" />
-        </button>
+        {slides.length > 1 && (
+          <button
+            onClick={goToNext}
+            className="absolute right-8 top-1/2 transform -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 rounded-full bg-white/80 hover:bg-white shadow-lg"
+            aria-label="Next slide"
+          >
+            <ChevronRight className="w-6 h-6 text-foreground" />
+          </button>
+        )}
       </div>
     </div>
   );

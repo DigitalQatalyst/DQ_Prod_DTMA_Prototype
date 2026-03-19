@@ -1,10 +1,12 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import HeroCarousel from "@/components/home/HeroCarousel";
+import HBSHeroSection from "@/components/home/HBSHeroSection";
 import ExploreCategoriesSection from "@/components/home/ExploreCategoriesSection";
 import TrustedProvidersSection from "@/components/home/TrustedProvidersSection";
 import HowCoursebayHelpsSection from "@/components/home/HowCoursebayHelpsSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
+import BenefitsSection from "@/components/home/BenefitsSection";
+import FeaturedCoursesSection2 from "@/components/home/FeaturedCoursesSection2";
 import CTASection from "@/components/home/CTASection";
 
 const Index = () => {
@@ -12,11 +14,13 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <main>
-        <HeroCarousel />
+        <HBSHeroSection />
+        <TestimonialsSection />
+        <BenefitsSection />
+        <FeaturedCoursesSection2 />
         <ExploreCategoriesSection />
         <TrustedProvidersSection />
         <HowCoursebayHelpsSection />
-        <TestimonialsSection />
         <CTASection />
       </main>
       <Footer />

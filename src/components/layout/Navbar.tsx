@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,14 +10,33 @@ type SignInRole = "learner" | "instructor" | "admin";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExploreOpen, setIsExploreOpen] = useState(false);
+  const [isForYouOpen, setIsForYouOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   const { user, profile, signOut, loading } = useAuth();
   const { flow } = useFlow();
+  const exploreRef = useRef<HTMLDivElement>(null);
+  const forYouRef = useRef<HTMLDivElement>(null);
 
-  const navLinks = [
-    { href: "/become-provider", label: "Become a Provider" },
-  ];
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (exploreRef.current && !exploreRef.current.contains(event.target as Node)) {
+        setIsExploreOpen(false);
+      }
+      if (forYouRef.current && !forYouRef.current.contains(event.target as Node)) {
+        setIsForYouOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const navLinks: { href: string; label: string }[] = [];
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -46,113 +65,223 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 glass">
-      <nav className="w-full">
-        <div className="flex items-center justify-between h-20 px-8 md:px-12 lg:px-16">
-          <div className="flex items-center" style={{ maxWidth: '1600px', width: '100%', margin: '0 auto' }}>
-            <div className="flex items-center justify-between w-full">
-              {/* Logo */}
-              <Link to="/" className="flex items-center gap-3 group h-[44px]">
-                <img
-                  src="/logo.svg"
-                  alt="BROWZ Academy"
-                  className="h-[44px] w-auto transition-transform duration-300 group-hover:scale-105"
-                />
-              </Link>
+    <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+      <nav className="w-full relative">
+        <div className="flex items-stretch w-full px-8 md:px-12 lg:px-16 py-6 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
+          {/* Left: Logo Area */}
+          <div className="flex items-center flex-shrink-0 gap-6">
+            <Link to="/" className="flex items-center gap-3 group">
+              <img
+                src="/logo dtma.svg"
+                alt="DTMA"
+                className="h-[48px] w-auto transition-transform duration-300 group-hover:scale-105"
+              />
+            </Link>
+            <div className="h-[48px] w-[1px] bg-white/20"></div>
+          </div>
 
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-8 ml-8">
-                {/* Explore Dropdown */}
-                <div className="relative">
+          {/* Right: Two Rows Main Content */}
+          <div className="flex flex-col flex-grow justify-center max-w-6xl" style={{ marginTop: '32px' }}>
+            {/* Top Row */}
+            <div className="flex justify-between items-end w-full pb-3 border-b border-white/20">
+              <h2 className="text-[20px] leading-[28px] font-normal text-white mb-1 tracking-tight">
+                Digital Transformation Management Academy
+              </h2>
+              
+              <div className="hidden md:flex items-center gap-6 mb-1">
+                {/* Auth / Right Side Actions */}
+                {!loading && user ? (
+                  <>
+                    <Link to="/dashboard">
+                      <Button variant="ghost" size="sm" className="gap-2 text-white hover:text-white/80 hover:bg-white/10">
+                        <LayoutDashboard className="w-4 h-4" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground">
+                        {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
+                      </div>
+                      <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white/80 hover:bg-white/10">
+                        <LogOut className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </>
+                ) : (
                   <button 
-                    onClick={() => setIsExploreOpen(!isExploreOpen)}
-                    className="text-sm font-medium transition-colors duration-200 hover:text-primary text-muted-foreground flex items-center gap-1"
+                    onClick={handleSignIn}
+                    className="text-sm font-semibold transition-colors duration-200 hover:text-white text-white/90"
                   >
-                    Explore
+                    Log In
+                  </button>
+                )}
+
+
+                
+                {!loading && !user && (
+                  <Button 
+                    variant="hero" 
+                    size="sm" 
+                    onClick={handleSignIn}
+                    className="px-6 ml-2 bg-[#ff6b4d] hover:bg-[#e56045] text-white border-transparent"
+                  >
+                    Get Started
+                  </Button>
+                )}
+              </div>
+
+               {/* Mobile Toggle */}
+              <div className="md:hidden flex items-center gap-4 mb-1">
+                <button
+                  className="p-1 rounded-lg hover:bg-white/10 transition-colors text-white"
+                  onClick={() => setIsOpen(!isOpen)}
+                >
+                  {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Bottom Row - Navigation Links */}
+            <div className="hidden md:flex items-center gap-8 pt-4">
+                <Link to="/" className="text-sm font-medium transition-colors duration-200 text-white hover:text-white">
+                  Home
+                </Link>
+                
+                {/* Explore Dropdown */}
+                <div className="relative" ref={exploreRef}>
+                  <button 
+                    onClick={() => {
+                      setIsExploreOpen(!isExploreOpen);
+                      setIsForYouOpen(false);
+                    }}
+                    className="text-sm font-medium transition-colors duration-200 hover:text-white text-white/90 flex items-center gap-1"
+                  >
+                    Explore Courses
                     <ChevronDown className={`w-4 h-4 transition-transform ${isExploreOpen ? 'rotate-180' : ''}`} />
                   </button>
                   
                   {/* Full Screen Overlay Dropdown */}
                   {isExploreOpen && (
-                    <div className="fixed left-0 right-0 top-20 z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'auto', borderColor: '#EEEDE9' }}>
+                    <div className="fixed left-0 right-0 top-[160px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 160px)', borderColor: '#EEEDE9' }}>
                       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
                         <div className="grid grid-cols-4 gap-12">
-                          {/* Explore Roles */}
+                          {/* Digital Workers */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Explore roles</h3>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Workers</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Data Analyst</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Project Manager</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Cyber Security Analyst</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Data Scientist</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Business Intelligence Analyst</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Digital Marketing Specialist</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">UI / UX Designer</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Machine Learning Engineer</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Social Media Specialist</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Computer Support Specialist</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
+                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
                           </div>
 
-                          {/* Explore Categories */}
+                          {/* Digital Leaders */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Explore categories</h3>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Leaders</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Artificial Intelligence</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Business</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Data Science</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Information Technology</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Computer Science</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Healthcare</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Physical Science and Engineering</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Personal Development</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Social Sciences</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Language Learning</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Arts and Humanities</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
+                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
                           </div>
 
-                          {/* Earn a Professional Certificate */}
+                          {/* Transformation Specialists and Teams */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Earn a Professional Certificate</h3>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Transformation Specialists and Teams</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Business</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Computer Science</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Data Science</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Information Technology</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
-                            
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6 mt-8">Earn an online degree</h3>
-                            <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Bachelor's Degrees</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Master's Degrees</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Postgraduate Programs</a></li>
-                            </ul>
-                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
+                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
                           </div>
 
-                          {/* Explore Trending Skills */}
+                          {/* Digital Economy */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Explore trending skills</h3>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Economy</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Python</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Artificial Intelligence</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Excel</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Machine Learning</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">SQL</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Project Management</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Power BI</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Marketing</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 mt-4 inline-block">View all</a>
-                            
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6 mt-8">Prepare for a certification exam</h3>
-                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 inline-block">View all</a>
+                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
                           </div>
                         </div>
+                        
+                        <div className="grid grid-cols-4 gap-12 mt-12">
+                          {/* Digital Cognitive Organisations */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Cognitive Organisations</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                          </div>
+
+                          {/* Digital Business Platforms */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Business Platforms</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                          </div>
+
+                          {/* Digital Transformation */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Transformation</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                          </div>
+
+                          {/* Digital Worker & Workspace */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Worker & Workspace</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                            </ul>
+                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* For You Dropdown */}
+                <div className="relative" ref={forYouRef}>
+                  <button 
+                    onClick={() => {
+                      setIsForYouOpen(!isForYouOpen);
+                      setIsExploreOpen(false);
+                    }}
+                    className="text-sm font-medium transition-colors duration-200 hover:text-white text-white/90 flex items-center gap-1"
+                  >
+                    For You
+                    <ChevronDown className={`w-4 h-4 transition-transform ${isForYouOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {isForYouOpen && (
+                    <div className="absolute left-0 mt-6 w-64 bg-white border shadow-lg rounded-xl z-[9999] py-4 pointer-events-auto" style={{ borderColor: '#EEEDE9' }}>
+                      <div className="px-6 py-2">
+                        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-3">Choose Your Path</h3>
+                        <ul className="space-y-3">
+                          <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Workers</a></li>
+                          <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Organizational Leaders</a></li>
+                          <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Transformation Specialists</a></li>
+                        </ul>
                       </div>
                     </div>
                   )}
@@ -162,57 +291,16 @@ const Navbar = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className={`text-sm font-medium transition-colors duration-200 hover:text-primary ${
-                      isActive(link.href) ? "text-primary" : "text-muted-foreground"
+                    className={`text-sm font-medium transition-colors duration-200 hover:text-white ${
+                      isActive(link.href) ? "text-white" : "text-white/90"
                     }`}
                   >
                     {link.label}
                   </Link>
                 ))}
               </div>
-
-              {/* Right Side - Auth & Dashboard */}
-              <div className="hidden md:flex items-center gap-4 ml-auto">
-                {!loading && user ? (
-                  <>
-                    <Link to="/dashboard">
-                      <Button variant="ghost" size="sm" className="gap-2">
-                        <LayoutDashboard className="w-4 h-4" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground">
-                        {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
-                      </div>
-                      <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                        <LogOut className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <Button 
-                    variant="hero" 
-                    size="sm" 
-                    onClick={handleSignIn}
-                    className="px-6"
-                  >
-                    Sign In
-                  </Button>
-                )}
-              </div>
-
-              {/* Mobile Menu Button */}
-              <button
-                className="md:hidden p-2 rounded-lg hover:bg-accent transition-colors ml-auto"
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label="Toggle menu"
-              >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
             </div>
           </div>
-        </div>
 
         {/* Mobile Menu */}
         {isOpen && (

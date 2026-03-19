@@ -132,23 +132,25 @@ const HeroSection2 = ({ isActive = true, currentSlide = 0, onDotClick, totalSlid
       </div>
 
       {/* Carousel Dots */}
-      <div className="absolute bottom-8 flex gap-3 z-20" style={{ left: 'calc(8.333% + 2rem)' }}>
-        {Array.from({ length: totalSlides }).map((_, index) => (
-          <button
-            key={index}
-            onClick={() => onDotClick?.(index)}
-            className={`transition-all duration-300 rounded-full ${
-              index === currentSlide
-                ? "w-12 h-3"
-                : "w-3 h-3 hover:opacity-80"
-            }`}
-            style={{
-              backgroundColor: index === currentSlide ? '#FFFFFF' : 'rgba(255,255,255,0.4)'
-            }}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
+      {totalSlides > 1 && (
+        <div className="absolute bottom-8 flex gap-3 z-20" style={{ left: 'calc(8.333% + 2rem)' }}>
+          {Array.from({ length: totalSlides }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => onDotClick?.(index)}
+              className={`transition-all duration-300 rounded-full ${
+                index === currentSlide
+                  ? "w-12 h-3"
+                  : "w-3 h-3 hover:opacity-80"
+              }`}
+              style={{
+                backgroundColor: index === currentSlide ? '#FFFFFF' : 'rgba(255,255,255,0.4)'
+              }}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };

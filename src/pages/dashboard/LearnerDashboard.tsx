@@ -178,8 +178,8 @@ const LearnerDashboard = () => {
         <div className="p-6 border-b border-border">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[50px] w-auto"
             />
           </Link>
@@ -192,7 +192,7 @@ const LearnerDashboard = () => {
               onClick={() => setActiveTab('overview')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                 activeTab === 'overview' 
-                  ? 'bg-primary text-primary-foreground' 
+                  ? 'bg-[#1e2348] text-white' 
                   : 'hover:bg-accent text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -203,49 +203,49 @@ const LearnerDashboard = () => {
               onClick={() => setActiveTab('courses')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                 activeTab === 'courses' 
-                  ? 'bg-primary text-primary-foreground' 
+                  ? 'bg-[#1e2348] text-white' 
                   : 'hover:bg-accent text-muted-foreground hover:text-foreground'
               }`}
             >
               <BookOpen className="w-5 h-5" />
               <span className="font-medium">My Courses</span>
               {inProgressCourses.length > 0 && (
-                <Badge className="ml-auto bg-primary/20 text-primary-foreground">{inProgressCourses.length}</Badge>
+                <Badge className="ml-auto bg-[#1e2348]/20 text-[#1e2348]">{inProgressCourses.length}</Badge>
               )}
             </button>
             <button
               onClick={() => setActiveTab('certificates')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                 activeTab === 'certificates' 
-                  ? 'bg-primary text-primary-foreground' 
+                  ? 'bg-[#1e2348] text-white' 
                   : 'hover:bg-accent text-muted-foreground hover:text-foreground'
               }`}
             >
               <Award className="w-5 h-5" />
               <span className="font-medium">Certificates</span>
               {certificates && certificates.length > 0 && (
-                <Badge className="ml-auto bg-primary/20 text-primary-foreground">{certificates.length}</Badge>
+                <Badge className="ml-auto bg-[#1e2348]/20 text-[#1e2348]">{certificates.length}</Badge>
               )}
             </button>
             <button
               onClick={() => setActiveTab('sessions')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                 activeTab === 'sessions' 
-                  ? 'bg-primary text-primary-foreground' 
+                  ? 'bg-[#1e2348] text-white' 
                   : 'hover:bg-accent text-muted-foreground hover:text-foreground'
               }`}
             >
               <Calendar className="w-5 h-5" />
               <span className="font-medium">My Sessions</span>
               {bookedSessions.length > 0 && (
-                <Badge className="ml-auto bg-primary/20 text-primary-foreground">{bookedSessions.length}</Badge>
+                <Badge className="ml-auto bg-[#1e2348]/20 text-[#1e2348]">{bookedSessions.length}</Badge>
               )}
             </button>
             <button
               onClick={() => setActiveTab('profile')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
                 activeTab === 'profile' 
-                  ? 'bg-primary text-primary-foreground' 
+                  ? 'bg-[#1e2348] text-white' 
                   : 'hover:bg-accent text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -260,7 +260,7 @@ const LearnerDashboard = () => {
           <div className="flex items-center gap-3 p-3 rounded-xl bg-accent/50">
             <Avatar className="w-10 h-10">
               <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-primary text-primary-foreground">
+              <AvatarFallback className="bg-[#1e2348] text-white">
                 {getInitials(profile?.full_name)}
               </AvatarFallback>
             </Avatar>
@@ -323,22 +323,22 @@ const LearnerDashboard = () => {
           {activeTab === 'overview' && (
             <div className="space-y-8">
               {/* Welcome Section */}
-              <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 lg:p-8 text-primary-foreground">
+              <div className="bg-gradient-to-r from-[#1e2348] to-[#2a3058] rounded-2xl p-6 lg:p-8 text-white">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div>
                     <h2 className="text-2xl lg:text-3xl font-semibold mb-2">
                       Welcome back, {profile?.full_name?.split(' ')[0] || 'Learner'}! 👋
                     </h2>
-                    <p className="text-primary-foreground/80">
+                    <p className="text-white/80">
                       {inProgressCourses.length > 0 
                         ? `You have ${inProgressCourses.length} course${inProgressCourses.length > 1 ? 's' : ''} in progress. Keep going!`
-                        : 'Start your beauty education journey today!'}
+                        : 'Start your digital transformation journey today!'}
                     </p>
                   </div>
                   {inProgressCourses.length > 0 && (
                     <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
-                      <Button variant="secondary" size="lg" className="gap-2 shrink-0">
-                        <PlayCircle className="w-5 h-5" />
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="lg">
+                        <PlayCircle className="w-5 h-5 mr-2" />
                         Continue Learning
                       </Button>
                     </Link>
@@ -350,8 +350,8 @@ const LearnerDashboard = () => {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                 <div className="bg-card rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                      <BookOpen className="w-5 h-5 text-blue-500" />
+                    <div className="w-10 h-10 bg-[#1e2348]/10 rounded-xl flex items-center justify-center">
+                      <BookOpen className="w-5 h-5 text-[#1e2348]" />
                     </div>
                   </div>
                   <div className="text-2xl font-bold text-foreground">{inProgressCourses.length}</div>
@@ -377,8 +377,8 @@ const LearnerDashboard = () => {
                 </div>
                 <div className="bg-card rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-purple-500/10 rounded-xl flex items-center justify-center">
-                      <Target className="w-5 h-5 text-purple-500" />
+                    <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+                      <Target className="w-5 h-5 text-[#ff6b4d]" />
                     </div>
                   </div>
                   <div className="text-2xl font-bold text-foreground">{totalProgress}%</div>
@@ -393,7 +393,7 @@ const LearnerDashboard = () => {
                   {inProgressCourses.length > 0 && (
                     <button 
                       onClick={() => setActiveTab('courses')}
-                      className="text-sm text-primary hover:underline flex items-center gap-1"
+                      className="text-sm text-[#ff6b4d] hover:underline flex items-center gap-1"
                     >
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
@@ -406,13 +406,13 @@ const LearnerDashboard = () => {
                   </div>
                 ) : inProgressCourses.length === 0 ? (
                   <div className="bg-card rounded-2xl p-8 text-center">
-                    <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <BookOpen className="w-8 h-8 text-primary" />
+                    <div className="w-16 h-16 bg-[#1e2348]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <BookOpen className="w-8 h-8 text-[#1e2348]" />
                     </div>
                     <h3 className="font-semibold text-lg mb-2">No courses yet</h3>
-                    <p className="text-muted-foreground mb-6">Start your learning journey by exploring our beauty courses</p>
+                    <p className="text-muted-foreground mb-6">Start your learning journey by exploring our digital transformation courses</p>
                     <Link to="/categories">
-                      <Button variant="hero">Explore Courses</Button>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Explore Courses</Button>
                     </Link>
                   </div>
                 ) : (
@@ -457,10 +457,10 @@ const LearnerDashboard = () => {
                 <section>
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-primary" />
+                      <Sparkles className="w-5 h-5 text-[#ff6b4d]" />
                       <h3 className="text-xl font-semibold text-foreground">Recommended for You</h3>
                     </div>
-                    <Link to="/categories" className="text-sm text-primary hover:underline flex items-center gap-1">
+                    <Link to="/categories" className="text-sm text-[#ff6b4d] hover:underline flex items-center gap-1">
                       View all <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -518,7 +518,7 @@ const LearnerDashboard = () => {
                     <h3 className="text-xl font-semibold text-foreground">Recent Certificates</h3>
                     <button 
                       onClick={() => setActiveTab('certificates')}
-                      className="text-sm text-primary hover:underline flex items-center gap-1"
+                      className="text-sm text-[#ff6b4d] hover:underline flex items-center gap-1"
                     >
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
@@ -568,7 +568,7 @@ const LearnerDashboard = () => {
                       <h3 className="font-semibold text-lg mb-2">No courses in progress</h3>
                       <p className="text-muted-foreground mb-6">Enroll in a course to start learning</p>
                       <Link to="/categories">
-                        <Button variant="hero">Browse Courses</Button>
+                        <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Browse Courses</Button>
                       </Link>
                     </div>
                   ) : (
@@ -604,8 +604,8 @@ const LearnerDashboard = () => {
                               <Progress value={enrollment.progress || 0} className="flex-1 h-2" />
                               <span className="text-sm font-medium">{enrollment.progress || 0}%</span>
                               <Link to={`/courses/${enrollment.course_id}/learn`}>
-                                <Button variant="hero" size="sm" className="gap-2">
-                                  <PlayCircle className="w-4 h-4" />
+                                <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="sm">
+                                  <PlayCircle className="w-4 h-4 mr-2" />
                                   Continue
                                 </Button>
                               </Link>
@@ -686,11 +686,11 @@ const LearnerDashboard = () => {
                   </p>
                   {inProgressCourses.length > 0 ? (
                     <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
-                      <Button variant="hero">Continue Learning</Button>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Continue Learning</Button>
                     </Link>
                   ) : (
                     <Link to="/categories">
-                      <Button variant="hero">Explore Courses</Button>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Explore Courses</Button>
                     </Link>
                   )}
                 </div>
@@ -721,8 +721,8 @@ const LearnerDashboard = () => {
                           </div>
                         </div>
                         <div className="flex gap-3">
-                          <Button variant="hero" className="flex-1 gap-2">
-                            <Download className="w-4 h-4" />
+                          <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white flex-1">
+                            <Download className="w-4 h-4 mr-2" />
                             Download
                           </Button>
                           <Button variant="outline" className="gap-2">
@@ -753,13 +753,13 @@ const LearnerDashboard = () => {
 
               {bookedSessions.length === 0 ? (
                 <div className="bg-card rounded-2xl p-12 text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Calendar className="w-8 h-8 text-primary" />
+                  <div className="w-16 h-16 bg-[#1e2348]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Calendar className="w-8 h-8 text-[#1e2348]" />
                   </div>
                   <h3 className="font-semibold text-lg mb-2">No sessions booked yet</h3>
                   <p className="text-muted-foreground mb-6">Explore our in-person masterclasses and book your first session</p>
                   <Link to="/masterclasses">
-                    <Button variant="hero">Browse Sessions</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Browse Sessions</Button>
                   </Link>
                 </div>
               ) : (
@@ -795,7 +795,7 @@ const LearnerDashboard = () => {
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground mb-1">Price Paid</p>
-                              <p className="font-semibold text-primary">${session.price}</p>
+                              <p className="font-semibold text-[#ff6b4d]">${session.price}</p>
                             </div>
                             <div>
                               <p className="text-xs text-muted-foreground mb-1">Booked On</p>
@@ -836,7 +836,7 @@ const LearnerDashboard = () => {
                 <div className="flex items-center gap-6 mb-6">
                   <Avatar className="w-20 h-20">
                     <AvatarImage src={profile?.avatar_url || undefined} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
+                    <AvatarFallback className="bg-[#1e2348] text-white text-2xl">
                       {getInitials(profile?.full_name)}
                     </AvatarFallback>
                   </Avatar>
@@ -876,7 +876,7 @@ const LearnerDashboard = () => {
                 <h3 className="font-semibold text-lg mb-4">Learning Statistics</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="text-center p-4 bg-accent/50 rounded-xl">
-                    <div className="text-2xl font-bold text-primary">{enrollments?.length || 0}</div>
+                    <div className="text-2xl font-bold text-[#1e2348]">{enrollments?.length || 0}</div>
                     <div className="text-sm text-muted-foreground">Total Courses</div>
                   </div>
                   <div className="text-center p-4 bg-accent/50 rounded-xl">
@@ -888,7 +888,7 @@ const LearnerDashboard = () => {
                     <div className="text-sm text-muted-foreground">Certificates</div>
                   </div>
                   <div className="text-center p-4 bg-accent/50 rounded-xl">
-                    <div className="text-2xl font-bold text-purple-500">{totalProgress}%</div>
+                    <div className="text-2xl font-bold text-[#ff6b4d]">{totalProgress}%</div>
                     <div className="text-sm text-muted-foreground">Avg. Progress</div>
                   </div>
                 </div>

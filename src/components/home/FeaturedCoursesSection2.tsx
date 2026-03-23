@@ -91,11 +91,6 @@ const FeaturedCoursesSection2 = () => {
                 <Badge className="absolute top-3 left-3 bg-[#ff6b4d] text-white">
                   {course.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                 </Badge>
-                {/* KHDA Badge */}
-                <div className="absolute top-3 right-3 flex items-center gap-1 px-3 py-1 bg-blue-600 rounded-full">
-                  <Award className="w-3 h-3 text-white" />
-                  <span className="text-xs font-medium text-white">KHDA Attested</span>
-                </div>
               </div>
               <div className="p-5">
                 <h3 className="text-lg font-semibold text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
@@ -112,7 +107,7 @@ const FeaturedCoursesSection2 = () => {
                     <span>{course.duration}</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-baseline gap-2">
                     <span className="text-xl font-bold text-[#0B0C19]">${course.price}</span>
                     <span className="text-sm text-[#9CA3AF] line-through">${course.originalPrice}</span>
@@ -120,6 +115,11 @@ const FeaturedCoursesSection2 = () => {
                   <Badge variant="outline" className="text-xs border-[#E5E7EB]">
                     {course.level}
                   </Badge>
+                </div>
+                {/* KHDA Badge - Moved below price */}
+                <div className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 rounded-full w-fit">
+                  <Award className="w-3 h-3 text-white" />
+                  <span className="text-xs font-medium text-white">KHDA Attested</span>
                 </div>
               </div>
             </Link>

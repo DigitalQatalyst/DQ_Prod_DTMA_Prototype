@@ -9,7 +9,7 @@ const humanFaculty = [
     title: "Digital Strategy Lead",
     bio: "Over 15 years driving enterprise digital transformations across EMEA. Specializes in cognitive organization design and strategic operating models.",
     expertise: ["Digital Strategy", "Cognitive Organizations", "Change Management"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+    image: "/image (2).png",
   },
   {
     name: "Kaylyn",

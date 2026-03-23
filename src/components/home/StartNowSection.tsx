@@ -11,10 +11,10 @@ const StartNowSection = () => {
             Start Now
           </p>
           <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">
-            Get These Skills Today and Thrive in the New Digital Economy
+            Get the Skills to Thrive in the Digital Economy
           </h2>
           <p className="text-base text-white/80 max-w-3xl mx-auto leading-relaxed mb-8">
-            The digital economy demands new competencies — DTMA delivers them through the 6XD framework and hybrid HI + AI faculty. Your competitive edge starts with your next course.
+            The digital economy demands new skills—DTMA delivers them through the 6XD framework and hybrid HI + AI faculty.
           </p>
         </div>
 

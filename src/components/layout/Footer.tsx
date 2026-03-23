@@ -26,9 +26,9 @@ const Footer = () => {
     ],
     forYou: [
       { label: "Explore Courses", href: "/courses" },
-      { label: "For Organizational Leaders", href: "/organizational-leaders" },
-      { label: "For Transformation Specialists", href: "/transformation-specialists" },
-      { label: "For Digital Workers", href: "/digital-workers" },
+      { label: "For Organizational Leaders", href: "/personas/organizational-leaders" },
+      { label: "For Transformation Specialists", href: "/personas/transformation-specialists" },
+      { label: "For Digital Workers", href: "/personas/digital-workers" },
       { label: "Blog & Insights", href: "/blog" },
     ],
   };

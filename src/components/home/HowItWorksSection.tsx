@@ -1,4 +1,5 @@
 import { ArrowRight, Users, Zap, TrendingUp } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const HowItWorksSection = () => {
   const personas = [
@@ -7,7 +8,7 @@ const HowItWorksSection = () => {
       title: "Digital Workers",
       heading: "Understand How a DCO Works",
       description: "Learn how a Digital Cognitive Organization operates and what your role within it demands. Build the competencies to collaborate, adapt, and deliver in a digital-first environment.",
-      link: "/digital-workers",
+      link: "/personas/digital-workers",
       color: "#ff6b4d",
     },
     {
@@ -15,15 +16,15 @@ const HowItWorksSection = () => {
       title: "Transformation Specialists & Teams",
       heading: "Deliver Successful Digital Initiatives",
       description: "Master the frameworks and methodologies that separate successful digital transformations from failed ones. Gain the execution skills to drive initiatives from strategy through to measurable outcomes.",
-      link: "/transformation-specialists",
-      color: "#0891b2",
+      link: "/personas/transformation-specialists",
+      color: "#181C3A",
     },
     {
       icon: TrendingUp,
       title: "Organizational Leaders",
       heading: "Lead in the New Economy",
       description: "Understand what it takes to transition your organization into a Digital Cognitive Organization. Develop the strategic vision to lead confidently through Economy 4.0 and beyond.",
-      link: "/organizational-leaders",
+      link: "/personas/organizational-leaders",
       color: "#9333ea",
     },
   ];
@@ -36,10 +37,10 @@ const HowItWorksSection = () => {
           <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
             How it Works
           </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+          <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
             Built Around the Challenges You Actually Face
           </h2>
-          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
             Your role. Your challenge. Your learning path.
           </p>
         </div>
@@ -51,7 +52,7 @@ const HowItWorksSection = () => {
             return (
               <div
                 key={index}
-                className="bg-[#f8f9fa] rounded-2xl p-8 hover:shadow-lg transition-all duration-300 flex flex-col"
+                className="bg-[#F5F6FA] rounded-2xl p-8 hover:shadow-lg transition-all duration-300 flex flex-col"
               >
                 {/* Icon */}
                 <div 
@@ -70,24 +71,24 @@ const HowItWorksSection = () => {
                 </p>
 
                 {/* Heading */}
-                <h3 className="text-lg font-semibold text-foreground mb-4">
+                <h3 className="text-lg font-semibold text-[#0B0C19] mb-4">
                   {persona.heading}
                 </h3>
 
                 {/* Description */}
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6 flex-grow">
+                <p className="text-sm text-[#4B5563] leading-relaxed mb-6 flex-grow">
                   {persona.description}
                 </p>
 
                 {/* CTA Link */}
-                <a
-                  href={persona.link}
+                <Link
+                  to={persona.link}
                   className="inline-flex items-center gap-2 font-medium text-sm transition-colors"
                   style={{ color: persona.color }}
                 >
                   Learn More
                   <ArrowRight className="w-4 h-4" />
-                </a>
+                </Link>
               </div>
             );
           })}

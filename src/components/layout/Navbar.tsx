@@ -35,6 +35,19 @@ const Navbar = () => {
     };
   }, []);
 
+  // Disable body scroll when dropdown is open
+  useEffect(() => {
+    if (isExploreOpen || isForYouOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isExploreOpen, isForYouOpen]);
+
   const navLinks: { href: string; label: string }[] = [];
 
   const isActive = (path: string) => location.pathname === path;
@@ -90,40 +103,8 @@ const Navbar = () => {
                   {isExploreOpen && (
                     <div className="fixed left-0 right-0 top-[100px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 100px)', borderColor: '#EEEDE9' }}>
                       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
-                        <div className="grid grid-cols-4 gap-12">
-                          {/* Digital Workers */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Workers</h3>
-                            <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
-                            </ul>
-                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
-                          </div>
-
-                          {/* Digital Leaders */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Leaders</h3>
-                            <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
-                            </ul>
-                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
-                          </div>
-
-                          {/* Transformation Specialists and Teams */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Transformation Specialists and Teams</h3>
-                            <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
-                            </ul>
-                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
-                          </div>
-
+                        {/* First Row - 3 Categories */}
+                        <div className="grid grid-cols-3 gap-12 mb-12">
                           {/* Digital Economy */}
                           <div>
                             <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Economy</h3>
@@ -132,11 +113,9 @@ const Navbar = () => {
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                            <Link to="/courses?category=digital-economy" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-4 gap-12 mt-12">
+
                           {/* Digital Cognitive Organisations */}
                           <div>
                             <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Cognitive Organisations</h3>
@@ -145,7 +124,7 @@ const Navbar = () => {
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                            <Link to="/courses?category=digital-cognitive-organisation" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
 
                           {/* Digital Business Platforms */}
@@ -156,9 +135,12 @@ const Navbar = () => {
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                            <Link to="/courses?category=digital-business-platform" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
+                        </div>
 
+                        {/* Second Row - 3 Categories */}
+                        <div className="grid grid-cols-3 gap-12">
                           {/* Digital Transformation */}
                           <div>
                             <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Transformation</h3>
@@ -167,18 +149,29 @@ const Navbar = () => {
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                            <Link to="/courses?category=digital-transformation" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
 
-                          {/* Digital Worker & Workspace */}
+                          {/* Digital Workers & Workspace */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Worker & Workspace</h3>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Workers & Workspace</h3>
                             <ul className="space-y-3">
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
                               <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
                             </ul>
-                            <a href="#" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</a>
+                            <Link to="/courses?category=digital-worker-workspace" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
+                          </div>
+
+                          {/* Digital Accelerators */}
+                          <div>
+                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Accelerators</h3>
+                            <ul className="space-y-3">
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
+                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                            </ul>
+                            <Link to="/courses?category=digital-accelerators" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
                         </div>
                       </div>
@@ -204,9 +197,9 @@ const Navbar = () => {
                       <div className="px-6 py-2">
                         <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-3">Choose Your Path</h3>
                         <ul className="space-y-3">
-                          <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Workers</a></li>
-                          <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Organizational Leaders</a></li>
-                          <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Transformation Specialists</a></li>
+                          <li><Link to="/personas/digital-workers" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Workers</Link></li>
+                          <li><Link to="/personas/organizational-leaders" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Organizational Leaders</Link></li>
+                          <li><Link to="/personas/transformation-specialists" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Transformation Specialists</Link></li>
                         </ul>
                       </div>
                     </div>

@@ -32,6 +32,19 @@ import MasterclassDetail from "./pages/MasterclassDetail";
 import MasterclassBooking from "./pages/MasterclassBooking";
 import CourseBuilder from "./pages/CourseBuilder";
 import NotFound from "./pages/NotFound";
+import SixXD from "./pages/SixXD";
+import Testimonials from "./pages/Testimonials";
+import DigitalWorkers from "./pages/personas/DigitalWorkers";
+import TransformationSpecialists from "./pages/personas/TransformationSpecialists";
+import OrganizationalLeaders from "./pages/personas/OrganizationalLeaders";
+import DigitalEconomy from "./pages/dimensions/DigitalEconomy";
+import DigitalCognitiveOrganisation from "./pages/dimensions/DigitalCognitiveOrganisation";
+import DigitalBusinessPlatform from "./pages/dimensions/DigitalBusinessPlatform";
+import DigitalTransformation from "./pages/dimensions/DigitalTransformation";
+import DigitalWorkerWorkspace from "./pages/dimensions/DigitalWorkerWorkspace";
+import DigitalAccelerators from "./pages/dimensions/DigitalAccelerators";
+import Faculty from "./pages/Faculty";
+import FacultyDetail from "./pages/FacultyDetail";
 
 const queryClient = new QueryClient();
 
@@ -117,6 +130,19 @@ const AppRoutes = () => (
       <Route path="/courses/:id" element={<CourseDetail />} />
       <Route path="/courses/:id/learn" element={<CourseLearning />} />
       <Route path="/about" element={<About />} />
+      <Route path="/testimonials" element={<Testimonials />} />
+      <Route path="/6xd" element={<SixXD />} />
+      <Route path="/personas/digital-workers" element={<DigitalWorkers />} />
+      <Route path="/personas/transformation-specialists" element={<TransformationSpecialists />} />
+      <Route path="/personas/organizational-leaders" element={<OrganizationalLeaders />} />
+      <Route path="/dimensions/digital-economy" element={<DigitalEconomy />} />
+      <Route path="/dimensions/digital-cognitive-organisation" element={<DigitalCognitiveOrganisation />} />
+      <Route path="/dimensions/digital-business-platform" element={<DigitalBusinessPlatform />} />
+      <Route path="/dimensions/digital-transformation" element={<DigitalTransformation />} />
+      <Route path="/dimensions/digital-worker-workspace" element={<DigitalWorkerWorkspace />} />
+      <Route path="/dimensions/digital-accelerators" element={<DigitalAccelerators />} />
+      <Route path="/faculty" element={<Faculty />} />
+      <Route path="/faculty/:id" element={<FacultyDetail />} />
       <Route path="/become-provider" element={<BecomeProvider />} />
       <Route path="/provider-apply" element={<ProviderApplication />} />
       <Route path="/provider-register/:type" element={<ProviderRegistration />} />

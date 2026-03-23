@@ -34,11 +34,11 @@ const BenefitsSection = () => {
           <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
             The DTMA Advantage
           </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
-            The Digital Economy Is Here. Are You Ready?
+          <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+            Ready for the Digital Economy?
           </h2>
-          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Discover what a Digital Cognitive Organization is and how to become one. Learn to deliver successful digital initiatives with confidence. Understand what it takes to operate and thrive in Economy 4.0.
+          <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
+            Learn what it takes to become a Digital Cognitive Organization and succeed in Economy 4.0.
           </p>
         </div>
 
@@ -49,26 +49,26 @@ const BenefitsSection = () => {
             return (
               <div 
                 key={index}
-                className="flex flex-col items-start p-8 bg-[#f8f9fa] rounded-2xl hover:shadow-lg transition-shadow duration-300"
+                className="flex flex-col items-start p-6 bg-[#F5F6FA] rounded-2xl hover:shadow-lg transition-shadow duration-300"
               >
                 {/* Icon */}
-                <div className="w-14 h-14 bg-[#ff6b4d] rounded-xl flex items-center justify-center mb-6">
-                  <Icon className="w-7 h-7 text-white" />
+                <div className="w-12 h-12 bg-[#ff6b4d] rounded-xl flex items-center justify-center mb-5">
+                  <Icon className="w-6 h-6 text-white" />
                 </div>
 
                 {/* Heading */}
-                <h3 className="text-lg font-semibold text-foreground mb-4">
+                <h3 className="text-lg font-semibold text-[#0B0C19] mb-4">
                   {benefit.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-grow">
+                <p className="text-sm text-[#4B5563] leading-relaxed mb-4 flex-grow">
                   {benefit.description}
                 </p>
 
                 {/* Credential Note (if exists) */}
                 {benefit.credential && (
-                  <p className="text-xs text-foreground/70 italic mb-4 p-3 bg-white rounded-lg border border-gray-200">
+                  <p className="text-xs text-[#4B5563] italic mb-4 p-3 bg-white rounded-lg border border-[#E5E7EB]">
                     {benefit.credential}
                   </p>
                 )}

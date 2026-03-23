@@ -84,17 +84,17 @@ const FeaturedCoursesSection2 = () => {
   ];
 
   return (
-    <section className="py-16 bg-[#f8f9fa]">
+    <section className="py-16 bg-[#F5F6FA]">
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
             Courses for You
           </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+          <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
             Find the Right Course for Where You Are
           </h2>
-          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
             DTMA offers seven targeted courses built on the 6XD framework — each designed for your specific role and objectives. Find the right course for where you are in your digital transformation journey.
           </p>
         </div>
@@ -103,7 +103,7 @@ const FeaturedCoursesSection2 = () => {
         <div className="flex justify-center mb-12">
           <div className="inline-flex gap-8 relative">
             {/* Background line for all tabs */}
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-200"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#E5E7EB]"></div>
             
             {tabs.map((tab) => (
               <button
@@ -111,8 +111,8 @@ const FeaturedCoursesSection2 = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-3 text-base font-medium transition-all duration-200 relative ${
                   activeTab === tab.id
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "text-[#0B0C19]"
+                    : "text-[#9CA3AF] hover:text-[#0B0C19]"
                 }`}
               >
                 {tab.label}
@@ -140,35 +140,35 @@ const FeaturedCoursesSection2 = () => {
               </div>
 
               {/* Course Title */}
-              <h3 className="text-lg font-semibold text-foreground mb-3">
+              <h3 className="text-lg font-semibold text-[#0B0C19] mb-3">
                 {course.title}
               </h3>
 
               {/* Description */}
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-grow">
+              <p className="text-sm text-[#4B5563] leading-relaxed mb-4 flex-grow">
                 {course.description}
               </p>
 
               {/* 6XD Dimension */}
               <div className="flex items-center gap-2 mb-3 text-sm">
-                <span className="font-medium text-foreground">6XD Dimension:</span>
+                <span className="font-medium text-[#0B0C19]">6XD Dimension:</span>
                 <span className="text-[#ff6b4d]">{course.dimension}</span>
               </div>
 
               {/* Module Count */}
-              <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 mb-4 text-sm text-[#4B5563]">
                 <BookOpen className="w-4 h-4" />
                 <span>{course.modules} Modules</span>
               </div>
 
               {/* Credential Tier */}
-              <div className="mb-4 p-3 bg-[#f8f9fa] rounded-lg">
-                <p className="text-xs text-muted-foreground mb-1">Counts toward:</p>
-                <p className="text-sm font-medium text-foreground">{course.credential}</p>
+              <div className="mb-4 p-3 bg-[#F5F6FA] rounded-lg">
+                <p className="text-xs text-[#9CA3AF] mb-1">Counts toward:</p>
+                <p className="text-sm font-medium text-[#0B0C19]">{course.credential}</p>
               </div>
 
               {/* Certificate Note */}
-              <p className="text-xs text-muted-foreground italic mb-4">
+              <p className="text-xs text-[#9CA3AF] italic mb-4">
                 KHDA-attested certificate included
               </p>
 

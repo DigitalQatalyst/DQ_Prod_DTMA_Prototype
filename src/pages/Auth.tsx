@@ -135,50 +135,49 @@ const Auth = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Image */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-charcoal">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1974&auto=format&fit=crop"
-            alt="Beauty professional"
-            className="w-full h-full object-cover opacity-40"
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1974&auto=format&fit=crop"
+            alt="Digital transformation"
+            className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-white/40" />
         </div>
 
-        <div className="relative z-10 flex flex-col justify-between p-12 text-foreground">
+        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[50px] w-auto"
             />
           </Link>
 
-          <div className="max-w-md opacity-60">
-            <blockquote className="text-lg font-medium leading-relaxed mb-4 text-foreground">
-              "BROWZ Beauty Academy gave me the skills and confidence to launch my own successful beauty business."
+          <div className="max-w-md">
+            <blockquote className="text-lg font-medium leading-relaxed mb-4 text-white">
+              "DTMA transformed how we approach digital innovation. The 6XD framework gave us the clarity and tools to lead our industry."
             </blockquote>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary" />
+              <div className="w-10 h-10 rounded-full bg-[#ff6b4d]" />
               <div>
-                <div className="font-semibold text-sm text-foreground">Michelle Torres</div>
-                <div className="text-xs text-muted-foreground">Beauty Entrepreneur</div>
+                <div className="font-semibold text-sm text-white">Sarah Chen</div>
+                <div className="text-xs text-white/70">Digital Transformation Leader</div>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-12 opacity-50">
+          <div className="flex gap-12">
             <div>
-              <div className="text-2xl font-semibold text-foreground">25K+</div>
-              <div className="text-xs text-muted-foreground">Students</div>
+              <div className="text-2xl font-semibold text-white">15K+</div>
+              <div className="text-xs text-white/70">Learners</div>
             </div>
             <div>
-              <div className="text-2xl font-semibold text-foreground">150+</div>
-              <div className="text-xs text-muted-foreground">Courses</div>
+              <div className="text-2xl font-semibold text-white">31+</div>
+              <div className="text-xs text-white/70">Courses</div>
             </div>
             <div>
-              <div className="text-2xl font-semibold text-foreground">4.9</div>
-              <div className="text-xs text-muted-foreground">Rating</div>
+              <div className="text-2xl font-semibold text-white">4.8</div>
+              <div className="text-xs text-white/70">Rating</div>
             </div>
           </div>
         </div>
@@ -189,8 +188,8 @@ const Auth = () => {
         <div className="lg:hidden p-6 border-b border-border">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[40px] w-auto"
             />
           </Link>
@@ -200,20 +199,20 @@ const Auth = () => {
           <div className="w-full max-w-md">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
             <div className="mb-8">
-              <h1 className="text-3xl font-semibold text-foreground mb-2">
+              <h1 className="text-3xl font-semibold text-[#0B0C19] mb-2">
                 {mode === "login" ? "Welcome back" : "Create your account"}
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-[#4B5563]">
                 {mode === "login"
                   ? "Enter your credentials to access your account"
-                  : "Start your beauty education journey today"}
+                  : "Start your digital transformation journey today"}
               </p>
             </div>
 
@@ -293,7 +292,7 @@ const Auth = () => {
                       Remember me
                     </Label>
                   </div>
-                  <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+                  <Link to="/forgot-password" className="text-sm text-[#ff6b4d] hover:underline">
                     Forgot password?
                   </Link>
                 </div>
@@ -309,18 +308,22 @@ const Auth = () => {
                   />
                   <Label htmlFor="terms" className="text-sm font-normal cursor-pointer leading-relaxed">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-primary hover:underline">
+                    <Link to="/terms" className="text-[#ff6b4d] hover:underline">
                       Terms of Service
                     </Link>{" "}
                     and{" "}
-                    <Link to="/privacy" className="text-primary hover:underline">
+                    <Link to="/privacy" className="text-[#ff6b4d] hover:underline">
                       Privacy Policy
                     </Link>
                   </Label>
                 </div>
               )}
 
-              <Button type="submit" variant="hero" size="lg" className="w-full" disabled={isSubmitting}>
+              <Button 
+                type="submit" 
+                className="w-full h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white" 
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -339,7 +342,7 @@ const Auth = () => {
                   <button
                     type="button"
                     onClick={() => setMode("signup")}
-                    className="text-primary font-medium hover:underline"
+                    className="text-[#ff6b4d] font-medium hover:underline"
                   >
                     Sign up
                   </button>
@@ -350,7 +353,7 @@ const Auth = () => {
                   <button
                     type="button"
                     onClick={() => setMode("login")}
-                    className="text-primary font-medium hover:underline"
+                    className="text-[#ff6b4d] font-medium hover:underline"
                   >
                     Sign in
                   </button>

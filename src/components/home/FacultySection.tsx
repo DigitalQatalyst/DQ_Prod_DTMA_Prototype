@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -44,7 +45,7 @@ const aiExperts = [
   {
     dimension: "Digital Business Platform (DBP)",
     avatar: "/ai-technology.png",
-    color: "#0891b2",
+    color: "#181C3A",
     specialization: "Expert guidance on platform architecture, integration, and orchestration strategies.",
     questions: "What unifies value creation? How do we design and deploy digital platforms?",
   },
@@ -87,10 +88,10 @@ const FacultySection = () => {
           <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
             Meet Your Trainers
           </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+          <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
             Learn from a Hybrid HI + AI Faculty
           </h2>
-          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
             DTMA's faculty combines three expert human instructors with six AI-powered specialists — one for each digital dimension. Together, they deliver a learning experience that blends real-world insight with deep, always-available expertise.
           </p>
         </div>
@@ -99,7 +100,7 @@ const FacultySection = () => {
         <div className="flex justify-center mb-12">
           <div className="inline-flex gap-8 relative">
             {/* Background line for all tabs */}
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-200"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#E5E7EB]"></div>
             
             {tabs.map((tab) => (
               <button
@@ -107,8 +108,8 @@ const FacultySection = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-3 text-base font-medium transition-all duration-200 relative ${
                   activeTab === tab.id
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "text-[#0B0C19]"
+                    : "text-[#9CA3AF] hover:text-[#0B0C19]"
                 }`}
               >
                 {tab.label}
@@ -139,13 +140,13 @@ const FacultySection = () => {
                 </div>
                 {/* Info */}
                 <div className="p-6">
-                  <h4 className="text-lg font-semibold text-foreground mb-1">
+                  <h4 className="text-lg font-semibold text-[#0B0C19] mb-1">
                     {faculty.name}
                   </h4>
                   <p className="text-sm text-[#ff6b4d] font-medium mb-3">
                     {faculty.title}
                   </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  <p className="text-sm text-[#4B5563] leading-relaxed mb-4">
                     {faculty.bio}
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -189,14 +190,14 @@ const FacultySection = () => {
                       className="w-2 h-2 rounded-full"
                       style={{ backgroundColor: expert.color }}
                     />
-                    <h4 className="text-lg font-semibold text-foreground">
+                    <h4 className="text-lg font-semibold text-[#0B0C19]">
                       {expert.dimension}
                     </h4>
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                  <p className="text-sm text-[#4B5563] leading-relaxed mb-3">
                     {expert.specialization}
                   </p>
-                  <p className="text-xs text-muted-foreground/70 italic">
+                  <p className="text-xs text-[#9CA3AF] italic">
                     "{expert.questions}"
                   </p>
                 </div>
@@ -208,13 +209,15 @@ const FacultySection = () => {
 
         {/* CTA */}
         <div className="text-center mt-12">
-          <Button
-            variant="outline"
-            className="px-8 py-6 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base gap-2"
-          >
-            Discover More
-            <ArrowRight className="w-4 h-4" />
-          </Button>
+          <Link to="/faculty">
+            <Button
+              variant="outline"
+              className="px-8 py-6 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base gap-2"
+            >
+              Discover More
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

@@ -13,7 +13,7 @@ const CredentialsSection = () => {
       tier: "Tier 2",
       name: "Foundation Credential",
       description: "Complete all seven core courses (the six 6XD dimension courses plus the foundational course). This demonstrates comprehensive understanding of the full Digital Cognitive Organization framework. The Foundation Credential signals readiness to participate in and contribute to digital transformation initiatives.",
-      color: "#0891b2",
+      color: "#181C3A",
     },
     {
       tier: "Tier 3",
@@ -30,17 +30,17 @@ const CredentialsSection = () => {
   ];
 
   return (
-    <section className="py-16 bg-[#f8f9fa]">
+    <section className="py-16 bg-[#F5F6FA]">
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-16">
           <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
             Accreditation & Credentials
           </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-6">
+          <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
             Credentials That Are Recognized, Not Just Printed
           </h2>
-          <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
             DTMA operates under a KHDA Training Institute Permit — licensed by Dubai's official education quality authority. Every completed course earns a KHDA-attested certificate: externally verifiable proof of competence recognized across the UAE and internationally. Beyond individual courses, DTMA offers a structured credential ladder so each qualification builds toward the next.
           </p>
         </div>
@@ -74,18 +74,18 @@ const CredentialsSection = () => {
                 </div>
 
                 {/* Credential Name */}
-                <h3 className="text-lg font-semibold text-foreground mb-3">
+                <h3 className="text-lg font-semibold text-[#0B0C19] mb-3">
                   {credential.name}
                 </h3>
 
                 {/* Description */}
-                <p className="text-sm text-muted-foreground leading-relaxed flex-grow">
+                <p className="text-sm text-[#4B5563] leading-relaxed flex-grow">
                   {credential.description}
                 </p>
 
                 {/* Visual Indicator */}
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="mt-4 pt-4 border-t border-[#E5E7EB]">
+                  <div className="flex items-center gap-2 text-xs text-[#4B5563]">
                     <CheckCircle2 className="w-4 h-4 text-green-600" />
                     <span>KHDA Attested</span>
                   </div>
@@ -96,19 +96,19 @@ const CredentialsSection = () => {
         </div>
 
         {/* KHDA Trust Bar */}
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-8">
+        <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB] mb-8">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-center md:text-left">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center">
                 <Award className="w-8 h-8 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-foreground mb-1">KHDA Accredited</p>
-                <p className="text-xs text-muted-foreground">Dubai's Official Education Authority</p>
+                <p className="text-sm font-semibold text-[#0B0C19] mb-1">KHDA Accredited</p>
+                <p className="text-xs text-[#9CA3AF]">Dubai's Official Education Authority</p>
               </div>
             </div>
-            <div className="hidden md:block w-px h-12 bg-gray-200"></div>
-            <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
+            <div className="hidden md:block w-px h-12 bg-[#E5E7EB]"></div>
+            <p className="text-sm text-[#4B5563] max-w-2xl leading-relaxed">
               All credentials are attested by KHDA — Dubai's official education quality authority. Recognized across the UAE and internationally.
             </p>
           </div>

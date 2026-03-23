@@ -92,7 +92,7 @@ const FacultySection = () => {
             Learn from a Hybrid HI + AI Faculty
           </h2>
           <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
-            DTMA's faculty combines three expert human instructors with six AI-powered specialists — one for each digital dimension. Together, they deliver a learning experience that blends real-world insight with deep, always-available expertise.
+            Human expertise meets AI specialists—one for each digital dimension.
           </p>
         </div>
 

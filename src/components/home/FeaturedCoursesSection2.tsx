@@ -45,7 +45,7 @@ const FeaturedCoursesSection2 = () => {
             Find the Right Course for Where You Are
           </h2>
           <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
-            DTMA offers seven targeted courses built on the 6XD framework — each designed for your specific role and objectives. Find the right course for where you are in your digital transformation journey.
+            DTMA offers role-focused courses built on the 6XD framework to support every stage of your digital transformation journey.
           </p>
         </div>
 

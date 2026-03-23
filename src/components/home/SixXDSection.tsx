@@ -57,10 +57,10 @@ const SixXDSection = () => {
             The 6 Dimensions of Digital
           </p>
           <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
-            A Structured Framework to Master Digital and AI
+            A Framework to Master Digital & AI
           </h2>
           <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
-            Six critical perspectives define what it means to understand, build, and operate within a Digital Cognitive Organization. Each dimension maps to a dedicated course — seven in total, covering every competency you need.
+            Six critical perspectives define how to understand, build, and operate a Digital Cognitive Organization, each mapped to a dedicated course.
           </p>
         </div>
 

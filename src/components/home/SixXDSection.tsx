@@ -104,12 +104,14 @@ const SixXDSection = () => {
 
         {/* Section CTA */}
         <div className="flex justify-center">
-          <Button
-            variant="outline"
-            className="px-8 py-6 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base"
-          >
-            Explore the 6XD Framework
-          </Button>
+          <Link to="/6xd">
+            <Button
+              variant="outline"
+              className="px-8 py-6 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base"
+            >
+              Explore the 6XD Framework
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

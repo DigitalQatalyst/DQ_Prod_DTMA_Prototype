@@ -1,80 +1,30 @@
 import { useState } from "react";
-import { Award, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Star, Clock, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/Badge";
+import { dtmaCourses } from "@/data/dtmaCourses";
 
 const FeaturedCoursesSection2 = () => {
   const [activeTab, setActiveTab] = useState("leaders");
 
-  const courses = {
+  // Map courses to personas
+  const coursesByPersona = {
     leaders: [
-      {
-        title: "Digital Leadership Essentials",
-        description: "Master the strategic frameworks needed to lead digital transformation initiatives and build high-performing digital teams.",
-        dimension: "Leadership & Strategy",
-        modules: 8,
-        credential: "Foundation Credential",
-      },
-      {
-        title: "Digital Business Platform Strategy",
-        description: "Learn to architect and implement the four-part Digital Business Platform that drives competitive advantage in Economy 4.0.",
-        dimension: "Platform Architecture",
-        modules: 10,
-        credential: "Advanced Credential",
-      },
-      {
-        title: "Organizational Digital Maturity",
-        description: "Assess and elevate your organization's digital capabilities across all six dimensions of the 6XD framework.",
-        dimension: "Organizational Design",
-        modules: 6,
-        credential: "Foundation Credential",
-      },
-    ],
+      dtmaCourses.find(c => c.id === "digital-economy-1"),
+      dtmaCourses.find(c => c.id === "digital-transformation-1"),
+      dtmaCourses.find(c => c.id === "digital-cognitive-org-1"),
+    ].filter(Boolean),
     specialists: [
-      {
-        title: "Digital Transformation Execution",
-        description: "Develop the execution capabilities to turn transformation strategy into measurable business outcomes and sustained change.",
-        dimension: "Execution & Delivery",
-        modules: 12,
-        credential: "Professional Credential",
-      },
-      {
-        title: "Change Management for Digital",
-        description: "Master the cultural and organizational change techniques that ensure digital initiatives succeed where others fail.",
-        dimension: "Culture & Change",
-        modules: 9,
-        credential: "Professional Credential",
-      },
-      {
-        title: "Digital Operating Model Design",
-        description: "Design and implement operating models that enable agility, innovation, and continuous digital evolution.",
-        dimension: "Operations & Processes",
-        modules: 11,
-        credential: "Advanced Credential",
-      },
-    ],
+      dtmaCourses.find(c => c.id === "digital-transformation-2"),
+      dtmaCourses.find(c => c.id === "digital-transformation-4"),
+      dtmaCourses.find(c => c.id === "digital-business-platform-2"),
+    ].filter(Boolean),
     workers: [
-      {
-        title: "Digital Worker Foundations",
-        description: "Build essential digital skills and mindsets to thrive in a Digital Cognitive Organization and Economy 4.0.",
-        dimension: "Digital Literacy",
-        modules: 7,
-        credential: "Foundation Credential",
-      },
-      {
-        title: "Data-Driven Decision Making",
-        description: "Learn to leverage data, analytics, and AI tools to make informed decisions and drive business value.",
-        dimension: "Data & Analytics",
-        modules: 8,
-        credential: "Foundation Credential",
-      },
-      {
-        title: "Digital Collaboration & Tools",
-        description: "Master the digital tools and collaboration practices that power modern distributed and hybrid work environments.",
-        dimension: "Digital Workspace",
-        modules: 6,
-        credential: "Foundation Credential",
-      },
-    ],
+      dtmaCourses.find(c => c.id === "digital-worker-1"),
+      dtmaCourses.find(c => c.id === "digital-worker-3"),
+      dtmaCourses.find(c => c.id === "digital-worker-2"),
+    ].filter(Boolean),
   };
 
   const tabs = [
@@ -126,81 +76,67 @@ const FeaturedCoursesSection2 = () => {
 
         {/* Course Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {courses[activeTab].map((course, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col"
+          {coursesByPersona[activeTab].map((course) => (
+            <Link
+              key={course.id}
+              to={`/courses/${course.id}`}
+              className="bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] hover:shadow-lg transition-all group"
             >
-              {/* KHDA Badge */}
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex items-center gap-1 px-3 py-1 bg-blue-50 rounded-full">
-                  <Award className="w-4 h-4 text-blue-600" />
-                  <span className="text-xs font-medium text-blue-600">KHDA Attested</span>
+              <div className="relative aspect-video overflow-hidden">
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <Badge className="absolute top-3 left-3 bg-[#ff6b4d] text-white">
+                  {course.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                </Badge>
+                {/* KHDA Badge */}
+                <div className="absolute top-3 right-3 flex items-center gap-1 px-3 py-1 bg-blue-600 rounded-full">
+                  <Award className="w-3 h-3 text-white" />
+                  <span className="text-xs font-medium text-white">KHDA Attested</span>
                 </div>
               </div>
-
-              {/* Course Title */}
-              <h3 className="text-lg font-semibold text-[#0B0C19] mb-3">
-                {course.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-sm text-[#4B5563] leading-relaxed mb-4 flex-grow">
-                {course.description}
-              </p>
-
-              {/* 6XD Dimension */}
-              <div className="flex items-center gap-2 mb-3 text-sm">
-                <span className="font-medium text-[#0B0C19]">6XD Dimension:</span>
-                <span className="text-[#ff6b4d]">{course.dimension}</span>
+              <div className="p-5">
+                <h3 className="text-lg font-semibold text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+                  {course.title}
+                </h3>
+                <div className="flex items-center gap-4 text-sm text-[#4B5563] mb-3">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
+                    <span className="font-medium">{course.rating}</span>
+                    <span className="text-[#9CA3AF]">({course.reviews})</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    <span>{course.duration}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-xl font-bold text-[#0B0C19]">${course.price}</span>
+                    <span className="text-sm text-[#9CA3AF] line-through">${course.originalPrice}</span>
+                  </div>
+                  <Badge variant="outline" className="text-xs border-[#E5E7EB]">
+                    {course.level}
+                  </Badge>
+                </div>
               </div>
-
-              {/* Module Count */}
-              <div className="flex items-center gap-2 mb-4 text-sm text-[#4B5563]">
-                <BookOpen className="w-4 h-4" />
-                <span>{course.modules} Modules</span>
-              </div>
-
-              {/* Credential Tier */}
-              <div className="mb-4 p-3 bg-[#F5F6FA] rounded-lg">
-                <p className="text-xs text-[#9CA3AF] mb-1">Counts toward:</p>
-                <p className="text-sm font-medium text-[#0B0C19]">{course.credential}</p>
-              </div>
-
-              {/* Certificate Note */}
-              <p className="text-xs text-[#9CA3AF] italic mb-4">
-                KHDA-attested certificate included
-              </p>
-
-              {/* Enroll CTA */}
-              <Button className="w-full bg-[#ff6b4d] hover:bg-[#e56045] text-white">
-                Enroll Now
-              </Button>
-            </div>
+            </Link>
           ))}
         </div>
 
         {/* Sub-section CTA */}
-        <div className="flex justify-center mb-6">
-          <a
-            href="#"
+        <div className="flex justify-center">
+          <Link
+            to="/courses"
             className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-base transition-colors inline-flex items-center gap-2"
           >
             See More
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-          </a>
-        </div>
-
-        {/* Section CTA */}
-        <div className="flex justify-center">
-          <Button
-            variant="outline"
-            className="px-8 py-6 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all"
-          >
-            Explore All Courses
-          </Button>
+          </Link>
         </div>
       </div>
     </section>

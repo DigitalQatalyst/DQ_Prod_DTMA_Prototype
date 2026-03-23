@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { ButlerAI } from "@/components/butler/ButlerAI";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/input";
@@ -298,6 +299,7 @@ const Courses = () => {
       </main>
 
       <Footer />
+      <ButlerAI />
     </div>
   );
 };

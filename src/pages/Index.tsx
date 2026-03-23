@@ -13,6 +13,7 @@ import FacultySection from "@/components/home/FacultySection";
 import CredentialsSection from "@/components/home/CredentialsSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import StartNowSection from "@/components/home/StartNowSection";
+import { ButlerAI } from "@/components/butler/ButlerAI";
 
 const Index = () => {
   return (
@@ -30,6 +31,7 @@ const Index = () => {
         <StartNowSection />
       </main>
       <Footer />
+      <ButlerAI />
     </div>
   );
 };

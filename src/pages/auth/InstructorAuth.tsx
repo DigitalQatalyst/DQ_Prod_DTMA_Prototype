@@ -89,28 +89,28 @@ const InstructorAuth = () => {
           </Link>
 
           <div className="max-w-md opacity-60">
-            <h2 className="text-2xl font-bold leading-tight mb-4">
+            <h2 className="text-[28px] leading-[36px] font-semibold mb-4">
               Share Your
               <br />
               Expertise
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
               Create courses, inspire students, and grow your beauty education business with BROWZ Beauty Academy.
             </p>
           </div>
 
           <div className="flex gap-12 opacity-50">
             <div>
-              <div className="text-2xl font-semibold text-primary">Create</div>
-              <div className="text-xs text-muted-foreground">Courses</div>
+              <div className="text-[24px] leading-[32px] font-medium text-primary">Create</div>
+              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Courses</div>
             </div>
             <div>
-              <div className="text-2xl font-semibold text-primary">Track</div>
-              <div className="text-xs text-muted-foreground">Students</div>
+              <div className="text-[24px] leading-[32px] font-medium text-primary">Track</div>
+              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Students</div>
             </div>
             <div>
-              <div className="text-2xl font-semibold text-primary">Earn</div>
-              <div className="text-xs text-muted-foreground">Revenue</div>
+              <div className="text-[24px] leading-[32px] font-medium text-primary">Earn</div>
+              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Revenue</div>
             </div>
           </div>
         </div>
@@ -132,17 +132,17 @@ const InstructorAuth = () => {
           <div className="w-full max-w-md">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground hover:text-primary transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
             <div className="mb-8">
-              <h1 className="text-3xl font-semibold text-foreground mb-2">
+              <h1 className="text-[32px] leading-[40px] font-semibold text-foreground mb-2">
                 Instructor Sign In
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
                 Access your instructor dashboard
               </p>
             </div>
@@ -197,7 +197,7 @@ const InstructorAuth = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground text-[16px] leading-[24px] font-normal"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -211,7 +211,7 @@ const InstructorAuth = () => {
               </Button>
             </form>
 
-            <p className="text-center text-sm text-muted-foreground mt-8">
+            <p className="text-center text-[14px] leading-[20px] font-normal text-muted-foreground mt-8">
               Don't have an account?{" "}
               <Link to="/become-provider" className="text-primary font-medium hover:underline">
                 Sign up

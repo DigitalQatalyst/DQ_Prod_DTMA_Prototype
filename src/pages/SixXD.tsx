@@ -57,13 +57,13 @@ const SixXD = () => {
       <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="text-sm font-semibold uppercase tracking-wide text-[#ff6b4d] mb-4">
+            <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-4">
               The 6 Dimensions of Digital
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mb-6">
+            <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
               A Structured Framework to Master Digital and AI
             </h1>
-            <p className="text-lg text-white/90 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
               Six critical perspectives define what it means to understand, build, and operate within a Digital Cognitive Organization. Each dimension maps to a dedicated course — seven in total, covering every competency you need.
             </p>
           </div>
@@ -74,10 +74,10 @@ const SixXD = () => {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
               Why the 6XD Framework?
             </h2>
-            <p className="text-base text-[#4B5563] leading-relaxed mb-8">
+            <p className="text-[16px] leading-[24px] font-normal text-[#4B5563] mb-8">
               Digital transformation isn't a single initiative—it's a comprehensive shift across multiple dimensions. The 6XD framework provides a structured approach to understanding, planning, and executing transformation across your entire organization.
             </p>
           </div>
@@ -101,22 +101,22 @@ const SixXD = () => {
                 ></div>
 
                 {/* Title */}
-                <h3 className="text-lg font-semibold text-[#0B0C19] mb-2">
+                <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2">
                   {dimension.title}
                 </h3>
 
                 {/* Subtitle */}
-                <p className="text-sm font-medium text-[#ff6b4d] mb-4">
+                <p className="text-[14px] leading-[20px] font-medium text-[#ff6b4d] mb-4">
                   {dimension.subtitle}
                 </p>
 
                 {/* Description */}
-                <p className="text-sm text-[#4B5563] leading-relaxed mb-6 flex-grow">
+                <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-6 flex-grow">
                   {dimension.description}
                 </p>
 
                 {/* Learn More CTA */}
-                <span className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-sm transition-colors inline-flex items-center gap-2">
+                <span className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-[14px] leading-[20px] transition-colors inline-flex items-center gap-2">
                   Learn More
                   <ArrowRight className="w-4 h-4" />
                 </span>
@@ -130,20 +130,20 @@ const SixXD = () => {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-12 text-center">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-12 text-center">
               How the 6XD Framework Works
             </h2>
             
             <div className="space-y-8">
               <div className="flex gap-6">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center font-semibold">
+                  <div className="w-12 h-12 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center text-[16px] leading-[24px] font-medium">
                     1
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-[#0B0C19] mb-2">Assess Your Current State</h3>
-                  <p className="text-base text-[#4B5563] leading-relaxed">
+                  <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2">Assess Your Current State</h3>
+                  <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
                     Understand where your organization stands across all six dimensions of digital maturity.
                   </p>
                 </div>
@@ -151,13 +151,13 @@ const SixXD = () => {
 
               <div className="flex gap-6">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center font-semibold">
+                  <div className="w-12 h-12 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center text-[16px] leading-[24px] font-medium">
                     2
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-[#0B0C19] mb-2">Build Targeted Capabilities</h3>
-                  <p className="text-base text-[#4B5563] leading-relaxed">
+                  <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2">Build Targeted Capabilities</h3>
+                  <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
                     Take courses aligned to each dimension, building the specific skills your organization needs.
                   </p>
                 </div>
@@ -165,13 +165,13 @@ const SixXD = () => {
 
               <div className="flex gap-6">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center font-semibold">
+                  <div className="w-12 h-12 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center text-[16px] leading-[24px] font-medium">
                     3
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-[#0B0C19] mb-2">Execute with Confidence</h3>
-                  <p className="text-base text-[#4B5563] leading-relaxed">
+                  <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2">Execute with Confidence</h3>
+                  <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
                     Apply your learning to drive transformation initiatives with clarity and precision.
                   </p>
                 </div>

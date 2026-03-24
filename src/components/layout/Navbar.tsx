@@ -107,33 +107,33 @@ const Navbar = () => {
                         <div className="grid grid-cols-3 gap-12 mb-12">
                           {/* Digital Economy */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Economy</h3>
+                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Economy</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                              <li><Link to="/courses/digital-economy-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">The Rise of Economy 4.0</Link></li>
+                              <li><Link to="/courses/digital-economy-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Perfect Life Transactions: The Cornerstone of Economy 4.0</Link></li>
+                              <li><Link to="/courses/digital-economy-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Success metrics of Economy 4.0</Link></li>
                             </ul>
                             <Link to="/courses?category=digital-economy" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
 
                           {/* Digital Cognitive Organisations */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Cognitive Organisations</h3>
+                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Cognitive Organisations</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                              <li><Link to="/courses/digital-cognitive-org-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Building the Digital Cognitive Organization</Link></li>
+                              <li><Link to="/courses/digital-cognitive-org-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">AI-Driven Decision Making & Organizational Intelligence</Link></li>
+                              <li><Link to="/courses/digital-cognitive-org-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Continuous Learning & Adaptive Systems</Link></li>
                             </ul>
                             <Link to="/courses?category=digital-cognitive-organisation" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
 
                           {/* Digital Business Platforms */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Business Platforms</h3>
+                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Business Platforms</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                              <li><Link to="/courses/digital-business-platform-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Business Platform Fundamentals</Link></li>
+                              <li><Link to="/courses/digital-business-platform-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Cloud Infrastructure & API Strategy</Link></li>
+                              <li><Link to="/courses/digital-business-platform-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Platform Security & Scalability</Link></li>
                             </ul>
                             <Link to="/courses?category=digital-business-platform" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
@@ -143,33 +143,33 @@ const Navbar = () => {
                         <div className="grid grid-cols-3 gap-12">
                           {/* Digital Transformation */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Transformation</h3>
+                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Transformation</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                              <li><Link to="/courses/digital-transformation-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Transformation 2.0 Strategy</Link></li>
+                              <li><Link to="/courses/digital-transformation-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Change Management for Digital Transformation</Link></li>
+                              <li><Link to="/courses/digital-transformation-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Measuring Transformation Success</Link></li>
                             </ul>
                             <Link to="/courses?category=digital-transformation" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
 
                           {/* Digital Workers & Workspace */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Workers & Workspace</h3>
+                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Workers & Workspace</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                              <li><Link to="/courses/digital-worker-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Worker Essentials & Productivity</Link></li>
+                              <li><Link to="/courses/digital-worker-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Remote Work & Collaboration Tools</Link></li>
+                              <li><Link to="/courses/digital-worker-5" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Wellness & Work-Life Balance</Link></li>
                             </ul>
                             <Link to="/courses?category=digital-worker-workspace" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>
 
                           {/* Digital Accelerators */}
                           <div>
-                            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-6">Digital Accelerators</h3>
+                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Accelerators</h3>
                             <ul className="space-y-3">
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 1</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 2</a></li>
-                              <li><a href="#" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Course 3</a></li>
+                              <li><Link to="/courses/digital-accelerators-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">AI & Machine Learning Fundamentals</Link></li>
+                              <li><Link to="/courses/digital-accelerators-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Blockchain & Emerging Technologies</Link></li>
+                              <li><Link to="/courses/digital-accelerators-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">IoT Strategy & Implementation</Link></li>
                             </ul>
                             <Link to="/courses?category=digital-accelerators" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
                           </div>

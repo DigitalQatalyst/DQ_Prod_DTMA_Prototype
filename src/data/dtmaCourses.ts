@@ -3,7 +3,7 @@ export const dtmaCourses = [
   // Digital Economy Courses
   {
     id: "digital-economy-1",
-    title: "Introduction to Digital Economy & Economy 4.0",
+    title: "The Rise of Economy 4.0",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
     category: "digital-economy",
@@ -19,7 +19,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-economy-2",
-    title: "Platform Economics & Network Effects",
+    title: "Perfect Life Transactions: The Cornerstone of Economy 4.0",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
     category: "digital-economy",
@@ -35,7 +35,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-economy-3",
-    title: "Data as a Strategic Asset",
+    title: "Success metrics of Economy 4.0",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop",
     category: "digital-economy",
@@ -85,7 +85,7 @@ export const dtmaCourses = [
   // Digital Cognitive Organisation Courses
   {
     id: "digital-cognitive-org-1",
-    title: "Building Digital Cognitive Organizations",
+    title: "Building the Digital Cognitive Organization",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop",
     category: "digital-cognitive-organisation",
@@ -101,7 +101,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-cognitive-org-2",
-    title: "AI-Driven Decision Making",
+    title: "AI-Driven Decision Making & Organizational Intelligence",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1200&auto=format&fit=crop",
     category: "digital-cognitive-organisation",
@@ -117,7 +117,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-cognitive-org-3",
-    title: "Organizational Learning & Adaptation",
+    title: "Continuous Learning & Adaptive Systems",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
     category: "digital-cognitive-organisation",
@@ -167,7 +167,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-business-platform-2",
-    title: "Cloud Infrastructure & Services",
+    title: "Cloud Infrastructure & API Strategy",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
     category: "digital-business-platform",
@@ -183,7 +183,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-business-platform-3",
-    title: "API Strategy & Integration",
+    title: "Platform Security & Scalability",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop",
     category: "digital-business-platform",
@@ -265,7 +265,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-transformation-3",
-    title: "Digital Maturity Assessment",
+    title: "Measuring Transformation Success",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
     category: "digital-transformation",
@@ -315,7 +315,7 @@ export const dtmaCourses = [
   // Digital Worker & Workspace Courses
   {
     id: "digital-worker-1",
-    title: "Digital Worker & Workspace Essentials",
+    title: "Digital Worker Essentials & Productivity",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
     category: "digital-worker-workspace",
@@ -413,7 +413,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-accelerators-2",
-    title: "Blockchain & Distributed Ledger Technology",
+    title: "Blockchain & Emerging Technologies",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1200&auto=format&fit=crop",
     category: "digital-accelerators",
@@ -429,7 +429,7 @@ export const dtmaCourses = [
   },
   {
     id: "digital-accelerators-3",
-    title: "Internet of Things (IoT) Strategy",
+    title: "IoT Strategy & Implementation",
     instructor: "DTMA Faculty",
     image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?q=80&w=1200&auto=format&fit=crop",
     category: "digital-accelerators",

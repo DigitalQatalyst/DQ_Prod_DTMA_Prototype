@@ -20,7 +20,6 @@ const BenefitsSection = () => {
       icon: Eye,
       title: "The 6X Digital Perspectives (6XD)",
       description: "Six critical dimensions define how a Digital Cognitive Organization operates. These perspectives give you a structured lens to understand digital transformation holistically. Master them to build and thrive within the future of Economy 4.0.",
-      credential: "Complete the six dimensions and earn credentials attested by KHDA, the Government of Dubai's education quality authority.",
       cta: "Upskill Now",
       link: "#",
     },
@@ -52,8 +51,8 @@ const BenefitsSection = () => {
                 className="flex flex-col items-start p-6 bg-[#F5F6FA] rounded-2xl hover:shadow-lg transition-shadow duration-300"
               >
                 {/* Icon */}
-                <div className="w-12 h-12 bg-[#ff6b4d] rounded-xl flex items-center justify-center mb-5">
-                  <Icon className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 bg-[#ff6b4d]/20 rounded-xl flex items-center justify-center mb-5">
+                  <Icon className="w-6 h-6 text-[#ff6b4d]" />
                 </div>
 
                 {/* Heading */}

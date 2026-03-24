@@ -17,7 +17,7 @@ const HowItWorksSection = () => {
       heading: "Deliver Successful Digital Initiatives",
       description: "Master the frameworks and methodologies that separate successful digital transformations from failed ones. Gain the execution skills to drive initiatives from strategy through to measurable outcomes.",
       link: "/personas/transformation-specialists",
-      color: "#181C3A",
+      color: "#16a34a",
     },
     {
       icon: TrendingUp,
@@ -34,13 +34,13 @@ const HowItWorksSection = () => {
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
+          <p className="text-[12px] leading-[16px] font-medium text-[#ff6b4d] uppercase tracking-wide mb-4">
             How it Works
           </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+          <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
             Built Around the Challenges You Actually Face
           </h2>
-          <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
+          <p className="text-[16px] leading-[24px] font-normal text-[#4B5563] max-w-3xl mx-auto">
             Your role. Your challenge. Your learning path.
           </p>
         </div>
@@ -64,26 +64,26 @@ const HowItWorksSection = () => {
 
                 {/* Persona Title */}
                 <p 
-                  className="text-sm font-semibold uppercase tracking-wide mb-3"
+                  className="text-[12px] leading-[16px] font-medium uppercase tracking-wide mb-3"
                   style={{ color: persona.color }}
                 >
                   {persona.title}
                 </p>
 
                 {/* Heading */}
-                <h3 className="text-lg font-semibold text-[#0B0C19] mb-4">
+                <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-4">
                   {persona.heading}
                 </h3>
 
                 {/* Description */}
-                <p className="text-sm text-[#4B5563] leading-relaxed mb-6 flex-grow">
+                <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-6 flex-grow">
                   {persona.description}
                 </p>
 
                 {/* CTA Link */}
                 <Link
                   to={persona.link}
-                  className="inline-flex items-center gap-2 font-medium text-sm transition-colors"
+                  className="inline-flex items-center gap-2 font-medium text-[14px] leading-[20px] transition-colors"
                   style={{ color: persona.color }}
                 >
                   Learn More

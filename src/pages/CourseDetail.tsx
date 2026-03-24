@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/Badge";
@@ -221,20 +220,17 @@ const CourseDetail = () => {
 
   return (
     <div className="min-h-screen">
-      <Navbar />
-      
-      <main className="pt-24 pb-20">
-        {/* Breadcrumb */}
-        <div className="container mx-auto px-4 lg:px-8 mb-6">
-          <Link to="/courses" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-            <ChevronLeft className="w-4 h-4" />
-            Back to Courses
-          </Link>
-        </div>
-
+      <main className="pb-20">
         {/* Hero Section */}
-        <section className="text-white bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-16">
+        <section className="text-white bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348] pt-24">
+          {/* Breadcrumb */}
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 pt-6 pb-4">
+            <Link to="/courses" className="inline-flex items-center gap-2 text-[14px] leading-[20px] font-normal text-white/70 hover:text-white transition-colors">
+              <ChevronLeft className="w-4 h-4" />
+              Back to Courses
+            </Link>
+          </div>
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 pb-16">
             <div className="grid lg:grid-cols-3 gap-12">
               {/* Course Info */}
               <div className="lg:col-span-2">
@@ -248,15 +244,15 @@ const CourseDetail = () => {
                   </Badge>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl font-semibold text-white leading-tight mb-4">
+                <h1 className="text-[32px] leading-[40px] font-semibold text-white mb-4">
                   {course.title}
                 </h1>
-                <p className="text-base text-white/80 leading-relaxed mb-6">
+                <p className="text-[16px] leading-[24px] font-normal text-white/80 mb-6">
                   {course.subtitle}
                 </p>
 
                 {/* Meta */}
-                <div className="flex flex-wrap items-center gap-6 text-sm text-white/70 mb-8">
+                <div className="flex flex-wrap items-center gap-6 text-[14px] leading-[20px] font-normal text-white/70 mb-8">
                   <div className="flex items-center gap-1.5">
                     <Star className="w-5 h-5 text-[#ff6b4d] fill-[#ff6b4d]" />
                     <span className="font-semibold text-white">{course.rating}</span>
@@ -284,8 +280,8 @@ const CourseDetail = () => {
                     className="w-12 h-12 rounded-full object-cover ring-2 ring-[#ff6b4d]"
                   />
                   <div>
-                    <div className="font-medium text-white">Created by {course.instructor.name}</div>
-                    <div className="text-sm text-white/70">{course.instructor.title}</div>
+                    <div className="text-[16px] leading-[24px] font-medium text-white">Created by {course.instructor.name}</div>
+                    <div className="text-[14px] leading-[20px] font-normal text-white/70">{course.instructor.title}</div>
                   </div>
                 </div>
               </div>
@@ -310,9 +306,9 @@ const CourseDetail = () => {
                   <div className="p-6">
                     {/* Price */}
                     <div className="flex items-baseline gap-3 mb-6">
-                      <span className="text-3xl font-bold">${course.price}</span>
-                      <span className="text-lg text-muted-foreground line-through">${course.originalPrice}</span>
-                      <Badge className="bg-primary text-primary-foreground">
+                      <span className="text-[28px] leading-[36px] font-semibold">${course.price}</span>
+                      <span className="text-[18px] leading-[28px] font-normal text-muted-foreground line-through">${course.originalPrice}</span>
+                      <Badge className="bg-primary text-primary-foreground text-[12px] leading-[16px] font-medium">
                         {Math.round((1 - course.price / course.originalPrice) * 100)}% off
                       </Badge>
                     </div>
@@ -334,16 +330,16 @@ const CourseDetail = () => {
                       )}
                     </div>
 
-                    <p className="text-center text-sm text-muted-foreground mb-6">
+                    <p className="text-center text-[14px] leading-[20px] font-normal text-muted-foreground mb-6">
                       30-day money-back guarantee
                     </p>
 
                     {/* Includes */}
                     <div>
-                      <h4 className="text-lg font-semibold mb-4">This course includes:</h4>
+                      <h4 className="text-[20px] leading-[28px] font-medium mb-4">This course includes:</h4>
                       <ul className="space-y-3">
                         {course.includes.map((item, index) => (
-                          <li key={index} className="flex items-center gap-3 text-sm">
+                          <li key={index} className="flex items-center gap-3 text-[14px] leading-[20px] font-normal">
                             <item.icon className="w-5 h-5 text-[#ff6b4d] flex-shrink-0" />
                             <span>{item.text}</span>
                           </li>
@@ -362,8 +358,8 @@ const CourseDetail = () => {
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold">${course.price}</span>
-                <span className="text-muted-foreground line-through">${course.originalPrice}</span>
+                <span className="text-[24px] leading-[32px] font-medium">${course.price}</span>
+                <span className="text-[14px] leading-[20px] font-normal text-muted-foreground line-through">${course.originalPrice}</span>
               </div>
             </div>
             <Button 
@@ -382,14 +378,14 @@ const CourseDetail = () => {
             <div className="lg:max-w-3xl">
               {/* What You'll Learn */}
               <div className="mb-12">
-                <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
                   What you'll learn
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4 p-6 bg-[#F5F6FA] rounded-2xl">
                   {course.whatYouWillLearn.map((item, index) => (
                     <div key={index} className="flex gap-3">
                       <CheckCircle className="w-5 h-5 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
-                      <span className="text-sm">{item}</span>
+                      <span className="text-[14px] leading-[20px] font-normal">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -397,10 +393,10 @@ const CourseDetail = () => {
 
               {/* Course Content/Curriculum */}
               <div className="mb-12">
-                <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-2">
+                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-2">
                   Course Content
                 </h2>
-                <p className="text-base text-[#4B5563] leading-relaxed mb-6">
+                <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-6">
                   {course.curriculum.length} modules • {totalLessons} lessons • {course.duration} total
                 </p>
 
@@ -413,8 +409,8 @@ const CourseDetail = () => {
                     >
                       <AccordionTrigger className="hover:no-underline py-5">
                         <div className="flex items-center justify-between w-full pr-4">
-                          <span className="font-semibold text-left">{module.title}</span>
-                          <span className="text-sm text-muted-foreground">
+                          <span className="text-[16px] leading-[24px] font-medium text-left">{module.title}</span>
+                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">
                             {module.lessons.length} lessons • {module.duration}
                           </span>
                         </div>
@@ -430,14 +426,14 @@ const CourseDetail = () => {
                                 {lesson.type === "video" && <PlayCircle className="w-4 h-4 text-[#ff6b4d]" />}
                                 {lesson.type === "file" && <FileText className="w-4 h-4 text-muted-foreground" />}
                                 {lesson.type === "quiz" && <Award className="w-4 h-4 text-[#ff6b4d]" />}
-                                <span className="text-sm">{lesson.title}</span>
+                                <span className="text-[14px] leading-[20px] font-normal">{lesson.title}</span>
                                 {lesson.preview && (
-                                  <Badge variant="secondary" className="text-xs">Preview</Badge>
+                                  <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium">Preview</Badge>
                                 )}
                               </div>
                               <div className="flex items-center gap-3">
                                 {lesson.duration && (
-                                  <span className="text-xs text-muted-foreground">{lesson.duration}</span>
+                                  <span className="text-[12px] leading-[16px] font-medium text-muted-foreground">{lesson.duration}</span>
                                 )}
                                 {!lesson.preview && <Lock className="w-3.5 h-3.5 text-muted-foreground" />}
                               </div>
@@ -452,14 +448,14 @@ const CourseDetail = () => {
 
               {/* Requirements */}
               <div className="mb-12">
-                <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
                   Requirements
                 </h2>
                 <ul className="space-y-3">
                   {course.requirements.map((req, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-[#ff6b4d] mt-2" />
-                      <span>{req}</span>
+                      <span className="text-[16px] leading-[24px] font-normal">{req}</span>
                     </li>
                   ))}
                 </ul>
@@ -467,12 +463,12 @@ const CourseDetail = () => {
 
               {/* Description */}
               <div className="mb-12">
-                <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
                   Description
                 </h2>
                 <div className="prose prose-neutral max-w-none">
                   {course.description.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="text-base text-[#4B5563] leading-relaxed mb-4">
+                    <p key={index} className="text-[16px] leading-[24px] font-normal text-[#4B5563] mb-4">
                       {paragraph}
                     </p>
                   ))}
@@ -481,7 +477,7 @@ const CourseDetail = () => {
 
               {/* Instructor */}
               <div className="mb-12">
-                <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
                   Your Instructor
                 </h2>
                 <div className="bg-card border border-border rounded-2xl p-6">
@@ -492,11 +488,11 @@ const CourseDetail = () => {
                       className="w-24 h-24 rounded-xl object-cover"
                     />
                     <div>
-                      <h3 className="text-lg font-semibold text-[#0B0C19] mb-1">
+                      <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-1">
                         {course.instructor.name}
                       </h3>
-                      <p className="text-[#ff6b4d] mb-3 text-sm">{course.instructor.title}</p>
-                      <div className="flex items-center gap-6 text-sm text-[#4B5563] mb-4">
+                      <p className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] mb-3">{course.instructor.title}</p>
+                      <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
                         <div className="flex items-center gap-1.5">
                           <Users className="w-4 h-4" />
                           {course.instructor.students.toLocaleString()} students
@@ -506,7 +502,7 @@ const CourseDetail = () => {
                           {course.instructor.courses} courses
                         </div>
                       </div>
-                      <p className="text-base text-[#4B5563] leading-relaxed">{course.instructor.bio}</p>
+                      <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">{course.instructor.bio}</p>
                     </div>
                   </div>
                 </div>
@@ -520,10 +516,10 @@ const CourseDetail = () => {
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-wide text-[#ff6b4d] mb-2">
+                <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-2">
                   Continue Learning
                 </p>
-                <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19]">
+                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19]">
                   Recommended Courses
                 </h2>
               </div>
@@ -564,15 +560,15 @@ const CourseDetail = () => {
                       alt={recCourse.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <Badge className="absolute top-3 left-3 bg-[#ff6b4d] text-white">
+                    <Badge className="absolute top-3 left-3 bg-[#ff6b4d] text-white text-[12px] leading-[16px] font-medium">
                       {recCourse.category}
                     </Badge>
                   </div>
                   <div className="p-5">
-                    <h3 className="text-lg font-semibold text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+                    <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
                       {recCourse.title}
                     </h3>
-                    <div className="flex items-center gap-4 text-sm text-[#4B5563] mb-3">
+                    <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#4B5563] mb-3">
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
                         <span className="font-medium">{recCourse.rating}</span>
@@ -585,10 +581,10 @@ const CourseDetail = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-xl font-bold text-[#0B0C19]">${recCourse.price}</span>
-                        <span className="text-sm text-[#9CA3AF] line-through">${recCourse.originalPrice}</span>
+                        <span className="text-[20px] leading-[28px] font-medium text-[#0B0C19]">${recCourse.price}</span>
+                        <span className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] line-through">${recCourse.originalPrice}</span>
                       </div>
-                      <Badge variant="outline" className="text-xs border-[#E5E7EB]">
+                      <Badge variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
                         {recCourse.level}
                       </Badge>
                     </div>

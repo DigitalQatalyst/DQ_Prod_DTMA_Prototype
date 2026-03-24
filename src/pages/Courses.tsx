@@ -70,13 +70,13 @@ const Courses = () => {
         <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
             <div className="max-w-2xl">
-              <p className="text-sm font-semibold uppercase tracking-wide text-[#ff6b4d] mb-4">
+              <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-4">
                 Course Marketplace
               </p>
-              <h1 className="text-4xl md:text-5xl font-semibold text-white mb-4">
+              <h1 className="text-[32px] leading-[40px] font-semibold text-white mb-4">
                 Explore Our Courses
               </h1>
-              <p className="text-base text-white/80 leading-relaxed">
+              <p className="text-[16px] leading-[24px] font-normal text-white/80">
                 Discover expert-led courses designed to help you thrive in the digital economy. Master the 6XD framework and build the skills for Economy 4.0.
               </p>
             </div>
@@ -158,7 +158,7 @@ const Courses = () => {
         <section className="py-12 bg-[#F5F6FA]">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
             <div className="mb-8">
-              <p className="text-[#4B5563]">
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                 Showing <span className="font-semibold text-[#0B0C19]">{filteredCourses.length}</span> courses
               </p>
             </div>
@@ -182,10 +182,10 @@ const Courses = () => {
                       </Badge>
                     </div>
                     <div className="p-5">
-                      <h3 className="text-lg font-semibold text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+                      <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
                         {course.title}
                       </h3>
-                      <div className="flex items-center gap-4 text-sm text-[#4B5563] mb-3">
+                      <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#4B5563] mb-3">
                         <div className="flex items-center gap-1">
                           <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
                           <span className="font-medium">{course.rating}</span>
@@ -198,10 +198,10 @@ const Courses = () => {
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-baseline gap-2">
-                          <span className="text-xl font-bold text-[#0B0C19]">${course.price}</span>
-                          <span className="text-sm text-[#9CA3AF] line-through">${course.originalPrice}</span>
+                          <span className="text-[20px] leading-[28px] font-semibold text-[#0B0C19]">${course.price}</span>
+                          <span className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] line-through">${course.originalPrice}</span>
                         </div>
-                        <Badge variant="outline" className="text-xs border-[#E5E7EB]">
+                        <Badge variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
                           {course.level}
                         </Badge>
                       </div>
@@ -233,21 +233,21 @@ const Courses = () => {
                     <div className="flex-1 flex flex-col justify-between py-1">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="secondary" className="text-xs font-medium capitalize">
+                          <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium capitalize">
                             {course.category}
                           </Badge>
-                          <span className="text-xs text-muted-foreground">{course.level}</span>
+                          <span className="text-[12px] leading-[16px] font-medium text-muted-foreground">{course.level}</span>
                         </div>
 
-                        <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                        <h3 className="text-[20px] leading-[28px] font-medium text-foreground mb-1 group-hover:text-primary transition-colors">
                           {course.title}
                         </h3>
-                        <p className="text-sm text-muted-foreground mb-2">{course.description}</p>
-                        <p className="text-sm text-muted-foreground">by {course.instructor}</p>
+                        <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-2">{course.description}</p>
+                        <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">by {course.instructor}</p>
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-muted-foreground">
                           <div className="flex items-center gap-1.5">
                             <Star className="w-4 h-4 fill-[#181C3A]" style={{ color: '#181C3A' }} />
                             <span className="font-semibold text-foreground">{course.rating}</span>
@@ -264,8 +264,8 @@ const Courses = () => {
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <span className="text-muted-foreground line-through">${course.originalPrice}</span>
-                          <span className="text-xl font-semibold text-primary">${course.price}</span>
+                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground line-through">${course.originalPrice}</span>
+                          <span className="text-[20px] leading-[28px] font-semibold text-primary">${course.price}</span>
                           <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                         </div>
                       </div>
@@ -280,8 +280,8 @@ const Courses = () => {
                 <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
                   <Search className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">No courses found</h3>
-                <p className="text-muted-foreground mb-6">Try adjusting your search or filter criteria</p>
+                <h3 className="text-[24px] leading-[32px] font-medium text-foreground mb-2">No courses found</h3>
+                <p className="text-[16px] leading-[24px] font-normal text-muted-foreground mb-6">Try adjusting your search or filter criteria</p>
                 <Button
                   variant="outline"
                   onClick={() => {

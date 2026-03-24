@@ -3,29 +3,29 @@ import { Button } from "@/components/ui/button";
 
 const StartNowSection = () => {
   return (
-    <section className="py-16 bg-gradient-to-br from-[#1e2348] via-[#1e2348] via-70% to-[#ff6b4d]">
+    <section className="py-20 bg-gradient-to-br from-[#1e2348] via-[#1e2348] via-70% to-[#ff6b4d]">
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
             Start Now
           </p>
           <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">
             Get the Skills to Thrive in the Digital Economy
           </h2>
-          <p className="text-base text-white/80 max-w-3xl mx-auto leading-relaxed mb-8">
+          <p className="text-base text-white/80 max-w-3xl mx-auto leading-relaxed">
             The digital economy demands new skills—DTMA delivers them through the 6XD framework and hybrid HI + AI faculty.
           </p>
         </div>
 
         {/* Credential Reinforcement */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-3xl mx-auto border border-white/20">
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 my-10 max-w-3xl mx-auto border border-white/20">
           <div className="flex items-center justify-center gap-4 text-center">
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
               <Award className="w-6 h-6 text-white" />
             </div>
             <p className="text-sm text-white/90 leading-relaxed">
-              All DTMA courses award KHDA-attested credentials — recognized across the UAE and internationally.
+              All DTMA courses award KHDA-attested, internationally recognized credentials.
             </p>
           </div>
         </div>

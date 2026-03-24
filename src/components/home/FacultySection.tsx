@@ -9,21 +9,21 @@ const humanFaculty = [
     title: "Digital Strategy Lead",
     bio: "Over 15 years driving enterprise digital transformations across EMEA. Specializes in cognitive organization design and strategic operating models.",
     expertise: ["Digital Strategy", "Cognitive Organizations", "Change Management"],
-    image: "/image (2).png",
+    image: "/st.png",
   },
   {
     name: "Kaylyn",
     title: "Innovation & Learning Architect",
     bio: "Passionate about designing future-ready learning experiences. Brings deep expertise in instructional design and digital capability building.",
     expertise: ["Learning Design", "Innovation Frameworks", "Capability Building"],
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop",
+    image: "/ky.png",
   },
   {
     name: "Mark",
     title: "Technology & Transformation Advisor",
     bio: "Former CTO turned educator. Bridges the gap between emerging technology and practical business transformation.",
     expertise: ["Emerging Tech", "Enterprise Architecture", "Transformation Delivery"],
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop",
+    image: "/mrk.png",
   },
 ];
 
@@ -131,11 +131,11 @@ const FacultySection = () => {
                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group"
               >
                 {/* Photo */}
-                <div className="h-64 overflow-hidden">
+                <div className="h-64 overflow-hidden bg-gray-50">
                   <img
                     src={faculty.image}
                     alt={faculty.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 {/* Info */}

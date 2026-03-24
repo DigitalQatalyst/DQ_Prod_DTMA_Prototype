@@ -29,11 +29,11 @@ const About = () => {
       <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mb-6">
+            <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
               Closing the Capability Gap in Digital Transformation
             </h1>
             
-            <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
               DTMA equips leaders, specialists, and digital workers with the skills to thrive in Economy 4.0 and build Digital Cognitive Organizations.
             </p>
           </div>
@@ -44,13 +44,13 @@ const About = () => {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="text-center mb-12">
-            <p className="text-sm font-semibold uppercase tracking-wide text-[#ff6b4d] mb-4">About DTMA</p>
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+            <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-4">About DTMA</p>
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
               A Modern Digital Academy for the New Economy
             </h2>
             
             <div className="max-w-3xl mx-auto">
-              <p className="text-base text-[#4B5563] leading-relaxed">
+              <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
                 DTMA is built to close the capability gaps that keep digital transformation efforts from succeeding. We serve organizational leaders, transformation specialists, and digital workers through structured learning, guided discovery, and the 6 Dimensions of Digital (6XD) framework.
               </p>
             </div>
@@ -62,7 +62,7 @@ const About = () => {
       <section className="py-16 lg:py-24 bg-[#F5F6FA]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19]">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19]">
               Why DTMA?
             </h2>
           </div>
@@ -73,8 +73,8 @@ const About = () => {
               <div className="w-12 h-12 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center mb-6">
                 <Target className="w-6 h-6 text-[#ff6b4d]" />
               </div>
-              <h3 className="text-lg font-semibold text-[#0B0C19] mb-3">6XD Framework</h3>
-              <p className="text-sm text-[#4B5563] leading-relaxed">
+              <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-3">6XD Framework</h3>
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                 Our learning is organized around the 6 Dimensions of Digital, turning each perspective into structured courses and clear entry points for every persona.
               </p>
             </div>
@@ -83,8 +83,8 @@ const About = () => {
               <div className="w-12 h-12 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center mb-6">
                 <Lightbulb className="w-6 h-6 text-[#ff6b4d]" />
               </div>
-              <h3 className="text-lg font-semibold text-[#0B0C19] mb-3">Hybrid HI + AI Faculty</h3>
-              <p className="text-sm text-[#4B5563] leading-relaxed">
+              <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-3">Hybrid HI + AI Faculty</h3>
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                 Learn from both human intelligence and artificial intelligence, combining expert instruction with AI-powered guidance throughout your journey.
               </p>
             </div>
@@ -93,8 +93,8 @@ const About = () => {
               <div className="w-12 h-12 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center mb-6">
                 <Zap className="w-6 h-6 text-[#ff6b4d]" />
               </div>
-              <h3 className="text-lg font-semibold text-[#0B0C19] mb-3">Bite-Sized Learning</h3>
-              <p className="text-sm text-[#4B5563] leading-relaxed">
+              <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-3">Bite-Sized Learning</h3>
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                 Podcast-style microlearning that fits your schedule. Always-available content designed for busy professionals navigating digital transformation.
               </p>
             </div>
@@ -106,45 +106,45 @@ const About = () => {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-4">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-4">
               Your Learning Journey
             </h2>
-            <p className="text-base text-[#4B5563] max-w-2xl mx-auto">
+            <p className="text-[16px] leading-[24px] font-normal text-[#4B5563] max-w-2xl mx-auto">
               From discovery to certification, DTMA guides you through a structured path aligned with your role and goals.
             </p>
           </div>
           
           <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
             <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center mx-auto mb-4 text-xl font-semibold">
+              <div className="w-16 h-16 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-medium">
                 1
               </div>
-              <h3 className="text-lg font-semibold text-[#0B0C19] mb-2">Discovery</h3>
-              <p className="text-sm text-[#4B5563]">Explore the 6XD framework and find your entry point</p>
+              <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2">Discovery</h3>
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Explore the 6XD framework and find your entry point</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center mx-auto mb-4 text-xl font-semibold">
+              <div className="w-16 h-16 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-medium">
                 2
               </div>
-              <h3 className="text-lg font-semibold text-[#0B0C19] mb-2">Core Courses</h3>
-              <p className="text-sm text-[#4B5563]">Complete 7 core 6XD-aligned courses</p>
+              <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2">Core Courses</h3>
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Complete 7 core 6XD-aligned courses</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center mx-auto mb-4 text-xl font-semibold">
+              <div className="w-16 h-16 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-medium">
                 3
               </div>
-              <h3 className="text-lg font-semibold text-[#0B0C19] mb-2">Electives</h3>
-              <p className="text-sm text-[#4B5563]">Deepen expertise with specialized courses</p>
+              <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2">Electives</h3>
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Deepen expertise with specialized courses</p>
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center mx-auto mb-4 text-xl font-semibold">
+              <div className="w-16 h-16 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-medium">
                 4
               </div>
-              <h3 className="text-lg font-semibold text-[#0B0C19] mb-2">Certification</h3>
-              <p className="text-sm text-[#4B5563]">Earn KHDA-attested credentials</p>
+              <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2">Certification</h3>
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Earn KHDA-attested credentials</p>
             </div>
           </div>
         </div>
@@ -156,9 +156,9 @@ const About = () => {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#ff6b4d]/10 text-[#ff6b4d] mb-6">
               <Users className="w-4 h-4" />
-              <span className="text-sm font-medium">Who We Serve</span>
+              <span className="text-[12px] leading-[16px] font-medium">Who We Serve</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19]">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19]">
               Built for Three Core Audiences
             </h2>
           </div>
@@ -170,7 +170,7 @@ const About = () => {
                 className="flex items-center gap-4 p-6 rounded-xl bg-white border border-[#E5E7EB]"
               >
                 <CheckCircle2 className="w-6 h-6 text-[#ff6b4d] flex-shrink-0" />
-                <p className="text-[#0B0C19]">{audience}</p>
+                <p className="text-[16px] leading-[24px] font-normal text-[#0B0C19]">{audience}</p>
               </div>
             ))}
           </div>
@@ -184,10 +184,10 @@ const About = () => {
             <div className="w-20 h-20 bg-[#ff6b4d]/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Award className="w-10 h-10 text-[#ff6b4d]" />
             </div>
-            <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-4">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-4">
               KHDA-Attested Credentials
             </h2>
-            <p className="text-base text-[#4B5563] leading-relaxed">
+            <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
               All DTMA courses award credentials recognized across the UAE and internationally, backed by the Knowledge and Human Development Authority (KHDA) in Dubai.
             </p>
           </div>
@@ -198,17 +198,17 @@ const About = () => {
       <section className="py-16 bg-gradient-to-br from-[#1e2348] via-[#1e2348] via-60% to-[#ff6b4d]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-white mb-6">
               Ready to Close Your Capability Gap?
             </h2>
-            <p className="text-base text-white/80 leading-relaxed mb-8">
+            <p className="text-[16px] leading-[24px] font-normal text-white/80 mb-8">
               Join leaders, specialists, and digital workers building the skills to thrive in Economy 4.0.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/courses">
                 <Button 
-                  className="px-8 py-6 bg-[#ff6b4d] hover:bg-[#e56045] text-white border-transparent text-base gap-2"
+                  className="px-8 py-6 bg-[#ff6b4d] hover:bg-[#e56045] text-white border-transparent text-[16px] leading-[24px] font-normal gap-2"
                 >
                   <BookOpen className="w-4 h-4" />
                   Explore Courses
@@ -216,7 +216,7 @@ const About = () => {
               </Link>
               <Link to="/">
                 <Button 
-                  className="px-8 py-6 bg-transparent border-white text-white hover:bg-white hover:text-[#ff6b4d] text-base"
+                  className="px-8 py-6 bg-transparent border-white text-white hover:bg-white hover:text-[#ff6b4d] text-[16px] leading-[24px] font-normal"
                   style={{ borderWidth: '1.5px' }}
                 >
                   Learn More

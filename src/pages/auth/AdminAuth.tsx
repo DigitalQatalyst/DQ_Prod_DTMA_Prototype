@@ -104,28 +104,28 @@ const AdminAuth = () => {
           </Link>
 
           <div className="max-w-md opacity-60">
-            <h2 className="text-2xl font-bold leading-tight mb-4">
+            <h2 className="text-[28px] leading-[36px] font-semibold mb-4">
               Administrator
               <br />
               Control Center
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
               Manage users, approve courses, and oversee the entire BROWZ Beauty Academy platform.
             </p>
           </div>
 
           <div className="flex gap-12 opacity-50">
             <div>
-              <div className="text-2xl font-semibold text-primary">Full</div>
-              <div className="text-xs text-muted-foreground">Platform Access</div>
+              <div className="text-[24px] leading-[32px] font-medium text-primary">Full</div>
+              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Platform Access</div>
             </div>
             <div>
-              <div className="text-2xl font-semibold text-primary">User</div>
-              <div className="text-xs text-muted-foreground">Management</div>
+              <div className="text-[24px] leading-[32px] font-medium text-primary">User</div>
+              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Management</div>
             </div>
             <div>
-              <div className="text-2xl font-semibold text-primary">Course</div>
-              <div className="text-xs text-muted-foreground">Approvals</div>
+              <div className="text-[24px] leading-[32px] font-medium text-primary">Course</div>
+              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Approvals</div>
             </div>
           </div>
         </div>
@@ -147,17 +147,17 @@ const AdminAuth = () => {
           <div className="w-full max-w-md">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground hover:text-primary transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
             <div className="mb-8">
-              <h1 className="text-3xl font-semibold text-foreground mb-2">
+              <h1 className="text-[32px] leading-[40px] font-semibold text-foreground mb-2">
                 {mode === "signup" ? "Create Admin Account" : "Admin Sign In"}
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
                 {mode === "signup" ? "Set up your administrator account" : "Access the administrator dashboard"}
               </p>
             </div>
@@ -232,7 +232,7 @@ const AdminAuth = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground text-[16px] leading-[24px] font-normal"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -246,7 +246,7 @@ const AdminAuth = () => {
               </Button>
             </form>
 
-            <p className="text-center text-sm text-muted-foreground mt-8">
+            <p className="text-center text-[14px] leading-[20px] font-normal text-muted-foreground mt-8">
               {mode === "signup" ? (
                 <>
                   Already have an account?{" "}

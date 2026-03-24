@@ -199,7 +199,7 @@ const LearnerDashboard = () => {
               }`}
             >
               <Home className="w-5 h-5" />
-              <span className="font-medium">Dashboard</span>
+              <span className="text-[16px] leading-[24px] font-normal">Dashboard</span>
             </button>
             <button
               onClick={() => setActiveTab('courses')}
@@ -210,7 +210,7 @@ const LearnerDashboard = () => {
               }`}
             >
               <BookOpen className="w-5 h-5" />
-              <span className="font-medium">My Courses</span>
+              <span className="text-[16px] leading-[24px] font-normal">My Courses</span>
               {inProgressCourses.length > 0 && (
                 <Badge className="ml-auto bg-[#ff6b4d] text-white">{inProgressCourses.length}</Badge>
               )}
@@ -224,7 +224,7 @@ const LearnerDashboard = () => {
               }`}
             >
               <Zap className="w-5 h-5" />
-              <span className="font-medium">Microlearning Paths</span>
+              <span className="text-[16px] leading-[24px] font-normal">Microlearning Paths</span>
             </button>
             <button
               onClick={() => setActiveTab('assessments')}
@@ -235,7 +235,7 @@ const LearnerDashboard = () => {
               }`}
             >
               <FileText className="w-5 h-5" />
-              <span className="font-medium">Assessments</span>
+              <span className="text-[16px] leading-[24px] font-normal">Assessments</span>
             </button>
             <button
               onClick={() => setActiveTab('assignments')}
@@ -246,7 +246,7 @@ const LearnerDashboard = () => {
               }`}
             >
               <Award className="w-5 h-5" />
-              <span className="font-medium">Assignments & Capstones</span>
+              <span className="text-[16px] leading-[24px] font-normal">Assignments & Capstones</span>
             </button>
             <button
               onClick={() => setActiveTab('certificates')}
@@ -257,7 +257,7 @@ const LearnerDashboard = () => {
               }`}
             >
               <Trophy className="w-5 h-5" />
-              <span className="font-medium">Certificates & Badges</span>
+              <span className="text-[16px] leading-[24px] font-normal">Certificates & Badges</span>
               {certificates && certificates.length > 0 && (
                 <Badge className="ml-auto bg-[#ff6b4d] text-white">{certificates.length}</Badge>
               )}
@@ -271,7 +271,7 @@ const LearnerDashboard = () => {
               }`}
             >
               <MessageSquare className="w-5 h-5" />
-              <span className="font-medium">Discussions</span>
+              <span className="text-[16px] leading-[24px] font-normal">Discussions</span>
             </button>
             <button
               onClick={() => setActiveTab('live')}
@@ -282,7 +282,7 @@ const LearnerDashboard = () => {
               }`}
             >
               <Video className="w-5 h-5" />
-              <span className="font-medium">Live Classes</span>
+              <span className="text-[16px] leading-[24px] font-normal">Live Classes</span>
             </button>
             
             <div className="pt-4 mt-4 border-t border-white/10">
@@ -295,7 +295,7 @@ const LearnerDashboard = () => {
                 }`}
               >
                 <TrendingUp className="w-5 h-5" />
-                <span className="font-medium">Progress & Notes</span>
+                <span className="text-[16px] leading-[24px] font-normal">Progress & Notes</span>
               </button>
               <button
                 onClick={() => setActiveTab('learning')}
@@ -306,7 +306,7 @@ const LearnerDashboard = () => {
                 }`}
               >
                 <PlayCircle className="w-5 h-5" />
-                <span className="font-medium">Learning Player</span>
+                <span className="text-[16px] leading-[24px] font-normal">Learning Player</span>
               </button>
               <button
                 onClick={() => setActiveTab('profile')}
@@ -317,7 +317,7 @@ const LearnerDashboard = () => {
                 }`}
               >
                 <User className="w-5 h-5" />
-                <span className="font-medium">Profile</span>
+                <span className="text-[16px] leading-[24px] font-normal">Profile</span>
               </button>
             </div>
           </nav>
@@ -333,8 +333,8 @@ const LearnerDashboard = () => {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate text-white">{profile?.full_name || 'Learner'}</p>
-              <p className="text-xs text-white/60 truncate">{profile?.email}</p>
+              <p className="text-[14px] leading-[20px] font-medium truncate text-white">{profile?.full_name || 'Learner'}</p>
+              <p className="text-[12px] leading-[16px] font-normal text-white/60 truncate">{profile?.email}</p>
             </div>
           </div>
           <Button 
@@ -368,7 +368,7 @@ const LearnerDashboard = () => {
           </button>
 
           <div className="hidden lg:block">
-            <h1 className="text-lg font-semibold text-foreground">
+            <h1 className="text-[20px] leading-[28px] font-medium text-foreground">
               {activeTab === 'overview' && 'Dashboard'}
               {activeTab === 'courses' && 'My Courses'}
               {activeTab === 'certificates' && 'Certificates & Badges'}
@@ -390,7 +390,7 @@ const LearnerDashboard = () => {
               <input
                 type="text"
                 placeholder="Search courses..."
-                className="bg-transparent border-none outline-none text-sm w-full"
+                className="bg-transparent border-none outline-none text-[14px] leading-[20px] font-normal w-full"
               />
             </div>
 
@@ -427,10 +427,10 @@ const LearnerDashboard = () => {
               <div className="bg-gradient-to-r from-[#1e2348] to-[#2a3058] rounded-2xl p-6 lg:p-8 text-white">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div>
-                    <h2 className="text-2xl lg:text-3xl font-semibold mb-2">
+                    <h2 className="text-[28px] leading-[36px] lg:text-[32px] lg:leading-[40px] font-semibold mb-2">
                       Welcome back, {profile?.full_name?.split(' ')[0] || 'Learner'}! 👋
                     </h2>
-                    <p className="text-white/80">
+                    <p className="text-[16px] leading-[24px] font-normal text-white/80">
                       {inProgressCourses.length > 0 
                         ? `You have ${inProgressCourses.length} course${inProgressCourses.length > 1 ? 's' : ''} in progress. Keep going!`
                         : 'Start your digital transformation journey today!'}
@@ -455,8 +455,8 @@ const LearnerDashboard = () => {
                       <BookOpen className="w-5 h-5 text-[#1e2348]" />
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-foreground">{inProgressCourses.length}</div>
-                  <div className="text-sm text-muted-foreground">In Progress</div>
+                  <div className="text-[24px] leading-[32px] font-medium text-foreground">{inProgressCourses.length}</div>
+                  <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">In Progress</div>
                 </div>
                 <div className="bg-card rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center gap-3 mb-3">
@@ -464,8 +464,8 @@ const LearnerDashboard = () => {
                       <CheckCircle className="w-5 h-5 text-green-500" />
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-foreground">{completedCourses.length}</div>
-                  <div className="text-sm text-muted-foreground">Completed</div>
+                  <div className="text-[24px] leading-[32px] font-medium text-foreground">{completedCourses.length}</div>
+                  <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Completed</div>
                 </div>
                 <div className="bg-card rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center gap-3 mb-3">
@@ -473,8 +473,8 @@ const LearnerDashboard = () => {
                       <Award className="w-5 h-5 text-amber-500" />
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-foreground">{certificates?.length || 0}</div>
-                  <div className="text-sm text-muted-foreground">Certificates</div>
+                  <div className="text-[24px] leading-[32px] font-medium text-foreground">{certificates?.length || 0}</div>
+                  <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Certificates</div>
                 </div>
                 <div className="bg-card rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center gap-3 mb-3">
@@ -482,19 +482,19 @@ const LearnerDashboard = () => {
                       <Target className="w-5 h-5 text-[#ff6b4d]" />
                     </div>
                   </div>
-                  <div className="text-2xl font-bold text-foreground">{totalProgress}%</div>
-                  <div className="text-sm text-muted-foreground">Avg. Progress</div>
+                  <div className="text-[24px] leading-[32px] font-medium text-foreground">{totalProgress}%</div>
+                  <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Avg. Progress</div>
                 </div>
               </div>
 
               {/* Continue Learning */}
               <section>
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold text-foreground">Continue Learning</h3>
+                  <h3 className="text-[20px] leading-[28px] font-medium text-foreground">Continue Learning</h3>
                   {inProgressCourses.length > 0 && (
                     <button 
                       onClick={() => setActiveTab('courses')}
-                      className="text-sm text-[#ff6b4d] hover:underline flex items-center gap-1"
+                      className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] hover:underline flex items-center gap-1"
                     >
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
@@ -510,8 +510,8 @@ const LearnerDashboard = () => {
                     <div className="w-16 h-16 bg-[#1e2348]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                       <BookOpen className="w-8 h-8 text-[#1e2348]" />
                     </div>
-                    <h3 className="font-semibold text-lg mb-2">No courses yet</h3>
-                    <p className="text-muted-foreground mb-6">Start your learning journey by exploring our digital transformation courses</p>
+                    <h3 className="text-[20px] leading-[28px] font-medium mb-2">No courses yet</h3>
+                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-6">Start your learning journey by exploring our digital transformation courses</p>
                     <Link to="/courses">
                       <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Explore Courses</Button>
                     </Link>
@@ -538,10 +538,10 @@ const LearnerDashboard = () => {
                           </div>
                         </div>
                         <div className="p-5">
-                          <h4 className="font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                          <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                             {enrollment.course?.title}
                           </h4>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                          <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                             <Clock className="w-4 h-4" />
                             <span>{enrollment.course?.duration_hours || 0} hours</span>
                           </div>
@@ -559,9 +559,9 @@ const LearnerDashboard = () => {
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-5 h-5 text-[#ff6b4d]" />
-                      <h3 className="text-xl font-semibold text-foreground">Recommended for You</h3>
+                      <h3 className="text-[20px] leading-[28px] font-medium text-foreground">Recommended for You</h3>
                     </div>
-                    <Link to="/courses" className="text-sm text-[#ff6b4d] hover:underline flex items-center gap-1">
+                    <Link to="/courses" className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] hover:underline flex items-center gap-1">
                       View all <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -594,14 +594,14 @@ const LearnerDashboard = () => {
                             )}
                           </div>
                           <div className="p-5">
-                            <h4 className="font-semibold mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+                            <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
                               {course.title}
                             </h4>
-                            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4 line-clamp-2">
                               {course.description}
                             </p>
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground">
                                 <Clock className="w-4 h-4" />
                                 <span>{course.duration}</span>
                               </div>
@@ -621,10 +621,10 @@ const LearnerDashboard = () => {
               {certificates && certificates.length > 0 && (
                 <section>
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold text-foreground">Recent Certificates</h3>
+                    <h3 className="text-[20px] leading-[28px] font-medium text-foreground">Recent Certificates</h3>
                     <button 
                       onClick={() => setActiveTab('certificates')}
-                      className="text-sm text-[#ff6b4d] hover:underline flex items-center gap-1"
+                      className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] hover:underline flex items-center gap-1"
                     >
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
@@ -636,8 +636,8 @@ const LearnerDashboard = () => {
                           <Trophy className="w-7 h-7 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold truncate">{cert.course?.title}</h4>
-                          <p className="text-sm text-muted-foreground">
+                          <h4 className="text-[16px] leading-[24px] font-medium truncate">{cert.course?.title}</h4>
+                          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
                             Issued {formatDate(cert.issued_at)}
                           </p>
                         </div>
@@ -671,8 +671,8 @@ const LearnerDashboard = () => {
                   {inProgressCourses.length === 0 ? (
                     <div className="bg-card rounded-2xl p-12 text-center">
                       <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="font-semibold text-lg mb-2">No courses in progress</h3>
-                      <p className="text-muted-foreground mb-6">Enroll in a course to start learning</p>
+                      <h3 className="text-[20px] leading-[28px] font-medium mb-2">No courses in progress</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-6">Enroll in a course to start learning</p>
                       <Link to="/courses">
                         <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Browse Courses</Button>
                       </Link>
@@ -689,14 +689,14 @@ const LearnerDashboard = () => {
                           <div className="flex-1">
                             <div className="flex items-start justify-between gap-4 mb-3">
                               <div>
-                                <h3 className="font-semibold text-lg mb-1">{enrollment.course?.title}</h3>
-                                <p className="text-sm text-muted-foreground line-clamp-2">
+                                <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
+                                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground line-clamp-2">
                                   {enrollment.course?.short_description}
                                 </p>
                               </div>
                               <Badge variant="secondary">{enrollment.course?.level}</Badge>
                             </div>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                            <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                               <span className="flex items-center gap-1">
                                 <Clock className="w-4 h-4" />
                                 {enrollment.course?.duration_hours || 0}h
@@ -708,7 +708,7 @@ const LearnerDashboard = () => {
                             </div>
                             <div className="flex items-center gap-4">
                               <Progress value={enrollment.progress || 0} className="flex-1 h-2" />
-                              <span className="text-sm font-medium">{enrollment.progress || 0}%</span>
+                              <span className="text-[14px] leading-[20px] font-medium">{enrollment.progress || 0}%</span>
                               <Link to={`/courses/${enrollment.course_id}/learn`}>
                                 <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="sm">
                                   <PlayCircle className="w-4 h-4 mr-2" />
@@ -727,8 +727,8 @@ const LearnerDashboard = () => {
                   {completedCourses.length === 0 ? (
                     <div className="bg-card rounded-2xl p-12 text-center">
                       <GraduationCap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="font-semibold text-lg mb-2">No completed courses yet</h3>
-                      <p className="text-muted-foreground">Complete your first course to earn a certificate!</p>
+                      <h3 className="text-[20px] leading-[28px] font-medium mb-2">No completed courses yet</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Complete your first course to earn a certificate!</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -742,8 +742,8 @@ const LearnerDashboard = () => {
                           <div className="flex-1">
                             <div className="flex items-start justify-between gap-4 mb-3">
                               <div>
-                                <h3 className="font-semibold text-lg mb-1">{enrollment.course?.title}</h3>
-                                <p className="text-sm text-muted-foreground">
+                                <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
+                                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
                                   Completed on {enrollment.completed_at ? formatDate(enrollment.completed_at) : 'N/A'}
                                 </p>
                               </div>
@@ -786,8 +786,8 @@ const LearnerDashboard = () => {
                   <div className="w-20 h-20 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Trophy className="w-10 h-10 text-amber-500" />
                   </div>
-                  <h3 className="font-semibold text-xl mb-2">No certificates yet</h3>
-                  <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                  <h3 className="text-[20px] leading-[28px] font-medium mb-2">No certificates yet</h3>
+                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-6 max-w-md mx-auto">
                     Complete a course to earn your first certificate. Certificates showcase your achievements and newly acquired skills.
                   </p>
                   {inProgressCourses.length > 0 ? (
@@ -810,20 +810,20 @@ const LearnerDashboard = () => {
                             <Award className="w-8 h-8" />
                           </div>
                           <div>
-                            <p className="text-white/80 text-sm mb-1">Certificate of Completion</p>
-                            <h3 className="font-semibold text-lg">{cert.course?.title}</h3>
+                            <p className="text-[12px] leading-[16px] font-medium text-white/80 mb-1">Certificate of Completion</p>
+                            <h3 className="text-[20px] leading-[28px] font-medium">{cert.course?.title}</h3>
                           </div>
                         </div>
                       </div>
                       <div className="p-6">
                         <div className="grid grid-cols-2 gap-4 mb-6">
                           <div>
-                            <p className="text-sm text-muted-foreground mb-1">Issue Date</p>
-                            <p className="font-medium">{formatDate(cert.issued_at)}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-1">Issue Date</p>
+                            <p className="text-[16px] leading-[24px] font-normal">{formatDate(cert.issued_at)}</p>
                           </div>
                           <div>
-                            <p className="text-sm text-muted-foreground mb-1">Certificate ID</p>
-                            <p className="font-medium font-mono text-sm">{cert.certificate_number}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-1">Certificate ID</p>
+                            <p className="text-[14px] leading-[20px] font-normal font-mono">{cert.certificate_number}</p>
                           </div>
                         </div>
                         <div className="flex gap-3">

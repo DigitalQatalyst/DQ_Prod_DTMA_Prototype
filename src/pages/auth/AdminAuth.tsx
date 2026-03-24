@@ -97,8 +97,8 @@ const AdminAuth = () => {
         <div className="relative z-10 flex flex-col justify-between p-12 text-foreground">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[50px] w-auto"
             />
           </Link>
@@ -110,7 +110,7 @@ const AdminAuth = () => {
               Control Center
             </h2>
             <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-              Manage users, approve courses, and oversee the entire BROWZ Beauty Academy platform.
+              Manage users, approve courses, and oversee the entire DTMA platform.
             </p>
           </div>
 
@@ -136,8 +136,8 @@ const AdminAuth = () => {
         <div className="lg:hidden p-6 border-b border-border">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[40px] w-auto"
             />
           </Link>

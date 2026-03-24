@@ -117,9 +117,9 @@ const FeaturedCoursesSection2 = () => {
                   </Badge>
                 </div>
                 {/* KHDA Badge - Moved below price */}
-                <div className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 rounded-full w-fit">
+                <div className="flex items-center gap-1 px-3 py-1.5 bg-green-600 rounded-full w-fit">
                   <Award className="w-3 h-3 text-white" />
-                  <span className="text-xs font-medium text-white">KHDA Attested</span>
+                  <span className="text-[12px] leading-[16px] font-medium text-white">KHDA Attested</span>
                 </div>
               </div>
             </Link>

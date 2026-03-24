@@ -23,6 +23,7 @@ const Footer = () => {
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Use", href: "/terms" },
       { label: "Accreditation & Credentials", href: "/accreditation" },
+      { label: "Admin", href: "/admin" },
     ],
     forYou: [
       { label: "Explore Courses", href: "/courses" },

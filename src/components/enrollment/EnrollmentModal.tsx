@@ -182,9 +182,9 @@ export function EnrollmentModal({
                   <div key={step.id} className="flex flex-col items-center flex-1">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
                       isCompleted 
-                        ? 'bg-primary text-primary-foreground' 
+                        ? 'bg-green-600 text-white' 
                         : isActive 
-                          ? 'bg-primary/20 text-primary border-2 border-primary' 
+                          ? 'bg-[#ff6b4d]/20 text-[#ff6b4d] border-2 border-[#ff6b4d]' 
                           : 'bg-muted text-muted-foreground'
                     }`}>
                       {isCompleted ? (
@@ -193,7 +193,7 @@ export function EnrollmentModal({
                         <StepIcon className="w-5 h-5" />
                       )}
                     </div>
-                    <span className={`text-xs mt-1 ${isActive ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
+                    <span className={`text-xs mt-1 ${isActive ? 'text-[#ff6b4d] font-medium' : 'text-muted-foreground'}`}>
                       {step.label}
                     </span>
                   </div>
@@ -280,7 +280,7 @@ export function EnrollmentModal({
 
                 {isLoading && (
                   <div className="flex items-center justify-center py-4">
-                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                    <Loader2 className="w-6 h-6 animate-spin text-[#ff6b4d]" />
                   </div>
                 )}
               </div>
@@ -294,6 +294,7 @@ export function EnrollmentModal({
                   onClick={handleProceed}
                   disabled={isLoading || !prerequisitesMet}
                   title={!prerequisitesMet ? "Complete prerequisite courses first" : ""}
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
                 >
                   {!prerequisitesMet ? (
                     <>
@@ -321,8 +322,8 @@ export function EnrollmentModal({
               </DialogHeader>
 
               <div className="py-4 space-y-4">
-                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
-                  <p className="text-sm text-amber-700 dark:text-amber-300">
+                <div className="bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 rounded-xl p-4">
+                  <p className="text-sm text-[#ff6b4d]">
                     Please complete the eligibility requirements below to continue.
                   </p>
                 </div>
@@ -466,6 +467,7 @@ export function EnrollmentModal({
                 <Button 
                   variant="hero" 
                   onClick={handleProceed}
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
                 >
                   Continue
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -491,12 +493,12 @@ export function EnrollmentModal({
                   </div>
                   <div className="flex items-center justify-between text-lg font-semibold">
                     <span>Total</span>
-                    <span className="text-primary">${course.price}</span>
+                    <span className="text-[#ff6b4d]">${course.price}</span>
                   </div>
                 </div>
 
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
-                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                <div className="bg-[#1e2348]/5 border border-[#1e2348]/20 rounded-xl p-4">
+                  <p className="text-sm text-[#1e2348]">
                     <strong>Demo Mode:</strong> Payment integration coming soon. 
                     Click "Complete Enrollment" to enroll for free during testing.
                   </p>
@@ -507,7 +509,7 @@ export function EnrollmentModal({
                     <div className="sm:col-span-2">
                       <label className="text-xs text-muted-foreground">Name on card</label>
                       <input
-                        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
+                        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/60"
                         placeholder="Jane Doe"
                         value={paymentDetails.name}
                         onChange={(e) => setPaymentDetails({ ...paymentDetails, name: e.target.value })}
@@ -516,7 +518,7 @@ export function EnrollmentModal({
                     <div className="sm:col-span-2">
                       <label className="text-xs text-muted-foreground">Card number</label>
                       <input
-                        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
+                        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/60"
                         placeholder="4242 4242 4242 4242"
                         value={paymentDetails.cardNumber}
                         onChange={(e) => setPaymentDetails({ ...paymentDetails, cardNumber: e.target.value })}
@@ -525,7 +527,7 @@ export function EnrollmentModal({
                     <div>
                       <label className="text-xs text-muted-foreground">Expiry</label>
                       <input
-                        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
+                        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/60"
                         placeholder="MM/YY"
                         value={paymentDetails.exp}
                         onChange={(e) => setPaymentDetails({ ...paymentDetails, exp: e.target.value })}
@@ -534,7 +536,7 @@ export function EnrollmentModal({
                     <div>
                       <label className="text-xs text-muted-foreground">CVC</label>
                       <input
-                        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
+                        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/60"
                         placeholder="123"
                         value={paymentDetails.cvc}
                         onChange={(e) => setPaymentDetails({ ...paymentDetails, cvc: e.target.value })}
@@ -561,6 +563,7 @@ export function EnrollmentModal({
                   variant="hero" 
                   onClick={handleProceed}
                   disabled={enrollMutation.isPending || paymentProcessing}
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
                 >
                   {enrollMutation.isPending || paymentProcessing ? (
                     <>
@@ -594,7 +597,7 @@ export function EnrollmentModal({
                   <p className="text-sm text-muted-foreground mb-4">
                     Start your learning journey now and unlock your potential!
                   </p>
-                  <Button variant="hero" size="lg" onClick={handleComplete}>
+                  <Button variant="hero" size="lg" onClick={handleComplete} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
                     Start Learning
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>

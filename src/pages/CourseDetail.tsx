@@ -244,15 +244,15 @@ const CourseDetail = () => {
                   </Badge>
                 </div>
 
-                <h1 className="text-[32px] leading-[40px] font-semibold text-white mb-4">
+                <h1 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-white mb-4">
                   {course.title}
                 </h1>
-                <p className="text-[16px] leading-[24px] font-normal text-white/80 mb-6">
+                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-white/80 mb-6">
                   {course.subtitle}
                 </p>
 
                 {/* Meta */}
-                <div className="flex flex-wrap items-center gap-6 text-[14px] leading-[20px] font-normal text-white/70 mb-8">
+                <div className="flex flex-wrap items-center gap-6 text-white/70 mb-8" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                   <div className="flex items-center gap-1.5">
                     <Star className="w-5 h-5 text-[#ff6b4d] fill-[#ff6b4d]" />
                     <span className="font-semibold text-white">{course.rating}</span>
@@ -280,8 +280,8 @@ const CourseDetail = () => {
                     className="w-12 h-12 rounded-full object-cover ring-2 ring-[#ff6b4d]"
                   />
                   <div>
-                    <div className="text-[16px] leading-[24px] font-medium text-white">Created by {course.instructor.name}</div>
-                    <div className="text-[14px] leading-[20px] font-normal text-white/70">{course.instructor.title}</div>
+                    <div style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-white">Created by {course.instructor.name}</div>
+                    <div style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-white/70">{course.instructor.title}</div>
                   </div>
                 </div>
               </div>
@@ -296,19 +296,14 @@ const CourseDetail = () => {
                       alt={course.title}
                       className="w-full h-full object-cover"
                     />
-                    <button className="absolute inset-0 flex items-center justify-center bg-foreground/30 hover:bg-foreground/40 transition-colors group">
-                      <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Play className="w-6 h-6 text-primary-foreground ml-1" />
-                      </div>
-                    </button>
                   </div>
 
                   <div className="p-6">
                     {/* Price */}
                     <div className="flex items-baseline gap-3 mb-6">
-                      <span className="text-[28px] leading-[36px] font-semibold">${course.price}</span>
-                      <span className="text-[18px] leading-[28px] font-normal text-muted-foreground line-through">${course.originalPrice}</span>
-                      <Badge className="bg-primary text-primary-foreground text-[12px] leading-[16px] font-medium">
+                      <span style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>${course.price}</span>
+                      <span style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 400 }} className="text-muted-foreground line-through">${course.originalPrice}</span>
+                      <Badge className="bg-green-600 text-white" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
                         {Math.round((1 - course.price / course.originalPrice) * 100)}% off
                       </Badge>
                     </div>
@@ -324,22 +319,22 @@ const CourseDetail = () => {
                         {isEnrolled ? "Start Learning" : "Enroll Now"}
                       </Button>
                       {!isEnrolled && (
-                        <Button variant="outline" className="w-full border-[#E5E7EB]" size="lg">
+                        <Button variant="outline" className="w-full border-[#E5E7EB] hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" size="lg">
                           Add to Wishlist
                         </Button>
                       )}
                     </div>
 
-                    <p className="text-center text-[14px] leading-[20px] font-normal text-muted-foreground mb-6">
+                    <p className="text-center text-muted-foreground mb-6" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       30-day money-back guarantee
                     </p>
 
                     {/* Includes */}
                     <div>
-                      <h4 className="text-[20px] leading-[28px] font-medium mb-4">This course includes:</h4>
+                      <h4 className="mb-4" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>This course includes:</h4>
                       <ul className="space-y-3">
                         {course.includes.map((item, index) => (
-                          <li key={index} className="flex items-center gap-3 text-[14px] leading-[20px] font-normal">
+                          <li key={index} className="flex items-center gap-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                             <item.icon className="w-5 h-5 text-[#ff6b4d] flex-shrink-0" />
                             <span>{item.text}</span>
                           </li>
@@ -358,8 +353,8 @@ const CourseDetail = () => {
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div>
               <div className="flex items-baseline gap-2">
-                <span className="text-[24px] leading-[32px] font-medium">${course.price}</span>
-                <span className="text-[14px] leading-[20px] font-normal text-muted-foreground line-through">${course.originalPrice}</span>
+                <span style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>${course.price}</span>
+                <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-muted-foreground line-through">${course.originalPrice}</span>
               </div>
             </div>
             <Button 
@@ -378,14 +373,14 @@ const CourseDetail = () => {
             <div className="lg:max-w-3xl">
               {/* What You'll Learn */}
               <div className="mb-12">
-                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
+                <h2 className="text-[#0B0C19] mb-6" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
                   What you'll learn
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4 p-6 bg-[#F5F6FA] rounded-2xl">
                   {course.whatYouWillLearn.map((item, index) => (
                     <div key={index} className="flex gap-3">
                       <CheckCircle className="w-5 h-5 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
-                      <span className="text-[14px] leading-[20px] font-normal">{item}</span>
+                      <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{item}</span>
                     </div>
                   ))}
                 </div>
@@ -393,10 +388,10 @@ const CourseDetail = () => {
 
               {/* Course Content/Curriculum */}
               <div className="mb-12">
-                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-2">
+                <h2 className="text-[#0B0C19] mb-2" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
                   Course Content
                 </h2>
-                <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-6">
+                <p className="text-[#4B5563] mb-6" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                   {course.curriculum.length} modules • {totalLessons} lessons • {course.duration} total
                 </p>
 
@@ -409,8 +404,8 @@ const CourseDetail = () => {
                     >
                       <AccordionTrigger className="hover:no-underline py-5">
                         <div className="flex items-center justify-between w-full pr-4">
-                          <span className="text-[16px] leading-[24px] font-medium text-left">{module.title}</span>
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">
+                          <span className="text-left" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{module.title}</span>
+                          <span className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                             {module.lessons.length} lessons • {module.duration}
                           </span>
                         </div>
@@ -426,14 +421,14 @@ const CourseDetail = () => {
                                 {lesson.type === "video" && <PlayCircle className="w-4 h-4 text-[#ff6b4d]" />}
                                 {lesson.type === "file" && <FileText className="w-4 h-4 text-muted-foreground" />}
                                 {lesson.type === "quiz" && <Award className="w-4 h-4 text-[#ff6b4d]" />}
-                                <span className="text-[14px] leading-[20px] font-normal">{lesson.title}</span>
+                                <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{lesson.title}</span>
                                 {lesson.preview && (
-                                  <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium">Preview</Badge>
+                                  <Badge variant="secondary" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Preview</Badge>
                                 )}
                               </div>
                               <div className="flex items-center gap-3">
                                 {lesson.duration && (
-                                  <span className="text-[12px] leading-[16px] font-medium text-muted-foreground">{lesson.duration}</span>
+                                  <span className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>{lesson.duration}</span>
                                 )}
                                 {!lesson.preview && <Lock className="w-3.5 h-3.5 text-muted-foreground" />}
                               </div>
@@ -448,14 +443,14 @@ const CourseDetail = () => {
 
               {/* Requirements */}
               <div className="mb-12">
-                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
+                <h2 className="text-[#0B0C19] mb-6" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
                   Requirements
                 </h2>
                 <ul className="space-y-3">
                   {course.requirements.map((req, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-[#ff6b4d] mt-2" />
-                      <span className="text-[16px] leading-[24px] font-normal">{req}</span>
+                      <span style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{req}</span>
                     </li>
                   ))}
                 </ul>
@@ -463,12 +458,12 @@ const CourseDetail = () => {
 
               {/* Description */}
               <div className="mb-12">
-                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
+                <h2 className="text-[#0B0C19] mb-6" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
                   Description
                 </h2>
                 <div className="prose prose-neutral max-w-none">
                   {course.description.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="text-[16px] leading-[24px] font-normal text-[#4B5563] mb-4">
+                    <p key={index} className="text-[#4B5563] mb-4" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
                       {paragraph}
                     </p>
                   ))}
@@ -477,7 +472,7 @@ const CourseDetail = () => {
 
               {/* Instructor */}
               <div className="mb-12">
-                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6">
+                <h2 className="text-[#0B0C19] mb-6" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
                   Your Instructor
                 </h2>
                 <div className="bg-card border border-border rounded-2xl p-6">
@@ -488,11 +483,11 @@ const CourseDetail = () => {
                       className="w-24 h-24 rounded-xl object-cover"
                     />
                     <div>
-                      <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-1">
+                      <h3 className="text-[#0B0C19] mb-1" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
                         {course.instructor.name}
                       </h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] mb-3">{course.instructor.title}</p>
-                      <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
+                      <p className="text-[#ff6b4d] mb-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{course.instructor.title}</p>
+                      <div className="flex items-center gap-6 text-[#4B5563] mb-4" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                         <div className="flex items-center gap-1.5">
                           <Users className="w-4 h-4" />
                           {course.instructor.students.toLocaleString()} students
@@ -502,7 +497,7 @@ const CourseDetail = () => {
                           {course.instructor.courses} courses
                         </div>
                       </div>
-                      <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">{course.instructor.bio}</p>
+                      <p className="text-[#4B5563]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{course.instructor.bio}</p>
                     </div>
                   </div>
                 </div>
@@ -516,10 +511,10 @@ const CourseDetail = () => {
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-2">
+                <p className="uppercase tracking-wide text-[#ff6b4d] mb-2" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
                   Continue Learning
                 </p>
-                <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19]">
+                <h2 className="text-[#0B0C19]" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
                   Recommended Courses
                 </h2>
               </div>
@@ -565,10 +560,10 @@ const CourseDetail = () => {
                     </Badge>
                   </div>
                   <div className="p-5">
-                    <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+                    <h3 className="text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
                       {recCourse.title}
                     </h3>
-                    <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#4B5563] mb-3">
+                    <div className="flex items-center gap-4 text-[#4B5563] mb-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
                         <span className="font-medium">{recCourse.rating}</span>
@@ -581,10 +576,10 @@ const CourseDetail = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-baseline gap-2">
-                        <span className="text-[20px] leading-[28px] font-medium text-[#0B0C19]">${recCourse.price}</span>
-                        <span className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] line-through">${recCourse.originalPrice}</span>
+                        <span className="text-[#0B0C19]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>${recCourse.price}</span>
+                        <span className="text-[#9CA3AF] line-through" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>${recCourse.originalPrice}</span>
                       </div>
-                      <Badge variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
+                      <Badge variant="outline" className="border-[#E5E7EB]" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
                         {recCourse.level}
                       </Badge>
                     </div>

@@ -169,7 +169,7 @@ const LearnerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-secondary/30 flex">
+    <div className="min-h-screen bg-[#E9EBF8] flex">
       {/* Sidebar */}
       <aside
         className={`${
@@ -385,7 +385,7 @@ const LearnerDashboard = () => {
 
           <div className="flex items-center gap-3 flex-1 lg:flex-initial justify-end">
             {/* Search Bar */}
-            <div className="hidden md:flex items-center gap-2 bg-accent/50 rounded-lg px-3 py-2 w-64">
+            <div className="hidden md:flex items-center gap-2 bg-white rounded-lg px-3 py-2 w-64 border border-border">
               <Search className="w-4 h-4 text-muted-foreground" />
               <input
                 type="text"

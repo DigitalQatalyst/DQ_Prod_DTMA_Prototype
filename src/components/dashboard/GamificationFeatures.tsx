@@ -166,8 +166,8 @@ export const GamificationFeatures = () => {
               <Trophy className="w-5 h-5 text-[#ff6b4d]" />
             </div>
           </div>
-          <div className="text-2xl font-bold">2,450</div>
-          <div className="text-sm text-muted-foreground">Total Points</div>
+          <div className="text-[24px] leading-[32px] font-medium">2,450</div>
+          <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Total Points</div>
         </Card>
 
         <Card className="p-5">
@@ -176,8 +176,8 @@ export const GamificationFeatures = () => {
               <Flame className="w-5 h-5 text-amber-500" />
             </div>
           </div>
-          <div className="text-2xl font-bold">28</div>
-          <div className="text-sm text-muted-foreground">Day Streak</div>
+          <div className="text-[24px] leading-[32px] font-medium">28</div>
+          <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Day Streak</div>
         </Card>
 
         <Card className="p-5">
@@ -186,8 +186,8 @@ export const GamificationFeatures = () => {
               <Star className="w-5 h-5 text-[#1e2348]" />
             </div>
           </div>
-          <div className="text-2xl font-bold">5th</div>
-          <div className="text-sm text-muted-foreground">Rank</div>
+          <div className="text-[24px] leading-[32px] font-medium">5th</div>
+          <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Rank</div>
         </Card>
 
         <Card className="p-5">
@@ -196,8 +196,8 @@ export const GamificationFeatures = () => {
               <Award className="w-5 h-5 text-green-500" />
             </div>
           </div>
-          <div className="text-2xl font-bold">12</div>
-          <div className="text-sm text-muted-foreground">Badges</div>
+          <div className="text-[24px] leading-[32px] font-medium">12</div>
+          <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Badges</div>
         </Card>
       </div>
 
@@ -206,11 +206,11 @@ export const GamificationFeatures = () => {
         <div className="lg:col-span-2 space-y-6">
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold flex items-center gap-2">
+              <h3 className="text-[20px] leading-[28px] font-medium flex items-center gap-2">
                 <Target className="w-6 h-6 text-[#ff6b4d]" />
                 Daily Challenges
               </h3>
-              <Badge className="bg-[#1e2348] text-white">
+              <Badge className="bg-[#1e2348] text-white text-[12px] leading-[16px] font-medium">
                 Resets in 8h
               </Badge>
             </div>
@@ -239,17 +239,17 @@ export const GamificationFeatures = () => {
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h4 className="font-semibold">{challenge.title}</h4>
-                            <p className="text-sm text-muted-foreground">{challenge.description}</p>
+                            <h4 className="text-[16px] leading-[24px] font-normal">{challenge.title}</h4>
+                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">{challenge.description}</p>
                           </div>
-                          <Badge className="bg-[#ff6b4d] text-white">
+                          <Badge className="bg-[#ff6b4d] text-white text-[12px] leading-[16px] font-medium">
                             +{challenge.points} pts
                           </Badge>
                         </div>
 
                         {!challenge.completed && (
                           <div className="mt-3">
-                            <div className="flex items-center justify-between text-sm mb-2">
+                            <div className="flex items-center justify-between text-[14px] leading-[20px] font-normal mb-2">
                               <span className="text-muted-foreground">Progress</span>
                               <span className="font-medium">{challenge.progress}/{challenge.total}</span>
                             </div>
@@ -260,7 +260,7 @@ export const GamificationFeatures = () => {
                         {challenge.completed && (
                           <div className="flex items-center gap-2 text-green-600 mt-2">
                             <CheckCircle className="w-4 h-4" />
-                            <span className="text-sm font-medium">Completed!</span>
+                            <span className="text-[14px] leading-[20px] font-medium">Completed!</span>
                           </div>
                         )}
                       </div>
@@ -273,7 +273,7 @@ export const GamificationFeatures = () => {
 
           {/* Microlearning Paths */}
           <Card className="p-6">
-            <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+            <h3 className="text-[20px] leading-[28px] font-medium mb-6 flex items-center gap-2">
               <Zap className="w-6 h-6 text-[#ff6b4d]" />
               Microlearning Paths
             </h3>
@@ -296,12 +296,12 @@ export const GamificationFeatures = () => {
                     </div>
 
                     <div className="flex-1">
-                      <h4 className="font-semibold mb-1">{path.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-3">{path.description}</p>
+                      <h4 className="text-[16px] leading-[24px] font-normal mb-1">{path.title}</h4>
+                      <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-3">{path.description}</p>
 
                       {!path.locked && (
                         <>
-                          <div className="flex items-center gap-4 text-sm mb-3">
+                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal mb-3">
                             <span className="flex items-center gap-1">
                               <Flame className="w-4 h-4 text-amber-500" />
                               {path.streak} day streak
@@ -311,14 +311,14 @@ export const GamificationFeatures = () => {
                             </span>
                           </div>
                           <Progress value={(path.progress / path.total) * 100} className="h-2 mb-3" />
-                          <Button size="sm" className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
+                          <Button size="sm" className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-normal">
                             Continue Path
                           </Button>
                         </>
                       )}
 
                       {path.locked && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
                           Complete previous paths to unlock
                         </p>
                       )}
@@ -333,7 +333,7 @@ export const GamificationFeatures = () => {
         {/* Leaderboard & Achievements */}
         <div className="space-y-6">
           <Card className="p-6">
-            <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+            <h3 className="text-[20px] leading-[28px] font-medium mb-6 flex items-center gap-2">
               <Trophy className="w-6 h-6 text-[#ff6b4d]" />
               Leaderboard
             </h3>
@@ -354,14 +354,14 @@ export const GamificationFeatures = () => {
 
                   <Avatar className="w-8 h-8">
                     <AvatarImage src={user.avatar || undefined} />
-                    <AvatarFallback className="bg-[#1e2348] text-white text-xs">
+                    <AvatarFallback className="bg-[#1e2348] text-white text-[10px] leading-[14px] font-medium">
                       {getInitials(user.name)}
                     </AvatarFallback>
                   </Avatar>
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm truncate">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{user.points} points</p>
+                    <p className="text-[14px] leading-[20px] font-medium truncate">{user.name}</p>
+                    <p className="text-[12px] leading-[16px] font-normal text-muted-foreground">{user.points} points</p>
                   </div>
 
                   {user.rank <= 3 && (
@@ -371,14 +371,14 @@ export const GamificationFeatures = () => {
               ))}
             </div>
 
-            <Button variant="outline" className="w-full mt-4">
+            <Button variant="outline" className="w-full mt-4 text-[14px] leading-[20px] font-normal">
               View Full Leaderboard
             </Button>
           </Card>
 
           {/* Achievement Levels */}
           <Card className="p-6">
-            <h3 className="text-xl font-semibold mb-6">Achievement Level</h3>
+            <h3 className="text-[20px] leading-[28px] font-medium mb-6">Achievement Level</h3>
 
             <div className="space-y-4">
               {achievements.map((achievement, index) => (
@@ -398,10 +398,10 @@ export const GamificationFeatures = () => {
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className={`font-semibold ${achievement.unlocked ? 'text-white' : 'text-gray-600'}`}>
+                      <p className={`text-[16px] leading-[24px] font-normal ${achievement.unlocked ? 'text-white' : 'text-gray-600'}`}>
                         {achievement.level}
                       </p>
-                      <p className={`text-sm ${achievement.unlocked ? 'text-white/80' : 'text-gray-500'}`}>
+                      <p className={`text-[14px] leading-[20px] font-normal ${achievement.unlocked ? 'text-white/80' : 'text-gray-500'}`}>
                         {achievement.points} points
                       </p>
                     </div>

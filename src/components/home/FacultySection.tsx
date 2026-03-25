@@ -216,7 +216,8 @@ const FacultySection = () => {
           <Link to="/faculty">
             <Button
               variant="outline"
-              className="px-8 py-6 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base gap-2"
+              className="px-8 py-6 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base gap-2"
+              style={{ borderWidth: '1.5px' }}
             >
               Discover More
               <ArrowRight className="w-4 h-4" />

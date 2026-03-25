@@ -107,7 +107,8 @@ const SixXDSection = () => {
           <Link to="/6xd">
             <Button
               variant="outline"
-              className="px-8 py-6 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base"
+              className="px-8 py-6 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white transition-all text-base"
+              style={{ borderWidth: '1.5px' }}
             >
               Explore the 6XD Framework
             </Button>

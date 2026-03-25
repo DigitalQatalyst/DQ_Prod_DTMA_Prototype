@@ -54,7 +54,7 @@ const CredentialsSection = () => {
                 <div 
                   className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10"
                 >
-                  <Award className="w-8 h-8 text-white" />
+                  <Award className="w-8 h-8" style={{ color: credential.color }} />
                 </div>
               </div>
 

@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   ChevronLeft,
+  ChevronRight,
   PlayCircle,
   FileText,
   Award,
@@ -34,6 +35,7 @@ import {
   Headphones,
   BookOpen,
   Lock,
+  Clock,
 } from "lucide-react";
 import {
   Select,
@@ -62,12 +64,55 @@ const CourseLearning = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
   const [mediaMode, setMediaMode] = useState<'video' | 'audio'>('video'); // Toggle between video and audio
+  
+  // AI Tools state
+  const [showAINotes, setShowAINotes] = useState(false);
+  const [showFlashcards, setShowFlashcards] = useState(false);
+  const [showInfographic, setShowInfographic] = useState(false);
+  const [generatingAI, setGeneratingAI] = useState(false);
+  
+  // Quiz state
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [quizStartTime, setQuizStartTime] = useState<number | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState<number>(0);
 
   // Load course data from localStorage
   const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
   const curriculum = storedCourse.curriculum || [];
   const assessmentType = storedCourse.assessmentType || "none";
-  const quizQuestions = storedCourse.quizQuestions || [];
+  const quizQuestions = storedCourse.quizQuestions || [
+    // Default demo quiz questions
+    {
+      text: "What is the primary driver of digital transformation in organizations?",
+      options: [
+        "Technology adoption",
+        "Customer expectations and market demands",
+        "Cost reduction",
+        "Regulatory compliance"
+      ],
+      correctAnswer: 1
+    },
+    {
+      text: "Which of the following is a key component of digital transformation?",
+      options: [
+        "Cloud computing",
+        "Data analytics",
+        "Artificial intelligence",
+        "All of the above"
+      ],
+      correctAnswer: 3
+    },
+    {
+      text: "What role does organizational culture play in digital transformation?",
+      options: [
+        "It has minimal impact",
+        "It is critical for success",
+        "It only matters for large companies",
+        "It can be ignored if technology is good"
+      ],
+      correctAnswer: 1
+    }
+  ];
   const assignmentTitle = storedCourse.assignmentTitle || "";
   const assignmentInstructions = storedCourse.assignmentInstructions || "";
   const assignmentBriefUrl = storedCourse.assignmentBriefUrl || "";
@@ -95,6 +140,34 @@ const CourseLearning = () => {
       setAssignmentSubmitted(true);
       alert("Assignment submitted successfully! Your instructor will review it.");
     }
+  };
+
+  // AI Tools handlers
+  const handleGenerateAINotes = () => {
+    setGeneratingAI(true);
+    // Simulate AI generation
+    setTimeout(() => {
+      setGeneratingAI(false);
+      setShowAINotes(true);
+    }, 2000);
+  };
+
+  const handleGenerateFlashcards = () => {
+    setGeneratingAI(true);
+    // Simulate AI generation
+    setTimeout(() => {
+      setGeneratingAI(false);
+      setShowFlashcards(true);
+    }, 2000);
+  };
+
+  const handleGenerateInfographic = () => {
+    setGeneratingAI(true);
+    // Simulate AI generation
+    setTimeout(() => {
+      setGeneratingAI(false);
+      setShowInfographic(true);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -134,19 +207,10 @@ const CourseLearning = () => {
           { id: "lesson-3", title: "Lesson 3", content: "Complete Lesson 3", video_url: "/Lesson 3.mp4", type: 'video', duration_minutes: 12 },
         ],
       },
-      {
-        id: "module-2",
-        title: "Advanced Topics",
-        lessons: [
-          { id: "lesson-4", title: "Lesson 4", content: "Explore advanced concepts", video_url: "/Lesson 4.mp4", type: 'video', duration_minutes: 14 },
-          { id: "lesson-5", title: "Lesson 5", content: "Build on your skills", video_url: "/Lesson 5.mp4", type: 'video', duration_minutes: 16 },
-          { id: "lesson-6", title: "Lesson 6", content: "Master the concepts", video_url: "/Lesson 6.mp4", type: 'video', duration_minutes: 13 },
-        ],
-      },
     ],
   } as any;
 
-  // Add assessment if exists
+  // Add assessment if exists (from stored course data)
   if (curriculum.length > 0 && assessmentType !== "none") {
     courseData.modules.push({
       id: "assessment-module",
@@ -160,6 +224,24 @@ const CourseLearning = () => {
         isQuiz: assessmentType === "quiz",
         isAssignment: assessmentType === "assignment",
         isPractical: assessmentType === "practical",
+        duration_minutes: 10,
+      }],
+    });
+  } else if (curriculum.length === 0) {
+    // Add default quiz for demo courses
+    courseData.modules.push({
+      id: "assessment-module",
+      title: "Final Assessment",
+      lessons: [{
+        id: "assessment-quiz",
+        title: "Course Quiz",
+        content: "Test your knowledge",
+        video_url: null,
+        type: 'quiz',
+        isQuiz: true,
+        isAssignment: false,
+        isPractical: false,
+        duration_minutes: 10,
       }],
     });
   }
@@ -171,6 +253,15 @@ const CourseLearning = () => {
       setSelectedLesson(firstLesson);
     }
   }, []);
+
+  // Reset quiz state when a new quiz lesson is selected
+  useEffect(() => {
+    if (selectedLesson?.isQuiz) {
+      setCurrentQuestionIndex(0);
+      setQuizAnswers({});
+      setQuizStartTime(Date.now());
+    }
+  }, [selectedLesson?.id]);
 
   if (authLoading || courseLoading || enrollmentLoading) {
     return (
@@ -229,9 +320,9 @@ const CourseLearning = () => {
 
         {/* Content Area */}
         <div className="p-8">
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Course Outline - 1/3 width on LEFT */}
-            <div>
+          <div className="grid lg:grid-cols-12 gap-6">
+            {/* Course Outline - LEFT SIDE - 3 columns */}
+            <div className="lg:col-span-3">
               <Card className="p-4">
                 <h3 className="mb-4" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>Course Content</h3>
                 <ScrollArea className="h-[600px]">
@@ -288,8 +379,8 @@ const CourseLearning = () => {
               </Card>
             </div>
 
-            {/* Main Player - 2/3 width on RIGHT */}
-            <div className="lg:col-span-2 space-y-4">
+            {/* Main Player - MIDDLE - 6 columns */}
+            <div className="lg:col-span-6 space-y-4">
               {/* Only show video player for non-quiz/non-assignment lessons */}
               {!selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
                 <Card className="overflow-hidden">
@@ -403,46 +494,132 @@ const CourseLearning = () => {
 
               {/* Quiz Section - Shows below lesson content */}
               {selectedLesson?.isQuiz && quizQuestions.length > 0 && (
-                <Card className="p-6">
-                  <h3 className="mb-4" style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>Course Quiz</h3>
-                  <div className="space-y-6">
-                    <p className="text-muted-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>Answer all questions to complete the quiz. You need {passingScore}% to pass.</p>
-                    {quizQuestions.map((q: any, index: number) => (
-                      <div key={index} className="border border-border rounded-lg p-5 space-y-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            <span className="text-primary" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>{index + 1}</span>
+                <div className="space-y-6">
+                  <Card className="p-8">
+                    {/* Quiz Header */}
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
+                          {selectedLesson?.title || 'Course Quiz'}
+                        </h2>
+                        <p className="text-muted-foreground mt-1" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                          Test your knowledge
+                        </p>
+                      </div>
+                      <Badge className="bg-[#1e2348] text-white px-4 py-2">
+                        Question {currentQuestionIndex + 1} of {quizQuestions.length}
+                      </Badge>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="mb-8">
+                      <Progress value={((currentQuestionIndex + 1) / quizQuestions.length) * 100} className="h-2" />
+                    </div>
+
+                    {/* Current Question */}
+                    {quizQuestions[currentQuestionIndex] && (
+                      <div className="space-y-6">
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-full bg-[#ff6b4d] flex items-center justify-center shrink-0">
+                            <span className="text-white font-semibold">{currentQuestionIndex + 1}</span>
                           </div>
-                          <p className="pt-1" style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 500 }}>{q.text}</p>
+                          <p style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+                            {quizQuestions[currentQuestionIndex].text}
+                          </p>
                         </div>
-                        <div className="space-y-2 ml-11">
-                          {q.options.map((option: string, optIndex: number) => (
-                            <label key={optIndex} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg border hover:border-border hover:bg-accent/50">
+
+                        {/* Answer Options */}
+                        <div className="space-y-3 ml-14">
+                          {quizQuestions[currentQuestionIndex].options.map((option: string, optIndex: number) => (
+                            <label
+                              key={optIndex}
+                              className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                                quizAnswers[currentQuestionIndex] === optIndex
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/5'
+                                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                              }`}
+                            >
                               <input
                                 type="radio"
-                                name={`question-${index}`}
+                                name={`question-${currentQuestionIndex}`}
                                 value={optIndex}
-                                checked={quizAnswers[index] === optIndex}
-                                onChange={() => setQuizAnswers({ ...quizAnswers, [index]: optIndex })}
-                                className="w-4 h-4"
+                                checked={quizAnswers[currentQuestionIndex] === optIndex}
+                                onChange={() => setQuizAnswers({ ...quizAnswers, [currentQuestionIndex]: optIndex })}
+                                className="w-5 h-5 text-[#ff6b4d]"
                               />
-                              <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{option}</span>
+                              <span style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{option}</span>
                             </label>
                           ))}
                         </div>
+
+                        {/* Navigation Buttons */}
+                        <div className="flex items-center justify-between mt-8 pt-6 border-t">
+                          <Button
+                            variant="outline"
+                            onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
+                            disabled={currentQuestionIndex === 0}
+                          >
+                            Previous
+                          </Button>
+                          {currentQuestionIndex < quizQuestions.length - 1 ? (
+                            <Button
+                              onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
+                              className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                              disabled={quizAnswers[currentQuestionIndex] === undefined}
+                            >
+                              Next Question
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={handleQuizSubmit}
+                              disabled={Object.keys(quizAnswers).length < quizQuestions.length}
+                              className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                            >
+                              Submit Answer
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                    ))}
-                    <Button
-                      onClick={handleQuizSubmit}
-                      disabled={Object.keys(quizAnswers).length < quizQuestions.length}
-                      className="w-full bg-[#ff6b4d] hover:bg-[#e56045]"
-                    >
-                      {Object.keys(quizAnswers).length < quizQuestions.length
-                        ? `Answer all questions (${Object.keys(quizAnswers).length}/${quizQuestions.length})`
-                        : "Submit Quiz"}
-                    </Button>
+                    )}
+                  </Card>
+
+                  {/* Quiz Stats */}
+                  <div className="grid grid-cols-3 gap-4">
+                    <Card className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                          <Clock className="w-5 h-5 text-orange-600" />
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>Time Remaining</p>
+                          <p className="font-semibold" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 600 }}>No limit</p>
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                          <CheckCircle className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>Current Score</p>
+                          <p className="font-semibold" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 600 }}>{Object.keys(quizAnswers).length} correct</p>
+                        </div>
+                      </div>
+                    </Card>
+                    <Card className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+                          <Award className="w-5 h-5 text-amber-600" />
+                        </div>
+                        <div>
+                          <p className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>Pass Mark</p>
+                          <p className="font-semibold" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 600 }}>{passingScore}%</p>
+                        </div>
+                      </div>
+                    </Card>
                   </div>
-                </Card>
+                </div>
               )}
 
               {/* Assignment Section - Shows below lesson content */}
@@ -473,6 +650,68 @@ const CourseLearning = () => {
                   </div>
                 </Card>
               )}
+            </div>
+
+            {/* AI Learning Tools - RIGHT SIDE - 3 columns */}
+            <div className="lg:col-span-3">
+              <Card className="p-6 sticky top-24">
+                <h3 className="mb-6" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>AI Learning Tools</h3>
+                <div className="space-y-3">
+                  {/* Flashcards */}
+                  <button 
+                    onClick={handleGenerateFlashcards}
+                    disabled={generatingAI}
+                    className="group w-full relative bg-pink-50 hover:bg-pink-100 rounded-xl p-4 text-left transition-all disabled:opacity-50"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-pink-200 rounded-lg flex items-center justify-center shrink-0">
+                          {generatingAI ? <Loader2 className="w-5 h-5 text-pink-700 animate-spin" /> : <FileText className="w-5 h-5 text-pink-700" />}
+                        </div>
+                        <h4 className="text-pink-900" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>Flashcards</h4>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-pink-400 group-hover:text-pink-600 transition-colors" />
+                    </div>
+                  </button>
+
+                  {/* Infographic */}
+                  <button 
+                    onClick={handleGenerateInfographic}
+                    disabled={generatingAI}
+                    className="group w-full relative bg-purple-50 hover:bg-purple-100 rounded-xl p-4 text-left transition-all disabled:opacity-50"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-purple-200 rounded-lg flex items-center justify-center shrink-0">
+                          {generatingAI ? <Loader2 className="w-5 h-5 text-purple-700 animate-spin" /> : <Award className="w-5 h-5 text-purple-700" />}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-purple-900" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>Infographic</h4>
+                          <Badge className="bg-black text-white text-xs px-2 py-0.5">BETA</Badge>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-purple-400 group-hover:text-purple-600 transition-colors" />
+                    </div>
+                  </button>
+
+                  {/* AI Notes */}
+                  <button 
+                    onClick={handleGenerateAINotes}
+                    disabled={generatingAI}
+                    className="group w-full relative bg-blue-50 hover:bg-blue-100 rounded-xl p-4 text-left transition-all disabled:opacity-50"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-blue-200 rounded-lg flex items-center justify-center shrink-0">
+                          {generatingAI ? <Loader2 className="w-5 h-5 text-blue-700 animate-spin" /> : <FileText className="w-5 h-5 text-blue-700" />}
+                        </div>
+                        <h4 className="text-blue-900" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>AI Notes</h4>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-blue-400 group-hover:text-blue-600 transition-colors" />
+                    </div>
+                  </button>
+                </div>
+              </Card>
             </div>
           </div>
         </div>
@@ -530,6 +769,137 @@ const CourseLearning = () => {
                   className="flex-1 bg-[#ff6b4d] hover:bg-[#e56045]"
                 >
                   Go to Dashboard
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* AI Notes Modal */}
+      {showAINotes && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>AI Generated Notes</h2>
+                <button onClick={() => setShowAINotes(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-4">
+                <div className="bg-blue-50 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2" style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 500 }}>Key Points</h3>
+                  <ul className="space-y-2 text-gray-700" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    <li>• {selectedLesson?.title} covers fundamental concepts</li>
+                    <li>• Important to understand the core principles before moving forward</li>
+                    <li>• Practice exercises help reinforce learning</li>
+                    <li>• Review the material multiple times for better retention</li>
+                  </ul>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h3 className="font-semibold mb-2" style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 500 }}>Summary</h3>
+                  <p className="text-gray-700" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    {selectedLesson?.content || "This lesson provides an overview of the key concepts and practical applications in the field."}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 flex gap-3">
+                <Button className="flex-1 bg-[#ff6b4d] hover:bg-[#e56045]">
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Notes
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => setShowAINotes(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Flashcards Modal */}
+      {showFlashcards && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>AI Generated Flashcards</h2>
+                <button onClick={() => setShowFlashcards(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="border-2 border-pink-200 rounded-xl p-6 bg-pink-50">
+                    <div className="mb-4">
+                      <p className="text-pink-900 font-semibold mb-2" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>Question {i}</p>
+                      <p className="text-gray-700" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                        What is the main concept covered in {selectedLesson?.title}?
+                      </p>
+                    </div>
+                    <div className="border-t-2 border-pink-200 pt-4">
+                      <p className="text-pink-900 font-semibold mb-2" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>Answer</p>
+                      <p className="text-gray-700" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                        The lesson covers fundamental principles and practical applications.
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 flex gap-3">
+                <Button className="flex-1 bg-[#ff6b4d] hover:bg-[#e56045]">
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Flashcards
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => setShowFlashcards(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Infographic Modal */}
+      {showInfographic && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <h2 style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>AI Generated Infographic</h2>
+                  <Badge className="bg-black text-white text-xs px-2 py-0.5">BETA</Badge>
+                </div>
+                <button onClick={() => setShowInfographic(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-8 min-h-[400px] flex items-center justify-center">
+                <div className="text-center">
+                  <Award className="w-20 h-20 text-purple-600 mx-auto mb-4" />
+                  <h3 className="text-purple-900 mb-4" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
+                    {selectedLesson?.title}
+                  </h3>
+                  <p className="text-purple-700 max-w-md mx-auto" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
+                    Visual representation of key concepts and relationships
+                  </p>
+                  <div className="mt-8 grid grid-cols-3 gap-4">
+                    {['Concept 1', 'Concept 2', 'Concept 3'].map((concept, i) => (
+                      <div key={i} className="bg-white rounded-lg p-4 shadow-sm">
+                        <p className="font-semibold text-purple-900" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>{concept}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 flex gap-3">
+                <Button className="flex-1 bg-[#ff6b4d] hover:bg-[#e56045]">
+                  <Download className="w-4 h-4 mr-2" />
+                  Download Infographic
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => setShowInfographic(false)}>
+                  Close
                 </Button>
               </div>
             </div>

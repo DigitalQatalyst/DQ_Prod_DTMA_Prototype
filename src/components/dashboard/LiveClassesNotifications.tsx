@@ -162,7 +162,7 @@ export const LiveClassesNotifications = () => {
 
           <TabsContent value="upcoming" className="space-y-4 mt-6">
             {upcomingClasses.map((classItem) => (
-              <Card key={classItem.id} className="p-6">
+              <Card key={classItem.id} className="p-6 border border-border">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center shrink-0">
                     <Video className="w-6 h-6 text-[#ff6b4d]" />
@@ -171,35 +171,39 @@ export const LiveClassesNotifications = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-semibold text-lg mb-1">{classItem.title}</h3>
-                        <p className="text-sm text-muted-foreground">with {classItem.instructor}</p>
+                        <h3 className="font-semibold mb-1" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+                          {classItem.title}
+                        </h3>
+                        <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                          with {classItem.instructor}
+                        </p>
                       </div>
-                      <Badge className="bg-[#1e2348] text-white">
+                      <Badge className="bg-[#1e2348] text-white" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
                         {getDaysUntil(classItem.date)}
                       </Badge>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-4 mb-4">
-                      <div className="flex items-center gap-2 text-sm">
+                      <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                         <Calendar className="w-4 h-4 text-muted-foreground" />
                         <span>{new Date(classItem.date).toLocaleDateString()}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm">
+                      <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                         <Clock className="w-4 h-4 text-muted-foreground" />
                         <span>{classItem.time}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm">
+                      <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                         <Users className="w-4 h-4 text-muted-foreground" />
                         <span>{classItem.participants}/{classItem.maxParticipants} enrolled</span>
                       </div>
                     </div>
 
                     <div className="flex gap-3">
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                         <Video className="w-4 h-4 mr-2" />
                         Join Class
                       </Button>
-                      <Button variant="outline">
+                      <Button variant="outline" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                         <Calendar className="w-4 h-4 mr-2" />
                         Add to Calendar
                       </Button>
@@ -212,7 +216,7 @@ export const LiveClassesNotifications = () => {
 
           <TabsContent value="past" className="space-y-4 mt-6">
             {pastClasses.map((classItem) => (
-              <Card key={classItem.id} className="p-6">
+              <Card key={classItem.id} className="p-6 border border-border">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
                     <Video className="w-6 h-6 text-gray-500" />
@@ -221,20 +225,26 @@ export const LiveClassesNotifications = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-semibold text-lg mb-1">{classItem.title}</h3>
-                        <p className="text-sm text-muted-foreground">with {classItem.instructor}</p>
+                        <h3 className="font-semibold mb-1" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+                          {classItem.title}
+                        </h3>
+                        <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                          with {classItem.instructor}
+                        </p>
                       </div>
                       {classItem.attended ? (
-                        <Badge className="bg-green-100 text-green-800 border-green-200">
+                        <Badge className="bg-green-100 text-green-800 border-green-200" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
                           <CheckCircle className="w-3 h-3 mr-1" />
                           Attended
                         </Badge>
                       ) : (
-                        <Badge variant="secondary">Missed</Badge>
+                        <Badge variant="secondary" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
+                          Missed
+                        </Badge>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                    <div className="flex items-center gap-4 text-muted-foreground mb-4" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         {new Date(classItem.date).toLocaleDateString()}
@@ -245,7 +255,7 @@ export const LiveClassesNotifications = () => {
                       </span>
                     </div>
 
-                    <Button variant="outline">
+                    <Button variant="outline" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Watch Recording
                     </Button>
@@ -259,13 +269,13 @@ export const LiveClassesNotifications = () => {
 
       {/* Notifications Sidebar */}
       <div>
-        <Card className="p-4">
+        <Card className="p-4 border border-border">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold flex items-center gap-2">
+            <h3 className="font-semibold flex items-center gap-2" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
               <Bell className="w-5 h-5 text-[#ff6b4d]" />
               Notifications
             </h3>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
               Mark all read
             </Button>
           </div>
@@ -277,8 +287,10 @@ export const LiveClassesNotifications = () => {
                 return (
                   <div
                     key={notification.id}
-                    className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                      notification.read ? 'bg-accent/30' : 'bg-accent'
+                    className={`p-3 rounded-lg cursor-pointer transition-colors border-l-4 ${
+                      notification.read 
+                        ? 'bg-white border-gray-300' 
+                        : 'bg-white border-[#ff6b4d] shadow-sm'
                     }`}
                   >
                     <div className="flex gap-3">
@@ -287,15 +299,17 @@ export const LiveClassesNotifications = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2 mb-1">
-                          <h4 className="font-medium text-sm">{notification.title}</h4>
+                          <h4 className="font-medium text-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                            {notification.title}
+                          </h4>
                           {!notification.read && (
                             <div className="w-2 h-2 bg-[#ff6b4d] rounded-full shrink-0 mt-1" />
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
+                        <p className="text-muted-foreground line-clamp-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                           {notification.message}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-muted-foreground mt-1" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
                           {notification.timestamp}
                         </p>
                       </div>

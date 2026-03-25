@@ -61,6 +61,7 @@ const CourseLearning = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
+  const [mediaMode, setMediaMode] = useState<'video' | 'audio'>('video'); // Toggle between video and audio
 
   // Load course data from localStorage
   const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
@@ -208,90 +209,18 @@ const CourseLearning = () => {
 
   return (
     <div className="min-h-screen bg-secondary/30 flex">
-      {/* Left Sidebar */}
-      <aside className="fixed left-0 top-0 z-50 w-72 h-screen bg-gradient-to-b from-[#1e2348] to-[#2a3058] border-r border-[#2a3058] flex flex-col">
-        {/* Logo */}
-        <div className="p-6 border-b border-[#2a3058]">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="/dtma-logo.png" alt="DTMA" className="h-[50px] w-auto brightness-0 invert" />
-          </Link>
-        </div>
-
-        {/* Navigation */}
-        <ScrollArea className="flex-1 px-4 py-6">
-          <nav className="space-y-2">
-            <Link to="/dashboard" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all">
-              <TrendingUp className="w-5 h-5" />
-              <span className="font-medium">Progress & Notes</span>
-            </Link>
-            <div className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20">
-              <PlayCircle className="w-5 h-5" />
-              <span className="font-medium">Learning Player</span>
-            </div>
-            <Link to="/dashboard" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all">
-              <Award className="w-5 h-5" />
-              <span className="font-medium">Certificates & Badges</span>
-            </Link>
-            <Link to="/dashboard" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all">
-              <MessageSquare className="w-5 h-5" />
-              <span className="font-medium">Discussions</span>
-            </Link>
-            <Link to="/dashboard" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all">
-              <Video className="w-5 h-5" />
-              <span className="font-medium">Live Classes</span>
-            </Link>
-            <Link to="/dashboard" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition-all">
-              <User className="w-5 h-5" />
-              <span className="font-medium">Profile</span>
-            </Link>
-          </nav>
-        </ScrollArea>
-
-        {/* User Section */}
-        <div className="p-4 border-t border-white/10">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
-            <Avatar className="w-10 h-10 ring-2 ring-[#ff6b4d]">
-              <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-[#ff6b4d] text-white">
-                {getInitials(profile?.full_name)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate text-white">{profile?.full_name || 'Learner'}</p>
-              <p className="text-xs text-white/60 truncate">{profile?.email}</p>
-            </div>
-          </div>
-          <Button 
-            variant="ghost" 
-            className="w-full mt-3 justify-start gap-3 text-white/70 hover:text-white hover:bg-white/10"
-            onClick={handleSignOut}
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </Button>
-        </div>
-      </aside>
-
       {/* Main Content */}
-      <main className="flex-1 ml-72">
+      <main className="flex-1">
         {/* Top Bar */}
         <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-sm border-b border-border px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link to={`/courses/${courseId}`} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+            <Link to="/dashboard" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
               <ChevronLeft className="w-4 h-4" />
-              <span>Back to Course</span>
+              <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>Back to Dashboard</span>
             </Link>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 bg-accent/50 rounded-lg px-3 py-2 w-64">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <input type="text" placeholder="Search..." className="bg-transparent border-none outline-none text-sm w-full" />
-            </div>
-            <button className="relative p-2 hover:bg-accent rounded-lg transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-[#ff6b4d] rounded-full"></span>
-            </button>
             <Link to="/courses">
               <Button variant="outline" size="sm">Browse Courses</Button>
             </Link>
@@ -301,163 +230,15 @@ const CourseLearning = () => {
         {/* Content Area */}
         <div className="p-8">
           <div className="grid lg:grid-cols-3 gap-6">
-            {/* Main Player - 2/3 width */}
-            <div className="lg:col-span-2 space-y-4">
-              <Card className="overflow-hidden">
-                {/* Video/Content Area */}
-                {selectedLesson?.video_url && !selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical ? (
-                  <div className="relative bg-black aspect-video flex items-center justify-center">
-                    <div className="w-full h-full bg-gradient-to-br from-[#1e2348] to-[#2a3058] flex items-center justify-center">
-                      <Play className="w-20 h-20 text-white/50" />
-                    </div>
-                    <button className="absolute top-4 right-4 w-10 h-10 bg-black/50 rounded-lg flex items-center justify-center text-white hover:bg-black/70">
-                      <Maximize className="w-5 h-5" />
-                    </button>
-                  </div>
-                ) : selectedLesson?.type === 'audio' ? (
-                  <div className="relative bg-black aspect-video flex items-center justify-center">
-                    <div className="w-full h-full bg-gradient-to-br from-[#ff6b4d] to-[#e56045] flex items-center justify-center">
-                      <Headphones className="w-20 h-20 text-white" />
-                    </div>
-                  </div>
-                ) : null}
-
-                {/* Controls */}
-                {(selectedLesson?.video_url || selectedLesson?.type === 'audio') && !selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
-                  <div className="p-4 bg-card">
-                    <div className="mb-4">
-                      <Progress value={videoProgress} className="h-2" />
-                      <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                        <span>0:00</span>
-                        <span>10:00</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="icon">
-                          <SkipBack className="w-5 h-5" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          onClick={() => setIsPlaying(!isPlaying)}
-                          className="w-12 h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white"
-                        >
-                          {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
-                        </Button>
-                        <Button variant="ghost" size="icon">
-                          <SkipForward className="w-5 h-5" />
-                        </Button>
-                      </div>
-                      <Button variant="ghost" size="icon" onClick={() => setIsMuted(!isMuted)}>
-                        {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </Card>
-
-              {/* Lesson Info */}
-              <Card className="p-6">
-                <h2 className="text-2xl font-semibold mb-2">{selectedLesson?.title}</h2>
-                <p className="text-muted-foreground mb-4">
-                  {currentModuleTitle} • {selectedLesson?.duration_minutes || 15} min
-                </p>
-
-                {/* Lesson Content */}
-                {selectedLesson?.content && !selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
-                  <div className="prose max-w-none">
-                    <p className="text-muted-foreground">{selectedLesson.content}</p>
-                  </div>
-                )}
-
-                {/* Quiz Content */}
-                {selectedLesson?.isQuiz && quizQuestions.length > 0 && (
-                  <div className="space-y-6">
-                    <p className="text-muted-foreground">Answer all questions to complete the quiz. You need {passingScore}% to pass.</p>
-                    {quizQuestions.map((q: any, index: number) => (
-                      <div key={index} className="border border-border rounded-lg p-5 space-y-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            <span className="text-sm font-semibold text-primary">{index + 1}</span>
-                          </div>
-                          <p className="font-semibold text-lg pt-1">{q.text}</p>
-                        </div>
-                        <div className="space-y-2 ml-11">
-                          {q.options.map((option: string, optIndex: number) => (
-                            <label key={optIndex} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg border hover:border-border hover:bg-accent/50">
-                              <input
-                                type="radio"
-                                name={`question-${index}`}
-                                value={optIndex}
-                                checked={quizAnswers[index] === optIndex}
-                                onChange={() => setQuizAnswers({ ...quizAnswers, [index]: optIndex })}
-                                className="w-4 h-4"
-                              />
-                              <span className="text-sm">{option}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                    <Button
-                      onClick={handleQuizSubmit}
-                      disabled={Object.keys(quizAnswers).length < quizQuestions.length}
-                      className="w-full bg-[#ff6b4d] hover:bg-[#e56045]"
-                    >
-                      {Object.keys(quizAnswers).length < quizQuestions.length
-                        ? `Answer all questions (${Object.keys(quizAnswers).length}/${quizQuestions.length})`
-                        : "Submit Quiz"}
-                    </Button>
-                  </div>
-                )}
-
-                {/* Assignment Content */}
-                {selectedLesson?.isAssignment && (
-                  <div className="space-y-6">
-                    <p className="text-muted-foreground whitespace-pre-wrap">{assignmentInstructions}</p>
-                    {!assignmentSubmitted ? (
-                      <div className="border-2 border-dashed rounded-lg p-6">
-                        <h3 className="text-sm font-semibold mb-3">Submit Your Assignment</h3>
-                        <input
-                          type="file"
-                          accept={allowedFileTypes.split(',').map(t => `.${t.trim()}`).join(',')}
-                          onChange={(e) => setAssignmentFile(e.target.files?.[0] || null)}
-                          className="mb-4"
-                        />
-                        <Button onClick={handleAssignmentSubmit} disabled={!assignmentFile} className="w-full bg-[#ff6b4d] hover:bg-[#e56045]">
-                          Submit Assignment
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="border border-green-200 bg-green-50 rounded-lg p-6 text-center">
-                        <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-3" />
-                        <h3 className="text-lg font-semibold text-green-900">Assignment Submitted!</h3>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Practical Content */}
-                {selectedLesson?.isPractical && (
-                  <div className="border border-blue-200 bg-blue-50 rounded-lg p-6">
-                    <GraduationCap className="w-6 h-6 text-blue-600 mb-3" />
-                    <h3 className="text-lg font-semibold text-blue-900 mb-2">Instructor Evaluation Required</h3>
-                    <p className="text-sm text-blue-800">{practicalInstructions}</p>
-                  </div>
-                )}
-              </Card>
-            </div>
-
-            {/* Course Outline - 1/3 width */}
+            {/* Course Outline - 1/3 width on LEFT */}
             <div>
               <Card className="p-4">
-                <h3 className="font-semibold mb-4">Course Content</h3>
+                <h3 className="mb-4" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>Course Content</h3>
                 <ScrollArea className="h-[600px]">
                   <div className="space-y-2">
                     {courseData.modules?.map((module: any) => (
                       <div key={module.id} className="mb-4">
-                        <h4 className="text-sm font-semibold text-muted-foreground mb-2 px-2">{module.title}</h4>
+                        <h4 className="text-muted-foreground mb-2 px-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>{module.title}</h4>
                         {module.lessons?.map((lesson: any) => {
                           const isCompleted = !lesson.isQuiz && !lesson.isAssignment && !lesson.isPractical && lessonProgress?.[lesson.id];
                           const isActive = selectedLesson?.id === lesson.id;
@@ -475,7 +256,7 @@ const CourseLearning = () => {
                                   ? 'bg-green-50 hover:bg-green-100'
                                   : isLocked
                                   ? 'bg-gray-50 cursor-not-allowed opacity-50'
-                                  : 'hover:bg-accent'
+                                  : 'hover:bg-[#1e2348]/15'
                               }`}
                             >
                               <div className="flex items-start gap-3">
@@ -489,10 +270,10 @@ const CourseLearning = () => {
                                   )}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <p className={`font-medium text-sm line-clamp-2 ${isActive ? 'text-white' : ''}`}>
+                                  <p className={`line-clamp-2 ${isActive ? 'text-white' : ''}`} style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
                                     {lesson.title}
                                   </p>
-                                  <p className={`text-xs mt-1 ${isActive ? 'text-white/70' : 'text-muted-foreground'}`}>
+                                  <p className={`mt-1 ${isActive ? 'text-white/70' : 'text-muted-foreground'}`} style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
                                     {lesson.duration_minutes || 15} min • {lesson.type || 'video'}
                                   </p>
                                 </div>
@@ -505,6 +286,193 @@ const CourseLearning = () => {
                   </div>
                 </ScrollArea>
               </Card>
+            </div>
+
+            {/* Main Player - 2/3 width on RIGHT */}
+            <div className="lg:col-span-2 space-y-4">
+              {/* Only show video player for non-quiz/non-assignment lessons */}
+              {!selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
+                <Card className="overflow-hidden">
+                  {/* Video/Content Area */}
+                  {selectedLesson?.video_url ? (
+                    <div className="relative bg-black aspect-video flex items-center justify-center">
+                      <div className="w-full h-full bg-gradient-to-br from-[#1e2348] to-[#2a3058] flex items-center justify-center">
+                        {mediaMode === 'video' ? (
+                          <Play className="w-20 h-20 text-white/50" />
+                        ) : (
+                          <Headphones className="w-20 h-20 text-white/50" />
+                        )}
+                      </div>
+                      {/* Media Mode Toggle - Top Right */}
+                      <div className="absolute top-4 right-4 flex items-center gap-2 bg-black/50 rounded-lg p-1 backdrop-blur-sm">
+                        <button
+                          onClick={() => setMediaMode('video')}
+                          className={`p-2 rounded-md transition-colors ${
+                            mediaMode === 'video'
+                              ? 'bg-[#ff6b4d] text-white'
+                              : 'text-white/70 hover:text-white hover:bg-white/10'
+                          }`}
+                          title="Video Mode"
+                        >
+                          <Video className="w-5 h-5" />
+                        </button>
+                        <button
+                          onClick={() => setMediaMode('audio')}
+                          className={`p-2 rounded-md transition-colors ${
+                            mediaMode === 'audio'
+                              ? 'bg-[#ff6b4d] text-white'
+                              : 'text-white/70 hover:text-white hover:bg-white/10'
+                          }`}
+                          title="Audio Mode"
+                        >
+                          <Headphones className="w-5 h-5" />
+                        </button>
+                      </div>
+                      {/* Fullscreen Button */}
+                      <button className="absolute bottom-4 right-4 w-10 h-10 bg-black/50 rounded-lg flex items-center justify-center text-white hover:bg-black/70">
+                        <Maximize className="w-5 h-5" />
+                      </button>
+                    </div>
+                  ) : selectedLesson?.type === 'audio' ? (
+                    <div className="relative bg-black aspect-video flex items-center justify-center">
+                      <div className="w-full h-full bg-gradient-to-br from-[#ff6b4d] to-[#e56045] flex items-center justify-center">
+                        <Headphones className="w-20 h-20 text-white" />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {/* Controls */}
+                  {(selectedLesson?.video_url || selectedLesson?.type === 'audio') && (
+                    <div className="p-4 bg-card">
+                      <div className="mb-4">
+                        <Progress value={videoProgress} className="h-2" />
+                        <div className="flex justify-between text-muted-foreground mt-2" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
+                          <span>0:00</span>
+                          <span>10:00</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Button variant="ghost" size="icon">
+                            <SkipBack className="w-5 h-5" />
+                          </Button>
+                          <Button
+                            size="icon"
+                            onClick={() => setIsPlaying(!isPlaying)}
+                            className="w-12 h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                          >
+                            {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+                          </Button>
+                          <Button variant="ghost" size="icon">
+                            <SkipForward className="w-5 h-5" />
+                          </Button>
+                        </div>
+                        <Button variant="ghost" size="icon" onClick={() => setIsMuted(!isMuted)}>
+                          {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              )}
+
+              {/* Lesson Info */}
+              <Card className="p-6">
+                <h2 className="mb-2" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>{selectedLesson?.title}</h2>
+                <p className="text-muted-foreground mb-4" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  {currentModuleTitle} • {selectedLesson?.duration_minutes || 15} min
+                </p>
+
+                {/* Lesson Content - Always show for regular lessons */}
+                {selectedLesson?.content && !selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
+                  <div className="prose max-w-none">
+                    <p className="text-muted-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{selectedLesson.content}</p>
+                  </div>
+                )}
+
+                {/* Practical Content */}
+                {selectedLesson?.isPractical && (
+                  <div className="border border-blue-200 bg-blue-50 rounded-lg p-6">
+                    <GraduationCap className="w-6 h-6 text-blue-600 mb-3" />
+                    <h3 className="text-blue-900 mb-2" style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 500 }}>Instructor Evaluation Required</h3>
+                    <p className="text-blue-800" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{practicalInstructions}</p>
+                  </div>
+                )}
+              </Card>
+
+              {/* Quiz Section - Shows below lesson content */}
+              {selectedLesson?.isQuiz && quizQuestions.length > 0 && (
+                <Card className="p-6">
+                  <h3 className="mb-4" style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>Course Quiz</h3>
+                  <div className="space-y-6">
+                    <p className="text-muted-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>Answer all questions to complete the quiz. You need {passingScore}% to pass.</p>
+                    {quizQuestions.map((q: any, index: number) => (
+                      <div key={index} className="border border-border rounded-lg p-5 space-y-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <span className="text-primary" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>{index + 1}</span>
+                          </div>
+                          <p className="pt-1" style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 500 }}>{q.text}</p>
+                        </div>
+                        <div className="space-y-2 ml-11">
+                          {q.options.map((option: string, optIndex: number) => (
+                            <label key={optIndex} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg border hover:border-border hover:bg-accent/50">
+                              <input
+                                type="radio"
+                                name={`question-${index}`}
+                                value={optIndex}
+                                checked={quizAnswers[index] === optIndex}
+                                onChange={() => setQuizAnswers({ ...quizAnswers, [index]: optIndex })}
+                                className="w-4 h-4"
+                              />
+                              <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{option}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                    <Button
+                      onClick={handleQuizSubmit}
+                      disabled={Object.keys(quizAnswers).length < quizQuestions.length}
+                      className="w-full bg-[#ff6b4d] hover:bg-[#e56045]"
+                    >
+                      {Object.keys(quizAnswers).length < quizQuestions.length
+                        ? `Answer all questions (${Object.keys(quizAnswers).length}/${quizQuestions.length})`
+                        : "Submit Quiz"}
+                    </Button>
+                  </div>
+                </Card>
+              )}
+
+              {/* Assignment Section - Shows below lesson content */}
+              {selectedLesson?.isAssignment && (
+                <Card className="p-6">
+                  <h3 className="mb-4" style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>{assignmentTitle || 'Assignment'}</h3>
+                  <div className="space-y-6">
+                    <p className="text-muted-foreground whitespace-pre-wrap" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{assignmentInstructions}</p>
+                    {!assignmentSubmitted ? (
+                      <div className="border-2 border-dashed rounded-lg p-6">
+                        <h3 className="mb-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>Submit Your Assignment</h3>
+                        <input
+                          type="file"
+                          accept={allowedFileTypes.split(',').map(t => `.${t.trim()}`).join(',')}
+                          onChange={(e) => setAssignmentFile(e.target.files?.[0] || null)}
+                          className="mb-4"
+                        />
+                        <Button onClick={handleAssignmentSubmit} disabled={!assignmentFile} className="w-full bg-[#ff6b4d] hover:bg-[#e56045]">
+                          Submit Assignment
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="border border-green-200 bg-green-50 rounded-lg p-6 text-center">
+                        <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-3" />
+                        <h3 className="text-green-900" style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 500 }}>Assignment Submitted!</h3>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              )}
             </div>
           </div>
         </div>
@@ -530,22 +498,22 @@ const CourseLearning = () => {
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-10 h-10 text-green-600" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">Congratulations!</h2>
-                <p className="text-gray-600">You've successfully completed the course</p>
+                <h2 className="text-gray-900 mb-2" style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }}>Congratulations!</h2>
+                <p className="text-gray-600" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>You've successfully completed the course</p>
               </div>
 
               <div className="border-4 border-[#4A3428] rounded-lg p-12 bg-gradient-to-br from-amber-50 to-white mb-6">
                 <div className="text-center space-y-4">
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">Certificate of Completion</div>
-                  <h3 className="text-3xl font-serif font-bold text-[#4A3428]">DTMA</h3>
-                  <p className="text-sm text-gray-600">This is to certify that</p>
-                  <div className="text-2xl font-bold text-gray-900 border-b-2 border-[#4A3428] inline-block px-12 pb-2">
+                  <div className="text-gray-500 uppercase tracking-wider" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Certificate of Completion</div>
+                  <h3 className="font-serif text-[#4A3428]" style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }}>DTMA</h3>
+                  <p className="text-gray-600" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>This is to certify that</p>
+                  <div className="text-gray-900 border-b-2 border-[#4A3428] inline-block px-12 pb-2" style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>
                     {profile?.full_name || "Student Name"}
                   </div>
-                  <p className="text-sm text-gray-600">has successfully completed</p>
-                  <div className="text-xl font-bold text-gray-900">{course?.title || "Course Title"}</div>
-                  <p className="text-sm text-gray-500">Completed on {new Date().toLocaleDateString()}</p>
-                  <p className="text-xs text-gray-400 pt-6">Certificate ID: CERT-{Date.now()}</p>
+                  <p className="text-gray-600" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>has successfully completed</p>
+                  <div className="text-gray-900" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 600 }}>{course?.title || "Course Title"}</div>
+                  <p className="text-gray-500" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>Completed on {new Date().toLocaleDateString()}</p>
+                  <p className="text-gray-400 pt-6" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>Certificate ID: CERT-{Date.now()}</p>
                 </div>
               </div>
 

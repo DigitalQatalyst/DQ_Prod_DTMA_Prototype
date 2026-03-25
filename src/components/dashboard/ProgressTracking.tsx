@@ -52,62 +52,82 @@ export const ProgressTracking = () => {
     <div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid md:grid-cols-4 gap-4">
-        <Card className="p-5">
+        <Card className="p-5 border border-border">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 bg-[#1e2348]/10 rounded-xl flex items-center justify-center">
               <Clock className="w-5 h-5 text-[#1e2348]" />
             </div>
           </div>
-          <div className="text-2xl font-bold">12.5h</div>
-          <div className="text-sm text-muted-foreground">This Week</div>
+          <div className="font-bold" style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 500 }}>
+            12.5h
+          </div>
+          <div className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+            This Week
+          </div>
         </Card>
 
-        <Card className="p-5">
+        <Card className="p-5 border border-border">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
             </div>
           </div>
-          <div className="text-2xl font-bold">85%</div>
-          <div className="text-sm text-muted-foreground">Avg. Score</div>
+          <div className="font-bold" style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 500 }}>
+            85%
+          </div>
+          <div className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+            Avg. Score
+          </div>
         </Card>
 
-        <Card className="p-5">
+        <Card className="p-5 border border-border">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center">
               <CheckCircle className="w-5 h-5 text-green-500" />
             </div>
           </div>
-          <div className="text-2xl font-bold">24</div>
-          <div className="text-sm text-muted-foreground">Lessons Done</div>
+          <div className="font-bold" style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 500 }}>
+            24
+          </div>
+          <div className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+            Lessons Done
+          </div>
         </Card>
 
-        <Card className="p-5">
+        <Card className="p-5 border border-border">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center">
               <Target className="w-5 h-5 text-amber-500" />
             </div>
           </div>
-          <div className="text-2xl font-bold">7</div>
-          <div className="text-sm text-muted-foreground">Day Streak</div>
+          <div className="font-bold" style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 500 }}>
+            7
+          </div>
+          <div className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+            Day Streak
+          </div>
         </Card>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Weekly Activity */}
-        <Card className="p-6">
+        <Card className="p-6 border border-border">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-semibold flex items-center gap-2">
+            <h3 className="font-semibold flex items-center gap-2" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
               <BarChart3 className="w-5 h-5 text-[#ff6b4d]" />
               Weekly Activity
             </h3>
-            <Badge variant="secondary">Last 7 days</Badge>
+            <Badge variant="secondary" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
+              Last 7 days
+            </Badge>
           </div>
           
           <div className="space-y-4">
             {weeklyProgress.map((day) => (
               <div key={day.day} className="flex items-center gap-4">
-                <span className="text-sm font-medium w-12">{day.day}</span>
+                <span className="font-medium w-12" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                  {day.day}
+                </span>
                 <div className="flex-1">
                   <div className="h-8 bg-accent rounded-lg overflow-hidden">
                     <div
@@ -116,7 +136,7 @@ export const ProgressTracking = () => {
                     />
                   </div>
                 </div>
-                <span className="text-sm text-muted-foreground w-12 text-right">
+                <span className="text-muted-foreground w-12 text-right" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                   {day.hours}h
                 </span>
               </div>
@@ -125,8 +145,8 @@ export const ProgressTracking = () => {
         </Card>
 
         {/* Course Progress */}
-        <Card className="p-6">
-          <h3 className="font-semibold mb-6 flex items-center gap-2">
+        <Card className="p-6 border border-border">
+          <h3 className="font-semibold mb-6 flex items-center gap-2" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
             <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
             Course Progress
           </h3>
@@ -134,36 +154,54 @@ export const ProgressTracking = () => {
           <div className="space-y-6">
             <div>
               <div className="flex justify-between mb-2">
-                <span className="text-sm font-medium">Introduction to Digital Economy & Economy 4.0</span>
-                <span className="text-sm text-muted-foreground">75%</span>
+                <span className="font-medium" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                  Introduction to Digital Economy & Economy 4.0
+                </span>
+                <span className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  75%
+                </span>
               </div>
               <Progress value={75} className="h-2" />
-              <p className="text-xs text-muted-foreground mt-1">15 of 20 lessons completed</p>
+              <p className="text-muted-foreground mt-1" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
+                15 of 20 lessons completed
+              </p>
             </div>
 
             <div>
               <div className="flex justify-between mb-2">
-                <span className="text-sm font-medium">AI-Powered Business Transformation</span>
-                <span className="text-sm text-muted-foreground">45%</span>
+                <span className="font-medium" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                  AI-Powered Business Transformation
+                </span>
+                <span className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  45%
+                </span>
               </div>
               <Progress value={45} className="h-2" />
-              <p className="text-xs text-muted-foreground mt-1">9 of 20 lessons completed</p>
+              <p className="text-muted-foreground mt-1" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
+                9 of 20 lessons completed
+              </p>
             </div>
 
             <div>
               <div className="flex justify-between mb-2">
-                <span className="text-sm font-medium">Digital Leadership & Change Management</span>
-                <span className="text-sm text-muted-foreground">20%</span>
+                <span className="font-medium" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                  Digital Leadership & Change Management
+                </span>
+                <span className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  20%
+                </span>
               </div>
               <Progress value={20} className="h-2" />
-              <p className="text-xs text-muted-foreground mt-1">4 of 20 lessons completed</p>
+              <p className="text-muted-foreground mt-1" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
+                4 of 20 lessons completed
+              </p>
             </div>
           </div>
         </Card>
       </div>
 
       {/* Notes & Insights */}
-      <Card className="p-6">
+      <Card className="p-6 border border-border">
         <Tabs defaultValue="notes">
           <TabsList className="mb-6">
             <TabsTrigger value="notes">My Notes</TabsTrigger>
@@ -172,37 +210,51 @@ export const ProgressTracking = () => {
 
           <TabsContent value="notes" className="space-y-4">
             {notes.map((note) => (
-              <div key={note.id} className="p-4 bg-accent/50 rounded-lg">
+              <div key={note.id} className="p-4 bg-white rounded-lg border border-border">
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-medium text-sm">{note.lessonTitle}</h4>
-                  <span className="text-xs text-muted-foreground">{note.timestamp}</span>
+                  <h4 className="font-medium text-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                    {note.lessonTitle}
+                  </h4>
+                  <span className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
+                    {note.timestamp}
+                  </span>
                 </div>
-                <p className="text-sm text-muted-foreground">{note.content}</p>
+                <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  {note.content}
+                </p>
               </div>
             ))}
           </TabsContent>
 
           <TabsContent value="insights" className="space-y-4">
-            <div className="p-4 bg-accent/50 rounded-lg">
+            <div className="p-4 bg-white rounded-lg border border-border">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
                 </div>
                 <div>
-                  <h4 className="font-medium">Strong Performance</h4>
-                  <p className="text-sm text-muted-foreground">You're in the top 20% of learners</p>
+                  <h4 className="font-medium text-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+                    Strong Performance
+                  </h4>
+                  <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    You're in the top 20% of learners
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-accent/50 rounded-lg">
+            <div className="p-4 bg-white rounded-lg border border-border">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center">
                   <Calendar className="w-5 h-5 text-amber-500" />
                 </div>
                 <div>
-                  <h4 className="font-medium">Consistent Learner</h4>
-                  <p className="text-sm text-muted-foreground">7-day learning streak! Keep it up</p>
+                  <h4 className="font-medium text-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+                    Consistent Learner
+                  </h4>
+                  <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    7-day learning streak! Keep it up
+                  </p>
                 </div>
               </div>
             </div>

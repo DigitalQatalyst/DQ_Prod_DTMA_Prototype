@@ -127,15 +127,18 @@ export const CollaborationTools = () => {
 
       {/* Q&A Tab */}
       <TabsContent value="qna" className="space-y-4">
-        <Card className="p-6">
-          <h3 className="font-semibold mb-4">Ask a Question</h3>
+        <Card className="p-6 border border-border">
+          <h3 className="font-semibold mb-4" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+            Ask a Question
+          </h3>
           <Textarea
             placeholder="What would you like to know?"
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
             className="mb-4"
+            style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
           />
-          <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
+          <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
             <MessageSquare className="w-4 h-4 mr-2" />
             Post Question
           </Button>
@@ -143,7 +146,7 @@ export const CollaborationTools = () => {
 
         <div className="space-y-4">
           {qnaThreads.map((thread) => (
-            <Card key={thread.id} className="p-6 hover:shadow-lg transition-shadow">
+            <Card key={thread.id} className="p-6 hover:shadow-lg transition-shadow border border-border">
               <div className="flex items-start gap-4">
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={thread.avatar || undefined} />
@@ -156,19 +159,25 @@ export const CollaborationTools = () => {
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold">{thread.author}</span>
-                        <span className="text-sm text-muted-foreground">{thread.timestamp}</span>
+                        <span className="font-semibold" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                          {thread.author}
+                        </span>
+                        <span className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                          {thread.timestamp}
+                        </span>
                         {thread.isPinned && (
-                          <Badge className="bg-[#ff6b4d] text-white">
+                          <Badge className="bg-[#ff6b4d] text-white" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
                             <Pin className="w-3 h-3 mr-1" />
                             Pinned
                           </Badge>
                         )}
                       </div>
-                      <h4 className="font-medium text-lg">{thread.question}</h4>
+                      <h4 className="font-medium" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+                        {thread.question}
+                      </h4>
                     </div>
                     {thread.hasAnswer && (
-                      <Badge className="bg-green-100 text-green-800 border-green-200">
+                      <Badge className="bg-green-100 text-green-800 border-green-200" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
                         <CheckCheck className="w-3 h-3 mr-1" />
                         Answered
                       </Badge>
@@ -176,15 +185,15 @@ export const CollaborationTools = () => {
                   </div>
 
                   <div className="flex items-center gap-6 mt-4">
-                    <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-[#ff6b4d]">
+                    <button className="flex items-center gap-2 text-muted-foreground hover:text-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       <ThumbsUp className="w-4 h-4" />
                       {thread.likes}
                     </button>
-                    <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-[#ff6b4d]">
+                    <button className="flex items-center gap-2 text-muted-foreground hover:text-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       <MessageCircle className="w-4 h-4" />
                       {thread.replies} replies
                     </button>
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       View Thread
                     </Button>
                   </div>
@@ -197,38 +206,40 @@ export const CollaborationTools = () => {
 
       {/* Forums Tab */}
       <TabsContent value="forums" className="space-y-4">
-        <Card className="p-6">
+        <Card className="p-6 border border-border">
           <div className="flex gap-4 mb-6">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input placeholder="Search discussions..." className="pl-10" />
+              <Input placeholder="Search discussions..." className="pl-10" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} />
             </div>
-            <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
+            <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
               New Topic
             </Button>
           </div>
 
           <div className="flex gap-2 flex-wrap">
-            <Badge variant="secondary">All Topics</Badge>
-            <Badge variant="outline">Technology</Badge>
-            <Badge variant="outline">Leadership</Badge>
-            <Badge variant="outline">Industry Applications</Badge>
-            <Badge variant="outline">Best Practices</Badge>
+            <Badge variant="secondary" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>All Topics</Badge>
+            <Badge variant="outline" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Technology</Badge>
+            <Badge variant="outline" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Leadership</Badge>
+            <Badge variant="outline" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Industry Applications</Badge>
+            <Badge variant="outline" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Best Practices</Badge>
           </div>
         </Card>
 
         <div className="space-y-3">
           {forumTopics.map((topic) => (
-            <Card key={topic.id} className="p-5 hover:shadow-lg transition-shadow cursor-pointer">
+            <Card key={topic.id} className="p-5 hover:shadow-lg transition-shadow cursor-pointer border border-border">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
                       {topic.category}
                     </Badge>
                   </div>
-                  <h4 className="font-semibold mb-2 hover:text-[#ff6b4d]">{topic.title}</h4>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <h4 className="font-semibold mb-2 hover:text-[#ff6b4d]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+                    {topic.title}
+                  </h4>
+                  <div className="flex items-center gap-4 text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                     <span className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
                       {topic.author}
@@ -249,10 +260,14 @@ export const CollaborationTools = () => {
 
       {/* Chat Tab */}
       <TabsContent value="chat">
-        <Card className="h-[600px] flex flex-col">
+        <Card className="h-[600px] flex flex-col border border-border">
           <div className="p-4 border-b">
-            <h3 className="font-semibold">Digital Transformation Cohort - March 2024</h3>
-            <p className="text-sm text-muted-foreground">45 participants online</p>
+            <h3 className="font-semibold" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+              Digital Transformation Cohort - March 2024
+            </h3>
+            <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+              45 participants online
+            </p>
           </div>
 
           <ScrollArea className="flex-1 p-4">
@@ -266,13 +281,21 @@ export const CollaborationTools = () => {
                   </Avatar>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-sm">{msg.sender}</span>
+                      <span className="font-semibold" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                        {msg.sender}
+                      </span>
                       {msg.isInstructor && (
-                        <Badge className="bg-[#ff6b4d] text-white text-xs">Instructor</Badge>
+                        <Badge className="bg-[#ff6b4d] text-white" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
+                          Instructor
+                        </Badge>
                       )}
-                      <span className="text-xs text-muted-foreground">{msg.timestamp}</span>
+                      <span className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
+                        {msg.timestamp}
+                      </span>
                     </div>
-                    <p className="text-sm bg-accent/50 p-3 rounded-lg">{msg.message}</p>
+                    <p className="bg-accent/50 p-3 rounded-lg" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                      {msg.message}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -290,6 +313,7 @@ export const CollaborationTools = () => {
                     setChatMessage('');
                   }
                 }}
+                style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
               />
               <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
                 <Send className="w-4 h-4" />

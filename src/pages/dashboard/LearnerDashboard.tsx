@@ -38,10 +38,10 @@ import {
   Bell,
 } from 'lucide-react';
 import { ProfileManagement } from '@/components/dashboard/ProfileManagement';
-import { LearningPlayer } from '@/components/dashboard/LearningPlayer';
 import { ProgressTracking } from '@/components/dashboard/ProgressTracking';
 import { AssessmentsQuizzes } from '@/components/dashboard/AssessmentsQuizzes';
 import { AssignmentsCredentials } from '@/components/dashboard/AssignmentsCredentials';
+import { CertificatesBadges } from '@/components/dashboard/CertificatesBadges';
 import { CollaborationTools } from '@/components/dashboard/CollaborationTools';
 import { LiveClassesNotifications } from '@/components/dashboard/LiveClassesNotifications';
 import { GamificationFeatures } from '@/components/dashboard/GamificationFeatures';
@@ -298,17 +298,6 @@ const LearnerDashboard = () => {
                 <span className="text-[16px] leading-[24px] font-normal">Progress & Notes</span>
               </button>
               <button
-                onClick={() => setActiveTab('learning')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                  activeTab === 'learning' 
-                    ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                    : 'text-white/70 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                <PlayCircle className="w-5 h-5" />
-                <span className="text-[16px] leading-[24px] font-normal">Learning Player</span>
-              </button>
-              <button
                 onClick={() => setActiveTab('profile')}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                   activeTab === 'profile' 
@@ -373,7 +362,6 @@ const LearnerDashboard = () => {
               {activeTab === 'courses' && 'My Courses'}
               {activeTab === 'certificates' && 'Certificates & Badges'}
               {activeTab === 'profile' && 'Profile Settings'}
-              {activeTab === 'learning' && 'Learning Player'}
               {activeTab === 'progress' && 'Progress & Notes'}
               {activeTab === 'assessments' && 'Assessments'}
               {activeTab === 'assignments' && 'Assignments & Capstones'}
@@ -849,23 +837,6 @@ const LearnerDashboard = () => {
             <ProfileManagement />
           )}
 
-          {/* Learning Player Tab */}
-          {activeTab === 'learning' && (
-            <LearningPlayer
-              courseTitle="Introduction to Digital Economy & Economy 4.0"
-              lessons={[
-                { id: '1', title: 'Understanding the Digital Economy', duration: '10:30', type: 'video', completed: true, locked: false },
-                { id: '2', title: 'Economy 4.0 Fundamentals', duration: '12:45', type: 'video', completed: true, locked: false },
-                { id: '3', title: 'Platform Business Models', duration: '8:20', type: 'audio', completed: false, locked: false },
-                { id: '4', title: 'Reading: Digital Transformation Case Studies', duration: '15:00', type: 'reading', completed: false, locked: false },
-                { id: '5', title: 'Quiz: Digital Economy Basics', duration: '10:00', type: 'quiz', completed: false, locked: false },
-                { id: '6', title: 'Network Effects & Data Strategy', duration: '14:30', type: 'video', completed: false, locked: true },
-              ]}
-              currentLessonIndex={2}
-              onLessonChange={(index) => console.log('Lesson changed to:', index)}
-            />
-          )}
-
           {/* Progress & Notes Tab */}
           {activeTab === 'progress' && (
             <ProgressTracking />
@@ -879,6 +850,11 @@ const LearnerDashboard = () => {
           {/* Assignments & Credentials Tab */}
           {activeTab === 'assignments' && (
             <AssignmentsCredentials />
+          )}
+
+          {/* Certificates & Badges Tab */}
+          {activeTab === 'certificates' && (
+            <CertificatesBadges />
           )}
 
           {/* Collaboration Tools Tab */}

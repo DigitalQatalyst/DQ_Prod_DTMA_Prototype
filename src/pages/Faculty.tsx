@@ -29,13 +29,13 @@ const Faculty = () => {
         <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
             <div className="max-w-2xl">
-              <p className="text-sm font-semibold uppercase tracking-wide text-[#ff6b4d] mb-4">
+              <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-4">
                 Meet Your Trainers
               </p>
-              <h1 className="text-4xl md:text-5xl font-semibold text-white mb-4">
+              <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-4">
                 Learn from Hybrid HI + AI Faculty
               </h1>
-              <p className="text-base text-white/80 leading-relaxed">
+              <p className="text-[16px] leading-[24px] font-normal text-white/80">
                 DTMA's faculty combines three expert human instructors with AI-powered specialists — one for each digital dimension. Together, they deliver a learning experience that blends real-world insight with deep, always-available expertise.
               </p>
             </div>
@@ -56,7 +56,7 @@ const Faculty = () => {
                     placeholder="Search faculty..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 border-[#E5E7EB]"
+                    className="pl-10 border-[#E5E7EB] text-[14px] leading-[20px] font-normal"
                   />
                 </div>
               </div>
@@ -67,7 +67,7 @@ const Faculty = () => {
                   variant={selectedType === "all" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setSelectedType("all")}
-                  className={selectedType === "all" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}
+                  className={`text-[16px] leading-[24px] font-normal ${selectedType === "all" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}`}
                 >
                   All Faculty
                 </Button>
@@ -75,7 +75,7 @@ const Faculty = () => {
                   variant={selectedType === "human" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setSelectedType("human")}
-                  className={selectedType === "human" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}
+                  className={`text-[16px] leading-[24px] font-normal ${selectedType === "human" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}`}
                 >
                   <UserIcon className="w-4 h-4 mr-1" />
                   Human
@@ -84,7 +84,7 @@ const Faculty = () => {
                   variant={selectedType === "ai" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setSelectedType("ai")}
-                  className={selectedType === "ai" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}
+                  className={`text-[16px] leading-[24px] font-normal ${selectedType === "ai" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}`}
                 >
                   <Sparkles className="w-4 h-4 mr-1" />
                   AI
@@ -98,8 +98,8 @@ const Faculty = () => {
         <section className="py-12 bg-[#F5F6FA]">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
             <div className="mb-8">
-              <p className="text-[#4B5563]">
-                Showing <span className="font-semibold text-[#0B0C19]">{filteredFaculty.length}</span> faculty members
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                Showing <span className="font-medium text-[#0B0C19]">{filteredFaculty.length}</span> faculty members
               </p>
             </div>
 
@@ -128,28 +128,28 @@ const Faculty = () => {
 
                   {/* Content */}
                   <div className="p-5">
-                    <h3 className="text-lg font-semibold text-[#0B0C19] mb-1 group-hover:text-[#ff6b4d] transition-colors">
+                    <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-1 group-hover:text-[#ff6b4d] transition-colors">
                       {faculty.name}
                     </h3>
-                    <p className="text-sm text-[#ff6b4d] mb-2">{faculty.title}</p>
-                    <p className="text-sm text-[#4B5563] mb-4 line-clamp-2">{faculty.specialization}</p>
+                    <p className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] mb-2">{faculty.title}</p>
+                    <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4 line-clamp-2">{faculty.specialization}</p>
 
                     {/* Expertise Tags */}
                     <div className="flex flex-wrap gap-2 mb-4">
                       {faculty.expertise.slice(0, 2).map((skill, index) => (
-                        <Badge key={index} variant="outline" className="text-xs border-[#E5E7EB]">
+                        <Badge key={index} variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
                           {skill}
                         </Badge>
                       ))}
                       {faculty.expertise.length > 2 && (
-                        <Badge variant="outline" className="text-xs border-[#E5E7EB]">
+                        <Badge variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
                           +{faculty.expertise.length - 2}
                         </Badge>
                       )}
                     </div>
 
                     {/* Stats */}
-                    <div className="flex items-center justify-between text-sm text-[#4B5563] pt-4 border-t border-[#E5E7EB]">
+                    <div className="flex items-center justify-between text-[14px] leading-[20px] font-normal text-[#4B5563] pt-4 border-t border-[#E5E7EB]">
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
                         <span className="font-medium">{faculty.rating}</span>
@@ -173,14 +173,15 @@ const Faculty = () => {
                 <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
                   <Search className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-2">No faculty found</h3>
-                <p className="text-muted-foreground mb-6">Try adjusting your search criteria</p>
+                <h3 className="text-[20px] leading-[28px] font-medium text-foreground mb-2">No faculty found</h3>
+                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-6">Try adjusting your search criteria</p>
                 <Button
                   variant="outline"
                   onClick={() => {
                     setSearchQuery("");
                     setSelectedType("all");
                   }}
+                  className="text-[16px] leading-[24px] font-normal"
                 >
                   Clear Filters
                 </Button>

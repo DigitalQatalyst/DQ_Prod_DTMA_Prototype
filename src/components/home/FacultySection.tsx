@@ -131,11 +131,15 @@ const FacultySection = () => {
                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group"
               >
                 {/* Photo */}
-                <div className="h-64 overflow-hidden bg-gray-50">
+                <div className="h-64 overflow-hidden bg-gray-50 flex items-center justify-center">
                   <img
                     src={faculty.image}
                     alt={faculty.name}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    className={`${
+                      faculty.name === "Stephane" 
+                        ? "w-full h-full object-contain" 
+                        : "w-full h-full object-cover scale-110"
+                    } group-hover:scale-[1.15] transition-transform duration-500`}
                   />
                 </div>
                 {/* Info */}

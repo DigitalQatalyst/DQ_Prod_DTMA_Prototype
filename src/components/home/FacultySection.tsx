@@ -79,11 +79,11 @@ const aiExperts = [
 ];
 
 const FacultySection = () => {
-  const [activeTab, setActiveTab] = useState<"human" | "ai">("human");
+  const [activeTab, setActiveTab] = useState<"human" | "ai">("ai");
 
   const tabs = [
-    { id: "human" as const, label: "Human Intelligence" },
     { id: "ai" as const, label: "Artificial Intelligence" },
+    { id: "human" as const, label: "Human Intelligence" },
   ];
 
   return (

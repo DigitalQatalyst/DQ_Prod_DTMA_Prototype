@@ -29,45 +29,51 @@ const humanFaculty = [
 
 const aiExperts = [
   {
+    name: "Eco",
     dimension: "Digital Economy (DE)",
     avatar: "/ai-leadership.png",
     color: "#ff6b4d",
-    specialization: "Deep expertise in Economy 4.0 dynamics, industry shifts, and competitive positioning.",
+    specialization: "Economy 4.0 dynamics, industry disruption analysis, competitive positioning strategies, and digital business model innovation.",
     questions: "Why should organizations change? How is the digital economy reshaping industries?",
   },
   {
+    name: "Cognito",
     dimension: "Digital Cognitive Organisation (DCO)",
     avatar: "/ai-operations.png",
     color: "#4f46e5",
-    specialization: "Specialized knowledge in intelligent, adaptive, and data-driven organizational design.",
+    specialization: "Intelligent organization design, data-driven decision systems, cognitive maturity assessment, and AI-powered operational agility.",
     questions: "Where are organizations headed? How do we build cognitive maturity?",
   },
   {
+    name: "Nexus",
     dimension: "Digital Business Platform (DBP)",
     avatar: "/ai-technology.png",
     color: "#181C3A",
-    specialization: "Expert guidance on platform architecture, integration, and orchestration strategies.",
+    specialization: "Platform architecture design, enterprise integration patterns, API orchestration, and digital ecosystem strategy.",
     questions: "What unifies value creation? How do we design and deploy digital platforms?",
   },
   {
+    name: "Transform",
     dimension: "Digital Transformation 2.0 (DT2.0)",
     avatar: "/ai-culture.png",
     color: "#16a34a",
-    specialization: "Advanced methodologies for architecting target states and deploying transformation at scale.",
+    specialization: "Target state architecture, transformation roadmapping, change execution methodologies, and scaled delivery frameworks.",
     questions: "How do we design the target? What approaches work for modern transformation?",
   },
   {
+    name: "Catalyst",
     dimension: "Digital Worker & Workspace (DW/WS)",
     avatar: "/ai-innovation.png",
     color: "#dc2626",
-    specialization: "Insights on workforce models, digital skills, and transformation-ready environments.",
+    specialization: "Workforce transformation, digital skills development, hybrid work models, and transformation-ready culture building.",
     questions: "Who are the orchestrators? How do we redesign workforce and workspace?",
   },
   {
+    name: "Velocity",
     dimension: "Digital Accelerators (DA)",
     avatar: "/ai-trust.png",
     color: "#9333ea",
-    specialization: "Tools and methodologies that compress timescales and accelerate transformation delivery.",
+    specialization: "Rapid delivery methodologies, transformation acceleration tools, agile execution frameworks, and time-compression strategies.",
     questions: "When will we get there? How do we speed up transformation execution?",
   },
 ];
@@ -189,15 +195,18 @@ const FacultySection = () => {
                 </div>
                 {/* Info */}
                 <div className="p-6">
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className="flex items-center gap-2 mb-2">
                     <span
                       className="w-2 h-2 rounded-full"
                       style={{ backgroundColor: expert.color }}
                     />
-                    <h4 className="text-lg font-semibold text-[#0B0C19]">
+                    <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide">
                       {expert.dimension}
-                    </h4>
+                    </p>
                   </div>
+                  <h4 className="text-lg font-semibold text-[#0B0C19] mb-3">
+                    {expert.name}
+                  </h4>
                   <p className="text-sm text-[#4B5563] leading-relaxed mb-3">
                     {expert.specialization}
                   </p>

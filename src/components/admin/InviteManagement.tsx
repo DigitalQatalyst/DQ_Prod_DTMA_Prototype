@@ -84,7 +84,7 @@ export function InviteManagement() {
     if (isPast(new Date(invite.expires_at))) {
       return <Badge variant="outline" className="text-muted-foreground">Expired</Badge>;
     }
-    return <Badge className="bg-blue-100 text-blue-800">Active</Badge>;
+    return <Badge className="bg-[#ff6b4d]/10 text-[#ff6b4d] border-[#ff6b4d]/20">Active</Badge>;
   };
 
   const activeInvites = invites?.filter(i => !i.used_at && !i.revoked_at && !isPast(new Date(i.expires_at))) || [];
@@ -95,30 +95,30 @@ export function InviteManagement() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Invite Management</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-[20px] leading-[28px] font-medium">Invite Management</h2>
+          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
             Generate invite links for new admins and instructors
           </p>
         </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
               <Plus className="w-4 h-4 mr-2" />
               Create Invite
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create New Invite</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-[20px] leading-[28px] font-medium">Create New Invite</DialogTitle>
+              <DialogDescription className="text-[14px] leading-[20px] font-normal">
                 Generate an invite link for a new admin or instructor.
               </DialogDescription>
             </DialogHeader>
             
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label>Role</Label>
+                <Label className="text-[14px] leading-[20px] font-normal">Role</Label>
                 <Select value={newInviteRole} onValueChange={(v) => setNewInviteRole(v as 'admin' | 'instructor')}>
                   <SelectTrigger>
                     <SelectValue />
@@ -141,20 +141,21 @@ export function InviteManagement() {
               </div>
               
               <div className="space-y-2">
-                <Label>Email (optional)</Label>
+                <Label className="text-[14px] leading-[20px] font-normal">Email (optional)</Label>
                 <Input
                   type="email"
                   placeholder="Restrict to specific email"
                   value={newInviteEmail}
                   onChange={(e) => setNewInviteEmail(e.target.value)}
+                  className="text-[16px] leading-[24px] font-normal"
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[12px] leading-[16px] font-medium text-muted-foreground">
                   If set, only this email can use the invite
                 </p>
               </div>
               
               <div className="space-y-2">
-                <Label>Expires in</Label>
+                <Label className="text-[14px] leading-[20px] font-normal">Expires in</Label>
                 <Select value={newInviteExpiry} onValueChange={setNewInviteExpiry}>
                   <SelectTrigger>
                     <SelectValue />
@@ -174,7 +175,7 @@ export function InviteManagement() {
               <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleCreateInvite} disabled={createInvite.isPending}>
+              <Button onClick={handleCreateInvite} disabled={createInvite.isPending} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
                 {createInvite.isPending ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -195,16 +196,16 @@ export function InviteManagement() {
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-card rounded-xl p-4 border">
-          <div className="text-2xl font-semibold text-blue-600">{activeInvites.length}</div>
-          <div className="text-sm text-muted-foreground">Active Invites</div>
+          <div className="text-[24px] leading-[32px] font-medium text-[#ff6b4d]">{activeInvites.length}</div>
+          <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Active Invites</div>
         </div>
         <div className="bg-card rounded-xl p-4 border">
-          <div className="text-2xl font-semibold text-green-600">{usedInvites.length}</div>
-          <div className="text-sm text-muted-foreground">Redeemed</div>
+          <div className="text-[24px] leading-[32px] font-medium text-green-600">{usedInvites.length}</div>
+          <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Redeemed</div>
         </div>
         <div className="bg-card rounded-xl p-4 border">
-          <div className="text-2xl font-semibold text-muted-foreground">{expiredOrRevokedInvites.length}</div>
-          <div className="text-sm text-muted-foreground">Expired/Revoked</div>
+          <div className="text-[24px] leading-[32px] font-medium text-muted-foreground">{expiredOrRevokedInvites.length}</div>
+          <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Expired/Revoked</div>
         </div>
       </div>
 
@@ -302,11 +303,11 @@ export function InviteManagement() {
       ) : (
         <div className="text-center py-12 border rounded-xl">
           <UserPlus className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="font-semibold mb-2">No invites yet</h3>
-          <p className="text-muted-foreground mb-4">
+          <h3 className="text-[20px] leading-[28px] font-medium mb-2">No invites yet</h3>
+          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
             Create your first invite to add admins or instructors
           </p>
-          <Button onClick={() => setIsDialogOpen(true)}>
+          <Button onClick={() => setIsDialogOpen(true)} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
             <Plus className="w-4 h-4 mr-2" />
             Create Invite
           </Button>

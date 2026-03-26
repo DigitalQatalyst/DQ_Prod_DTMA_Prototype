@@ -241,8 +241,8 @@ const AdminDashboard = () => {
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     <div className="bg-card rounded-2xl p-6 shadow-sm">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                          <Users className="w-5 h-5 text-primary" />
+                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+                          <Users className="w-5 h-5 text-[#ff6b4d]" />
                         </div>
                       </div>
                       <div className="text-[24px] leading-[32px] font-medium">{analytics?.totalUsers || 0}</div>
@@ -250,8 +250,8 @@ const AdminDashboard = () => {
                     </div>
                     <div className="bg-card rounded-2xl p-6 shadow-sm">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                          <BookOpen className="w-5 h-5 text-primary" />
+                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+                          <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
                         </div>
                       </div>
                       <div className="text-[24px] leading-[32px] font-medium">{analytics?.publishedCourses || 0}</div>
@@ -259,8 +259,8 @@ const AdminDashboard = () => {
                     </div>
                     <div className="bg-card rounded-2xl p-6 shadow-sm">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                          <TrendingUp className="w-5 h-5 text-primary" />
+                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+                          <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
                         </div>
                       </div>
                       <div className="text-[24px] leading-[32px] font-medium">{analytics?.totalEnrollments || 0}</div>
@@ -268,8 +268,8 @@ const AdminDashboard = () => {
                     </div>
                     <div className="bg-card rounded-2xl p-6 shadow-sm">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                          <Award className="w-5 h-5 text-primary" />
+                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+                          <Award className="w-5 h-5 text-[#ff6b4d]" />
                         </div>
                       </div>
                       <div className="text-[24px] leading-[32px] font-medium">{analytics?.certificatesIssued || 0}</div>
@@ -331,13 +331,13 @@ const AdminDashboard = () => {
                 <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full" role="table" aria-label="User management table">
-                      <thead className="bg-secondary">
+                      <thead className="bg-[#1e2348]">
                         <tr>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">User</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Email</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Role</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Joined</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Actions</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">User</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Email</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Role</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Joined</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -345,7 +345,7 @@ const AdminDashboard = () => {
                           <tr key={user.id} className="border-t border-border">
                             <td className="p-4">
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-[14px] leading-[20px] font-medium text-primary" aria-hidden="true">
+                                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center text-[14px] leading-[20px] font-medium text-[#ff6b4d]" aria-hidden="true">
                                   {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
                                 </div>
                                 <span className="text-[16px] leading-[24px] font-normal">{user.full_name || 'No name'}</span>
@@ -452,7 +452,7 @@ const AdminDashboard = () => {
                 </div>
               ) : (
                 <div className="bg-card rounded-2xl p-12 text-center">
-                  <CheckCircle className="w-12 h-12 text-primary mx-auto mb-4" />
+                  <CheckCircle className="w-12 h-12 text-[#ff6b4d] mx-auto mb-4" />
                   <h3 className="text-[20px] leading-[28px] font-medium mb-2">All caught up!</h3>
                   <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">There are no courses pending approval.</p>
                 </div>
@@ -727,28 +727,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Get AI-generated summaries of platform activity and key metrics.
                     </p>
-                    <Button>Generate Summary</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Generate Summary</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Operational Reports</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Create comprehensive reports with AI assistance.
                     </p>
-                    <Button>Create Report</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Create Report</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Next-Best Actions</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI suggests priority actions for admins and faculty.
                     </p>
-                    <Button variant="outline">View Suggestions</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Suggestions</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Draft Responses</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Generate draft responses to learner queries.
                     </p>
-                    <Button variant="outline">Draft Response</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Draft Response</Button>
                   </div>
                 </div>
               </div>
@@ -775,28 +775,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       View AI-generated summaries of individual learner progress.
                     </p>
-                    <Button>View Summaries</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Summaries</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Mentoring Suggestions</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Get AI-powered mentoring strategies for each learner.
                     </p>
-                    <Button>Get Suggestions</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Get Suggestions</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Struggling Learner Guidance</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Receive guidance on how to support struggling learners.
                     </p>
-                    <Button variant="outline">View Guidance</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Guidance</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Intervention Recommendations</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI recommends timely interventions and outreach actions.
                     </p>
-                    <Button variant="outline">View Recommendations</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Recommendations</Button>
                   </div>
                 </div>
               </div>
@@ -823,28 +823,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Generate structured lesson outlines based on learning objectives.
                     </p>
-                    <Button>Create Outline</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Create Outline</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Generate Examples & Exercises</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Create relevant examples and practice exercises automatically.
                     </p>
-                    <Button>Generate Content</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Generate Content</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Propose Learning Objectives</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI suggests clear, measurable learning objectives.
                     </p>
-                    <Button variant="outline">Get Objectives</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Get Objectives</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Content Improvement Suggestions</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Get AI recommendations to enhance existing content.
                     </p>
-                    <Button variant="outline">Analyze Content</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Analyze Content</Button>
                   </div>
                 </div>
               </div>
@@ -871,28 +871,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Create quizzes from lesson content with varied difficulty levels.
                     </p>
-                    <Button>Generate Quiz</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Generate Quiz</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Question Variations</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI suggests question variations and difficulty adjustments.
                     </p>
-                    <Button>Create Variations</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Create Variations</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">AI Grading Helper</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Assist in grading open-ended responses with AI analysis.
                     </p>
-                    <Button variant="outline">Start Grading</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Start Grading</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Rubric Matching</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI highlights key points and suggests provisional scores.
                     </p>
-                    <Button variant="outline">Analyze Responses</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Analyze Responses</Button>
                   </div>
                 </div>
               </div>
@@ -919,28 +919,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Detect learners falling behind and disengagement patterns.
                     </p>
-                    <Button>View Alerts</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Alerts</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Early Intervention</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI recommends timely interventions for struggling learners.
                     </p>
-                    <Button>Get Recommendations</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Get Recommendations</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Training Needs Analysis</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Analyze performance data to identify common skill gaps.
                     </p>
-                    <Button variant="outline">Analyze Cohorts</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Analyze Cohorts</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Course Planning Insights</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Feed insights into future course planning and development.
                     </p>
-                    <Button variant="outline">View Insights</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Insights</Button>
                   </div>
                 </div>
               </div>
@@ -967,28 +967,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Track sentiment trends across courses and time periods.
                     </p>
-                    <Button>View Trends</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Trends</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Recurring Complaints</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Identify common issues and pain points from feedback.
                     </p>
-                    <Button>Analyze Feedback</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Analyze Feedback</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Improvement Opportunities</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI highlights areas for course and platform improvement.
                     </p>
-                    <Button variant="outline">Get Recommendations</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Get Recommendations</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Support Ticket Analysis</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Analyze support tickets for patterns and insights.
                     </p>
-                    <Button variant="outline">Analyze Tickets</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Analyze Tickets</Button>
                   </div>
                 </div>
               </div>
@@ -1015,28 +1015,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Detect inappropriate or off-topic content automatically.
                     </p>
-                    <Button>View Flagged Content</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Flagged Content</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Moderator Review Queue</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Flag posts for human moderator review and action.
                     </p>
-                    <Button>Review Queue</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Review Queue</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Suggested Responses</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI suggests automated or drafted moderator responses.
                     </p>
-                    <Button variant="outline">View Suggestions</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Suggestions</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Moderation Analytics</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Track moderation metrics and community health.
                     </p>
-                    <Button variant="outline">View Analytics</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Analytics</Button>
                   </div>
                 </div>
               </div>
@@ -1063,28 +1063,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Automatically classify incoming support requests by type.
                     </p>
-                    <Button>View Requests</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Requests</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Suggested Replies</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI generates draft responses for common support issues.
                     </p>
-                    <Button>Generate Replies</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Generate Replies</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Smart Routing</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Route issues to the correct team or faculty member.
                     </p>
-                    <Button variant="outline">Configure Routing</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Configure Routing</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Priority Detection</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Identify and prioritize urgent learner problems.
                     </p>
-                    <Button variant="outline">View Urgent Issues</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Urgent Issues</Button>
                   </div>
                 </div>
               </div>
@@ -1111,28 +1111,28 @@ const AdminDashboard = () => {
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Translate course content while maintaining accuracy.
                     </p>
-                    <Button>Translate Content</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Translate Content</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Cultural Adaptation</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Suggest culturally appropriate phrasing and examples.
                     </p>
-                    <Button>Get Suggestions</Button>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Get Suggestions</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Multilingual Support</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Assist with multilingual support responses.
                     </p>
-                    <Button variant="outline">Translate Response</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Translate Response</Button>
                   </div>
                   <div className="bg-card rounded-2xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Consistency Management</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Maintain consistency across localized versions.
                     </p>
-                    <Button variant="outline">Check Consistency</Button>
+                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Check Consistency</Button>
                   </div>
                 </div>
               </div>

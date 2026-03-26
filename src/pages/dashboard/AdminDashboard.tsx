@@ -330,14 +330,14 @@ const AdminDashboard = () => {
               ) : (
                 <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
-                    <table className="w-full">
+                    <table className="w-full" role="table" aria-label="User management table">
                       <thead className="bg-secondary">
                         <tr>
-                          <th className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">User</th>
-                          <th className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Email</th>
-                          <th className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Role</th>
-                          <th className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Joined</th>
-                          <th className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Actions</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">User</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Email</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Role</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Joined</th>
+                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-muted-foreground">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -345,7 +345,7 @@ const AdminDashboard = () => {
                           <tr key={user.id} className="border-t border-border">
                             <td className="p-4">
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-[14px] leading-[20px] font-medium text-primary">
+                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-[14px] leading-[20px] font-medium text-primary" aria-hidden="true">
                                   {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
                                 </div>
                                 <span className="text-[16px] leading-[24px] font-normal">{user.full_name || 'No name'}</span>
@@ -357,7 +357,7 @@ const AdminDashboard = () => {
                                 value={user.role}
                                 onValueChange={(value) => handleUpdateRole(user.id, value as 'learner' | 'instructor' | 'admin')}
                               >
-                                <SelectTrigger className="w-32">
+                                <SelectTrigger className="w-32" aria-label={`Change role for ${user.full_name || user.email}`}>
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -371,8 +371,9 @@ const AdminDashboard = () => {
                               {new Date(user.created_at).toLocaleDateString()}
                             </td>
                             <td className="p-4">
-                              <Button variant="ghost" size="sm">
-                                <Eye className="w-4 h-4" />
+                              <Button variant="ghost" size="sm" aria-label={`View details for ${user.full_name || user.email}`}>
+                                <Eye className="w-4 h-4" aria-hidden="true" />
+                                <span className="sr-only">View user details</span>
                               </Button>
                             </td>
                           </tr>

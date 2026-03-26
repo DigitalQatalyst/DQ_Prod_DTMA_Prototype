@@ -9,7 +9,7 @@ const HowItWorksSection = () => {
       heading: "Understand How a DCO Works",
       description: "Learn how a Digital Cognitive Organization operates and what your role within it demands. Build the competencies to collaborate, adapt, and deliver in a digital-first environment.",
       link: "/personas/digital-workers",
-      color: "#ff6b4d",
+      color: "#ff6b4d", // DTMA Orange
     },
     {
       icon: Zap,
@@ -17,7 +17,7 @@ const HowItWorksSection = () => {
       heading: "Deliver Successful Digital Initiatives",
       description: "Master the frameworks and methodologies that separate successful digital transformations from failed ones. Gain the execution skills to drive initiatives from strategy through to measurable outcomes.",
       link: "/personas/transformation-specialists",
-      color: "#16a34a",
+      color: "#ff6b4d", // DTMA Orange
     },
     {
       icon: TrendingUp,
@@ -25,7 +25,7 @@ const HowItWorksSection = () => {
       heading: "Lead in the New Economy",
       description: "Understand what it takes to transition your organization into a Digital Cognitive Organization. Develop the strategic vision to lead confidently through Economy 4.0 and beyond.",
       link: "/personas/organizational-leaders",
-      color: "#9333ea",
+      color: "#ff6b4d", // DTMA Orange
     },
   ];
 

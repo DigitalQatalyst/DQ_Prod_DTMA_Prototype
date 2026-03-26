@@ -8,42 +8,42 @@ const SixXDSection = () => {
       title: "Digital Economy (DE)",
       subtitle: "Why should organisations change?",
       description: "The digital economy is redrawing industries, value chains, and competitive dynamics. Gain clarity to read these shifts and position your organisation for Economy 4.0.",
-      color: "#ff6b4d",
+      color: "#1e2348", // DTMA Navy Blue
       link: "/dimensions/digital-economy",
     },
     {
       title: "Digital Cognitive Organisation (DCO)",
       subtitle: "Where are organisations headed?",
       description: "The future organisation is intelligent, adaptive, and data-driven. Assess your organisation's cognitive maturity and chart a path toward AI-powered agility.",
-      color: "#4f46e5",
+      color: "#1e2348", // DTMA Navy Blue
       link: "/dimensions/digital-cognitive-organisation",
     },
     {
       title: "Digital Business Platform (DBP)",
       subtitle: "What unifies and orchestrates value?",
       description: "Every transformation needs an engine for business functions and enterprise integration. Build the expertise to evaluate, design, and orchestrate digital platforms.",
-      color: "#181C3A",
+      color: "#1e2348", // DTMA Navy Blue
       link: "/dimensions/digital-business-platform",
     },
     {
       title: "Digital Transformation 2.0 (DT2.0)",
       subtitle: "How to design and deploy the target?",
       description: "Traditional transformation approaches are no longer enough for today's demands. Acquire methodologies to architect target states and deploy transformation at scale.",
-      color: "#16a34a",
+      color: "#1e2348", // DTMA Navy Blue
       link: "/dimensions/digital-transformation",
     },
     {
       title: "Digital Worker & Workspace (DW/WS)",
       subtitle: "Who are the orchestrators?",
       description: "Technology alone doesn't transform organisations — people do. Redesign workforce models and cultivate the environments where transformation happens.",
-      color: "#dc2626",
+      color: "#1e2348", // DTMA Navy Blue
       link: "/dimensions/digital-worker-workspace",
     },
     {
       title: "Digital Accelerators (DA)",
       subtitle: "When will you get there?",
       description: "Speed and precision separate successful transformations from stalled ones. Master the tools and methodologies that compress timescales and turn strategy into reality.",
-      color: "#9333ea",
+      color: "#1e2348", // DTMA Navy Blue
       link: "/dimensions/digital-accelerators",
     },
   ];

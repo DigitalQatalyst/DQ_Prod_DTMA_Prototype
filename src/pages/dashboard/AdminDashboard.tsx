@@ -52,6 +52,27 @@ import {
   PlusCircle,
   ArrowUpRight,
   Filter,
+  Video,
+  MapPin,
+  Link as LinkIcon,
+  Users2,
+  FileText as FileTextIcon,
+  Upload,
+  Mail,
+  UserPlus as UserPlusIcon,
+  Download,
+  Phone,
+  Briefcase,
+  Award as AwardIcon,
+  Image,
+  Lock,
+  Building,
+  Shield as ShieldIcon,
+  CheckCircle2,
+  XCircle as XCircleIcon,
+  AlertCircle,
+  ThumbsUp,
+  ThumbsDown,
 } from 'lucide-react';
 
 type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
@@ -891,6 +912,11 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [showBulkEnrollModal, setShowBulkEnrollModal] = useState(false);
+  const [showAddFacultyModal, setShowAddFacultyModal] = useState(false);
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+  const [showReviewContentModal, setShowReviewContentModal] = useState(false);
   const [announcementForm, setAnnouncementForm] = useState({
     title: '',
     message: '',
@@ -899,6 +925,76 @@ const AdminDashboard = () => {
     scheduledDate: '',
     expiryDate: '',
     channels: [] as string[],
+  });
+  const [scheduleForm, setScheduleForm] = useState({
+    course: '',
+    sessionType: 'live' as 'live' | 'hybrid' | 'recorded',
+    title: '',
+    instructor: '',
+    date: '',
+    startTime: '',
+    endTime: '',
+    timezone: 'UTC',
+    location: '',
+    meetingLink: '',
+    capacity: '',
+    cohortName: '',
+    description: '',
+    materials: [] as string[],
+  });
+  const [bulkEnrollForm, setBulkEnrollForm] = useState({
+    course: '',
+    enrollmentMethod: 'manual' as 'manual' | 'csv' | 'email',
+    emails: '',
+    csvFile: null as File | null,
+    emailDomains: '',
+    sendWelcomeEmail: true,
+    enrollmentType: 'standard' as 'standard' | 'trial' | 'sponsored',
+    accessDuration: '90',
+    notifyInstructors: true,
+  });
+  const [facultyForm, setFacultyForm] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    title: '',
+    department: '',
+    specialization: [] as string[],
+    bio: '',
+    qualifications: '',
+    experience: '',
+    linkedIn: '',
+    website: '',
+    profilePhoto: null as File | null,
+    courses: [] as string[],
+    availability: 'full-time' as 'full-time' | 'part-time' | 'contract',
+    startDate: '',
+  });
+  const [createUserForm, setCreateUserForm] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: 'learner' as 'learner' | 'instructor' | 'admin',
+    organization: '',
+    department: '',
+    phone: '',
+    sendWelcomeEmail: true,
+    requirePasswordChange: true,
+    status: 'active' as 'active' | 'pending' | 'suspended',
+  });
+  const [reviewContentForm, setReviewContentForm] = useState({
+    contentType: 'course' as 'course' | 'lesson' | 'assessment' | 'resource',
+    contentId: '',
+    reviewType: 'quality' as 'quality' | 'compliance' | 'accessibility' | 'plagiarism',
+    reviewStatus: 'pending' as 'pending' | 'approved' | 'rejected' | 'needs-revision',
+    reviewNotes: '',
+    qualityScore: 0,
+    complianceChecks: [] as string[],
+    accessibilityIssues: [] as string[],
+    recommendations: '',
+    reviewerComments: '',
+    priority: 'normal' as 'low' | 'normal' | 'high' | 'urgent',
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -1175,7 +1271,16 @@ const AdminDashboard = () => {
           {/* Users Tab */}
           {activeTab === 'users' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">User Management</h1>
+              <div className="flex items-center justify-between mb-6">
+                <h1 className="text-[28px] leading-[36px] font-semibold">User Management</h1>
+                <Button 
+                  onClick={() => setShowCreateUserModal(true)}
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                >
+                  <UserPlusIcon className="w-4 h-4 mr-2" />
+                  Create User
+                </Button>
+              </div>
               
               {usersLoading ? (
                 <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Loading users...</p>
@@ -1273,7 +1378,12 @@ const AdminDashboard = () => {
                   <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                     Schedule live classes, manage cohorts, and track attendance.
                   </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Schedule Class</Button>
+                  <Button 
+                    onClick={() => setShowScheduleModal(true)}
+                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  >
+                    Schedule Class
+                  </Button>
                 </div>
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Training Calendar</h3>
@@ -1295,7 +1405,12 @@ const AdminDashboard = () => {
                   <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                     Manage student enrollments, approvals, and bulk operations.
                   </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Bulk Enroll</Button>
+                  <Button 
+                    onClick={() => setShowBulkEnrollModal(true)}
+                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  >
+                    Bulk Enroll
+                  </Button>
                 </div>
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Seat Management</h3>
@@ -1317,7 +1432,12 @@ const AdminDashboard = () => {
                   <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                     Manage faculty members, assignments, and performance.
                   </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Add Faculty</Button>
+                  <Button 
+                    onClick={() => setShowAddFacultyModal(true)}
+                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  >
+                    Add Faculty
+                  </Button>
                 </div>
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Program Builder</h3>
@@ -1366,7 +1486,12 @@ const AdminDashboard = () => {
                   <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                     Review and moderate course content for quality and compliance.
                   </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Review Content</Button>
+                  <Button 
+                    onClick={() => setShowReviewContentModal(true)}
+                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  >
+                    Review Content
+                  </Button>
                 </div>
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Accessibility Standards</h3>
@@ -2142,6 +2267,1664 @@ const AdminDashboard = () => {
                 >
                   <Send className="w-4 h-4 mr-2" />
                   Send Announcement
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Schedule Class Modal */}
+      {showScheduleModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <GraduationCap className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Schedule Class</h2>
+              </div>
+              <button
+                onClick={() => setShowScheduleModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Course Selection */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Select Course *
+                </label>
+                <select
+                  value={scheduleForm.course}
+                  onChange={(e) => setScheduleForm({ ...scheduleForm, course: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                >
+                  <option value="">Choose a course...</option>
+                  <option value="digital-transformation">Digital Transformation Fundamentals</option>
+                  <option value="ai-automation">AI & Automation in the Workplace</option>
+                  <option value="data-driven">Data-Driven Decision Making</option>
+                  <option value="leadership">Leadership in the Digital Age</option>
+                  <option value="agile">Agile Project Management</option>
+                </select>
+              </div>
+
+              {/* Session Type */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Session Type *
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {(['live', 'hybrid', 'recorded'] as const).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setScheduleForm({ ...scheduleForm, sessionType: type })}
+                      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                        scheduleForm.sessionType === type
+                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      }`}
+                    >
+                      {type === 'live' && <Video className="w-4 h-4" />}
+                      {type === 'hybrid' && <Users2 className="w-4 h-4" />}
+                      {type === 'recorded' && <FileTextIcon className="w-4 h-4" />}
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Session Title */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Session Title *
+                </label>
+                <input
+                  type="text"
+                  value={scheduleForm.title}
+                  onChange={(e) => setScheduleForm({ ...scheduleForm, title: e.target.value })}
+                  placeholder="e.g., Week 1: Introduction to Digital Transformation"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                />
+              </div>
+
+              {/* Instructor */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Instructor *
+                </label>
+                <select
+                  value={scheduleForm.instructor}
+                  onChange={(e) => setScheduleForm({ ...scheduleForm, instructor: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                >
+                  <option value="">Select instructor...</option>
+                  <option value="dr-aisha">Dr. Aisha Mensah</option>
+                  <option value="james">James Okafor</option>
+                  <option value="priya">Priya Nair</option>
+                  <option value="marcus">Marcus Webb</option>
+                  <option value="sofia">Sofia Reyes</option>
+                </select>
+              </div>
+
+              {/* Date and Time */}
+              <div className="grid md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Date *
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="date"
+                      value={scheduleForm.date}
+                      onChange={(e) => setScheduleForm({ ...scheduleForm, date: e.target.value })}
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Start Time *
+                  </label>
+                  <div className="relative">
+                    <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="time"
+                      value={scheduleForm.startTime}
+                      onChange={(e) => setScheduleForm({ ...scheduleForm, startTime: e.target.value })}
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    End Time *
+                  </label>
+                  <div className="relative">
+                    <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="time"
+                      value={scheduleForm.endTime}
+                      onChange={(e) => setScheduleForm({ ...scheduleForm, endTime: e.target.value })}
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Timezone */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Timezone *
+                </label>
+                <select
+                  value={scheduleForm.timezone}
+                  onChange={(e) => setScheduleForm({ ...scheduleForm, timezone: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                >
+                  <option value="UTC">UTC (Coordinated Universal Time)</option>
+                  <option value="EST">EST (Eastern Standard Time)</option>
+                  <option value="PST">PST (Pacific Standard Time)</option>
+                  <option value="GMT">GMT (Greenwich Mean Time)</option>
+                  <option value="CET">CET (Central European Time)</option>
+                  <option value="IST">IST (Indian Standard Time)</option>
+                  <option value="JST">JST (Japan Standard Time)</option>
+                </select>
+              </div>
+
+              {/* Location & Meeting Link */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Location {scheduleForm.sessionType !== 'live' && '(Optional)'}
+                  </label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      value={scheduleForm.location}
+                      onChange={(e) => setScheduleForm({ ...scheduleForm, location: e.target.value })}
+                      placeholder="e.g., Room 301, Building A"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Meeting Link {scheduleForm.sessionType === 'recorded' && '(Optional)'}
+                  </label>
+                  <div className="relative">
+                    <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="url"
+                      value={scheduleForm.meetingLink}
+                      onChange={(e) => setScheduleForm({ ...scheduleForm, meetingLink: e.target.value })}
+                      placeholder="https://zoom.us/j/..."
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Capacity & Cohort */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Class Capacity *
+                  </label>
+                  <input
+                    type="number"
+                    value={scheduleForm.capacity}
+                    onChange={(e) => setScheduleForm({ ...scheduleForm, capacity: e.target.value })}
+                    placeholder="e.g., 30"
+                    min="1"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Cohort Name (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={scheduleForm.cohortName}
+                    onChange={(e) => setScheduleForm({ ...scheduleForm, cohortName: e.target.value })}
+                    placeholder="e.g., Spring 2026 Cohort"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  />
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Session Description (Optional)
+                </label>
+                <textarea
+                  value={scheduleForm.description}
+                  onChange={(e) => setScheduleForm({ ...scheduleForm, description: e.target.value })}
+                  placeholder="Provide additional details about this session..."
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                />
+              </div>
+
+              {/* Preview Section */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">Session Preview</h3>
+                <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4 text-[#ff6b4d]" />
+                    <span className="text-[16px] font-semibold text-gray-900">
+                      {scheduleForm.title || 'Session Title'}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 text-[14px] text-gray-600">
+                    <span className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      {scheduleForm.date || 'Date'}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      {scheduleForm.startTime || 'Start'} - {scheduleForm.endTime || 'End'}
+                    </span>
+                    <span className="capitalize px-2 py-1 rounded bg-[#ff6b4d]/10 text-[#ff6b4d] text-[12px] font-medium">
+                      {scheduleForm.sessionType}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-6 flex items-center justify-between">
+              <Button
+                variant="outline"
+                onClick={() => setShowScheduleModal(false)}
+                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  onClick={() => {
+                    toast({
+                      title: 'Draft Saved',
+                      description: 'Your class schedule has been saved as a draft.',
+                    });
+                  }}
+                >
+                  Save as Draft
+                </Button>
+                <Button
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  onClick={() => {
+                    toast({
+                      title: 'Class Scheduled',
+                      description: 'Your class has been scheduled successfully.',
+                    });
+                    setShowScheduleModal(false);
+                    setScheduleForm({
+                      course: '',
+                      sessionType: 'live',
+                      title: '',
+                      instructor: '',
+                      date: '',
+                      startTime: '',
+                      endTime: '',
+                      timezone: 'UTC',
+                      location: '',
+                      meetingLink: '',
+                      capacity: '',
+                      cohortName: '',
+                      description: '',
+                      materials: [],
+                    });
+                  }}
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Schedule Class
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Enrollment Modal */}
+      {showBulkEnrollModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <UserPlusIcon className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Bulk Enrollment</h2>
+              </div>
+              <button
+                onClick={() => setShowBulkEnrollModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Course Selection */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Select Course *
+                </label>
+                <select
+                  value={bulkEnrollForm.course}
+                  onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, course: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                >
+                  <option value="">Choose a course...</option>
+                  <option value="digital-transformation">Digital Transformation Fundamentals</option>
+                  <option value="ai-automation">AI & Automation in the Workplace</option>
+                  <option value="data-driven">Data-Driven Decision Making</option>
+                  <option value="leadership">Leadership in the Digital Age</option>
+                  <option value="agile">Agile Project Management</option>
+                  <option value="cybersecurity">Cybersecurity Essentials</option>
+                </select>
+              </div>
+
+              {/* Enrollment Method */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Enrollment Method *
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {(['manual', 'csv', 'email'] as const).map((method) => (
+                    <button
+                      key={method}
+                      onClick={() => setBulkEnrollForm({ ...bulkEnrollForm, enrollmentMethod: method })}
+                      className={`flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
+                        bulkEnrollForm.enrollmentMethod === method
+                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      }`}
+                    >
+                      {method === 'manual' && <UserPlusIcon className="w-5 h-5" />}
+                      {method === 'csv' && <Upload className="w-5 h-5" />}
+                      {method === 'email' && <Mail className="w-5 h-5" />}
+                      <span className="capitalize">{method === 'csv' ? 'CSV Upload' : method === 'email' ? 'Email Domain' : 'Manual Entry'}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Manual Entry */}
+              {bulkEnrollForm.enrollmentMethod === 'manual' && (
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Email Addresses *
+                  </label>
+                  <textarea
+                    value={bulkEnrollForm.emails}
+                    onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, emails: e.target.value })}
+                    placeholder="Enter email addresses (one per line)&#10;example1@company.com&#10;example2@company.com&#10;example3@company.com"
+                    rows={8}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none font-mono text-[14px]"
+                  />
+                  <p className="text-[12px] text-gray-500 mt-2">
+                    {bulkEnrollForm.emails.split('\n').filter(e => e.trim()).length} email(s) entered
+                  </p>
+                </div>
+              )}
+
+              {/* CSV Upload */}
+              {bulkEnrollForm.enrollmentMethod === 'csv' && (
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Upload CSV File *
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#ff6b4d] transition-colors">
+                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-[14px] text-gray-600 mb-2">
+                      Drag and drop your CSV file here, or click to browse
+                    </p>
+                    <input
+                      type="file"
+                      accept=".csv"
+                      onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, csvFile: e.target.files?.[0] || null })}
+                      className="hidden"
+                      id="csv-upload"
+                    />
+                    <label
+                      htmlFor="csv-upload"
+                      className="inline-block px-4 py-2 bg-white border border-gray-300 rounded-lg text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+                    >
+                      Choose File
+                    </label>
+                    {bulkEnrollForm.csvFile && (
+                      <p className="text-[14px] text-[#ff6b4d] mt-3 font-medium">
+                        Selected: {bulkEnrollForm.csvFile.name}
+                      </p>
+                    )}
+                  </div>
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <p className="text-[12px] text-blue-900 font-medium mb-2">CSV Format Requirements:</p>
+                    <ul className="text-[12px] text-blue-800 space-y-1 ml-4 list-disc">
+                      <li>First column: Email address (required)</li>
+                      <li>Second column: Full name (optional)</li>
+                      <li>Third column: Organization (optional)</li>
+                    </ul>
+                    <button className="mt-3 text-[12px] text-[#ff6b4d] font-medium hover:underline flex items-center gap-1">
+                      <Download className="w-3 h-3" />
+                      Download sample CSV template
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Email Domain */}
+              {bulkEnrollForm.enrollmentMethod === 'email' && (
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Email Domains *
+                  </label>
+                  <textarea
+                    value={bulkEnrollForm.emailDomains}
+                    onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, emailDomains: e.target.value })}
+                    placeholder="Enter email domains (one per line)&#10;@company.com&#10;@organization.org&#10;@university.edu"
+                    rows={6}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none font-mono text-[14px]"
+                  />
+                  <p className="text-[12px] text-gray-500 mt-2">
+                    Anyone with these email domains can self-enroll in the course
+                  </p>
+                </div>
+              )}
+
+              {/* Enrollment Type */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Enrollment Type *
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {(['standard', 'trial', 'sponsored'] as const).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setBulkEnrollForm({ ...bulkEnrollForm, enrollmentType: type })}
+                      className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                        bulkEnrollForm.enrollmentType === type
+                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Access Duration */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Access Duration (Days) *
+                </label>
+                <div className="grid grid-cols-4 gap-3">
+                  {['30', '60', '90', '365'].map((days) => (
+                    <button
+                      key={days}
+                      onClick={() => setBulkEnrollForm({ ...bulkEnrollForm, accessDuration: days })}
+                      className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium transition-all ${
+                        bulkEnrollForm.accessDuration === days
+                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      }`}
+                    >
+                      {days === '365' ? '1 Year' : `${days} Days`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Options */}
+              <div className="space-y-3">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={bulkEnrollForm.sendWelcomeEmail}
+                    onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, sendWelcomeEmail: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                  />
+                  <div>
+                    <span className="text-[14px] font-medium text-gray-700">Send welcome email to learners</span>
+                    <p className="text-[12px] text-gray-500">Learners will receive course access details via email</p>
+                  </div>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={bulkEnrollForm.notifyInstructors}
+                    onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, notifyInstructors: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                  />
+                  <div>
+                    <span className="text-[14px] font-medium text-gray-700">Notify course instructors</span>
+                    <p className="text-[12px] text-gray-500">Instructors will be notified of new enrollments</p>
+                  </div>
+                </label>
+              </div>
+
+              {/* Summary */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">Enrollment Summary</h3>
+                <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
+                  <div className="flex justify-between text-[14px]">
+                    <span className="text-gray-600">Course:</span>
+                    <span className="font-medium text-gray-900">
+                      {bulkEnrollForm.course ? bulkEnrollForm.course.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'Not selected'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[14px]">
+                    <span className="text-gray-600">Method:</span>
+                    <span className="font-medium text-gray-900 capitalize">
+                      {bulkEnrollForm.enrollmentMethod === 'csv' ? 'CSV Upload' : bulkEnrollForm.enrollmentMethod === 'email' ? 'Email Domain' : 'Manual Entry'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[14px]">
+                    <span className="text-gray-600">Learners:</span>
+                    <span className="font-medium text-gray-900">
+                      {bulkEnrollForm.enrollmentMethod === 'manual' 
+                        ? bulkEnrollForm.emails.split('\n').filter(e => e.trim()).length 
+                        : bulkEnrollForm.enrollmentMethod === 'csv' 
+                        ? (bulkEnrollForm.csvFile ? '1 file selected' : '0')
+                        : bulkEnrollForm.emailDomains.split('\n').filter(d => d.trim()).length + ' domain(s)'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[14px]">
+                    <span className="text-gray-600">Access Duration:</span>
+                    <span className="font-medium text-gray-900">
+                      {bulkEnrollForm.accessDuration === '365' ? '1 Year' : `${bulkEnrollForm.accessDuration} Days`}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-6 flex items-center justify-between">
+              <Button
+                variant="outline"
+                onClick={() => setShowBulkEnrollModal(false)}
+                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  onClick={() => {
+                    toast({
+                      title: 'Preview Generated',
+                      description: 'Review the enrollment details before confirming.',
+                    });
+                  }}
+                >
+                  Preview
+                </Button>
+                <Button
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  onClick={() => {
+                    const count = bulkEnrollForm.enrollmentMethod === 'manual' 
+                      ? bulkEnrollForm.emails.split('\n').filter(e => e.trim()).length 
+                      : 0;
+                    toast({
+                      title: 'Enrollment Complete',
+                      description: `Successfully enrolled ${count > 0 ? count : 'learners'} in the course.`,
+                    });
+                    setShowBulkEnrollModal(false);
+                    setBulkEnrollForm({
+                      course: '',
+                      enrollmentMethod: 'manual',
+                      emails: '',
+                      csvFile: null,
+                      emailDomains: '',
+                      sendWelcomeEmail: true,
+                      enrollmentType: 'standard',
+                      accessDuration: '90',
+                      notifyInstructors: true,
+                    });
+                  }}
+                >
+                  <UserPlusIcon className="w-4 h-4 mr-2" />
+                  Enroll Learners
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Faculty Modal */}
+      {showAddFacultyModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <GraduationCap className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Add Faculty Member</h2>
+              </div>
+              <button
+                onClick={() => setShowAddFacultyModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Personal Information */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Personal Information</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={facultyForm.fullName}
+                      onChange={(e) => setFacultyForm({ ...facultyForm, fullName: e.target.value })}
+                      placeholder="e.g., Dr. Sarah Johnson"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Email Address *
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="email"
+                        value={facultyForm.email}
+                        onChange={(e) => setFacultyForm({ ...facultyForm, email: e.target.value })}
+                        placeholder="sarah.johnson@university.edu"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="tel"
+                        value={facultyForm.phone}
+                        onChange={(e) => setFacultyForm({ ...facultyForm, phone: e.target.value })}
+                        placeholder="+1 (555) 123-4567"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Job Title *
+                    </label>
+                    <input
+                      type="text"
+                      value={facultyForm.title}
+                      onChange={(e) => setFacultyForm({ ...facultyForm, title: e.target.value })}
+                      placeholder="e.g., Senior Lecturer"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Professional Details */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Professional Details</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Department *
+                    </label>
+                    <select
+                      value={facultyForm.department}
+                      onChange={(e) => setFacultyForm({ ...facultyForm, department: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    >
+                      <option value="">Select department...</option>
+                      <option value="digital-transformation">Digital Transformation</option>
+                      <option value="ai-technology">AI & Technology</option>
+                      <option value="leadership">Leadership & Management</option>
+                      <option value="data-analytics">Data & Analytics</option>
+                      <option value="cybersecurity">Cybersecurity</option>
+                      <option value="business-strategy">Business Strategy</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Areas of Specialization *
+                    </label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                      {['Digital Strategy', 'AI/ML', 'Cloud Computing', 'Agile', 'Change Management', 'Data Science', 'Leadership', 'Innovation', 'Cybersecurity'].map((spec) => (
+                        <label key={spec} className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={facultyForm.specialization.includes(spec)}
+                            onChange={(e) => {
+                              const newSpec = e.target.checked
+                                ? [...facultyForm.specialization, spec]
+                                : facultyForm.specialization.filter(s => s !== spec);
+                              setFacultyForm({ ...facultyForm, specialization: newSpec });
+                            }}
+                            className="w-4 h-4 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                          />
+                          <span className="text-[14px] text-gray-700">{spec}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Bio / About
+                    </label>
+                    <textarea
+                      value={facultyForm.bio}
+                      onChange={(e) => setFacultyForm({ ...facultyForm, bio: e.target.value })}
+                      placeholder="Brief professional biography..."
+                      rows={4}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                    />
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                        Qualifications
+                      </label>
+                      <textarea
+                        value={facultyForm.qualifications}
+                        onChange={(e) => setFacultyForm({ ...facultyForm, qualifications: e.target.value })}
+                        placeholder="e.g., PhD in Computer Science, MBA"
+                        rows={3}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                        Years of Experience
+                      </label>
+                      <input
+                        type="text"
+                        value={facultyForm.experience}
+                        onChange={(e) => setFacultyForm({ ...facultyForm, experience: e.target.value })}
+                        placeholder="e.g., 15+ years"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Online Presence */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Online Presence</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      LinkedIn Profile
+                    </label>
+                    <div className="relative">
+                      <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="url"
+                        value={facultyForm.linkedIn}
+                        onChange={(e) => setFacultyForm({ ...facultyForm, linkedIn: e.target.value })}
+                        placeholder="https://linkedin.com/in/..."
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Personal Website
+                    </label>
+                    <div className="relative">
+                      <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="url"
+                        value={facultyForm.website}
+                        onChange={(e) => setFacultyForm({ ...facultyForm, website: e.target.value })}
+                        placeholder="https://..."
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Photo */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Profile Photo</h3>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#ff6b4d] transition-colors">
+                  <Image className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-[14px] text-gray-600 mb-2">
+                    Upload faculty profile photo
+                  </p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setFacultyForm({ ...facultyForm, profilePhoto: e.target.files?.[0] || null })}
+                    className="hidden"
+                    id="photo-upload"
+                  />
+                  <label
+                    htmlFor="photo-upload"
+                    className="inline-block px-4 py-2 bg-white border border-gray-300 rounded-lg text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+                  >
+                    Choose Photo
+                  </label>
+                  {facultyForm.profilePhoto && (
+                    <p className="text-[14px] text-[#ff6b4d] mt-3 font-medium">
+                      Selected: {facultyForm.profilePhoto.name}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Course Assignment */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Course Assignment</h3>
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Assign to Courses
+                  </label>
+                  <div className="space-y-2">
+                    {['Digital Transformation Fundamentals', 'AI & Automation in the Workplace', 'Leadership in the Digital Age', 'Agile Project Management', 'Cybersecurity Essentials'].map((course) => (
+                      <label key={course} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={facultyForm.courses.includes(course)}
+                          onChange={(e) => {
+                            const newCourses = e.target.checked
+                              ? [...facultyForm.courses, course]
+                              : facultyForm.courses.filter(c => c !== course);
+                            setFacultyForm({ ...facultyForm, courses: newCourses });
+                          }}
+                          className="w-4 h-4 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                        />
+                        <span className="text-[14px] text-gray-700">{course}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Employment Details */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Employment Details</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Availability *
+                    </label>
+                    <div className="grid grid-cols-3 gap-3">
+                      {(['full-time', 'part-time', 'contract'] as const).map((type) => (
+                        <button
+                          key={type}
+                          onClick={() => setFacultyForm({ ...facultyForm, availability: type })}
+                          className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                            facultyForm.availability === type
+                              ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                              : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                          }`}
+                        >
+                          {type.replace('-', ' ')}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Start Date *
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="date"
+                        value={facultyForm.startDate}
+                        onChange={(e) => setFacultyForm({ ...facultyForm, startDate: e.target.value })}
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Summary */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">Faculty Summary</h3>
+                <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4 text-[#ff6b4d]" />
+                    <span className="text-[16px] font-semibold text-gray-900">
+                      {facultyForm.fullName || 'Faculty Name'}
+                    </span>
+                  </div>
+                  <div className="text-[14px] text-gray-600 space-y-1">
+                    <p>{facultyForm.title || 'Job Title'} • {facultyForm.department ? facultyForm.department.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'Department'}</p>
+                    <p>{facultyForm.specialization.length} specialization(s) • {facultyForm.courses.length} course(s) assigned</p>
+                    <p className="capitalize">{facultyForm.availability.replace('-', ' ')} • Starts {facultyForm.startDate || 'TBD'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-6 flex items-center justify-between">
+              <Button
+                variant="outline"
+                onClick={() => setShowAddFacultyModal(false)}
+                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  onClick={() => {
+                    toast({
+                      title: 'Draft Saved',
+                      description: 'Faculty profile has been saved as a draft.',
+                    });
+                  }}
+                >
+                  Save as Draft
+                </Button>
+                <Button
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  onClick={() => {
+                    toast({
+                      title: 'Faculty Added',
+                      description: `${facultyForm.fullName || 'Faculty member'} has been added successfully.`,
+                    });
+                    setShowAddFacultyModal(false);
+                    setFacultyForm({
+                      fullName: '',
+                      email: '',
+                      phone: '',
+                      title: '',
+                      department: '',
+                      specialization: [],
+                      bio: '',
+                      qualifications: '',
+                      experience: '',
+                      linkedIn: '',
+                      website: '',
+                      profilePhoto: null,
+                      courses: [],
+                      availability: 'full-time',
+                      startDate: '',
+                    });
+                  }}
+                >
+                  <UserPlusIcon className="w-4 h-4 mr-2" />
+                  Add Faculty
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create User Modal */}
+      {showCreateUserModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <UserPlusIcon className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Create New User</h2>
+              </div>
+              <button
+                onClick={() => setShowCreateUserModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Basic Information */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Basic Information</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={createUserForm.fullName}
+                      onChange={(e) => setCreateUserForm({ ...createUserForm, fullName: e.target.value })}
+                      placeholder="e.g., John Smith"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Email Address *
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="email"
+                        value={createUserForm.email}
+                        onChange={(e) => setCreateUserForm({ ...createUserForm, email: e.target.value })}
+                        placeholder="john.smith@company.com"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="tel"
+                        value={createUserForm.phone}
+                        onChange={(e) => setCreateUserForm({ ...createUserForm, phone: e.target.value })}
+                        placeholder="+1 (555) 123-4567"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Account Credentials */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Account Credentials</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Password *
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="password"
+                        value={createUserForm.password}
+                        onChange={(e) => setCreateUserForm({ ...createUserForm, password: e.target.value })}
+                        placeholder="••••••••"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                    <p className="text-[12px] text-gray-500 mt-1">Minimum 8 characters</p>
+                  </div>
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Confirm Password *
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="password"
+                        value={createUserForm.confirmPassword}
+                        onChange={(e) => setCreateUserForm({ ...createUserForm, confirmPassword: e.target.value })}
+                        placeholder="••••••••"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Role & Permissions */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Role & Permissions</h3>
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    User Role *
+                  </label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {(['learner', 'instructor', 'admin'] as const).map((role) => (
+                      <button
+                        key={role}
+                        onClick={() => setCreateUserForm({ ...createUserForm, role })}
+                        className={`flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
+                          createUserForm.role === role
+                            ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                            : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                        }`}
+                      >
+                        {role === 'learner' && <Users className="w-5 h-5" />}
+                        {role === 'instructor' && <GraduationCap className="w-5 h-5" />}
+                        {role === 'admin' && <ShieldIcon className="w-5 h-5" />}
+                        <span className="capitalize">{role}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-3 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-[12px] text-blue-900">
+                      {createUserForm.role === 'learner' && 'Learners can enroll in courses, access content, and track their progress.'}
+                      {createUserForm.role === 'instructor' && 'Instructors can create courses, manage content, and interact with learners.'}
+                      {createUserForm.role === 'admin' && 'Admins have full access to all platform features and settings.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Organization Details */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Organization Details</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Organization
+                    </label>
+                    <div className="relative">
+                      <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        value={createUserForm.organization}
+                        onChange={(e) => setCreateUserForm({ ...createUserForm, organization: e.target.value })}
+                        placeholder="e.g., Acme Corporation"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Department
+                    </label>
+                    <input
+                      type="text"
+                      value={createUserForm.department}
+                      onChange={(e) => setCreateUserForm({ ...createUserForm, department: e.target.value })}
+                      placeholder="e.g., IT Department"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Account Status */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Account Status</h3>
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Initial Status *
+                  </label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {(['active', 'pending', 'suspended'] as const).map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => setCreateUserForm({ ...createUserForm, status })}
+                        className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                          createUserForm.status === status
+                            ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                            : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                        }`}
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Options */}
+              <div className="space-y-3">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={createUserForm.sendWelcomeEmail}
+                    onChange={(e) => setCreateUserForm({ ...createUserForm, sendWelcomeEmail: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                  />
+                  <div>
+                    <span className="text-[14px] font-medium text-gray-700">Send welcome email</span>
+                    <p className="text-[12px] text-gray-500">User will receive login credentials and getting started guide</p>
+                  </div>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={createUserForm.requirePasswordChange}
+                    onChange={(e) => setCreateUserForm({ ...createUserForm, requirePasswordChange: e.target.checked })}
+                    className="w-5 h-5 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                  />
+                  <div>
+                    <span className="text-[14px] font-medium text-gray-700">Require password change on first login</span>
+                    <p className="text-[12px] text-gray-500">User must set a new password when they first sign in</p>
+                  </div>
+                </label>
+              </div>
+
+              {/* Summary */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">User Summary</h3>
+                <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <UserPlusIcon className="w-4 h-4 text-[#ff6b4d]" />
+                    <span className="text-[16px] font-semibold text-gray-900">
+                      {createUserForm.fullName || 'User Name'}
+                    </span>
+                  </div>
+                  <div className="text-[14px] text-gray-600 space-y-1">
+                    <p>{createUserForm.email || 'email@example.com'}</p>
+                    <p className="capitalize">Role: {createUserForm.role} • Status: {createUserForm.status}</p>
+                    {createUserForm.organization && <p>Organization: {createUserForm.organization}</p>}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-6 flex items-center justify-between">
+              <Button
+                variant="outline"
+                onClick={() => setShowCreateUserModal(false)}
+                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  onClick={() => {
+                    toast({
+                      title: 'Draft Saved',
+                      description: 'User profile has been saved as a draft.',
+                    });
+                  }}
+                >
+                  Save as Draft
+                </Button>
+                <Button
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  onClick={() => {
+                    if (createUserForm.password !== createUserForm.confirmPassword) {
+                      toast({
+                        title: 'Error',
+                        description: 'Passwords do not match.',
+                        variant: 'destructive',
+                      });
+                      return;
+                    }
+                    toast({
+                      title: 'User Created',
+                      description: `${createUserForm.fullName || 'User'} has been created successfully.`,
+                    });
+                    setShowCreateUserModal(false);
+                    setCreateUserForm({
+                      fullName: '',
+                      email: '',
+                      password: '',
+                      confirmPassword: '',
+                      role: 'learner',
+                      organization: '',
+                      department: '',
+                      phone: '',
+                      sendWelcomeEmail: true,
+                      requirePasswordChange: true,
+                      status: 'active',
+                    });
+                  }}
+                >
+                  <UserPlusIcon className="w-4 h-4 mr-2" />
+                  Create User
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Review Content Modal */}
+      {showReviewContentModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <FileTextIcon className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Content Review</h2>
+              </div>
+              <button
+                onClick={() => setShowReviewContentModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Content Selection */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Content Information</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Content Type *
+                    </label>
+                    <select
+                      value={reviewContentForm.contentType}
+                      onChange={(e) => setReviewContentForm({ ...reviewContentForm, contentType: e.target.value as any })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    >
+                      <option value="course">Course</option>
+                      <option value="lesson">Lesson</option>
+                      <option value="assessment">Assessment</option>
+                      <option value="resource">Resource</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                      Select Content *
+                    </label>
+                    <select
+                      value={reviewContentForm.contentId}
+                      onChange={(e) => setReviewContentForm({ ...reviewContentForm, contentId: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    >
+                      <option value="">Choose content...</option>
+                      <option value="dt-fundamentals">Digital Transformation Fundamentals</option>
+                      <option value="ai-automation">AI & Automation in the Workplace</option>
+                      <option value="data-driven">Data-Driven Decision Making</option>
+                      <option value="leadership">Leadership in the Digital Age</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Review Type */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Review Type</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {(['quality', 'compliance', 'accessibility', 'plagiarism'] as const).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setReviewContentForm({ ...reviewContentForm, reviewType: type })}
+                      className={`flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
+                        reviewContentForm.reviewType === type
+                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      }`}
+                    >
+                      {type === 'quality' && <Star className="w-5 h-5" />}
+                      {type === 'compliance' && <ShieldIcon className="w-5 h-5" />}
+                      {type === 'accessibility' && <Eye className="w-5 h-5" />}
+                      {type === 'plagiarism' && <Search className="w-5 h-5" />}
+                      <span className="capitalize">{type}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quality Score */}
+              {reviewContentForm.reviewType === 'quality' && (
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Quality Score (0-100)
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={reviewContentForm.qualityScore}
+                      onChange={(e) => setReviewContentForm({ ...reviewContentForm, qualityScore: parseInt(e.target.value) })}
+                      className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      style={{
+                        background: `linear-gradient(to right, #ff6b4d 0%, #ff6b4d ${reviewContentForm.qualityScore}%, #e5e7eb ${reviewContentForm.qualityScore}%, #e5e7eb 100%)`
+                      }}
+                    />
+                    <span className="text-[24px] font-semibold text-[#ff6b4d] w-16 text-right">
+                      {reviewContentForm.qualityScore}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[12px] text-gray-500 mt-1">
+                    <span>Poor</span>
+                    <span>Excellent</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Compliance Checks */}
+              {reviewContentForm.reviewType === 'compliance' && (
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Compliance Checks
+                  </label>
+                  <div className="space-y-2">
+                    {['Copyright clearance', 'Data privacy compliance', 'Industry regulations', 'Ethical guidelines', 'Content accuracy'].map((check) => (
+                      <label key={check} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={reviewContentForm.complianceChecks.includes(check)}
+                          onChange={(e) => {
+                            const newChecks = e.target.checked
+                              ? [...reviewContentForm.complianceChecks, check]
+                              : reviewContentForm.complianceChecks.filter(c => c !== check);
+                            setReviewContentForm({ ...reviewContentForm, complianceChecks: newChecks });
+                          }}
+                          className="w-4 h-4 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                        />
+                        <span className="text-[14px] text-gray-700">{check}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Accessibility Issues */}
+              {reviewContentForm.reviewType === 'accessibility' && (
+                <div>
+                  <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                    Accessibility Issues Found
+                  </label>
+                  <div className="space-y-2">
+                    {['Missing alt text', 'Poor color contrast', 'No keyboard navigation', 'Missing captions', 'Unclear headings'].map((issue) => (
+                      <label key={issue} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={reviewContentForm.accessibilityIssues.includes(issue)}
+                          onChange={(e) => {
+                            const newIssues = e.target.checked
+                              ? [...reviewContentForm.accessibilityIssues, issue]
+                              : reviewContentForm.accessibilityIssues.filter(i => i !== issue);
+                            setReviewContentForm({ ...reviewContentForm, accessibilityIssues: newIssues });
+                          }}
+                          className="w-4 h-4 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                        />
+                        <span className="text-[14px] text-gray-700">{issue}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Review Status */}
+              <div>
+                <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Review Decision</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {(['pending', 'approved', 'rejected', 'needs-revision'] as const).map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => setReviewContentForm({ ...reviewContentForm, reviewStatus: status })}
+                      className={`flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
+                        reviewContentForm.reviewStatus === status
+                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      }`}
+                    >
+                      {status === 'pending' && <Clock className="w-5 h-5" />}
+                      {status === 'approved' && <CheckCircle2 className="w-5 h-5" />}
+                      {status === 'rejected' && <XCircleIcon className="w-5 h-5" />}
+                      {status === 'needs-revision' && <AlertCircle className="w-5 h-5" />}
+                      <span className="capitalize">{status.replace('-', ' ')}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Priority */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Review Priority
+                </label>
+                <div className="grid grid-cols-4 gap-3">
+                  {(['low', 'normal', 'high', 'urgent'] as const).map((priority) => (
+                    <button
+                      key={priority}
+                      onClick={() => setReviewContentForm({ ...reviewContentForm, priority })}
+                      className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                        reviewContentForm.priority === priority
+                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                      }`}
+                    >
+                      {priority}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Review Notes */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Review Notes
+                </label>
+                <textarea
+                  value={reviewContentForm.reviewNotes}
+                  onChange={(e) => setReviewContentForm({ ...reviewContentForm, reviewNotes: e.target.value })}
+                  placeholder="Document your review findings..."
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                />
+              </div>
+
+              {/* Recommendations */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Recommendations for Improvement
+                </label>
+                <textarea
+                  value={reviewContentForm.recommendations}
+                  onChange={(e) => setReviewContentForm({ ...reviewContentForm, recommendations: e.target.value })}
+                  placeholder="Provide specific recommendations..."
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                />
+              </div>
+
+              {/* Reviewer Comments */}
+              <div>
+                <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
+                  Comments to Content Creator
+                </label>
+                <textarea
+                  value={reviewContentForm.reviewerComments}
+                  onChange={(e) => setReviewContentForm({ ...reviewContentForm, reviewerComments: e.target.value })}
+                  placeholder="Add comments for the content creator..."
+                  rows={3}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                />
+              </div>
+
+              {/* Summary */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">Review Summary</h3>
+                <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <FileTextIcon className="w-4 h-4 text-[#ff6b4d]" />
+                    <span className="text-[16px] font-semibold text-gray-900 capitalize">
+                      {reviewContentForm.contentType} Review
+                    </span>
+                  </div>
+                  <div className="text-[14px] text-gray-600 space-y-1">
+                    <p>Type: {reviewContentForm.reviewType.charAt(0).toUpperCase() + reviewContentForm.reviewType.slice(1)}</p>
+                    <p>Status: <span className="capitalize">{reviewContentForm.reviewStatus.replace('-', ' ')}</span></p>
+                    <p>Priority: <span className="capitalize">{reviewContentForm.priority}</span></p>
+                    {reviewContentForm.reviewType === 'quality' && <p>Quality Score: {reviewContentForm.qualityScore}/100</p>}
+                    {reviewContentForm.reviewType === 'compliance' && <p>Compliance Checks: {reviewContentForm.complianceChecks.length} passed</p>}
+                    {reviewContentForm.reviewType === 'accessibility' && <p>Issues Found: {reviewContentForm.accessibilityIssues.length}</p>}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-6 flex items-center justify-between">
+              <Button
+                variant="outline"
+                onClick={() => setShowReviewContentModal(false)}
+                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  onClick={() => {
+                    toast({
+                      title: 'Draft Saved',
+                      description: 'Review has been saved as a draft.',
+                    });
+                  }}
+                >
+                  Save as Draft
+                </Button>
+                <Button
+                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  onClick={() => {
+                    toast({
+                      title: 'Review Submitted',
+                      description: `Content review has been submitted with status: ${reviewContentForm.reviewStatus}.`,
+                    });
+                    setShowReviewContentModal(false);
+                    setReviewContentForm({
+                      contentType: 'course',
+                      contentId: '',
+                      reviewType: 'quality',
+                      reviewStatus: 'pending',
+                      reviewNotes: '',
+                      qualityScore: 0,
+                      complianceChecks: [],
+                      accessibilityIssues: [],
+                      recommendations: '',
+                      reviewerComments: '',
+                      priority: 'normal',
+                    });
+                  }}
+                >
+                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  Submit Review
                 </Button>
               </div>
             </div>

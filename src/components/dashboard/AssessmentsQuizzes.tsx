@@ -12,7 +12,11 @@ import {
   Award,
   FileText,
   AlertCircle,
-  TrendingUp
+  TrendingUp,
+  ArrowLeft,
+  Calendar,
+  Trophy,
+  PlayCircle
 } from 'lucide-react';
 
 interface Question {
@@ -23,7 +27,7 @@ interface Question {
   explanation: string;
 }
 
-export const AssessmentsQuizzes = () => {
+const QuizTaker = ({ onBack }: { onBack: () => void }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -106,6 +110,11 @@ export const AssessmentsQuizzes = () => {
   if (quizCompleted) {
     return (
       <div className="max-w-2xl mx-auto">
+        <Button variant="ghost" onClick={onBack} className="mb-6 -ml-2 text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Assessments
+        </Button>
+      
         <Card className="p-8 text-center">
           <div className={`w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center ${
             finalScore >= 70 ? 'bg-green-100' : 'bg-amber-100'
@@ -160,11 +169,9 @@ export const AssessmentsQuizzes = () => {
             <Button onClick={handleRetakeQuiz} variant="outline">
               Retake Quiz
             </Button>
-            {finalScore >= 70 && (
-              <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
-                Continue to Next Lesson
-              </Button>
-            )}
+            <Button onClick={onBack} className={finalScore >= 70 ? "bg-[#ff6b4d] hover:bg-[#e56045] text-white" : "bg-[#1e2348] hover:bg-[#2a3058] text-white"}>
+              Continue to Dashboard
+            </Button>
           </div>
         </Card>
       </div>
@@ -173,6 +180,11 @@ export const AssessmentsQuizzes = () => {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      <Button variant="ghost" onClick={onBack} className="mb-2 -ml-2 text-muted-foreground hover:text-foreground">
+        <ArrowLeft className="w-4 h-4 mr-2" />
+        Back to Assessments
+      </Button>
+
       {/* Quiz Header */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-4">
@@ -302,6 +314,201 @@ export const AssessmentsQuizzes = () => {
             </div>
           </div>
         </Card>
+      </div>
+    </div>
+  );
+};
+
+export const AssessmentsQuizzes = () => {
+  const [selectedQuiz, setSelectedQuiz] = useState<string | null>(null);
+
+  const assessments = [
+    {
+      id: '1',
+      title: 'Digital Transformation Quiz',
+      course: 'Introduction to Digital Economy & Economy 4.0',
+      type: 'Quiz',
+      dueDate: '2024-03-30',
+      status: 'pending',
+      questions: 3,
+      timeLimit: 'No limit',
+    },
+    {
+      id: '2',
+      title: 'AI Fundamentals Assessment',
+      course: 'AI-Powered Business Transformation',
+      type: 'Assessment',
+      dueDate: '2024-04-05',
+      status: 'completed',
+      questions: 15,
+      timeLimit: '30 mins',
+      score: 92,
+      completedDate: '2024-03-25'
+    },
+    {
+      id: '3',
+      title: 'Leadership in Tech Quiz',
+      course: 'Digital Leadership & Change Management',
+      type: 'Quiz',
+      dueDate: '2024-03-20',
+      status: 'failed',
+      questions: 8,
+      timeLimit: '15 mins',
+      score: 65,
+      completedDate: '2024-03-18'
+    },
+  ];
+
+  if (selectedQuiz) {
+    return <QuizTaker onBack={() => setSelectedQuiz(null)} />;
+  }
+
+  const completedQuizzes = assessments.filter(a => a.status === 'completed' || a.status === 'failed');
+  const avgScore = completedQuizzes.length > 0 
+    ? Math.round(completedQuizzes.reduce((acc, curr) => acc + (curr.score || 0), 0) / completedQuizzes.length)
+    : 0;
+  const pendingCount = assessments.filter(a => a.status === 'pending').length;
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-amber-100 text-amber-800 border-amber-200';
+      case 'completed':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'failed':
+        return 'bg-red-100 text-red-800 border-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-semibold mb-2" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
+          Assessments & Quizzes
+        </h2>
+        <p className="text-muted-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
+          Track your quiz scores, attempt pending assessments, and review your performance history.
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <Card className="p-6 border border-border flex items-center gap-4">
+          <div className="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center">
+            <CheckCircle className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground font-medium">Completed</p>
+            <h3 className="text-2xl font-bold">{completedQuizzes.length}</h3>
+          </div>
+        </Card>
+        <Card className="p-6 border border-border flex items-center gap-4">
+          <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center">
+            <Clock className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground font-medium">Pending</p>
+            <h3 className="text-2xl font-bold">{pendingCount}</h3>
+          </div>
+        </Card>
+        <Card className="p-6 border border-border flex items-center gap-4">
+          <div className="w-12 h-12 bg-[#ff6b4d]/10 text-[#ff6b4d] rounded-xl flex items-center justify-center">
+            <TrendingUp className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground font-medium">Average Score</p>
+            <h3 className="text-2xl font-bold">{avgScore}%</h3>
+          </div>
+        </Card>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold mb-4 text-[#1e2348]">Assessment History</h3>
+        {assessments.map((assessment) => (
+          <Card key={assessment.id} className="p-6 border border-border hover:shadow-md transition-shadow">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-start gap-3 mb-2">
+                  <FileText className="w-5 h-5 text-[#ff6b4d] mt-1" />
+                  <div>
+                    <h4 className="font-semibold" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+                      {assessment.title}
+                    </h4>
+                    <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                      {assessment.course}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="ml-8 grid md:grid-cols-3 gap-4 mt-4">
+                  <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    <FileText className="w-4 h-4 text-muted-foreground" />
+                    <span>{assessment.questions} Questions</span>
+                  </div>
+                  <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    <Clock className="w-4 h-4 text-muted-foreground" />
+                    <span>Time: {assessment.timeLimit}</span>
+                  </div>
+                  {assessment.completedDate && (
+                    <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                      <Calendar className="w-4 h-4 text-muted-foreground" />
+                      <span>Taken: {new Date(assessment.completedDate).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {assessment.status === 'pending' && (
+                    <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                      <Calendar className="w-4 h-4 text-muted-foreground" />
+                      <span>Due: {new Date(assessment.dueDate).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex flex-col items-end gap-3">
+                <Badge className={getStatusColor(assessment.status)} style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
+                  {assessment.status.charAt(0).toUpperCase() + assessment.status.slice(1)}
+                </Badge>
+                
+                {assessment.score !== undefined && (
+                  <div className="flex items-center gap-2">
+                    <Trophy className={`w-5 h-5 ${assessment.score >= 70 ? 'text-amber-500' : 'text-gray-400'}`} />
+                    <span className={`font-bold ${assessment.score >= 70 ? 'text-green-600' : 'text-red-500'}`}>
+                      {assessment.score}%
+                    </span>
+                  </div>
+                )}
+
+                <div className="mt-2">
+                  {assessment.status === 'pending' && (
+                    <Button 
+                      onClick={() => setSelectedQuiz(assessment.id)}
+                      className="bg-[#ff6b4d] hover:bg-[#e56045] text-white w-full md:w-auto"
+                    >
+                      <PlayCircle className="w-4 h-4 mr-2" />
+                      Start Quiz
+                    </Button>
+                  )}
+                  {assessment.status === 'failed' && (
+                    <Button 
+                      onClick={() => setSelectedQuiz(assessment.id)}
+                      variant="outline"
+                      className="w-full md:w-auto text-[#ff6b4d] border-[#ff6b4d] hover:bg-[#ff6b4d]/10"
+                    >
+                      <PlayCircle className="w-4 h-4 mr-2" />
+                      Retake Quiz
+                    </Button>
+                  )}
+                  {assessment.status === 'completed' && (
+                    <Button variant="outline" className="w-full md:w-auto">
+                      Review Answers
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Card>
+        ))}
       </div>
     </div>
   );

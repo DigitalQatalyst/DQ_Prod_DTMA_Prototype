@@ -65,17 +65,17 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#1e2348]/20 backdrop-blur-md">
       <nav className="w-full relative">
-        <div className="flex items-center w-full px-8 md:px-12 lg:px-16 py-6 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
+        <div className="flex items-center w-full px-8 md:px-12 lg:px-16 py-3 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
           {/* Left: Logo Area */}
           <div className="flex items-center flex-shrink-0 gap-6">
             <Link to="/" className="flex items-center gap-3 group">
               <img
                 src="/dtma-logo.png"
                 alt="DTMA"
-                className="h-[48px] w-auto transition-transform duration-300 group-hover:scale-105"
+                className="h-[40px] w-auto transition-transform duration-300 group-hover:scale-105"
               />
             </Link>
-            <div className="h-[48px] w-[1px] bg-white/20"></div>
+            <div className="h-[40px] w-[1px] bg-white/20"></div>
           </div>
 
           {/* Right: Single Row with Nav Links and Auth */}
@@ -101,7 +101,7 @@ const Navbar = () => {
                   
                   {/* Full Screen Overlay Dropdown */}
                   {isExploreOpen && (
-                    <div className="fixed left-0 right-0 top-[100px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 100px)', borderColor: '#EEEDE9' }}>
+                    <div className="fixed left-0 right-0 top-[80px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 80px)', borderColor: '#EEEDE9' }}>
                       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
                         {/* First Row - 3 Categories */}
                         <div className="grid grid-cols-3 gap-12 mb-12">

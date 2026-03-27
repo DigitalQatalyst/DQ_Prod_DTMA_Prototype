@@ -30,50 +30,50 @@ const humanFaculty = [
 const aiExperts = [
   {
     name: "Eco",
-    dimension: "Digital Economy (DE)",
+    dimension: "Digital Economy",
     avatar: "/ai-leadership.png",
     color: "#ff6b4d",
-    specialization: "Economy 4.0 dynamics, industry disruption analysis, competitive positioning strategies, and digital business model innovation.",
+    specialization: "Digital Economy Strategist. Your go-to AI for understanding Economy 4.0 dynamics, analyzing industry disruption, crafting competitive positioning strategies, and innovating digital business models to thrive in the digital economy.",
     questions: "Why should organizations change? How is the digital economy reshaping industries?",
   },
   {
     name: "Cognito",
-    dimension: "Digital Cognitive Organisation (DCO)",
+    dimension: "Digital Cognitive Organisation",
     avatar: "/ai-operations.png",
     color: "#4f46e5",
-    specialization: "Intelligent organization design, data-driven decision systems, cognitive maturity assessment, and AI-powered operational agility.",
+    specialization: "Cognitive Organization Architect. Your go-to AI for designing intelligent organizations, implementing data-driven decision systems, assessing cognitive maturity, and building AI-powered operational agility.",
     questions: "Where are organizations headed? How do we build cognitive maturity?",
   },
   {
     name: "Nexus",
-    dimension: "Digital Business Platform (DBP)",
+    dimension: "Digital Business Platform",
     avatar: "/ai-technology.png",
     color: "#181C3A",
-    specialization: "Platform architecture design, enterprise integration patterns, API orchestration, and digital ecosystem strategy.",
+    specialization: "Platform Architecture Expert. Your go-to AI for designing digital business platforms, orchestrating enterprise integrations, managing API ecosystems, and building scalable digital infrastructure.",
     questions: "What unifies value creation? How do we design and deploy digital platforms?",
   },
   {
     name: "Transform",
-    dimension: "Digital Transformation 2.0 (DT2.0)",
+    dimension: "Digital Transformation 2.0",
     avatar: "/ai-culture.png",
     color: "#16a34a",
-    specialization: "Target state architecture, transformation roadmapping, change execution methodologies, and scaled delivery frameworks.",
+    specialization: "Transformation Strategist. Your go-to AI for architecting target states, roadmapping transformation journeys, executing change methodologies, and delivering scaled transformation frameworks.",
     questions: "How do we design the target? What approaches work for modern transformation?",
   },
   {
     name: "Catalyst",
-    dimension: "Digital Worker & Workspace (DW/WS)",
+    dimension: "Digital Worker & Workspace",
     avatar: "/ai-innovation.png",
     color: "#dc2626",
-    specialization: "Workforce transformation, digital skills development, hybrid work models, and transformation-ready culture building.",
+    specialization: "Workforce Transformation Specialist. Your go-to AI for transforming workforces, developing digital skills, designing hybrid work models, and building transformation-ready organizational cultures.",
     questions: "Who are the orchestrators? How do we redesign workforce and workspace?",
   },
   {
     name: "Velocity",
-    dimension: "Digital Accelerators (DA)",
+    dimension: "Digital Accelerators",
     avatar: "/ai-trust.png",
     color: "#9333ea",
-    specialization: "Rapid delivery methodologies, transformation acceleration tools, agile execution frameworks, and time-compression strategies.",
+    specialization: "Acceleration Expert. Your go-to AI for rapid delivery methodologies, transformation acceleration tools, agile execution frameworks, and time-compression strategies to speed up your transformation.",
     questions: "When will we get there? How do we speed up transformation execution?",
   },
 ];
@@ -207,11 +207,8 @@ const FacultySection = () => {
                   <h4 className="text-lg font-semibold text-[#0B0C19] mb-3">
                     {expert.name}
                   </h4>
-                  <p className="text-sm text-[#4B5563] leading-relaxed mb-3">
+                  <p className="text-sm text-[#4B5563] leading-relaxed">
                     {expert.specialization}
-                  </p>
-                  <p className="text-xs text-[#9CA3AF] italic">
-                    "{expert.questions}"
                   </p>
                 </div>
               </div>

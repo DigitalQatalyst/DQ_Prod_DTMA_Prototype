@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Star, Clock, BookOpen, Search, Grid3X3, List, ChevronRight } from "lucide-react";
-import { dtmaCourses } from "@/data/dtmaCourses";
+import { dtmaCoursesNew } from "@/data/dtmaCoursesNew";
 
 const Courses = () => {
   const [searchParams] = useSearchParams();
@@ -41,7 +41,7 @@ const Courses = () => {
     { value: "advanced", label: "Advanced" },
   ];
 
-  const allCourses = dtmaCourses;
+  const allCourses = dtmaCoursesNew;
 
   const filteredCourses = allCourses.filter((course) => {
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -196,6 +196,10 @@ const Courses = () => {
                           <span>{course.duration}</span>
                         </div>
                       </div>
+                      <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[#4B5563] mb-3">
+                        <BookOpen className="w-4 h-4" />
+                        <span>{course.modules.length} modules • {course.totalLessons} lessons</span>
+                      </div>
                       <div className="flex items-center justify-between">
                         <div className="flex items-baseline gap-2">
                           <span className="text-[20px] leading-[28px] font-semibold text-[#0B0C19]">${course.price}</span>
@@ -259,7 +263,7 @@ const Courses = () => {
                           </div>
                           <div className="flex items-center gap-1">
                             <BookOpen className="w-4 h-4" />
-                            {course.lessons} lessons
+                            {course.modules.length} modules • {course.totalLessons} lessons
                           </div>
                         </div>
 

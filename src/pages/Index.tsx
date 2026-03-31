@@ -14,6 +14,7 @@ import CredentialsSection from "@/components/home/CredentialsSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import StartNowSection from "@/components/home/StartNowSection";
 import { ButlerAI } from "@/components/butler/ButlerAI";
+import { WhatsAppFloatingButton } from "@/components/contact/WhatsAppFloatingButton";
 
 const Index = () => {
   return (
@@ -32,6 +33,7 @@ const Index = () => {
       </main>
       <Footer />
       <ButlerAI />
+      <WhatsAppFloatingButton />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Star, Clock, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/Badge";
-import { dtmaCourses } from "@/data/dtmaCourses";
+import { dtmaCoursesNew } from "@/data/dtmaCoursesNew";
 
 const FeaturedCoursesSection2 = () => {
   const [activeTab, setActiveTab] = useState("leaders");
@@ -11,19 +11,19 @@ const FeaturedCoursesSection2 = () => {
   // Map courses to personas
   const coursesByPersona = {
     leaders: [
-      dtmaCourses.find(c => c.id === "digital-economy-1"),
-      dtmaCourses.find(c => c.id === "digital-transformation-1"),
-      dtmaCourses.find(c => c.id === "digital-cognitive-org-1"),
+      dtmaCoursesNew.find(c => c.id === "course-economy-40"),
+      dtmaCoursesNew.find(c => c.id === "course-transformation"),
+      dtmaCoursesNew.find(c => c.id === "course-cognitive-org"),
     ].filter(Boolean),
     specialists: [
-      dtmaCourses.find(c => c.id === "digital-transformation-2"),
-      dtmaCourses.find(c => c.id === "digital-transformation-4"),
-      dtmaCourses.find(c => c.id === "digital-business-platform-2"),
+      dtmaCoursesNew.find(c => c.id === "course-transformation"),
+      dtmaCoursesNew.find(c => c.id === "course-business-platforms"),
+      dtmaCoursesNew.find(c => c.id === "course-digital-accelerators"),
     ].filter(Boolean),
     workers: [
-      dtmaCourses.find(c => c.id === "digital-worker-1"),
-      dtmaCourses.find(c => c.id === "digital-worker-3"),
-      dtmaCourses.find(c => c.id === "digital-worker-2"),
+      dtmaCoursesNew.find(c => c.id === "course-digital-workers"),
+      dtmaCoursesNew.find(c => c.id === "course-economy-40"),
+      dtmaCoursesNew.find(c => c.id === "course-cognitive-org"),
     ].filter(Boolean),
   };
 
@@ -89,7 +89,7 @@ const FeaturedCoursesSection2 = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <Badge className="absolute top-3 left-3 bg-[#ff6b4d] text-white">
-                  {course.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                  {course.shortTitle}
                 </Badge>
               </div>
               <div className="p-5">

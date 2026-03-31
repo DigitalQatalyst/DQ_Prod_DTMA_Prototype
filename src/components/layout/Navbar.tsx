@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/Badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFlow } from "@/contexts/FlowContext";
 import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
@@ -103,76 +104,73 @@ const Navbar = () => {
                   {isExploreOpen && (
                     <div className="fixed left-0 right-0 top-[80px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 80px)', borderColor: '#EEEDE9' }}>
                       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
-                        {/* First Row - 3 Categories */}
-                        <div className="grid grid-cols-3 gap-12 mb-12">
-                          {/* Digital Economy */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Economy</h3>
-                            <ul className="space-y-3">
-                              <li><Link to="/courses/digital-economy-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">The Rise of Economy 4.0</Link></li>
-                              <li><Link to="/courses/digital-economy-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Perfect Life Transactions: The Cornerstone of Economy 4.0</Link></li>
-                              <li><Link to="/courses/digital-economy-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Success metrics of Economy 4.0</Link></li>
-                            </ul>
-                            <Link to="/courses?category=digital-economy" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
-                          </div>
+                        <div className="mb-8">
+                          <h2 className="text-2xl font-semibold text-[#1e2348] mb-2">6XD Framework Courses</h2>
+                          <p className="text-sm text-muted-foreground">Master the six dimensions of digital transformation</p>
+                        </div>
+                        
+                        {/* First Row - 3 Courses */}
+                        <div className="grid grid-cols-3 gap-8 mb-8">
+                          {/* Course 1: Economy 4.0 */}
+                          <Link to="/courses/course-economy-40" className="group">
+                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 hover:shadow-lg transition-all">
+                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Mastering Economy 4.0</h3>
+                              <p className="text-sm text-muted-foreground">Master the fundamentals of the digital economy and Economy 4.0</p>
+                            </div>
+                          </Link>
 
-                          {/* Digital Cognitive Organisations */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Cognitive Organisations</h3>
-                            <ul className="space-y-3">
-                              <li><Link to="/courses/digital-cognitive-org-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Building the Digital Cognitive Organization</Link></li>
-                              <li><Link to="/courses/digital-cognitive-org-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">AI-Driven Decision Making & Organizational Intelligence</Link></li>
-                              <li><Link to="/courses/digital-cognitive-org-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Continuous Learning & Adaptive Systems</Link></li>
-                            </ul>
-                            <Link to="/courses?category=digital-cognitive-organisation" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
-                          </div>
+                          {/* Course 2: Cognitive Organisations */}
+                          <Link to="/courses/course-cognitive-org" className="group">
+                            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 hover:shadow-lg transition-all">
+                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Decoding Digital Cognitive Organisations</h3>
+                              <p className="text-sm text-muted-foreground">Transform your organization into an intelligent, learning entity</p>
+                            </div>
+                          </Link>
 
-                          {/* Digital Business Platforms */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Business Platforms</h3>
-                            <ul className="space-y-3">
-                              <li><Link to="/courses/digital-business-platform-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Business Platform Fundamentals</Link></li>
-                              <li><Link to="/courses/digital-business-platform-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Cloud Infrastructure & API Strategy</Link></li>
-                              <li><Link to="/courses/digital-business-platform-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Platform Security & Scalability</Link></li>
-                            </ul>
-                            <Link to="/courses?category=digital-business-platform" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
-                          </div>
+                          {/* Course 3: Business Platforms */}
+                          <Link to="/courses/course-business-platforms" className="group">
+                            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 hover:shadow-lg transition-all">
+                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Building Powerful Digital Business Platforms</h3>
+                              <p className="text-sm text-muted-foreground">Master the architecture and design of scalable digital platforms</p>
+                            </div>
+                          </Link>
                         </div>
 
-                        {/* Second Row - 3 Categories */}
-                        <div className="grid grid-cols-3 gap-12">
-                          {/* Digital Transformation */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Transformation</h3>
-                            <ul className="space-y-3">
-                              <li><Link to="/courses/digital-transformation-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Transformation 2.0 Strategy</Link></li>
-                              <li><Link to="/courses/digital-transformation-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Change Management for Digital Transformation</Link></li>
-                              <li><Link to="/courses/digital-transformation-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Measuring Transformation Success</Link></li>
-                            </ul>
-                            <Link to="/courses?category=digital-transformation" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
-                          </div>
+                        {/* Second Row - 3 Courses */}
+                        <div className="grid grid-cols-3 gap-8">
+                          {/* Course 4: Digital Transformation */}
+                          <Link to="/courses/course-transformation" className="group">
+                            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 hover:shadow-lg transition-all">
+                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Navigating Digital Transformation 2.0</h3>
+                              <p className="text-sm text-muted-foreground">Lead successful digital transformation initiatives</p>
+                            </div>
+                          </Link>
 
-                          {/* Digital Workers & Workspace */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Workers & Workspace</h3>
-                            <ul className="space-y-3">
-                              <li><Link to="/courses/digital-worker-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Worker Essentials & Productivity</Link></li>
-                              <li><Link to="/courses/digital-worker-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Remote Work & Collaboration Tools</Link></li>
-                              <li><Link to="/courses/digital-worker-5" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Wellness & Work-Life Balance</Link></li>
-                            </ul>
-                            <Link to="/courses?category=digital-worker-workspace" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
-                          </div>
+                          {/* Course 5: Digital Workers */}
+                          <Link to="/courses/course-digital-workers" className="group">
+                            <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 hover:shadow-lg transition-all">
+                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Optimizing Digital Workers and Workspaces</h3>
+                              <p className="text-sm text-muted-foreground">Master tools and practices for modern digital work</p>
+                            </div>
+                          </Link>
 
-                          {/* Digital Accelerators */}
-                          <div>
-                            <h3 className="text-sm font-semibold text-[#1e2348] uppercase tracking-wide mb-6">Digital Accelerators</h3>
-                            <ul className="space-y-3">
-                              <li><Link to="/courses/digital-accelerators-1" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">AI & Machine Learning Fundamentals</Link></li>
-                              <li><Link to="/courses/digital-accelerators-2" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Blockchain & Emerging Technologies</Link></li>
-                              <li><Link to="/courses/digital-accelerators-3" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">IoT Strategy & Implementation</Link></li>
-                            </ul>
-                            <Link to="/courses?category=digital-accelerators" className="text-sm font-medium text-[#ff6b4d] hover:text-[#e56045] mt-4 inline-block">View all</Link>
-                          </div>
+                          {/* Course 6: Digital Accelerators */}
+                          <Link to="/courses/course-digital-accelerators" className="group">
+                            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 hover:shadow-lg transition-all">
+                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Leveraging Digital Accelerators for Growth</h3>
+                              <p className="text-sm text-muted-foreground">Harness AI, blockchain, IoT, and automation</p>
+                            </div>
+                          </Link>
+                        </div>
+
+                        {/* View All Link */}
+                        <div className="mt-8 text-center">
+                          <Link to="/courses" className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-sm transition-colors inline-flex items-center gap-2">
+                            View All Courses
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </Link>
                         </div>
                       </div>
                     </div>

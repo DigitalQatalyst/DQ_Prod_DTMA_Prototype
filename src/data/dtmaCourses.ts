@@ -1,5 +1,46 @@
-// DTMA Course Data
-export const dtmaCourses = [
+// DTMA Course Data - Legacy format for backward compatibility
+// Import the new structure
+import { dtmaCoursesNew, type Course as NewCourse } from './dtmaCoursesNew';
+
+// Legacy course interface for backward compatibility
+export interface LegacyCourse {
+  id: string;
+  title: string;
+  instructor: string;
+  image: string;
+  category: string;
+  level: string;
+  duration: string;
+  lessons: number;
+  rating: number;
+  reviews: number;
+  price: number;
+  originalPrice: number;
+  badge: string | null;
+  description: string;
+}
+
+// Convert new courses to legacy format for components that still use it
+export const dtmaCourses: LegacyCourse[] = dtmaCoursesNew.map(course => ({
+  id: course.id,
+  title: course.title,
+  instructor: course.instructor,
+  image: course.image,
+  category: course.category,
+  level: course.level,
+  duration: course.duration,
+  lessons: course.totalLessons,
+  rating: course.rating,
+  reviews: course.reviews,
+  price: course.price,
+  originalPrice: course.originalPrice,
+  badge: course.badge,
+  description: course.description,
+}));
+
+// Keep old data structure for reference (commented out)
+/*
+export const dtmaCoursesOld = [
   // Digital Economy Courses
   {
     id: "digital-economy-1",
@@ -492,3 +533,4 @@ export const dtmaCourses = [
     description: "Understand 5G and edge computing technologies and their business impact.",
   },
 ];
+*/

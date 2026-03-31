@@ -29,6 +29,7 @@ import {
 import { useCourse, useIsEnrolled } from "@/hooks/useCourses";
 import { useAuth } from "@/contexts/AuthContext";
 import { EnrollmentModal } from "@/components/enrollment/EnrollmentModal";
+import { getCourseById } from "@/data/dtmaCoursesNew";
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -129,8 +130,11 @@ const CourseDetail = () => {
     navigate(`/courses/${id}/learn`);
   };
 
-  // Mock course data - in real app, fetch based on id
-  const course = {
+  // Get course from new data structure
+  const courseFromNew = getCourseById(id || "");
+  
+  // Mock course data for fallback
+  const mockCourse = {
     id: id || "digital-economy-1",
     title: "Introduction to Digital Economy & Economy 4.0",
     subtitle: "Understand how the digital economy is reshaping industries, value chains, and competitive dynamics in Economy 4.0.",
@@ -216,7 +220,10 @@ const CourseDetail = () => {
     ],
   };
 
-  const totalLessons = course.curriculum.reduce((acc, mod) => acc + mod.lessons.length, 0);
+  // Use real course data for display, with proper typing
+  const displayCourse: any = courseFromNew || mockCourse;
+  
+  const totalLessons = displayCourse.modules?.reduce((acc: number, mod: any) => acc + (mod.lessons?.length || 0), 0) || displayCourse.curriculum?.reduce((acc: number, mod: any) => acc + mod.lessons.length, 0) || 0;
 
   return (
     <div className="min-h-screen">
@@ -235,53 +242,61 @@ const CourseDetail = () => {
               {/* Course Info */}
               <div className="lg:col-span-2">
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <Badge className="bg-[#ff6b4d] text-white">{course.badge}</Badge>
+                  {displayCourse.badge && <Badge className="bg-[#ff6b4d] text-white">{displayCourse.badge}</Badge>}
                   <Badge variant="outline" className="text-white border-white/30">
-                    {course.category}
+                    {displayCourse.category}
                   </Badge>
                   <Badge variant="outline" className="text-white border-white/30">
-                    {course.level}
+                    {displayCourse.level}
                   </Badge>
                 </div>
 
                 <h1 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-white mb-4">
-                  {course.title}
+                  {displayCourse.title}
                 </h1>
                 <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-white/80 mb-6">
-                  {course.subtitle}
+                  {displayCourse.description || (displayCourse as any).subtitle}
                 </p>
 
                 {/* Meta */}
                 <div className="flex flex-wrap items-center gap-6 text-white/70 mb-8" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                   <div className="flex items-center gap-1.5">
                     <Star className="w-5 h-5 text-[#ff6b4d] fill-[#ff6b4d]" />
-                    <span className="font-semibold text-white">{course.rating}</span>
-                    <span>({course.reviews} reviews)</span>
+                    <span className="font-semibold text-white">{displayCourse.rating}</span>
+                    <span>({displayCourse.reviews} reviews)</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Users className="w-5 h-5" />
-                    <span>{course.students.toLocaleString()} students</span>
+                    <span>{((displayCourse as any).students || 12453).toLocaleString()} students</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Clock className="w-5 h-5" />
-                    <span>{course.duration}</span>
+                    <span>{displayCourse.duration}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <BookOpen className="w-5 h-5" />
+                    <span>{displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules • {totalLessons} lessons</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Globe className="w-5 h-5" />
-                    <span>{course.language}</span>
+                    <span>{(displayCourse as any).language || "English"}</span>
                   </div>
                 </div>
 
                 {/* Instructor Preview */}
                 <div className="flex items-center gap-4">
                   <img
-                    src={course.instructor.image}
-                    alt={course.instructor.name}
+                    src={typeof displayCourse.instructor === 'string' ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop" : displayCourse.instructor.image}
+                    alt={typeof displayCourse.instructor === 'string' ? displayCourse.instructor : displayCourse.instructor.name}
                     className="w-12 h-12 rounded-full object-cover ring-2 ring-[#ff6b4d]"
                   />
                   <div>
-                    <div style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-white">Created by {course.instructor.name}</div>
-                    <div style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-white/70">{course.instructor.title}</div>
+                    <div style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-white">
+                      Created by {typeof displayCourse.instructor === 'string' ? displayCourse.instructor : displayCourse.instructor.name}
+                    </div>
+                    <div style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-white/70">
+                      {typeof displayCourse.instructor === 'string' ? "DTMA Faculty" : displayCourse.instructor.title}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -292,8 +307,8 @@ const CourseDetail = () => {
                   {/* Preview Image */}
                   <div className="relative aspect-video">
                     <img
-                      src={course.image}
-                      alt={course.title}
+                      src={displayCourse.image}
+                      alt={displayCourse.title}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -301,10 +316,10 @@ const CourseDetail = () => {
                   <div className="p-6">
                     {/* Price */}
                     <div className="flex items-baseline gap-3 mb-6">
-                      <span style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>${course.price}</span>
-                      <span style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 400 }} className="text-muted-foreground line-through">${course.originalPrice}</span>
+                      <span style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>${displayCourse.price}</span>
+                      <span style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 400 }} className="text-muted-foreground line-through">${displayCourse.originalPrice}</span>
                       <Badge className="bg-green-600 text-white" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                        {Math.round((1 - course.price / course.originalPrice) * 100)}% off
+                        {Math.round((1 - displayCourse.price / displayCourse.originalPrice) * 100)}% off
                       </Badge>
                     </div>
 
@@ -333,7 +348,7 @@ const CourseDetail = () => {
                     <div>
                       <h4 className="mb-4" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>This course includes:</h4>
                       <ul className="space-y-3">
-                        {course.includes.map((item, index) => (
+                        {((displayCourse as any).includes || []).map((item: any, index: number) => (
                           <li key={index} className="flex items-center gap-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                             <item.icon className="w-5 h-5 text-[#ff6b4d] flex-shrink-0" />
                             <span>{item.text}</span>
@@ -353,8 +368,8 @@ const CourseDetail = () => {
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div>
               <div className="flex items-baseline gap-2">
-                <span style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>${course.price}</span>
-                <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-muted-foreground line-through">${course.originalPrice}</span>
+                <span style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>${displayCourse.price}</span>
+                <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-muted-foreground line-through">${displayCourse.originalPrice}</span>
               </div>
             </div>
             <Button 
@@ -377,7 +392,7 @@ const CourseDetail = () => {
                   What you'll learn
                 </h2>
                 <div className="grid sm:grid-cols-2 gap-4 p-6 bg-[#F5F6FA] rounded-2xl">
-                  {course.whatYouWillLearn.map((item, index) => (
+                  {((displayCourse as any).whatYouWillLearn || []).map((item: string, index: number) => (
                     <div key={index} className="flex gap-3">
                       <CheckCircle className="w-5 h-5 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
                       <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{item}</span>
@@ -392,11 +407,11 @@ const CourseDetail = () => {
                   Course Content
                 </h2>
                 <p className="text-[#4B5563] mb-6" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                  {course.curriculum.length} modules • {totalLessons} lessons • {course.duration} total
+                  {displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules • {totalLessons} lessons • {displayCourse.duration} total
                 </p>
 
                 <Accordion type="multiple" className="space-y-4">
-                  {course.curriculum.map((module, moduleIndex) => (
+                  {(displayCourse.modules || (displayCourse as any).curriculum || []).map((module: any, moduleIndex: number) => (
                     <AccordionItem
                       key={moduleIndex}
                       value={`module-${moduleIndex}`}
@@ -447,7 +462,7 @@ const CourseDetail = () => {
                   Requirements
                 </h2>
                 <ul className="space-y-3">
-                  {course.requirements.map((req, index) => (
+                  {((displayCourse as any).requirements || []).map((req: string, index: number) => (
                     <li key={index} className="flex items-start gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-[#ff6b4d] mt-2" />
                       <span style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{req}</span>
@@ -462,7 +477,7 @@ const CourseDetail = () => {
                   Description
                 </h2>
                 <div className="prose prose-neutral max-w-none">
-                  {course.description.split('\n\n').map((paragraph, index) => (
+                  {displayCourse.description.split('\n\n').map((paragraph, index) => (
                     <p key={index} className="text-[#4B5563] mb-4" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
                       {paragraph}
                     </p>
@@ -478,26 +493,30 @@ const CourseDetail = () => {
                 <div className="bg-card border border-border rounded-2xl p-6">
                   <div className="flex items-start gap-6">
                     <img
-                      src={course.instructor.image}
-                      alt={course.instructor.name}
+                      src={typeof displayCourse.instructor === 'string' ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop" : displayCourse.instructor.image}
+                      alt={typeof displayCourse.instructor === 'string' ? displayCourse.instructor : displayCourse.instructor.name}
                       className="w-24 h-24 rounded-xl object-cover"
                     />
                     <div>
                       <h3 className="text-[#0B0C19] mb-1" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
-                        {course.instructor.name}
+                        {typeof displayCourse.instructor === 'string' ? displayCourse.instructor : displayCourse.instructor.name}
                       </h3>
-                      <p className="text-[#ff6b4d] mb-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{course.instructor.title}</p>
+                      <p className="text-[#ff6b4d] mb-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                        {typeof displayCourse.instructor === 'string' ? "DTMA Faculty" : displayCourse.instructor.title}
+                      </p>
                       <div className="flex items-center gap-6 text-[#4B5563] mb-4" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                         <div className="flex items-center gap-1.5">
                           <Users className="w-4 h-4" />
-                          {course.instructor.students.toLocaleString()} students
+                          {typeof displayCourse.instructor === 'string' ? "15,420" : displayCourse.instructor.students.toLocaleString()} students
                         </div>
                         <div className="flex items-center gap-1.5">
                           <BookOpen className="w-4 h-4" />
-                          {course.instructor.courses} courses
+                          {typeof displayCourse.instructor === 'string' ? "24" : displayCourse.instructor.courses} courses
                         </div>
                       </div>
-                      <p className="text-[#4B5563]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{course.instructor.bio}</p>
+                      <p className="text-[#4B5563]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
+                        {typeof displayCourse.instructor === 'string' ? "DTMA Faculty includes multidisciplinary educators with expertise in digital transformation." : displayCourse.instructor.bio}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -599,10 +618,10 @@ const CourseDetail = () => {
         onOpenChange={setShowEnrollmentModal}
         course={{
           id: id || "",
-          title: course.title,
-          price: course.price,
-          originalPrice: course.originalPrice,
-          imageUrl: course.image,
+          title: displayCourse.title,
+          price: displayCourse.price,
+          originalPrice: displayCourse.originalPrice,
+          imageUrl: displayCourse.image,
         }}
         onEnrollmentComplete={handleEnrollmentComplete}
       />

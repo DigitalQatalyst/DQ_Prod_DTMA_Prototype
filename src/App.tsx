@@ -45,6 +45,7 @@ import DigitalWorkerWorkspace from "./pages/dimensions/DigitalWorkerWorkspace";
 import DigitalAccelerators from "./pages/dimensions/DigitalAccelerators";
 import Faculty from "./pages/Faculty";
 import FacultyDetail from "./pages/FacultyDetail";
+import AIStudyBuddyPage from "./pages/AIStudyBuddyPage";
 
 const queryClient = new QueryClient();
 
@@ -157,6 +158,7 @@ const AppRoutes = () => (
       <Route path="/courses/:courseId/builder" element={<ProtectedRoute><CourseBuilder /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardRouter /></ProtectedRoute>} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/ai-study-buddy" element={<ProtectedRoute><AIStudyBuddyPage /></ProtectedRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>

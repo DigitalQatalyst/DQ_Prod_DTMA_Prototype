@@ -189,14 +189,13 @@ export const ButlerAI = () => {
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${
-      isMinimized ? 'w-80' : 'w-96'
-    }`}>
+    <div className="fixed bottom-6 right-6 z-50">
       <div className={`bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 ${
-        isMinimized ? 'h-16' : 'h-[600px]'
+        isMinimized ? 'w-80 h-16' : 'w-96 h-[600px]'
       }`}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#1e2348] to-[#2a3058] p-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#1e2348] to-[#2a3058] p-4 flex items-center justify-between cursor-pointer"
+             onClick={() => isMinimized && setIsMinimized(false)}>
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10 ring-2 ring-[#ff6b4d]">
               <AvatarFallback className="bg-[#ff6b4d] text-white">
@@ -208,16 +207,18 @@ export const ButlerAI = () => {
               <p className="text-xs text-white/70">DTMA Concierge</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setIsMinimized(!isMinimized)}
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              title={isMinimized ? "Expand" : "Minimize"}
             >
-              <Minimize2 className="w-4 h-4 text-white" />
+              <Minimize2 className={`w-4 h-4 text-white transition-transform ${isMinimized ? 'rotate-180' : ''}`} />
             </button>
             <button
               onClick={() => setIsOpen(false)}
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              title="Close"
             >
               <X className="w-4 h-4 text-white" />
             </button>
@@ -304,7 +305,7 @@ export const ButlerAI = () => {
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Ask me anything..."
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
                 />

@@ -28,6 +28,7 @@ import {
   Calendar,
   CheckCircle,
   ExternalLink,
+  Bot,
   Sparkles,
   Video,
   TrendingUp,
@@ -36,6 +37,7 @@ import {
   FileText,
   Search,
   Bell,
+  MessageCircle,
 } from 'lucide-react';
 import { ProfileManagement } from '@/components/dashboard/ProfileManagement';
 import { ProgressTracking } from '@/components/dashboard/ProgressTracking';
@@ -424,14 +426,22 @@ const LearnerDashboard = () => {
                         : 'Start your digital transformation journey today!'}
                     </p>
                   </div>
-                  {inProgressCourses.length > 0 && (
-                    <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
+                  <div className="flex gap-3">
+                    <Link to="/ai-study-buddy">
                       <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="lg">
-                        <PlayCircle className="w-5 h-5 mr-2" />
-                        Continue Learning
+                        <Bot className="w-5 h-5 mr-2" />
+                        AI Study Buddy
                       </Button>
                     </Link>
-                  )}
+                    {inProgressCourses.length > 0 && (
+                      <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
+                        <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20" size="lg">
+                          <PlayCircle className="w-5 h-5 mr-2" />
+                          Continue Learning
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
 

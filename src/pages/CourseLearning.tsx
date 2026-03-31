@@ -45,6 +45,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CourseTutorAI } from "@/components/mentor/CourseTutorAI";
+import { WhatsAppLearning } from "@/components/learning/WhatsAppLearning";
 import { Card } from "@/components/ui/card";
 
 const CourseLearning = () => {
@@ -657,6 +658,12 @@ const CourseLearning = () => {
               <Card className="p-6 sticky top-24">
                 <h3 className="mb-6" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>AI Learning Tools</h3>
                 <div className="space-y-3">
+                  {/* WhatsApp Learning */}
+                  <WhatsAppLearning 
+                    courseTitle={courseData.title || course?.title || "Course"}
+                    lessonTitle={selectedLesson?.title || ""}
+                  />
+
                   {/* Flashcards */}
                   <button 
                     onClick={handleGenerateFlashcards}

@@ -25,6 +25,7 @@ import { useEligibilityTest, useEligibilityStatus } from "@/hooks/useEligibility
 import { useCheckEligibility, useEligibilityRequirements } from "@/hooks/useEligibilityCheck";
 import { EligibilityTestModal } from "./EligibilityTestModal";
 import { EligibilityCheckModal } from "./EligibilityCheckModal";
+import { WhatsAppOptInModal } from "./WhatsAppOptInModal";
 import { useToast } from "@/hooks/use-toast";
 
 interface CourseInfo {
@@ -61,6 +62,7 @@ export function EnrollmentModal({
   const [currentStep, setCurrentStep] = useState<EnrollmentStep>('overview');
   const [showEligibilityTest, setShowEligibilityTest] = useState(false);
   const [showEligibilityCheck, setShowEligibilityCheck] = useState(false);
+  const [showWhatsAppOptIn, setShowWhatsAppOptIn] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paymentDetails, setPaymentDetails] = useState({
@@ -152,6 +154,26 @@ export function EnrollmentModal({
   };
 
   const handleComplete = () => {
+    // Show WhatsApp opt-in modal instead of immediately completing
+    setShowWhatsAppOptIn(true);
+  };
+
+  const handleWhatsAppOptIn = (phoneNumber: string) => {
+    // Save WhatsApp preference (in real app, this would call an API)
+    console.log("WhatsApp opt-in:", phoneNumber);
+    toast({
+      title: "WhatsApp Learning Enabled",
+      description: "You'll start receiving daily lessons on WhatsApp soon!",
+    });
+    setShowWhatsAppOptIn(false);
+    onOpenChange(false);
+    onEnrollmentComplete();
+  };
+
+  const handleWhatsAppSkip = () => {
+    // User chose to skip WhatsApp learning
+    console.log("WhatsApp opt-in skipped");
+    setShowWhatsAppOptIn(false);
     onOpenChange(false);
     onEnrollmentComplete();
   };
@@ -168,7 +190,7 @@ export function EnrollmentModal({
 
   return (
     <>
-      <Dialog open={open && !showEligibilityTest} onOpenChange={handleClose}>
+      <Dialog open={open && !showEligibilityTest && !showWhatsAppOptIn} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
           {/* Progress Steps */}
           <div className="mb-6">
@@ -636,6 +658,14 @@ export function EnrollmentModal({
           }}
         />
       )}
+
+      {/* WhatsApp Opt-In Modal */}
+      <WhatsAppOptInModal
+        open={showWhatsAppOptIn}
+        onOpenChange={setShowWhatsAppOptIn}
+        onOptIn={handleWhatsAppOptIn}
+        onSkip={handleWhatsAppSkip}
+      />
     </>
   );
 }

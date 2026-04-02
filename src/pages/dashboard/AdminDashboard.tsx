@@ -4,6 +4,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAnalytics, usePendingCourses, useAdminUsers, useReviewCourse, useUpdateUserRole } from '@/hooks/useAdmin';
 import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
 import { InviteManagement } from '@/components/admin/InviteManagement';
+import AnalyticsPerformanceInsightsPanel from '@/components/admin/stage4/AnalyticsPerformanceInsightsPanel';
+import FinanceBillingGovernancePanel from '@/components/admin/stage4/FinanceBillingGovernancePanel';
+import OperationsSupportPanel from '@/components/admin/stage4/OperationsSupportPanel';
+import PartnerAccreditationReportingPanel from '@/components/admin/stage4/PartnerAccreditationReportingPanel';
+import RecordsCertificationGovernancePanel from '@/components/admin/stage4/RecordsCertificationGovernancePanel';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
 import {
@@ -75,7 +80,7 @@ import {
   ThumbsDown,
 } from 'lucide-react';
 
-type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
+type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'finance' | 'partner-reporting' | 'analytics-performance' | 'operations-support' | 'records-certification' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 const MOCK_COURSES = [
@@ -1050,9 +1055,11 @@ const AdminDashboard = () => {
     { id: 'invites' as AdminTab, label: 'Invites', icon: UserPlus },
     { id: 'communication' as AdminTab, label: 'Communication', icon: Settings },
     { id: 'governance' as AdminTab, label: 'Content Governance', icon: Settings },
-    { id: 'organizations' as AdminTab, label: 'Organizations', icon: Settings },
-    { id: 'certification' as AdminTab, label: 'Certification', icon: Award },
-    { id: 'commerce' as AdminTab, label: 'Commerce & Billing', icon: Settings },
+    { id: 'finance' as AdminTab, label: 'Finance & Billing', icon: BarChart2 },
+    { id: 'partner-reporting' as AdminTab, label: 'Partner & Reporting', icon: Globe },
+    { id: 'analytics-performance' as AdminTab, label: 'Analytics & Performance', icon: TrendingUp },
+    { id: 'operations-support' as AdminTab, label: 'Operations & Support', icon: Headphones },
+    { id: 'records-certification' as AdminTab, label: 'Records & Certification', icon: FileTextIcon },
     { id: 'system' as AdminTab, label: 'System Settings', icon: Settings },
     // AI Features Section
     { id: 'ai-assistant' as AdminTab, label: 'AI Operations Assistant', icon: Bot, section: 'ai' },
@@ -1503,71 +1510,15 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {/* Organizations Tab */}
-          {activeTab === 'organizations' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Organization & Integration Management</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Organization Management</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Manage organizational accounts and multi-tenant access.
-                  </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Add Organization</Button>
-                </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">External Integrations</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Configure integrations with external systems and APIs.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          {activeTab === 'finance' && <FinanceBillingGovernancePanel />}
 
-          {/* Certification Tab */}
-          {activeTab === 'certification' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Certification & Customer Success</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Certificate Template Management</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Design and manage certificate templates for courses.
-                  </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Create Template</Button>
-                </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Customer Success Tracking</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Track learner success metrics and engagement.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          {activeTab === 'partner-reporting' && <PartnerAccreditationReportingPanel />}
 
-          {/* Commerce Tab */}
-          {activeTab === 'commerce' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Commerce & Billing Operations</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Course Pricing & Plans</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Manage course pricing, discount codes, and subscription plans.
-                  </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Set Pricing</Button>
-                </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Payment & Refunds</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Process payments, manage refunds, and view transaction history.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          {activeTab === 'analytics-performance' && <AnalyticsPerformanceInsightsPanel />}
+
+          {activeTab === 'operations-support' && <OperationsSupportPanel />}
+
+          {activeTab === 'records-certification' && <RecordsCertificationGovernancePanel />}
 
           {/* System Settings Tab */}
           {activeTab === 'system' && (
@@ -3633,7 +3584,12 @@ const AdminDashboard = () => {
                     </label>
                     <select
                       value={reviewContentForm.contentType}
-                      onChange={(e) => setReviewContentForm({ ...reviewContentForm, contentType: e.target.value as any })}
+                      onChange={(e) =>
+                        setReviewContentForm({
+                          ...reviewContentForm,
+                          contentType: e.target.value as 'course' | 'lesson' | 'assessment' | 'resource',
+                        })
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
                     >
                       <option value="course">Course</option>

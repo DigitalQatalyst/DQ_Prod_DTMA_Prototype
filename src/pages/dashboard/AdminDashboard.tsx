@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAnalytics, usePendingCourses, useAdminUsers, useReviewCourse, useUpdateUserRole } from '@/hooks/useAdmin';
 import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
 import { InviteManagement } from '@/components/admin/InviteManagement';
+import { CreateCourseModal } from '@/components/admin/CreateCourseModal';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
 import {
@@ -101,6 +102,7 @@ const CourseManagementTab = () => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
+  const [showCreateCourseModal, setShowCreateCourseModal] = useState(false);
 
   const filtered = MOCK_COURSES.filter(c => {
     const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -134,12 +136,13 @@ const CourseManagementTab = () => {
             <h2 className="text-[20px] leading-[28px] font-semibold text-foreground">Course Authoring &amp; Publishing</h2>
             <p className="text-[13px] text-muted-foreground mt-0.5">Create, edit, and publish courses with approval workflows.</p>
           </div>
-          <Link to="/course-builder">
-            <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white gap-2">
-              <PlusCircle className="w-4 h-4" />
-              Create New Course
-            </Button>
-          </Link>
+          <Button 
+            onClick={() => setShowCreateCourseModal(true)}
+            className="bg-[#ff6b4d] hover:bg-[#e56045] text-white gap-2"
+          >
+            <PlusCircle className="w-4 h-4" />
+            Create New Course
+          </Button>
         </div>
 
         {/* Summary stat pills */}
@@ -355,6 +358,12 @@ const CourseManagementTab = () => {
           </div>
         </div>
       </section>
+
+      {/* Create Course Modal */}
+      <CreateCourseModal 
+        open={showCreateCourseModal}
+        onClose={() => setShowCreateCourseModal(false)}
+      />
     </div>
   );
 };

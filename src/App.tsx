@@ -15,13 +15,7 @@ import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import CourseLearning from "./pages/CourseLearning";
 import About from "./pages/About";
-import BecomeProvider from "./pages/BecomeProvider";
-import ProviderApplication from "./pages/ProviderApplication";
-import ProviderRegistration from "./pages/ProviderRegistration";
-import ProviderVerification from "./pages/ProviderVerification";
-import ProviderVerificationPending from "./pages/ProviderVerificationPending";
-import InstitutionProviderRegistration from "./pages/InstitutionProviderRegistration";
-import InstitutionVerification from "./pages/InstitutionVerification";
+import InstructorApplication from "./pages/InstructorApplication";
 import LearnerOnboarding from "./pages/LearnerOnboarding";
 import LearnerDashboard from "./pages/dashboard/LearnerDashboard";
 import InstructorDashboard from "./pages/dashboard/InstructorDashboard";
@@ -103,9 +97,7 @@ function FlowTracker() {
 
   useEffect(() => {
     // Set flow based on current route
-    if (location.pathname.startsWith("/become-provider") || 
-        location.pathname.startsWith("/provider-") ||
-        location.pathname.startsWith("/institution-")) {
+    if (location.pathname.startsWith("/instructor-")) {
       setFlow("provider");
     } else if (location.pathname === "/" || 
                location.pathname.startsWith("/categories") ||
@@ -143,16 +135,10 @@ const AppRoutes = () => (
       <Route path="/dimensions/digital-worker-workspace" element={<DigitalWorkerWorkspace />} />
       <Route path="/dimensions/digital-accelerators" element={<DigitalAccelerators />} />
       <Route path="/faculty" element={<Faculty />} />
+      <Route path="/faculty" element={<Faculty />} />
       <Route path="/faculty/:id" element={<FacultyDetail />} />
-      <Route path="/become-provider" element={<BecomeProvider />} />
-      <Route path="/provider-apply" element={<ProviderApplication />} />
-      <Route path="/provider-register/:type" element={<ProviderRegistration />} />
-      <Route path="/provider-verification" element={<ProviderVerification />} />
-      <Route path="/provider-verification-pending" element={<ProviderVerificationPending />} />
-      <Route path="/institution-register/:type" element={<InstitutionProviderRegistration />} />
-      <Route path="/institution-verification" element={<InstitutionVerification />} />
+      <Route path="/instructor-application" element={<InstructorApplication />} />
       <Route path="/learner-onboarding" element={<ProtectedRoute><LearnerOnboarding /></ProtectedRoute>} />
-      <Route path="/masterclasses" element={<Masterclasses />} />
       <Route path="/masterclasses/:id" element={<MasterclassDetail />} />
       <Route path="/masterclasses/:id/booking" element={<ProtectedRoute><MasterclassBooking /></ProtectedRoute>} />
       <Route path="/courses/:courseId/builder" element={<ProtectedRoute><CourseBuilder /></ProtectedRoute>} />

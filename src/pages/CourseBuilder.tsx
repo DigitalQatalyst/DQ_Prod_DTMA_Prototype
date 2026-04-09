@@ -28,6 +28,8 @@ import {
   Clock,
   HelpCircle,
   ChevronDown,
+  MessageSquare,
+  Bot,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
@@ -144,14 +146,14 @@ const CourseBuilder = () => {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#F5F1ED] text-gray-600 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#1e2348] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
         <div className="flex flex-col h-full">
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-4 border-b border-white/10">
             <Link to="/" className="flex items-center gap-3">
               <img
-                src="/log.svg"
-                alt="BROWZ Academy"
-                className="h-[28px] w-auto"
+                src="/dtma-logo.png"
+                alt="DTMA"
+                className="h-[32px] w-auto"
               />
             </Link>
           </div>
@@ -166,10 +168,10 @@ const CourseBuilder = () => {
                 <button
                   key={step.id}
                   onClick={() => setCurrentStep(step.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left ${
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left text-[14px] leading-[20px] font-medium ${
                     currentStep === step.id
-                      ? "bg-[#4A3428] text-white"
-                      : "text-gray-500 hover:bg-gray-200"
+                      ? "bg-[#ff6b4d] text-white"
+                      : "text-white/70 hover:bg-white/10"
                   }`}
                 >
                   {isCompleted ? (
@@ -177,25 +179,25 @@ const CourseBuilder = () => {
                   ) : (
                     <Circle className="w-5 h-5 flex-shrink-0" />
                   )}
-                  <span className="text-sm">{step.label}</span>
+                  <span>{step.label}</span>
                 </button>
               );
             })}
           </nav>
 
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-white/10">
             <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="w-10 h-10 rounded-full bg-[#4A3428] flex items-center justify-center text-sm font-semibold text-white">
+              <div className="w-10 h-10 rounded-full bg-[#ff6b4d] flex items-center justify-center text-[14px] leading-[20px] font-semibold text-white">
                 {profile?.full_name?.charAt(0) || 'I'}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-medium truncate text-gray-800">{profile?.full_name || 'Instructor'}</div>
-                <div className="text-xs text-gray-500">Instructor</div>
+                <div className="text-[14px] leading-[20px] font-medium truncate text-white">{profile?.full_name || 'Instructor'}</div>
+                <div className="text-[12px] leading-[16px] font-normal text-white/70">Instructor</div>
               </div>
             </div>
             <Button
               variant="ghost"
-              className="w-full justify-start text-gray-500 hover:text-gray-800 hover:bg-gray-200 text-sm"
+              className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10 text-[14px] leading-[20px] font-medium"
               onClick={signOut}
             >
               <LogOut className="w-4 h-4 mr-2" />
@@ -218,18 +220,18 @@ const CourseBuilder = () => {
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <div>
-                <h1 className="text-2xl font-semibold">{course.title || "New Course"}</h1>
-                <p className="text-sm text-muted-foreground">
+                <h1 className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">{course.title || "New Course"}</h1>
+                <p className="text-[13px] leading-[18px] font-normal text-muted-foreground">
                   {lastSaved ? `Last saved ${lastSaved.toLocaleTimeString()}` : "Not saved yet"}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={handlePreview}>
+              <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium">
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
               </Button>
-              <Button size="sm" onClick={handleSave}>
+              <Button size="sm" onClick={handleSave} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">
                 <Save className="w-4 h-4 mr-2" />
                 Save
               </Button>
@@ -239,8 +241,8 @@ const CourseBuilder = () => {
           {/* Progress Bar */}
           <div className="px-6 pb-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Progress</span>
-              <span className="text-sm text-muted-foreground">{completedSteps} of {STEPS.length}</span>
+              <span className="text-[13px] leading-[18px] font-medium text-[#1e2348]">Progress</span>
+              <span className="text-[13px] leading-[18px] font-normal text-muted-foreground">{completedSteps} of {STEPS.length}</span>
             </div>
             <Progress value={progressPercent} className="h-2" />
           </div>
@@ -257,33 +259,33 @@ const CourseBuilder = () => {
 
 // Step Components
 const CourseBasicsStep = ({ course }: any) => (
-  <div className="max-w-2xl">
-    <div className="bg-card rounded-2xl p-6 border border-border">
-      <h2 className="text-xl font-semibold mb-4">Course Basics</h2>
-      <div className="space-y-4">
+  <div className="max-w-4xl">
+    <div className="bg-card rounded-xl p-6 border border-border">
+      <h2 className="text-[20px] leading-[28px] font-medium mb-6 text-[#1e2348]">Course Basics</h2>
+      <div className="space-y-5">
         <div>
-          <label className="block text-sm font-medium mb-2">Course Title</label>
-          <p className="text-lg font-semibold">{course.title}</p>
+          <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Course Title</label>
+          <p className="text-[16px] leading-[24px] font-medium text-[#1e2348]">{course.title}</p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-2">Category</label>
-            <p className="text-sm capitalize">{course.category}</p>
+            <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Category</label>
+            <p className="text-[14px] leading-[20px] font-normal capitalize text-muted-foreground">{course.category}</p>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Level</label>
-            <p className="text-sm capitalize">{course.level}</p>
+            <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Level</label>
+            <p className="text-[14px] leading-[20px] font-normal capitalize text-muted-foreground">{course.level}</p>
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Description</label>
-          <p className="text-sm text-muted-foreground">{course.description || "No description provided"}</p>
+          <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Description</label>
+          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">{course.description || "No description provided"}</p>
         </div>
         <div>
-          <label className="block text-sm font-medium mb-2">Price</label>
-          <p className="text-sm">${course.price}</p>
+          <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Price</label>
+          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">${course.price}</p>
         </div>
-        <Badge className="w-fit">Completed</Badge>
+        <Badge className="w-fit bg-green-100 text-green-700 hover:bg-green-100 text-[12px] leading-[16px] font-medium">Completed</Badge>
       </div>
     </div>
   </div>
@@ -696,7 +698,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
             <h2 className="text-xl font-semibold mb-2">Curriculum</h2>
             <p className="text-sm text-muted-foreground">Add sections and lessons to your course.</p>
           </div>
-          <Button onClick={addSection} variant="hero" size="sm">
+          <Button onClick={addSection} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium" size="sm">
             <Plus className="w-4 h-4 mr-2" />
             Add Section
           </Button>
@@ -987,6 +989,101 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             </div>
                           </div>
                         )}
+
+                        {/* WhatsApp Micro-Learning & AI Tutor Settings */}
+                        <div className="mt-4 border-t border-border pt-4 space-y-4">
+                          {/* AI Tutor Toggle */}
+                          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <Bot className="w-4 h-4 text-[#ff6b4d]" />
+                              <div>
+                                <label className="text-xs font-medium">Enable AI Tutor for this lesson</label>
+                                <p className="text-xs text-muted-foreground">AI Q&A, summaries, and voice responses</p>
+                              </div>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={lesson.aiTutorEnabled !== false}
+                                onChange={(e) => {
+                                  setSections(sections.map(s => {
+                                    if (s.id === section.id) {
+                                      return {
+                                        ...s,
+                                        lessons: s.lessons.map(l => 
+                                          l.id === lesson.id ? { ...l, aiTutorEnabled: e.target.checked } : l
+                                        )
+                                      };
+                                    }
+                                    return s;
+                                  }));
+                                }}
+                                className="sr-only peer"
+                              />
+                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                          </div>
+
+                          {/* WhatsApp Micro-Learning */}
+                          <div className="border border-border rounded-lg p-3 space-y-3">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <MessageSquare className="w-4 h-4 text-green-600" />
+                                <label className="text-xs font-medium">Deliver via WhatsApp</label>
+                              </div>
+                              <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={lesson.whatsappEnabled || false}
+                                  onChange={(e) => {
+                                    setSections(sections.map(s => {
+                                      if (s.id === section.id) {
+                                        return {
+                                          ...s,
+                                          lessons: s.lessons.map(l => 
+                                            l.id === lesson.id ? { ...l, whatsappEnabled: e.target.checked } : l
+                                          )
+                                        };
+                                      }
+                                      return s;
+                                    }));
+                                  }}
+                                  className="sr-only peer"
+                                />
+                                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
+                              </label>
+                            </div>
+
+                            {lesson.whatsappEnabled && (
+                              <div>
+                                <label className="block text-xs font-medium mb-1">Micro-Learning Content (WhatsApp)</label>
+                                <Textarea
+                                  value={lesson.whatsappContent || ''}
+                                  onChange={(e) => {
+                                    setSections(sections.map(s => {
+                                      if (s.id === section.id) {
+                                        return {
+                                          ...s,
+                                          lessons: s.lessons.map(l => 
+                                            l.id === lesson.id ? { ...l, whatsappContent: e.target.value } : l
+                                          )
+                                        };
+                                      }
+                                      return s;
+                                    }));
+                                  }}
+                                  placeholder="Enter a short concept for WhatsApp delivery (max 280 characters)"
+                                  maxLength={280}
+                                  rows={3}
+                                  className="text-xs resize-none"
+                                />
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {lesson.whatsappContent?.length || 0}/280 characters
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     ))}
 
@@ -1009,7 +1106,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
 
       <div className="flex gap-3">
         <Button variant="outline" onClick={onSave}>Save as Draft</Button>
-        <Button disabled={!hasValidCurriculum} onClick={onContinue}>Continue to Next Step</Button>
+        <Button disabled={!hasValidCurriculum} onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -1264,7 +1361,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
 
       <div className="flex gap-3">
         <Button variant="outline" onClick={onSave}>Save as Draft</Button>
-        <Button disabled={!hasThumbnail} onClick={onContinue}>Continue to Next Step</Button>
+        <Button disabled={!hasThumbnail} onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -1299,6 +1396,10 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
   const [allowLateSubmissions, setAllowLateSubmissions] = useState(storedCourse.allowLateSubmissions || false);
   const [lateWindow, setLateWindow] = useState(storedCourse.lateWindow || "24");
   const [lateWindowUnit, setLateWindowUnit] = useState(storedCourse.lateWindowUnit || "hours");
+
+  // WhatsApp and AI settings
+  const [whatsappPracticeEnabled, setWhatsappPracticeEnabled] = useState(storedCourse.whatsappPracticeEnabled || false);
+  const [aiAssessmentEnabled, setAiAssessmentEnabled] = useState(storedCourse.aiAssessmentEnabled !== false);
 
   const assessmentRequired = certificationEnabled && assessmentType === "none";
   
@@ -1339,6 +1440,8 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
         lateWindowUnit,
         practicalTitle,
         practicalInstructions,
+        whatsappPracticeEnabled,
+        aiAssessmentEnabled,
         assessmentsConfigured: true,
         hasValidAssessmentContent: hasValidContent
       }));
@@ -1346,7 +1449,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
   }, [courseId, certificationEnabled, assessmentType, passingScore, retakesAllowed, maxRetakes, autoGrading, 
       quizQuestions, assignmentTitle, assignmentInstructions, assignmentBriefUrl, allowedFileTypes, 
       enableDeadline, dueDate, dueTime, timezone, allowLateSubmissions, lateWindow, lateWindowUnit,
-      practicalTitle, practicalInstructions, hasValidContent]);
+      practicalTitle, practicalInstructions, whatsappPracticeEnabled, aiAssessmentEnabled, hasValidContent]);
 
   return (
     <div className="max-w-4xl">
@@ -1674,6 +1777,49 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                   Add Question
                 </Button>
               </div>
+
+              {/* WhatsApp and AI Settings for Quiz */}
+              <div className="mt-6 space-y-4">
+                {/* WhatsApp Practice Questions */}
+                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5 text-green-600" />
+                    <div>
+                      <label className="text-sm font-medium">Deliver practice questions via WhatsApp</label>
+                      <p className="text-xs text-muted-foreground">Send quiz questions to learners through WhatsApp</p>
+                    </div>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={whatsappPracticeEnabled}
+                      onChange={(e) => setWhatsappPracticeEnabled(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                  </label>
+                </div>
+
+                {/* AI Assessment Assistance */}
+                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Bot className="w-5 h-5 text-[#ff6b4d]" />
+                    <div>
+                      <label className="text-sm font-medium">Enable AI Assessment Assistance</label>
+                      <p className="text-xs text-muted-foreground">AI helps explain answers and provide feedback</p>
+                    </div>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={aiAssessmentEnabled}
+                      onChange={(e) => setAiAssessmentEnabled(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  </label>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1914,8 +2060,8 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                   />
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm text-blue-900">
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                  <p className="text-sm text-orange-900">
                     <strong>Note:</strong> Practical evaluations require manual grading by the instructor. Students will be notified when their evaluation has been reviewed.
                   </p>
                 </div>
@@ -1930,6 +2076,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
         <Button 
           disabled={assessmentRequired || (assessmentType !== "none" && !hasValidContent)} 
           onClick={onContinue}
+          className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Continue to Next Step
         </Button>
@@ -2096,7 +2243,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                       )}
                       <div className="text-xs text-muted-foreground uppercase tracking-wider">Certificate of Completion</div>
                       <h3 className="text-2xl font-serif font-bold">
-                        {certificateBranding.issuingEntityName || "BROWZ Beauty Academy"}
+                        {certificateBranding.issuingEntityName || "DTMA - Digital Transformation Management Academy"}
                       </h3>
                       <p className="text-sm text-muted-foreground">This is to certify that</p>
                       <div className="text-xl font-semibold border-b-2 border-primary inline-block px-8 pb-1">[Student Name]</div>
@@ -2137,8 +2284,8 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
               </div>
 
               {/* Certification Logic Info */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-blue-900">Automatic Certificate Generation</p>
                   <p className="text-xs text-blue-800 mt-1">
@@ -2160,7 +2307,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
 
       <div className="flex gap-3">
         <Button variant="outline" onClick={onSave}>Save as Draft</Button>
-        <Button onClick={onContinue}>Continue to Next Step</Button>
+        <Button onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -2178,6 +2325,18 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
   const [enrollmentCap, setEnrollmentCap] = useState(storedCourse.enrollmentCap || "");
   const [language, setLanguage] = useState(storedCourse.language || "English");
 
+  // WhatsApp Learning Settings
+  const [whatsappLearningEnabled, setWhatsappLearningEnabled] = useState(storedCourse.whatsappLearningEnabled || false);
+  const [whatsappDeliveryType, setWhatsappDeliveryType] = useState(storedCourse.whatsappDeliveryType || "both");
+  const [whatsappFrequency, setWhatsappFrequency] = useState(storedCourse.whatsappFrequency || "daily");
+  const [quietHoursStart, setQuietHoursStart] = useState(storedCourse.quietHoursStart || "22:00");
+  const [quietHoursEnd, setQuietHoursEnd] = useState(storedCourse.quietHoursEnd || "08:00");
+
+  // AI Course Settings
+  const [aiTutorEnabled, setAiTutorEnabled] = useState(storedCourse.aiTutorEnabled !== false);
+  const [aiTone, setAiTone] = useState(storedCourse.aiTone || "friendly");
+  const [aiResponseStyle, setAiResponseStyle] = useState(storedCourse.aiResponseStyle || "detailed");
+
   // Save pricing data to localStorage whenever it changes
   useEffect(() => {
     if (courseId) {
@@ -2191,10 +2350,20 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
         hasEnrollmentCap,
         enrollmentCap,
         language,
+        whatsappLearningEnabled,
+        whatsappDeliveryType,
+        whatsappFrequency,
+        quietHoursStart,
+        quietHoursEnd,
+        aiTutorEnabled,
+        aiTone,
+        aiResponseStyle,
         pricingConfigured: true // Mark as configured
       }));
     }
-  }, [courseId, price, hasDiscount, discountType, discountValue, hasEnrollmentCap, enrollmentCap, language]);
+  }, [courseId, price, hasDiscount, discountType, discountValue, hasEnrollmentCap, enrollmentCap, language,
+      whatsappLearningEnabled, whatsappDeliveryType, whatsappFrequency, quietHoursStart, quietHoursEnd,
+      aiTutorEnabled, aiTone, aiResponseStyle]);
 
   const calculateDiscountedPrice = () => {
     const originalPrice = parseFloat(price) || 0;
@@ -2368,9 +2537,220 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
             </select>
           </div>
 
+          {/* WhatsApp Learning Settings */}
+          <div className="border border-border rounded-lg p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <MessageSquare className="w-5 h-5 text-green-600" />
+              <h3 className="text-lg font-semibold">WhatsApp Learning Settings</h3>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Enable WhatsApp Learning */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="text-sm font-medium">Enable WhatsApp Learning</label>
+                  <p className="text-xs text-muted-foreground mt-1">Deliver course content via WhatsApp</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={whatsappLearningEnabled}
+                    onChange={(e) => setWhatsappLearningEnabled(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                </label>
+              </div>
+
+              {whatsappLearningEnabled && (
+                <div className="space-y-4 pt-4 border-t border-border">
+                  {/* Delivery Type */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Delivery Type</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        onClick={() => setWhatsappDeliveryType("daily")}
+                        className={`p-3 border-2 rounded-lg text-xs font-medium transition-all ${
+                          whatsappDeliveryType === "daily"
+                            ? "border-green-600 bg-green-50 text-green-900"
+                            : "border-border hover:border-green-300"
+                        }`}
+                      >
+                        Daily Micro-Learning
+                      </button>
+                      <button
+                        onClick={() => setWhatsappDeliveryType("practice")}
+                        className={`p-3 border-2 rounded-lg text-xs font-medium transition-all ${
+                          whatsappDeliveryType === "practice"
+                            ? "border-green-600 bg-green-50 text-green-900"
+                            : "border-border hover:border-green-300"
+                        }`}
+                      >
+                        Practice Questions
+                      </button>
+                      <button
+                        onClick={() => setWhatsappDeliveryType("both")}
+                        className={`p-3 border-2 rounded-lg text-xs font-medium transition-all ${
+                          whatsappDeliveryType === "both"
+                            ? "border-green-600 bg-green-50 text-green-900"
+                            : "border-border hover:border-green-300"
+                        }`}
+                      >
+                        Both
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Frequency */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Frequency</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => setWhatsappFrequency("daily")}
+                        className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                          whatsappFrequency === "daily"
+                            ? "border-green-600 bg-green-50 text-green-900"
+                            : "border-border hover:border-green-300"
+                        }`}
+                      >
+                        Daily
+                      </button>
+                      <button
+                        onClick={() => setWhatsappFrequency("weekly")}
+                        className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                          whatsappFrequency === "weekly"
+                            ? "border-green-600 bg-green-50 text-green-900"
+                            : "border-border hover:border-green-300"
+                        }`}
+                      >
+                        Weekly
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Quiet Hours */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Quiet Hours</label>
+                    <p className="text-xs text-muted-foreground mb-2">No messages will be sent during these hours</p>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="time"
+                        value={quietHoursStart}
+                        onChange={(e) => setQuietHoursStart(e.target.value)}
+                        className="flex-1"
+                      />
+                      <span className="text-sm text-muted-foreground">to</span>
+                      <Input
+                        type="time"
+                        value={quietHoursEnd}
+                        onChange={(e) => setQuietHoursEnd(e.target.value)}
+                        className="flex-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* AI Learning Settings */}
+          <div className="border border-border rounded-lg p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Bot className="w-5 h-5 text-[#ff6b4d]" />
+              <h3 className="text-lg font-semibold">AI Learning Settings</h3>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Enable AI Tutor */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="text-sm font-medium">Enable AI Tutor (Course Level)</label>
+                  <p className="text-xs text-muted-foreground mt-1">Applies to all lessons unless overridden</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={aiTutorEnabled}
+                    onChange={(e) => setAiTutorEnabled(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+
+              {aiTutorEnabled && (
+                <div className="space-y-4 pt-4 border-t border-border">
+                  {/* AI Tone */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">AI Tone</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        onClick={() => setAiTone("friendly")}
+                        className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                          aiTone === "friendly"
+                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
+                            : "border-border hover:border-[#ff6b4d]/50"
+                        }`}
+                      >
+                        Friendly
+                      </button>
+                      <button
+                        onClick={() => setAiTone("professional")}
+                        className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                          aiTone === "professional"
+                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
+                            : "border-border hover:border-[#ff6b4d]/50"
+                        }`}
+                      >
+                        Professional
+                      </button>
+                      <button
+                        onClick={() => setAiTone("encouraging")}
+                        className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                          aiTone === "encouraging"
+                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
+                            : "border-border hover:border-[#ff6b4d]/50"
+                        }`}
+                      >
+                        Encouraging
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Response Style */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Response Style</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => setAiResponseStyle("short")}
+                        className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                          aiResponseStyle === "short"
+                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
+                            : "border-border hover:border-[#ff6b4d]/50"
+                        }`}
+                      >
+                        Short
+                      </button>
+                      <button
+                        onClick={() => setAiResponseStyle("detailed")}
+                        className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                          aiResponseStyle === "detailed"
+                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
+                            : "border-border hover:border-[#ff6b4d]/50"
+                        }`}
+                      >
+                        Detailed
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Visibility Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-blue-900">Course Visibility</p>
               <p className="text-xs text-blue-800 mt-1">
@@ -2383,7 +2763,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
 
       <div className="flex gap-3">
         <Button variant="outline" onClick={onSave}>Save as Draft</Button>
-        <Button onClick={onContinue}>Continue to Next Step</Button>
+        <Button onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -2407,6 +2787,9 @@ const SubmitStep = ({ course, onSave }: any) => {
   const certificationEnabled = !!storedCourse.certificationEnabled;
   const hasAssessment = storedCourse.assessmentType && storedCourse.assessmentType !== 'none';
   const hasValidAssessmentContent = !!storedCourse.hasValidAssessmentContent;
+  const whatsappEnabled = !!storedCourse.whatsappLearningEnabled;
+  const whatsappConfigured = whatsappEnabled ? !!(storedCourse.whatsappDeliveryType && storedCourse.whatsappFrequency) : true;
+  const aiEnabled = storedCourse.aiTutorEnabled !== false;
   
   const validationData = {
     hasTitle: !!course?.title,
@@ -2417,6 +2800,9 @@ const SubmitStep = ({ course, onSave }: any) => {
     certificationEnabled,
     hasAssessment,
     hasValidAssessmentContent,
+    whatsappEnabled,
+    whatsappConfigured,
+    aiEnabled,
   };
 
   const validationChecklist = [
@@ -2436,6 +2822,18 @@ const SubmitStep = ({ course, onSave }: any) => {
       label: 'Assessment content created', 
       required: validationData.hasAssessment, 
       completed: validationData.hasValidAssessmentContent 
+    },
+    { 
+      id: 'whatsappSettings', 
+      label: 'WhatsApp settings configured', 
+      required: validationData.whatsappEnabled, 
+      completed: validationData.whatsappConfigured 
+    },
+    { 
+      id: 'aiSettings', 
+      label: 'AI learning settings enabled', 
+      required: false, 
+      completed: validationData.aiEnabled 
     },
   ];
 
@@ -2535,8 +2933,8 @@ const SubmitStep = ({ course, onSave }: any) => {
 
         {/* Submission Info */}
         {isValid && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-blue-900">Ready to submit</p>
               <p className="text-xs text-blue-800 mt-1">
@@ -2577,9 +2975,9 @@ const SubmitStep = ({ course, onSave }: any) => {
       <div className="flex gap-3">
         <Button variant="outline" onClick={onSave}>Save as Draft</Button>
         <Button 
-          variant="hero" 
           onClick={handleSubmit}
           disabled={!isValid || isSubmitting}
+          className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? "Submitting..." : "Submit for Review"}
         </Button>

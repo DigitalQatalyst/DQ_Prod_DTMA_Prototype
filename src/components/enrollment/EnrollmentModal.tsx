@@ -26,6 +26,7 @@ import { useCheckEligibility, useEligibilityRequirements } from "@/hooks/useElig
 import { EligibilityTestModal } from "./EligibilityTestModal";
 import { EligibilityCheckModal } from "./EligibilityCheckModal";
 import { WhatsAppOptInModal } from "./WhatsAppOptInModal";
+import { SubscriptionPlans } from "@/components/payment/SubscriptionPlans";
 import { useToast } from "@/hooks/use-toast";
 
 interface CourseInfo {
@@ -43,7 +44,7 @@ interface EnrollmentModalProps {
   onEnrollmentComplete: () => void;
 }
 
-type EnrollmentStep = 'overview' | 'eligibility' | 'payment' | 'complete';
+type EnrollmentStep = 'pricing' | 'overview' | 'eligibility' | 'payment' | 'complete';
 
 export function EnrollmentModal({
   open,
@@ -59,7 +60,8 @@ export function EnrollmentModal({
   const { data: eligibilityCheck, isLoading: checkLoading } = useCheckEligibility(course.id);
   const { data: eligibilityRequirements } = useEligibilityRequirements(course.id);
   
-  const [currentStep, setCurrentStep] = useState<EnrollmentStep>('overview');
+  const [currentStep, setCurrentStep] = useState<EnrollmentStep>('pricing');
+  const [selectedPlan, setSelectedPlan] = useState<'single' | 'basic' | 'premium' | null>(null);
   const [showEligibilityTest, setShowEligibilityTest] = useState(false);
   const [showEligibilityCheck, setShowEligibilityCheck] = useState(false);
   const [showWhatsAppOptIn, setShowWhatsAppOptIn] = useState(false);
@@ -81,6 +83,7 @@ export function EnrollmentModal({
   const hasEligibilityRequirements = (eligibilityRequirements?.requirements?.length ?? 0) > 0;
 
   const steps = [
+    { id: 'pricing', label: 'Plan', icon: CreditCard },
     { id: 'overview', label: 'Overview', icon: BookOpen },
     { id: 'eligibility', label: 'Eligibility', icon: ClipboardCheck },
     ...(!isFree ? [{ id: 'payment', label: 'Payment', icon: CreditCard }] : []),
@@ -103,7 +106,17 @@ export function EnrollmentModal({
   };
 
   const handleProceed = async () => {
-    if (currentStep === 'overview') {
+    if (currentStep === 'pricing') {
+      if (!selectedPlan) {
+        toast({
+          title: "Please Select a Plan",
+          description: "Choose a payment option to continue.",
+          variant: "destructive",
+        });
+        return;
+      }
+      setCurrentStep('overview');
+    } else if (currentStep === 'overview') {
       if (!prerequisitesMet) {
         toast({
           title: "Prerequisites Not Met",
@@ -114,6 +127,7 @@ export function EnrollmentModal({
       }
       setCurrentStep('eligibility');
     } else if (currentStep === 'eligibility') {
+      // All plans (single, basic, premium) should go to payment step
       if (!isFree) {
         setCurrentStep('payment');
       } else {
@@ -132,6 +146,15 @@ export function EnrollmentModal({
   const handleEnroll = async () => {
     try {
       await enrollMutation.mutateAsync(course.id);
+      
+      // Show success message based on plan type
+      if (selectedPlan === 'basic' || selectedPlan === 'premium') {
+        toast({
+          title: "Subscription Activated!",
+          description: `You now have access to ${selectedPlan === 'basic' ? '3 courses' : 'all 6 courses'} with your ${selectedPlan} plan.`,
+        });
+      }
+      
       setCurrentStep('complete');
     } catch (error: any) {
       toast({
@@ -182,7 +205,8 @@ export function EnrollmentModal({
     if (currentStep === 'complete') {
       onEnrollmentComplete();
     }
-    setCurrentStep('overview');
+    setCurrentStep('pricing');
+    setSelectedPlan(null);
     onOpenChange(false);
   };
 
@@ -191,7 +215,7 @@ export function EnrollmentModal({
   return (
     <>
       <Dialog open={open && !showEligibilityTest && !showWhatsAppOptIn} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-5xl max-h-[90vh] overflow-y-auto">
           {/* Progress Steps */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
@@ -225,17 +249,44 @@ export function EnrollmentModal({
             <Progress value={progress} className="h-1" />
           </div>
 
+          {currentStep === 'pricing' && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-display text-xl">Choose Your Plan</DialogTitle>
+                <DialogDescription>
+                  Select how you'd like to access "{course.title}"
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="py-4">
+                <SubscriptionPlans
+                  currentCoursePrice={course.price}
+                  currentCourseId={course.id}
+                  onSelectPlan={(planType) => {
+                    setSelectedPlan(planType);
+                    setCurrentStep('overview');
+                  }}
+                />
+              </div>
+            </>
+          )}
+
           {currentStep === 'overview' && (
             <>
               <DialogHeader>
-                <DialogTitle className="font-display text-xl">Enroll in Course</DialogTitle>
+                <DialogTitle className="font-display text-xl">
+                  {selectedPlan === 'single' ? 'Enroll in Course' : `${selectedPlan === 'basic' ? 'Basic' : 'Premium'} Subscription`}
+                </DialogTitle>
                 <DialogDescription>
-                  You're about to enroll in "{course.title}"
+                  {selectedPlan === 'single' 
+                    ? `You're about to enroll in "${course.title}"`
+                    : `You're subscribing to the ${selectedPlan} plan with access to ${selectedPlan === 'basic' ? '3 courses' : 'all 6 courses'}`
+                  }
                 </DialogDescription>
               </DialogHeader>
 
               <div className="py-4 space-y-4">
-                {course.imageUrl && (
+                {course.imageUrl && selectedPlan === 'single' && (
                   <div className="aspect-video rounded-xl overflow-hidden bg-muted opacity-60">
                     <img 
                       src={course.imageUrl} 
@@ -246,9 +297,11 @@ export function EnrollmentModal({
                 )}
 
                 <div className="bg-muted/30 rounded-xl p-4 opacity-70">
-                  <h4 className="font-semibold mb-3 text-sm text-muted-foreground">Enrollment Summary</h4>
+                  <h4 className="font-semibold mb-3 text-sm text-muted-foreground">
+                    {selectedPlan === 'single' ? 'Enrollment Summary' : 'Subscription Summary'}
+                  </h4>
                   <div className="space-y-2 text-xs text-muted-foreground">
-                    {hasPrerequisites && (
+                    {selectedPlan === 'single' && hasPrerequisites && (
                       <div className="flex items-center justify-between">
                         <span>Prerequisites</span>
                         <span className={prerequisitesMet ? 'text-green-600' : 'text-amber-600'}>
@@ -257,26 +310,53 @@ export function EnrollmentModal({
                       </div>
                     )}
                     <div className="flex items-center justify-between">
-                      <span>Course Price</span>
+                      <span>
+                        {selectedPlan === 'single' ? 'Course Price' : 'Monthly Subscription'}
+                      </span>
                       <div className="text-right">
-                        {isFree ? (
+                        {selectedPlan === 'single' && isFree ? (
                           <span className="font-semibold text-green-600">Free</span>
                         ) : (
                           <div className="flex items-center gap-2">
-                            {course.originalPrice && course.originalPrice > course.price && (
+                            {selectedPlan === 'single' && course.originalPrice && course.originalPrice > course.price && (
                               <span className="text-muted-foreground line-through text-xs">
                                 ${course.originalPrice}
                               </span>
                             )}
-                            <span className="font-semibold">${course.price}</span>
+                            <span className="font-semibold">
+                              ${selectedPlan === 'single' ? course.price : selectedPlan === 'basic' ? 99 : 149}/
+                              {selectedPlan === 'single' ? 'one-time' : 'month'}
+                            </span>
                           </div>
                         )}
                       </div>
                     </div>
+                    {selectedPlan !== 'single' && (
+                      <div className="flex items-center justify-between pt-2 border-t">
+                        <span>Courses Included</span>
+                        <span className="font-semibold">{selectedPlan === 'basic' ? '3' : '6'} courses</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {!prerequisitesMet && (
+                {selectedPlan !== 'single' && (
+                  <div className="bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 rounded-xl p-4">
+                    <p className="text-sm text-[#ff6b4d] font-medium mb-2">
+                      ✨ Subscription Benefits
+                    </p>
+                    <ul className="space-y-1 text-xs text-muted-foreground">
+                      <li>• Access to {selectedPlan === 'basic' ? '3 foundational' : 'all 6'} courses</li>
+                      <li>• All course materials & certificates</li>
+                      <li>• Course Tutor AI support</li>
+                      <li>• WhatsApp Learning</li>
+                      {selectedPlan === 'premium' && <li>• Priority support</li>}
+                      <li>• Cancel anytime</li>
+                    </ul>
+                  </div>
+                )}
+
+                {selectedPlan === 'single' && !prerequisitesMet && (
                   <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-3 opacity-70">
                     <div className="flex gap-2">
                       <Lock className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
@@ -308,17 +388,17 @@ export function EnrollmentModal({
               </div>
 
               <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={handleClose}>
-                  Cancel
+                <Button variant="outline" onClick={() => setCurrentStep('pricing')}>
+                  Back to Plans
                 </Button>
                 <Button 
                   variant="hero" 
                   onClick={handleProceed}
-                  disabled={isLoading || !prerequisitesMet}
-                  title={!prerequisitesMet ? "Complete prerequisite courses first" : ""}
+                  disabled={isLoading || (selectedPlan === 'single' && !prerequisitesMet)}
+                  title={selectedPlan === 'single' && !prerequisitesMet ? "Complete prerequisite courses first" : ""}
                   className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
                 >
-                  {!prerequisitesMet ? (
+                  {selectedPlan === 'single' && !prerequisitesMet ? (
                     <>
                       <Lock className="w-4 h-4 mr-2" />
                       Prerequisites Required
@@ -503,26 +583,36 @@ export function EnrollmentModal({
               <DialogHeader>
                 <DialogTitle className="font-display text-xl">Complete Payment</DialogTitle>
                 <DialogDescription>
-                  Review your order and complete the payment.
+                  {selectedPlan === 'single' 
+                    ? 'Review your order and complete the payment.'
+                    : `Subscribe to the ${selectedPlan} plan`
+                  }
                 </DialogDescription>
               </DialogHeader>
 
               <div className="py-4 space-y-4">
                 <div className="bg-muted/50 rounded-xl p-4">
                   <div className="flex items-center justify-between mb-4 pb-4 border-b border-border">
-                    <span className="font-medium">{course.title}</span>
-                    <span className="font-semibold">${course.price}</span>
+                    <span className="font-medium">
+                      {selectedPlan === 'single' ? course.title : `${selectedPlan === 'basic' ? 'Basic' : 'Premium'} Subscription`}
+                    </span>
+                    <span className="font-semibold">
+                      ${selectedPlan === 'single' ? course.price : selectedPlan === 'basic' ? 99 : 149}
+                      {selectedPlan !== 'single' && '/month'}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between text-lg font-semibold">
-                    <span>Total</span>
-                    <span className="text-[#ff6b4d]">${course.price}</span>
+                    <span>Total {selectedPlan !== 'single' && '(Monthly)'}</span>
+                    <span className="text-[#ff6b4d]">
+                      ${selectedPlan === 'single' ? course.price : selectedPlan === 'basic' ? 99 : 149}
+                    </span>
                   </div>
                 </div>
 
                 <div className="bg-[#1e2348]/5 border border-[#1e2348]/20 rounded-xl p-4">
                   <p className="text-sm text-[#1e2348]">
                     <strong>Demo Mode:</strong> Payment integration coming soon. 
-                    Click "Complete Enrollment" to enroll for free during testing.
+                    Click "Complete {selectedPlan === 'single' ? 'Enrollment' : 'Subscription'}" to {selectedPlan === 'single' ? 'enroll' : 'subscribe'} for free during testing.
                   </p>
                 </div>
 
@@ -593,7 +683,7 @@ export function EnrollmentModal({
                       Processing...
                     </>
                   ) : (
-                    'Complete Enrollment'
+                    `Complete ${selectedPlan === 'single' ? 'Enrollment' : 'Subscription'}`
                   )}
                 </Button>
               </div>
@@ -607,20 +697,26 @@ export function EnrollmentModal({
                   <Rocket className="w-10 h-10 text-green-600 dark:text-green-400" />
                 </div>
                 <DialogTitle className="text-2xl font-display">
-                  You're Enrolled!
+                  {selectedPlan === 'single' ? "You're Enrolled!" : "Subscription Activated!"}
                 </DialogTitle>
                 <DialogDescription className="text-base">
-                  Congratulations! You now have access to "{course.title}".
+                  {selectedPlan === 'single' 
+                    ? `Congratulations! You now have access to "${course.title}".`
+                    : `You now have access to ${selectedPlan === 'basic' ? '3 courses' : 'all 6 courses'} with your ${selectedPlan} plan!`
+                  }
                 </DialogDescription>
               </DialogHeader>
 
               <div className="py-6">
                 <div className="bg-muted/50 rounded-xl p-6 text-center">
                   <p className="text-sm text-muted-foreground mb-4">
-                    Start your learning journey now and unlock your potential!
+                    {selectedPlan === 'single' 
+                      ? 'Start your learning journey now and unlock your potential!'
+                      : 'Explore all your courses and start learning today!'
+                    }
                   </p>
                   <Button variant="hero" size="lg" onClick={handleComplete} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
-                    Start Learning
+                    {selectedPlan === 'single' ? 'Start Learning' : 'View My Courses'}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </div>

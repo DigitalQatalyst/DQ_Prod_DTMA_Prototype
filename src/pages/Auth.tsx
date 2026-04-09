@@ -91,7 +91,7 @@ const Auth = () => {
         } else {
           toast({
             title: "Account created!",
-            description: "Welcome to BROWZ Beauty Academy. Setting up your profile...",
+            description: "Welcome to DTMA. Setting up your profile...",
           });
           setIsNewSignup(true);
           // Redirect will happen via useEffect

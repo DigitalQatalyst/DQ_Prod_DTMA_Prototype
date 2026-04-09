@@ -24,6 +24,7 @@ const Footer = () => {
       { label: "Terms of Use", href: "/terms" },
       { label: "Accreditation & Credentials", href: "/accreditation" },
       { label: "Admin", href: "/admin" },
+      { label: "Instructor", href: "/auth/instructor" },
     ],
     forYou: [
       { label: "Explore Courses", href: "/courses" },

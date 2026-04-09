@@ -11,7 +11,7 @@ const FeaturedCoursesSection = () => {
     {
       id: "face-4",
       title: "Facelift Alternatives: Non-Surgical Facial Rejuvenation",
-      instructor: "BROWZ Faculty",
+      instructor: "DTMA Faculty",
       image: "/e1.png",
       category: "Facial Aesthetics",
       level: "Advanced",
@@ -26,7 +26,7 @@ const FeaturedCoursesSection = () => {
     {
       id: "body-2",
       title: "Body Contouring Fundamentals",
-      instructor: "BROWZ Faculty",
+      instructor: "DTMA Faculty",
       image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop",
       category: "Body Aesthetics",
       level: "Intermediate",
@@ -41,7 +41,7 @@ const FeaturedCoursesSection = () => {
     {
       id: "breast-3",
       title: "Breast Enhancement Options Overview",
-      instructor: "BROWZ Faculty",
+      instructor: "DTMA Faculty",
       image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop",
       category: "Breast Aesthetics",
       level: "Professional Awareness",
@@ -56,7 +56,7 @@ const FeaturedCoursesSection = () => {
     {
       id: "inject-1",
       title: "Introduction to Aesthetic Injectables",
-      instructor: "BROWZ Faculty",
+      instructor: "DTMA Faculty",
       image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop",
       category: "Injectables & Fillers",
       level: "Professional Awareness",

@@ -14,6 +14,8 @@ import {
   Target,
   TrendingUp,
   Users,
+  GraduationCap,
+  Layers,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/Badge";
@@ -66,6 +68,20 @@ type Incident = {
   updatedAt: string;
 };
 
+type FacultyPerformance = {
+  name: string;
+  rating: number;
+  students: number;
+  courses: number;
+};
+
+type CategoryPerformance = {
+  name: string;
+  enrollments: number;
+  revenue: number;
+  growth: string;
+};
+
 const periodProfiles: Record<
   Period,
   {
@@ -113,10 +129,24 @@ const funnelByPeriod: Record<Period, FunnelStep[]> = {
 };
 
 const coursePerformance: CoursePerformance[] = [
-  { id: "CP-01", title: "Digital Transformation Fundamentals", owner: "Program Lead: Aisha Mensah", enrollments: 342, activeHours: 614, completionRate: 72, avgQuizScore: 81, rating: 4.8, revenue: 85500, dropOffPoint: "Module 4 case-study submission" },
-  { id: "CP-02", title: "AI & Automation in the Workplace", owner: "Program Lead: James Okafor", enrollments: 219, activeHours: 506, completionRate: 65, avgQuizScore: 76, rating: 4.6, revenue: 54750, dropOffPoint: "Simulation lab onboarding" },
-  { id: "CP-03", title: "Agile Project Management", owner: "Program Lead: Sofia Reyes", enrollments: 187, activeHours: 330, completionRate: 58, avgQuizScore: 71, rating: 4.5, revenue: 46750, dropOffPoint: "Sprint retrospective assignment" },
-  { id: "CP-04", title: "Cybersecurity Essentials", owner: "Program Lead: Kwame Asante", enrollments: 154, activeHours: 274, completionRate: 81, avgQuizScore: 88, rating: 4.7, revenue: 38500, dropOffPoint: "Low risk; no acute blocker" },
+  { id: "CP-01", title: "Digital Transformation Fundamentals", owner: "Aisha Mensah", enrollments: 342, activeHours: 614, completionRate: 72, avgQuizScore: 81, rating: 4.8, revenue: 85500, dropOffPoint: "Module 4 case-study submission" },
+  { id: "CP-02", title: "AI & Automation in the Workplace", owner: "James Okafor", enrollments: 219, activeHours: 506, completionRate: 65, avgQuizScore: 76, rating: 4.6, revenue: 54750, dropOffPoint: "Simulation lab onboarding" },
+  { id: "CP-03", title: "Agile Project Management", owner: "Sofia Reyes", enrollments: 187, activeHours: 330, completionRate: 58, avgQuizScore: 71, rating: 4.5, revenue: 46750, dropOffPoint: "Sprint retrospective assignment" },
+  { id: "CP-04", title: "Cybersecurity Essentials", owner: "Kwame Asante", enrollments: 154, activeHours: 274, completionRate: 81, avgQuizScore: 88, rating: 4.7, revenue: 38500, dropOffPoint: "Low risk; no acute blocker" },
+];
+
+const facultyPerformance: FacultyPerformance[] = [
+  { name: "Aisha Mensah", rating: 4.9, students: 1240, courses: 3 },
+  { name: "James Okafor", rating: 4.8, students: 980, courses: 2 },
+  { name: "Sofia Reyes", rating: 4.7, students: 850, courses: 4 },
+  { name: "Kwame Asante", rating: 4.7, students: 720, courses: 2 },
+];
+
+const categoryPerformance: CategoryPerformance[] = [
+  { name: "Digital Strategy", enrollments: 1450, revenue: 320000, growth: "+12%" },
+  { name: "Artificial Intelligence", enrollments: 980, revenue: 245000, growth: "+24%" },
+  { name: "Project Management", enrollments: 760, revenue: 180000, growth: "+8%" },
+  { name: "Cybersecurity", enrollments: 540, revenue: 135000, growth: "+15%" },
 ];
 
 const revenueBreakdown: RevenueBreakdown[] = [
@@ -211,7 +241,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[28px] bg-slate-950 text-white shadow-xl">
+      <section className="overflow-hidden rounded-3xl bg-gradient-to-r from-[#1e2348] via-[#24305f] to-[#0f172a] text-white shadow-xl">
         <div className="grid gap-8 px-6 py-7 lg:grid-cols-[1.6fr_0.9fr] lg:px-8">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/75">
@@ -221,7 +251,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold tracking-tight">Platform Analytics &amp; Performance Insights</h1>
               <p className="max-w-3xl text-sm text-white/75">
-                Decision-grade oversight for academy growth, course health, revenue performance, and operational pressure points. Metrics remain aggregated so the school manager can steer the academy without exposing learner-level data.
+                Decision-grade oversight for academy growth, course health, revenue performance, and operational pressure points.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -243,9 +273,8 @@ export default function AnalyticsPerformanceInsightsPanel() {
           <div className="rounded-[24px] border border-white/10 bg-white/5 p-5 backdrop-blur">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-white/55">Current review window</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-white/55">Academy Revenue</p>
                 <div className="mt-2 text-3xl font-semibold tracking-tight">{formatMoney(profile.revenue)}</div>
-                <p className="mt-1 text-sm text-white/70">Revenue recognized across direct, sponsor, and partner-linked programs.</p>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
                 <BarChart2 className="h-6 w-6 text-white" />
@@ -254,30 +283,27 @@ export default function AnalyticsPerformanceInsightsPanel() {
             <div className="mt-5 grid grid-cols-2 gap-4">
               <div className="rounded-2xl bg-white/5 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Active users</div><div className="mt-2 text-2xl font-semibold">{profile.activeUsers.toLocaleString()}</div></div>
               <div className="rounded-2xl bg-white/5 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Conversion</div><div className="mt-2 text-2xl font-semibold">{profile.conversionRate}%</div></div>
-              <div className="rounded-2xl bg-white/5 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Completion speed</div><div className="mt-2 text-2xl font-semibold">{profile.avgCompletionDays} days</div></div>
-              <div className="rounded-2xl bg-white/5 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">System uptime</div><div className="mt-2 text-2xl font-semibold">{profile.uptime}%</div></div>
             </div>
           </div>
         </div>
       </section>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">New learner sign-ups</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{profile.signUps}</div><p className="mt-2 text-sm text-slate-600">Top-of-funnel growth during the selected window.</p></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600"><Users className="h-5 w-5" /></div></div></CardContent></Card>
-        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Conversion to enrolment</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{profile.conversionRate}%</div><p className="mt-2 text-sm text-slate-600">Measured from visitor discovery through paid enrolment.</p></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-50 text-sky-600"><TrendingUp className="h-5 w-5" /></div></div></CardContent></Card>
-        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Payout exposure</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{formatMoney(totalPayoutExposure)}</div><p className="mt-2 text-sm text-slate-600">Cross-check against the governed finance workspace before release.</p></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600"><Banknote className="h-5 w-5" /></div></div></CardContent></Card>
-        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Operational alert state</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{supportAlert ? "Watch" : "Stable"}</div><p className="mt-2 text-sm text-slate-600">{supportAlert ? "Support volume is above the 30-day alert threshold." : "Ticket demand is within the expected operating band."}</p></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-600"><CircleAlert className="h-5 w-5" /></div></div></CardContent></Card>
+        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Total Enrollment</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{coursePerformance.reduce((acc, c) => acc + c.enrollments, 0).toLocaleString()}</div></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600"><Users className="h-5 w-5" /></div></div></CardContent></Card>
+        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Active Courses</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{coursePerformance.length}</div></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-50 text-sky-600"><BookOpen className="h-5 w-5" /></div></div></CardContent></Card>
+        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Avg Course Rating</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">4.7</div></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600"><Sparkles className="h-5 w-5" /></div></div></CardContent></Card>
+        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Operational Health</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{profile.uptime}%</div></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-600"><Activity className="h-5 w-5" /></div></div></CardContent></Card>
       </div>
 
       <Tabs defaultValue="executive" className="space-y-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <TabsList className="h-auto flex-wrap justify-start gap-2 rounded-2xl bg-slate-100 p-2">
             <TabsTrigger value="executive" className="rounded-xl px-4 py-2">Executive Overview</TabsTrigger>
-            <TabsTrigger value="course-performance" className="rounded-xl px-4 py-2">Course Performance</TabsTrigger>
-            <TabsTrigger value="activity" className="rounded-xl px-4 py-2">User Activity</TabsTrigger>
+            <TabsTrigger value="course-performance" className="rounded-xl px-4 py-2">Course & Faculty</TabsTrigger>
             <TabsTrigger value="financial" className="rounded-xl px-4 py-2">Financial Insights</TabsTrigger>
             <TabsTrigger value="operations" className="rounded-xl px-4 py-2">Operations Health</TabsTrigger>
           </TabsList>
-          <Button onClick={() => handleExport("Analytics board")} className="gap-2 bg-slate-950 text-white hover:bg-slate-800">
+          <Button onClick={() => handleExport("Analytics board")} className="gap-2 bg-[#1e2348] text-white hover:bg-[#24305f]">
             <Download className="h-4 w-4" />
             Export board
           </Button>
@@ -290,29 +316,51 @@ export default function AnalyticsPerformanceInsightsPanel() {
                 <CardTitle>Executive Overview Dashboard</CardTitle>
                 <CardDescription>Growth, acquisition, and strategic signals aligned to the school manager view.</CardDescription>
               </CardHeader>
-              <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                {funnel.map((step, index) => {
-                  const previous = funnel[index - 1]?.value ?? step.value;
-                  const conversion = previous === 0 ? 100 : Math.round((step.value / previous) * 100);
-                  return (
-                    <div key={step.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{step.label}</div>
-                      <div className="mt-2 text-2xl font-semibold text-slate-950">{step.value.toLocaleString()}</div>
-                      <p className="mt-1 text-sm text-slate-600">{step.helper}</p>
-                      <div className="mt-4"><div className="mb-2 flex items-center justify-between text-xs text-slate-500"><span>Step retention</span><span>{conversion}%</span></div><Progress value={conversion} className="h-2" /></div>
+              <CardContent className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-4">
+                  {funnel.map((step, index) => {
+                    const previous = funnel[index - 1]?.value ?? step.value;
+                    const conversion = previous === 0 ? 100 : Math.round((step.value / previous) * 100);
+                    return (
+                      <div key={step.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{step.label}</div>
+                          <Badge variant="outline" className="bg-white">{conversion}% retain</Badge>
+                        </div>
+                        <div className="mt-2 text-2xl font-semibold text-slate-950">{step.value.toLocaleString()}</div>
+                        <p className="mt-1 text-sm text-slate-600">{step.helper}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="space-y-4">
+                  <div className="rounded-2xl border border-slate-200 bg-indigo-50/50 p-4">
+                    <div className="flex items-center gap-2 font-semibold text-indigo-900 mb-3">
+                      <Target className="h-4 w-4" />
+                      Top Performing Category
                     </div>
-                  );
-                })}
+                    <div className="text-2xl font-bold text-indigo-950">{categoryPerformance[0].name}</div>
+                    <div className="text-sm text-indigo-700 mt-1">{categoryPerformance[0].enrollments} Enrollments · {categoryPerformance[0].growth} Growth</div>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-emerald-50/50 p-4">
+                    <div className="flex items-center gap-2 font-semibold text-emerald-900 mb-3">
+                      <GraduationCap className="h-4 w-4" />
+                      Highest Rated Faculty
+                    </div>
+                    <div className="text-2xl font-bold text-emerald-950">{facultyPerformance[0].name}</div>
+                    <div className="text-sm text-emerald-700 mt-1">{facultyPerformance[0].rating} Rating · {facultyPerformance[0].students} Students</div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
             <div className="space-y-6">
               <Card className="border-slate-200/80 shadow-sm">
-                <CardHeader><CardTitle>Learner segmentation</CardTitle><CardDescription>Aggregated mix by role and program buying context.</CardDescription></CardHeader>
+                <CardHeader><CardTitle>Learner segmentation</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
                   {learnerSegments.map((segment) => (
                     <div key={segment.name} className="space-y-2">
-                      <div className="flex items-center justify-between text-sm"><span className="font-medium text-slate-900">{segment.name}</span><span className="text-slate-500">{segment.learners} learners</span></div>
+                      <div className="flex items-center justify-between text-sm"><span className="font-medium text-slate-900">{segment.name}</span><span className="text-slate-500">{segment.learners}</span></div>
                       <Progress value={segment.share} className="h-2" />
                     </div>
                   ))}
@@ -320,11 +368,11 @@ export default function AnalyticsPerformanceInsightsPanel() {
               </Card>
 
               <Card className="border-slate-200/80 shadow-sm">
-                <CardHeader><CardTitle>Trending topics</CardTitle><CardDescription>Signals from search, community activity, and open-text feedback.</CardDescription></CardHeader>
+                <CardHeader><CardTitle>Trending topics</CardTitle></CardHeader>
                 <CardContent className="space-y-3">
                   {trendTopics.map((trend) => (
                     <div key={trend.topic} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                      <div className="flex items-center justify-between gap-3"><div><div className="font-medium text-slate-950">{trend.topic}</div><div className="text-sm text-slate-500">{trend.source}</div></div><Badge className="border border-slate-200 bg-white text-slate-700">{trend.signal}</Badge></div>
+                      <div className="flex items-center justify-between gap-3"><div><div className="font-medium text-slate-950">{trend.topic}</div><div className="text-xs text-slate-500">{trend.source}</div></div><Badge className="border border-slate-200 bg-white text-slate-700">{trend.signal}</Badge></div>
                     </div>
                   ))}
                 </CardContent>
@@ -334,60 +382,72 @@ export default function AnalyticsPerformanceInsightsPanel() {
         </TabsContent>
 
         <TabsContent value="course-performance" className="space-y-6">
-          <Card className="border-slate-200/80 shadow-sm">
-            <CardHeader className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-              <div><CardTitle>Course Performance Board</CardTitle><CardDescription>Popularity ranking combines enrolment count with active session intensity.</CardDescription></div>
-              <Button variant="outline" onClick={() => handleExport("Course performance board")} className="gap-2"><Download className="h-4 w-4" />Export board</Button>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader><TableRow><TableHead>Program</TableHead><TableHead>Popularity signal</TableHead><TableHead>Completion</TableHead><TableHead>Assessment</TableHead><TableHead>Revenue</TableHead><TableHead>Action</TableHead></TableRow></TableHeader>
-                <TableBody>
-                  {rankedCourses.map((course) => {
-                    const popularity = Math.round(course.enrollments * 0.45 + course.activeHours * 0.35 + course.revenue / 1000 * 0.2);
-                    return (
-                      <TableRow key={course.id}>
-                        <TableCell><div className="space-y-1"><div className="font-medium text-slate-950">{course.title}</div><div className="text-sm text-slate-500">{course.owner}</div></div></TableCell>
-                        <TableCell><div className="space-y-1"><div className="font-medium text-slate-950">{popularity}</div><div className="text-sm text-slate-500">{course.enrollments} enrolments / {course.activeHours} active hours</div></div></TableCell>
-                        <TableCell><div className="space-y-1"><div className="font-medium text-slate-950">{course.completionRate}%</div><Progress value={course.completionRate} className="h-2 w-28" /></div></TableCell>
-                        <TableCell><div className="space-y-1"><div className="font-medium text-slate-950">{course.avgQuizScore}% average</div><div className="text-sm text-slate-500">{course.rating.toFixed(1)} course rating</div></div></TableCell>
-                        <TableCell>{formatMoney(course.revenue)}</TableCell>
-                        <TableCell><Button variant="outline" size="sm" onClick={() => handleEscalate(course)}>Assign update</Button></TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Card className="border-slate-200/80 shadow-sm"><CardHeader><CardTitle>Completion funnel hotspots</CardTitle><CardDescription>Where learners drop out before finishing an otherwise popular course.</CardDescription></CardHeader><CardContent className="space-y-3">{coursePerformance.map((course) => <div key={course.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="flex items-start justify-between gap-3"><div><div className="font-medium text-slate-950">{course.title}</div><div className="mt-1 text-sm text-slate-500">{course.dropOffPoint}</div></div><Badge className="border border-slate-200 bg-white text-slate-700">{course.completionRate}% complete</Badge></div></div>)}</CardContent></Card>
-            <Card className="border-slate-200/80 shadow-sm"><CardHeader><CardTitle>Learning effectiveness</CardTitle><CardDescription>Aggregated outcome quality without exposing learner-level records.</CardDescription></CardHeader><CardContent className="grid gap-4 sm:grid-cols-2"><div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Average completion time</div><div className="mt-2 text-2xl font-semibold text-slate-950">{profile.avgCompletionDays} days</div></div><div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Average quiz performance</div><div className="mt-2 text-2xl font-semibold text-slate-950">{Math.round(coursePerformance.reduce((sum, item) => sum + item.avgQuizScore, 0) / coursePerformance.length)}%</div></div><div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Top sentiment</div><div className="mt-2 text-2xl font-semibold text-slate-950">4.7 / 5</div><p className="mt-1 text-sm text-slate-500">Faculty access and case-study depth are driving positive reviews.</p></div><div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Most demonstrated skill</div><div className="mt-2 text-2xl font-semibold text-slate-950">Digital governance</div><p className="mt-1 text-sm text-slate-500">Appears most often across validated capstone rubrics.</p></div></CardContent></Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="activity" className="space-y-6">
-          <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
             <Card className="border-slate-200/80 shadow-sm">
-              <CardHeader><CardTitle>User Activity Hub</CardTitle><CardDescription>Engagement patterns spanning active sessions, forums, and assessments.</CardDescription></CardHeader>
-              <CardContent className="space-y-3">
-                {activitySignals.map((item) => (
-                  <div key={item.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="flex items-start justify-between gap-3"><div><div className="font-medium text-slate-950">{item.title}</div><div className="mt-1 text-sm text-slate-500">{item.helper}</div></div><Badge className={cn("border", badgeClass(item.status))}>{labelForSeverity(item.status)}</Badge></div>
-                    <div className="mt-3 text-2xl font-semibold text-slate-950">{item.value}</div>
+              <CardHeader><CardTitle>Course Performance Board</CardTitle><CardDescription>Ranking by enrollment, active hours, and revenue.</CardDescription></CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader><TableRow><TableHead>Program</TableHead><TableHead>Faculty</TableHead><TableHead>Enrollment</TableHead><TableHead>Rating</TableHead><TableHead className="text-right">Revenue</TableHead></TableRow></TableHeader>
+                  <TableBody>
+                    {rankedCourses.map((course) => (
+                      <TableRow key={course.id}>
+                        <TableCell className="font-medium">{course.title}</TableCell>
+                        <TableCell>{course.owner}</TableCell>
+                        <TableCell>{course.enrollments}</TableCell>
+                        <TableCell><div className="flex items-center gap-1"><Sparkles className="h-3 w-3 text-amber-500" />{course.rating}</div></TableCell>
+                        <TableCell className="text-right">{formatMoney(course.revenue)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            <Card className="border-slate-200/80 shadow-sm">
+              <CardHeader><CardTitle>Faculty Spotlight</CardTitle><CardDescription>Top rated teachers by learner feedback.</CardDescription></CardHeader>
+              <CardContent className="space-y-4">
+                {facultyPerformance.map((faculty) => (
+                  <div key={faculty.name} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 bg-slate-50/50">
+                    <div>
+                      <div className="font-semibold text-slate-900">{faculty.name}</div>
+                      <div className="text-xs text-slate-500">{faculty.courses} Courses · {faculty.students} Learners</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-slate-950">{faculty.rating}</div>
+                      <div className="flex gap-0.5 justify-end text-amber-500">
+                        {[1, 2, 3, 4, 5].map((s) => <Sparkles key={s} className="h-3 w-3 fill-current" />)}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </CardContent>
             </Card>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-2">
             <Card className="border-slate-200/80 shadow-sm">
-              <CardHeader><CardTitle>Engagement signal map</CardTitle><CardDescription>Where community and learning interactions are climbing fastest.</CardDescription></CardHeader>
-              <CardContent className="space-y-4">
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-100 text-sky-700"><MessageSquare className="h-5 w-5" /></div><div><div className="font-medium text-slate-950">Forum activity</div><div className="text-sm text-slate-500">1,248 posts and 3,612 reactions in the selected window.</div></div></div></div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-700"><BookOpen className="h-5 w-5" /></div><div><div className="font-medium text-slate-950">Completion funnel attention</div><div className="text-sm text-slate-500">Case-study submissions remain the most common completion bottleneck.</div></div></div></div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700"><Target className="h-5 w-5" /></div><div><div className="font-medium text-slate-950">Most adopted competency</div><div className="text-sm text-slate-500">Transformation strategy was evidenced in 61% of recent capstone reviews.</div></div></div></div>
+              <CardHeader><CardTitle>Category Performance</CardTitle><CardDescription>Growth metrics across academy subjects.</CardDescription></CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {categoryPerformance.map((cat) => (
+                    <div key={cat.name} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-slate-100 rounded-xl text-slate-600"><Layers className="h-4 w-4" /></div>
+                        <div>
+                          <div className="font-semibold text-slate-900">{cat.name}</div>
+                          <div className="text-xs text-slate-500">{cat.enrollments} Total Enrollments</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-bold text-slate-900">{formatMoney(cat.revenue)}</div>
+                        <div className="text-xs text-emerald-600 font-medium">{cat.growth} Growth</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
+            <Card className="border-slate-200/80 shadow-sm"><CardHeader><CardTitle>Completion Funnel Hotspots</CardTitle></CardHeader><CardContent className="space-y-3">{coursePerformance.map((course) => <div key={course.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="flex items-start justify-between gap-3"><div><div className="font-medium text-slate-950">{course.title}</div><div className="mt-1 text-xs text-slate-500">{course.dropOffPoint}</div></div><Badge className="bg-white border-slate-200">{course.completionRate}% complete</Badge></div></div>)}</CardContent></Card>
           </div>
         </TabsContent>
 

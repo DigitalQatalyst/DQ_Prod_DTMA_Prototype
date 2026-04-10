@@ -88,9 +88,6 @@ const FeaturedCoursesSection2 = () => {
                   alt={course.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <Badge className="absolute top-3 left-3 bg-[#ff6b4d] text-white">
-                  {course.shortTitle}
-                </Badge>
               </div>
               <div className="p-5">
                 <h3 className="text-lg font-semibold text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">

@@ -18,7 +18,7 @@ export const WhatsAppFloatingButton = () => {
   return (
     <button
       onClick={handleWhatsAppClick}
-      className="fixed bottom-28 right-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#20BA5A] rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+      className="fixed bottom-28 right-6 z-40 w-14 h-14 bg-[#25D366] hover:bg-[#20BA5A] rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
       aria-label="Contact us on WhatsApp"
     >
       {/* WhatsApp Icon */}

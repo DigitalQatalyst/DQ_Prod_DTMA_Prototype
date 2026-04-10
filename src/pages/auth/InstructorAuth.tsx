@@ -69,80 +69,80 @@ const InstructorAuth = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-background">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-[#1e2348]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=2069&auto=format&fit=crop"
-            alt="Beauty instructor"
-            className="w-full h-full object-cover opacity-30"
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+            alt="Digital transformation"
+            className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-white via-white/80 to-white/40" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1e2348] via-[#1e2348]/95 to-[#1e2348]/80" />
         </div>
 
-        <div className="relative z-10 flex flex-col justify-between p-12 text-foreground">
+        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[50px] w-auto"
             />
           </Link>
 
-          <div className="max-w-md opacity-60">
-            <h2 className="text-[28px] leading-[36px] font-semibold mb-4">
-              Share Your
+          <div className="max-w-md">
+            <h2 className="text-[32px] leading-[40px] font-semibold mb-4 text-white">
+              Shape the Future of
               <br />
-              Expertise
+              Digital Transformation
             </h2>
-            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-              Create courses, inspire students, and grow your beauty education business with BROWZ Beauty Academy.
+            <p className="text-[16px] leading-[24px] font-normal text-white/80">
+              Join DTMA's community of expert instructors. Create courses, inspire learners, and drive digital transformation education forward.
             </p>
           </div>
 
-          <div className="flex gap-12 opacity-50">
+          <div className="flex gap-12">
             <div>
-              <div className="text-[24px] leading-[32px] font-medium text-primary">Create</div>
-              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Courses</div>
+              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">Create</div>
+              <div className="text-[14px] leading-[20px] font-normal text-white/70">Courses</div>
             </div>
             <div>
-              <div className="text-[24px] leading-[32px] font-medium text-primary">Track</div>
-              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Students</div>
+              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">Inspire</div>
+              <div className="text-[14px] leading-[20px] font-normal text-white/70">Learners</div>
             </div>
             <div>
-              <div className="text-[24px] leading-[32px] font-medium text-primary">Earn</div>
-              <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">Revenue</div>
+              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">Transform</div>
+              <div className="text-[14px] leading-[20px] font-normal text-white/70">Education</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Right Panel - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col bg-background dark:bg-charcoal">
-        <div className="lg:hidden p-6 border-b border-border">
+      <div className="w-full lg:w-1/2 flex flex-col bg-white">
+        <div className="lg:hidden p-6 border-b border-gray-200">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[40px] w-auto"
             />
           </Link>
         </div>
 
         <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md mx-auto">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground hover:text-primary transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-[12px] leading-[16px] font-medium text-gray-600 hover:text-[#ff6b4d] transition-colors mb-12"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
-            <div className="mb-8">
-              <h1 className="text-[32px] leading-[40px] font-semibold text-foreground mb-2">
+            <div className="mb-10 text-center">
+              <h1 className="text-[40px] leading-[48px] font-semibold text-[#1e2348] mb-3">
                 Instructor Sign In
               </h1>
-              <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
+              <p className="text-[14px] leading-[20px] font-normal text-gray-600">
                 Access your instructor dashboard
               </p>
             </div>
@@ -150,18 +150,18 @@ const InstructorAuth = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-foreground">
+                <Label htmlFor="email" className="text-[12px] leading-[16px] font-medium text-[#1e2348]">
                   Email Address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your instructor email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-11 h-12 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                    className="pl-11 h-12 text-[14px] leading-[20px] bg-white border-gray-300 text-[#1e2348] placeholder:text-gray-400 focus:border-[#ff6b4d] focus:ring-[#ff6b4d] transition-all"
                     required
                     disabled={isSubmitting}
                   />
@@ -169,18 +169,18 @@ const InstructorAuth = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-foreground">
+                <Label htmlFor="password" className="text-[12px] leading-[16px] font-medium text-[#1e2348]">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-11 pr-11 h-12 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                    className="pl-11 pr-11 h-12 text-[14px] leading-[20px] bg-white border-gray-300 text-[#1e2348] placeholder:text-gray-400 focus:border-[#ff6b4d] focus:ring-[#ff6b4d] transition-all"
                     required
                     minLength={6}
                     disabled={isSubmitting}
@@ -188,7 +188,7 @@ const InstructorAuth = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1e2348] transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -197,7 +197,7 @@ const InstructorAuth = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground text-[16px] leading-[24px] font-normal"
+                className="w-full h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium transition-colors mt-8"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -206,15 +206,15 @@ const InstructorAuth = () => {
                     Signing in...
                   </>
                 ) : (
-                  "Sign In as Instructor"
+                  "Sign In"
                 )}
               </Button>
             </form>
 
-            <p className="text-center text-[14px] leading-[20px] font-normal text-muted-foreground mt-8">
+            <p className="text-center text-[12px] leading-[16px] font-normal text-gray-600 mt-8">
               Don't have an account?{" "}
-              <Link to="/become-provider" className="text-primary font-medium hover:underline">
-                Sign up
+              <Link to="/instructor-application" className="text-[#ff6b4d] font-medium hover:underline">
+                Apply to become an instructor
               </Link>
             </p>
           </div>

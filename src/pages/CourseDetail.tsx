@@ -574,9 +574,6 @@ const CourseDetail = () => {
                       alt={recCourse.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <Badge className="absolute top-3 left-3 bg-[#ff6b4d] text-white text-[12px] leading-[16px] font-medium">
-                      {recCourse.category}
-                    </Badge>
                   </div>
                   <div className="p-5">
                     <h3 className="text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>

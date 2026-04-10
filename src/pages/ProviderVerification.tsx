@@ -82,7 +82,7 @@ const ProviderVerification = () => {
                 <Shield className="w-8 h-8 text-primary" />
               </div>
               <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
-                Verify your eligibility to publish on BROWZ Beauty Academy
+                Verify your eligibility to publish on DTMA
               </h1>
               <p className="text-lg text-muted-foreground">
                 Help us ensure quality by confirming your credentials. This quick step protects
@@ -207,7 +207,7 @@ const ProviderVerification = () => {
                         name="professionalBio"
                         value={verificationData.professionalBio}
                         onChange={handleInputChange}
-                        placeholder="Describe your professional background, teaching experience, and what makes you qualified to teach on BROWZ Beauty Academy..."
+                        placeholder="Describe your professional background, teaching experience, and what makes you qualified to teach on DTMA..."
                         rows={5}
                         className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                       />

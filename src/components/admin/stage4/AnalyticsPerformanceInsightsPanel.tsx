@@ -34,7 +34,15 @@ type CoursePerformance = {
   dropOffPoint: string;
 };
 
-type FacultyPerformance = { name: string; rating: number; students: number; courses: number };
+type FacultyPerformance = {
+  name: string;
+  rating: number;
+  activeStudents: number;
+  courses: number;
+  completionRate: number;   // % of enrolled who finished
+  lastActiveDaysAgo: number;
+  unansweredQA: number;
+};
 type CategoryPerformance = { name: string; enrollments: number; revenue: number; growth: string };
 type TrendTopic = { topic: string; source: string; signal: string };
 
@@ -53,10 +61,10 @@ const coursePerformance: CoursePerformance[] = [
 ];
 
 const facultyPerformance: FacultyPerformance[] = [
-  { name: "Aisha Mensah", rating: 4.9, students: 1240, courses: 3 },
-  { name: "James Okafor", rating: 4.8, students: 980,  courses: 2 },
-  { name: "Sofia Reyes",  rating: 4.7, students: 850,  courses: 4 },
-  { name: "Kwame Asante", rating: 4.7, students: 720,  courses: 2 },
+  { name: "Aisha Mensah",  rating: 4.9, activeStudents: 342, courses: 3, completionRate: 74, lastActiveDaysAgo: 1,  unansweredQA: 0 },
+  { name: "James Okafor",  rating: 4.8, activeStudents: 219, courses: 2, completionRate: 65, lastActiveDaysAgo: 3,  unansweredQA: 4 },
+  { name: "Sofia Reyes",   rating: 4.7, activeStudents: 187, courses: 4, completionRate: 58, lastActiveDaysAgo: 16, unansweredQA: 2 },
+  { name: "Kwame Asante",  rating: 4.7, activeStudents: 154, courses: 2, completionRate: 81, lastActiveDaysAgo: 2,  unansweredQA: 0 },
 ];
 
 const categoryPerformance: CategoryPerformance[] = [
@@ -278,29 +286,54 @@ export default function AnalyticsPerformanceInsightsPanel() {
         <TabsContent value="faculty" className="space-y-6">
           <Card className="border-slate-200/80 shadow-sm">
             <CardHeader>
-              <CardTitle>Faculty Performance</CardTitle>
-              <CardDescription>Top-rated instructors by learner feedback and student reach.</CardDescription>
+              <CardTitle>Faculty</CardTitle>
+              <CardDescription>Instructor performance and attention signals. Flags appear when action may be needed.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {facultyPerformance.map((f) => (
-                <div key={f.name} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 bg-slate-50/50">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1e2348] text-white text-sm font-semibold">
-                      {f.name.charAt(0)}
+            <CardContent className="grid gap-4 sm:grid-cols-2">
+              {facultyPerformance.map((f) => {
+                const needsAttention = f.lastActiveDaysAgo > 14 || f.unansweredQA > 0 || f.completionRate < 65;
+                return (
+                  <div key={f.name} className={cn(
+                    "rounded-2xl border p-5 space-y-4",
+                    needsAttention ? "border-amber-200 bg-amber-50/40" : "border-slate-100 bg-slate-50/50"
+                  )}>
+                    {/* Identity row */}
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1e2348] text-white text-sm font-semibold shrink-0">
+                          {f.name.charAt(0)}
+                        </div>
+                        <div>
+                          <div className="font-semibold text-slate-900">{f.name}</div>
+                          <div className="text-xs text-slate-500">{f.courses} course{f.courses !== 1 ? "s" : ""} · {f.activeStudents.toLocaleString()} active students</div>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="text-lg font-bold text-slate-950">{f.rating}</div>
+                        <div className="text-xs text-slate-400">rating</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-semibold text-slate-900">{f.name}</div>
-                      <div className="text-xs text-slate-500">{f.courses} courses · {f.students.toLocaleString()} students</div>
+
+                    {/* Signal row */}
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                      <div className={cn("rounded-xl p-2", f.completionRate < 65 ? "bg-rose-100" : "bg-white border border-slate-100")}>
+                        <div className={cn("text-sm font-semibold", f.completionRate < 65 ? "text-rose-700" : "text-slate-800")}>{f.completionRate}%</div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5">completion</div>
+                      </div>
+                      <div className={cn("rounded-xl p-2", f.lastActiveDaysAgo > 14 ? "bg-amber-100" : "bg-white border border-slate-100")}>
+                        <div className={cn("text-sm font-semibold", f.lastActiveDaysAgo > 14 ? "text-amber-700" : "text-slate-800")}>
+                          {f.lastActiveDaysAgo === 0 ? "Today" : f.lastActiveDaysAgo === 1 ? "Yesterday" : `${f.lastActiveDaysAgo}d ago`}
+                        </div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5">last active</div>
+                      </div>
+                      <div className={cn("rounded-xl p-2", f.unansweredQA > 0 ? "bg-amber-100" : "bg-white border border-slate-100")}>
+                        <div className={cn("text-sm font-semibold", f.unansweredQA > 0 ? "text-amber-700" : "text-slate-800")}>{f.unansweredQA}</div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5">unanswered Q&amp;A</div>
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-slate-950">{f.rating}</div>
-                    <div className="flex gap-0.5 justify-end text-amber-500">
-                      {[1,2,3,4,5].map((s) => <Sparkles key={s} className="h-3 w-3 fill-current" />)}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </CardContent>
           </Card>
         </TabsContent>

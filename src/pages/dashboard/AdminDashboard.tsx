@@ -8,7 +8,6 @@ import AnalyticsPerformanceInsightsPanel from '@/components/admin/stage4/Analyti
 import FinanceBillingGovernancePanel from '@/components/admin/stage4/FinanceBillingGovernancePanel';
 import OperationsSupportPanel from '@/components/admin/stage4/OperationsSupportPanel';
 import PartnerAccreditationReportingPanel from '@/components/admin/stage4/PartnerAccreditationReportingPanel';
-import AccreditationPanel from '@/components/admin/stage4/AccreditationPanel';
 import RecordsCertificationGovernancePanel from '@/components/admin/stage4/RecordsCertificationGovernancePanel';
 import { CreateCourseModal } from '@/components/admin/CreateCourseModal';
 import { Button } from '@/components/ui/button';
@@ -83,7 +82,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 
-type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'finance' | 'partner-reporting' | 'accreditation' | 'analytics-performance' | 'operations-support' | 'records-certification' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
+type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'finance' | 'partner-reporting' | 'analytics-performance' | 'operations-support' | 'records-certification' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 const MOCK_COURSES = [
@@ -1068,7 +1067,6 @@ const AdminDashboard = () => {
     { id: 'governance' as AdminTab, label: 'Content Governance', icon: Settings },
     { id: 'finance' as AdminTab, label: 'Finance & Billing', icon: BarChart2 },
     { id: 'partner-reporting' as AdminTab, label: 'Partner & Reporting', icon: Globe },
-    { id: 'accreditation' as AdminTab, label: 'Accreditation', icon: ShieldCheck },
     { id: 'analytics-performance' as AdminTab, label: 'Analytics & Performance', icon: TrendingUp },
     { id: 'operations-support' as AdminTab, label: 'Operations & Support', icon: Headphones },
     { id: 'records-certification' as AdminTab, label: 'Records & Certification', icon: FileTextIcon },
@@ -1526,7 +1524,6 @@ const AdminDashboard = () => {
 
           {activeTab === 'partner-reporting' && <PartnerAccreditationReportingPanel />}
 
-          {activeTab === 'accreditation' && <AccreditationPanel />}
 
           {activeTab === 'analytics-performance' && <AnalyticsPerformanceInsightsPanel />}
 

@@ -1,422 +1,335 @@
-import { useMemo, useState } from "react";
-import {
-  BookOpen,
-  Building2,
-  ChevronRight,
-  DollarSign,
-  GraduationCap,
-  TrendingUp,
-  Users,
-  Workflow,
-} from "lucide-react";
-
+import { useState } from "react";
+import { Building2, ChevronRight, BookOpen, ShieldCheck, FileText, CheckCircle2, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 /* ── Types ─────────────────────────────────────────────────────────────── */
 
-type PartnerCourse = {
+type PartnerStatus = "active" | "onboarding" | "paused";
+type AccreditationStatus = "active" | "pending" | "expired";
+type VerificationStatus = "pending" | "verified" | "rejected";
+type SubmissionStatus = "submitted" | "acknowledged" | "under-review" | "accepted";
+
+interface PartnerCourse {
   id: string;
   title: string;
-  category: string;
   enrolled: number;
   completed: number;
   revenue: number;
-  rating: number;
-};
+  partnerShare: number;
+}
 
-type Partner = {
+interface Partner {
   id: string;
   name: string;
   type: string;
-  status: "active" | "onboarding" | "paused";
-  since: string;
+  status: PartnerStatus;
   sharePercent: number;
   courses: PartnerCourse[];
-};
+}
+
+interface AccreditationBody {
+  id: string;
+  name: string;
+  region: string;
+  status: AccreditationStatus;
+  lastAudit: string;
+  courses: string[];
+}
+
+interface VerificationCase {
+  id: string;
+  learner: string;
+  credential: string;
+  requestedBy: string;
+  status: VerificationStatus;
+  submittedAt: string;
+}
+
+interface SubmissionRecord {
+  id: string;
+  scope: string;
+  recipient: string;
+  authorizedBy: string;
+  submittedAt: string;
+  status: SubmissionStatus;
+}
 
 /* ── Mock data ─────────────────────────────────────────────────────────── */
 
 const partners: Partner[] = [
   {
-    id: "P-001",
-    name: "Harvard Online",
-    type: "Academic Institution",
-    status: "active",
-    since: "2025-06-01",
-    sharePercent: 30,
+    id: "P-001", name: "Harvard Online", type: "Academic Institution", status: "active", sharePercent: 30,
     courses: [
-      { id: "C-01", title: "IT 4.0: Digital Transformation", category: "Digital Skills", enrolled: 10000, completed: 9500, revenue: 1000000, rating: 4.8 },
-      { id: "C-02", title: "Leadership in the Digital Age", category: "Leadership", enrolled: 4200, completed: 3800, revenue: 420000, rating: 4.7 },
-      { id: "C-03", title: "Data-Driven Decision Making", category: "Analytics", enrolled: 3100, completed: 2650, revenue: 310000, rating: 4.5 },
+      { id: "C-01", title: "IT 4.0: Digital Transformation", enrolled: 10000, completed: 9500, revenue: 1000000, partnerShare: 300000 },
+      { id: "C-02", title: "Leadership in the Digital Age", enrolled: 4200, completed: 3800, revenue: 420000, partnerShare: 126000 },
     ],
   },
   {
-    id: "P-002",
-    name: "Coursera for Business",
-    type: "Learning Platform",
-    status: "active",
-    since: "2025-09-15",
-    sharePercent: 25,
+    id: "P-002", name: "Dubai Knowledge Authority", type: "Government Body", status: "active", sharePercent: 20,
     courses: [
-      { id: "C-04", title: "AI & Automation in the Workplace", category: "AI & Technology", enrolled: 6500, completed: 5200, revenue: 650000, rating: 4.6 },
-      { id: "C-05", title: "Cybersecurity Essentials", category: "Digital Skills", enrolled: 4800, completed: 4100, revenue: 480000, rating: 4.7 },
+      { id: "C-03", title: "Smart Government Services", enrolled: 8200, completed: 7400, revenue: 820000, partnerShare: 164000 },
+      { id: "C-04", title: "UAE Innovation Framework", enrolled: 3400, completed: 2800, revenue: 340000, partnerShare: 68000 },
     ],
   },
   {
-    id: "P-003",
-    name: "Dubai Knowledge Authority",
-    type: "Government Body",
-    status: "active",
-    since: "2025-11-01",
-    sharePercent: 20,
+    id: "P-003", name: "Kenyan EdTech Collective", type: "Regional Partner", status: "onboarding", sharePercent: 30,
     courses: [
-      { id: "C-06", title: "Smart Government Services", category: "Public Sector", enrolled: 8200, completed: 7400, revenue: 820000, rating: 4.9 },
-      { id: "C-07", title: "Arabic Digital Literacy", category: "Digital Skills", enrolled: 5600, completed: 4900, revenue: 560000, rating: 4.4 },
-      { id: "C-08", title: "UAE Innovation Framework", category: "Innovation", enrolled: 3400, completed: 2800, revenue: 340000, rating: 4.6 },
-    ],
-  },
-  {
-    id: "P-004",
-    name: "Kenyan EdTech Collective",
-    type: "Regional Partner",
-    status: "onboarding",
-    since: "2026-02-10",
-    sharePercent: 30,
-    courses: [
-      { id: "C-09", title: "Agile Project Management", category: "Management", enrolled: 1800, completed: 1200, revenue: 180000, rating: 4.3 },
+      { id: "C-05", title: "Agile Project Management", enrolled: 1800, completed: 1200, revenue: 180000, partnerShare: 54000 },
     ],
   },
 ];
 
-/* ── Helpers ────────────────────────────────────────────────────────────── */
+const accreditationBodies: AccreditationBody[] = [
+  { id: "AB-01", name: "Dubai Digital Authority", region: "UAE", status: "active", lastAudit: "2026-01-15", courses: ["Smart Government Services", "UAE Innovation Framework"] },
+  { id: "AB-02", name: "Kenyan National Qualifications Authority", region: "Kenya", status: "active", lastAudit: "2026-02-10", courses: ["Agile Project Management"] },
+  { id: "AB-03", name: "Global Tech Accreditation Board", region: "International", status: "pending", lastAudit: "N/A", courses: [] },
+];
 
-function statusBadgeClass(status: string) {
+const verificationCases: VerificationCase[] = [
+  { id: "VR-501", learner: "Amina Osei", credential: "IT 4.0 Certificate", requestedBy: "Dubai Digital Authority", status: "pending", submittedAt: "2026-04-01T08:10:00Z" },
+  { id: "VR-502", learner: "Noah Mensah", credential: "Smart Government Services Badge", requestedBy: "Kenyan NQCA", status: "verified", submittedAt: "2026-03-31T17:15:00Z" },
+  { id: "VR-503", learner: "Irene Mwangi", credential: "Leadership Certificate", requestedBy: "Harvard Online", status: "rejected", submittedAt: "2026-03-29T11:45:00Z" },
+];
+
+const submissionHistory: SubmissionRecord[] = [
+  { id: "SB-01", scope: "Q1 Learner Outcomes Report", recipient: "Dubai Digital Authority", authorizedBy: "Compliance Owner", submittedAt: "2026-04-01T09:00:00Z", status: "accepted" },
+  { id: "SB-02", scope: "Accreditation Renewal Package", recipient: "Kenyan NQCA", authorizedBy: "Partnership Lead", submittedAt: "2026-03-28T14:30:00Z", status: "under-review" },
+  { id: "SB-03", scope: "Partner Revenue Summary", recipient: "Harvard Online", authorizedBy: "Finance Operations", submittedAt: "2026-03-20T10:00:00Z", status: "acknowledged" },
+];
+
+/* ── Helpers ─────────────────────────────────────────────────────────────── */
+
+function statusClass(status: string) {
   switch (status) {
-    case "active":
-      return "bg-emerald-100 text-emerald-700 border-emerald-200";
-    case "onboarding":
-      return "bg-amber-100 text-amber-800 border-amber-200";
-    case "paused":
-      return "bg-slate-100 text-slate-600 border-slate-200";
-    default:
-      return "bg-slate-100 text-slate-700 border-slate-200";
+    case "active": case "verified": case "accepted": return "border-emerald-200 bg-emerald-50 text-emerald-700";
+    case "pending": case "onboarding": case "under-review": case "submitted": return "border-amber-200 bg-amber-50 text-amber-800";
+    case "rejected": case "expired": return "border-rose-200 bg-rose-50 text-rose-700";
+    case "acknowledged": return "border-sky-200 bg-sky-50 text-sky-700";
+    default: return "border-slate-200 bg-slate-50 text-slate-700";
   }
 }
+
+const fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+const money = (v: number) => fmt.format(v);
+const relTime = (iso: string) => {
+  const diff = Date.now() - new Date(iso).getTime();
+  const days = Math.floor(diff / 86400000);
+  return days === 0 ? "today" : `${days}d ago`;
+};
 
 /* ── Component ─────────────────────────────────────────────────────────── */
 
 export default function PartnerAccreditationReportingPanel() {
-  const [selectedPartnerId, setSelectedPartnerId] = useState<string>("all");
+  const { toast } = useToast();
+  const [selectedPartnerId, setSelectedPartnerId] = useState<string | null>(null);
+  const [verifications, setVerifications] = useState(verificationCases);
 
-  const totals = useMemo(() => {
-    const allCourses = partners.flatMap((p) => p.courses);
-    return {
-      partners: partners.length,
-      activePartners: partners.filter((p) => p.status === "active").length,
-      courses: allCourses.length,
-      enrolled: allCourses.reduce((s, c) => s + c.enrolled, 0),
-      completed: allCourses.reduce((s, c) => s + c.completed, 0),
-      revenue: allCourses.reduce((s, c) => s + c.revenue, 0),
-    };
-  }, []);
+  const selectedPartner = partners.find((p) => p.id === selectedPartnerId) ?? null;
+  type CourseWithPartner = PartnerCourse & { partnerName?: string };
+  const displayCourses: CourseWithPartner[] = selectedPartner
+    ? selectedPartner.courses
+    : partners.flatMap((p) => p.courses.map((c) => ({ ...c, partnerName: p.name })));
 
-  const selectedPartner = selectedPartnerId === "all" ? null : partners.find((p) => p.id === selectedPartnerId) ?? null;
+  const totalRevenue = partners.reduce((s, p) => s + p.courses.reduce((cs, c) => cs + c.revenue, 0), 0);
+  const totalPartnerShare = partners.reduce((s, p) => s + p.courses.reduce((cs, c) => cs + c.partnerShare, 0), 0);
 
-  const displayCourses = selectedPartner ? selectedPartner.courses : partners.flatMap((p) => p.courses.map((c) => ({ ...c, partnerName: p.name })));
-
-  const displayRevenue = selectedPartner
-    ? selectedPartner.courses.reduce((s, c) => s + c.revenue, 0)
-    : totals.revenue;
-  const displayEnrolled = selectedPartner
-    ? selectedPartner.courses.reduce((s, c) => s + c.enrolled, 0)
-    : totals.enrolled;
-  const displayCompleted = selectedPartner
-    ? selectedPartner.courses.reduce((s, c) => s + c.completed, 0)
-    : totals.completed;
-  const sharePercent = selectedPartner ? selectedPartner.sharePercent : 0;
-  const partnerShare = selectedPartner ? Math.round(displayRevenue * (sharePercent / 100)) : partners.reduce((s, p) => s + p.courses.reduce((cs, c) => cs + c.revenue, 0) * (p.sharePercent / 100), 0);
-  const dqShare = displayRevenue - partnerShare;
+  const verify = (id: string, status: VerificationStatus) => {
+    setVerifications((cur) => cur.map((v) => v.id === id ? { ...v, status } : v));
+    toast({ title: "Verification updated", description: `Case ${id} is now ${status}.` });
+  };
 
   return (
     <div className="space-y-6">
-      {/* ── Header banner ───────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-slate-200 bg-gradient-to-r from-[#1e2348] via-[#24305f] to-[#0f172a] p-6 text-white shadow-sm">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/80">
-              <Workflow className="h-3.5 w-3.5" />
-              Stage 4 · Partner Reporting
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-3xl font-semibold leading-tight">Partner Reporting</h2>
-              <p className="max-w-3xl text-sm leading-6 text-white/75">
-                View performance across all partner collaborations — courses delivered, learner enrolment & completion, revenue generated, and revenue share breakdown.
-              </p>
-            </div>
+      {/* Header */}
+      <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-[#1e2348] via-[#24305f] to-[#0f172a] p-6 text-white shadow-sm">
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/80">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            Stage 4 external governance
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[
-              { label: "Partners", value: totals.partners },
-              { label: "Courses", value: totals.courses },
-              { label: "Total Learners", value: totals.enrolled.toLocaleString() },
-              { label: "Total Revenue", value: `$${(totals.revenue / 1000000).toFixed(1)}M` },
-            ].map((item) => (
-              <div key={item.label} className="rounded-2xl bg-white/10 p-4 backdrop-blur">
-                <div className="text-2xl font-semibold">{item.value}</div>
-                <div className="text-xs uppercase tracking-[0.16em] text-white/65">{item.label}</div>
-              </div>
-            ))}
-          </div>
+          <h1 className="text-3xl font-semibold tracking-tight">Partner, Accreditation &amp; External Reporting</h1>
+          <p className="max-w-3xl text-sm text-white/75">
+            Manage partner collaborations and their course reporting, accrediting body relationships, credential verification, and governed external submissions.
+          </p>
+        </div>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl bg-white/10 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Active Partners</div><div className="mt-2 text-2xl font-semibold">{partners.filter((p) => p.status === "active").length}</div></div>
+          <div className="rounded-2xl bg-white/10 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Total Partner Revenue</div><div className="mt-2 text-2xl font-semibold">{money(totalRevenue)}</div></div>
+          <div className="rounded-2xl bg-white/10 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Partner Share</div><div className="mt-2 text-2xl font-semibold">{money(totalPartnerShare)}</div></div>
         </div>
       </div>
 
-      {/* ── Partner selector ────────────────────────────────────────── */}
-      <div className="flex items-center gap-3">
-        <span className="text-sm font-medium text-muted-foreground">Viewing</span>
-        <Select value={selectedPartnerId} onValueChange={setSelectedPartnerId}>
-          <SelectTrigger className="w-[280px]">
-            <SelectValue placeholder="All partners" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Partners</SelectItem>
-            {partners.map((p) => (
-              <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <Tabs defaultValue="partners" className="space-y-6">
+        <TabsList className="h-auto flex-wrap justify-start gap-2 rounded-2xl bg-slate-100 p-2">
+          <TabsTrigger value="partners" className="rounded-xl px-4 py-2 data-[state=active]:bg-white">Partner Reporting</TabsTrigger>
+          <TabsTrigger value="accreditation" className="rounded-xl px-4 py-2 data-[state=active]:bg-white">Accreditation</TabsTrigger>
+          <TabsTrigger value="verification" className="rounded-xl px-4 py-2 data-[state=active]:bg-white">Verification Console</TabsTrigger>
+          <TabsTrigger value="submissions" className="rounded-xl px-4 py-2 data-[state=active]:bg-white">Submission History</TabsTrigger>
+        </TabsList>
 
-      {/* ── KPI row ─────────────────────────────────────────────────── */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {[
-          { label: "Total Revenue", value: `$${displayRevenue.toLocaleString()}`, icon: DollarSign, accent: "bg-emerald-100 text-emerald-700" },
-          { label: "Learners Enrolled", value: displayEnrolled.toLocaleString(), icon: Users, accent: "bg-indigo-100 text-indigo-700" },
-          { label: "Learners Completed", value: displayCompleted.toLocaleString(), icon: GraduationCap, accent: "bg-violet-100 text-violet-700" },
-          { label: "Completion Rate", value: `${displayEnrolled > 0 ? Math.round((displayCompleted / displayEnrolled) * 100) : 0}%`, icon: TrendingUp, accent: "bg-amber-100 text-amber-800" },
-        ].map((item) => (
-          <Card key={item.label} className="border-slate-200 shadow-sm">
-            <CardContent className="flex items-center justify-between p-5">
-              <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">{item.label}</p>
-                <p className="mt-2 text-2xl font-semibold">{item.value}</p>
-              </div>
-              <div className={`rounded-full p-3 ${item.accent}`}>
-                <item.icon className="h-5 w-5" />
+        {/* ── Partner Reporting ─────────────────────────────────────── */}
+        <TabsContent value="partners" className="space-y-6">
+          <div className="grid gap-6 xl:grid-cols-[1fr_1.4fr]">
+            <Card className="border-slate-200 shadow-sm">
+              <CardHeader><CardTitle>Partners</CardTitle><CardDescription>Select a partner to view their course performance and revenue split.</CardDescription></CardHeader>
+              <CardContent className="space-y-3">
+                {partners.map((p) => {
+                  const rev = p.courses.reduce((s, c) => s + c.revenue, 0);
+                  return (
+                    <button key={p.id} onClick={() => setSelectedPartnerId(selectedPartnerId === p.id ? null : p.id)}
+                      className={`w-full rounded-2xl border p-4 text-left transition-colors hover:bg-slate-50 ${selectedPartnerId === p.id ? "border-[#1e2348] bg-slate-50" : "border-slate-200"}`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100"><Building2 className="h-4 w-4 text-slate-600" /></div>
+                          <div><div className="text-sm font-semibold text-slate-900">{p.name}</div><div className="text-xs text-slate-500">{p.type} · {p.sharePercent}% share</div></div>
+                        </div>
+                        <div className="flex items-center gap-2"><Badge className={statusClass(p.status)}>{p.status}</Badge><ChevronRight className="h-4 w-4 text-slate-400" /></div>
+                      </div>
+                      <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+                        <div><div className="font-semibold text-slate-700">{p.courses.length}</div><div className="text-slate-500">courses</div></div>
+                        <div><div className="font-semibold text-slate-700">{p.courses.reduce((s, c) => s + c.enrolled, 0).toLocaleString()}</div><div className="text-slate-500">enrolled</div></div>
+                        <div><div className="font-semibold text-slate-700">{money(rev)}</div><div className="text-slate-500">revenue</div></div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </CardContent>
+            </Card>
+
+            <Card className="border-slate-200 shadow-sm">
+              <CardHeader>
+                <CardTitle>{selectedPartner ? `${selectedPartner.name} — Course Performance` : "All Partner Courses"}</CardTitle>
+                <CardDescription>{selectedPartner ? `${selectedPartner.sharePercent}% revenue share applies to all joint courses.` : "Enrolment, completion, and revenue across all partner collaborations."}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {selectedPartner && (
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><div className="text-xs uppercase tracking-[0.16em] text-slate-500">Gross Revenue</div><div className="mt-1 text-xl font-bold">{money(selectedPartner.courses.reduce((s, c) => s + c.revenue, 0))}</div></div>
+                    <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4"><div className="text-xs uppercase tracking-[0.16em] text-slate-500">Partner Share</div><div className="mt-1 text-xl font-bold text-indigo-600">{money(selectedPartner.courses.reduce((s, c) => s + c.partnerShare, 0))}</div></div>
+                    <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4"><div className="text-xs uppercase tracking-[0.16em] text-slate-500">DQ Net Share</div><div className="mt-1 text-xl font-bold text-emerald-600">{money(selectedPartner.courses.reduce((s, c) => s + c.revenue - c.partnerShare, 0))}</div></div>
+                  </div>
+                )}
+                <div className="overflow-hidden rounded-2xl border border-slate-200">
+                  <Table>
+                    <TableHeader><TableRow className="bg-slate-50">
+                      <TableHead>Course</TableHead>
+                      {!selectedPartner && <TableHead>Partner</TableHead>}
+                      <TableHead className="text-right">Enrolled</TableHead>
+                      <TableHead>Completion</TableHead>
+                      <TableHead className="text-right">Revenue</TableHead>
+                    </TableRow></TableHeader>
+                    <TableBody>
+                      {displayCourses.map((course) => {
+                        const rate = Math.round((course.completed / course.enrolled) * 100);
+                        return (
+                          <TableRow key={course.id}>
+                            <TableCell><div className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-[#ff6b4d]" /><span className="font-medium">{course.title}</span></div></TableCell>
+                            {!selectedPartner && <TableCell className="text-slate-500 text-sm">{course.partnerName}</TableCell>}
+                            <TableCell className="text-right">{course.enrolled.toLocaleString()}</TableCell>
+                            <TableCell><div className="flex items-center gap-2"><Progress value={rate} className="h-2 w-16" /><span className="text-xs text-slate-500">{rate}%</span></div></TableCell>
+                            <TableCell className="text-right font-medium">{money(course.revenue)}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* ── Accreditation ─────────────────────────────────────────── */}
+        <TabsContent value="accreditation" className="space-y-6">
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader><CardTitle>Accrediting Bodies</CardTitle><CardDescription>Bodies that certify DTMA courses. Courses accredited by these bodies carry their official stamp on issued certificates.</CardDescription></CardHeader>
+            <CardContent>
+              <div className="overflow-hidden rounded-2xl border border-slate-200">
+                <Table>
+                  <TableHeader><TableRow className="bg-slate-50">
+                    <TableHead>Body</TableHead><TableHead>Region</TableHead><TableHead>Accredited Courses</TableHead><TableHead>Last Audit</TableHead><TableHead>Status</TableHead>
+                  </TableRow></TableHeader>
+                  <TableBody>
+                    {accreditationBodies.map((body) => (
+                      <TableRow key={body.id}>
+                        <TableCell className="font-medium">{body.name}</TableCell>
+                        <TableCell>{body.region}</TableCell>
+                        <TableCell>
+                          {body.courses.length === 0
+                            ? <span className="text-slate-400 text-sm">None yet</span>
+                            : <div className="flex flex-wrap gap-1">{body.courses.map((c) => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}</div>}
+                        </TableCell>
+                        <TableCell>{body.lastAudit}</TableCell>
+                        <TableCell><Badge className={statusClass(body.status)}>{body.status}</Badge></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             </CardContent>
           </Card>
-        ))}
-      </div>
+        </TabsContent>
 
-      {/* ── Revenue split ───────────────────────────────────────────── */}
-      <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-        <Card className="border-slate-200 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-xl">Revenue Share Breakdown</CardTitle>
-            <CardDescription>
-              {selectedPartner
-                ? `${selectedPartner.name} receives ${selectedPartner.sharePercent}% of revenue generated from joint courses.`
-                : "Revenue distribution across all partner collaborations."}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-slate-200 p-4">
-                <div className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Gross Revenue</div>
-                <div className="mt-1 text-xl font-bold">${displayRevenue.toLocaleString()}</div>
-              </div>
-              <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4">
-                <div className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Partner Share</div>
-                <div className="mt-1 text-xl font-bold text-indigo-600">${partnerShare.toLocaleString()}</div>
-                {selectedPartner && <div className="mt-0.5 text-xs text-indigo-500">{selectedPartner.sharePercent}%</div>}
-              </div>
-              <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-4">
-                <div className="text-xs uppercase tracking-[0.16em] text-muted-foreground">DQ Net Share</div>
-                <div className="mt-1 text-xl font-bold text-emerald-600">${dqShare.toLocaleString()}</div>
-                {selectedPartner && <div className="mt-0.5 text-xs text-emerald-500">{100 - selectedPartner.sharePercent}%</div>}
-              </div>
-            </div>
-
-            {selectedPartner && (
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">DQ Share ({100 - sharePercent}%)</span>
-                  <span className="text-muted-foreground">Partner Share ({sharePercent}%)</span>
-                </div>
-                <div className="h-3 overflow-hidden rounded-full bg-slate-100">
-                  <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-indigo-500" style={{ width: `${100 - sharePercent}%` }} />
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* ── Partner list ─────────────────────────────────────────── */}
-        <Card className="border-slate-200 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-xl">Partners Overview</CardTitle>
-            <CardDescription>All organisations collaborating with DQ on course delivery.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {partners.map((p) => {
-              const pRevenue = p.courses.reduce((s, c) => s + c.revenue, 0);
-              const pEnrolled = p.courses.reduce((s, c) => s + c.enrolled, 0);
-              const pCompleted = p.courses.reduce((s, c) => s + c.completed, 0);
-              return (
-                <button
-                  key={p.id}
-                  onClick={() => setSelectedPartnerId(p.id)}
-                  className={`w-full rounded-2xl border p-4 text-left transition-colors hover:bg-slate-50 ${selectedPartnerId === p.id ? "border-indigo-300 bg-indigo-50/40" : "border-slate-200"}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
-                        <Building2 className="h-5 w-5 text-slate-600" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-slate-900">{p.name}</div>
-                        <div className="text-xs text-muted-foreground">{p.type} · {p.courses.length} course{p.courses.length !== 1 ? "s" : ""}</div>
-                      </div>
+        {/* ── Verification Console ──────────────────────────────────── */}
+        <TabsContent value="verification" className="space-y-6">
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader><CardTitle>Verification Console</CardTitle><CardDescription>Controlled confirmation of learner credentials for authorized external parties. Only validated records are eligible for release.</CardDescription></CardHeader>
+            <CardContent className="space-y-3">
+              {verifications.map((item) => (
+                <div key={item.id} className="rounded-2xl border border-slate-200 p-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="space-y-1">
+                      <div className="font-medium text-slate-900">{item.learner}</div>
+                      <div className="text-sm text-slate-600">{item.credential}</div>
+                      <div className="text-xs text-slate-500">Requested by {item.requestedBy} · {relTime(item.submittedAt)}</div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Badge className={statusBadgeClass(p.status)}>{p.status}</Badge>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                    </div>
+                    <Badge className={statusClass(item.status)}>{item.status}</Badge>
                   </div>
-                  <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
-                    <div>
-                      <div className="font-semibold text-slate-700">{pEnrolled.toLocaleString()}</div>
-                      <div className="text-muted-foreground">enrolled</div>
+                  {item.status === "pending" && (
+                    <div className="mt-3 flex gap-2">
+                      <Button size="sm" onClick={() => verify(item.id, "verified")}>Verify</Button>
+                      <Button size="sm" variant="outline" onClick={() => verify(item.id, "rejected")}>Reject</Button>
                     </div>
-                    <div>
-                      <div className="font-semibold text-slate-700">{pCompleted.toLocaleString()}</div>
-                      <div className="text-muted-foreground">completed</div>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-slate-700">${(pRevenue / 1000).toFixed(0)}k</div>
-                      <div className="text-muted-foreground">revenue</div>
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </CardContent>
-        </Card>
-      </div>
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-      {/* ── Course-level breakdown ──────────────────────────────────── */}
-      <Card className="border-slate-200 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-xl">
-            {selectedPartner ? `${selectedPartner.name} — Course Performance` : "All Partner Courses"}
-          </CardTitle>
-          <CardDescription>
-            {selectedPartner
-              ? `Courses delivered in collaboration with ${selectedPartner.name}.`
-              : "Per-course enrolment, completion, and revenue across all partner collaborations."}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-hidden rounded-2xl border border-slate-200">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50">
-                  <TableHead>Course</TableHead>
-                  {!selectedPartner && <TableHead>Partner</TableHead>}
-                  <TableHead>Category</TableHead>
-                  <TableHead className="text-right">Enrolled</TableHead>
-                  <TableHead className="text-right">Completed</TableHead>
-                  <TableHead className="text-center">Completion</TableHead>
-                  <TableHead className="text-right">Revenue</TableHead>
-                  <TableHead className="text-right">Rating</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {displayCourses.map((course: any) => {
-                  const completionRate = Math.round((course.completed / course.enrolled) * 100);
-                  return (
-                    <TableRow key={course.id}>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                          <BookOpen className="h-4 w-4 text-[#ff6b4d]" />
-                          {course.title}
-                        </div>
-                      </TableCell>
-                      {!selectedPartner && <TableCell className="text-muted-foreground">{(course as any).partnerName}</TableCell>}
-                      <TableCell>
-                        <Badge variant="outline" className="text-xs">{course.category}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right">{course.enrolled.toLocaleString()}</TableCell>
-                      <TableCell className="text-right">{course.completed.toLocaleString()}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Progress value={completionRate} className="h-2 w-16" />
-                          <span className="text-xs text-muted-foreground">{completionRate}%</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right font-medium">${course.revenue.toLocaleString()}</TableCell>
-                      <TableCell className="text-right">
-                        <span className="text-sm">⭐ {course.rating}</span>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* ── Per-partner revenue summary table ──────────────────────── */}
-      {!selectedPartner && (
-        <Card className="border-slate-200 shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-xl">Revenue Summary by Partner</CardTitle>
-            <CardDescription>Gross revenue, partner share, and DQ net share for each collaboration.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-hidden rounded-2xl border border-slate-200">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-slate-50">
-                    <TableHead>Partner</TableHead>
-                    <TableHead className="text-right">Courses</TableHead>
-                    <TableHead className="text-right">Learners</TableHead>
-                    <TableHead className="text-right">Gross Revenue</TableHead>
-                    <TableHead className="text-center">Share %</TableHead>
-                    <TableHead className="text-right">Partner Share</TableHead>
-                    <TableHead className="text-right">DQ Share</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {partners.map((p) => {
-                    const pRevenue = p.courses.reduce((s, c) => s + c.revenue, 0);
-                    const pShare = Math.round(pRevenue * (p.sharePercent / 100));
-                    const pDQ = pRevenue - pShare;
-                    const pLearners = p.courses.reduce((s, c) => s + c.enrolled, 0);
-                    return (
-                      <TableRow key={p.id}>
-                        <TableCell className="font-medium">{p.name}</TableCell>
-                        <TableCell className="text-right">{p.courses.length}</TableCell>
-                        <TableCell className="text-right">{pLearners.toLocaleString()}</TableCell>
-                        <TableCell className="text-right">${pRevenue.toLocaleString()}</TableCell>
-                        <TableCell className="text-center">{p.sharePercent}%</TableCell>
-                        <TableCell className="text-right text-indigo-600">${pShare.toLocaleString()}</TableCell>
-                        <TableCell className="text-right text-emerald-600">${pDQ.toLocaleString()}</TableCell>
+        {/* ── Submission History ────────────────────────────────────── */}
+        <TabsContent value="submissions" className="space-y-6">
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader><CardTitle>Submission History</CardTitle><CardDescription>Audit trail of all external data exchanges — what was shared, with whom, and under whose authority.</CardDescription></CardHeader>
+            <CardContent>
+              <div className="overflow-hidden rounded-2xl border border-slate-200">
+                <Table>
+                  <TableHeader><TableRow className="bg-slate-50">
+                    <TableHead>Scope</TableHead><TableHead>Recipient</TableHead><TableHead>Authorized By</TableHead><TableHead>Submitted</TableHead><TableHead>Status</TableHead>
+                  </TableRow></TableHeader>
+                  <TableBody>
+                    {submissionHistory.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell><div className="flex items-center gap-2"><FileText className="h-4 w-4 text-slate-400" /><span className="font-medium">{item.scope}</span></div></TableCell>
+                        <TableCell>{item.recipient}</TableCell>
+                        <TableCell>{item.authorizedBy}</TableCell>
+                        <TableCell className="text-sm text-slate-500">{relTime(item.submittedAt)}</TableCell>
+                        <TableCell><Badge className={statusClass(item.status)}>{item.status}</Badge></TableCell>
                       </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

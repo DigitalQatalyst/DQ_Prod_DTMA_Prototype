@@ -1,4 +1,4 @@
-import { Activity, AlertTriangle, Banknote, BookOpen, CheckCircle2, Clock, GraduationCap, TrendingUp, Users } from "lucide-react";
+import { Activity, AlertTriangle, Banknote, BookOpen, CheckCircle2, ChevronRight, Clock, GraduationCap, TrendingUp, Users } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,12 +22,12 @@ const snapshot = {
   coursesNeedingReview: 1,
 };
 
-const flags = [
-  { id: "f1", label: "Certificate name correction pending", category: "students", severity: "warning" as const },
-  { id: "f2", label: "Billing dispute open — Corporate Learning Buyer", category: "finance", severity: "warning" as const },
-  { id: "f3", label: "Support ticket overdue by 6h — TK-141", category: "support", severity: "critical" as const },
-  { id: "f4", label: "Instructor payout needs review — Maya Patel", category: "finance", severity: "warning" as const },
-  { id: "f5", label: "KNQA course registration expiring in 14 days", category: "partners", severity: "warning" as const },
+const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical" }[] = [
+  { id: "f1", label: "Certificate name correction pending",       destination: "students", destinationLabel: "Students & Certificates", severity: "warning"  },
+  { id: "f2", label: "Billing dispute open — Corporate Learning Buyer", destination: "finance",  destinationLabel: "Finance & Billing",       severity: "warning"  },
+  { id: "f3", label: "Support ticket overdue by 6h — TK-141",    destination: "finance",  destinationLabel: "Finance & Billing",       severity: "critical" },
+  { id: "f4", label: "Instructor payout needs review — Maya Patel", destination: "finance", destinationLabel: "Finance & Billing",      severity: "warning"  },
+  { id: "f5", label: "KNQA course registration expiring in 14 days", destination: "partners", destinationLabel: "Partners & Compliance", severity: "warning" },
 ];
 
 const topCourses = [
@@ -65,12 +65,20 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
           </CardHeader>
           <CardContent className="space-y-2">
             {flags.map((flag) => (
-              <div key={flag.id} className="flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-white px-4 py-3">
+              <button
+                key={flag.id}
+                onClick={() => onNavigate(flag.destination)}
+                className="w-full flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-white px-4 py-3 text-left hover:bg-amber-50/50 transition-colors cursor-pointer group"
+              >
                 <span className="text-sm text-slate-800">{flag.label}</span>
-                <Badge className={`shrink-0 border text-xs font-semibold ${severityClass(flag.severity)}`}>
-                  {flag.severity}
-                </Badge>
-              </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <Badge className={`border text-xs font-semibold ${severityClass(flag.severity)}`}>
+                    {flag.severity}
+                  </Badge>
+                  <span className="text-xs text-slate-400 hidden sm:block">{flag.destinationLabel}</span>
+                  <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors" />
+                </div>
+              </button>
             ))}
           </CardContent>
         </Card>

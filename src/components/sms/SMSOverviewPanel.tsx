@@ -188,6 +188,9 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
                 <span className="text-sm text-slate-600">Overdue</span>
                 <span className={`font-semibold ${snapshot.overdueTickets > 0 ? "text-rose-600" : "text-emerald-600"}`}>{snapshot.overdueTickets}</span>
               </div>
+              <Button variant="outline" size="sm" className="w-full" onClick={() => onNavigate('finance')}>
+                View support tickets
+              </Button>
             </CardContent>
           </Card>
 
@@ -206,11 +209,14 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
 
           <Card className="border-slate-200 shadow-sm">
             <CardHeader className="pb-3"><CardTitle className="text-base flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-slate-500" />Platform</CardTitle></CardHeader>
-            <CardContent>
+            <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-600">Uptime</span>
                 <span className="font-semibold text-emerald-600">99.96%</span>
               </div>
+              <Button variant="outline" size="sm" className="w-full" onClick={() => onNavigate('partners')}>
+                View system status
+              </Button>
             </CardContent>
           </Card>
         </div>

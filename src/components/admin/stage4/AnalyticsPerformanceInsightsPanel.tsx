@@ -93,6 +93,18 @@ export default function AnalyticsPerformanceInsightsPanel() {
   const handleExport = () =>
     toast({ title: "Export queued", description: `Course & Faculty report for ${period} added to the export queue.` });
 
+  // Reusable inline info icon with tooltip
+  const Tip = ({ text }: { text: string }) => (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Info className="inline h-3.5 w-3.5 text-slate-400 cursor-default ml-1 shrink-0" />
+        </TooltipTrigger>
+        <TooltipContent side="top" className="max-w-[220px] text-xs">{text}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+
   return (
     <div className="space-y-6">
       {/* Page header — plain, matching Academy Overview */}
@@ -137,7 +149,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.paid.toLocaleString()}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700">Tuition Paid</div>
-          <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5">{paidRate}% payment rate</div>
+          <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5 flex items-center">{paidRate}% payment rate <Tip text="Percentage of enrolled students who have completed at least one payment toward their course fees." /></div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
           <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3">
@@ -151,7 +163,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
             <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.activeUsers.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Students Active This Month</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">Students Active This Month <Tip text="Students who logged in and engaged with at least one course module during the selected period." /></div>
           <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5">{Math.round((profile.activeUsers / profile.enrolled) * 100)}% of enrolled</div>
         </div>
 
@@ -226,8 +238,8 @@ export default function AnalyticsPerformanceInsightsPanel() {
                       </Tooltip>
                     </TooltipProvider>
                   </TableHead>
-                  <TableHead>Rating</TableHead>
-                  <TableHead className="text-right">Revenue</TableHead>
+                  <TableHead><span className="flex items-center gap-1">Rating <Tip text="Average score from post-course student feedback surveys, out of 5.0." /></span></TableHead>
+                  <TableHead className="text-right"><span className="flex items-center justify-end gap-1">Revenue <Tip text="Gross revenue collected from enrolled students for this course in the selected period, before instructor payouts." /></span></TableHead>
                 </TableRow></TableHeader>
                 <TableBody>
                   {coursePerformance.map((c) => (
@@ -318,17 +330,17 @@ export default function AnalyticsPerformanceInsightsPanel() {
                     <div className="grid grid-cols-3 gap-2 text-center">
                       <div className={cn("rounded-xl p-2", f.completionRate < 65 ? "bg-rose-100" : "bg-white border border-slate-100")}>
                         <div className={cn("text-sm font-semibold", f.completionRate < 65 ? "text-rose-700" : "text-slate-800")}>{f.completionRate}%</div>
-                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5">completion</div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">completion <Tip text="% of this instructor's enrolled students who completed all required modules across their courses." /></div>
                       </div>
                       <div className={cn("rounded-xl p-2", f.lastActiveDaysAgo > 14 ? "bg-amber-100" : "bg-white border border-slate-100")}>
                         <div className={cn("text-sm font-semibold", f.lastActiveDaysAgo > 14 ? "text-amber-700" : "text-slate-800")}>
                           {f.lastActiveDaysAgo === 0 ? "Today" : f.lastActiveDaysAgo === 1 ? "Yesterday" : `${f.lastActiveDaysAgo}d ago`}
                         </div>
-                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5">last active</div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">last active <Tip text="Number of days since the instructor last logged in, posted an announcement, or responded to a student question." /></div>
                       </div>
                       <div className={cn("rounded-xl p-2", f.unansweredQA > 0 ? "bg-amber-100" : "bg-white border border-slate-100")}>
                         <div className={cn("text-sm font-semibold", f.unansweredQA > 0 ? "text-amber-700" : "text-slate-800")}>{f.unansweredQA}</div>
-                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5">unanswered Q&amp;A</div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">unanswered Q&amp;A <Tip text="Student questions that have received no instructor response in over 48 hours." /></div>
                       </div>
                     </div>
                   </div>
@@ -358,7 +370,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-slate-900">{fmt(cat.revenue)}</div>
-                      <div className="text-xs text-emerald-600 font-medium">{cat.growth} growth</div>
+                      <div className="text-xs text-emerald-600 font-medium flex items-center gap-0.5">{cat.growth} enrollment growth <Tip text="Change in new enrollments for this category compared to the previous equivalent period." /></div>
                     </div>
                   </div>
                 ))}

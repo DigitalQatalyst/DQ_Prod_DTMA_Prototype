@@ -3,6 +3,7 @@ import {
   BookOpen,
   Download,
   GraduationCap,
+  Info,
   Layers,
   Sparkles,
   Target,
@@ -16,6 +17,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -111,79 +113,69 @@ export default function AnalyticsPerformanceInsightsPanel() {
         </div>
       </div>
 
-      {/* Single unified stat grid — no duplication */}
+      {/* KPI grid — two logical rows: operational (top) then informational (bottom) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Row 1: student headcount — operational */}
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-              <Users className="w-5 h-5 text-[#ff6b4d]" />
-            </div>
+          <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center mb-3">
+            <Users className="w-5 h-5 text-[#ff6b4d]" />
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.enrolled.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] text-muted-foreground">Enrolled</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Total Students Enrolled</div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
-              <Users className="w-5 h-5 text-emerald-600" />
-            </div>
+          <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3">
+            <Users className="w-5 h-5 text-emerald-600" />
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.paid.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] text-muted-foreground">Paid · {paidRate}%</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Tuition Paid</div>
+          <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5">{paidRate}% payment rate</div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-sky-600" />
-            </div>
-          </div>
-          <div className="text-[24px] leading-[32px] font-medium">{coursePerformance.length}</div>
-          <div className="text-[14px] leading-[20px] text-muted-foreground">Active Courses</div>
-        </div>
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-amber-500" />
-            </div>
-          </div>
-          <div className="text-[24px] leading-[32px] font-medium">4.7</div>
-          <div className="text-[14px] leading-[20px] text-muted-foreground">Avg Rating</div>
-        </div>
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
-            </div>
-          </div>
-          <div className="text-[24px] leading-[32px] font-medium">{profile.activeUsers.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] text-muted-foreground">Active Students</div>
-        </div>
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center">
-              <Target className="w-5 h-5 text-indigo-600" />
-            </div>
+          <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3">
+            <Target className="w-5 h-5 text-rose-500" />
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.unpaid.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] text-muted-foreground">Unpaid</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Students with Unpaid Fees</div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
-              <GraduationCap className="w-5 h-5 text-emerald-600" />
-            </div>
+          <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center mb-3">
+            <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{profile.activeUsers.toLocaleString()}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Students Active This Month</div>
+          <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5">{Math.round((profile.activeUsers / profile.enrolled) * 100)}% of enrolled</div>
+        </div>
+
+        {/* Row 2: informational */}
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3">
+            <GraduationCap className="w-5 h-5 text-emerald-600" />
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.signUps.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] text-muted-foreground">New Sign-ups</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">New Enrollments This Month</div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
-              <Layers className="w-5 h-5 text-slate-600" />
-            </div>
+          <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3">
+            <BookOpen className="w-5 h-5 text-sky-600" />
           </div>
-          <div className="text-[20px] leading-[28px] font-medium">{categoryPerformance[0].name}</div>
-          <div className="text-[14px] leading-[20px] text-muted-foreground">Top Category</div>
+          <div className="text-[24px] leading-[32px] font-medium">{coursePerformance.length}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Courses Running</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
+            <Sparkles className="w-5 h-5 text-amber-500" />
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">4.7</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Average Course Rating</div>
+          <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5">out of 5.0</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-3">
+            <Layers className="w-5 h-5 text-slate-600" />
+          </div>
+          <div className="text-[18px] leading-[26px] font-medium">{categoryPerformance[0].name}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Most Popular Category</div>
         </div>
       </div>
 
@@ -212,7 +204,20 @@ export default function AnalyticsPerformanceInsightsPanel() {
                   <TableHead>Course</TableHead>
                   <TableHead>Instructor</TableHead>
                   <TableHead className="text-right">Enrolled</TableHead>
-                  <TableHead>Completion</TableHead>
+                  <TableHead>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="flex items-center gap-1 cursor-default">
+                            Completion <Info className="h-3.5 w-3.5 text-slate-400" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="max-w-[220px] text-xs">
+                          % of enrolled students who completed all required modules and assessments in this course.
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </TableHead>
                   <TableHead>Rating</TableHead>
                   <TableHead className="text-right">Revenue</TableHead>
                 </TableRow></TableHeader>
@@ -236,18 +241,34 @@ export default function AnalyticsPerformanceInsightsPanel() {
               </Table>
 
               <div className="space-y-3">
-                <p className="text-sm font-semibold text-slate-700">Drop-off hotspots</p>
-                {coursePerformance.map((c) => (
-                  <div key={c.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="font-medium text-slate-950">{c.title}</div>
-                        <div className="mt-1 text-xs text-slate-500">{c.dropOffPoint}</div>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-semibold text-slate-700">Where students are stopping</p>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-3.5 w-3.5 text-slate-400 cursor-default" />
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-[240px] text-xs">
+                        The specific point in each course where the highest number of students stopped progressing and never continued. Use this to identify where students may need support or where course content may need review.
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                {coursePerformance.map((c) => {
+                  const stoppedCount = Math.round(c.enrollments * (1 - c.completionRate / 100));
+                  return (
+                    <div key={c.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="font-medium text-slate-950">{c.title}</div>
+                          <div className="mt-1 text-xs text-slate-500">{c.dropOffPoint}</div>
+                          <div className="mt-1 text-xs text-amber-700 font-medium">{stoppedCount} students haven't progressed past this point</div>
+                        </div>
+                        <Badge className="bg-white border-slate-200 shrink-0">{c.completionRate}% completed</Badge>
                       </div>
-                      <Badge className="bg-white border-slate-200">{c.completionRate}% complete</Badge>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </CardContent>
           </Card>

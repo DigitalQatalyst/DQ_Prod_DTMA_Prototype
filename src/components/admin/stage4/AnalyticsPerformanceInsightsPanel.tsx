@@ -368,7 +368,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
             <Card className="border-slate-200/80 shadow-sm">
               <CardHeader>
                 <CardTitle>Trending Topics</CardTitle>
-                <CardDescription>What students are searching for and discussing.</CardDescription>
+                <CardDescription>Topics students are searching for and discussing — potential gaps in your current course catalogue.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 {trendTopics.map((t) => (

@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { AlertTriangle, FileText, Package, Search, Truck, UserCheck } from "lucide-react";
+import { AlertTriangle, FileText, Info, Package, Search, Truck, UserCheck } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -124,22 +126,38 @@ export default function SMSStudentsPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-[#1e2348] via-[#24305f] to-[#0f172a] p-6 text-white shadow-sm">
-        <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/80">
-            <UserCheck className="h-3.5 w-3.5" />
-            Students & Certificates
-          </div>
-          <h1 className="text-2xl font-semibold tracking-tight">Students &amp; Certificates</h1>
-          <p className="max-w-2xl text-sm text-white/75">
-            Student records, certificate exception handling, and hard-copy order tracking. Digital certificates are issued automatically on course completion.
+      {/* Header — plain, matching Courses & Faculty */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-[28px] leading-[36px] font-semibold">Students &amp; Certificates</h2>
+          <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
+            Student records, certificate exceptions, and hard-copy order tracking. Digital certificates are auto-issued on completion.
           </p>
         </div>
-        <div className="mt-5 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl bg-white/10 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Total Students</div><div className="mt-2 text-2xl font-semibold">{studentRecords.length}</div></div>
-          <div className="rounded-2xl bg-white/10 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Certificate Exceptions</div><div className="mt-2 text-2xl font-semibold">{openExceptions}</div></div>
-          <div className="rounded-2xl bg-white/10 p-4"><div className="text-xs uppercase tracking-[0.16em] text-white/55">Hard Copy Approvals</div><div className="mt-2 text-2xl font-semibold">{pendingHardCopies}</div></div>
+      </div>
+
+      {/* Summary KPIs */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center mb-3">
+            <UserCheck className="w-5 h-5 text-[#ff6b4d]" />
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{studentRecords.length}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Total Students</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
+            <AlertTriangle className="w-5 h-5 text-amber-500" />
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{openExceptions}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Certificate Exceptions</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3">
+            <Package className="w-5 h-5 text-sky-600" />
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{pendingHardCopies}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Hard Copy Approvals</div>
         </div>
       </div>
 
@@ -175,21 +193,60 @@ export default function SMSStudentsPanel() {
                     <TableHead className="text-right">Enrolled</TableHead>
                     <TableHead className="text-right">Completed</TableHead>
                     <TableHead className="text-right">Certificates</TableHead>
+                    <TableHead>
+                      <span className="flex items-center gap-1">
+                        Progress
+                        <TooltipProvider><Tooltip><TooltipTrigger asChild>
+                          <Info className="h-3.5 w-3.5 text-slate-400 cursor-default" />
+                        </TooltipTrigger><TooltipContent side="top" className="max-w-[200px] text-xs">
+                          Courses completed as a percentage of courses enrolled.
+                        </TooltipContent></Tooltip></TooltipProvider>
+                      </span>
+                    </TableHead>
                     <TableHead>Payment</TableHead>
+                    <TableHead>
+                      <span className="flex items-center gap-1">
+                        Status
+                        <TooltipProvider><Tooltip><TooltipTrigger asChild>
+                          <Info className="h-3.5 w-3.5 text-slate-400 cursor-default" />
+                        </TooltipTrigger><TooltipContent side="top" className="max-w-[220px] text-xs">
+                          At Risk: unpaid with no completions. Needs Attention: partial payment or low progress. On Track: paid and progressing.
+                        </TooltipContent></Tooltip></TooltipProvider>
+                      </span>
+                    </TableHead>
                   </TableRow></TableHeader>
                   <TableBody>
-                    {filteredStudents.map((s) => (
-                      <TableRow key={s.id}>
-                        <TableCell>
-                          <div className="font-medium text-slate-900">{s.name}</div>
-                          <div className="text-xs text-slate-500">{s.email}</div>
-                        </TableCell>
-                        <TableCell className="text-right">{s.enrolled}</TableCell>
-                        <TableCell className="text-right">{s.completed}</TableCell>
-                        <TableCell className="text-right">{s.certificates}</TableCell>
-                        <TableCell><Badge className={`border text-xs font-semibold capitalize ${statusClass(s.paymentStatus)}`}>{s.paymentStatus}</Badge></TableCell>
-                      </TableRow>
-                    ))}
+                    {filteredStudents.map((s) => {
+                      const pct = s.enrolled > 0 ? Math.round((s.completed / s.enrolled) * 100) : 0;
+                      const atRisk = s.paymentStatus === "unpaid" && s.completed === 0;
+                      const needsAttention = !atRisk && (s.paymentStatus !== "paid" || pct < 40);
+                      const statusLabel = atRisk ? "At Risk" : needsAttention ? "Needs Attention" : "On Track";
+                      const statusCls = atRisk
+                        ? "border-rose-200 bg-rose-50 text-rose-700"
+                        : needsAttention
+                        ? "border-amber-200 bg-amber-50 text-amber-800"
+                        : "border-emerald-200 bg-emerald-50 text-emerald-700";
+                      const barColor = pct >= 80 ? "bg-emerald-500" : pct >= 40 ? "bg-amber-400" : "bg-rose-500";
+                      return (
+                        <TableRow key={s.id}>
+                          <TableCell>
+                            <div className="font-medium text-slate-900">{s.name}</div>
+                            <div className="text-xs text-slate-500">{s.email}</div>
+                          </TableCell>
+                          <TableCell className="text-right">{s.enrolled}</TableCell>
+                          <TableCell className="text-right">{s.completed}</TableCell>
+                          <TableCell className="text-right">{s.certificates}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Progress value={pct} className={`h-2 w-16 [&>div]:${barColor}`} />
+                              <span className="text-xs text-slate-500">{pct}%</span>
+                            </div>
+                          </TableCell>
+                          <TableCell><Badge className={`border text-xs font-semibold capitalize ${statusClass(s.paymentStatus)}`}>{s.paymentStatus}</Badge></TableCell>
+                          <TableCell><Badge className={`border text-xs font-semibold ${statusCls}`}>{statusLabel}</Badge></TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               </div>

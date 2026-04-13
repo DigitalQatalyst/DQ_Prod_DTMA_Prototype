@@ -61,17 +61,14 @@ export default function SMSDashboard() {
               <button
                 key={item.id}
                 onClick={() => { setActiveTab(item.id); setSidebarOpen(false); }}
-                className={`w-full flex items-start gap-3 rounded-xl px-3 py-3 text-left transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-base font-normal ${
                   isActive
-                    ? 'bg-white/15 text-white'
-                    : 'text-white/65 hover:bg-white/8 hover:text-white'
+                    ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20'
+                    : 'text-white/70 hover:bg-white/10 hover:text-white'
                 }`}
               >
-                <Icon className="h-5 w-5 mt-0.5 shrink-0" />
-                <div>
-                  <div className="text-sm font-medium leading-tight">{item.label}</div>
-                  <div className="text-xs text-white/40 mt-0.5">{item.description}</div>
-                </div>
+                <Icon className="w-5 h-5 shrink-0" />
+                <span className="flex-1">{item.label}</span>
               </button>
             );
           })}

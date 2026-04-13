@@ -166,112 +166,232 @@ const Courses = () => {
             {viewMode === "grid" ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredCourses.map((course) => (
-                  <Link
+                  <div
                     key={course.id}
-                    to={`/courses/${course.id}`}
-                    className="flex-shrink-0 bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] hover:shadow-lg transition-all group"
+                    className={`flex-shrink-0 bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] transition-all ${
+                      course.comingSoon 
+                        ? 'opacity-75 cursor-not-allowed' 
+                        : 'hover:shadow-lg group cursor-pointer'
+                    }`}
                   >
-                    <div className="relative aspect-video overflow-hidden">
-                      <img
-                        src={course.image}
-                        alt={course.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    <div className="p-5">
-                      <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
-                        {course.title}
-                      </h3>
-                      <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#4B5563] mb-3">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
-                          <span className="font-medium">{course.rating}</span>
-                          <span className="text-[#9CA3AF]">({course.reviews})</span>
+                    {course.comingSoon ? (
+                      // Coming Soon Card (not clickable)
+                      <div>
+                        <div className="relative aspect-video overflow-hidden rounded-t-2xl">
+                          <img
+                            src={course.image}
+                            alt={course.title}
+                            className="w-full h-full object-cover opacity-40 saturate-0"
+                          />
+                          <div className="absolute top-4 left-1/2 -translate-x-1/2">
+                            <div className="bg-white text-[#6B7280] text-[14px] leading-[20px] font-medium px-4 py-2 rounded-full shadow-md">
+                              Coming Soon
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{course.duration}</span>
+                        <div className="p-5">
+                          <h3 className="text-[20px] leading-[28px] font-medium text-[#4B5563] mb-2 line-clamp-2">
+                            {course.title}
+                          </h3>
+                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#9CA3AF] mb-3">
+                            <div className="flex items-center gap-1">
+                              <Star className="w-4 h-4 text-[#D1D5DB] fill-[#D1D5DB]" />
+                              <span className="font-medium">{course.rating}</span>
+                              <span>({course.reviews})</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              <span>{course.duration}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[#9CA3AF] mb-3">
+                            <BookOpen className="w-4 h-4" />
+                            <span>Content in development</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-baseline gap-2">
+                              <span className="text-[20px] leading-[28px] font-semibold text-[#9CA3AF]">${course.price}</span>
+                              <span className="text-[14px] leading-[20px] font-normal text-[#D1D5DB] line-through">${course.originalPrice}</span>
+                            </div>
+                            <Badge className="bg-[#E5E7EB] text-[#9CA3AF] text-[12px] leading-[16px] font-medium border-0">
+                              Coming Soon
+                            </Badge>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[#4B5563] mb-3">
-                        <BookOpen className="w-4 h-4" />
-                        <span>{course.modules.length} modules • {course.totalLessons} lessons</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-[20px] leading-[28px] font-semibold text-[#0B0C19]">${course.price}</span>
-                          <span className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] line-through">${course.originalPrice}</span>
+                    ) : (
+                      // Regular Course Card (clickable)
+                      <Link to={`/courses/${course.id}`} className="block">
+                        <div className="relative aspect-video overflow-hidden">
+                          <img
+                            src={course.image}
+                            alt={course.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
                         </div>
-                        <Badge variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
-                          {course.level}
-                        </Badge>
-                      </div>
-                    </div>
-                  </Link>
+                        <div className="p-5">
+                          <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+                            {course.title}
+                          </h3>
+                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#4B5563] mb-3">
+                            <div className="flex items-center gap-1">
+                              <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
+                              <span className="font-medium">{course.rating}</span>
+                              <span className="text-[#9CA3AF]">({course.reviews})</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              <span>{course.duration}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[#4B5563] mb-3">
+                            <BookOpen className="w-4 h-4" />
+                            <span>{course.modules.length} modules • {course.totalLessons} lessons</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-baseline gap-2">
+                              <span className="text-[20px] leading-[28px] font-semibold text-[#0B0C19]">${course.price}</span>
+                              <span className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] line-through">${course.originalPrice}</span>
+                            </div>
+                            <Badge variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
+                              {course.level}
+                            </Badge>
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
             ) : (
               <div className="space-y-4">
                 {filteredCourses.map((course) => (
-                  <Link
+                  <div
                     key={course.id}
-                    to={`/courses/${course.id}`}
-                    className="group flex gap-6 bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-luxury transition-all duration-500 p-4"
+                    className={`flex gap-6 bg-card rounded-2xl overflow-hidden shadow-md p-4 transition-all duration-500 ${
+                      course.comingSoon 
+                        ? 'opacity-75 cursor-not-allowed' 
+                        : 'group hover:shadow-luxury cursor-pointer'
+                    }`}
                   >
-                    <div className="relative w-48 h-32 rounded-xl overflow-hidden flex-shrink-0">
-                      <img
-                        src={course.image}
-                        alt={course.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      {course.badge && (
-                        <Badge className={`absolute top-2 left-2 text-xs ${getBadgeVariant(course.badge)}`}>
-                          {course.badge}
-                        </Badge>
-                      )}
-                    </div>
-
-                    <div className="flex-1 flex flex-col justify-between py-1">
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium capitalize">
-                            {course.category}
-                          </Badge>
-                          <span className="text-[12px] leading-[16px] font-medium text-muted-foreground">{course.level}</span>
-                        </div>
-
-                        <h3 className="text-[20px] leading-[28px] font-medium text-foreground mb-1 group-hover:text-primary transition-colors">
-                          {course.title}
-                        </h3>
-                        <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-2">{course.description}</p>
-                        <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">by {course.instructor}</p>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-muted-foreground">
-                          <div className="flex items-center gap-1.5">
-                            <Star className="w-4 h-4 fill-[#181C3A]" style={{ color: '#181C3A' }} />
-                            <span className="font-semibold text-foreground">{course.rating}</span>
-                            <span>({course.reviews})</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            {course.duration}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <BookOpen className="w-4 h-4" />
-                            {course.modules.length} modules • {course.totalLessons} lessons
+                    {course.comingSoon ? (
+                      // Coming Soon List Item (not clickable)
+                      <>
+                        <div className="relative w-48 h-32 rounded-xl overflow-hidden flex-shrink-0">
+                          <img
+                            src={course.image}
+                            alt={course.title}
+                            className="w-full h-full object-cover opacity-40 saturate-0"
+                          />
+                          <div className="absolute top-2 left-1/2 -translate-x-1/2">
+                            <div className="bg-white text-[#6B7280] text-[10px] leading-[14px] font-medium px-3 py-1.5 rounded-full shadow-md">
+                              Coming Soon
+                            </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground line-through">${course.originalPrice}</span>
-                          <span className="text-[20px] leading-[28px] font-semibold text-primary">${course.price}</span>
-                          <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                        <div className="flex-1 flex flex-col justify-between py-1">
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium capitalize text-[#9CA3AF]">
+                                {course.category}
+                              </Badge>
+                              <span className="text-[12px] leading-[16px] font-medium text-[#9CA3AF]">{course.level}</span>
+                            </div>
+
+                            <h3 className="text-[20px] leading-[28px] font-medium text-[#4B5563] mb-1">
+                              {course.title}
+                            </h3>
+                            <p className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] mb-2">{course.description}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-[#9CA3AF]">by {course.instructor}</p>
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-[#9CA3AF]">
+                              <div className="flex items-center gap-1.5">
+                                <Star className="w-4 h-4 fill-[#D1D5DB] text-[#D1D5DB]" />
+                                <span className="font-semibold">{course.rating}</span>
+                                <span>({course.reviews})</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                {course.duration}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <BookOpen className="w-4 h-4" />
+                                Content in development
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                              <span className="text-[14px] leading-[20px] font-normal text-[#D1D5DB] line-through">${course.originalPrice}</span>
+                              <span className="text-[20px] leading-[28px] font-semibold text-[#9CA3AF]">${course.price}</span>
+                              <Badge className="bg-[#E5E7EB] text-[#9CA3AF] text-[10px] leading-[14px] font-medium border-0 ml-2">
+                                Coming Soon
+                              </Badge>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </Link>
+                      </>
+                    ) : (
+                      // Regular List Item (clickable)
+                      <Link to={`/courses/${course.id}`} className="flex gap-6 flex-1">
+                        <div className="relative w-48 h-32 rounded-xl overflow-hidden flex-shrink-0">
+                          <img
+                            src={course.image}
+                            alt={course.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          />
+                          {course.badge && (
+                            <Badge className={`absolute top-2 left-2 text-xs ${getBadgeVariant(course.badge)}`}>
+                              {course.badge}
+                            </Badge>
+                          )}
+                        </div>
+
+                        <div className="flex-1 flex flex-col justify-between py-1">
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium capitalize">
+                                {course.category}
+                              </Badge>
+                              <span className="text-[12px] leading-[16px] font-medium text-muted-foreground">{course.level}</span>
+                            </div>
+
+                            <h3 className="text-[20px] leading-[28px] font-medium text-foreground mb-1 group-hover:text-primary transition-colors">
+                              {course.title}
+                            </h3>
+                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-2">{course.description}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">by {course.instructor}</p>
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-muted-foreground">
+                              <div className="flex items-center gap-1.5">
+                                <Star className="w-4 h-4 fill-[#181C3A]" style={{ color: '#181C3A' }} />
+                                <span className="font-semibold text-foreground">{course.rating}</span>
+                                <span>({course.reviews})</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-4 h-4" />
+                                {course.duration}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <BookOpen className="w-4 h-4" />
+                                {course.modules.length} modules • {course.totalLessons} lessons
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                              <span className="text-[14px] leading-[20px] font-normal text-muted-foreground line-through">${course.originalPrice}</span>
+                              <span className="text-[20px] leading-[28px] font-semibold text-primary">${course.price}</span>
+                              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
             )}

@@ -77,13 +77,13 @@ const Testimonials = () => {
       <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="text-sm font-semibold uppercase tracking-wide text-[#ff6b4d] mb-4">
+            <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-4">
               Hear From Our Learners
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mb-6">
+            <h1 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-white mb-6">
               Success Stories from Digital Leaders
             </h1>
-            <p className="text-lg text-white/90 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-[16px] leading-[24px] font-normal text-white/90 max-w-3xl mx-auto">
               Discover how professionals across industries are using DTMA to build the skills they need to thrive in the digital economy.
             </p>
           </div>
@@ -105,7 +105,7 @@ const Testimonials = () => {
                 </div>
 
                 {/* Quote */}
-                <p className="text-base text-[#0B0C19] leading-relaxed mb-6 flex-grow">
+                <p className="text-[16px] leading-[24px] font-normal text-[#0B0C19] mb-6 flex-grow">
                   "{testimonial.quote}"
                 </p>
 
@@ -119,13 +119,13 @@ const Testimonials = () => {
                     />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-[#0B0C19]">
+                    <p className="text-[14px] leading-[20px] font-normal text-[#0B0C19]">
                       {testimonial.author}
                     </p>
-                    <p className="text-xs text-[#4B5563]">
+                    <p className="text-[12px] leading-[16px] font-medium text-[#4B5563]">
                       {testimonial.role}
                     </p>
-                    <p className="text-xs text-[#9CA3AF]">
+                    <p className="text-[12px] leading-[16px] font-medium text-[#9CA3AF]">
                       {testimonial.organization}
                     </p>
                   </div>
@@ -141,26 +141,26 @@ const Testimonials = () => {
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-              <p className="text-4xl md:text-5xl font-semibold text-[#ff6b4d] mb-2">
+              <p className="text-[40px] leading-[48px] font-semibold text-[#ff6b4d] mb-2">
                 1,200+
               </p>
-              <p className="text-base text-[#4B5563]">
+              <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
                 Professionals Trained
               </p>
             </div>
             <div>
-              <p className="text-4xl md:text-5xl font-semibold text-[#ff6b4d] mb-2">
+              <p className="text-[40px] leading-[48px] font-semibold text-[#ff6b4d] mb-2">
                 95%
               </p>
-              <p className="text-base text-[#4B5563]">
+              <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
                 Satisfaction Rate
               </p>
             </div>
             <div>
-              <p className="text-4xl md:text-5xl font-semibold text-[#ff6b4d] mb-2">
+              <p className="text-[40px] leading-[48px] font-semibold text-[#ff6b4d] mb-2">
                 40+
               </p>
-              <p className="text-base text-[#4B5563]">
+              <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
                 Countries Represented
               </p>
             </div>

@@ -49,7 +49,7 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
     {
       id: 'basic',
       name: 'Basic Plan',
-      price: 99,
+      price: 79,
       period: 'month',
       description: 'Access to first 3 courses',
       features: [
@@ -63,14 +63,14 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
       ],
       badge: isInBasic ? 'Includes This Course' : null,
       buttonText: 'Subscribe to Basic',
-      buttonVariant: 'default' as const,
+      buttonVariant: 'hero' as const,
       available: true,
-      savings: isInBasic ? Math.round(((currentCoursePrice * 3 - 99) / (currentCoursePrice * 3)) * 100) : null,
+      savings: isInBasic ? `Save $${(149 * 3 - 79).toFixed(0)}` : null,
     },
     {
       id: 'premium',
       name: 'Premium Plan',
-      price: 149,
+      price: 129,
       period: 'month',
       description: 'Access to all 6 courses',
       features: [
@@ -88,7 +88,7 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
       buttonText: 'Subscribe to Premium',
       buttonVariant: 'hero' as const,
       available: true,
-      savings: isInPremium ? Math.round(((currentCoursePrice * 6 - 149) / (currentCoursePrice * 6)) * 100) : null,
+      savings: isInPremium ? `Save $${(149 * 6 - 129).toFixed(0)}` : null,
       highlight: true,
     },
   ];
@@ -134,7 +134,7 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
               <p className="text-sm text-muted-foreground">{plan.description}</p>
               {plan.savings && (
                 <Badge variant="outline" className="mt-2 border-green-600 text-green-600">
-                  Save {plan.savings}%
+                  {plan.savings}
                 </Badge>
               )}
             </div>
@@ -151,8 +151,10 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
             <Button
               variant={plan.buttonVariant}
               className={`w-full ${
-                plan.highlight
+                plan.buttonVariant === 'hero'
                   ? 'bg-[#ff6b4d] hover:bg-[#e56045] text-white'
+                  : plan.buttonVariant === 'outline'
+                  ? 'border-[#1e2348] text-[#1e2348] hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]'
                   : ''
               }`}
               onClick={() => onSelectPlan(plan.id as 'single' | 'basic' | 'premium')}

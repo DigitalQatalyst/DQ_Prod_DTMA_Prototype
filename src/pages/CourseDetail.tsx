@@ -46,56 +46,64 @@ const CourseDetail = () => {
 
   const recommendedCourses = [
     {
-      id: "digital-cognitive-org-1",
-      title: "Building Digital Cognitive Organizations",
+      id: "course-economy-40",
+      title: "Mastering Economy 4.0",
+      category: "Digital Economy",
+      level: "Beginner",
+      rating: 4.8,
+      reviews: 320,
+      students: 12453,
+      price: 149,
+      originalPrice: 199,
+      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop",
+      duration: "12 hours",
+      badge: "Bestseller",
+      comingSoon: false,
+    },
+    {
+      id: "course-cognitive-org",
+      title: "Decoding Digital Cognitive Organisations",
       category: "Digital Cognitive Organisation",
       level: "Intermediate",
       rating: 4.9,
       reviews: 245,
-      students: 8920,
-      price: 179,
-      originalPrice: 249,
+      students: 12453,
+      price: 149,
+      originalPrice: 199,
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop",
-      duration: "5 hours",
+      duration: "15 hours",
+      badge: "Coming Soon",
+      comingSoon: true,
     },
     {
-      id: "digital-business-platform-1",
-      title: "Digital Business Platform Fundamentals",
+      id: "course-business-platforms",
+      title: "Building Powerful Digital Business Platforms",
       category: "Digital Business Platform",
-      level: "Beginner",
+      level: "Intermediate",
       rating: 4.7,
-      reviews: 189,
-      students: 6540,
-      price: 99,
-      originalPrice: 149,
+      reviews: 289,
+      students: 12453,
+      price: 149,
+      originalPrice: 199,
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop",
-      duration: "3 hours",
+      duration: "18 hours",
+      badge: "Coming Soon",
+      comingSoon: true,
     },
     {
-      id: "digital-transformation-1",
-      title: "Digital Transformation 2.0 Strategy",
-      category: "Digital Transformation 2.0",
-      level: "Intermediate",
+      id: "course-transformation",
+      title: "Navigating Digital Transformation 2.0",
+      category: "Digital Transformation",
+      level: "Advanced",
       rating: 4.8,
       reviews: 312,
-      students: 11200,
+      students: 12453,
       price: 149,
       originalPrice: 199,
       image: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=1200&auto=format&fit=crop",
-      duration: "4.5 hours",
-    },
-    {
-      id: "digital-worker-1",
-      title: "Digital Worker & Workspace Essentials",
-      category: "Digital Worker & Workspace",
-      level: "Beginner",
-      rating: 4.6,
-      reviews: 156,
-      students: 5230,
-      price: 129,
-      originalPrice: 179,
-      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop",
-      duration: "3.5 hours",
+      duration: "16 hours",
+      badge: "Coming Soon",
+      comingSoon: true,
     },
   ];
 
@@ -275,7 +283,12 @@ const CourseDetail = () => {
                   </div>
                   <div className="flex items-center gap-1.5">
                     <BookOpen className="w-5 h-5" />
-                    <span>{displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules • {totalLessons} lessons</span>
+                    <span>
+                      {displayCourse.comingSoon 
+                        ? 'Content coming soon' 
+                        : `${displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules • ${totalLessons} lessons`
+                      }
+                    </span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Globe className="w-5 h-5" />
@@ -325,18 +338,30 @@ const CourseDetail = () => {
 
                     {/* CTA Buttons */}
                     <div className="space-y-3 mb-6">
-                      <Button 
-                        className="w-full bg-[#ff6b4d] hover:bg-[#e56045] text-white" 
-                        size="lg"
-                        onClick={handleEnroll}
-                        disabled={authLoading || enrollmentLoading}
-                      >
-                        {isEnrolled ? "Start Learning" : "Enroll Now"}
-                      </Button>
-                      {!isEnrolled && (
-                        <Button variant="outline" className="w-full border-[#E5E7EB] hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" size="lg">
-                          Add to Wishlist
+                      {displayCourse.comingSoon ? (
+                        <Button 
+                          className="w-full bg-gray-400 cursor-not-allowed" 
+                          size="lg"
+                          disabled
+                        >
+                          Coming Soon
                         </Button>
+                      ) : (
+                        <>
+                          <Button 
+                            className="w-full bg-[#ff6b4d] hover:bg-[#e56045] text-white" 
+                            size="lg"
+                            onClick={handleEnroll}
+                            disabled={authLoading || enrollmentLoading}
+                          >
+                            {isEnrolled ? "Start Learning" : "Enroll Now"}
+                          </Button>
+                          {!isEnrolled && (
+                            <Button variant="outline" className="w-full border-[#E5E7EB] hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" size="lg">
+                              Add to Wishlist
+                            </Button>
+                          )}
+                        </>
                       )}
                     </div>
 
@@ -372,13 +397,22 @@ const CourseDetail = () => {
                 <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-muted-foreground line-through">${displayCourse.originalPrice}</span>
               </div>
             </div>
-            <Button 
-              className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
-              onClick={handleEnroll}
-              disabled={authLoading || enrollmentLoading}
-            >
-              {isEnrolled ? "Start Learning" : "Enroll Now"}
-            </Button>
+            {displayCourse.comingSoon ? (
+              <Button 
+                className="bg-gray-400 cursor-not-allowed"
+                disabled
+              >
+                Coming Soon
+              </Button>
+            ) : (
+              <Button 
+                className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                onClick={handleEnroll}
+                disabled={authLoading || enrollmentLoading}
+              >
+                {isEnrolled ? "Start Learning" : "Enroll Now"}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -565,18 +599,32 @@ const CourseDetail = () => {
               {recommendedCourses.map((recCourse) => (
                 <Link
                   key={recCourse.id}
-                  to={`/courses/${recCourse.id}`}
-                  className="flex-shrink-0 w-[300px] bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] hover:shadow-lg transition-all group"
+                  to={recCourse.comingSoon ? '#' : `/courses/${recCourse.id}`}
+                  onClick={(e) => recCourse.comingSoon && e.preventDefault()}
+                  className={`flex-shrink-0 w-[300px] bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] transition-all group ${
+                    recCourse.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg'
+                  }`}
                 >
                   <div className="relative aspect-video overflow-hidden">
                     <img
                       src={recCourse.image}
                       alt={recCourse.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className={`w-full h-full object-cover transition-transform duration-300 ${
+                        !recCourse.comingSoon && 'group-hover:scale-105'
+                      }`}
                     />
+                    {recCourse.comingSoon && (
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                        <Badge className="bg-white text-gray-900 text-sm px-4 py-2">
+                          Coming Soon
+                        </Badge>
+                      </div>
+                    )}
                   </div>
-                  <div className="p-5">
-                    <h3 className="text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+                  <div className="p-5 h-[180px] flex flex-col">
+                    <h3 className={`text-[#0B0C19] transition-colors mb-3 h-14 line-clamp-2 ${
+                        !recCourse.comingSoon && 'group-hover:text-[#ff6b4d]'
+                      }`} style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
                       {recCourse.title}
                     </h3>
                     <div className="flex items-center gap-4 text-[#4B5563] mb-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
@@ -590,13 +638,17 @@ const CourseDetail = () => {
                         <span>{recCourse.duration}</span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mt-auto">
                       <div className="flex items-baseline gap-2">
                         <span className="text-[#0B0C19]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>${recCourse.price}</span>
                         <span className="text-[#9CA3AF] line-through" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>${recCourse.originalPrice}</span>
                       </div>
-                      <Badge variant="outline" className="border-[#E5E7EB]" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                        {recCourse.level}
+                      <Badge 
+                        className={recCourse.comingSoon ? 'bg-gray-200 text-gray-700' : 'border-[#E5E7EB]'}
+                        variant={recCourse.comingSoon ? 'default' : 'outline'}
+                        style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}
+                      >
+                        {recCourse.comingSoon ? recCourse.badge : recCourse.level}
                       </Badge>
                     </div>
                   </div>

@@ -4,7 +4,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAnalytics, usePendingCourses, useAdminUsers, useReviewCourse, useUpdateUserRole } from '@/hooks/useAdmin';
 import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
 import { InviteManagement } from '@/components/admin/InviteManagement';
-import { CreateCourseModal } from '@/components/admin/CreateCourseModal';
+import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalyticsDashboard';
+import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
+import { CommunicationSupportTab } from '@/components/admin/CommunicationSupportTab';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
 import {
@@ -76,7 +78,7 @@ import {
   ThumbsDown,
 } from 'lucide-react';
 
-type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
+type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'whatsapp-analytics' | 'ai-usage' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 const MOCK_COURSES = [
@@ -98,11 +100,10 @@ const STATUS_STYLES: Record<string, string> = {
 const CATEGORIES = ['All Categories', 'Digital Skills', 'AI & Technology', 'Analytics', 'Leadership', 'Management'];
 
 // ─── CourseManagementTab ──────────────────────────────────────────────────────
-const CourseManagementTab = () => {
+const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () => void }) => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
-  const [showCreateCourseModal, setShowCreateCourseModal] = useState(false);
 
   const filtered = MOCK_COURSES.filter(c => {
     const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -132,16 +133,13 @@ const CourseManagementTab = () => {
       {/* ── Section 1: Authoring & Publishing ── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-[20px] leading-[28px] font-semibold text-foreground">Course Authoring &amp; Publishing</h2>
-            <p className="text-[13px] text-muted-foreground mt-0.5">Create, edit, and publish courses with approval workflows.</p>
-          </div>
+          <h2 className="text-[20px] leading-[28px] font-semibold text-foreground">Course Authoring &amp; Publishing</h2>
           <Button 
-            onClick={() => setShowCreateCourseModal(true)}
+            onClick={onNavigateToPending}
             className="bg-[#ff6b4d] hover:bg-[#e56045] text-white gap-2"
           >
-            <PlusCircle className="w-4 h-4" />
-            Create New Course
+            <Clock className="w-4 h-4" />
+            View Pending Reviews
           </Button>
         </div>
 
@@ -359,11 +357,6 @@ const CourseManagementTab = () => {
         </div>
       </section>
 
-      {/* Create Course Modal */}
-      <CreateCourseModal 
-        open={showCreateCourseModal}
-        onClose={() => setShowCreateCourseModal(false)}
-      />
     </div>
   );
 };
@@ -474,9 +467,6 @@ const AssessmentsTab = () => {
                 className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
               />
             </div>
-            <button className="px-4 py-2 rounded-xl bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[13px] font-medium flex items-center gap-1.5 transition-colors">
-              <PlusCircle className="w-4 h-4" /> Create Assessment
-            </button>
           </div>
 
           <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
@@ -698,6 +688,10 @@ const MOCK_PENDING = [
     submittedDate: '2026-03-25',
     description: 'A comprehensive course on using data analytics to drive strategic business decisions. Learners will master dashboards, KPIs, and data storytelling using real-world datasets.',
     thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'both',
+    aiTutorEnabled: true,
+    aiTone: 'professional',
   },
   {
     id: 'p2',
@@ -712,6 +706,10 @@ const MOCK_PENDING = [
     submittedDate: '2026-03-22',
     description: 'Equip leaders with the mindset and tools to thrive in rapidly evolving digital environments. Covers agile leadership, remote team management, and digital culture transformation.',
     thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'daily',
+    aiTutorEnabled: true,
+    aiTone: 'encouraging',
   },
   {
     id: 'p3',
@@ -726,6 +724,10 @@ const MOCK_PENDING = [
     submittedDate: '2026-03-26',
     description: 'Develop self-awareness, empathy, and interpersonal skills to foster a more collaborative and productive workplace. Includes practical exercises and reflective assignments.',
     thumbnail: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
+    whatsappEnabled: false,
+    whatsappDeliveryType: null,
+    aiTutorEnabled: true,
+    aiTone: 'friendly',
   },
 ];
 
@@ -838,6 +840,37 @@ const PendingApprovalsTab = () => {
                 <p className="text-[12px] text-muted-foreground mt-2 flex items-center gap-1">
                   <Calendar className="w-3 h-3" /> Submitted: {course.submittedDate}
                 </p>
+                
+                {/* WhatsApp & AI Settings */}
+                <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border">
+                  {course.whatsappEnabled ? (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-green-50 border border-green-200">
+                      <MessageSquare className="w-3.5 h-3.5 text-green-600" />
+                      <span className="text-[11px] font-medium text-green-700">
+                        WhatsApp: {course.whatsappDeliveryType === 'both' ? 'Daily + Practice' : course.whatsappDeliveryType === 'daily' ? 'Daily Micro-Learning' : 'Practice Questions'}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-200">
+                      <MessageSquare className="w-3.5 h-3.5 text-gray-400" />
+                      <span className="text-[11px] font-medium text-gray-500">WhatsApp: Disabled</span>
+                    </div>
+                  )}
+                  
+                  {course.aiTutorEnabled ? (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200">
+                      <Bot className="w-3.5 h-3.5 text-[#ff6b4d]" />
+                      <span className="text-[11px] font-medium text-[#ff6b4d]">
+                        AI Tutor: {course.aiTone.charAt(0).toUpperCase() + course.aiTone.slice(1)} tone
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-50 border border-gray-200">
+                      <Bot className="w-3.5 h-3.5 text-gray-400" />
+                      <span className="text-[11px] font-medium text-gray-500">AI Tutor: Disabled</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="flex items-center gap-3 px-5 py-3 bg-muted/30 border-t border-border">
@@ -1057,6 +1090,8 @@ const AdminDashboard = () => {
     { id: 'faculty' as AdminTab, label: 'Faculty Operations', icon: Users },
     { id: 'users' as AdminTab, label: 'User Management', icon: Users },
     { id: 'invites' as AdminTab, label: 'Invites', icon: UserPlus },
+    { id: 'whatsapp-analytics' as AdminTab, label: 'WhatsApp Analytics', icon: MessageSquare },
+    { id: 'ai-usage' as AdminTab, label: 'AI Usage Monitoring', icon: Bot },
     { id: 'communication' as AdminTab, label: 'Communication', icon: Settings },
     { id: 'governance' as AdminTab, label: 'Content Governance', icon: Settings },
     { id: 'organizations' as AdminTab, label: 'Organizations', icon: Settings },
@@ -1367,9 +1402,19 @@ const AdminDashboard = () => {
             <InviteManagement />
           )}
 
+          {/* WhatsApp Analytics Tab */}
+          {activeTab === 'whatsapp-analytics' && (
+            <WhatsAppAnalyticsDashboard />
+          )}
+
+          {/* AI Usage Monitoring Tab */}
+          {activeTab === 'ai-usage' && (
+            <AIUsageMonitoringDashboard />
+          )}
+
           {/* All Courses Tab */}
           {activeTab === 'courses' && (
-            <CourseManagementTab />
+            <CourseManagementTab onNavigateToPending={() => setActiveTab('pending')} />
           )}
 
           {/* Assessments Tab */}
@@ -1459,31 +1504,7 @@ const AdminDashboard = () => {
           )}
 
           {/* Communication Tab */}
-          {activeTab === 'communication' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Communication & Support</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Announcement Manager</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Send announcements to learners, faculty, and organizations.
-                  </p>
-                  <Button 
-                    onClick={() => setShowAnnouncementModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
-                  >
-                    Create Announcement
-                  </Button>
-                </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Support Console</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Manage support tickets and learner inquiries.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          {activeTab === 'communication' && <CommunicationSupportTab />}
 
           {/* Governance Tab */}
           {activeTab === 'governance' && (

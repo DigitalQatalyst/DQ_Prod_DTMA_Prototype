@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEnrollments, useCertificates } from '@/hooks/useCourses';
-import { dtmaCourses } from '@/data/dtmaCourses';
+import { dtmaCoursesNew as dtmaCourses } from '@/data/dtmaCoursesNew';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/Badge';
@@ -573,17 +573,29 @@ const LearnerDashboard = () => {
                       {recommendedCourses.map((course) => (
                         <Link
                           key={course.id}
-                          to={`/courses/${course.id}`}
-                          className="group bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all"
+                          to={course.comingSoon ? '#' : `/courses/${course.id}`}
+                          onClick={(e) => course.comingSoon && e.preventDefault()}
+                          className={`group bg-card rounded-2xl overflow-hidden shadow-sm transition-all ${
+                            course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg'
+                          }`}
                         >
                           <div className="relative">
                             <img
                               src={course.image || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop'}
                               alt={course.title}
-                              className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                              className={`w-full h-40 object-cover transition-transform duration-300 ${
+                                !course.comingSoon && 'group-hover:scale-105'
+                              }`}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                            {course.badge && (
+                            {course.comingSoon && (
+                              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                <Badge className="bg-white text-gray-900 text-sm px-4 py-2">
+                                  Coming Soon
+                                </Badge>
+                              </div>
+                            )}
+                            {course.badge && !course.comingSoon && (
                               <div className="absolute top-3 right-3">
                                 <Badge className="bg-[#ff6b4d] text-white capitalize">
                                   {course.badge}
@@ -603,8 +615,11 @@ const LearnerDashboard = () => {
                                 <Clock className="w-4 h-4" />
                                 <span>{course.duration}</span>
                               </div>
-                              <Badge variant="secondary" className="text-xs">
-                                {course.level}
+                              <Badge 
+                                className={course.comingSoon ? 'bg-gray-200 text-gray-700' : ''}
+                                variant={course.comingSoon ? 'default' : 'secondary'}
+                              >
+                                {course.comingSoon ? 'Coming Soon' : course.level}
                               </Badge>
                             </div>
                           </div>

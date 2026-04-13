@@ -287,7 +287,7 @@ export function EnrollmentModal({
 
               <div className="py-4 space-y-4">
                 {course.imageUrl && selectedPlan === 'single' && (
-                  <div className="aspect-video rounded-xl overflow-hidden bg-muted opacity-60">
+                  <div className="h-32 rounded-xl overflow-hidden bg-muted opacity-50">
                     <img 
                       src={course.imageUrl} 
                       alt={course.title}
@@ -388,7 +388,7 @@ export function EnrollmentModal({
               </div>
 
               <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setCurrentStep('pricing')}>
+                <Button variant="outline" onClick={() => setCurrentStep('pricing')} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
                   Back to Plans
                 </Button>
                 <Button 
@@ -563,7 +563,7 @@ export function EnrollmentModal({
               </div>
 
               <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setCurrentStep('overview')}>
+                <Button variant="outline" onClick={() => setCurrentStep('overview')} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
                   Back
                 </Button>
                 <Button 
@@ -668,6 +668,7 @@ export function EnrollmentModal({
                 <Button 
                   variant="outline" 
                   onClick={() => setCurrentStep(hasEligibilityRequirements ? 'eligibility' : 'overview')}
+                  className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
                 >
                   Back
                 </Button>

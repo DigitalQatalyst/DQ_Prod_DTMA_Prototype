@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertTriangle, FileText, Info, Package, Search, Truck, UserCheck } from "lucide-react";
+import { AlertTriangle, Info, Package, Search } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,33 +9,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-
-type ExceptionType = "name-correction" | "revocation" | "re-issue";
-type ExceptionStatus = "open" | "in-review" | "resolved";
-type HardCopyStatus = "pending-approval" | "sent-to-vendor" | "shipped" | "delivered" | "blocked";
-
-interface CertificateException {
-  id: string;
-  learner: string;
-  credential: string;
-  type: ExceptionType;
-  reason: string;
-  status: ExceptionStatus;
-  raisedAt: string;
-}
-
-interface HardCopyOrder {
-  id: string;
-  learner: string;
-  credential: string;
-  address: string;
-  digitalValid: boolean;
-  paymentClear: boolean;
-  status: HardCopyStatus;
-  tracking: string | null;
-}
 
 interface StudentRecord {
   id: string;
@@ -44,148 +20,160 @@ interface StudentRecord {
   enrolled: number;
   completed: number;
   certificates: number;
+  lastActiveDaysAgo: number;
   paymentStatus: "paid" | "partial" | "unpaid";
+}
+
+interface IssuedCertificate {
+  id: string;
+  student: string;
+  course: string;
+  issuedDate: string;
+}
+
+interface PendingAction {
+  id: string;
+  student: string;
+  type: "hard-copy" | "name-correction" | "revocation" | "re-issue";
+  detail: string;
 }
 
 // ── Mock data ─────────────────────────────────────────────────────────────────
 
-const initialExceptions: CertificateException[] = [
-  { id: "EX-01", learner: "Amina Osei", credential: "DT Strategy Certificate", type: "name-correction", reason: "Legal name differs from display name in LMS", status: "open", raisedAt: "2026-04-01T08:10:00Z" },
-  { id: "EX-02", learner: "Irene Mwangi", credential: "Executive Change Leadership Badge", type: "revocation", reason: "Enrollment cancelled — payment not completed", status: "in-review", raisedAt: "2026-03-31T14:30:00Z" },
-  { id: "EX-03", learner: "Noah Mensah", credential: "AI Operations Micro-Credential", type: "re-issue", reason: "Student changed email address — needs re-delivery", status: "resolved", raisedAt: "2026-03-29T11:00:00Z" },
-];
-
-const initialHardCopies: HardCopyOrder[] = [
-  { id: "HC-01", learner: "Amina Osei", credential: "DT Strategy Certificate", address: "Nairobi, Kenya", digitalValid: true, paymentClear: true, status: "pending-approval", tracking: null },
-  { id: "HC-02", learner: "Noah Mensah", credential: "AI Operations Micro-Credential", address: "Accra, Ghana", digitalValid: true, paymentClear: true, status: "shipped", tracking: "DHL-9938174" },
-  { id: "HC-03", learner: "Irene Mwangi", credential: "Executive Change Leadership Badge", address: "Kampala, Uganda", digitalValid: false, paymentClear: false, status: "blocked", tracking: null },
-];
-
 const studentRecords: StudentRecord[] = [
-  { id: "S-001", name: "Amina Osei", email: "amina@example.com", enrolled: 3, completed: 2, certificates: 2, paymentStatus: "paid" },
-  { id: "S-002", name: "Noah Mensah", email: "noah@example.com", enrolled: 2, completed: 2, certificates: 2, paymentStatus: "paid" },
-  { id: "S-003", name: "Irene Mwangi", email: "irene@example.com", enrolled: 1, completed: 0, certificates: 0, paymentStatus: "unpaid" },
-  { id: "S-004", name: "Kwame Asante", email: "kwame@example.com", enrolled: 4, completed: 3, certificates: 3, paymentStatus: "partial" },
-  { id: "S-005", name: "Sofia Reyes", email: "sofia@example.com", enrolled: 2, completed: 1, certificates: 1, paymentStatus: "paid" },
+  { id: "S-001", name: "Amina Osei",   email: "amina@example.com",  enrolled: 3, completed: 2, certificates: 2, lastActiveDaysAgo: 1,  paymentStatus: "paid"    },
+  { id: "S-002", name: "Noah Mensah",  email: "noah@example.com",   enrolled: 2, completed: 2, certificates: 2, lastActiveDaysAgo: 2,  paymentStatus: "paid"    },
+  { id: "S-003", name: "Irene Mwangi", email: "irene@example.com",  enrolled: 1, completed: 0, certificates: 0, lastActiveDaysAgo: 21, paymentStatus: "unpaid"  },
+  { id: "S-004", name: "Kwame Asante", email: "kwame@example.com",  enrolled: 4, completed: 3, certificates: 3, lastActiveDaysAgo: 4,  paymentStatus: "partial" },
+  { id: "S-005", name: "Sofia Reyes",  email: "sofia@example.com",  enrolled: 2, completed: 1, certificates: 1, lastActiveDaysAgo: 8,  paymentStatus: "paid"    },
+];
+
+const issuedCertificates: IssuedCertificate[] = [
+  { id: "C-01", student: "Amina Osei",   course: "Digital Transformation Fundamentals", issuedDate: "2026-04-10" },
+  { id: "C-02", student: "Amina Osei",   course: "AI & Automation in the Workplace",    issuedDate: "2026-04-08" },
+  { id: "C-03", student: "Noah Mensah",  course: "Digital Transformation Fundamentals", issuedDate: "2026-04-05" },
+  { id: "C-04", student: "Noah Mensah",  course: "Agile Project Management",            issuedDate: "2026-03-28" },
+  { id: "C-05", student: "Kwame Asante", course: "Cybersecurity Essentials",            issuedDate: "2026-03-20" },
+  { id: "C-06", student: "Kwame Asante", course: "AI & Automation in the Workplace",    issuedDate: "2026-03-15" },
+  { id: "C-07", student: "Kwame Asante", course: "Agile Project Management",            issuedDate: "2026-03-10" },
+  { id: "C-08", student: "Sofia Reyes",  course: "Digital Transformation Fundamentals", issuedDate: "2026-03-01" },
+];
+
+const completionByCourse = [
+  { course: "Digital Transformation Fundamentals", enrolled: 342, completed: 246, rate: 72 },
+  { course: "AI & Automation in the Workplace",    enrolled: 219, completed: 142, rate: 65 },
+  { course: "Agile Project Management",            enrolled: 187, completed: 108, rate: 58 },
+  { course: "Cybersecurity Essentials",            enrolled: 154, completed: 125, rate: 81 },
+];
+
+const initialPendingActions: PendingAction[] = [
+  { id: "PA-01", student: "Amina Osei",   type: "hard-copy",       detail: "DT Strategy Certificate — Nairobi, Kenya"                    },
+  { id: "PA-02", student: "Amina Osei",   type: "name-correction", detail: "Legal name differs from display name in LMS"                  },
+  { id: "PA-03", student: "Irene Mwangi", type: "revocation",      detail: "Executive Change Leadership Badge — payment not completed"    },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function statusClass(s: string) {
-  switch (s) {
-    case "resolved": case "delivered": case "paid": return "border-emerald-200 bg-emerald-50 text-emerald-700";
-    case "open": case "pending-approval": case "partial": return "border-amber-200 bg-amber-50 text-amber-800";
-    case "in-review": case "sent-to-vendor": case "shipped": return "border-sky-200 bg-sky-50 text-sky-700";
-    case "blocked": case "revocation": case "unpaid": return "border-rose-200 bg-rose-50 text-rose-700";
-    default: return "border-slate-200 bg-slate-50 text-slate-700";
-  }
-}
-
-const typeLabel: Record<ExceptionType, string> = {
+const actionLabel: Record<PendingAction["type"], string> = {
+  "hard-copy":       "Hard copy approval",
   "name-correction": "Name correction",
   "revocation":      "Revocation",
   "re-issue":        "Re-issue",
 };
 
-const typeAction: Record<ExceptionType, string> = {
-  "name-correction": "Verify the correct legal name with the student, then update it in the LMS before marking resolved.",
-  "revocation":      "Confirm the reason is valid (e.g. payment failure, policy breach), then mark resolved to trigger certificate deactivation.",
-  "re-issue":        "Confirm the student's new details are correct in the LMS, then mark resolved to trigger re-delivery.",
+const actionGuide: Record<PendingAction["type"], string> = {
+  "hard-copy":       "Verify digital certificate is valid and payment is clear, then approve to send to print vendor.",
+  "name-correction": "Confirm the correct legal name with the student and update it in the LMS before approving.",
+  "revocation":      "Confirm the reason is valid (e.g. payment failure), then approve to deactivate the certificate.",
+  "re-issue":        "Confirm the student's updated details are correct in the LMS, then approve to trigger re-delivery.",
 };
 
-const relTime = (iso: string) => {
-  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
-  return days === 0 ? "today" : `${days}d ago`;
-};
+const Tip = ({ text }: { text: string }) => (
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Info className="inline h-3.5 w-3.5 text-slate-400 cursor-default ml-1 shrink-0" />
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-[220px] text-xs">{text}</TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
+
+function paymentBadge(s: string) {
+  if (s === "paid")    return "border-emerald-200 bg-emerald-50 text-emerald-700";
+  if (s === "partial") return "border-amber-200 bg-amber-50 text-amber-800";
+  return "border-rose-200 bg-rose-50 text-rose-700";
+}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function SMSStudentsPanel() {
   const { toast } = useToast();
-  const [exceptions, setExceptions] = useState(initialExceptions);
-  const [hardCopies, setHardCopies] = useState(initialHardCopies);
   const [search, setSearch] = useState("");
+  const [pendingActions, setPendingActions] = useState(initialPendingActions);
 
-  const filteredStudents = studentRecords.filter((s) =>
+  const filtered = studentRecords.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase()) ||
     s.email.toLowerCase().includes(search.toLowerCase())
   );
 
-  const resolveException = (id: string) => {
-    setExceptions((cur) => cur.map((e) => e.id === id ? { ...e, status: "resolved" as ExceptionStatus } : e));
-    toast({ title: "Exception resolved", description: `Case ${id} marked as resolved.` });
+  const approveAction = (id: string, student: string) => {
+    setPendingActions((cur) => cur.filter((a) => a.id !== id));
+    toast({ title: "Approved", description: `Action for ${student} has been approved.` });
   };
 
-  const approveHardCopy = (id: string) => {
-    const order = hardCopies.find((h) => h.id === id);
-    if (!order) return;
-    if (!order.digitalValid || !order.paymentClear) {
-      toast({ title: "Cannot approve", description: "Digital certificate must be valid and payment must be clear first.", variant: "destructive" });
-      return;
-    }
-    setHardCopies((cur) => cur.map((h) => h.id === id ? { ...h, status: "sent-to-vendor" as HardCopyStatus } : h));
-    toast({ title: "Order approved", description: `${order.learner}'s hard copy sent to print vendor.` });
-  };
-
-  const openExceptions = exceptions.filter((e) => e.status !== "resolved").length;
-  const pendingHardCopies = hardCopies.filter((h) => h.status === "pending-approval").length;
+  const totalCerts = issuedCertificates.length;
+  const atRiskCount = studentRecords.filter((s) => s.paymentStatus === "unpaid" && s.completed === 0).length;
 
   return (
     <div className="space-y-6">
-      {/* Header — plain, matching Courses & Faculty */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-[28px] leading-[36px] font-semibold">Students &amp; Certificates</h2>
-          <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-            Student records, certificate exceptions, and hard-copy order tracking. Digital certificates are auto-issued on completion.
-          </p>
-        </div>
+      {/* Header */}
+      <div>
+        <h2 className="text-[28px] leading-[36px] font-semibold">Students &amp; Certificates</h2>
+        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
+          Student progress, certificate outcomes, and any items needing your approval.
+        </p>
       </div>
 
-      {/* Summary KPIs */}
+      {/* KPI cards */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center mb-3">
-            <UserCheck className="w-5 h-5 text-[#ff6b4d]" />
-          </div>
           <div className="text-[24px] leading-[32px] font-medium">{studentRecords.length}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Total Students</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            Total Students <Tip text="All students currently enrolled in at least one course in your academy." />
+          </div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
-            <AlertTriangle className="w-5 h-5 text-amber-500" />
+          <div className="text-[24px] leading-[32px] font-medium">{totalCerts}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            Certificates Issued <Tip text="Total digital certificates auto-issued to students who completed all required modules. No manual action needed for these." />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{openExceptions}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Certificate Exceptions</div>
         </div>
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3">
-            <Package className="w-5 h-5 text-sky-600" />
+        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", atRiskCount > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
+          <div className={cn("text-[24px] leading-[32px] font-medium", atRiskCount > 0 ? "text-rose-700" : "")}>{atRiskCount}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            Students At Risk <Tip text="Students who are unpaid and have not completed any courses. They may need a follow-up." />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{pendingHardCopies}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Hard Copy Approvals</div>
         </div>
       </div>
 
-      <Tabs defaultValue="records" className="space-y-6">
+      <Tabs defaultValue="students" className="space-y-6">
         <TabsList className="h-auto flex-wrap justify-start gap-2 rounded-2xl bg-slate-100 p-2">
-          <TabsTrigger value="records" className="rounded-xl px-4 py-2 data-[state=active]:bg-white">Student Records</TabsTrigger>
-          <TabsTrigger value="exceptions" className="rounded-xl px-4 py-2 data-[state=active]:bg-white">
-            Certificate Exceptions
-            {openExceptions > 0 && <span className="ml-2 rounded-full bg-amber-500 px-1.5 py-0.5 text-xs text-white">{openExceptions}</span>}
-          </TabsTrigger>
-          <TabsTrigger value="hardcopy" className="rounded-xl px-4 py-2 data-[state=active]:bg-white">
-            Hard Copy Orders
-            {pendingHardCopies > 0 && <span className="ml-2 rounded-full bg-sky-500 px-1.5 py-0.5 text-xs text-white">{pendingHardCopies}</span>}
+          <TabsTrigger value="students"     className="rounded-xl px-4 py-2">Students</TabsTrigger>
+          <TabsTrigger value="certificates" className="rounded-xl px-4 py-2">
+            Certificates
+            {pendingActions.length > 0 && (
+              <span className="ml-2 rounded-full bg-amber-500 px-1.5 py-0.5 text-xs text-white">{pendingActions.length}</span>
+            )}
           </TabsTrigger>
         </TabsList>
 
-        {/* Student Records */}
-        <TabsContent value="records">
-          <Card className="border-slate-200 shadow-sm">
+        {/* Students tab */}
+        <TabsContent value="students">
+          <Card className="border-slate-200/80 shadow-sm">
             <CardHeader>
-              <CardTitle>Student Records</CardTitle>
-              <CardDescription>Academic and payment status for all enrolled students. Digital certificates are auto-issued on completion.</CardDescription>
+              <CardTitle>Student Progress</CardTitle>
+              <CardDescription>Enrollment, completion, and payment status for all students. At-risk students are highlighted.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="relative max-w-sm">
@@ -198,58 +186,45 @@ export default function SMSStudentsPanel() {
                     <TableHead>Student</TableHead>
                     <TableHead className="text-right">Enrolled</TableHead>
                     <TableHead className="text-right">Completed</TableHead>
-                    <TableHead className="text-right">Certificates</TableHead>
                     <TableHead>
                       <span className="flex items-center gap-1">
-                        Progress
-                        <TooltipProvider><Tooltip><TooltipTrigger asChild>
-                          <Info className="h-3.5 w-3.5 text-slate-400 cursor-default" />
-                        </TooltipTrigger><TooltipContent side="top" className="max-w-[200px] text-xs">
-                          Courses completed as a percentage of courses enrolled.
-                        </TooltipContent></Tooltip></TooltipProvider>
+                        Progress <Tip text="Courses completed as a percentage of courses enrolled." />
+                      </span>
+                    </TableHead>
+                    <TableHead>
+                      <span className="flex items-center gap-1">
+                        Last Active <Tip text="Days since the student last logged in and engaged with course content." />
                       </span>
                     </TableHead>
                     <TableHead>Payment</TableHead>
-                    <TableHead>
-                      <span className="flex items-center gap-1">
-                        Status
-                        <TooltipProvider><Tooltip><TooltipTrigger asChild>
-                          <Info className="h-3.5 w-3.5 text-slate-400 cursor-default" />
-                        </TooltipTrigger><TooltipContent side="top" className="max-w-[220px] text-xs">
-                          At Risk: unpaid with no completions. Needs Attention: partial payment or low progress. On Track: paid and progressing.
-                        </TooltipContent></Tooltip></TooltipProvider>
-                      </span>
-                    </TableHead>
                   </TableRow></TableHeader>
                   <TableBody>
-                    {filteredStudents.map((s) => {
+                    {filtered.map((s) => {
                       const pct = s.enrolled > 0 ? Math.round((s.completed / s.enrolled) * 100) : 0;
                       const atRisk = s.paymentStatus === "unpaid" && s.completed === 0;
-                      const needsAttention = !atRisk && (s.paymentStatus !== "paid" || pct < 40);
-                      const statusLabel = atRisk ? "At Risk" : needsAttention ? "Needs Attention" : "On Track";
-                      const statusCls = atRisk
-                        ? "border-rose-200 bg-rose-50 text-rose-700"
-                        : needsAttention
-                        ? "border-amber-200 bg-amber-50 text-amber-800"
-                        : "border-emerald-200 bg-emerald-50 text-emerald-700";
                       const barColor = pct >= 80 ? "bg-emerald-500" : pct >= 40 ? "bg-amber-400" : "bg-rose-500";
                       return (
-                        <TableRow key={s.id}>
+                        <TableRow key={s.id} className={atRisk ? "bg-rose-50/40" : ""}>
                           <TableCell>
                             <div className="font-medium text-slate-900">{s.name}</div>
                             <div className="text-xs text-slate-500">{s.email}</div>
                           </TableCell>
                           <TableCell className="text-right">{s.enrolled}</TableCell>
                           <TableCell className="text-right">{s.completed}</TableCell>
-                          <TableCell className="text-right">{s.certificates}</TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <Progress value={pct} className={`h-2 w-16 [&>div]:${barColor}`} />
                               <span className="text-xs text-slate-500">{pct}%</span>
                             </div>
                           </TableCell>
-                          <TableCell><Badge className={`border text-xs font-semibold capitalize ${statusClass(s.paymentStatus)}`}>{s.paymentStatus}</Badge></TableCell>
-                          <TableCell><Badge className={`border text-xs font-semibold ${statusCls}`}>{statusLabel}</Badge></TableCell>
+                          <TableCell>
+                            <span className={cn("text-sm", s.lastActiveDaysAgo > 14 ? "text-amber-700 font-medium" : "text-slate-600")}>
+                              {s.lastActiveDaysAgo === 0 ? "Today" : s.lastActiveDaysAgo === 1 ? "Yesterday" : `${s.lastActiveDaysAgo}d ago`}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={`border text-xs font-semibold capitalize ${paymentBadge(s.paymentStatus)}`}>{s.paymentStatus}</Badge>
+                          </TableCell>
                         </TableRow>
                       );
                     })}
@@ -260,116 +235,97 @@ export default function SMSStudentsPanel() {
           </Card>
         </TabsContent>
 
-        {/* Certificate Exceptions */}
-        <TabsContent value="exceptions">
-          <Card className="border-slate-200 shadow-sm">
+        {/* Certificates tab */}
+        <TabsContent value="certificates" className="space-y-6">
+
+          {/* Pending approvals — surfaced inline at the top */}
+          {pendingActions.length > 0 && (
+            <Card className="border-amber-200 bg-amber-50/40 shadow-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-amber-800">
+                  <AlertTriangle className="h-4 w-4" /> Pending Approvals
+                </CardTitle>
+                <CardDescription>These items need your sign-off before the system can proceed.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {pendingActions.map((a) => (
+                  <div key={a.id} className="rounded-2xl border border-amber-200 bg-white p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-slate-900">{a.student}</span>
+                          <Badge className="border border-slate-200 bg-slate-50 text-slate-600 text-xs">{actionLabel[a.type]}</Badge>
+                        </div>
+                        <div className="text-sm text-slate-600">{a.detail}</div>
+                        <div className="text-xs text-amber-800 mt-1">
+                          <span className="font-semibold">What to do: </span>{actionGuide[a.type]}
+                        </div>
+                      </div>
+                      <Button size="sm" className="shrink-0" onClick={() => approveAction(a.id, a.student)}>
+                        <Package className="mr-1 h-3.5 w-3.5" /> Approve
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Completion rate by course */}
+          <Card className="border-slate-200/80 shadow-sm">
             <CardHeader>
-              <CardTitle>Certificate Exceptions</CardTitle>
+              <CardTitle>Completion Rate by Course</CardTitle>
               <CardDescription>
-                Corrections, revocations, and re-issues that require human review. Routine digital issuance is automatic and does not appear here.
+                How many enrolled students have earned a certificate in each course.
+                <span className="ml-1 inline-flex items-center">
+                  <Tip text="Completion rate = students who finished all required modules ÷ total enrolled. Certificates are issued automatically when a student completes a course." />
+                </span>
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {exceptions.map((ex) => (
-                <div key={ex.id} className="rounded-2xl border border-slate-200 p-4">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
-                        <span className="font-medium text-slate-900">{ex.learner}</span>
-                        <Badge className="border border-slate-200 bg-slate-50 text-slate-600 text-xs font-semibold">{typeLabel[ex.type]}</Badge>
-                      </div>
-                      <div className="text-sm text-slate-600">{ex.credential}</div>
-                      <div className="text-sm text-slate-500">{ex.reason}</div>
-                      {ex.status !== "resolved" && (
-                        <div className="mt-2 rounded-xl bg-amber-50 border border-amber-100 px-3 py-2 text-xs text-amber-800">
-                          <span className="font-semibold">What to do: </span>{typeAction[ex.type]}
-                        </div>
-                      )}
-                      <div className="text-xs text-slate-400">Raised {relTime(ex.raisedAt)}</div>
+              {completionByCourse.map((c) => (
+                <div key={c.course} className="flex items-center gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium text-slate-800 truncate">{c.course}</span>
+                      <span className="text-sm text-slate-500 ml-3 shrink-0">{c.completed}/{c.enrolled}</span>
                     </div>
-                    <Badge className={`shrink-0 border text-xs font-semibold capitalize ${statusClass(ex.status)}`}>{ex.status.replace("-", " ")}</Badge>
+                    <Progress
+                      value={c.rate}
+                      className={`h-2 [&>div]:${c.rate >= 75 ? "bg-emerald-500" : c.rate >= 55 ? "bg-amber-400" : "bg-rose-500"}`}
+                    />
                   </div>
-                  {ex.status !== "resolved" && (
-                    <div className="mt-3">
-                      <Button size="sm" onClick={() => resolveException(ex.id)}>Mark resolved</Button>
-                    </div>
-                  )}
+                  <span className={cn("text-sm font-semibold w-10 text-right shrink-0",
+                    c.rate >= 75 ? "text-emerald-700" : c.rate >= 55 ? "text-amber-700" : "text-rose-700"
+                  )}>{c.rate}%</span>
                 </div>
               ))}
             </CardContent>
           </Card>
-        </TabsContent>
 
-        {/* Hard Copy Orders */}
-        <TabsContent value="hardcopy">
-          <Card className="border-slate-200 shadow-sm">
+          {/* Recently issued */}
+          <Card className="border-slate-200/80 shadow-sm">
             <CardHeader>
-              <CardTitle>Hard Copy Orders</CardTitle>
-              <CardDescription>
-                Approve print orders before they go to the vendor. The vendor handles all printing, packaging, and shipping. You track status and approve replacements.
-              </CardDescription>
+              <CardTitle>Recently Issued Certificates</CardTitle>
+              <CardDescription>Certificates auto-issued in the last 30 days. No action required.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="overflow-hidden rounded-2xl border border-slate-200">
-                <Table>
-                  <TableHeader><TableRow className="bg-slate-50">
-                    <TableHead>Student</TableHead>
-                    <TableHead>Controls</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Tracking</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                  </TableRow></TableHeader>
-                  <TableBody>
-                    {hardCopies.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell>
-                          <div className="font-medium text-slate-900">{order.learner}</div>
-                          <div className="text-xs text-slate-500">{order.credential}</div>
-                          <div className="text-xs text-slate-400">{order.address}</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="space-y-1 text-xs">
-                            <div className={order.digitalValid ? "text-emerald-600" : "text-rose-600"}>
-                              {order.digitalValid ? "✓" : "✗"} Digital valid
-                            </div>
-                            <div className={order.paymentClear ? "text-emerald-600" : "text-rose-600"}>
-                              {order.paymentClear ? "✓" : "✗"} Payment clear
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge className={`border text-xs font-semibold ${statusClass(order.status)}`}>
-                            {order.status.replace(/-/g, " ")}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-sm text-slate-600">{order.tracking ?? "—"}</TableCell>
-                        <TableCell className="text-right">
-                          {order.status === "pending-approval" && (
-                            <Button size="sm" onClick={() => approveHardCopy(order.id)}>
-                              <Package className="mr-1 h-3.5 w-3.5" />
-                              Approve
-                            </Button>
-                          )}
-                          {order.status === "shipped" && (
-                            <div className="flex items-center justify-end gap-1 text-xs text-sky-600">
-                              <Truck className="h-3.5 w-3.5" />
-                              In transit
-                            </div>
-                          )}
-                          {order.status === "blocked" && (
-                            <span className="text-xs text-rose-500">Resolve controls first</span>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-              <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                <FileText className="inline h-4 w-4 mr-1 text-slate-400" />
-                The print vendor handles all physical fulfillment. Your role is to approve orders and track status. Contact the vendor directly for shipping issues.
-              </div>
+              <Table>
+                <TableHeader><TableRow className="bg-slate-50">
+                  <TableHead>Student</TableHead>
+                  <TableHead>Course</TableHead>
+                  <TableHead>Issued</TableHead>
+                </TableRow></TableHeader>
+                <TableBody>
+                  {issuedCertificates.map((c) => (
+                    <TableRow key={c.id}>
+                      <TableCell className="font-medium text-slate-900">{c.student}</TableCell>
+                      <TableCell className="text-sm text-slate-600">{c.course}</TableCell>
+                      <TableCell className="text-sm text-slate-500">{c.issuedDate}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
           </Card>
         </TabsContent>

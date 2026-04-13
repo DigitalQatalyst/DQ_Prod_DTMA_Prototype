@@ -83,8 +83,14 @@ function statusClass(s: string) {
 
 const typeLabel: Record<ExceptionType, string> = {
   "name-correction": "Name correction",
-  "revocation": "Revocation",
-  "re-issue": "Re-issue",
+  "revocation":      "Revocation",
+  "re-issue":        "Re-issue",
+};
+
+const typeAction: Record<ExceptionType, string> = {
+  "name-correction": "Verify the correct legal name with the student, then update it in the LMS before marking resolved.",
+  "revocation":      "Confirm the reason is valid (e.g. payment failure, policy breach), then mark resolved to trigger certificate deactivation.",
+  "re-issue":        "Confirm the student's new details are correct in the LMS, then mark resolved to trigger re-delivery.",
 };
 
 const relTime = (iso: string) => {
@@ -271,10 +277,15 @@ export default function SMSStudentsPanel() {
                       <div className="flex items-center gap-2">
                         <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0" />
                         <span className="font-medium text-slate-900">{ex.learner}</span>
-                        <Badge className={`border text-xs font-semibold ${statusClass(ex.type)}`}>{typeLabel[ex.type]}</Badge>
+                        <Badge className="border border-slate-200 bg-slate-50 text-slate-600 text-xs font-semibold">{typeLabel[ex.type]}</Badge>
                       </div>
                       <div className="text-sm text-slate-600">{ex.credential}</div>
                       <div className="text-sm text-slate-500">{ex.reason}</div>
+                      {ex.status !== "resolved" && (
+                        <div className="mt-2 rounded-xl bg-amber-50 border border-amber-100 px-3 py-2 text-xs text-amber-800">
+                          <span className="font-semibold">What to do: </span>{typeAction[ex.type]}
+                        </div>
+                      )}
                       <div className="text-xs text-slate-400">Raised {relTime(ex.raisedAt)}</div>
                     </div>
                     <Badge className={`shrink-0 border text-xs font-semibold capitalize ${statusClass(ex.status)}`}>{ex.status.replace("-", " ")}</Badge>

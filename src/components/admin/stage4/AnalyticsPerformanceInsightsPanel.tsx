@@ -85,69 +85,106 @@ export default function AnalyticsPerformanceInsightsPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <section className="overflow-hidden rounded-3xl bg-gradient-to-r from-[#1e2348] via-[#24305f] to-[#0f172a] text-white shadow-xl">
-        <div className="grid gap-8 px-6 py-7 lg:grid-cols-[1.6fr_0.9fr] lg:px-8">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/75">
-              <Sparkles className="h-3.5 w-3.5" />
-              Courses &amp; Faculty
-            </div>
-            <div className="space-y-2">
-              <h1 className="text-3xl font-semibold tracking-tight">Platform Analytics &amp; Performance Insights</h1>
-              <p className="max-w-3xl text-sm text-white/75">
-                Course performance, faculty ratings, category trends, and student headcount for the selected period.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {(["7d", "30d", "90d", "365d"] as Period[]).map((opt) => (
-                <button
-                  key={opt}
-                  onClick={() => setPeriod(opt)}
-                  className={cn(
-                    "rounded-full border px-3 py-1.5 text-sm transition-colors",
-                    period === opt ? "border-white bg-white text-slate-950" : "border-white/15 bg-white/5 text-white/75 hover:bg-white/10",
-                  )}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Headcount snapshot */}
-          <div className="rounded-[24px] border border-white/10 bg-white/5 p-5 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.18em] text-white/55">Student Headcount</p>
-            <div className="mt-2 text-3xl font-semibold tracking-tight">{profile.enrolled.toLocaleString()}</div>
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              <div className="rounded-2xl bg-white/5 p-3">
-                <div className="text-xs uppercase tracking-[0.16em] text-white/55">Paid</div>
-                <div className="mt-1 text-xl font-semibold">{profile.paid.toLocaleString()}</div>
-                <div className="text-xs text-white/40">{paidRate}% of enrolled</div>
-              </div>
-              <div className="rounded-2xl bg-white/5 p-3">
-                <div className="text-xs uppercase tracking-[0.16em] text-white/55">Unpaid</div>
-                <div className="mt-1 text-xl font-semibold">{profile.unpaid.toLocaleString()}</div>
-              </div>
-              <div className="rounded-2xl bg-white/5 p-3">
-                <div className="text-xs uppercase tracking-[0.16em] text-white/55">Active</div>
-                <div className="mt-1 text-xl font-semibold">{profile.activeUsers.toLocaleString()}</div>
-              </div>
-              <div className="rounded-2xl bg-white/5 p-3">
-                <div className="text-xs uppercase tracking-[0.16em] text-white/55">New sign-ups</div>
-                <div className="mt-1 text-xl font-semibold">{profile.signUps.toLocaleString()}</div>
-              </div>
-            </div>
-          </div>
+      {/* Page header — plain, matching Academy Overview */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-[28px] leading-[36px] font-semibold">Courses &amp; Faculty</h2>
+          <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
+            Course performance, faculty ratings, and student headcount.
+          </p>
         </div>
-      </section>
+        <div className="flex flex-wrap gap-2">
+          {(["7d", "30d", "90d", "365d"] as Period[]).map((opt) => (
+            <button
+              key={opt}
+              onClick={() => setPeriod(opt)}
+              className={cn(
+                "rounded-full border px-3 py-1.5 text-sm transition-colors",
+                period === opt
+                  ? "border-[#1e2348] bg-[#1e2348] text-white"
+                  : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50",
+              )}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      </div>
 
-      {/* Summary stat cards */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Total Enrolled</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{coursePerformance.reduce((a, c) => a + c.enrollments, 0).toLocaleString()}</div></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600"><Users className="h-5 w-5" /></div></div></CardContent></Card>
-        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Active Courses</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{coursePerformance.length}</div></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-50 text-sky-600"><BookOpen className="h-5 w-5" /></div></div></CardContent></Card>
-        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Avg Course Rating</p><div className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">4.7</div></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600"><Sparkles className="h-5 w-5" /></div></div></CardContent></Card>
-        <Card className="border-slate-200/80 shadow-sm"><CardContent className="p-5"><div className="flex items-start justify-between gap-3"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Top Category</p><div className="mt-2 text-xl font-semibold tracking-tight text-slate-950">{categoryPerformance[0].name}</div></div><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600"><Target className="h-5 w-5" /></div></div></CardContent></Card>
+      {/* Single unified stat grid — no duplication */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+              <Users className="w-5 h-5 text-[#ff6b4d]" />
+            </div>
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{profile.enrolled.toLocaleString()}</div>
+          <div className="text-[14px] leading-[20px] text-muted-foreground">Enrolled</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+              <Users className="w-5 h-5 text-emerald-600" />
+            </div>
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{profile.paid.toLocaleString()}</div>
+          <div className="text-[14px] leading-[20px] text-muted-foreground">Paid · {paidRate}%</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-sky-600" />
+            </div>
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{coursePerformance.length}</div>
+          <div className="text-[14px] leading-[20px] text-muted-foreground">Active Courses</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+            </div>
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">4.7</div>
+          <div className="text-[14px] leading-[20px] text-muted-foreground">Avg Rating</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
+            </div>
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{profile.activeUsers.toLocaleString()}</div>
+          <div className="text-[14px] leading-[20px] text-muted-foreground">Active Students</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center">
+              <Target className="w-5 h-5 text-indigo-600" />
+            </div>
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{profile.unpaid.toLocaleString()}</div>
+          <div className="text-[14px] leading-[20px] text-muted-foreground">Unpaid</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+              <GraduationCap className="w-5 h-5 text-emerald-600" />
+            </div>
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">{profile.signUps.toLocaleString()}</div>
+          <div className="text-[14px] leading-[20px] text-muted-foreground">New Sign-ups</div>
+        </div>
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
+              <Layers className="w-5 h-5 text-slate-600" />
+            </div>
+          </div>
+          <div className="text-[20px] leading-[28px] font-medium">{categoryPerformance[0].name}</div>
+          <div className="text-[14px] leading-[20px] text-muted-foreground">Top Category</div>
+        </div>
       </div>
 
       <Tabs defaultValue="courses" className="space-y-6">

@@ -27,9 +27,9 @@ describe("Stage 4 admin panels", () => {
   it("renders the platform analytics workspace", () => {
     render(<AnalyticsPerformanceInsightsPanel />);
 
-    expect(screen.getByText("Platform Analytics & Performance Insights")).toBeInTheDocument();
+    expect(screen.getByText("Courses & Faculty")).toBeInTheDocument();
     expect(screen.getAllByText("Course Performance").length).toBeGreaterThan(0);
-    expect(screen.getByText("Student Headcount")).toBeInTheDocument();
+    expect(screen.getAllByText(/Enrolled/).length).toBeGreaterThan(0);
   });
 
   it("renders the platform operations workspace", () => {

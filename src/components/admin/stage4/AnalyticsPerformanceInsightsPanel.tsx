@@ -352,6 +352,37 @@ export default function AnalyticsPerformanceInsightsPanel() {
 
         {/* Categories & Trends */}
         <TabsContent value="categories" className="space-y-6">
+          {/* Completion rate by course — moved here from Students page (it's a course health metric) */}
+          <Card className="border-slate-200/80 shadow-sm">
+            <CardHeader>
+              <CardTitle>Completion Rate by Course</CardTitle>
+              <CardDescription>
+                How many enrolled students earned a certificate in each course.{" "}
+                <TooltipProvider><Tooltip><TooltipTrigger asChild>
+                  <Info className="inline h-3.5 w-3.5 text-slate-400 cursor-default" />
+                </TooltipTrigger><TooltipContent side="top" className="max-w-[220px] text-xs">
+                  Completion rate = students who finished all required modules ÷ total enrolled. Certificates are issued automatically on completion.
+                </TooltipContent></Tooltip></TooltipProvider>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {coursePerformance.map((c) => (
+                <div key={c.id} className="flex items-center gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium text-slate-800 truncate">{c.title}</span>
+                      <span className="text-sm text-slate-500 ml-3 shrink-0">{Math.round(c.enrollments * c.completionRate / 100)}/{c.enrollments}</span>
+                    </div>
+                    <Progress value={c.completionRate} className={`h-2 [&>div]:${c.completionRate >= 75 ? "bg-emerald-500" : c.completionRate >= 55 ? "bg-amber-400" : "bg-rose-500"}`} />
+                  </div>
+                  <span className={cn("text-sm font-semibold w-10 text-right shrink-0",
+                    c.completionRate >= 75 ? "text-emerald-700" : c.completionRate >= 55 ? "text-amber-700" : "text-rose-700"
+                  )}>{c.completionRate}%</span>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
           <div className="grid gap-6 lg:grid-cols-2">
             <Card className="border-slate-200/80 shadow-sm">
               <CardHeader>

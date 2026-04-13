@@ -23,7 +23,7 @@ type SMSTab = 'overview' | 'courses' | 'students' | 'finance' | 'partners';
 const navItems: { id: SMSTab; label: string; icon: React.ElementType }[] = [
   { id: 'overview',  label: 'Academy Overview',       icon: LayoutDashboard },
   { id: 'courses',   label: 'Courses & Faculty',       icon: BookOpen        },
-  { id: 'students',  label: 'Students & Certificates', icon: GraduationCap   },
+  { id: 'students',  label: 'Students',             icon: GraduationCap   },
   { id: 'finance',   label: 'Finance & Billing',       icon: Banknote        },
   { id: 'partners',  label: 'Partners & Compliance',   icon: Globe           },
 ];

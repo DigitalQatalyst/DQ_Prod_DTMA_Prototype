@@ -23,7 +23,7 @@ const snapshot = {
 };
 
 const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical" }[] = [
-  { id: "f1", label: "Certificate name correction pending",       destination: "students", destinationLabel: "Students & Certificates", severity: "warning"  },
+  { id: "f1", label: "Certificate name correction pending",       destination: "students", destinationLabel: "Students", severity: "warning"  },
   { id: "f2", label: "Billing dispute open — Corporate Learning Buyer", destination: "finance",  destinationLabel: "Finance & Billing",       severity: "warning"  },
   { id: "f3", label: "Support ticket overdue by 6h — TK-141",    destination: "finance",  destinationLabel: "Finance & Billing",       severity: "critical" },
   { id: "f4", label: "Instructor payout needs review — Maya Patel", destination: "finance", destinationLabel: "Finance & Billing",      severity: "warning"  },

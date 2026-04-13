@@ -21,6 +21,7 @@ import LearnerDashboard from "./pages/dashboard/LearnerDashboard";
 import InstructorDashboard from "./pages/dashboard/InstructorDashboard";
 import InstitutionDashboard from "./pages/dashboard/InstitutionDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import SMSDashboard from "./pages/dashboard/SMSDashboard";
 import Masterclasses from "./pages/Masterclasses";
 import MasterclassDetail from "./pages/MasterclassDetail";
 import MasterclassBooking from "./pages/MasterclassBooking";
@@ -144,6 +145,7 @@ const AppRoutes = () => (
       <Route path="/courses/:courseId/builder" element={<ProtectedRoute><CourseBuilder /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardRouter /></ProtectedRoute>} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/sms-admin" element={<SMSDashboard />} />
       <Route path="/ai-study-buddy" element={<ProtectedRoute><AIStudyBuddyPage /></ProtectedRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />

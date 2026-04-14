@@ -110,7 +110,6 @@ const InstructorDashboard = () => {
     profileComplete: false,
     draftCourse: false,
     uploadContent: false,
-    payoutMethod: false,
   });
 
   const { data: courses, isLoading } = useInstructorCourses();
@@ -287,14 +286,14 @@ const InstructorDashboard = () => {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#F5F1ED] text-gray-600 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#1e2348] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
         <div className="flex flex-col h-full">
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-4 border-b border-white/10">
             <Link to="/" className="flex items-center gap-3">
               <img
-                src="/log.svg"
-                alt="BROWZ Academy"
-                className="h-[28px] w-auto"
+                src="/dtma-logo.png"
+                alt="DTMA"
+                className="h-[32px] w-auto"
               />
             </Link>
           </div>
@@ -304,68 +303,61 @@ const InstructorDashboard = () => {
           <nav className="flex-1 p-4 space-y-2">
             <button 
               onClick={() => { setActiveTab("overview"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "overview" ? "bg-[#4A3428] text-white" : "text-gray-500 hover:bg-gray-200"}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "overview" ? "bg-[#ff6b4d] text-white" : "text-white/70 hover:bg-white/10"}`}
             >
               <LayoutDashboard className="w-5 h-5" />
               <span>Dashboard</span>
             </button>
             <button 
               onClick={() => { setActiveTab("courses"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "courses" ? "bg-[#4A3428] text-white" : "text-gray-500 hover:bg-gray-200"}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "courses" ? "bg-[#ff6b4d] text-white" : "text-white/70 hover:bg-white/10"}`}
             >
               <BookOpen className="w-5 h-5" />
               <span>My Courses</span>
             </button>
             <button 
               onClick={() => { setActiveTab("learners"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "learners" ? "bg-[#4A3428] text-white" : "text-gray-500 hover:bg-gray-200"}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "learners" ? "bg-[#ff6b4d] text-white" : "text-white/70 hover:bg-white/10"}`}
             >
               <Users className="w-5 h-5" />
               <span>Learners</span>
             </button>
             <button 
-              onClick={() => { setActiveTab("earnings"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "earnings" ? "bg-[#4A3428] text-white" : "text-gray-500 hover:bg-gray-200"}`}
-            >
-              <DollarSign className="w-5 h-5" />
-              <span>Earnings</span>
-            </button>
-            <button 
               onClick={() => { setActiveTab("verification"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "verification" ? "bg-[#4A3428] text-white" : "text-gray-500 hover:bg-gray-200"}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "verification" ? "bg-[#ff6b4d] text-white" : "text-white/70 hover:bg-white/10"}`}
             >
               <CheckCircle className="w-5 h-5" />
               <span>Verification</span>
             </button>
             <button 
               onClick={() => { setActiveTab("reviews"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "reviews" ? "bg-[#4A3428] text-white" : "text-gray-500 hover:bg-gray-200"}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "reviews" ? "bg-[#ff6b4d] text-white" : "text-white/70 hover:bg-white/10"}`}
             >
               <Star className="w-5 h-5" />
               <span>Reviews</span>
             </button>
             <button 
               onClick={() => { setActiveTab("profile"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "profile" ? "bg-[#4A3428] text-white" : "text-gray-500 hover:bg-gray-200"}`}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "profile" ? "bg-[#ff6b4d] text-white" : "text-white/70 hover:bg-white/10"}`}
             >
               <Settings className="w-5 h-5" />
               <span>Profile & Settings</span>
             </button>
           </nav>
 
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-white/10">
             <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="w-10 h-10 rounded-full bg-[#4A3428] flex items-center justify-center text-sm font-semibold text-white">
+              <div className="w-10 h-10 rounded-full bg-[#ff6b4d] flex items-center justify-center text-sm font-semibold text-white">
                 {profile?.full_name?.charAt(0) || 'I'}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-medium truncate text-gray-800">{profile?.full_name || 'Instructor'}</div>
-                <div className="text-xs text-gray-500">Instructor</div>
+                <div className="font-medium truncate text-white">{profile?.full_name || 'Instructor'}</div>
+                <div className="text-xs text-white/70">Instructor</div>
               </div>
             </div>
             <Button
               variant="ghost"
-              className="w-full justify-start text-gray-500 hover:text-gray-800 hover:bg-gray-200"
+              className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10"
               onClick={signOut}
             >
               <LogOut className="w-4 h-4 mr-2" />
@@ -396,18 +388,18 @@ const InstructorDashboard = () => {
         <main className="p-6 lg:p-8">
           {/* Verification Banner */}
           {isVerificationPending && (
-            <div className="mb-8 bg-blue-50 border border-blue-200 rounded-2xl p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0">
-                  <Clock className="w-6 h-6 text-blue-600" />
+            <div className="mb-8 bg-blue-50 border border-blue-200 rounded-xl p-5">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 mt-0.5">
+                  <Clock className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-blue-900 mb-1">Verification in Progress</h3>
-                  <p className="text-sm text-blue-800 mb-4">
+                  <h3 className="text-[14px] leading-[20px] font-medium text-blue-900 mb-2">Verification in Progress</h3>
+                  <p className="text-[13px] leading-[18px] font-normal text-blue-800 mb-3">
                     We're reviewing your credentials. This typically takes 2-5 business days. In the meantime, you can prepare your courses and complete your profile.
                   </p>
-                  <div className="flex items-center gap-2 text-xs text-blue-700">
-                    <AlertCircle className="w-4 h-4" />
+                  <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-blue-700 bg-blue-100/50 rounded-lg px-3 py-2">
+                    <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
                     <span>Course publishing is disabled until verification is complete</span>
                   </div>
                 </div>
@@ -418,14 +410,14 @@ const InstructorDashboard = () => {
           {activeTab === "overview" && (
             <div className="space-y-8">
               <div>
-                <h1 className="text-3xl font-semibold mb-2">Welcome back, {profile?.full_name?.split(' ')[0]}!</h1>
-                <p className="text-muted-foreground">Here's your teaching dashboard overview</p>
+                <h1 className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">Welcome back, {profile?.full_name?.split(' ')[0]}!</h1>
+                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Here's your teaching dashboard overview</p>
               </div>
 
               {/* Verification Checklist */}
               {isVerificationPending && (
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-lg font-semibold mb-4">What you can do while waiting</h3>
+                  <h3 className="text-[16px] leading-[24px] font-medium mb-4 text-[#1e2348]">What you can do while waiting</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
                       <button
@@ -439,10 +431,10 @@ const InstructorDashboard = () => {
                         )}
                       </button>
                       <div className="flex-1">
-                        <p className={`font-medium ${checklist.profileComplete ? 'text-muted-foreground line-through' : ''}`}>
+                        <p className={`text-[14px] leading-[20px] font-medium ${checklist.profileComplete ? 'text-muted-foreground line-through' : 'text-[#1e2348]'}`}>
                           Complete your provider profile
                         </p>
-                        <p className="text-xs text-muted-foreground">Add bio, photo, and expertise areas</p>
+                        <p className="text-[12px] leading-[16px] font-normal text-muted-foreground">Add bio, photo, and expertise areas</p>
                       </div>
                     </div>
 
@@ -458,10 +450,10 @@ const InstructorDashboard = () => {
                         )}
                       </button>
                       <div className="flex-1">
-                        <p className={`font-medium ${checklist.draftCourse ? 'text-muted-foreground line-through' : ''}`}>
+                        <p className={`text-[14px] leading-[20px] font-medium ${checklist.draftCourse ? 'text-muted-foreground line-through' : 'text-[#1e2348]'}`}>
                           Draft your first course
                         </p>
-                        <p className="text-xs text-muted-foreground">Create course outline and structure</p>
+                        <p className="text-[12px] leading-[16px] font-normal text-muted-foreground">Create course outline and structure</p>
                       </div>
                     </div>
 
@@ -477,29 +469,10 @@ const InstructorDashboard = () => {
                         )}
                       </button>
                       <div className="flex-1">
-                        <p className={`font-medium ${checklist.uploadContent ? 'text-muted-foreground line-through' : ''}`}>
+                        <p className={`text-[14px] leading-[20px] font-medium ${checklist.uploadContent ? 'text-muted-foreground line-through' : 'text-[#1e2348]'}`}>
                           Upload lesson content
                         </p>
-                        <p className="text-xs text-muted-foreground">Add videos, materials, and resources</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-                      <button
-                        onClick={() => setChecklist({ ...checklist, payoutMethod: !checklist.payoutMethod })}
-                        className="flex-shrink-0"
-                      >
-                        {checklist.payoutMethod ? (
-                          <CheckSquare className="w-5 h-5 text-green-600" />
-                        ) : (
-                          <Square className="w-5 h-5 text-muted-foreground" />
-                        )}
-                      </button>
-                      <div className="flex-1">
-                        <p className={`font-medium ${checklist.payoutMethod ? 'text-muted-foreground line-through' : ''}`}>
-                          Set up your payout method
-                        </p>
-                        <p className="text-xs text-muted-foreground">Add bank details (payouts unlock after approval)</p>
+                        <p className="text-[12px] leading-[16px] font-normal text-muted-foreground">Add videos, materials, and resources</p>
                       </div>
                     </div>
                   </div>
@@ -507,63 +480,49 @@ const InstructorDashboard = () => {
               )}
 
               {/* Key Metrics */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                      <Users className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+                      <Users className="w-6 h-6 text-[#ff6b4d]" />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold mb-1">{totalEnrollments}</div>
-                  <div className="text-sm text-muted-foreground">Total Learners</div>
+                  <div className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">{totalEnrollments}</div>
+                  <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">Total Learners</div>
                 </div>
 
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                      <BookOpen className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+                      <BookOpen className="w-6 h-6 text-[#ff6b4d]" />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold mb-1">{courses?.length || 0}</div>
-                  <div className="text-sm text-muted-foreground">Active Courses</div>
+                  <div className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">{courses?.length || 0}</div>
+                  <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">Active Courses</div>
                 </div>
 
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                      <DollarSign className="w-6 h-6 text-primary" />
+                    <div className="w-12 h-12 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-[#ff6b4d]" />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold mb-1">$0</div>
-                  <div className="text-sm text-muted-foreground">Earnings (This Month)</div>
-                </div>
-
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                      <Calendar className="w-6 h-6 text-primary" />
-                    </div>
-                  </div>
-                  <div className="text-3xl font-bold mb-1">0</div>
-                  <div className="text-sm text-muted-foreground">Upcoming Sessions</div>
+                  <div className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">0</div>
+                  <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">Upcoming Sessions</div>
                 </div>
               </div>
 
               {/* Quick Actions */}
               <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+                <h3 className="text-[16px] leading-[24px] font-medium mb-4 text-[#1e2348]">Quick Actions</h3>
                 <div className="flex flex-wrap gap-3">
-                  <Button variant="hero" onClick={() => setActiveTab("courses")}>
+                  <Button variant="hero" onClick={() => setActiveTab("courses")} className="bg-[#ff6b4d] hover:bg-[#e56045]">
                     <Plus className="w-4 h-4 mr-2" />
                     Create Course
                   </Button>
-                  <Button variant="outline" onClick={() => setActiveTab("learners")}>
+                  <Button variant="outline" onClick={() => setActiveTab("learners")} className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348]/5">
                     <Users className="w-4 h-4 mr-2" />
                     View Learners
-                  </Button>
-                  <Button variant="outline" onClick={() => setActiveTab("earnings")}>
-                    <DollarSign className="w-4 h-4 mr-2" />
-                    View Earnings
                   </Button>
                 </div>
               </div>
@@ -599,66 +558,14 @@ const InstructorDashboard = () => {
           {activeTab === "learners" && (
             <div className="space-y-6">
               <div>
-                <h1 className="text-2xl font-semibold mb-2">Learners</h1>
-                <p className="text-muted-foreground">Manage and track your learners</p>
+                <h1 className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">Learners</h1>
+                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Manage and track your learners</p>
               </div>
               <div className="bg-card rounded-2xl p-8 text-center border border-border">
                 <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-semibold mb-2">Learner Management</h3>
-                <p className="text-muted-foreground mb-4">View all learners across your courses</p>
-                <p className="text-sm text-muted-foreground">Total Learners: {totalEnrollments}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Earnings Tab */}
-          {activeTab === "earnings" && (
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-2xl font-semibold mb-2">Earnings & Payouts</h1>
-                <p className="text-muted-foreground">Track your income and payment history</p>
-              </div>
-              {isVerificationPending && (
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="font-semibold text-amber-900 mb-1">Payouts Locked</h4>
-                      <p className="text-sm text-amber-800">
-                        Earnings tracking and payouts are disabled until your verification is complete. You'll be able to request payouts once approved.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-card rounded-2xl p-6 border border-border">
-                  <div className="text-sm text-muted-foreground mb-2">Total Lifetime Earnings</div>
-                  <div className="text-4xl font-bold mb-4">$0</div>
-                  <Button variant="outline" className="w-full" disabled={isVerificationPending}>View Details</Button>
-                </div>
-                <div className="bg-card rounded-2xl p-6 border border-border">
-                  <div className="text-sm text-muted-foreground mb-2">Available Balance</div>
-                  <div className="text-4xl font-bold mb-4">$0</div>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button variant="hero" className="w-full" disabled={isVerificationPending}>
-                          Request Payout
-                        </Button>
-                      </TooltipTrigger>
-                      {isVerificationPending && (
-                        <TooltipContent>
-                          <p>Available after verification is complete</p>
-                        </TooltipContent>
-                      )}
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </div>
-              <div className="bg-card rounded-2xl p-6 border border-border">
-                <h3 className="font-semibold mb-4">Transaction History</h3>
-                <p className="text-muted-foreground text-center py-8">No transactions yet</p>
+                <h3 className="text-[16px] leading-[24px] font-medium mb-2 text-[#1e2348]">Learner Management</h3>
+                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">View all learners across your courses</p>
+                <p className="text-[13px] leading-[18px] font-normal text-muted-foreground">Total Learners: {totalEnrollments}</p>
               </div>
             </div>
           )}
@@ -667,8 +574,8 @@ const InstructorDashboard = () => {
           {activeTab === "verification" && (
             <div className="space-y-6">
               <div>
-                <h1 className="text-2xl font-semibold mb-2">Verification & Compliance</h1>
-                <p className="text-muted-foreground">Complete your verification to publish courses</p>
+                <h1 className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">Verification & Compliance</h1>
+                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Complete your verification to publish courses</p>
               </div>
               <div className="space-y-4">
                 <div className="bg-card rounded-2xl p-6 border border-border flex items-start gap-4">
@@ -676,8 +583,8 @@ const InstructorDashboard = () => {
                     <CheckCircle className="w-6 h-6 text-green-600" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold mb-1">Identity Verification</h3>
-                    <p className="text-sm text-muted-foreground mb-3">Verified</p>
+                    <h3 className="text-[14px] leading-[20px] font-medium mb-1 text-[#1e2348]">Identity Verification</h3>
+                    <p className="text-[13px] leading-[18px] font-normal text-muted-foreground mb-3">Verified</p>
                   </div>
                 </div>
                 <div className="bg-card rounded-2xl p-6 border border-border flex items-start gap-4">
@@ -685,8 +592,8 @@ const InstructorDashboard = () => {
                     <AlertCircle className="w-6 h-6 text-amber-600" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold mb-1">Professional Credentials</h3>
-                    <p className="text-sm text-muted-foreground mb-3">Pending Review</p>
+                    <h3 className="text-[14px] leading-[20px] font-medium mb-1 text-[#1e2348]">Professional Credentials</h3>
+                    <p className="text-[13px] leading-[18px] font-normal text-muted-foreground mb-3">Pending Review</p>
                     <Button variant="outline" size="sm">Upload Credentials</Button>
                   </div>
                 </div>
@@ -698,13 +605,13 @@ const InstructorDashboard = () => {
           {activeTab === "reviews" && (
             <div className="space-y-6">
               <div>
-                <h1 className="text-2xl font-semibold mb-2">Reviews & Reputation</h1>
-                <p className="text-muted-foreground">Manage your course reviews and ratings</p>
+                <h1 className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">Reviews & Reputation</h1>
+                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Manage your course reviews and ratings</p>
               </div>
               <div className="bg-card rounded-2xl p-8 text-center border border-border">
                 <Star className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-semibold mb-2">No reviews yet</h3>
-                <p className="text-muted-foreground">Reviews will appear here as learners complete your courses</p>
+                <h3 className="text-[16px] leading-[24px] font-medium mb-2 text-[#1e2348]">No reviews yet</h3>
+                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Reviews will appear here as learners complete your courses</p>
               </div>
             </div>
           )}
@@ -771,13 +678,13 @@ const CertificateBrandingSection = ({ profile }: any) => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold mb-2">Profile & Settings</h1>
-        <p className="text-muted-foreground">Manage your instructor profile and certificate branding</p>
+        <h1 className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">Profile & Settings</h1>
+        <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Manage your instructor profile and certificate branding</p>
       </div>
 
       {/* Basic Profile Information */}
       <div className="bg-card rounded-2xl p-6 border border-border">
-        <h3 className="font-semibold mb-4">Public Instructor Profile</h3>
+        <h3 className="text-[16px] leading-[24px] font-medium mb-4 text-[#1e2348]">Public Instructor Profile</h3>
         <div className="space-y-4">
           <div>
             <Label>Full Name</Label>
@@ -907,7 +814,7 @@ const CertificateBrandingSection = ({ profile }: any) => {
 
         {/* Save Button */}
         <div className="flex justify-end pt-4 border-t border-border">
-          <Button onClick={handleSave} variant="hero">
+          <Button onClick={handleSave} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">
             Save Certificate Settings
           </Button>
         </div>
@@ -915,7 +822,7 @@ const CertificateBrandingSection = ({ profile }: any) => {
 
       {/* Certificate Preview */}
       <div className="bg-card rounded-2xl p-6 border border-border">
-        <h3 className="text-lg font-semibold mb-4">Certificate Preview</h3>
+        <h3 className="text-[16px] leading-[24px] font-medium mb-4 text-[#1e2348]">Certificate Preview</h3>
         <div className="border-2 border-border rounded-lg p-8 bg-gradient-to-br from-primary/5 to-background">
           <div className="max-w-2xl mx-auto text-center space-y-4">
             {certificateSettings.logoPreview && (
@@ -985,50 +892,50 @@ const CoursesSection = ({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">My Courses</h1>
-          <p className="text-muted-foreground">Create and manage your course content</p>
+          <h1 className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">My Courses</h1>
+          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Create and manage your course content</p>
         </div>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
-            <Button variant="hero">
+            <Button variant="hero" className="bg-[#ff6b4d] hover:bg-[#e56045]">
               <Plus className="w-4 h-4 mr-2" />
               Create Course
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>Create New Course</DialogTitle>
-              <DialogDescription>Fill in the basic details to create a new course draft.</DialogDescription>
+              <DialogTitle className="text-[24px] leading-[32px] font-medium text-[#1e2348]">Create New Course</DialogTitle>
+              <DialogDescription className="text-[14px] leading-[20px] font-normal">Fill in the basic details to create a new course draft.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 pt-4">
               <div>
-                <Label htmlFor="title">Course Title *</Label>
+                <Label htmlFor="title" className="text-[12px] leading-[16px] font-medium">Course Title *</Label>
                 <Input
                   id="title"
                   value={newCourse.title}
                   onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
-                  placeholder="e.g., Advanced Hair Coloring Techniques"
+                  placeholder="e.g., Digital Transformation Strategy Fundamentals"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label>Category *</Label>
+                  <Label className="text-[12px] leading-[16px] font-medium">Category *</Label>
                   <Select value={newCourse.category} onValueChange={(v) => setNewCourse({ ...newCourse, category: v })}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="body-aesthetics">Body Aesthetics & Sculpting</SelectItem>
-                      <SelectItem value="breast-aesthetics">Breast Aesthetics & Enhancement</SelectItem>
-                      <SelectItem value="facial-aesthetics">Facial Aesthetics & Rejuvenation</SelectItem>
-                      <SelectItem value="eye-feature">Eye, Ear & Feature Enhancement</SelectItem>
-                      <SelectItem value="injectables-fillers">Injectables & Fillers</SelectItem>
-                      <SelectItem value="client-care">Client Care & Professional Practice</SelectItem>
+                      <SelectItem value="digital-transformation">Digital Transformation</SelectItem>
+                      <SelectItem value="digital-business-platform">Digital Business Platform</SelectItem>
+                      <SelectItem value="digital-accelerators">Digital Accelerators</SelectItem>
+                      <SelectItem value="digital-workers">Digital Workers</SelectItem>
+                      <SelectItem value="digital-economy">Digital Economy</SelectItem>
+                      <SelectItem value="digital-cognitive-organisation">Digital Cognitive Organisation</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label>Level *</Label>
+                  <Label className="text-[12px] leading-[16px] font-medium">Level *</Label>
                   <Select value={newCourse.level} onValueChange={(v) => setNewCourse({ ...newCourse, level: v })}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />
@@ -1037,13 +944,13 @@ const CoursesSection = ({
                       <SelectItem value="beginner">Beginner</SelectItem>
                       <SelectItem value="intermediate">Intermediate</SelectItem>
                       <SelectItem value="advanced">Advanced</SelectItem>
-                      <SelectItem value="professional awareness">Professional Awareness</SelectItem>
+                      <SelectItem value="expert">Expert</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <div>
-                <Label htmlFor="price">Price ($)</Label>
+                <Label htmlFor="price" className="text-[12px] leading-[16px] font-medium">Price ($)</Label>
                 <Input
                   id="price"
                   type="number"
@@ -1053,7 +960,7 @@ const CoursesSection = ({
                 />
               </div>
               <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description" className="text-[12px] leading-[16px] font-medium">Description</Label>
                 <Textarea
                   id="description"
                   value={newCourse.description}
@@ -1062,7 +969,7 @@ const CoursesSection = ({
                   rows={3}
                 />
               </div>
-              <Button className="w-full" onClick={handleCreateCourse} disabled={createCourse.isPending}>
+              <Button className="w-full bg-[#ff6b4d] hover:bg-[#e56045] text-white" onClick={handleCreateCourse} disabled={createCourse.isPending}>
                 {createCourse.isPending ? 'Creating...' : 'Create Course'}
               </Button>
             </div>
@@ -1072,31 +979,31 @@ const CoursesSection = ({
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-          <div className="text-2xl font-semibold">{courses?.length || 0}</div>
-          <div className="text-sm text-muted-foreground">Total Courses</div>
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">{courses?.length || 0}</div>
+          <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">Total Courses</div>
         </div>
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-          <div className="text-2xl font-semibold">{publishedCount}</div>
-          <div className="text-sm text-muted-foreground">Published</div>
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">{publishedCount}</div>
+          <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">Published</div>
         </div>
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-          <div className="text-2xl font-semibold">{underReviewCount}</div>
-          <div className="text-sm text-muted-foreground">Under Review</div>
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">{underReviewCount}</div>
+          <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">Under Review</div>
         </div>
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-          <div className="text-2xl font-semibold">{draftCount}</div>
-          <div className="text-sm text-muted-foreground">Drafts</div>
+        <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">{draftCount}</div>
+          <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">Drafts</div>
         </div>
       </div>
 
       {/* Courses List */}
       {isLoading ? (
-        <p className="text-muted-foreground">Loading your courses...</p>
+        <p className="text-[16px] leading-[24px] font-normal text-muted-foreground">Loading your courses...</p>
       ) : courses && courses.length > 0 ? (
         <div className="space-y-4">
           {courses.map((course: any) => (
-            <div key={course.id} className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+            <div key={course.id} className="bg-white rounded-xl p-6 border border-gray-200">
               <div className="flex items-start gap-4">
                 <img
                   src={course.image_url || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9'}
@@ -1110,8 +1017,8 @@ const CoursesSection = ({
                         {statusConfig[course.status]?.badge}
                         <Badge variant="secondary" className="capitalize">{course.category}</Badge>
                       </div>
-                      <h3 className="font-semibold text-lg mb-1">{course.title}</h3>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <h3 className="text-[16px] leading-[24px] font-medium mb-1 text-[#1e2348]">{course.title}</h3>
+                      <div className="flex items-center gap-4 text-[13px] leading-[18px] font-normal text-muted-foreground">
                         <span className="capitalize">{course.level}</span>
                         <span>${course.price}</span>
                         <span>{course._count?.lessons || 0} lessons</span>
@@ -1123,7 +1030,7 @@ const CoursesSection = ({
                         </button>
                       </div>
                       {course.review_feedback && (
-                        <p className="text-xs text-muted-foreground mt-2">{course.review_feedback}</p>
+                        <p className="text-[12px] leading-[16px] font-normal text-muted-foreground mt-2">{course.review_feedback}</p>
                       )}
                     </div>
                     <CourseActions
@@ -1146,9 +1053,9 @@ const CoursesSection = ({
       ) : (
         <div className="bg-card rounded-2xl p-12 text-center border border-border">
           <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="font-semibold mb-2">No courses yet</h3>
-          <p className="text-muted-foreground mb-4">Create your first course to start teaching.</p>
-          <Button variant="hero" onClick={() => setIsCreateOpen(true)}>
+          <h3 className="text-[16px] leading-[24px] font-medium mb-2 text-[#1e2348]">No courses yet</h3>
+          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">Create your first course to start teaching.</p>
+          <Button variant="hero" onClick={() => setIsCreateOpen(true)} className="bg-[#ff6b4d] hover:bg-[#e56045]">
             <Plus className="w-4 h-4 mr-2" />
             Create Course
           </Button>
@@ -1158,25 +1065,25 @@ const CoursesSection = ({
       <Dialog open={!!studentCourseId} onOpenChange={(open) => !open && setStudentCourseId(null)}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Learners</DialogTitle>
-            <DialogDescription>Enrolled learners and their progress.</DialogDescription>
+            <DialogTitle className="text-[24px] leading-[32px] font-medium text-[#1e2348]">Learners</DialogTitle>
+            <DialogDescription className="text-[14px] leading-[20px] font-normal">Enrolled learners and their progress.</DialogDescription>
           </DialogHeader>
           <div className="mt-4 space-y-3">
             {studentList && studentList.length > 0 ? (
               studentList.map((student: any) => (
                 <div key={student.id} className="flex items-center justify-between rounded-lg border border-border p-3">
                   <div>
-                    <div className="font-medium">{student.full_name}</div>
-                    <div className="text-xs text-muted-foreground">{student.email}</div>
+                    <div className="text-[16px] leading-[24px] font-medium text-[#1e2348]">{student.full_name}</div>
+                    <div className="text-[12px] leading-[16px] font-normal text-muted-foreground">{student.email}</div>
                   </div>
-                  <div className="text-right text-sm text-muted-foreground">
+                  <div className="text-right text-[14px] leading-[20px] font-normal text-muted-foreground">
                     <div>{student.progress_label || "In progress"}</div>
-                    <div className="text-xs">Enrolled {new Date(student.enrolled_at).toLocaleDateString()}</div>
+                    <div className="text-[12px] leading-[16px]">Enrolled {new Date(student.enrolled_at).toLocaleDateString()}</div>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-muted-foreground">No learners enrolled yet.</p>
+              <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">No learners enrolled yet.</p>
             )}
           </div>
         </DialogContent>

@@ -7,7 +7,14 @@ import HowCoursebayHelpsSection from "@/components/home/HowCoursebayHelpsSection
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import BenefitsSection from "@/components/home/BenefitsSection";
 import FeaturedCoursesSection2 from "@/components/home/FeaturedCoursesSection2";
+import SixXDSection from "@/components/home/SixXDSection";
 import CTASection from "@/components/home/CTASection";
+import FacultySection from "@/components/home/FacultySection";
+import CredentialsSection from "@/components/home/CredentialsSection";
+import HowItWorksSection from "@/components/home/HowItWorksSection";
+import StartNowSection from "@/components/home/StartNowSection";
+import { ButlerAI } from "@/components/butler/ButlerAI";
+import { WhatsAppFloatingButton } from "@/components/contact/WhatsAppFloatingButton";
 
 const Index = () => {
   return (
@@ -18,12 +25,15 @@ const Index = () => {
         <TestimonialsSection />
         <BenefitsSection />
         <FeaturedCoursesSection2 />
-        <ExploreCategoriesSection />
-        <TrustedProvidersSection />
-        <HowCoursebayHelpsSection />
-        <CTASection />
+        <SixXDSection />
+        <FacultySection />
+        <CredentialsSection />
+        <HowItWorksSection />
+        <StartNowSection />
       </main>
       <Footer />
+      <ButlerAI />
+      <WhatsAppFloatingButton />
     </div>
   );
 };

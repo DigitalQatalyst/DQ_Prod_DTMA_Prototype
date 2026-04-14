@@ -83,7 +83,7 @@ const InstitutionVerification = () => {
                 <Shield className="w-8 h-8 text-primary" />
               </div>
               <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
-                Verify your institution to publish on BROWZ Beauty Academy
+                Verify your institution to publish on DTMA
               </h1>
               <p className="text-lg text-muted-foreground">
                 Help us ensure quality by confirming your institutional credentials. This quick step protects

@@ -84,80 +84,80 @@ const AdminAuth = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-background">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-[#1e2348]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=2069&auto=format&fit=crop"
-            alt="Beauty instructor"
-            className="w-full h-full object-cover opacity-30"
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+            alt="Digital transformation"
+            className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-white via-white/80 to-white/40" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1e2348] via-[#1e2348]/95 to-[#1e2348]/80" />
         </div>
 
-        <div className="relative z-10 flex flex-col justify-between p-12 text-foreground">
+        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[50px] w-auto"
             />
           </Link>
 
-          <div className="max-w-md opacity-60">
-            <h2 className="text-2xl font-bold leading-tight mb-4">
+          <div className="max-w-md">
+            <h2 className="text-[32px] leading-[40px] font-semibold mb-4 text-white">
               Administrator
               <br />
               Control Center
             </h2>
-            <p className="text-sm text-muted-foreground">
-              Manage users, approve courses, and oversee the entire BROWZ Beauty Academy platform.
+            <p className="text-[16px] leading-[24px] font-normal text-white/80">
+              Manage users, approve courses, and oversee the entire DTMA platform.
             </p>
           </div>
 
-          <div className="flex gap-12 opacity-50">
+          <div className="flex gap-12">
             <div>
-              <div className="text-2xl font-semibold text-primary">Full</div>
-              <div className="text-xs text-muted-foreground">Platform Access</div>
+              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">Full</div>
+              <div className="text-[14px] leading-[20px] font-normal text-white/70">Platform Access</div>
             </div>
             <div>
-              <div className="text-2xl font-semibold text-primary">User</div>
-              <div className="text-xs text-muted-foreground">Management</div>
+              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">User</div>
+              <div className="text-[14px] leading-[20px] font-normal text-white/70">Management</div>
             </div>
             <div>
-              <div className="text-2xl font-semibold text-primary">Course</div>
-              <div className="text-xs text-muted-foreground">Approvals</div>
+              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">Course</div>
+              <div className="text-[14px] leading-[20px] font-normal text-white/70">Approvals</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Right Panel - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col bg-background dark:bg-charcoal">
-        <div className="lg:hidden p-6 border-b border-border">
+      <div className="w-full lg:w-1/2 flex flex-col bg-white">
+        <div className="lg:hidden p-6 border-b border-gray-200">
           <Link to="/" className="flex items-center gap-3">
             <img
-              src="/log.svg"
-              alt="BROWZ Academy"
+              src="/dtma-logo.png"
+              alt="DTMA"
               className="h-[40px] w-auto"
             />
           </Link>
         </div>
 
         <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md mx-auto">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-[12px] leading-[16px] font-medium text-gray-600 hover:text-[#ff6b4d] transition-colors mb-12"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
-            <div className="mb-8">
-              <h1 className="text-3xl font-semibold text-foreground mb-2">
+            <div className="mb-10 text-center">
+              <h1 className="text-[40px] leading-[48px] font-semibold text-[#1e2348] mb-3">
                 {mode === "signup" ? "Create Admin Account" : "Admin Sign In"}
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-[14px] leading-[20px] font-normal text-gray-600">
                 {mode === "signup" ? "Set up your administrator account" : "Access the administrator dashboard"}
               </p>
             </div>
@@ -165,18 +165,18 @@ const AdminAuth = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               {mode === "signup" && (
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-foreground">
+                  <Label htmlFor="name" className="text-[12px] leading-[16px] font-medium text-[#1e2348]">
                     Full Name
                   </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       id="name"
                       type="text"
                       placeholder="Enter your full name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="pl-11 h-12 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                      className="pl-11 h-12 text-[14px] leading-[20px] bg-white border-gray-300 text-[#1e2348] placeholder:text-gray-400 focus:border-[#ff6b4d] focus:ring-[#ff6b4d] transition-all"
                       required
                       disabled={isSubmitting}
                     />
@@ -185,18 +185,18 @@ const AdminAuth = () => {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-foreground">
+                <Label htmlFor="email" className="text-[12px] leading-[16px] font-medium text-[#1e2348]">
                   Email Address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your admin email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-11 h-12 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                    className="pl-11 h-12 text-[14px] leading-[20px] bg-white border-gray-300 text-[#1e2348] placeholder:text-gray-400 focus:border-[#ff6b4d] focus:ring-[#ff6b4d] transition-all"
                     required
                     disabled={isSubmitting}
                   />
@@ -204,18 +204,18 @@ const AdminAuth = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-foreground">
+                <Label htmlFor="password" className="text-[12px] leading-[16px] font-medium text-[#1e2348]">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder={mode === "signup" ? "Create a password (min 6 characters)" : "Enter your password"}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-11 pr-11 h-12 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
+                    className="pl-11 pr-11 h-12 text-[14px] leading-[20px] bg-white border-gray-300 text-[#1e2348] placeholder:text-gray-400 focus:border-[#ff6b4d] focus:ring-[#ff6b4d] transition-all"
                     required
                     minLength={6}
                     disabled={isSubmitting}
@@ -223,7 +223,7 @@ const AdminAuth = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1e2348] transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -232,7 +232,7 @@ const AdminAuth = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                className="w-full h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium transition-colors mt-8"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -241,19 +241,19 @@ const AdminAuth = () => {
                     {mode === "signup" ? "Creating account..." : "Signing in..."}
                   </>
                 ) : (
-                  mode === "signup" ? "Create Admin Account" : "Sign In as Administrator"
+                  mode === "signup" ? "Create Account" : "Sign In"
                 )}
               </Button>
             </form>
 
-            <p className="text-center text-sm text-muted-foreground mt-8">
+            <p className="text-center text-[12px] leading-[16px] font-normal text-gray-600 mt-8">
               {mode === "signup" ? (
                 <>
                   Already have an account?{" "}
                   <button
                     type="button"
                     onClick={() => setMode("login")}
-                    className="text-primary font-medium hover:underline"
+                    className="text-[#ff6b4d] font-medium hover:underline"
                   >
                     Sign in
                   </button>
@@ -261,7 +261,7 @@ const AdminAuth = () => {
               ) : (
                 <>
                   Not an administrator?{" "}
-                  <Link to="/auth" className="text-primary font-medium hover:underline">
+                  <Link to="/auth" className="text-[#ff6b4d] font-medium hover:underline">
                     Go to learner login
                   </Link>
                 </>

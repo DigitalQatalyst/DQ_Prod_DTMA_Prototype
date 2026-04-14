@@ -21,12 +21,12 @@ const LearnerOnboarding = () => {
   const [isGoalDropdownOpen, setIsGoalDropdownOpen] = useState(false);
 
   const learningGoals = [
-    "Career advancement in beauty",
-    "Start my own beauty business",
-    "Learn new beauty techniques",
-    "Professional certification",
-    "Personal skill development",
-    "Career change to beauty industry",
+    "Lead digital transformation initiatives",
+    "Build digital strategy capabilities",
+    "Develop AI and emerging tech skills",
+    "Transform organizational operations",
+    "Advance my digital career",
+    "Understand Economy 4.0 dynamics",
   ];
 
   const skillLevels = ["Beginner", "Intermediate", "Advanced"];
@@ -43,9 +43,9 @@ const LearnerOnboarding = () => {
       description: "Real-time interaction with instructors",
     },
     {
-      id: "cohort-based",
-      title: "Cohort-based",
-      description: "Learn together with a group",
+      id: "audio",
+      title: "Audio",
+      description: "Listen and learn on the go",
     },
   ];
 
@@ -71,11 +71,14 @@ const LearnerOnboarding = () => {
           <div className="max-w-2xl mx-auto">
             {/* Header */}
             <div className="text-center mb-12">
-              <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1e2348]/10 mb-6">
+                <span className="text-3xl">🎯</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-4">
                 What do you want to learn?
               </h1>
-              <p className="text-lg text-muted-foreground">
-                Help us personalize your experience.
+              <p className="text-base text-[#4B5563]">
+                Help us personalize your digital transformation journey.
               </p>
             </div>
 
@@ -84,19 +87,19 @@ const LearnerOnboarding = () => {
               <div className="space-y-8">
                 {/* Primary Learning Goal */}
                 <div>
-                  <label className="block text-sm font-semibold text-foreground mb-4">
+                  <label className="block text-sm font-semibold text-[#0B0C19] mb-4">
                     Primary Learning Goal
                   </label>
                   <div className="relative">
                     <button
                       onClick={() => setIsGoalDropdownOpen(!isGoalDropdownOpen)}
-                      className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white text-left flex items-center justify-between"
+                      className="w-full px-4 py-3 border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] bg-white text-left flex items-center justify-between hover:border-[#ff6b4d] transition-colors"
                     >
-                      <span>{formData.learningGoal || "Select a goal..."}</span>
-                      <ChevronDown className={`w-5 h-5 transition-transform ${isGoalDropdownOpen ? 'rotate-180' : ''}`} />
+                      <span className="text-[#0B0C19]">{formData.learningGoal || "Select a goal..."}</span>
+                      <ChevronDown className={`w-5 h-5 text-[#4B5563] transition-transform ${isGoalDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
                     {isGoalDropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-1 border border-border rounded-lg bg-white shadow-lg z-10">
+                      <div className="absolute top-full left-0 right-0 mt-1 border border-[#E5E7EB] rounded-lg bg-white shadow-lg z-10">
                         {learningGoals.map((goal) => (
                           <button
                             key={goal}
@@ -104,7 +107,7 @@ const LearnerOnboarding = () => {
                               setFormData({ ...formData, learningGoal: goal });
                               setIsGoalDropdownOpen(false);
                             }}
-                            className="w-full px-4 py-3 text-left hover:bg-[#EEEDE9] transition-colors first:rounded-t-lg last:rounded-b-lg"
+                            className="w-full px-4 py-3 text-left text-[#0B0C19] hover:bg-[#F5F6FA] transition-colors first:rounded-t-lg last:rounded-b-lg"
                           >
                             {goal}
                           </button>
@@ -116,7 +119,7 @@ const LearnerOnboarding = () => {
 
                 {/* Current Skill Level */}
                 <div>
-                  <label className="block text-sm font-semibold text-foreground mb-4">
+                  <label className="block text-sm font-semibold text-[#0B0C19] mb-4">
                     Current Skill Level
                   </label>
                   <div className="flex gap-3">
@@ -128,8 +131,8 @@ const LearnerOnboarding = () => {
                         }
                         className={`flex-1 px-4 py-3 rounded-lg font-medium transition-all ${
                           formData.skillLevel === level
-                            ? "bg-primary text-primary-foreground"
-                            : "border border-border text-foreground hover:bg-[rgba(238,237,233,0.5)]"
+                            ? "bg-[#ff6b4d] text-white"
+                            : "border border-[#E5E7EB] text-[#0B0C19] hover:border-[#ff6b4d]"
                         }`}
                       >
                         {level}
@@ -140,7 +143,7 @@ const LearnerOnboarding = () => {
 
                 {/* Preferred Format */}
                 <div>
-                  <label className="block text-sm font-semibold text-foreground mb-4">
+                  <label className="block text-sm font-semibold text-[#0B0C19] mb-4">
                     Preferred Format
                   </label>
                   <div className="space-y-3">
@@ -149,8 +152,8 @@ const LearnerOnboarding = () => {
                         key={format.id}
                         className={`flex items-start gap-4 p-4 rounded-lg border-2 cursor-pointer transition-all ${
                           formData.preferredFormat === format.id
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/50"
+                            ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
+                            : "border-[#E5E7EB] hover:border-[#ff6b4d]/50"
                         }`}
                       >
                         <input
@@ -164,13 +167,13 @@ const LearnerOnboarding = () => {
                               preferredFormat: e.target.value,
                             })
                           }
-                          className="mt-1"
+                          className="mt-1 accent-[#ff6b4d]"
                         />
                         <div>
-                          <div className="font-medium text-foreground">
+                          <div className="font-medium text-[#0B0C19]">
                             {format.title}
                           </div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-sm text-[#4B5563]">
                             {format.description}
                           </div>
                         </div>
@@ -185,23 +188,22 @@ const LearnerOnboarding = () => {
                 <Button
                   onClick={handleStartBrowsing}
                   disabled={!isFormComplete}
-                  variant="hero"
+                  className="w-full gap-2 h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white"
                   size="lg"
-                  className="w-full gap-2"
                 >
                   Start Browsing
                   <ArrowRight className="w-5 h-5" />
                 </Button>
 
                 <div className="flex items-center gap-4">
-                  <div className="flex-1 h-px bg-border" />
-                  <span className="text-sm text-muted-foreground">Or</span>
-                  <div className="flex-1 h-px bg-border" />
+                  <div className="flex-1 h-px bg-[#E5E7EB]" />
+                  <span className="text-sm text-[#9CA3AF]">Or</span>
+                  <div className="flex-1 h-px bg-[#E5E7EB]" />
                 </div>
 
                 <button
                   onClick={handleSkip}
-                  className="w-full py-3 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="w-full py-3 text-sm font-medium text-[#4B5563] hover:text-[#0B0C19] transition-colors"
                 >
                   Skip for now
                 </button>
@@ -209,10 +211,10 @@ const LearnerOnboarding = () => {
             </div>
 
             {/* Info Box */}
-            <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-              <p className="text-sm text-blue-900">
+            <div className="mt-8 bg-[#ff6b4d]/5 border border-[#ff6b4d]/20 rounded-lg p-6">
+              <p className="text-sm text-[#0B0C19]">
                 <strong>💡 Tip:</strong> Your preferences help us recommend the
-                best beauty courses tailored to your goals. You can update these
+                best digital transformation courses tailored to your goals. You can update these
                 anytime in your profile settings.
               </p>
             </div>

@@ -15,23 +15,32 @@ import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import CourseLearning from "./pages/CourseLearning";
 import About from "./pages/About";
-import BecomeProvider from "./pages/BecomeProvider";
-import ProviderApplication from "./pages/ProviderApplication";
-import ProviderRegistration from "./pages/ProviderRegistration";
-import ProviderVerification from "./pages/ProviderVerification";
-import ProviderVerificationPending from "./pages/ProviderVerificationPending";
-import InstitutionProviderRegistration from "./pages/InstitutionProviderRegistration";
-import InstitutionVerification from "./pages/InstitutionVerification";
+import InstructorApplication from "./pages/InstructorApplication";
 import LearnerOnboarding from "./pages/LearnerOnboarding";
 import LearnerDashboard from "./pages/dashboard/LearnerDashboard";
 import InstructorDashboard from "./pages/dashboard/InstructorDashboard";
 import InstitutionDashboard from "./pages/dashboard/InstitutionDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import SMSDashboard from "./pages/dashboard/SMSDashboard";
 import Masterclasses from "./pages/Masterclasses";
 import MasterclassDetail from "./pages/MasterclassDetail";
 import MasterclassBooking from "./pages/MasterclassBooking";
 import CourseBuilder from "./pages/CourseBuilder";
 import NotFound from "./pages/NotFound";
+import SixXD from "./pages/SixXD";
+import Testimonials from "./pages/Testimonials";
+import DigitalWorkers from "./pages/personas/DigitalWorkers";
+import TransformationSpecialists from "./pages/personas/TransformationSpecialists";
+import OrganizationalLeaders from "./pages/personas/OrganizationalLeaders";
+import DigitalEconomy from "./pages/dimensions/DigitalEconomy";
+import DigitalCognitiveOrganisation from "./pages/dimensions/DigitalCognitiveOrganisation";
+import DigitalBusinessPlatform from "./pages/dimensions/DigitalBusinessPlatform";
+import DigitalTransformation from "./pages/dimensions/DigitalTransformation";
+import DigitalWorkerWorkspace from "./pages/dimensions/DigitalWorkerWorkspace";
+import DigitalAccelerators from "./pages/dimensions/DigitalAccelerators";
+import Faculty from "./pages/Faculty";
+import FacultyDetail from "./pages/FacultyDetail";
+import AIStudyBuddyPage from "./pages/AIStudyBuddyPage";
 
 const queryClient = new QueryClient();
 
@@ -89,9 +98,7 @@ function FlowTracker() {
 
   useEffect(() => {
     // Set flow based on current route
-    if (location.pathname.startsWith("/become-provider") || 
-        location.pathname.startsWith("/provider-") ||
-        location.pathname.startsWith("/institution-")) {
+    if (location.pathname.startsWith("/instructor-")) {
       setFlow("provider");
     } else if (location.pathname === "/" || 
                location.pathname.startsWith("/categories") ||
@@ -117,19 +124,29 @@ const AppRoutes = () => (
       <Route path="/courses/:id" element={<CourseDetail />} />
       <Route path="/courses/:id/learn" element={<CourseLearning />} />
       <Route path="/about" element={<About />} />
-      <Route path="/become-provider" element={<BecomeProvider />} />
-      <Route path="/provider-apply" element={<ProviderApplication />} />
-      <Route path="/provider-register/:type" element={<ProviderRegistration />} />
-      <Route path="/provider-verification" element={<ProviderVerification />} />
-      <Route path="/provider-verification-pending" element={<ProviderVerificationPending />} />
-      <Route path="/institution-register/:type" element={<InstitutionProviderRegistration />} />
-      <Route path="/institution-verification" element={<InstitutionVerification />} />
+      <Route path="/testimonials" element={<Testimonials />} />
+      <Route path="/6xd" element={<SixXD />} />
+      <Route path="/personas/digital-workers" element={<DigitalWorkers />} />
+      <Route path="/personas/transformation-specialists" element={<TransformationSpecialists />} />
+      <Route path="/personas/organizational-leaders" element={<OrganizationalLeaders />} />
+      <Route path="/dimensions/digital-economy" element={<DigitalEconomy />} />
+      <Route path="/dimensions/digital-cognitive-organisation" element={<DigitalCognitiveOrganisation />} />
+      <Route path="/dimensions/digital-business-platform" element={<DigitalBusinessPlatform />} />
+      <Route path="/dimensions/digital-transformation" element={<DigitalTransformation />} />
+      <Route path="/dimensions/digital-worker-workspace" element={<DigitalWorkerWorkspace />} />
+      <Route path="/dimensions/digital-accelerators" element={<DigitalAccelerators />} />
+      <Route path="/faculty" element={<Faculty />} />
+      <Route path="/faculty" element={<Faculty />} />
+      <Route path="/faculty/:id" element={<FacultyDetail />} />
+      <Route path="/instructor-application" element={<InstructorApplication />} />
       <Route path="/learner-onboarding" element={<ProtectedRoute><LearnerOnboarding /></ProtectedRoute>} />
-      <Route path="/masterclasses" element={<Masterclasses />} />
       <Route path="/masterclasses/:id" element={<MasterclassDetail />} />
       <Route path="/masterclasses/:id/booking" element={<ProtectedRoute><MasterclassBooking /></ProtectedRoute>} />
       <Route path="/courses/:courseId/builder" element={<ProtectedRoute><CourseBuilder /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardRouter /></ProtectedRoute>} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/sms-admin" element={<SMSDashboard />} />
+      <Route path="/ai-study-buddy" element={<ProtectedRoute><AIStudyBuddyPage /></ProtectedRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>

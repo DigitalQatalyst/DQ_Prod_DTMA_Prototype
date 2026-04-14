@@ -11,7 +11,7 @@ const MetricsSection = () => {
     {
       value: "25K+",
       label: "Students Enrolled",
-      description: "Beauty professionals learning with BROWZ Beauty Academy worldwide.",
+      description: "Digital transformation professionals learning with DTMA worldwide.",
     },
   ];
 

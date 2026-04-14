@@ -86,6 +86,7 @@ const fmt = (v: number) => currency.format(v);
 export default function AnalyticsPerformanceInsightsPanel() {
   const { toast } = useToast();
   const [period, setPeriod] = useState<Period>("30d");
+  const [remindedFaculty, setRemindedFaculty] = useState<Set<string>>(new Set());
 
   const profile = periodProfiles[period];
   const paidRate = Math.round((profile.paid / profile.enrolled) * 100);
@@ -343,6 +344,22 @@ export default function AnalyticsPerformanceInsightsPanel() {
                         <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">unanswered Q&amp;A <Tip text="Student questions that have received no instructor response in over 48 hours." /></div>
                       </div>
                     </div>
+
+                    {/* Action row — only shown when attention needed */}
+                    {needsAttention && (
+                      <div className="pt-1 border-t border-slate-100 flex justify-end">
+                        <Button
+                          size="sm" variant="outline" className="text-xs h-7"
+                          disabled={remindedFaculty.has(f.name)}
+                          onClick={() => {
+                            setRemindedFaculty((prev) => new Set(prev).add(f.name));
+                            toast({ title: "Reminder sent", description: `${f.name} has been sent a reminder to log in and respond to students.` });
+                          }}
+                        >
+                          {remindedFaculty.has(f.name) ? "Reminded" : "Send reminder"}
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 );
               })}

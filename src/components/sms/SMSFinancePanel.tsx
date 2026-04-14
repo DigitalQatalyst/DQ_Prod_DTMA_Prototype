@@ -368,6 +368,7 @@ export default function SMSFinancePanel() {
                   <TableHead>Access Type</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Purchase / Renewal</TableHead>
+                  <TableHead className="text-right">Action</TableHead>
                 </TableRow></TableHeader>
                 <TableBody>
                   {displayedAccess
@@ -406,6 +407,20 @@ export default function SMSFinancePanel() {
                                   : <span className="text-slate-500">Renews {fmtDate(s.renewalDate)}</span>
                             ) : (
                               <span className="text-slate-500">Purchased {fmtDate(s.purchaseDate)}</span>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {(s.status === "payment-failed" || s.status === "expired") && (
+                              <Button
+                                size="sm" variant="outline" className="text-xs h-7"
+                                disabled={flaggedIds.has(s.id)}
+                                onClick={() => {
+                                  setFlaggedIds((prev) => new Set(prev).add(s.id));
+                                  toast({ title: "Escalated to Finance", description: `${s.name}'s access issue has been flagged for the finance team.` });
+                                }}
+                              >
+                                {flaggedIds.has(s.id) ? "Escalated" : <><Flag className="h-3 w-3 mr-1" />Escalate</>}
+                              </Button>
                             )}
                           </TableCell>
                         </TableRow>

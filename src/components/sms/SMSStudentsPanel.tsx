@@ -96,6 +96,7 @@ export default function SMSStudentsPanel() {
   const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [pendingActions, setPendingActions] = useState(initialPendingActions);
+  const [remindedStudents, setRemindedStudents] = useState<Set<string>>(new Set());
 
   const filtered = studentRecords.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -200,6 +201,7 @@ export default function SMSStudentsPanel() {
                 <TableHead className="text-right">
                   Certificates
                 </TableHead>
+                <TableHead className="text-right">Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
                 {filtered.map((s) => {
@@ -232,6 +234,20 @@ export default function SMSStudentsPanel() {
                           ? <span className="text-sm font-medium text-emerald-700">{s.certificates} issued</span>
                           : <span className="text-sm text-slate-400">—</span>
                         }
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {atRisk && (
+                          <Button
+                            size="sm" variant="outline" className="text-xs h-7"
+                            disabled={remindedStudents.has(s.id)}
+                            onClick={() => {
+                              setRemindedStudents((prev) => new Set(prev).add(s.id));
+                              toast({ title: "Reminder sent", description: `${s.name} has been sent a reminder about their access status.` });
+                            }}
+                          >
+                            {remindedStudents.has(s.id) ? "Reminded" : "Send reminder"}
+                          </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   );

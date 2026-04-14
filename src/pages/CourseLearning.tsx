@@ -78,6 +78,8 @@ const CourseLearning = () => {
   const [generatingAI, setGeneratingAI] = useState(false);
   const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState(0);
   const [isFlashcardFlipped, setIsFlashcardFlipped] = useState(false);
+  const [isAIToolsCollapsed, setIsAIToolsCollapsed] = useState(false);
+  const [isCourseContentCollapsed, setIsCourseContentCollapsed] = useState(false);
   
   // Quiz state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -377,7 +379,7 @@ const CourseLearning = () => {
 
           <div className="flex items-center gap-3">
             <Link to="/courses">
-              <Button variant="outline" size="sm">Browse Courses</Button>
+              <Button variant="outline" size="sm" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Browse Courses</Button>
             </Link>
           </div>
         </header>
@@ -385,20 +387,32 @@ const CourseLearning = () => {
         {/* Content Area */}
         <div className="p-8">
           <div className="grid lg:grid-cols-12 gap-6">
-            {/* Course Outline - LEFT SIDE - 3 columns */}
-            <div className="lg:col-span-3">
-              <Card className="p-4">
-                <h3 className="mb-4 text-[20px] leading-[28px] font-medium">Course Content</h3>
-                <ScrollArea className="h-[600px]">
+            {/* Course Outline - LEFT SIDE - 3 columns (collapses to minimal width) */}
+            <div className={`transition-all duration-300 ${isCourseContentCollapsed ? 'lg:col-span-1' : 'lg:col-span-3'}`}>
+              <Card className="p-4 relative">
+                <div className="flex items-center justify-between mb-4">
+                  {!isCourseContentCollapsed && (
+                    <h3 className="text-[#1e2348] text-[18px] leading-[26px] font-bold">Course Content</h3>
+                  )}
+                  <button
+                    onClick={() => setIsCourseContentCollapsed(!isCourseContentCollapsed)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-auto"
+                    aria-label={isCourseContentCollapsed ? "Expand Course Content" : "Collapse Course Content"}
+                  >
+                    <ChevronRight className={`w-5 h-5 text-gray-600 transition-transform ${isCourseContentCollapsed ? '' : 'rotate-180'}`} />
+                  </button>
+                </div>
+                {!isCourseContentCollapsed && (
+                  <ScrollArea className="h-[600px]">
                   <div className="space-y-2">
                     {courseData.modules?.map((module: any) => {
                       const moduleHasQuiz = module.lessons?.some((l: any) => l.isQuiz);
                       const isModulePassed = moduleHasQuiz && passedModules.has(module.id);
                       
                       return (
-                      <div key={module.id} className="mb-4">
-                        <div className="flex items-center gap-2 mb-2 px-2">
-                          <h4 className="text-muted-foreground text-[14px] leading-[20px] font-medium flex-1">{module.title}</h4>
+                      <div key={module.id} className="mb-6">
+                        <div className="flex items-center gap-2 mb-3 px-2">
+                          <h4 className="text-[#1e2348] text-[16px] leading-[24px] font-bold flex-1">{module.title}</h4>
                           {isModulePassed && (
                             <div className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
                               <CheckCircle className="w-3 h-3" />
@@ -454,6 +468,7 @@ const CourseLearning = () => {
                     })}
                   </div>
                 </ScrollArea>
+                )}
               </Card>
             </div>
 
@@ -461,7 +476,7 @@ const CourseLearning = () => {
             <div className={`space-y-4 ${selectedLesson?.isQuiz ? 'lg:col-span-9' : 'lg:col-span-6'}`}>
               {/* Only show video player for non-quiz/non-assignment lessons */}
               {!selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
-                <Card className="overflow-hidden">
+                <div className="overflow-hidden rounded-lg">
                   {/* Video/Content Area */}
                   {selectedLesson?.video_url || selectedLesson?.videoUrl ? (
                     <div className="relative bg-black aspect-video">
@@ -566,78 +581,110 @@ const CourseLearning = () => {
                       </div>
                     </div>
                   )}
-                </Card>
+                </div>
               )}
 
-              {/* Lesson Info */}
-              <Card className="p-6">
-                <h2 className="mb-2 text-[28px] leading-[36px] font-semibold">{selectedLesson?.title}</h2>
-                <p className="text-muted-foreground mb-4 text-[14px] leading-[20px] font-normal">
-                  {currentModuleTitle} • {selectedLesson?.duration_minutes || 15} min
-                </p>
+              {/* Lesson Info - Only show for non-quiz lessons */}
+              {!selectedLesson?.isQuiz && (
+                <Card className="p-6">
+                  {/* Calculate lesson number (e.g., 1.1, 1.2, 2.1) - Only for non-quiz lessons */}
+                  {(() => {
+                    const moduleIndex = courseData?.modules?.findIndex((m: any) => 
+                      m.lessons?.some((l: any) => l.id === selectedLesson?.id)
+                    );
+                    const module = courseData?.modules?.[moduleIndex];
+                    const lessonIndex = module?.lessons?.findIndex((l: any) => l.id === selectedLesson?.id);
+                    const lessonNumber = `${moduleIndex + 1}.${lessonIndex + 1}`;
+                    
+                    // Don't show numbering for assignments or practicals
+                    if (selectedLesson?.isAssignment || selectedLesson?.isPractical) {
+                      return (
+                        <>
+                          <h2 className="mb-4 text-[28px] leading-[36px] font-semibold">{selectedLesson?.title}</h2>
+                          {/* Lesson Content */}
+                          {selectedLesson?.content && (
+                            <div className="prose max-w-none">
+                              <p className="text-muted-foreground text-[16px] leading-[24px] font-normal">{selectedLesson.content}</p>
+                            </div>
+                          )}
+                        </>
+                      );
+                    }
+                    
+                    return (
+                      <>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="bg-[#ff6b4d] text-white px-3 py-1 rounded-lg text-[14px] leading-[20px] font-bold">
+                            {lessonNumber}
+                          </div>
+                          <h2 className="text-[28px] leading-[36px] font-semibold">{selectedLesson?.title}</h2>
+                        </div>
+                        {/* Lesson Content - Aligned with title, not badge */}
+                        {selectedLesson?.content && (
+                          <div className="prose max-w-none ml-[52px]">
+                            <p className="text-muted-foreground text-[16px] leading-[24px] font-normal">{selectedLesson.content}</p>
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
 
-                {/* Lesson Content - Always show for regular lessons */}
-                {selectedLesson?.content && !selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
-                  <div className="prose max-w-none">
-                    <p className="text-muted-foreground text-[16px] leading-[24px] font-normal">{selectedLesson.content}</p>
-                  </div>
-                )}
-
-                {/* Practical Content */}
-                {selectedLesson?.isPractical && (
-                  <div className="border border-blue-200 bg-blue-50 rounded-lg p-6">
-                    <GraduationCap className="w-6 h-6 text-blue-600 mb-3" />
-                    <h3 className="text-blue-900 mb-2 text-[18px] leading-[28px] font-normal">Instructor Evaluation Required</h3>
-                    <p className="text-blue-800 text-[14px] leading-[20px] font-normal">{practicalInstructions}</p>
-                  </div>
-                )}
-              </Card>
+                  {/* Practical Content */}
+                  {selectedLesson?.isPractical && (
+                    <div className="border border-blue-200 bg-blue-50 rounded-lg p-6">
+                      <GraduationCap className="w-6 h-6 text-blue-600 mb-3" />
+                      <h3 className="text-blue-900 mb-2 text-[18px] leading-[28px] font-normal">Instructor Evaluation Required</h3>
+                      <p className="text-blue-800 text-[14px] leading-[20px] font-normal">{practicalInstructions}</p>
+                    </div>
+                  )}
+                </Card>
+              )}
 
               {/* Quiz Section - Shows below lesson content */}
               {selectedLesson?.isQuiz && quizQuestions.length > 0 && (
                 <div className="space-y-6">
                   <Card className="p-8">
                     {/* Quiz Header */}
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center justify-between mb-8">
                       <div>
-                        <h2 className="text-[28px] leading-[36px] font-semibold">
+                        <h2 className="text-[#1e2348] text-[32px] leading-[40px] font-bold">
                           {selectedLesson?.title || 'Course Quiz'}
                         </h2>
-                        <p className="text-muted-foreground mt-1 text-[14px] leading-[20px] font-normal">
+                        <p className="text-gray-600 mt-2 text-[16px] leading-[24px] font-normal">
                           Test your knowledge
                         </p>
                       </div>
-                      <Badge className="bg-[#1e2348] text-white px-4 py-2">
+                      <Badge className="bg-[#1e2348] text-white px-5 py-2.5 text-[14px] leading-[20px] font-semibold">
                         Question {currentQuestionIndex + 1} of {quizQuestions.length}
                       </Badge>
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="mb-8">
-                      <Progress value={((currentQuestionIndex + 1) / quizQuestions.length) * 100} className="h-2" />
+                    <div className="mb-10">
+                      <Progress value={((currentQuestionIndex + 1) / quizQuestions.length) * 100} className="h-3" />
                     </div>
 
                     {/* Current Question */}
                     {quizQuestions[currentQuestionIndex] && (
-                      <div className="space-y-6">
-                        <div className="flex items-start gap-4">
-                          <div className="w-10 h-10 rounded-full bg-[#ff6b4d] flex items-center justify-center shrink-0">
-                            <span className="text-white font-semibold">{currentQuestionIndex + 1}</span>
+                      <div className="space-y-8">
+                        <div className="flex items-start gap-5">
+                          <div className="w-12 h-12 rounded-full bg-[#ff6b4d] flex items-center justify-center shrink-0">
+                            <span className="text-white text-[18px] leading-[26px] font-bold">{currentQuestionIndex + 1}</span>
                           </div>
                           <div className="flex-1">
-                            <p className="text-[20px] leading-[28px] font-medium">
+                            <p className="text-[#1e2348] text-[24px] leading-[32px] font-semibold">
                               {quizQuestions[currentQuestionIndex].text}
                             </p>
                             
                             {/* Hint Button */}
                             {moduleQuiz?.questions[currentQuestionIndex]?.hint && (
-                              <div className="mt-4">
+                              <div className="mt-5">
                                 {!showHints[currentQuestionIndex] ? (
                                   <Button
                                     variant="outline"
                                     size="sm"
                                     onClick={() => setShowHints({ ...showHints, [currentQuestionIndex]: true })}
-                                    className="gap-2 border-blue-300 text-blue-600 hover:bg-blue-50"
+                                    className="gap-2 border-blue-300 text-blue-600 hover:bg-blue-50 text-[14px] leading-[20px] font-medium"
                                   >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -645,13 +692,13 @@ const CourseLearning = () => {
                                     Show Hint
                                   </Button>
                                 ) : (
-                                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
-                                    <svg className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-5 flex items-start gap-4">
+                                    <svg className="w-6 h-6 text-blue-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                                     </svg>
                                     <div className="flex-1">
-                                      <p className="text-blue-900 font-medium mb-1 text-[14px] leading-[20px]">Hint:</p>
-                                      <p className="text-blue-800 text-[14px] leading-[20px] font-normal">
+                                      <p className="text-blue-900 font-semibold mb-2 text-[16px] leading-[24px]">Hint:</p>
+                                      <p className="text-blue-800 text-[15px] leading-[22px] font-normal">
                                         {moduleQuiz.questions[currentQuestionIndex].hint}
                                       </p>
                                     </div>
@@ -659,7 +706,7 @@ const CourseLearning = () => {
                                       onClick={() => setShowHints({ ...showHints, [currentQuestionIndex]: false })}
                                       className="text-blue-400 hover:text-blue-600"
                                     >
-                                      <X className="w-4 h-4" />
+                                      <X className="w-5 h-5" />
                                     </button>
                                   </div>
                                 )}
@@ -669,13 +716,13 @@ const CourseLearning = () => {
                         </div>
 
                         {/* Answer Options */}
-                        <div className="space-y-3 ml-14">
+                        <div className="space-y-4 ml-[68px]">
                           {quizQuestions[currentQuestionIndex].options.map((option: string, optIndex: number) => (
                             <label
                               key={optIndex}
-                              className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                              className={`flex items-center gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all ${
                                 quizAnswers[currentQuestionIndex] === optIndex
-                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/5'
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/5 shadow-sm'
                                   : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                               }`}
                             >
@@ -687,24 +734,25 @@ const CourseLearning = () => {
                                 onChange={() => setQuizAnswers({ ...quizAnswers, [currentQuestionIndex]: optIndex })}
                                 className="w-5 h-5 text-[#ff6b4d]"
                               />
-                              <span className="text-[16px] leading-[24px] font-normal">{option}</span>
+                              <span className="text-[#1e2348] text-[18px] leading-[26px] font-normal">{option}</span>
                             </label>
                           ))}
                         </div>
 
                         {/* Navigation Buttons */}
-                        <div className="flex items-center justify-between mt-8 pt-6 border-t">
+                        <div className="flex items-center justify-between mt-10 pt-8 border-t-2">
                           <Button
                             variant="outline"
                             onClick={() => setCurrentQuestionIndex(Math.max(0, currentQuestionIndex - 1))}
                             disabled={currentQuestionIndex === 0}
+                            className="text-[16px] leading-[24px] font-medium px-6 py-3"
                           >
                             Previous
                           </Button>
                           {currentQuestionIndex < quizQuestions.length - 1 ? (
                             <Button
                               onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 1)}
-                              className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                              className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[16px] leading-[24px] font-semibold px-8 py-3"
                               disabled={quizAnswers[currentQuestionIndex] === undefined}
                             >
                               Next Question
@@ -713,7 +761,7 @@ const CourseLearning = () => {
                             <Button
                               onClick={handleQuizSubmit}
                               disabled={Object.keys(quizAnswers).length < quizQuestions.length}
-                              className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                              className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[16px] leading-[24px] font-semibold px-8 py-3"
                             >
                               Submit Answer
                             </Button>
@@ -796,8 +844,18 @@ const CourseLearning = () => {
             {!selectedLesson?.isQuiz && (
               <div className="lg:col-span-3">
                 <Card className="p-6 sticky top-24">
-                  <h3 className="mb-6 text-[20px] leading-[28px] font-medium">AI Learning Tools</h3>
-                  <div className="space-y-3">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-[20px] leading-[28px] font-medium">AI Learning Tools</h3>
+                    <button
+                      onClick={() => setIsAIToolsCollapsed(!isAIToolsCollapsed)}
+                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                      aria-label={isAIToolsCollapsed ? "Expand AI Tools" : "Collapse AI Tools"}
+                    >
+                      <ChevronRight className={`w-5 h-5 text-gray-600 transition-transform ${isAIToolsCollapsed ? '' : 'rotate-90'}`} />
+                    </button>
+                  </div>
+                  {!isAIToolsCollapsed && (
+                    <div className="space-y-3">
                     {/* WhatsApp Learning */}
                     <WhatsAppLearning 
                       courseTitle={courseData.title || course?.title || "Course"}
@@ -838,6 +896,7 @@ const CourseLearning = () => {
                       </div>
                     </button>
                   </div>
+                  )}
                 </Card>
               </div>
             )}
@@ -1324,7 +1383,7 @@ const CourseLearning = () => {
                   <Download className="w-4 h-4 mr-2" />
                   Download Notes
                 </Button>
-                <Button variant="outline" className="flex-1" onClick={() => setShowAINotes(false)}>
+                <Button variant="outline" className="flex-1 hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" onClick={() => setShowAINotes(false)}>
                   Close
                 </Button>
               </div>

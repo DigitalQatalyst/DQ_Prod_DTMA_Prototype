@@ -250,8 +250,8 @@ export const CreateCourseModal = ({ open, onClose }: CreateCourseModalProps) => 
           </div>
 
           {/* Info Box */}
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-            <p className="text-[13px] text-blue-900">
+          <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
+            <p className="text-[13px] text-orange-900">
               <strong>Next Steps:</strong> After creating your course, you'll be taken to the Course Builder where you can add curriculum, media, assessments, and more.
             </p>
           </div>
@@ -263,6 +263,7 @@ export const CreateCourseModal = ({ open, onClose }: CreateCourseModalProps) => 
             variant="outline"
             onClick={onClose}
             disabled={isCreating}
+            className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
           >
             Cancel
           </Button>

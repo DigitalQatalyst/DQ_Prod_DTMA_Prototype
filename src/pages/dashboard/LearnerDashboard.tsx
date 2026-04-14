@@ -384,14 +384,14 @@ const LearnerDashboard = () => {
             </div>
 
             {/* Notifications */}
-            <button className="relative p-2 hover:bg-accent rounded-lg transition-colors">
+            <button className="relative p-2 rounded-lg transition-colors">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-[#ff6b4d] rounded-full"></span>
             </button>
 
             {/* Browse Courses Button */}
             <Link to="/courses">
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
                 <BookOpen className="w-4 h-4" />
                 <span className="hidden sm:inline">Browse Courses</span>
               </Button>
@@ -426,12 +426,6 @@ const LearnerDashboard = () => {
                     </p>
                   </div>
                   <div className="flex gap-3">
-                    <Link to="/ai-study-buddy">
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="lg">
-                        <Bot className="w-5 h-5 mr-2" />
-                        AI Study Buddy
-                      </Button>
-                    </Link>
                     {inProgressCourses.length > 0 && (
                       <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
                         <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20" size="lg">
@@ -581,7 +575,7 @@ const LearnerDashboard = () => {
                           to={course.comingSoon ? '#' : `/courses/${course.id}`}
                           onClick={(e) => course.comingSoon && e.preventDefault()}
                           className={`group bg-card rounded-2xl overflow-hidden shadow-sm transition-all ${
-                            course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg'
+                            course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-[#ff6b4d]/20'
                           }`}
                         >
                           <div className="relative">

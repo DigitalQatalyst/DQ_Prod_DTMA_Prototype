@@ -353,7 +353,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
                           disabled={remindedFaculty.has(f.name)}
                           onClick={() => {
                             setRemindedFaculty((prev) => new Set(prev).add(f.name));
-                            toast({ title: "Reminder sent", description: `${f.name} has been sent a reminder to log in and respond to students.` });
+                            toast({ title: "Reminder sent", description: `A reminder has been sent to ${f.name} to log in and respond to pending student questions.` });
                           }}
                         >
                           {remindedFaculty.has(f.name) ? "Reminded" : "Send reminder"}

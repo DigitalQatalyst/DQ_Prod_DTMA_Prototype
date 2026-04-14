@@ -242,10 +242,10 @@ export default function SMSStudentsPanel() {
                             disabled={remindedStudents.has(s.id)}
                             onClick={() => {
                               setRemindedStudents((prev) => new Set(prev).add(s.id));
-                              toast({ title: "Reminder sent", description: `${s.name} has been sent a reminder about their access status.` });
+                              toast({ title: "Support team notified", description: `Student support has been alerted about ${s.name}'s access issue.` });
                             }}
                           >
-                            {remindedStudents.has(s.id) ? "Reminded" : "Send reminder"}
+                            {remindedStudents.has(s.id) ? "Notified" : "Notify Support"}
                           </Button>
                         )}
                       </TableCell>

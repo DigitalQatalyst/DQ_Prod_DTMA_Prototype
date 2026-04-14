@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertTriangle, Info, Package, Search } from "lucide-react";
+import { AlertTriangle, Info, Search } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,12 +21,13 @@ interface StudentRecord {
   certificates: number;
   lastActiveDaysAgo: number;
   accessStatus: "active" | "payment-failed" | "expired" | "cancelled" | "refunded" | "free";
+  accessExpiresInDays?: number; // subscription students only
 }
 
 interface PendingAction {
   id: string;
   student: string;
-  type: "hard-copy" | "name-correction" | "revocation" | "re-issue";
+  type: "name-correction" | "revocation" | "re-issue";
   detail: string;
 }
 
@@ -34,31 +35,28 @@ interface PendingAction {
 
 const studentRecords: StudentRecord[] = [
   { id: "S-001", name: "Amina Osei",   email: "amina@example.com",  enrolled: 3, completed: 2, certificates: 2, lastActiveDaysAgo: 1,  accessStatus: "active"         },
-  { id: "S-002", name: "Noah Mensah",  email: "noah@example.com",   enrolled: 2, completed: 2, certificates: 2, lastActiveDaysAgo: 2,  accessStatus: "active"         },
+  { id: "S-002", name: "Noah Mensah",  email: "noah@example.com",   enrolled: 2, completed: 2, certificates: 2, lastActiveDaysAgo: 2,  accessStatus: "active", accessExpiresInDays: 6 },
   { id: "S-003", name: "Irene Mwangi", email: "irene@example.com",  enrolled: 1, completed: 0, certificates: 0, lastActiveDaysAgo: 21, accessStatus: "payment-failed" },
   { id: "S-004", name: "Kwame Asante", email: "kwame@example.com",  enrolled: 4, completed: 3, certificates: 3, lastActiveDaysAgo: 4,  accessStatus: "expired"        },
-  { id: "S-005", name: "Sofia Reyes",  email: "sofia@example.com",  enrolled: 2, completed: 1, certificates: 1, lastActiveDaysAgo: 8,  accessStatus: "active"         },
+  { id: "S-005", name: "Sofia Reyes",  email: "sofia@example.com",  enrolled: 2, completed: 1, certificates: 1, lastActiveDaysAgo: 16, accessStatus: "active"         },
 ];
 
 const initialPendingActions: PendingAction[] = [
-  { id: "PA-01", student: "Amina Osei",   type: "hard-copy",       detail: "DT Strategy Certificate — hard copy requested, Nairobi, Kenya"     },
-  { id: "PA-02", student: "Amina Osei",   type: "name-correction", detail: "Legal name differs from display name in LMS"                        },
-  { id: "PA-03", student: "Irene Mwangi", type: "revocation",      detail: "Executive Change Leadership Badge — subscription payment failed"           },
+  { id: "PA-02", student: "Amina Osei",   type: "name-correction", detail: "Legal name differs from display name in LMS"                  },
+  { id: "PA-03", student: "Irene Mwangi", type: "revocation",      detail: "Executive Change Leadership Badge — subscription payment failed" },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 const actionLabel: Record<PendingAction["type"], string> = {
-  "hard-copy":       "Hard copy approval",
   "name-correction": "Name correction",
   "revocation":      "Revocation",
   "re-issue":        "Re-issue",
 };
 
 const actionGuide: Record<PendingAction["type"], string> = {
-  "hard-copy":       "Verify digital certificate is valid and payment is clear, then approve to send to print vendor.",
   "name-correction": "Confirm the correct legal name with the student and update it in the LMS before approving.",
-  "revocation":      "Confirm the reason is valid (e.g. payment failure), then approve to deactivate the certificate.",
+  "revocation":      "Confirm the reason is valid (e.g. subscription payment failed), then approve to deactivate the certificate.",
   "re-issue":        "Confirm the student's updated details are correct in the LMS, then approve to trigger re-delivery.",
 };
 
@@ -96,7 +94,7 @@ export default function SMSStudentsPanel() {
   const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [pendingActions, setPendingActions] = useState(initialPendingActions);
-  const [remindedStudents, setRemindedStudents] = useState<Set<string>>(new Set());
+  const [notifiedStudents, setNotifiedStudents] = useState<Set<string>>(new Set());
 
   const filtered = studentRecords.filter((s) =>
     s.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -108,8 +106,10 @@ export default function SMSStudentsPanel() {
     toast({ title: "Approved", description: `Action for ${student} has been approved.` });
   };
 
-  const atRiskCount = studentRecords.filter((s) => s.accessStatus === "payment-failed" || s.accessStatus === "expired").length;
-  const totalCerts  = studentRecords.reduce((sum, s) => sum + s.certificates, 0);
+  const totalCerts    = studentRecords.reduce((sum, s) => sum + s.certificates, 0);
+  const accessLost    = studentRecords.filter((s) => s.accessStatus === "payment-failed" || s.accessStatus === "expired").length;
+  const inactive14d   = studentRecords.filter((s) => s.accessStatus === "active" && s.lastActiveDaysAgo >= 14).length;
+  const needsAttention = accessLost + inactive14d;
 
   return (
     <div className="space-y-6">
@@ -122,28 +122,36 @@ export default function SMSStudentsPanel() {
       </div>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
           <div className="text-[24px] leading-[32px] font-medium">{studentRecords.length}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-            Total Students
-          </div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Total Students</div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
           <div className="text-[24px] leading-[32px] font-medium">{totalCerts}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-            Certificates Issued <Tip text="Total certificates auto-issued to students who completed all required modules. No manual action needed." />
+            Certificates Issued
+            <Tip text="Digital certificates auto-issued when a student completes all required modules. No manual action needed." />
           </div>
         </div>
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", atRiskCount > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
-          <div className={cn("text-[24px] leading-[32px] font-medium", atRiskCount > 0 && "text-rose-700")}>{atRiskCount}</div>
+        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", inactive14d > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
+          <div className={cn("text-[24px] leading-[32px] font-medium", inactive14d > 0 && "text-amber-700")}>{inactive14d}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-            Students At Risk
+            Inactive 14d+
+            <Tip text="Students with active access who haven't logged in or engaged with any course in the last 14 days." />
           </div>
+        </div>
+        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", needsAttention > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
+          <div className={cn("text-[24px] leading-[32px] font-medium", needsAttention > 0 && "text-rose-700")}>{needsAttention}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            Needs Attention
+            <Tip text="Students with lost access (payment failed or expired) plus students inactive for 14+ days." />
+          </div>
+          {accessLost > 0 && <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600">{accessLost} lost access</div>}
         </div>
       </div>
 
-      {/* Pending approvals — contextual, only shown when items exist */}
+      {/* Pending approvals */}
       {pendingActions.length > 0 && (
         <Card className="border-amber-200 bg-amber-50/40 shadow-sm">
           <CardHeader>
@@ -151,7 +159,7 @@ export default function SMSStudentsPanel() {
               <AlertTriangle className="h-4 w-4 shrink-0" />
               {pendingActions.length} item{pendingActions.length !== 1 ? "s" : ""} need your approval
             </CardTitle>
-            <CardDescription>These are blocking students from receiving their credentials.</CardDescription>
+            <CardDescription>These are blocking students from receiving their digital certificates.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {pendingActions.map((a) => (
@@ -165,7 +173,7 @@ export default function SMSStudentsPanel() {
                   <div className="text-xs text-amber-800"><span className="font-semibold">What to do: </span>{actionGuide[a.type]}</div>
                 </div>
                 <Button size="sm" className="shrink-0" onClick={() => approveAction(a.id, a.student)}>
-                  <Package className="mr-1 h-3.5 w-3.5" /> Approve
+                  Approve
                 </Button>
               </div>
             ))}
@@ -177,7 +185,7 @@ export default function SMSStudentsPanel() {
       <Card className="border-slate-200/80 shadow-sm">
         <CardHeader>
           <CardTitle>All Students</CardTitle>
-          <CardDescription>Progress, last activity, payment status, and certificates earned per student.</CardDescription>
+          <CardDescription>Progress, last activity, access status, and certificates earned per student.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="relative max-w-sm">
@@ -188,37 +196,39 @@ export default function SMSStudentsPanel() {
             <Table>
               <TableHeader><TableRow className="bg-slate-50">
                 <TableHead>Student</TableHead>
-                <TableHead className="text-right">Enrolled</TableHead>
-                <TableHead>
-                  Progress
-                </TableHead>
+                <TableHead>Progress</TableHead>
                 <TableHead>
                   <span className="flex items-center gap-1">
                     Last Active <Tip text="Days since the student last logged in and engaged with course content. Amber if over 14 days." />
                   </span>
                 </TableHead>
                 <TableHead>Access</TableHead>
-                <TableHead className="text-right">
-                  Certificates
+                <TableHead>
+                  <span className="flex items-center gap-1">
+                    Access Expires
+                    <Tip text="For subscription students: when their current subscription period ends. Blank for one-time purchases." />
+                  </span>
                 </TableHead>
+                <TableHead className="text-right">Certificates</TableHead>
                 <TableHead className="text-right">Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
                 {filtered.map((s) => {
                   const pct = s.enrolled > 0 ? Math.round((s.completed / s.enrolled) * 100) : 0;
-                  const atRisk = s.accessStatus === "payment-failed" || s.accessStatus === "expired";
+                  const lostAccess = s.accessStatus === "payment-failed" || s.accessStatus === "expired";
+                  const inactive   = s.accessStatus === "active" && s.lastActiveDaysAgo >= 14;
+                  const needsAction = lostAccess || inactive;
                   const barColor = pct >= 80 ? "bg-emerald-500" : pct >= 40 ? "bg-amber-400" : "bg-rose-500";
                   return (
-                    <TableRow key={s.id} className={atRisk ? "bg-rose-50/40" : ""}>
+                    <TableRow key={s.id} className={lostAccess ? "bg-rose-50/40" : inactive ? "bg-amber-50/30" : ""}>
                       <TableCell>
                         <div className="font-medium text-slate-900">{s.name}</div>
                         <div className="text-xs text-slate-500">{s.email}</div>
                       </TableCell>
-                      <TableCell className="text-right">{s.enrolled}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Progress value={pct} className={`h-2 w-16 [&>div]:${barColor}`} />
-                          <span className="text-xs text-slate-500">{pct}%</span>
+                          <span className="text-xs text-slate-500">{s.completed}/{s.enrolled}</span>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -229,23 +239,34 @@ export default function SMSStudentsPanel() {
                       <TableCell>
                         <Badge className={`border text-xs font-semibold ${accessBadge(s.accessStatus)}`}>{accessLabel(s.accessStatus)}</Badge>
                       </TableCell>
+                      <TableCell className="text-sm">
+                        {s.accessExpiresInDays !== undefined
+                          ? s.accessExpiresInDays <= 7
+                            ? <span className="text-amber-700 font-medium">In {s.accessExpiresInDays}d</span>
+                            : <span className="text-slate-500">In {s.accessExpiresInDays}d</span>
+                          : <span className="text-slate-400">—</span>}
+                      </TableCell>
                       <TableCell className="text-right">
                         {s.certificates > 0
                           ? <span className="text-sm font-medium text-emerald-700">{s.certificates} issued</span>
-                          : <span className="text-sm text-slate-400">—</span>
-                        }
+                          : <span className="text-sm text-slate-400">—</span>}
                       </TableCell>
                       <TableCell className="text-right">
-                        {atRisk && (
+                        {needsAction && (
                           <Button
                             size="sm" variant="outline" className="text-xs h-7"
-                            disabled={remindedStudents.has(s.id)}
+                            disabled={notifiedStudents.has(s.id)}
                             onClick={() => {
-                              setRemindedStudents((prev) => new Set(prev).add(s.id));
-                              toast({ title: "Support team notified", description: `Student support has been alerted about ${s.name}'s access issue.` });
+                              setNotifiedStudents((prev) => new Set(prev).add(s.id));
+                              toast({
+                                title: lostAccess ? "Support team notified" : "Reminder sent",
+                                description: lostAccess
+                                  ? `Student support has been alerted about ${s.name}'s access issue.`
+                                  : `${s.name} has been sent a re-engagement reminder.`,
+                              });
                             }}
                           >
-                            {remindedStudents.has(s.id) ? "Notified" : "Notify Support"}
+                            {notifiedStudents.has(s.id) ? "Done" : lostAccess ? "Notify Support" : "Send Reminder"}
                           </Button>
                         )}
                       </TableCell>

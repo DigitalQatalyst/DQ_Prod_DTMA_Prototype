@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { AlertTriangle, Banknote, BookOpen, ChevronRight, GraduationCap, Info, TrendingUp, Users } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 type SMSTab = 'overview' | 'courses' | 'students' | 'finance' | 'partners';
 
@@ -12,34 +15,35 @@ type SMSTab = 'overview' | 'courses' | 'students' | 'finance' | 'partners';
 const snapshot = {
   enrolledStudents:   2840,
   activeStudents:     1488,
-  activeAccess:       1210,   // paid purchases + active subscriptions
-  accessIssues:       278,    // payment failures + expired subscriptions
+  activeAccess:       1210,
+  accessIssues:       278,
   atRiskStudents:     1,
-  pendingApprovals:   3,
+  pendingApprovals:   2,   // name corrections + revocations only (hard-copy removed)
   revenueThisMonth:   58400,
   revenueLastMonth:   52100,
+  mrr:                20600,
   coursesRunning:     4,
   avgCompletionRate:  69,
+  failedRenewals:     7,
+  openComplianceIssues: 1,
 };
 
-const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical" }[] = [
-  { id: "f1", label: "Certificate name correction pending — Amina Osei",  destination: "students", destinationLabel: "Students",             severity: "warning" },
-  { id: "f2", label: "2 students with payment failures",                    destination: "finance",  destinationLabel: "Finance & Billing",    severity: "warning" },
-  { id: "f3", label: "Sofia Reyes hasn't been active in 16 days",         destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning" },
-  { id: "f4", label: "KNQA course registration expiring in 14 days",      destination: "partners", destinationLabel: "Partners & Compliance", severity: "warning" },
+const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical"; action?: string }[] = [
+  { id: "f1", label: "Certificate name correction pending — Amina Osei",  destination: "students", destinationLabel: "Students",             severity: "warning",  action: "Review"           },
+  { id: "f2", label: "2 students with payment failures",                   destination: "finance",  destinationLabel: "Finance & Billing",    severity: "warning",  action: "Escalate to Finance" },
+  { id: "f3", label: "KNQA accreditation expiring in 14 days",            destination: "partners", destinationLabel: "Partners & Compliance", severity: "warning",  action: "Escalate"         },
+  { id: "f4", label: "James Okafor has 3 unanswered student questions",   destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning",  action: "Send Reminder"    },
+  { id: "f5", label: "Sofia Reyes hasn't been active in 16 days",         destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning"                              },
 ];
 
 const topCourses = [
-  { title: "Digital Transformation Fundamentals", enrolled: 342, completion: 72, revenue: 85500 },
-  { title: "AI & Automation in the Workplace",    enrolled: 219, completion: 65, revenue: 54750 },
-  { title: "Agile Project Management",            enrolled: 187, completion: 58, revenue: 46750 },
+  { title: "Digital Transformation Fundamentals", enrolled: 342, completion: 72, revenue: 85500, status: "top" as const },
+  { title: "AI & Automation in the Workplace",    enrolled: 219, completion: 65, revenue: 54750, status: "top" as const },
+  { title: "Agile Project Management",            enrolled: 187, completion: 58, revenue: 46750, status: "at-risk" as const },
+  { title: "Cybersecurity Essentials",            enrolled: 154, completion: 81, revenue: 38500, status: "top" as const },
 ];
 
-function severityClass(s: "warning" | "critical") {
-  return s === "critical"
-    ? "border-rose-200 bg-rose-50 text-rose-700"
-    : "border-amber-200 bg-amber-50 text-amber-800";
-}
+function severityClass(_s: "warning" | "critical") { return ""; } // kept for type safety
 
 const Tip = ({ text }: { text: string }) => (
   <TooltipProvider>
@@ -55,8 +59,11 @@ const Tip = ({ text }: { text: string }) => (
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMSTab) => void }) {
+  const { toast } = useToast();
+  const [actedFlags, setActedFlags] = useState<Set<string>>(new Set());
   const revenueGrowth = Math.round(((snapshot.revenueThisMonth - snapshot.revenueLastMonth) / snapshot.revenueLastMonth) * 100);
   const fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const totalAlerts = snapshot.failedRenewals + snapshot.openComplianceIssues + snapshot.pendingApprovals;
 
   return (
     <div className="space-y-6">
@@ -77,18 +84,31 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
           </CardHeader>
           <CardContent className="space-y-2">
             {flags.map((flag) => (
-              <button
+              <div
                 key={flag.id}
-                onClick={() => onNavigate(flag.destination)}
-                className="w-full flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-white px-4 py-3 text-left hover:bg-amber-50/50 transition-colors cursor-pointer group"
+                className="w-full flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-white px-4 py-3"
               >
-                <span className="text-sm text-slate-800">{flag.label}</span>
-                <div className="flex items-center gap-2 shrink-0">
-                  <Badge className={`border text-xs font-semibold ${severityClass(flag.severity)}`}>{flag.severity}</Badge>
-                  <span className="text-xs text-slate-400 hidden sm:block">{flag.destinationLabel}</span>
-                  <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors" />
-                </div>
-              </button>
+                <button
+                  onClick={() => onNavigate(flag.destination)}
+                  className="flex-1 flex items-center gap-3 text-left group"
+                >
+                  <span className="text-sm text-slate-800">{flag.label}</span>
+                  <span className="text-xs text-slate-400 hidden sm:block shrink-0">{flag.destinationLabel}</span>
+                  <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
+                </button>
+                {flag.action && (
+                  <Button
+                    size="sm" variant="outline" className="text-xs h-7 shrink-0"
+                    disabled={actedFlags.has(flag.id)}
+                    onClick={() => {
+                      setActedFlags((prev) => new Set(prev).add(flag.id));
+                      toast({ title: "Done", description: `${flag.action} action taken for: ${flag.label}` });
+                    }}
+                  >
+                    {actedFlags.has(flag.id) ? "Done" : flag.action}
+                  </Button>
+                )}
+              </div>
             ))}
           </CardContent>
         </Card>
@@ -157,43 +177,51 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
           </CardContent>
         </Card>
 
-        {/* Pending approvals */}
+        {/* Alerts */}
         <Card className="border-slate-200 shadow-sm cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('students')}>
           <CardContent className="p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Pending Approvals</p>
-                <div className={`mt-2 text-3xl font-semibold ${snapshot.pendingApprovals > 0 ? "text-amber-700" : "text-slate-900"}`}>
-                  {snapshot.pendingApprovals}
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Alerts</p>
+                <div className={`mt-2 text-3xl font-semibold ${totalAlerts > 0 ? "text-rose-700" : "text-slate-900"}`}>
+                  {totalAlerts}
                 </div>
                 <p className="mt-1 text-sm text-slate-500 flex items-center">
-                  Hard copies &amp; certificate actions
-                  <Tip text="Items waiting for your sign-off: hard copy print orders and certificate corrections (name changes, revocations, re-issues). These block students from receiving their credentials." />
+                  {snapshot.pendingApprovals} approvals · {snapshot.failedRenewals} renewals · {snapshot.openComplianceIssues} compliance
+                  <Tip text="Combined count of certificate approvals pending, failed subscription renewals, and open compliance issues across the portal." />
                 </p>
               </div>
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600"><GraduationCap className="h-5 w-5" /></div>
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-500"><GraduationCap className="h-5 w-5" /></div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Top courses */}
+      {/* Course Snapshot */}
       <Card className="border-slate-200 shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-slate-500" />
-            Top Courses This Month
+            Course Snapshot
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {topCourses.map((course) => (
-            <div key={course.title} className="rounded-2xl border border-slate-200 p-4">
+            <div key={course.title} className={cn(
+              "rounded-2xl border p-4",
+              course.status === "at-risk" ? "border-amber-200 bg-amber-50/30" : "border-slate-200"
+            )}>
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-medium text-slate-900 text-sm">{course.title}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-slate-900 text-sm">{course.title}</p>
+                    {course.status === "at-risk" && (
+                      <Badge className="border border-amber-200 bg-amber-50 text-amber-700 text-xs">At risk</Badge>
+                    )}
+                  </div>
                   <p className="text-xs text-slate-500 mt-0.5">{course.enrolled} enrolled · {fmt.format(course.revenue)} revenue</p>
                 </div>
-                <span className="text-sm font-semibold text-slate-700 shrink-0">
+                <span className={cn("text-sm font-semibold shrink-0", course.completion < 65 ? "text-amber-700" : "text-slate-700")}>
                   {course.completion}% completed
                 </span>
               </div>

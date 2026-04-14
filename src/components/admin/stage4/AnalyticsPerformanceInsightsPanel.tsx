@@ -87,6 +87,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
   const { toast } = useToast();
   const [period, setPeriod] = useState<Period>("30d");
   const [remindedFaculty, setRemindedFaculty] = useState<Set<string>>(new Set());
+  const [notifiedDropOff, setNotifiedDropOff] = useState<Set<string>>(new Set());
 
   const profile = periodProfiles[period];
   const paidRate = Math.round((profile.paid / profile.enrolled) * 100);
@@ -260,37 +261,57 @@ export default function AnalyticsPerformanceInsightsPanel() {
                   ))}
                 </TableBody>
               </Table>
+            </CardContent>
+          </Card>
 
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-slate-700">Where students are stopping</p>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="h-3.5 w-3.5 text-slate-400 cursor-default" />
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="max-w-[240px] text-xs">
-                        The specific point in each course where the highest number of students stopped progressing and never continued. Use this to identify where students may need support or where course content may need review.
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                {coursePerformance.map((c) => {
-                  const stoppedCount = Math.round(c.enrollments * (1 - c.completionRate / 100));
-                  return (
-                    <div key={c.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <div className="font-medium text-slate-950">{c.title}</div>
-                          <div className="mt-1 text-xs text-slate-500">{c.dropOffPoint}</div>
-                          <div className="mt-1 text-xs text-amber-700 font-medium">{stoppedCount} students haven't progressed past this point</div>
-                        </div>
-                        <Badge className="bg-white border-slate-200 shrink-0">{c.completionRate}% completed</Badge>
+          {/* Drop-off watchlist — standalone card */}
+          <Card className="border-slate-200/80 shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                Where Students Are Stopping
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info className="h-3.5 w-3.5 text-slate-400 cursor-default" />
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="max-w-[240px] text-xs">
+                      The point in each course where the most students stopped progressing. Notify the instructor to review that section or offer student support.
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </CardTitle>
+              <CardDescription>Notify the course instructor to review the drop-off point or reach out to stuck students.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {coursePerformance.map((c) => {
+                const stoppedCount = Math.round(c.enrollments * (1 - c.completionRate / 100));
+                const notified = notifiedDropOff.has(c.id);
+                return (
+                  <div key={c.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1">
+                        <div className="font-medium text-slate-900">{c.title}</div>
+                        <div className="text-xs text-slate-500">Drop-off: {c.dropOffPoint}</div>
+                        <div className="text-xs text-amber-700 font-medium">{stoppedCount} students haven't progressed past this point</div>
+                        <div className="text-xs text-slate-400">Instructor: {c.owner}</div>
+                      </div>
+                      <div className="flex flex-col items-end gap-2 shrink-0">
+                        <Badge className="bg-white border-slate-200">{c.completionRate}% completed</Badge>
+                        <Button
+                          size="sm" variant="outline" className="text-xs h-7"
+                          disabled={notified}
+                          onClick={() => {
+                            setNotifiedDropOff((prev) => new Set(prev).add(c.id));
+                            toast({ title: "Instructor notified", description: `${c.owner} has been notified about the drop-off in "${c.title}".` });
+                          }}
+                        >
+                          {notified ? "Notified" : "Notify Instructor"}
+                        </Button>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </CardContent>
           </Card>
         </TabsContent>

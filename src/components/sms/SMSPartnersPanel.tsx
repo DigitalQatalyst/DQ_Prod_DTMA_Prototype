@@ -288,7 +288,7 @@ export default function SMSPartnersPanel() {
                     <TableHead>
                       <span className="flex items-center gap-1">
                         Expiry
-                        <Tip text="Date the accreditation lapses. Courses covered by an expired accreditation lose their official certification stamp." />
+                        <Tip text="Date the accreditation lapses. Courses covered by an expired accreditation lose their official recognised status." />
                       </span>
                     </TableHead>
                     <TableHead>Status</TableHead>

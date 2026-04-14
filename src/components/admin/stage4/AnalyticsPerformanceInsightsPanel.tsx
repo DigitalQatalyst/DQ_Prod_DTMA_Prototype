@@ -395,11 +395,11 @@ export default function AnalyticsPerformanceInsightsPanel() {
             <CardHeader>
               <CardTitle>Completion Rate by Course</CardTitle>
               <CardDescription>
-                How many enrolled students earned a certificate in each course.{" "}
+                How many enrolled students finished all required modules in each course.{" "}
                 <TooltipProvider><Tooltip><TooltipTrigger asChild>
                   <Info className="inline h-3.5 w-3.5 text-slate-400 cursor-default" />
                 </TooltipTrigger><TooltipContent side="top" className="max-w-[220px] text-xs">
-                  Completion rate = students who finished all required modules ÷ total enrolled. Certificates are issued automatically on completion.
+                  Completion rate = students who finished all required modules ÷ total enrolled.
                 </TooltipContent></Tooltip></TooltipProvider>
               </CardDescription>
             </CardHeader>

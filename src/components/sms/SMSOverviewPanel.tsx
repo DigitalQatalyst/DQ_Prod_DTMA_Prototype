@@ -18,7 +18,6 @@ const snapshot = {
   activeAccess:       1210,
   accessIssues:       278,
   atRiskStudents:     1,
-  pendingApprovals:   2,   // name corrections + revocations only (hard-copy removed)
   revenueThisMonth:   58400,
   revenueLastMonth:   52100,
   mrr:                20600,
@@ -29,7 +28,6 @@ const snapshot = {
 };
 
 const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical"; action?: string }[] = [
-  { id: "f1", label: "Certificate name correction pending — Amina Osei",  destination: "students", destinationLabel: "Students",             severity: "warning",  action: "Review"           },
   { id: "f2", label: "2 students with payment failures",                   destination: "finance",  destinationLabel: "Finance & Billing",    severity: "warning",  action: "Escalate to Finance" },
   { id: "f3", label: "KNQA accreditation expiring in 14 days",            destination: "partners", destinationLabel: "Partners & Compliance", severity: "warning",  action: "Escalate"         },
   { id: "f4", label: "James Okafor has 3 unanswered student questions",   destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning",  action: "Send Reminder"    },
@@ -63,7 +61,7 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
   const [actedFlags, setActedFlags] = useState<Set<string>>(new Set());
   const revenueGrowth = Math.round(((snapshot.revenueThisMonth - snapshot.revenueLastMonth) / snapshot.revenueLastMonth) * 100);
   const fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-  const totalAlerts = snapshot.failedRenewals + snapshot.openComplianceIssues + snapshot.pendingApprovals;
+  const totalAlerts = snapshot.failedRenewals + snapshot.openComplianceIssues;
 
   return (
     <div className="space-y-6">
@@ -169,7 +167,7 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
                 <div className="mt-2 text-3xl font-semibold text-slate-900">{snapshot.coursesRunning}</div>
                 <p className="mt-1 text-sm text-slate-500 flex items-center">
                   {snapshot.avgCompletionRate}% avg completion rate
-                  <Tip text="Average percentage of enrolled students who have finished all required modules and earned a certificate, across all active courses." />
+                  <Tip text="Average percentage of enrolled students who have finished all required modules across all active courses." />
                 </p>
               </div>
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-50 text-sky-600"><BookOpen className="h-5 w-5" /></div>
@@ -187,8 +185,8 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
                   {totalAlerts}
                 </div>
                 <p className="mt-1 text-sm text-slate-500 flex items-center">
-                  {snapshot.pendingApprovals} approvals · {snapshot.failedRenewals} renewals · {snapshot.openComplianceIssues} compliance
-                  <Tip text="Combined count of certificate approvals pending, failed subscription renewals, and open compliance issues across the portal." />
+                  {snapshot.failedRenewals} failed renewals · {snapshot.openComplianceIssues} compliance issues
+                  <Tip text="Combined count of failed subscription renewals and open compliance issues across the portal." />
                 </p>
               </div>
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-500"><GraduationCap className="h-5 w-5" /></div>

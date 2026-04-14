@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertTriangle, Info, Search } from "lucide-react";
+import { Info, Search } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,47 +18,22 @@ interface StudentRecord {
   email: string;
   enrolled: number;
   completed: number;
-  certificates: number;
   lastActiveDaysAgo: number;
   accessStatus: "active" | "payment-failed" | "expired" | "cancelled" | "refunded" | "free";
   accessExpiresInDays?: number; // subscription students only
 }
 
-interface PendingAction {
-  id: string;
-  student: string;
-  type: "name-correction" | "revocation" | "re-issue";
-  detail: string;
-}
-
 // ── Mock data ─────────────────────────────────────────────────────────────────
 
 const studentRecords: StudentRecord[] = [
-  { id: "S-001", name: "Amina Osei",   email: "amina@example.com",  enrolled: 3, completed: 2, certificates: 2, lastActiveDaysAgo: 1,  accessStatus: "active"         },
-  { id: "S-002", name: "Noah Mensah",  email: "noah@example.com",   enrolled: 2, completed: 2, certificates: 2, lastActiveDaysAgo: 2,  accessStatus: "active", accessExpiresInDays: 6 },
-  { id: "S-003", name: "Irene Mwangi", email: "irene@example.com",  enrolled: 1, completed: 0, certificates: 0, lastActiveDaysAgo: 21, accessStatus: "payment-failed" },
-  { id: "S-004", name: "Kwame Asante", email: "kwame@example.com",  enrolled: 4, completed: 3, certificates: 3, lastActiveDaysAgo: 4,  accessStatus: "expired"        },
-  { id: "S-005", name: "Sofia Reyes",  email: "sofia@example.com",  enrolled: 2, completed: 1, certificates: 1, lastActiveDaysAgo: 16, accessStatus: "active"         },
-];
-
-const initialPendingActions: PendingAction[] = [
-  { id: "PA-02", student: "Amina Osei",   type: "name-correction", detail: "Legal name differs from display name in LMS"                  },
-  { id: "PA-03", student: "Irene Mwangi", type: "revocation",      detail: "Executive Change Leadership Badge — subscription payment failed" },
+  { id: "S-001", name: "Amina Osei",   email: "amina@example.com",  enrolled: 3, completed: 2, lastActiveDaysAgo: 1,  accessStatus: "active"         },
+  { id: "S-002", name: "Noah Mensah",  email: "noah@example.com",   enrolled: 2, completed: 2, lastActiveDaysAgo: 2,  accessStatus: "active", accessExpiresInDays: 6 },
+  { id: "S-003", name: "Irene Mwangi", email: "irene@example.com",  enrolled: 1, completed: 0, lastActiveDaysAgo: 21, accessStatus: "payment-failed" },
+  { id: "S-004", name: "Kwame Asante", email: "kwame@example.com",  enrolled: 4, completed: 3, lastActiveDaysAgo: 4,  accessStatus: "expired"        },
+  { id: "S-005", name: "Sofia Reyes",  email: "sofia@example.com",  enrolled: 2, completed: 1, lastActiveDaysAgo: 16, accessStatus: "active"         },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-
-const actionLabel: Record<PendingAction["type"], string> = {
-  "name-correction": "Name correction",
-  "revocation":      "Revocation",
-  "re-issue":        "Re-issue",
-};
-
-const actionGuide: Record<PendingAction["type"], string> = {
-  "name-correction": "Confirm the correct legal name with the student and update it in the LMS before approving.",
-  "revocation":      "Confirm the reason is valid (e.g. subscription payment failed), then approve to deactivate the certificate.",
-  "re-issue":        "Confirm the student's updated details are correct in the LMS, then approve to trigger re-delivery.",
-};
 
 const Tip = ({ text }: { text: string }) => (
   <TooltipProvider>
@@ -93,7 +68,6 @@ function accessLabel(s: string) {
 export default function SMSStudentsPanel() {
   const { toast } = useToast();
   const [search, setSearch] = useState("");
-  const [pendingActions, setPendingActions] = useState(initialPendingActions);
   const [notifiedStudents, setNotifiedStudents] = useState<Set<string>>(new Set());
 
   const filtered = studentRecords.filter((s) =>
@@ -106,7 +80,6 @@ export default function SMSStudentsPanel() {
     toast({ title: "Approved", description: `Action for ${student} has been approved.` });
   };
 
-  const totalCerts    = studentRecords.reduce((sum, s) => sum + s.certificates, 0);
   const accessLost    = studentRecords.filter((s) => s.accessStatus === "payment-failed" || s.accessStatus === "expired").length;
   const inactive14d   = studentRecords.filter((s) => s.accessStatus === "active" && s.lastActiveDaysAgo >= 14).length;
   const needsAttention = accessLost + inactive14d;
@@ -117,7 +90,7 @@ export default function SMSStudentsPanel() {
       <div>
         <h2 className="text-[28px] leading-[36px] font-semibold">Students</h2>
         <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Progress, access status, and certificates for all enrolled students.
+          Progress, access status, and engagement for all enrolled students.
         </p>
       </div>
 
@@ -126,13 +99,6 @@ export default function SMSStudentsPanel() {
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
           <div className="text-[24px] leading-[32px] font-medium">{studentRecords.length}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700">Total Students</div>
-        </div>
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="text-[24px] leading-[32px] font-medium">{totalCerts}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-            Certificates Issued
-            <Tip text="Digital certificates auto-issued when a student completes all required modules. No manual action needed." />
-          </div>
         </div>
         <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", inactive14d > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
           <div className={cn("text-[24px] leading-[32px] font-medium", inactive14d > 0 && "text-amber-700")}>{inactive14d}</div>
@@ -151,41 +117,11 @@ export default function SMSStudentsPanel() {
         </div>
       </div>
 
-      {/* Pending approvals */}
-      {pendingActions.length > 0 && (
-        <Card className="border-amber-200 bg-amber-50/40 shadow-sm">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-amber-800 text-base">
-              <AlertTriangle className="h-4 w-4 shrink-0" />
-              {pendingActions.length} item{pendingActions.length !== 1 ? "s" : ""} need your approval
-            </CardTitle>
-            <CardDescription>These are blocking students from receiving their digital certificates.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {pendingActions.map((a) => (
-              <div key={a.id} className="rounded-2xl border border-amber-200 bg-white p-4 flex items-start justify-between gap-3">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-slate-900">{a.student}</span>
-                    <Badge className="border border-slate-200 bg-slate-50 text-slate-600 text-xs">{actionLabel[a.type]}</Badge>
-                  </div>
-                  <div className="text-sm text-slate-600">{a.detail}</div>
-                  <div className="text-xs text-amber-800"><span className="font-semibold">What to do: </span>{actionGuide[a.type]}</div>
-                </div>
-                <Button size="sm" className="shrink-0" onClick={() => approveAction(a.id, a.student)}>
-                  Approve
-                </Button>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
       {/* Student table */}
       <Card className="border-slate-200/80 shadow-sm">
         <CardHeader>
           <CardTitle>All Students</CardTitle>
-          <CardDescription>Progress, last activity, access status, and certificates earned per student.</CardDescription>
+          <CardDescription>Progress, last activity, and access status per student.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="relative max-w-sm">
@@ -209,7 +145,6 @@ export default function SMSStudentsPanel() {
                     <Tip text="For subscription students: when their current subscription period ends. Blank for one-time purchases." />
                   </span>
                 </TableHead>
-                <TableHead className="text-right">Certificates</TableHead>
                 <TableHead className="text-right">Action</TableHead>
               </TableRow></TableHeader>
               <TableBody>
@@ -245,11 +180,6 @@ export default function SMSStudentsPanel() {
                             ? <span className="text-amber-700 font-medium">In {s.accessExpiresInDays}d</span>
                             : <span className="text-slate-500">In {s.accessExpiresInDays}d</span>
                           : <span className="text-slate-400">—</span>}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {s.certificates > 0
-                          ? <span className="text-sm font-medium text-emerald-700">{s.certificates} issued</span>
-                          : <span className="text-sm text-slate-400">—</span>}
                       </TableCell>
                       <TableCell className="text-right">
                         {needsAction && (

@@ -12,8 +12,8 @@ type SMSTab = 'overview' | 'courses' | 'students' | 'finance' | 'partners';
 const snapshot = {
   enrolledStudents:   2840,
   activeStudents:     1488,
-  paidStudents:       1210,
-  unpaidStudents:     278,
+  activeAccess:       1210,   // paid purchases + active subscriptions
+  accessIssues:       278,    // payment failures + expired subscriptions
   atRiskStudents:     1,
   pendingApprovals:   3,
   revenueThisMonth:   58400,
@@ -24,7 +24,7 @@ const snapshot = {
 
 const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical" }[] = [
   { id: "f1", label: "Certificate name correction pending — Amina Osei",  destination: "students", destinationLabel: "Students",             severity: "warning" },
-  { id: "f2", label: "2 students with overdue payments",                   destination: "finance",  destinationLabel: "Finance & Billing",    severity: "warning" },
+  { id: "f2", label: "2 students with payment failures",                    destination: "finance",  destinationLabel: "Finance & Billing",    severity: "warning" },
   { id: "f3", label: "Sofia Reyes hasn't been active in 16 days",         destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning" },
   { id: "f4", label: "KNQA course registration expiring in 14 days",      destination: "partners", destinationLabel: "Partners & Compliance", severity: "warning" },
 ];
@@ -112,13 +112,13 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
             </div>
             <div className="mt-3 space-y-1">
               <div className="flex justify-between text-xs text-slate-500">
-                <span>Paid: {snapshot.paidStudents.toLocaleString()}</span>
-                <span>Unpaid: {snapshot.unpaidStudents.toLocaleString()}</span>
+                <span>Active access: {snapshot.activeAccess.toLocaleString()}</span>
+                <span>Access issues: {snapshot.accessIssues.toLocaleString()}</span>
               </div>
-              <Progress value={Math.round((snapshot.paidStudents / snapshot.enrolledStudents) * 100)} className="h-1.5" />
+              <Progress value={Math.round((snapshot.activeAccess / snapshot.enrolledStudents) * 100)} className="h-1.5" />
               <p className="text-xs text-slate-400 flex items-center">
-                Payment coverage
-                <Tip text="Percentage of enrolled students who have a paid or active payment plan. Unpaid students may lose access if payment is not resolved." />
+                Access status
+                <Tip text="Percentage of enrolled students with active access. Students with failed payments or expired subscriptions may have their access revoked." />
               </p>
             </div>
           </CardContent>

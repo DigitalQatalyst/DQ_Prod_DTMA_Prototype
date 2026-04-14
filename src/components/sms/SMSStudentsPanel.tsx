@@ -20,7 +20,7 @@ interface StudentRecord {
   completed: number;
   certificates: number;
   lastActiveDaysAgo: number;
-  paymentStatus: "paid" | "partial" | "unpaid";
+  accessStatus: "active" | "payment-failed" | "expired" | "cancelled" | "refunded" | "free";
 }
 
 interface PendingAction {
@@ -33,17 +33,17 @@ interface PendingAction {
 // ── Mock data ─────────────────────────────────────────────────────────────────
 
 const studentRecords: StudentRecord[] = [
-  { id: "S-001", name: "Amina Osei",   email: "amina@example.com",  enrolled: 3, completed: 2, certificates: 2, lastActiveDaysAgo: 1,  paymentStatus: "paid"    },
-  { id: "S-002", name: "Noah Mensah",  email: "noah@example.com",   enrolled: 2, completed: 2, certificates: 2, lastActiveDaysAgo: 2,  paymentStatus: "paid"    },
-  { id: "S-003", name: "Irene Mwangi", email: "irene@example.com",  enrolled: 1, completed: 0, certificates: 0, lastActiveDaysAgo: 21, paymentStatus: "unpaid"  },
-  { id: "S-004", name: "Kwame Asante", email: "kwame@example.com",  enrolled: 4, completed: 3, certificates: 3, lastActiveDaysAgo: 4,  paymentStatus: "partial" },
-  { id: "S-005", name: "Sofia Reyes",  email: "sofia@example.com",  enrolled: 2, completed: 1, certificates: 1, lastActiveDaysAgo: 8,  paymentStatus: "paid"    },
+  { id: "S-001", name: "Amina Osei",   email: "amina@example.com",  enrolled: 3, completed: 2, certificates: 2, lastActiveDaysAgo: 1,  accessStatus: "active"         },
+  { id: "S-002", name: "Noah Mensah",  email: "noah@example.com",   enrolled: 2, completed: 2, certificates: 2, lastActiveDaysAgo: 2,  accessStatus: "active"         },
+  { id: "S-003", name: "Irene Mwangi", email: "irene@example.com",  enrolled: 1, completed: 0, certificates: 0, lastActiveDaysAgo: 21, accessStatus: "payment-failed" },
+  { id: "S-004", name: "Kwame Asante", email: "kwame@example.com",  enrolled: 4, completed: 3, certificates: 3, lastActiveDaysAgo: 4,  accessStatus: "expired"        },
+  { id: "S-005", name: "Sofia Reyes",  email: "sofia@example.com",  enrolled: 2, completed: 1, certificates: 1, lastActiveDaysAgo: 8,  accessStatus: "active"         },
 ];
 
 const initialPendingActions: PendingAction[] = [
   { id: "PA-01", student: "Amina Osei",   type: "hard-copy",       detail: "DT Strategy Certificate — hard copy requested, Nairobi, Kenya"     },
   { id: "PA-02", student: "Amina Osei",   type: "name-correction", detail: "Legal name differs from display name in LMS"                        },
-  { id: "PA-03", student: "Irene Mwangi", type: "revocation",      detail: "Executive Change Leadership Badge — payment not completed"           },
+  { id: "PA-03", student: "Irene Mwangi", type: "revocation",      detail: "Executive Change Leadership Badge — subscription payment failed"           },
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -73,10 +73,21 @@ const Tip = ({ text }: { text: string }) => (
   </TooltipProvider>
 );
 
-function paymentBadge(s: string) {
-  if (s === "paid")    return "border-emerald-200 bg-emerald-50 text-emerald-700";
-  if (s === "partial") return "border-amber-200 bg-amber-50 text-amber-800";
-  return "border-rose-200 bg-rose-50 text-rose-700";
+function accessBadge(s: string) {
+  if (s === "active")         return "border-emerald-200 bg-emerald-50 text-emerald-700";
+  if (s === "payment-failed") return "border-rose-300 bg-rose-100 text-rose-800";
+  if (s === "expired")        return "border-amber-200 bg-amber-50 text-amber-800";
+  if (s === "cancelled")      return "border-slate-200 bg-slate-50 text-slate-600";
+  if (s === "refunded")       return "border-sky-200 bg-sky-50 text-sky-700";
+  return "border-slate-200 bg-slate-50 text-slate-600";
+}
+
+function accessLabel(s: string) {
+  const map: Record<string, string> = {
+    "active": "Active", "payment-failed": "Payment Failed",
+    "expired": "Expired", "cancelled": "Cancelled", "refunded": "Refunded", "free": "Free",
+  };
+  return map[s] ?? s;
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -96,7 +107,7 @@ export default function SMSStudentsPanel() {
     toast({ title: "Approved", description: `Action for ${student} has been approved.` });
   };
 
-  const atRiskCount = studentRecords.filter((s) => s.paymentStatus === "unpaid" && s.completed === 0).length;
+  const atRiskCount = studentRecords.filter((s) => s.accessStatus === "payment-failed" || s.accessStatus === "expired").length;
   const totalCerts  = studentRecords.reduce((sum, s) => sum + s.certificates, 0);
 
   return (
@@ -105,7 +116,7 @@ export default function SMSStudentsPanel() {
       <div>
         <h2 className="text-[28px] leading-[36px] font-semibold">Students</h2>
         <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Progress, payment status, and certificates for all enrolled students.
+          Progress, access status, and certificates for all enrolled students.
         </p>
       </div>
 
@@ -185,7 +196,7 @@ export default function SMSStudentsPanel() {
                     Last Active <Tip text="Days since the student last logged in and engaged with course content. Amber if over 14 days." />
                   </span>
                 </TableHead>
-                <TableHead>Payment</TableHead>
+                <TableHead>Access</TableHead>
                 <TableHead className="text-right">
                   Certificates
                 </TableHead>
@@ -193,7 +204,7 @@ export default function SMSStudentsPanel() {
               <TableBody>
                 {filtered.map((s) => {
                   const pct = s.enrolled > 0 ? Math.round((s.completed / s.enrolled) * 100) : 0;
-                  const atRisk = s.paymentStatus === "unpaid" && s.completed === 0;
+                  const atRisk = s.accessStatus === "payment-failed" || s.accessStatus === "expired";
                   const barColor = pct >= 80 ? "bg-emerald-500" : pct >= 40 ? "bg-amber-400" : "bg-rose-500";
                   return (
                     <TableRow key={s.id} className={atRisk ? "bg-rose-50/40" : ""}>
@@ -214,7 +225,7 @@ export default function SMSStudentsPanel() {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <Badge className={`border text-xs font-semibold capitalize ${paymentBadge(s.paymentStatus)}`}>{s.paymentStatus}</Badge>
+                        <Badge className={`border text-xs font-semibold ${accessBadge(s.accessStatus)}`}>{accessLabel(s.accessStatus)}</Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         {s.certificates > 0

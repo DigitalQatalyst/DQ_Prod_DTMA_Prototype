@@ -148,15 +148,15 @@ export default function AnalyticsPerformanceInsightsPanel() {
             <Users className="w-5 h-5 text-emerald-600" />
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.paid.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Tuition Paid</div>
-          <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5 flex items-center">{paidRate}% payment rate <Tip text="Percentage of enrolled students who have completed at least one payment toward their course fees." /></div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Paid Enrollments</div>
+          <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5 flex items-center">{paidRate}% of enrollments <Tip text="Percentage of enrollments completed via paid purchase or active subscription, excluding free courses." /></div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
           <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3">
             <Target className="w-5 h-5 text-rose-500" />
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.unpaid.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Students with Unpaid Fees</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Free Course Enrollments</div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
           <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center mb-3">
@@ -239,7 +239,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
                     </TooltipProvider>
                   </TableHead>
                   <TableHead>Rating</TableHead>
-                  <TableHead className="text-right"><span className="flex items-center justify-end gap-1">Revenue <Tip text="Gross revenue collected from enrolled students for this course in the selected period, before instructor payouts." /></span></TableHead>
+                  <TableHead className="text-right"><span className="flex items-center justify-end gap-1">Revenue <Tip text="Gross revenue from course purchases and subscription charges in the selected period, before instructor payouts." /></span></TableHead>
                 </TableRow></TableHeader>
                 <TableBody>
                   {coursePerformance.map((c) => (

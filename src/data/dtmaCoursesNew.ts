@@ -5,6 +5,8 @@ export interface Lesson {
   title: string;
   duration: string; // e.g., "15 min"
   type: 'video' | 'reading' | 'quiz' | 'assignment';
+  videoUrl?: string; // URL to video file
+  quizId?: string; // ID linking to quiz data
   isCompleted?: boolean;
 }
 
@@ -32,7 +34,8 @@ export interface Course {
   reviews: number;
   price: number;
   originalPrice: number;
-  badge?: 'New' | 'Bestseller' | 'Popular' | null;
+  badge?: 'New' | 'Bestseller' | 'Popular' | 'Coming Soon' | null;
+  comingSoon?: boolean; // Flag to indicate if course is not yet available
 }
 
 export const dtmaCoursesNew: Course[] = [
@@ -46,55 +49,61 @@ export const dtmaCoursesNew: Course[] = [
     image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop',
     category: 'digital-economy',
     level: 'Beginner',
-    duration: '12 hours',
-    totalLessons: 30,
+    duration: '1 hour',
+    totalLessons: 6,
     rating: 4.8,
     reviews: 320,
-    price: 299,
-    originalPrice: 399,
+    price: 149,
+    originalPrice: 199,
     badge: 'Bestseller',
     modules: [
       {
         id: 'economy-module-1',
-        title: 'Module 1: The Rise of Economy 4.0',
+        title: 'Module 1: The Rise of Economy 4.0: How Digital Cognitive Organizations Are Reshaping Markets',
         description: 'Understand the evolution and key drivers of Economy 4.0',
-        duration: '4 hours',
+        duration: '32 min',
         lessons: [
           {
             id: 'economy-m1-l1',
-            title: 'Introduction to Economy 4.0',
-            duration: '20 min',
+            title: 'Understanding features of Economy 4.0',
+            duration: '6 min',
             type: 'video',
+            videoUrl: '/Understanding features of Economy 4.0.mp4',
           },
           {
             id: 'economy-m1-l2',
-            title: 'Historical Evolution: From Economy 1.0 to 4.0',
-            duration: '25 min',
+            title: 'Unveiling the Digital Cognitive Organization',
+            duration: '6 min',
             type: 'video',
+            videoUrl: '/Unveiling the Digital Cognitive Organization.mp4',
           },
           {
             id: 'economy-m1-l3',
-            title: 'Key Drivers of Digital Economy',
-            duration: '30 min',
+            title: 'Significance of Cognitive organization theory',
+            duration: '7 min',
             type: 'video',
+            videoUrl: '/Significance of Cognitive organization theory.mp4',
           },
           {
             id: 'economy-m1-l4',
-            title: 'Platform Economics and Network Effects',
-            duration: '35 min',
+            title: 'Core Features of Digital Cognitive Organizations',
+            duration: '6 min',
             type: 'video',
+            videoUrl: '/Core Features of Digital Cognitve Organizations.mp4',
           },
           {
             id: 'economy-m1-l5',
-            title: 'Case Study: Digital Economy Leaders',
-            duration: '40 min',
-            type: 'reading',
+            title: 'Understanding Business Model Innovation',
+            duration: '7 min',
+            type: 'video',
+            videoUrl: '/Understanding Business Model Innovation.mp4',
           },
           {
             id: 'economy-m1-l6',
             title: 'Module 1 Assessment',
             duration: '30 min',
             type: 'quiz',
+            quizId: 'economy-module-1-quiz', // Links to the quiz data
           },
         ],
       },
@@ -212,128 +221,14 @@ export const dtmaCoursesNew: Course[] = [
     category: 'digital-cognitive-organisation',
     level: 'Intermediate',
     duration: '15 hours',
-    totalLessons: 35,
+    totalLessons: 0,
     rating: 4.9,
     reviews: 245,
-    price: 349,
-    originalPrice: 449,
-    badge: 'Popular',
-    modules: [
-      {
-        id: 'cognitive-module-1',
-        title: 'Module 1: Foundations of Cognitive Organizations',
-        description: 'Understanding the principles of organizational intelligence',
-        duration: '5 hours',
-        lessons: [
-          {
-            id: 'cognitive-m1-l1',
-            title: 'What is a Cognitive Organization?',
-            duration: '25 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m1-l2',
-            title: 'Organizational Learning Theory',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m1-l3',
-            title: 'Knowledge Management Systems',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m1-l4',
-            title: 'Building Learning Culture',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m1-l5',
-            title: 'Module 1 Assessment',
-            duration: '30 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'cognitive-module-2',
-        title: 'Module 2: AI-Driven Decision Making',
-        description: 'Leverage artificial intelligence for organizational intelligence',
-        duration: '5 hours',
-        lessons: [
-          {
-            id: 'cognitive-m2-l1',
-            title: 'AI in Business Decision Making',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m2-l2',
-            title: 'Machine Learning for Predictions',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m2-l3',
-            title: 'Natural Language Processing Applications',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m2-l4',
-            title: 'Ethical AI and Governance',
-            duration: '30 min',
-            type: 'reading',
-          },
-          {
-            id: 'cognitive-m2-l5',
-            title: 'Module 2 Assessment',
-            duration: '45 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'cognitive-module-3',
-        title: 'Module 3: Continuous Learning & Adaptive Systems',
-        description: 'Create systems that learn and adapt continuously',
-        duration: '5 hours',
-        lessons: [
-          {
-            id: 'cognitive-m3-l1',
-            title: 'Adaptive Systems Architecture',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m3-l2',
-            title: 'Feedback Loops and Iteration',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m3-l3',
-            title: 'Organizational Agility',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m3-l4',
-            title: 'Change Management for Learning Organizations',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'cognitive-m3-l5',
-            title: 'Final Project: Design a Cognitive Organization',
-            duration: '90 min',
-            type: 'assignment',
-          },
-        ],
-      },
-    ],
+    price: 149,
+    originalPrice: 199,
+    badge: 'Coming Soon',
+    comingSoon: true,
+    modules: [],
   },
 
   // Course 3: Building Powerful Digital Business Platforms
@@ -347,128 +242,14 @@ export const dtmaCoursesNew: Course[] = [
     category: 'digital-business-platform',
     level: 'Intermediate',
     duration: '18 hours',
-    totalLessons: 40,
+    totalLessons: 0,
     rating: 4.7,
     reviews: 289,
-    price: 399,
-    originalPrice: 499,
-    badge: 'New',
-    modules: [
-      {
-        id: 'platform-module-1',
-        title: 'Module 1: Platform Fundamentals',
-        description: 'Core concepts of digital business platforms',
-        duration: '6 hours',
-        lessons: [
-          {
-            id: 'platform-m1-l1',
-            title: 'Introduction to Digital Platforms',
-            duration: '25 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m1-l2',
-            title: 'Platform Business Models',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m1-l3',
-            title: 'Platform Architecture Patterns',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m1-l4',
-            title: 'API-First Design',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m1-l5',
-            title: 'Module 1 Assessment',
-            duration: '30 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'platform-module-2',
-        title: 'Module 2: Cloud Infrastructure & Scalability',
-        description: 'Build scalable cloud-native platforms',
-        duration: '6 hours',
-        lessons: [
-          {
-            id: 'platform-m2-l1',
-            title: 'Cloud Computing Fundamentals',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m2-l2',
-            title: 'Microservices Architecture',
-            duration: '45 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m2-l3',
-            title: 'Containerization and Kubernetes',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m2-l4',
-            title: 'Scalability Patterns',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m2-l5',
-            title: 'Module 2 Assessment',
-            duration: '40 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'platform-module-3',
-        title: 'Module 3: Security & Compliance',
-        description: 'Secure your digital platforms',
-        duration: '6 hours',
-        lessons: [
-          {
-            id: 'platform-m3-l1',
-            title: 'Platform Security Fundamentals',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m3-l2',
-            title: 'Authentication and Authorization',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m3-l3',
-            title: 'Data Privacy and GDPR',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'platform-m3-l4',
-            title: 'Security Best Practices',
-            duration: '30 min',
-            type: 'reading',
-          },
-          {
-            id: 'platform-m3-l5',
-            title: 'Final Project: Platform Architecture Design',
-            duration: '120 min',
-            type: 'assignment',
-          },
-        ],
-      },
-    ],
+    price: 149,
+    originalPrice: 199,
+    badge: 'Coming Soon',
+    comingSoon: true,
+    modules: [],
   },
 
   // Course 4: Navigating Digital Transformation 2.0
@@ -482,128 +263,14 @@ export const dtmaCoursesNew: Course[] = [
     category: 'digital-transformation',
     level: 'Advanced',
     duration: '16 hours',
-    totalLessons: 38,
+    totalLessons: 0,
     rating: 4.8,
     reviews: 312,
-    price: 379,
-    originalPrice: 479,
-    badge: 'Bestseller',
-    modules: [
-      {
-        id: 'transform-module-1',
-        title: 'Module 1: Transformation Strategy',
-        description: 'Develop comprehensive digital transformation strategies',
-        duration: '5 hours',
-        lessons: [
-          {
-            id: 'transform-m1-l1',
-            title: 'Digital Transformation Fundamentals',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m1-l2',
-            title: 'Assessing Digital Maturity',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m1-l3',
-            title: 'Creating a Transformation Roadmap',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m1-l4',
-            title: 'Stakeholder Management',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m1-l5',
-            title: 'Module 1 Assessment',
-            duration: '35 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'transform-module-2',
-        title: 'Module 2: Change Management',
-        description: 'Navigate organizational change effectively',
-        duration: '6 hours',
-        lessons: [
-          {
-            id: 'transform-m2-l1',
-            title: 'Change Management Principles',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m2-l2',
-            title: 'Overcoming Resistance to Change',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m2-l3',
-            title: 'Communication Strategies',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m2-l4',
-            title: 'Building Change Champions',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m2-l5',
-            title: 'Module 2 Assessment',
-            duration: '45 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'transform-module-3',
-        title: 'Module 3: Measuring Success',
-        description: 'Track and optimize transformation outcomes',
-        duration: '5 hours',
-        lessons: [
-          {
-            id: 'transform-m3-l1',
-            title: 'Transformation KPIs',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m3-l2',
-            title: 'ROI of Digital Transformation',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m3-l3',
-            title: 'Continuous Improvement',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'transform-m3-l4',
-            title: 'Case Studies: Successful Transformations',
-            duration: '40 min',
-            type: 'reading',
-          },
-          {
-            id: 'transform-m3-l5',
-            title: 'Final Project: Transformation Plan',
-            duration: '90 min',
-            type: 'assignment',
-          },
-        ],
-      },
-    ],
+    price: 149,
+    originalPrice: 199,
+    badge: 'Coming Soon',
+    comingSoon: true,
+    modules: [],
   },
 
   // Course 5: Optimizing Digital Workers and Workspaces
@@ -617,128 +284,14 @@ export const dtmaCoursesNew: Course[] = [
     category: 'digital-worker-workspace',
     level: 'Beginner',
     duration: '10 hours',
-    totalLessons: 28,
+    totalLessons: 0,
     rating: 4.6,
     reviews: 234,
-    price: 249,
-    originalPrice: 329,
-    badge: 'Popular',
-    modules: [
-      {
-        id: 'worker-module-1',
-        title: 'Module 1: Digital Worker Essentials',
-        description: 'Core skills for the modern digital workplace',
-        duration: '3 hours',
-        lessons: [
-          {
-            id: 'worker-m1-l1',
-            title: 'The Digital Worker Mindset',
-            duration: '20 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m1-l2',
-            title: 'Essential Digital Tools',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m1-l3',
-            title: 'Digital Communication Skills',
-            duration: '25 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m1-l4',
-            title: 'Time Management in Digital Age',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m1-l5',
-            title: 'Module 1 Assessment',
-            duration: '25 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'worker-module-2',
-        title: 'Module 2: Remote Work & Collaboration',
-        description: 'Excel in distributed work environments',
-        duration: '4 hours',
-        lessons: [
-          {
-            id: 'worker-m2-l1',
-            title: 'Remote Work Best Practices',
-            duration: '25 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m2-l2',
-            title: 'Virtual Collaboration Tools',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m2-l3',
-            title: 'Building Remote Team Culture',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m2-l4',
-            title: 'Asynchronous Communication',
-            duration: '25 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m2-l5',
-            title: 'Module 2 Assessment',
-            duration: '30 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'worker-module-3',
-        title: 'Module 3: Digital Wellness & Work-Life Balance',
-        description: 'Maintain health and balance in digital work',
-        duration: '3 hours',
-        lessons: [
-          {
-            id: 'worker-m3-l1',
-            title: 'Digital Wellness Fundamentals',
-            duration: '20 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m3-l2',
-            title: 'Managing Digital Overload',
-            duration: '25 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m3-l3',
-            title: 'Work-Life Integration',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m3-l4',
-            title: 'Cybersecurity for Digital Workers',
-            duration: '25 min',
-            type: 'video',
-          },
-          {
-            id: 'worker-m3-l5',
-            title: 'Final Project: Personal Productivity Plan',
-            duration: '60 min',
-            type: 'assignment',
-          },
-        ],
-      },
-    ],
+    price: 149,
+    originalPrice: 199,
+    badge: 'Coming Soon',
+    comingSoon: true,
+    modules: [],
   },
 
   // Course 6: Leveraging Digital Accelerators for Growth
@@ -752,140 +305,14 @@ export const dtmaCoursesNew: Course[] = [
     category: 'digital-accelerators',
     level: 'Advanced',
     duration: '20 hours',
-    totalLessons: 45,
+    totalLessons: 0,
     rating: 4.9,
     reviews: 345,
-    price: 449,
-    originalPrice: 549,
-    badge: 'New',
-    modules: [
-      {
-        id: 'accelerator-module-1',
-        title: 'Module 1: AI & Machine Learning',
-        description: 'Leverage artificial intelligence for business advantage',
-        duration: '7 hours',
-        lessons: [
-          {
-            id: 'accelerator-m1-l1',
-            title: 'AI Fundamentals for Business',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m1-l2',
-            title: 'Machine Learning Applications',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m1-l3',
-            title: 'Natural Language Processing',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m1-l4',
-            title: 'Computer Vision Applications',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m1-l5',
-            title: 'AI Ethics and Governance',
-            duration: '25 min',
-            type: 'reading',
-          },
-          {
-            id: 'accelerator-m1-l6',
-            title: 'Module 1 Assessment',
-            duration: '40 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'accelerator-module-2',
-        title: 'Module 2: Blockchain & Emerging Technologies',
-        description: 'Understand and apply blockchain technology',
-        duration: '6 hours',
-        lessons: [
-          {
-            id: 'accelerator-m2-l1',
-            title: 'Blockchain Fundamentals',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m2-l2',
-            title: 'Smart Contracts',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m2-l3',
-            title: 'Cryptocurrency and DeFi',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m2-l4',
-            title: 'Enterprise Blockchain Applications',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m2-l5',
-            title: 'Module 2 Assessment',
-            duration: '40 min',
-            type: 'quiz',
-          },
-        ],
-      },
-      {
-        id: 'accelerator-module-3',
-        title: 'Module 3: IoT & Automation',
-        description: 'Connect devices and automate processes',
-        duration: '7 hours',
-        lessons: [
-          {
-            id: 'accelerator-m3-l1',
-            title: 'Internet of Things Fundamentals',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m3-l2',
-            title: 'IoT Architecture and Protocols',
-            duration: '40 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m3-l3',
-            title: 'Robotic Process Automation (RPA)',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m3-l4',
-            title: 'Industrial IoT Applications',
-            duration: '30 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m3-l5',
-            title: 'AR/VR and Immersive Technologies',
-            duration: '35 min',
-            type: 'video',
-          },
-          {
-            id: 'accelerator-m3-l6',
-            title: 'Final Project: Technology Implementation Plan',
-            duration: '120 min',
-            type: 'assignment',
-          },
-        ],
-      },
-    ],
+    price: 149,
+    originalPrice: 199,
+    badge: 'Coming Soon',
+    comingSoon: true,
+    modules: [],
   },
 ];
 

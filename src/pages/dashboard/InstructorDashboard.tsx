@@ -13,6 +13,7 @@ import {
 } from "@/hooks/useInstructor";
 import { useQueryClient } from "@tanstack/react-query";
 import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
+import { LearnerManagementTable } from "@/components/instructor/LearnerManagementTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -561,12 +562,7 @@ const InstructorDashboard = () => {
                 <h1 className="text-[24px] leading-[32px] font-semibold mb-1 text-[#1e2348]">Learners</h1>
                 <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Manage and track your learners</p>
               </div>
-              <div className="bg-card rounded-2xl p-8 text-center border border-border">
-                <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-[16px] leading-[24px] font-medium mb-2 text-[#1e2348]">Learner Management</h3>
-                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">View all learners across your courses</p>
-                <p className="text-[13px] leading-[18px] font-normal text-muted-foreground">Total Learners: {totalEnrollments}</p>
-              </div>
+              <LearnerManagementTable />
             </div>
           )}
 

@@ -114,7 +114,7 @@ export default function SMSStudentsPanel() {
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
           <div className="text-[24px] leading-[32px] font-medium">{studentRecords.length}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-            Total Students <Tip text="All students currently enrolled in at least one course in your academy." />
+            Total Students
           </div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
@@ -126,7 +126,7 @@ export default function SMSStudentsPanel() {
         <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", atRiskCount > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
           <div className={cn("text-[24px] leading-[32px] font-medium", atRiskCount > 0 && "text-rose-700")}>{atRiskCount}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-            Students At Risk <Tip text="Students who are unpaid and have not completed any courses. They may need a follow-up." />
+            Students At Risk
           </div>
         </div>
       </div>
@@ -178,9 +178,7 @@ export default function SMSStudentsPanel() {
                 <TableHead>Student</TableHead>
                 <TableHead className="text-right">Enrolled</TableHead>
                 <TableHead>
-                  <span className="flex items-center gap-1">
-                    Progress <Tip text="Courses completed as a percentage of courses enrolled." />
-                  </span>
+                  Progress
                 </TableHead>
                 <TableHead>
                   <span className="flex items-center gap-1">
@@ -189,9 +187,7 @@ export default function SMSStudentsPanel() {
                 </TableHead>
                 <TableHead>Payment</TableHead>
                 <TableHead className="text-right">
-                  <span className="flex items-center justify-end gap-1">
-                    Certificates <Tip text="Digital certificates auto-issued on course completion." />
-                  </span>
+                  Certificates
                 </TableHead>
               </TableRow></TableHeader>
               <TableBody>

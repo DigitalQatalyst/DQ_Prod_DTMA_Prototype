@@ -124,7 +124,7 @@ export default function SMSFinancePanel() {
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{fmt(thisMonth)}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-            Revenue This Month <Tip text="Total tuition fees collected from students this calendar month." />
+            Revenue This Month
           </div>
           <div className={cn("text-[12px] leading-[16px] mt-0.5", growth >= 0 ? "text-emerald-600" : "text-rose-600")}>
             {growth >= 0 ? "+" : ""}{growth}% vs last month
@@ -136,7 +136,7 @@ export default function SMSFinancePanel() {
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{overdueCount}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-            Overdue or Failed <Tip text="Students with a payment that is past due or whose last payment attempt failed." />
+            Overdue or Failed
           </div>
         </div>
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
@@ -231,7 +231,7 @@ export default function SMSFinancePanel() {
                   <TableHead>Student</TableHead>
                   <TableHead>Course</TableHead>
                   <TableHead className="text-right">Amount</TableHead>
-                  <TableHead><span className="flex items-center gap-1">Due Date <Tip text="The date by which payment was expected. Overdue means this date has passed without a successful payment." /></span></TableHead>
+                  <TableHead>Due Date</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow></TableHeader>

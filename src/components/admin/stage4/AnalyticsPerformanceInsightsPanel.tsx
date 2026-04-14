@@ -163,7 +163,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
             <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
           </div>
           <div className="text-[24px] leading-[32px] font-medium">{profile.activeUsers.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">Students Active This Month <Tip text="Students who logged in and engaged with at least one course module during the selected period." /></div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">Students Active This Month</div>
           <div className="text-[12px] leading-[16px] text-muted-foreground mt-0.5">{Math.round((profile.activeUsers / profile.enrolled) * 100)}% of enrolled</div>
         </div>
 
@@ -238,7 +238,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
                       </Tooltip>
                     </TooltipProvider>
                   </TableHead>
-                  <TableHead><span className="flex items-center gap-1">Rating <Tip text="Average score from post-course student feedback surveys, out of 5.0." /></span></TableHead>
+                  <TableHead>Rating</TableHead>
                   <TableHead className="text-right"><span className="flex items-center justify-end gap-1">Revenue <Tip text="Gross revenue collected from enrolled students for this course in the selected period, before instructor payouts." /></span></TableHead>
                 </TableRow></TableHeader>
                 <TableBody>
@@ -330,7 +330,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
                     <div className="grid grid-cols-3 gap-2 text-center">
                       <div className={cn("rounded-xl p-2", f.completionRate < 65 ? "bg-rose-100" : "bg-white border border-slate-100")}>
                         <div className={cn("text-sm font-semibold", f.completionRate < 65 ? "text-rose-700" : "text-slate-800")}>{f.completionRate}%</div>
-                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">completion <Tip text="% of this instructor's enrolled students who completed all required modules across their courses." /></div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">completion</div>
                       </div>
                       <div className={cn("rounded-xl p-2", f.lastActiveDaysAgo > 14 ? "bg-amber-100" : "bg-white border border-slate-100")}>
                         <div className={cn("text-sm font-semibold", f.lastActiveDaysAgo > 14 ? "text-amber-700" : "text-slate-800")}>
@@ -401,7 +401,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-slate-900">{fmt(cat.revenue)}</div>
-                      <div className="text-xs text-emerald-600 font-medium flex items-center gap-0.5">{cat.growth} enrollment growth <Tip text="Change in new enrollments for this category compared to the previous equivalent period." /></div>
+                      <div className="text-xs text-emerald-600 font-medium flex items-center gap-0.5">{cat.growth} enrollment growth</div>
                     </div>
                   </div>
                 ))}

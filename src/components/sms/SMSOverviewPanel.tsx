@@ -131,9 +131,8 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Revenue This Month</p>
                 <div className="mt-2 text-3xl font-semibold text-slate-900">{fmt.format(snapshot.revenueThisMonth)}</div>
-                <p className={`mt-1 text-sm font-medium flex items-center ${revenueGrowth >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                <p className={`mt-1 text-sm font-medium ${revenueGrowth >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                   {revenueGrowth >= 0 ? "+" : ""}{revenueGrowth}% vs last month
-                  <Tip text="Percentage change in tuition collected compared to the same point last month." />
                 </p>
               </div>
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600"><Banknote className="h-5 w-5" /></div>
@@ -194,9 +193,8 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
                   <p className="font-medium text-slate-900 text-sm">{course.title}</p>
                   <p className="text-xs text-slate-500 mt-0.5">{course.enrolled} enrolled · {fmt.format(course.revenue)} revenue</p>
                 </div>
-                <span className="text-sm font-semibold text-slate-700 shrink-0 flex items-center">
+                <span className="text-sm font-semibold text-slate-700 shrink-0">
                   {course.completion}% completed
-                  <Tip text="Students who finished all required modules and earned a certificate, as a percentage of total enrolled." />
                 </span>
               </div>
               <Progress value={course.completion} className="mt-2 h-1.5" />

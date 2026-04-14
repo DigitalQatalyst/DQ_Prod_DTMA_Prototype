@@ -200,8 +200,8 @@ export default function SMSFinancePanel() {
                 <TableHeader><TableRow>
                   <TableHead>Course</TableHead>
                   <TableHead className="text-right">Enrolled</TableHead>
-                  <TableHead className="text-right">Paid Students</TableHead>
-                  <TableHead className="text-right">Revenue</TableHead>
+                  <TableHead className="text-right"><span className="flex items-center justify-end gap-1">Paid Students <Tip text="Students who have completed payment for this course. Enrolled but unpaid students are not counted here." /></span></TableHead>
+                  <TableHead className="text-right"><span className="flex items-center justify-end gap-1">Revenue <Tip text="Gross tuition collected from paid students for this course. Does not include pending or failed payments." /></span></TableHead>
                 </TableRow></TableHeader>
                 <TableBody>
                   {revenueBycourse.map((r) => (
@@ -231,7 +231,7 @@ export default function SMSFinancePanel() {
                   <TableHead>Student</TableHead>
                   <TableHead>Course</TableHead>
                   <TableHead className="text-right">Amount</TableHead>
-                  <TableHead>Due Date</TableHead>
+                  <TableHead><span className="flex items-center gap-1">Due Date <Tip text="The date by which payment was expected. Overdue means this date has passed without a successful payment." /></span></TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow></TableHeader>

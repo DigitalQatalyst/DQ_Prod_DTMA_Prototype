@@ -3,29 +3,38 @@ import { Link } from 'react-router-dom';
 import {
   LayoutDashboard,
   BookOpen,
+  Users,
   GraduationCap,
   Banknote,
+  CreditCard,
   Globe,
+  ShieldCheck,
   Menu,
   X,
   LogOut,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import SMSOverviewPanel from '@/components/sms/SMSOverviewPanel';
-import SMSCoursesPanel from '@/components/sms/SMSCoursesPanel';
-import SMSStudentsPanel from '@/components/sms/SMSStudentsPanel';
-import SMSFinancePanel from '@/components/sms/SMSFinancePanel';
-import SMSPartnersPanel from '@/components/sms/SMSPartnersPanel';
+import SMSOverviewPanel   from '@/components/sms/SMSOverviewPanel';
+import SMSCoursesPanel    from '@/components/sms/SMSCoursesPanel';
+import SMSFacultyPanel    from '@/components/sms/SMSFacultyPanel';
+import SMSStudentsPanel   from '@/components/sms/SMSStudentsPanel';
+import SMSFinancePanel    from '@/components/sms/SMSFinancePanel';
+import SMSBillingPanel    from '@/components/sms/SMSBillingPanel';
+import SMSPartnersPanel   from '@/components/sms/SMSPartnersPanel';
+import SMSCompliancePanel from '@/components/sms/SMSCompliancePanel';
 
-type SMSTab = 'overview' | 'courses' | 'students' | 'finance' | 'partners';
+type SMSTab = 'overview' | 'courses' | 'faculty' | 'students' | 'finance' | 'billing' | 'partners' | 'compliance';
 
 const navItems: { id: SMSTab; label: string; icon: React.ElementType }[] = [
-  { id: 'overview',  label: 'Academy Overview',       icon: LayoutDashboard },
-  { id: 'courses',   label: 'Courses & Faculty',       icon: BookOpen        },
-  { id: 'students',  label: 'Students',             icon: GraduationCap   },
-  { id: 'finance',   label: 'Finance & Billing',       icon: Banknote        },
-  { id: 'partners',  label: 'Partners & Compliance',   icon: Globe           },
+  { id: 'overview',   label: 'Academy Overview', icon: LayoutDashboard },
+  { id: 'courses',    label: 'Courses',           icon: BookOpen        },
+  { id: 'faculty',    label: 'Faculty',           icon: Users           },
+  { id: 'students',   label: 'Students',          icon: GraduationCap   },
+  { id: 'finance',    label: 'Finance',           icon: Banknote        },
+  { id: 'billing',    label: 'Billing',           icon: CreditCard      },
+  { id: 'partners',   label: 'Partners',          icon: Globe           },
+  { id: 'compliance', label: 'Compliance',        icon: ShieldCheck     },
 ];
 
 export default function SMSDashboard() {
@@ -107,11 +116,14 @@ export default function SMSDashboard() {
         )}
 
         <main className="p-6 lg:p-8">
-          {activeTab === 'overview'  && <SMSOverviewPanel  onNavigate={setActiveTab} />}
-          {activeTab === 'courses'   && <SMSCoursesPanel />}
-          {activeTab === 'students'  && <SMSStudentsPanel />}
-          {activeTab === 'finance'   && <SMSFinancePanel />}
-          {activeTab === 'partners'  && <SMSPartnersPanel />}
+          {activeTab === 'overview'   && <SMSOverviewPanel   onNavigate={setActiveTab} />}
+          {activeTab === 'courses'    && <SMSCoursesPanel />}
+          {activeTab === 'faculty'    && <SMSFacultyPanel />}
+          {activeTab === 'students'   && <SMSStudentsPanel />}
+          {activeTab === 'finance'    && <SMSFinancePanel />}
+          {activeTab === 'billing'    && <SMSBillingPanel />}
+          {activeTab === 'partners'   && <SMSPartnersPanel />}
+          {activeTab === 'compliance' && <SMSCompliancePanel />}
         </main>
       </div>
     </div>

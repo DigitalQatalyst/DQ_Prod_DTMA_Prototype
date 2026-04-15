@@ -83,7 +83,7 @@ const trendTopics: TrendTopic[] = [
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 const fmt = (v: number) => currency.format(v);
 
-export default function AnalyticsPerformanceInsightsPanel() {
+export default function AnalyticsPerformanceInsightsPanel({ initialTab = "courses" }: { initialTab?: "courses" | "faculty" | "categories" }) {
   const { toast } = useToast();
   const [period, setPeriod] = useState<Period>("30d");
   const [remindedFaculty, setRemindedFaculty] = useState<Set<string>>(new Set());
@@ -201,7 +201,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
         </div>
       </div>
 
-      <Tabs defaultValue="courses" className="space-y-6">
+      <Tabs defaultValue={initialTab} className="space-y-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <TabsList className="h-auto flex-wrap justify-start gap-2 rounded-2xl bg-slate-100 p-2">
             <TabsTrigger value="courses"    className="rounded-xl px-4 py-2">Course Performance</TabsTrigger>

@@ -124,7 +124,7 @@ const Tip = ({ text }: { text: string }) => (
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function SMSFinancePanel() {
+export default function SMSFinancePanel({ initialTab = "revenue" }: { initialTab?: "revenue" | "access" | "issues" }) {
   const { toast } = useToast();
   const [flaggedIds,   setFlaggedIds]   = useState<Set<string>>(new Set());
   const [showResolved, setShowResolved] = useState(false);
@@ -225,7 +225,7 @@ export default function SMSFinancePanel() {
         </div>
       </div>
 
-      <Tabs defaultValue="revenue" className="space-y-6">
+      <Tabs defaultValue={initialTab} className="space-y-6">
         <TabsList className="h-auto flex-wrap justify-start gap-2 rounded-2xl bg-slate-100 p-2">
           <TabsTrigger value="revenue"  className="rounded-xl px-4 py-2">Revenue Overview</TabsTrigger>
           <TabsTrigger value="access"   className="rounded-xl px-4 py-2">

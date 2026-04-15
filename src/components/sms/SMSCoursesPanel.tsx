@@ -61,7 +61,7 @@ function agentStatusBadge(s: AIAgentRecord["status"]) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function SMSCoursesPanel() {
+export default function SMSCoursesPanel({ initialTab = "courses" }: { initialTab?: "courses" | "faculty" | "categories" }) {
   const { toast } = useToast();
   const [reminded, setReminded]   = useState<Set<string>>(new Set());
   const [escalated, setEscalated] = useState<Set<string>>(new Set());
@@ -193,7 +193,7 @@ export default function SMSCoursesPanel() {
       </Card>
 
       {/* Full courses & faculty panel */}
-      <AnalyticsPerformanceInsightsPanel />
+      <AnalyticsPerformanceInsightsPanel initialTab={initialTab} />
     </div>
   );
 }

@@ -439,6 +439,7 @@ export const LearnerManagementTable = () => {
               variant="outline"
               size="sm"
               onClick={() => setSelectedLearners(new Set())}
+              className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
             >
               Clear Selection
             </Button>

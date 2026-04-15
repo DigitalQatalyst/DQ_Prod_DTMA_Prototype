@@ -86,6 +86,7 @@ import {
   Square,
   Trash2,
   Upload,
+  Award,
 } from "lucide-react";
 
 const InstructorDashboard = () => {
@@ -420,7 +421,7 @@ const InstructorDashboard = () => {
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <h3 className="text-[16px] leading-[24px] font-medium mb-4 text-[#1e2348]">What you can do while waiting</h3>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#FFE9E4] transition-colors">
                       <button
                         onClick={() => setChecklist({ ...checklist, profileComplete: !checklist.profileComplete })}
                         className="flex-shrink-0"
@@ -439,7 +440,7 @@ const InstructorDashboard = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#FFE9E4] transition-colors">
                       <button
                         onClick={() => setChecklist({ ...checklist, draftCourse: !checklist.draftCourse })}
                         className="flex-shrink-0"
@@ -458,7 +459,7 @@ const InstructorDashboard = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-[#FFE9E4] transition-colors">
                       <button
                         onClick={() => setChecklist({ ...checklist, uploadContent: !checklist.uploadContent })}
                         className="flex-shrink-0"
@@ -521,7 +522,7 @@ const InstructorDashboard = () => {
                     <Plus className="w-4 h-4 mr-2" />
                     Create Course
                   </Button>
-                  <Button variant="outline" onClick={() => setActiveTab("learners")} className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348]/5">
+                  <Button variant="outline" onClick={() => setActiveTab("learners")} className="border-[#1e2348] text-[#1e2348] hover:bg-[#FFE9E4]">
                     <Users className="w-4 h-4 mr-2" />
                     View Learners
                   </Button>
@@ -590,7 +591,7 @@ const InstructorDashboard = () => {
                   <div className="flex-1">
                     <h3 className="text-[14px] leading-[20px] font-medium mb-1 text-[#1e2348]">Professional Credentials</h3>
                     <p className="text-[13px] leading-[18px] font-normal text-muted-foreground mb-3">Pending Review</p>
-                    <Button variant="outline" size="sm">Upload Credentials</Button>
+                    <Button variant="outline" size="sm" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Upload Credentials</Button>
                   </div>
                 </div>
               </div>
@@ -690,7 +691,7 @@ const CertificateBrandingSection = ({ profile }: any) => {
             <Label>Email</Label>
             <Input value={profile?.email || ''} disabled />
           </div>
-          <Button variant="outline">Edit Profile</Button>
+          <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Edit Profile</Button>
         </div>
       </div>
 
@@ -819,40 +820,103 @@ const CertificateBrandingSection = ({ profile }: any) => {
       {/* Certificate Preview */}
       <div className="bg-card rounded-2xl p-6 border border-border">
         <h3 className="text-[16px] leading-[24px] font-medium mb-4 text-[#1e2348]">Certificate Preview</h3>
-        <div className="border-2 border-border rounded-lg p-8 bg-gradient-to-br from-primary/5 to-background">
-          <div className="max-w-2xl mx-auto text-center space-y-4">
-            {certificateSettings.logoPreview && (
-              <img src={certificateSettings.logoPreview} alt="Logo" className="h-12 w-auto mx-auto mb-4" />
-            )}
-            <div className="text-xs text-muted-foreground uppercase tracking-wider">Certificate of Completion</div>
-            <h3 className="text-2xl font-serif font-bold">{certificateSettings.issuingEntityName || "Issuing Entity"}</h3>
-            <p className="text-sm text-muted-foreground">This is to certify that</p>
-            <div className="text-xl font-semibold border-b-2 border-primary inline-block px-8 pb-1">[Student Name]</div>
-            <p className="text-sm text-muted-foreground">has successfully completed</p>
-            <div className="text-lg font-semibold">[Course Title]</div>
-            <div className="flex justify-center gap-8 pt-6">
-              <div className="text-center">
-                {certificateSettings.signaturePreview ? (
-                  <img src={certificateSettings.signaturePreview} alt="Signature" className="h-12 w-auto mx-auto mb-2" />
+        <div className="border-2 border-border rounded-lg overflow-hidden bg-white">
+          {/* Certificate Header with Gradient */}
+          <div className="bg-gradient-to-r from-[#1e2348] to-[#2a3058] p-8 text-white">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-20 h-20 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                {certificateSettings.logoPreview ? (
+                  <img src={certificateSettings.logoPreview} alt="Logo" className="h-16 w-auto" />
                 ) : (
-                  <div className="border-t border-foreground pt-1 px-8 mb-2">
-                    <p className="text-xs text-muted-foreground invisible">Signature</p>
-                  </div>
+                  <Award className="w-10 h-10" />
                 )}
-                <p className="text-xs text-muted-foreground">{certificateSettings.signatoryName || "Authorized Signatory"}</p>
               </div>
-              <div className="text-center">
-                <div className="border-t border-foreground pt-1 px-8 mb-2">
-                  <p className="text-xs text-muted-foreground invisible">Date</p>
-                </div>
-                <p className="text-xs text-muted-foreground">Date</p>
+              <div className="text-left">
+                <p className="text-white/80 text-sm mb-1" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
+                  KHDA-Attested Certificate
+                </p>
+                <h3 className="font-semibold text-xl" style={{ fontSize: '18px', lineHeight: '24px', fontWeight: 600 }}>
+                  {certificateSettings.issuingEntityName || "Issuing Entity"}
+                </h3>
               </div>
             </div>
-            {certificateSettings.accreditationNumber && (
-              <p className="text-xs text-muted-foreground pt-4">Accreditation: {certificateSettings.accreditationNumber}</p>
-            )}
-            <p className="text-xs text-muted-foreground pt-4">{certificateSettings.footerText}</p>
-            <p className="text-xs text-muted-foreground">Certificate ID: [Auto-generated]</p>
+          </div>
+
+          {/* Certificate Body */}
+          <div className="p-8">
+            <div className="max-w-2xl mx-auto text-center space-y-6">
+              <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
+                Certificate of Completion
+              </div>
+              
+              <p className="text-sm text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                This is to certify that
+              </p>
+              
+              <div className="text-2xl font-semibold text-[#1e2348] border-b-2 border-[#ff6b4d] inline-block px-8 pb-2">
+                [Student Name]
+              </div>
+              
+              <p className="text-sm text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                has successfully completed
+              </p>
+              
+              <div className="text-xl font-semibold text-[#1e2348]" style={{ fontSize: '18px', lineHeight: '24px' }}>
+                [Course Title]
+              </div>
+
+              {/* Issue Date and Certificate ID */}
+              <div className="grid grid-cols-2 gap-4 pt-4">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                    Issue Date
+                  </p>
+                  <p className="font-medium" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                    [Date]
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                    Certificate ID
+                  </p>
+                  <p className="font-medium font-mono text-sm" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                    [Auto-generated]
+                  </p>
+                </div>
+              </div>
+
+              {/* Signature Section */}
+              <div className="flex justify-center gap-12 pt-6 border-t border-border">
+                <div className="text-center">
+                  {certificateSettings.signaturePreview ? (
+                    <img src={certificateSettings.signaturePreview} alt="Signature" className="h-16 w-auto mx-auto mb-2" />
+                  ) : (
+                    <div className="h-16 flex items-center justify-center mb-2">
+                      <div className="border-t-2 border-[#1e2348] w-32"></div>
+                    </div>
+                  )}
+                  <p className="text-xs font-medium text-[#1e2348]" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                    {certificateSettings.signatoryName || "Authorized Signatory"}
+                  </p>
+                  <p className="text-xs text-muted-foreground" style={{ fontSize: '11px', lineHeight: '14px' }}>
+                    Instructor
+                  </p>
+                </div>
+              </div>
+
+              {/* Footer Information */}
+              {certificateSettings.accreditationNumber && (
+                <p className="text-xs text-muted-foreground pt-4" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                  Accreditation: {certificateSettings.accreditationNumber}
+                </p>
+              )}
+              
+              {certificateSettings.footerText && (
+                <p className="text-xs text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                  {certificateSettings.footerText}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -1120,7 +1184,7 @@ const CourseActions = ({ status, onSubmit, onArchive, onRestore, onDuplicate, on
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
             Actions
           </Button>
         </DropdownMenuTrigger>

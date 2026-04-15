@@ -30,6 +30,7 @@ import {
   ChevronDown,
   MessageSquare,
   Bot,
+  Award,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
@@ -227,7 +228,7 @@ const CourseBuilder = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium">
+              <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium hover:bg-[#FFE9E4]">
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
               </Button>
@@ -312,7 +313,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
   const addSection = () => {
     const newSection = {
       id: `section-${Date.now()}`,
-      title: `Section ${sections.length + 1}`,
+      title: `Module ${sections.length + 1}`,
       lessons: [],
       order: sections.length,
     };
@@ -696,11 +697,11 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
         <div className="flex items-start justify-between mb-6">
           <div>
             <h2 className="text-xl font-semibold mb-2">Curriculum</h2>
-            <p className="text-sm text-muted-foreground">Add sections and lessons to your course.</p>
+            <p className="text-sm text-muted-foreground">Add modules and lessons to your course.</p>
           </div>
           <Button onClick={addSection} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium" size="sm">
             <Plus className="w-4 h-4 mr-2" />
-            Add Section
+            Add Module
           </Button>
         </div>
 
@@ -819,7 +820,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'video')}
-                            className="text-xs"
+                            className="text-xs hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
                           >
                             <Video className="w-3 h-3 mr-1" />
                             Upload Video
@@ -828,7 +829,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'pdf')}
-                            className="text-xs"
+                            className="text-xs hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
                           >
                             <FileText className="w-3 h-3 mr-1" />
                             Upload PDF
@@ -837,7 +838,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'download')}
-                            className="text-xs"
+                            className="text-xs hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
                           >
                             <Upload className="w-3 h-3 mr-1" />
                             Upload Resource
@@ -846,7 +847,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant={lesson.quiz?.enabled ? "default" : "outline"}
                             size="sm"
                             onClick={() => lesson.quiz?.enabled ? toggleQuiz(lesson.id) : enableLessonQuiz(section.id, lesson.id)}
-                            className="text-xs"
+                            className={`text-xs ${!lesson.quiz?.enabled ? 'hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]' : ''}`}
                           >
                             <HelpCircle className="w-3 h-3 mr-1" />
                             {lesson.quiz?.enabled ? `Quiz (${lesson.quiz.questions?.length || 0})` : 'Add Quiz'}
@@ -883,7 +884,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                     onChange={(e) => updateQuizSettings(section.id, lesson.id, { required: e.target.checked })}
                                     className="sr-only peer"
                                   />
-                                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
                                 </label>
                               </div>
 
@@ -902,6 +903,33 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
 
                             {/* Quiz Questions */}
                             <div className="space-y-3">
+                              {/* AI Butler Quiz Helper */}
+                              <div className="bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5 border border-[#ff6b4d]/20 rounded-lg p-3 mb-4">
+                                <div className="flex items-start gap-3">
+                                  <div className="w-8 h-8 rounded-full bg-[#ff6b4d] flex items-center justify-center flex-shrink-0">
+                                    <Bot className="w-4 h-4 text-white" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <h5 className="text-xs font-semibold text-[#1e2348] mb-1">AI Quiz Generator</h5>
+                                    <p className="text-xs text-muted-foreground mb-2">
+                                      Need help creating quiz questions? Butler AI can generate questions based on your lesson content.
+                                    </p>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="text-xs h-7 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white"
+                                      onClick={() => {
+                                        // This would open a modal or sidebar with AI assistance
+                                        alert('AI Quiz Generator: This feature will help you generate quiz questions based on your lesson content. Coming soon!');
+                                      }}
+                                    >
+                                      <Bot className="w-3 h-3 mr-1" />
+                                      Generate Questions with AI
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+
                               {lesson.quiz.questions?.map((question: any, qIndex: number) => (
                                 <div key={question.id} className="border border-border rounded-lg p-3 bg-background">
                                   <div className="flex items-start justify-between mb-2">
@@ -949,7 +977,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                     />
                                   </div>
 
-                                  <div className="space-y-1">
+                                  <div className="space-y-1 mb-2">
                                     <label className="block text-xs font-medium mb-1">Answer Options</label>
                                     {question.options.map((option: string, oIndex: number) => (
                                       <div key={oIndex} className="flex items-center gap-2">
@@ -974,6 +1002,24 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                       </div>
                                     ))}
                                   </div>
+
+                                  {/* Hint Field */}
+                                  <div className="mt-3 pt-3 border-t border-border">
+                                    <label className="flex items-center gap-1 text-xs font-medium mb-1">
+                                      <HelpCircle className="w-3 h-3 text-[#ff6b4d]" />
+                                      Hint (Optional)
+                                    </label>
+                                    <Textarea
+                                      value={question.hint || ''}
+                                      onChange={(e) => updateQuizQuestion(section.id, lesson.id, question.id, { hint: e.target.value })}
+                                      placeholder="Provide a helpful hint for learners who are stuck..."
+                                      className="text-xs resize-none h-16"
+                                      maxLength={200}
+                                    />
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      {question.hint?.length || 0}/200 characters
+                                    </p>
+                                  </div>
                                 </div>
                               ))}
 
@@ -981,7 +1027,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => addQuizQuestion(section.id, lesson.id)}
-                                className="w-full text-xs"
+                                className="w-full text-xs hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
                               >
                                 <Plus className="w-3 h-3 mr-1" />
                                 Add Question
@@ -1020,7 +1066,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                 }}
                                 className="sr-only peer"
                               />
-                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
                             </label>
                           </div>
 
@@ -1050,7 +1096,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                   }}
                                   className="sr-only peer"
                                 />
-                                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
+                                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
                               </label>
                             </div>
 
@@ -1091,7 +1137,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                       variant="outline"
                       size="sm"
                       onClick={() => addLesson(section.id)}
-                      className="w-full"
+                      className="w-full hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Lesson
@@ -1105,7 +1151,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
         <Button disabled={!hasValidCurriculum} onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
       </div>
     </div>
@@ -1225,7 +1271,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                 </Button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-[#ff6b4d] transition-colors cursor-pointer">
                 <input
                   type="file"
                   accept="image/*"
@@ -1262,7 +1308,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                 </Button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-[#ff6b4d] transition-colors cursor-pointer">
                 <input
                   type="file"
                   accept="video/*"
@@ -1303,7 +1349,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                   )}
                 </div>
               ))}
-              <Button variant="outline" size="sm" onClick={addObjective}>
+              <Button variant="outline" size="sm" onClick={addObjective} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Objective
               </Button>
@@ -1334,7 +1380,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                   )}
                 </div>
               ))}
-              <Button variant="outline" size="sm" onClick={addOutcome}>
+              <Button variant="outline" size="sm" onClick={addOutcome} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Outcome
               </Button>
@@ -1360,7 +1406,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
         <Button disabled={!hasThumbnail} onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
       </div>
     </div>
@@ -1481,7 +1527,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                 onChange={(e) => setCertificationEnabled(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
             </label>
           </div>
 
@@ -1496,15 +1542,15 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                 onClick={() => setAssessmentType("quiz")}
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   assessmentType === "quiz"
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/50"
+                    ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
+                    : "border-border hover:border-[#ff6b4d]/50"
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                    assessmentType === "quiz" ? "border-primary" : "border-muted-foreground"
+                    assessmentType === "quiz" ? "border-[#ff6b4d]" : "border-muted-foreground"
                   }`}>
-                    {assessmentType === "quiz" && <div className="w-3 h-3 rounded-full bg-primary" />}
+                    {assessmentType === "quiz" && <div className="w-3 h-3 rounded-full bg-[#ff6b4d]" />}
                   </div>
                   <div>
                     <p className="font-medium text-sm">Quiz</p>
@@ -1517,15 +1563,15 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                 onClick={() => setAssessmentType("assignment")}
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   assessmentType === "assignment"
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/50"
+                    ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
+                    : "border-border hover:border-[#ff6b4d]/50"
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                    assessmentType === "assignment" ? "border-primary" : "border-muted-foreground"
+                    assessmentType === "assignment" ? "border-[#ff6b4d]" : "border-muted-foreground"
                   }`}>
-                    {assessmentType === "assignment" && <div className="w-3 h-3 rounded-full bg-primary" />}
+                    {assessmentType === "assignment" && <div className="w-3 h-3 rounded-full bg-[#ff6b4d]" />}
                   </div>
                   <div>
                     <p className="font-medium text-sm">Assignment Upload</p>
@@ -1538,15 +1584,15 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                 onClick={() => setAssessmentType("practical")}
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   assessmentType === "practical"
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/50"
+                    ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
+                    : "border-border hover:border-[#ff6b4d]/50"
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                    assessmentType === "practical" ? "border-primary" : "border-muted-foreground"
+                    assessmentType === "practical" ? "border-[#ff6b4d]" : "border-muted-foreground"
                   }`}>
-                    {assessmentType === "practical" && <div className="w-3 h-3 rounded-full bg-primary" />}
+                    {assessmentType === "practical" && <div className="w-3 h-3 rounded-full bg-[#ff6b4d]" />}
                   </div>
                   <div>
                     <p className="font-medium text-sm">Practical Evaluation</p>
@@ -1560,15 +1606,15 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                   onClick={() => setAssessmentType("none")}
                   className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                     assessmentType === "none"
-                      ? "border-primary bg-primary/5"
-                      : "border-border hover:border-primary/50"
+                      ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
+                      : "border-border hover:border-[#ff6b4d]/50"
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                      assessmentType === "none" ? "border-primary" : "border-muted-foreground"
+                      assessmentType === "none" ? "border-[#ff6b4d]" : "border-muted-foreground"
                     }`}>
-                      {assessmentType === "none" && <div className="w-3 h-3 rounded-full bg-primary" />}
+                      {assessmentType === "none" && <div className="w-3 h-3 rounded-full bg-[#ff6b4d]" />}
                     </div>
                     <div>
                       <p className="font-medium text-sm">No Assessment</p>
@@ -1614,7 +1660,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                       onChange={(e) => setRetakesAllowed(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
                   </label>
                 </div>
 
@@ -1650,7 +1696,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                       onChange={(e) => setAutoGrading(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
                   </label>
                 </div>
               )}
@@ -1771,7 +1817,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                     correctAnswer: undefined,
                     points: 1
                   }])}
-                  className="w-full"
+                  className="w-full hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Question
@@ -1796,7 +1842,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                       onChange={(e) => setWhatsappPracticeEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                   </label>
                 </div>
 
@@ -1816,7 +1862,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                       onChange={(e) => setAiAssessmentEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
                   </label>
                 </div>
               </div>
@@ -1925,7 +1971,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                         onChange={(e) => setEnableDeadline(e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
                     </label>
                   </div>
 
@@ -1958,7 +2004,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                         <select
                           value={timezone}
                           onChange={(e) => setTimezone(e.target.value)}
-                          className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                          className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]"
                         >
                           <option value="America/New_York">Eastern Time (ET)</option>
                           <option value="America/Chicago">Central Time (CT)</option>
@@ -1989,7 +2035,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                               onChange={(e) => setAllowLateSubmissions(e.target.checked)}
                               className="sr-only peer"
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
                           </label>
                         </div>
 
@@ -2008,7 +2054,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                               <select
                                 value={lateWindowUnit}
                                 onChange={(e) => setLateWindowUnit(e.target.value)}
-                                className="px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                                className="px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]"
                               >
                                 <option value="hours">Hours</option>
                                 <option value="days">Days</option>
@@ -2072,7 +2118,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
         <Button 
           disabled={assessmentRequired || (assessmentType !== "none" && !hasValidContent)} 
           onClick={onContinue}
@@ -2137,7 +2183,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                 onChange={(e) => setCertificationEnabled(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
             </label>
           </div>
 
@@ -2156,7 +2202,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                         type="checkbox"
                         checked={requireWatchAll}
                         onChange={(e) => setRequireWatchAll(e.target.checked)}
-                        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                        className="w-4 h-4 text-[#ff6b4d] bg-gray-100 border-gray-300 rounded focus:ring-[#ff6b4d] focus:ring-2"
                       />
                       <div>
                         <label className="text-sm font-medium">Watch 100% of content</label>
@@ -2172,7 +2218,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                         type="checkbox"
                         checked={requirePassAssessment}
                         onChange={(e) => setRequirePassAssessment(e.target.checked)}
-                        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                        className="w-4 h-4 text-[#ff6b4d] bg-gray-100 border-gray-300 rounded focus:ring-[#ff6b4d] focus:ring-2"
                       />
                       <div>
                         <label className="text-sm font-medium">Pass assessment</label>
@@ -2188,7 +2234,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                         type="checkbox"
                         checked={requireSubmitAssignment}
                         onChange={(e) => setRequireSubmitAssignment(e.target.checked)}
-                        className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
+                        className="w-4 h-4 text-[#ff6b4d] bg-gray-100 border-gray-300 rounded focus:ring-[#ff6b4d] focus:ring-2"
                       />
                       <div>
                         <label className="text-sm font-medium">Submit assignment</label>
@@ -2229,6 +2275,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                     variant="outline"
                     size="sm"
                     onClick={() => setShowCertificatePreview(!showCertificatePreview)}
+                    className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     {showCertificatePreview ? "Hide" : "Show"} Preview
@@ -2236,48 +2283,103 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                 </div>
 
                 {showCertificatePreview && (
-                  <div className="border-2 border-border rounded-lg p-8 bg-gradient-to-br from-primary/5 to-background">
-                    <div className="max-w-2xl mx-auto text-center space-y-4">
-                      {certificateBranding.logo && (
-                        <img src={certificateBranding.logo} alt="Logo" className="h-12 w-auto mx-auto mb-4" />
-                      )}
-                      <div className="text-xs text-muted-foreground uppercase tracking-wider">Certificate of Completion</div>
-                      <h3 className="text-2xl font-serif font-bold">
-                        {certificateBranding.issuingEntityName || "DTMA - Digital Transformation Management Academy"}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">This is to certify that</p>
-                      <div className="text-xl font-semibold border-b-2 border-primary inline-block px-8 pb-1">[Student Name]</div>
-                      <p className="text-sm text-muted-foreground">has successfully completed</p>
-                      <div className="text-lg font-semibold">{course?.title || "Course Title"}</div>
-                      <div className="flex justify-center gap-8 pt-6">
-                        <div className="text-center">
-                          {certificateBranding.signature ? (
-                            <img src={certificateBranding.signature} alt="Signature" className="h-12 w-auto mx-auto mb-2" />
+                  <div className="border-2 border-border rounded-lg overflow-hidden bg-white">
+                    {/* Certificate Header with Gradient */}
+                    <div className="bg-gradient-to-r from-[#1e2348] to-[#2a3058] p-8 text-white">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-20 h-20 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                          {certificateBranding.logo ? (
+                            <img src={certificateBranding.logo} alt="Logo" className="h-16 w-auto" />
                           ) : (
-                            <div className="border-t border-foreground pt-1 px-8 mb-2">
-                              <p className="text-xs text-muted-foreground invisible">Signature</p>
-                            </div>
+                            <Award className="w-10 h-10" />
                           )}
-                          <p className="text-xs text-muted-foreground">
-                            {certificateBranding.signatoryName || "Instructor Signature"}
-                          </p>
                         </div>
-                        <div className="text-center">
-                          <div className="border-t border-foreground pt-1 px-8 mb-2">
-                            <p className="text-xs text-muted-foreground invisible">Date</p>
-                          </div>
-                          <p className="text-xs text-muted-foreground">Date</p>
+                        <div className="text-left">
+                          <p className="text-white/80 text-sm mb-1" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
+                            KHDA-Attested Certificate
+                          </p>
+                          <h3 className="font-semibold text-xl" style={{ fontSize: '18px', lineHeight: '24px', fontWeight: 600 }}>
+                            {certificateBranding.issuingEntityName || "DTMA - Digital Transformation Management Academy"}
+                          </h3>
                         </div>
                       </div>
-                      {certificateBranding.accreditationNumber && (
-                        <p className="text-xs text-muted-foreground pt-4">
-                          Accreditation: {certificateBranding.accreditationNumber}
+                    </div>
+
+                    {/* Certificate Body */}
+                    <div className="p-8">
+                      <div className="max-w-2xl mx-auto text-center space-y-6">
+                        <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
+                          Certificate of Completion
+                        </div>
+                        
+                        <p className="text-sm text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                          This is to certify that
                         </p>
-                      )}
-                      {certificateBranding.footerText && (
-                        <p className="text-xs text-muted-foreground pt-4">{certificateBranding.footerText}</p>
-                      )}
-                      <p className="text-xs text-muted-foreground">Certificate ID: [Auto-generated]</p>
+                        
+                        <div className="text-2xl font-semibold text-[#1e2348] border-b-2 border-[#ff6b4d] inline-block px-8 pb-2">
+                          [Student Name]
+                        </div>
+                        
+                        <p className="text-sm text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                          has successfully completed
+                        </p>
+                        
+                        <div className="text-xl font-semibold text-[#1e2348]" style={{ fontSize: '18px', lineHeight: '24px' }}>
+                          {course?.title || "Course Title"}
+                        </div>
+
+                        {/* Issue Date and Certificate ID */}
+                        <div className="grid grid-cols-2 gap-4 pt-4">
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                              Issue Date
+                            </p>
+                            <p className="font-medium" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                              [Date]
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1" style={{ fontSize: '14px', lineHeight: '20px' }}>
+                              Certificate ID
+                            </p>
+                            <p className="font-medium font-mono text-sm" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                              [Auto-generated]
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Signature Section */}
+                        <div className="flex justify-center gap-12 pt-6 border-t border-border">
+                          <div className="text-center">
+                            {certificateBranding.signature ? (
+                              <img src={certificateBranding.signature} alt="Signature" className="h-16 w-auto mx-auto mb-2" />
+                            ) : (
+                              <div className="h-16 flex items-center justify-center mb-2">
+                                <div className="border-t-2 border-[#1e2348] w-32"></div>
+                              </div>
+                            )}
+                            <p className="text-xs font-medium text-[#1e2348]" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                              {certificateBranding.signatoryName || "Instructor Signature"}
+                            </p>
+                            <p className="text-xs text-muted-foreground" style={{ fontSize: '11px', lineHeight: '14px' }}>
+                              Instructor
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Footer Information */}
+                        {certificateBranding.accreditationNumber && (
+                          <p className="text-xs text-muted-foreground pt-4" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                            Accreditation: {certificateBranding.accreditationNumber}
+                          </p>
+                        )}
+                        
+                        {certificateBranding.footerText && (
+                          <p className="text-xs text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                            {certificateBranding.footerText}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -2306,7 +2408,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
         <Button onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
       </div>
     </div>
@@ -2417,7 +2519,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                   onChange={(e) => setHasDiscount(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
               </label>
             </div>
 
@@ -2430,8 +2532,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                       onClick={() => setDiscountType("percentage")}
                       className={`flex-1 p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                         discountType === "percentage"
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
+                          ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
+                          : "border-border hover:border-[#ff6b4d]/50"
                       }`}
                     >
                       Percentage (%)
@@ -2440,8 +2542,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                       onClick={() => setDiscountType("fixed")}
                       className={`flex-1 p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                         discountType === "fixed"
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
+                          ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
+                          : "border-border hover:border-[#ff6b4d]/50"
                       }`}
                     >
                       Fixed Amount ($)
@@ -2493,7 +2595,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                   onChange={(e) => setHasEnrollmentCap(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
               </label>
             </div>
 
@@ -2522,7 +2624,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="w-full max-w-xs px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full max-w-xs px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]"
             >
               <option value="English">English</option>
               <option value="Spanish">Spanish</option>
@@ -2558,7 +2660,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                     onChange={(e) => setWhatsappLearningEnabled(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
 
@@ -2674,7 +2776,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                     onChange={(e) => setAiTutorEnabled(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
                 </label>
               </div>
 
@@ -2762,7 +2864,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
         <Button onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
       </div>
     </div>
@@ -2949,23 +3051,23 @@ const SubmitStep = ({ course, onSave }: any) => {
           <h3 className="text-sm font-semibold mb-3">What happens after submission?</h3>
           <div className="space-y-2 text-sm text-muted-foreground">
             <div className="flex items-start gap-2">
-              <span className="text-primary mt-0.5">•</span>
+              <span className="text-[#ff6b4d] mt-0.5">•</span>
               <span>Course status changes to "Pending Review"</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-primary mt-0.5">•</span>
+              <span className="text-[#ff6b4d] mt-0.5">•</span>
               <span>Curriculum, assessments, and certification settings are locked</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-primary mt-0.5">•</span>
+              <span className="text-[#ff6b4d] mt-0.5">•</span>
               <span>Minor metadata edits (title, description, price) remain available</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-primary mt-0.5">•</span>
+              <span className="text-[#ff6b4d] mt-0.5">•</span>
               <span>Admin will review and either approve or request changes</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-primary mt-0.5">•</span>
+              <span className="text-[#ff6b4d] mt-0.5">•</span>
               <span>You'll receive a notification when the review is complete</span>
             </div>
           </div>
@@ -2973,7 +3075,7 @@ const SubmitStep = ({ course, onSave }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave}>Save as Draft</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
         <Button 
           onClick={handleSubmit}
           disabled={!isValid || isSubmitting}

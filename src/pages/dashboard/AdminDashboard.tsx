@@ -904,7 +904,7 @@ const PendingApprovalsTab = () => {
                     <button className="px-4 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-[13px] font-medium border border-red-200 transition-colors flex items-center gap-1.5">
                       <XCircle className="w-3.5 h-3.5" /> Reject
                     </button>
-                    <button className="ml-auto px-3 py-1.5 rounded-lg border border-border text-[13px] text-muted-foreground hover:bg-muted transition-colors flex items-center gap-1.5">
+                    <button className="ml-auto px-3 py-1.5 rounded-lg border border-border text-[13px] text-muted-foreground hover:bg-[#FFE9E4] transition-colors flex items-center gap-1.5">
                       <Eye className="w-3.5 h-3.5" /> Preview
                     </button>
                   </>

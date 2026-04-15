@@ -79,7 +79,7 @@ export default function SMSDashboard() {
             <Link to="/admin">
               <Button variant="ghost" className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10">
                 <LogOut className="w-4 h-4 mr-2" />
-                Back to Admin
+                Log Out
               </Button>
             </Link>
           </div>

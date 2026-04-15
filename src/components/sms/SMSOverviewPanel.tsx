@@ -1,11 +1,18 @@
 import { useState } from "react";
-import { AlertTriangle, ChevronRight } from "lucide-react";
+import { AlertTriangle, Banknote, BookOpen, Bot, ChevronRight, CreditCard, Globe, Info, ShieldCheck, TrendingUp, UserCheck, Users } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+
+const Tip = ({ text }: { text: string }) => (
+  <TooltipProvider><Tooltip>
+    <TooltipTrigger asChild><Info className="inline h-3.5 w-3.5 text-slate-400 cursor-default ml-1 shrink-0" /></TooltipTrigger>
+    <TooltipContent side="top" className="max-w-[220px] text-xs">{text}</TooltipContent>
+  </Tooltip></TooltipProvider>
+);
 
 type SMSTab = 'overview' | 'courses' | 'faculty' | 'students' | 'finance' | 'billing' | 'partners' | 'compliance';
 
@@ -13,26 +20,6 @@ type SMSTab = 'overview' | 'courses' | 'faculty' | 'students' | 'finance' | 'bil
 
 const fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
-// KPI rail — grouped: People | Operations
-const kpiGroups = [
-  {
-    label: "People",
-    items: [
-      { tab: "students"   as SMSTab, label: "Students",   value: "2,840",  delta: "+182 this month", deltaOk: true,  alert: "2 lost access",    color: "border-l-[#ff6b4d]" },
-      { tab: "faculty"    as SMSTab, label: "Faculty",    value: "4 / 6",  delta: "instructors · AI agents", deltaOk: true, alert: "2 need attention", color: "border-l-indigo-400" },
-      { tab: "partners"   as SMSTab, label: "Partners",   value: "2",      delta: "active providers",  deltaOk: true,  alert: "1 inactive",       color: "border-l-sky-400" },
-    ],
-  },
-  {
-    label: "Operations",
-    items: [
-      { tab: "courses"    as SMSTab, label: "Courses",    value: "4",      delta: "69% avg completion", deltaOk: true,  alert: "2 at risk",        color: "border-l-amber-400" },
-      { tab: "finance"    as SMSTab, label: "Finance",    value: "$58,400",delta: "+12% vs last month",  deltaOk: true,  alert: null,               color: "border-l-emerald-400" },
-      { tab: "billing"    as SMSTab, label: "Billing",    value: "3",      delta: "open issues",         deltaOk: false, alert: "$550 at risk",     color: "border-l-rose-400" },
-      { tab: "compliance" as SMSTab, label: "Compliance", value: "1",      delta: "accreditation at risk",deltaOk: false,alert: "14 days to expiry",color: "border-l-amber-500" },
-    ],
-  },
-];
 
 // Flags — Review link only, no action buttons (per expert recommendation)
 const flags = [
@@ -70,7 +57,6 @@ const horizon = [
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMSTab) => void }) {
-  const { toast } = useToast();
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
 
   return (
@@ -78,32 +64,91 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
       {/* Header — title only */}
       <h2 className="text-[28px] leading-[36px] font-semibold">Overview</h2>
 
-      {/* 1. KPI Rail — first thing the manager sees */}
-      <div className="space-y-4">
-        {kpiGroups.map((group) => (
-          <div key={group.label}>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-2">{group.label}</p>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {group.items.map((k) => (
-                <button
-                  key={k.tab}
-                  onClick={() => onNavigate(k.tab)}
-                  className={cn(
-                    "text-left rounded-2xl border border-slate-200 bg-card p-5 shadow-sm border-l-4 hover:border-slate-300 transition-colors",
-                    k.color
-                  )}
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{k.label}</p>
-                  <p className="mt-2 text-[26px] leading-[32px] font-semibold text-slate-900">{k.value}</p>
-                  <p className={cn("mt-1 text-xs", k.deltaOk ? "text-slate-500" : "text-rose-600 font-medium")}>{k.delta}</p>
-                  {k.alert && (
-                    <p className={cn("mt-1 text-xs font-medium", k.deltaOk ? "text-amber-700" : "text-rose-600")}>{k.alert}</p>
-                  )}
-                </button>
-              ))}
+      {/* 1. KPI Rail — standard portal card style, grouped */}
+      <div className="space-y-5">
+        {/* People */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-3">People</p>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {/* Students */}
+            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('students')}>
+              <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center mb-3"><Users className="w-5 h-5 text-[#ff6b4d]" /></div>
+              <div className="text-[24px] leading-[32px] font-medium">2,840</div>
+              <div className="text-[14px] leading-[20px] font-medium text-slate-700">Students</div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500 flex items-center">
+                1,488 active this month (52%)
+                <Tip text="Active = logged in and engaged with at least one course in the last 30 days." />
+              </div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600 font-medium">2 lost access</div>
+            </div>
+            {/* Faculty */}
+            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('faculty')}>
+              <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-3"><UserCheck className="w-5 h-5 text-indigo-600" /></div>
+              <div className="text-[24px] leading-[32px] font-medium">2 / 6</div>
+              <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+                Faculty
+                <Tip text="Human instructors active / AI agents operational. Human faculty create content; AI agents handle all student Q&A." />
+              </div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">instructors · AI agents</div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">2 need attention</div>
+            </div>
+            {/* Partners */}
+            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('partners')}>
+              <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3"><Globe className="w-5 h-5 text-sky-600" /></div>
+              <div className="text-[24px] leading-[32px] font-medium">2</div>
+              <div className="text-[14px] leading-[20px] font-medium text-slate-700">Partners</div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">active content providers</div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600 font-medium">1 inactive</div>
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Operations */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-3">Operations</p>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {/* Courses */}
+            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('courses')}>
+              <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3"><BookOpen className="w-5 h-5 text-sky-600" /></div>
+              <div className="text-[24px] leading-[32px] font-medium">4</div>
+              <div className="text-[14px] leading-[20px] font-medium text-slate-700">Courses Running</div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500 flex items-center">
+                69% avg completion
+                <Tip text="Average percentage of enrolled students who finished all required modules across all active courses." />
+              </div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">2 at risk</div>
+            </div>
+            {/* Finance */}
+            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('finance')}>
+              <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3"><Banknote className="w-5 h-5 text-emerald-600" /></div>
+              <div className="text-[24px] leading-[32px] font-medium">$58,400</div>
+              <div className="text-[14px] leading-[20px] font-medium text-slate-700">Revenue This Month</div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-emerald-600 font-medium flex items-center gap-0.5">
+                <TrendingUp className="h-3 w-3" /> +12% vs last month
+              </div>
+            </div>
+            {/* Billing */}
+            <div className="bg-card rounded-2xl p-6 shadow-sm border border-rose-200 bg-rose-50/30 cursor-pointer hover:border-rose-300 transition-colors" onClick={() => onNavigate('billing')}>
+              <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3"><CreditCard className="w-5 h-5 text-rose-500" /></div>
+              <div className="text-[24px] leading-[32px] font-medium text-rose-700">3</div>
+              <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+                Billing Issues
+                <Tip text="Failed payments and refund requests not yet resolved by the finance team." />
+              </div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600 font-medium">$550 value at risk</div>
+            </div>
+            {/* Compliance */}
+            <div className="bg-card rounded-2xl p-6 shadow-sm border border-amber-200 bg-amber-50/30 cursor-pointer hover:border-amber-300 transition-colors" onClick={() => onNavigate('compliance')}>
+              <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3"><ShieldCheck className="w-5 h-5 text-amber-600" /></div>
+              <div className="text-[24px] leading-[32px] font-medium text-amber-700">1</div>
+              <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+                Compliance
+                <Tip text="Accreditations expiring within 60 days or already expired. Lapsed accreditation affects the official status of the courses it covers." />
+              </div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">14 days to KNQA expiry</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 2. Attention flags */}

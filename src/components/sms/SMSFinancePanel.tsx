@@ -242,15 +242,22 @@ export default function SMSFinancePanel() {
             <CardContent>
               <div className="flex items-end gap-3" style={{ height: "160px" }}>
                 {monthlyRevenue.map((m) => {
-                  const heightPct = Math.round((m.amount / maxRevenue) * 100);
-                  const isLatest  = m.month === monthlyRevenue[monthlyRevenue.length - 1].month;
+                  const minRevenue = Math.min(...monthlyRevenue.map((x) => x.amount));
+                  const range      = maxRevenue - minRevenue;
+                  // Scale from baseline so differences are visible; min bar = 12%, max = 100%
+                  const heightPct  = range === 0 ? 100 : Math.round(12 + ((m.amount - minRevenue) / range) * 88);
+                  const isLatest   = m.month === monthlyRevenue[monthlyRevenue.length - 1].month;
                   return (
-                    <div key={m.month} className="flex flex-col items-center gap-1 flex-1 h-full justify-end">
+                    <div key={m.month} className="flex flex-col items-center gap-1 flex-1 h-full justify-end group">
+                      {/* Dollar label — always visible, bold for current month */}
+                      <span className={`text-[11px] leading-none mb-1 ${isLatest ? "font-semibold text-slate-800" : "text-slate-400"}`}>
+                        {fmt(m.amount)}
+                      </span>
                       <div
-                        className={cn("w-full rounded-t-lg transition-all", isLatest ? "bg-[#ff6b4d]" : "bg-slate-200")}
+                        className={`w-full rounded-t-lg transition-all ${isLatest ? "bg-[#ff6b4d]" : "bg-slate-200 group-hover:bg-slate-300"}`}
                         style={{ height: `${heightPct}%` }}
                       />
-                      <span className="text-xs text-slate-500 shrink-0">{m.month}</span>
+                      <span className={`text-xs shrink-0 ${isLatest ? "font-semibold text-slate-700" : "text-slate-500"}`}>{m.month}</span>
                     </div>
                   );
                 })}

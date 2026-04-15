@@ -158,13 +158,13 @@ export default function SMSFinancePanel() {
             Revenue, subscriptions, and billing issues for your academy.
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={() => toast({ title: "Export queued", description: "Revenue summary added to export queue." })}>
-          <Download className="mr-2 h-4 w-4" /> Export
+        <Button variant="outline" size="sm" onClick={() => toast({ title: "Executive Report Generated", description: "Compiling a PDF summary of Finance KPIs, Compliance status, and Faculty backlogs for board review." })}>
+          <Download className="mr-2 h-4 w-4" /> Export Executive Summary
         </Button>
       </div>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 xl:grid-cols-5 gap-4">
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
           <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3">
             <TrendingUp className="w-5 h-5 text-emerald-600" />
@@ -212,6 +212,16 @@ export default function SMSFinancePanel() {
             <Tip text="Failed payments and refund requests that have not yet been resolved by the finance team." />
           </div>
           <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Open billing issues</div>
+        </div>
+
+        {/* Projected Revenue */}
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-3">
+            <TrendingUp className="w-5 h-5 text-indigo-600" />
+          </div>
+          <div className="text-[24px] leading-[32px] font-medium">$64,200</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Projected Revenue (Next Month)</div>
+          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Based on current MRR + 8% growth trend</div>
         </div>
       </div>
 

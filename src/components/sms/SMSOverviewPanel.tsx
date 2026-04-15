@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AlertTriangle, Banknote, BookOpen, ChevronRight, GraduationCap, Info, TrendingUp, Users } from "lucide-react";
+import { AlertTriangle, Banknote, BookOpen, ChevronRight, GraduationCap, Info, Smile, TrendingUp, Users } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,8 +27,8 @@ const snapshot = {
   openComplianceIssues: 1,
 };
 
-const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical"; action?: string }[] = [
-  { id: "f2", label: "2 students with payment failures",                   destination: "finance",  destinationLabel: "Finance & Billing",    severity: "warning",  action: "Escalate to Finance" },
+const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical"; action?: string; autoEscalated?: boolean }[] = [
+  { id: "f2", label: "2 students with payment failures",                   destination: "finance",  destinationLabel: "Finance & Billing",    severity: "warning",  autoEscalated: true },
   { id: "f3", label: "KNQA accreditation expiring in 14 days",            destination: "partners", destinationLabel: "Partners & Compliance", severity: "warning",  action: "Escalate"         },
   { id: "f4", label: "James Okafor has 3 unanswered student questions",   destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning",  action: "Send Reminder"    },
   { id: "f5", label: "Sofia Reyes hasn't been active in 16 days",         destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning"                              },
@@ -94,7 +94,9 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
                   <span className="text-xs text-slate-400 hidden sm:block shrink-0">{flag.destinationLabel}</span>
                   <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-slate-600 transition-colors shrink-0" />
                 </button>
-                {flag.action && (
+                {flag.autoEscalated ? (
+                  <Badge className="border border-rose-200 bg-rose-50 text-rose-700 text-xs shrink-0">Auto-Escalated (48h Delay)</Badge>
+                ) : flag.action && (
                   <Button
                     size="sm" variant="outline" className="text-xs h-7 shrink-0"
                     disabled={actedFlags.has(flag.id)}
@@ -113,7 +115,7 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
       )}
 
       {/* KPI cards */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         {/* Students */}
         <Card className="border-slate-200 shadow-sm cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('students')}>
           <CardContent className="p-5">

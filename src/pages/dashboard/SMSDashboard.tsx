@@ -27,7 +27,7 @@ import SMSCompliancePanel from '@/components/sms/SMSCompliancePanel';
 type SMSTab = 'overview' | 'courses' | 'faculty' | 'students' | 'finance' | 'billing' | 'partners' | 'compliance';
 
 const navItems: { id: SMSTab; label: string; icon: React.ElementType }[] = [
-  { id: 'overview',   label: 'Academy Overview', icon: LayoutDashboard },
+  { id: 'overview',   label: 'Overview',          icon: LayoutDashboard },
   { id: 'courses',    label: 'Courses',           icon: BookOpen        },
   { id: 'faculty',    label: 'Faculty',           icon: Users           },
   { id: 'students',   label: 'Students',          icon: GraduationCap   },
@@ -51,9 +51,7 @@ export default function SMSDashboard() {
             <Link to="/" className="flex items-center gap-3">
               <img src="/dtma-logo.png" alt="DTMA" className="h-[40px] w-auto brightness-0 invert" />
             </Link>
-            <p className="mt-2 text-[12px] leading-[16px] font-medium text-white/50 uppercase tracking-wide">
-              School Management
-            </p>
+
           </div>
 
           {/* Nav */}

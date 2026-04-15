@@ -57,8 +57,10 @@ const atRiskCount      = courses.filter((c) => c.completionRate < 65).length;
 
 export default function SMSCoursesPanel() {
   const { toast } = useToast();
-  const [notifiedDropOff, setNotifiedDropOff]             = useState<Set<string>>(new Set());
+  const [notifiedDropOff, setNotifiedDropOff]               = useState<Set<string>>(new Set());
   const [notifiedSupportDropOff, setNotifiedSupportDropOff] = useState<Set<string>>(new Set());
+  const [flaggedCategories, setFlaggedCategories]           = useState<Set<string>>(new Set());
+  const [flaggedTopics, setFlaggedTopics]                   = useState<Set<string>>(new Set());
 
   return (
     <div className="space-y-6">
@@ -222,7 +224,7 @@ export default function SMSCoursesPanel() {
         <Card className="border-slate-200/80 shadow-sm">
           <CardHeader>
             <CardTitle>Category Performance</CardTitle>
-            <CardDescription>Enrollment and revenue by subject area.</CardDescription>
+            <CardDescription>Enrollment and revenue by subject area. Flag fast-growing categories to the partnership manager to source more courses.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {categories.map((cat) => (
@@ -234,9 +236,15 @@ export default function SMSCoursesPanel() {
                     <div className="text-xs text-slate-500">{cat.enrollments.toLocaleString()} enrollments</div>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="flex flex-col items-end gap-1.5">
                   <div className="font-bold text-slate-900">{fmt(cat.revenue)}</div>
                   <div className="text-xs text-emerald-600 font-medium">{cat.growth} enrollment growth</div>
+                  <Button size="sm" variant="outline" className="text-xs h-6"
+                    disabled={flaggedCategories.has(cat.name)}
+                    onClick={() => { setFlaggedCategories((p) => new Set(p).add(cat.name)); toast({ title: "Flagged to partnership manager", description: `${cat.name} has been flagged as a high-demand category needing more course content.` }); }}
+                  >
+                    {flaggedCategories.has(cat.name) ? "Flagged" : "Flag for more courses"}
+                  </Button>
                 </div>
               </div>
             ))}
@@ -246,7 +254,7 @@ export default function SMSCoursesPanel() {
         <Card className="border-slate-200/80 shadow-sm">
           <CardHeader>
             <CardTitle>Trending Topics</CardTitle>
-            <CardDescription>Topics students are searching for — potential gaps in your current course catalogue.</CardDescription>
+            <CardDescription>Topics students are searching for — potential gaps in your catalogue. Flag to the content team to commission a new course.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {trendTopics.map((t) => (
@@ -256,9 +264,17 @@ export default function SMSCoursesPanel() {
                     <div className="font-medium text-slate-950">{t.topic}</div>
                     <div className="text-xs text-slate-500">{t.source}</div>
                   </div>
-                  <Badge className="border border-slate-200 bg-white text-slate-700 shrink-0">
-                    <TrendingUp className="h-3 w-3 mr-1" />{t.signal}
-                  </Badge>
+                  <div className="flex flex-col items-end gap-1.5 shrink-0">
+                    <Badge className="border border-slate-200 bg-white text-slate-700">
+                      <TrendingUp className="h-3 w-3 mr-1" />{t.signal}
+                    </Badge>
+                    <Button size="sm" variant="outline" className="text-xs h-6"
+                      disabled={flaggedTopics.has(t.topic)}
+                      onClick={() => { setFlaggedTopics((p) => new Set(p).add(t.topic)); toast({ title: "Flagged to content team", description: `"${t.topic}" has been flagged for the content team to consider commissioning a course.` }); }}
+                    >
+                      {flaggedTopics.has(t.topic) ? "Flagged" : "Flag to content team"}
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}

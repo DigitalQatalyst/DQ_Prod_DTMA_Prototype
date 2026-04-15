@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BookOpen, Building2, Flag } from "lucide-react";
+import { Building2, Flag } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,11 +22,6 @@ const partners: Partner[] = [
   { id: "P-004", name: "Lagos Tech Institute",      type: "Academic Institution", region: "Nigeria", status: "inactive",   coursesContributed: 0, activeStudents: 0,     avgCompletion: 0,  lastActivity: "2026-01-12" },
 ];
 
-const submissionLog = [
-  { id: "SL-01", event: "Q1 Learner Outcomes Report submitted",    partner: "Dubai Digital Authority",  date: "2026-04-01" },
-  { id: "SL-02", event: "Accreditation renewal package submitted", partner: "KNQA",                     date: "2026-03-28" },
-  { id: "SL-03", event: "Partner onboarding documents received",   partner: "Kenyan EdTech Collective", date: "2026-03-15" },
-];
 
 const fmtDate = (d: string) => new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
@@ -140,20 +135,6 @@ export default function SMSPartnersPanel() {
                 ))}
               </TableBody>
             </Table>
-          </div>
-
-          {/* Recent activity log */}
-          <div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-2">Recent Activity</h3>
-            <div className="space-y-2">
-              {submissionLog.map((log) => (
-                <div key={log.id} className="flex items-center gap-3 rounded-xl border border-slate-200 px-4 py-3">
-                  <BookOpen className="h-4 w-4 text-slate-400 shrink-0" />
-                  <div className="flex-1 text-sm text-slate-700">{log.event}</div>
-                  <div className="text-xs text-slate-400 shrink-0">{log.partner} · {fmtDate(log.date)}</div>
-                </div>
-              ))}
-            </div>
           </div>
         </CardContent>
       </Card>

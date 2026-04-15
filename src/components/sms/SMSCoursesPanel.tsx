@@ -57,7 +57,8 @@ const atRiskCount      = courses.filter((c) => c.completionRate < 65).length;
 
 export default function SMSCoursesPanel() {
   const { toast } = useToast();
-  const [notifiedDropOff, setNotifiedDropOff] = useState<Set<string>>(new Set());
+  const [notifiedDropOff, setNotifiedDropOff]             = useState<Set<string>>(new Set());
+  const [notifiedSupportDropOff, setNotifiedSupportDropOff] = useState<Set<string>>(new Set());
 
   return (
     <div className="space-y-6">
@@ -172,32 +173,43 @@ export default function SMSCoursesPanel() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             Where Students Are Stopping
-            <Tip text="The point in each course where the most students stopped progressing. Notify the instructor to review that section." />
+            <Tip text="The point in each course where the most students stopped progressing. Use the actions to notify the instructor to review the content, or alert the support team to follow up with stuck students." />
           </CardTitle>
-          <CardDescription>Notify the course instructor to review the drop-off point or reach out to stuck students.</CardDescription>
+          <CardDescription>Two actions per course: notify the instructor to review the drop-off point, or alert the support team to follow up with stuck students.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {courses.map((c) => {
+            const isLowRisk    = c.dropOffPoint.toLowerCase().startsWith("low risk");
             const stoppedCount = Math.round(c.enrollments * (1 - c.completionRate / 100));
-            const notified = notifiedDropOff.has(c.id);
+            const notifiedInstructor = notifiedDropOff.has(c.id);
+            const notifiedSupport    = notifiedSupportDropOff.has(c.id);
             return (
-              <div key={c.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <div key={c.id} className={cn("rounded-2xl border p-4", isLowRisk ? "border-slate-200 bg-white" : "border-amber-200 bg-amber-50/20")}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-1">
                     <div className="font-medium text-slate-900">{c.title}</div>
-                    <div className="text-xs text-slate-500">Drop-off: {c.dropOffPoint}</div>
-                    <div className="text-xs text-amber-700 font-medium">{stoppedCount} students haven't progressed past this point</div>
+                    <div className="text-xs text-slate-500">Drop-off point: <span className="font-medium text-slate-700">{c.dropOffPoint}</span></div>
+                    {isLowRisk
+                      ? <div className="text-xs text-emerald-700 font-medium">No action needed — completion is healthy</div>
+                      : <div className="text-xs text-amber-700 font-medium">{stoppedCount} students haven't progressed past this point</div>}
                     <div className="text-xs text-slate-400">Instructor: {c.owner}</div>
                   </div>
-                  <div className="flex flex-col items-end gap-2 shrink-0">
-                    <Badge className="bg-white border-slate-200">{c.completionRate}% completed</Badge>
-                    <Button size="sm" variant="outline" className="text-xs h-7"
-                      disabled={notified}
-                      onClick={() => { setNotifiedDropOff((prev) => new Set(prev).add(c.id)); toast({ title: "Instructor notified", description: `${c.owner} has been notified about the drop-off in "${c.title}".` }); }}
-                    >
-                      {notified ? "Notified" : "Notify Instructor"}
-                    </Button>
-                  </div>
+                  {!isLowRisk && (
+                    <div className="flex flex-col items-end gap-2 shrink-0">
+                      <Button size="sm" variant="outline" className="text-xs h-7"
+                        disabled={notifiedInstructor}
+                        onClick={() => { setNotifiedDropOff((p) => new Set(p).add(c.id)); toast({ title: "Instructor notified", description: `${c.owner} has been asked to review the drop-off in "${c.title}".` }); }}
+                      >
+                        {notifiedInstructor ? "Instructor Notified" : "Notify Instructor"}
+                      </Button>
+                      <Button size="sm" variant="outline" className="text-xs h-7"
+                        disabled={notifiedSupport}
+                        onClick={() => { setNotifiedSupportDropOff((p) => new Set(p).add(c.id)); toast({ title: "Support team alerted", description: `Support team has been asked to follow up with stuck students in "${c.title}".` }); }}
+                      >
+                        {notifiedSupport ? "Support Alerted" : "Alert Support Team"}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             );

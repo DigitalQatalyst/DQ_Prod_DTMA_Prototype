@@ -30,8 +30,7 @@ const snapshot = {
 const flags: { id: string; label: string; destination: SMSTab; destinationLabel: string; severity: "warning" | "critical"; action?: string; autoEscalated?: boolean }[] = [
   { id: "f2", label: "2 students with payment failures",                   destination: "finance",  destinationLabel: "Finance & Billing",    severity: "warning",  autoEscalated: true },
   { id: "f3", label: "KNQA accreditation expiring in 14 days",            destination: "partners", destinationLabel: "Partners & Compliance", severity: "warning",  action: "Escalate"         },
-  { id: "f4", label: "James Okafor has 3 unanswered student questions",   destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning",  action: "Send Reminder"    },
-  { id: "f5", label: "Sofia Reyes hasn't been active in 16 days",         destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning"                              },
+  { id: "f5", label: "Sofia Reyes hasn't published content in 16 days",   destination: "courses",  destinationLabel: "Courses & Faculty",    severity: "warning",  action: "Send Reminder"    },
 ];
 
 const topCourses = [

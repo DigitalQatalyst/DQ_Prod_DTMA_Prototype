@@ -41,7 +41,7 @@ type FacultyPerformance = {
   courses: number;
   completionRate: number;   // % of enrolled who finished
   lastActiveDaysAgo: number;
-  unansweredQA: number;
+  contentDraftsPending: number; // unpublished drafts / quizzes awaiting publish
 };
 type CategoryPerformance = { name: string; enrollments: number; revenue: number; growth: string };
 type TrendTopic = { topic: string; source: string; signal: string };
@@ -61,10 +61,10 @@ const coursePerformance: CoursePerformance[] = [
 ];
 
 const facultyPerformance: FacultyPerformance[] = [
-  { name: "Aisha Mensah",  rating: 4.9, activeStudents: 342, courses: 3, completionRate: 74, lastActiveDaysAgo: 1,  unansweredQA: 0 },
-  { name: "James Okafor",  rating: 4.8, activeStudents: 219, courses: 2, completionRate: 65, lastActiveDaysAgo: 3,  unansweredQA: 4 },
-  { name: "Sofia Reyes",   rating: 4.7, activeStudents: 187, courses: 4, completionRate: 58, lastActiveDaysAgo: 16, unansweredQA: 2 },
-  { name: "Kwame Asante",  rating: 4.7, activeStudents: 154, courses: 2, completionRate: 81, lastActiveDaysAgo: 2,  unansweredQA: 0 },
+  { name: "Aisha Mensah",  rating: 4.9, activeStudents: 342, courses: 3, completionRate: 74, lastActiveDaysAgo: 1,  contentDraftsPending: 0 },
+  { name: "James Okafor",  rating: 4.8, activeStudents: 219, courses: 2, completionRate: 65, lastActiveDaysAgo: 3,  contentDraftsPending: 2 },
+  { name: "Sofia Reyes",   rating: 4.7, activeStudents: 187, courses: 4, completionRate: 58, lastActiveDaysAgo: 16, contentDraftsPending: 3 },
+  { name: "Kwame Asante",  rating: 4.7, activeStudents: 154, courses: 2, completionRate: 81, lastActiveDaysAgo: 2,  contentDraftsPending: 0 },
 ];
 
 const categoryPerformance: CategoryPerformance[] = [
@@ -321,11 +321,11 @@ export default function AnalyticsPerformanceInsightsPanel() {
           <Card className="border-slate-200/80 shadow-sm">
             <CardHeader>
               <CardTitle>Faculty</CardTitle>
-              <CardDescription>Instructor performance and attention signals. Flags appear when action may be needed.</CardDescription>
+              <CardDescription>Content activity and course health per instructor. Flags appear when content is overdue or completion is low.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               {facultyPerformance.map((f) => {
-                const needsAttention = f.lastActiveDaysAgo > 14 || f.unansweredQA > 0 || f.completionRate < 65;
+                const needsAttention = f.lastActiveDaysAgo > 14 || f.contentDraftsPending > 0 || f.completionRate < 65;
                 return (
                   <div key={f.name} className={cn(
                     "rounded-2xl border p-5 space-y-4",
@@ -358,11 +358,11 @@ export default function AnalyticsPerformanceInsightsPanel() {
                         <div className={cn("text-sm font-semibold", f.lastActiveDaysAgo > 14 ? "text-amber-700" : "text-slate-800")}>
                           {f.lastActiveDaysAgo === 0 ? "Today" : f.lastActiveDaysAgo === 1 ? "Yesterday" : `${f.lastActiveDaysAgo}d ago`}
                         </div>
-                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">last active <Tip text="Number of days since the instructor last logged in, posted an announcement, or responded to a student question." /></div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">last content update <Tip text="Days since the instructor last published content, uploaded a quiz, or posted an announcement." /></div>
                       </div>
-                      <div className={cn("rounded-xl p-2", f.unansweredQA > 0 ? "bg-amber-100" : "bg-white border border-slate-100")}>
-                        <div className={cn("text-sm font-semibold", f.unansweredQA > 0 ? "text-amber-700" : "text-slate-800")}>{f.unansweredQA}</div>
-                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">unanswered Q&amp;A <Tip text="Student questions that have received no instructor response in over 48 hours." /></div>
+                      <div className={cn("rounded-xl p-2", f.contentDraftsPending > 0 ? "bg-amber-100" : "bg-white border border-slate-100")}>
+                        <div className={cn("text-sm font-semibold", f.contentDraftsPending > 0 ? "text-amber-700" : "text-slate-800")}>{f.contentDraftsPending}</div>
+                        <div className="text-[11px] text-slate-500 leading-tight mt-0.5 flex items-center gap-0.5">drafts pending <Tip text="Unpublished course content, quizzes, or announcements waiting to be published by this instructor." /></div>
                       </div>
                     </div>
 
@@ -374,7 +374,7 @@ export default function AnalyticsPerformanceInsightsPanel() {
                           disabled={remindedFaculty.has(f.name)}
                           onClick={() => {
                             setRemindedFaculty((prev) => new Set(prev).add(f.name));
-                            toast({ title: "Reminder sent", description: `A reminder has been sent to ${f.name} to log in and respond to pending student questions.` });
+                            toast({ title: "Reminder sent", description: `A reminder has been sent to ${f.name} to log in and publish pending content.` });
                           }}
                         >
                           {remindedFaculty.has(f.name) ? "Reminded" : "Send reminder"}

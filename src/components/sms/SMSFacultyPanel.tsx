@@ -209,7 +209,7 @@ export default function SMSFacultyPanel() {
                       </TableCell>
                       <TableCell><Badge className={`border text-xs font-semibold capitalize ${agentBadge(a.status)}`}>{a.status}</Badge></TableCell>
                       <TableCell className="text-right">
-                        {needsEscalation && (
+                        {needsEscalation ? (
                           <Button size="sm" variant="outline" className="text-xs h-7"
                             disabled={escalated.has(a.id)}
                             onClick={() => { setEscalated((p) => new Set(p).add(a.id)); toast({ title: "Escalated to Support", description: `${a.name} (${a.subject}) has been flagged for the technical team.` }); }}
@@ -217,7 +217,14 @@ export default function SMSFacultyPanel() {
                             <FileText className="h-3 w-3 mr-1" />
                             {escalated.has(a.id) ? "Escalated" : "Escalate"}
                           </Button>
-                        )}
+                        ) : a.coverageGaps > 0 ? (
+                          <Button size="sm" variant="outline" className="text-xs h-7"
+                            disabled={escalated.has(a.id + "-gap")}
+                            onClick={() => { setEscalated((p) => new Set(p).add(a.id + "-gap")); toast({ title: "Flagged to content team", description: `${a.coverageGaps} coverage gap${a.coverageGaps > 1 ? "s" : ""} in ${a.subject} flagged for the content team to address with new material.` }); }}
+                          >
+                            {escalated.has(a.id + "-gap") ? "Flagged" : "Flag Coverage Gap"}
+                          </Button>
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   );

@@ -39,8 +39,8 @@ const courseSnapshot = [
 
 const facultySnapshot = [
   { label: "Aisha Mensah",  sub: "Digital Transformation", status: "Active",       ok: true  },
-  { label: "James Okafor",  sub: "AI in Workplace",         status: "Overdue",      ok: false },
-  { label: "Sofia Reyes",   sub: "Agile Management",        status: "Inactive",     ok: false },
+  { label: "James Okafor",  sub: "AI in Workplace",         status: "Drafts Pending", ok: false },
+  { label: "Sofia Reyes",   sub: "Agile Management",        status: "No Content (16d)", ok: false },
   { label: "Kwame Asante",  sub: "Cybersecurity",           status: "Active",       ok: true  },
   { label: "Nexus (AI)",    sub: "Digital Transformation",  status: "Operational",  ok: true  },
   { label: "Sprint (AI)",   sub: "Agile Management",        status: "Degraded",     ok: false },

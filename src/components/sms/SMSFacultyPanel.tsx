@@ -12,8 +12,8 @@ import { cn } from "@/lib/utils";
 
 const humanFaculty = [
   { id: "HF-01", name: "Aisha Mensah",  course: "Digital Transformation",  lastPublishedDaysAgo: 1,  draftsPending: 0, completionRate: 74, rating: 4.9, activeStudents: 342, status: "active"   as const },
-  { id: "HF-02", name: "James Okafor",  course: "AI in Workplace",          lastPublishedDaysAgo: 3,  draftsPending: 2, completionRate: 65, rating: 4.8, activeStudents: 219, status: "overdue"  as const },
-  { id: "HF-03", name: "Sofia Reyes",   course: "Agile Management",         lastPublishedDaysAgo: 16, draftsPending: 3, completionRate: 58, rating: 4.7, activeStudents: 187, status: "inactive" as const },
+  { id: "HF-02", name: "James Okafor",  course: "AI in Workplace",          lastPublishedDaysAgo: 3,  draftsPending: 2, completionRate: 65, rating: 4.8, activeStudents: 219, status: "drafts-pending" as const },
+  { id: "HF-03", name: "Sofia Reyes",   course: "Agile Management",         lastPublishedDaysAgo: 16, draftsPending: 3, completionRate: 58, rating: 4.7, activeStudents: 187, status: "no-content" as const },
   { id: "HF-04", name: "Kwame Asante",  course: "Cybersecurity Essentials", lastPublishedDaysAgo: 2,  draftsPending: 0, completionRate: 81, rating: 4.7, activeStudents: 154, status: "active"   as const },
 ];
 
@@ -26,10 +26,16 @@ const aiAgents = [
   { id: "AI-06", name: "Catalyst", subject: "Leadership & Strategy",  status: "paused"      as const, qaVolume7d: 0,   escalationRate: 0,  coverageGaps: 0 },
 ];
 
-function humanBadge(s: "active" | "overdue" | "inactive") {
-  if (s === "active")   return "border-emerald-200 bg-emerald-50 text-emerald-700";
-  if (s === "inactive") return "border-rose-200 bg-rose-50 text-rose-700";
+function humanBadge(s: "active" | "drafts-pending" | "no-content") {
+  if (s === "active")          return "border-emerald-200 bg-emerald-50 text-emerald-700";
+  if (s === "no-content")      return "border-rose-200 bg-rose-50 text-rose-700";
   return "border-amber-200 bg-amber-50 text-amber-800";
+}
+
+function humanStatusLabel(s: "active" | "drafts-pending" | "no-content") {
+  if (s === "active")          return "Active";
+  if (s === "drafts-pending")  return "Drafts Pending";
+  return "No Content (16d)";
 }
 function agentBadge(s: "operational" | "degraded" | "paused") {
   if (s === "operational") return "border-emerald-200 bg-emerald-50 text-emerald-700";
@@ -146,9 +152,9 @@ export default function SMSFacultyPanel() {
                       {f.lastPublishedDaysAgo === 0 ? "Today" : f.lastPublishedDaysAgo === 1 ? "Yesterday" : `${f.lastPublishedDaysAgo}d ago`}
                     </TableCell>
                     <TableCell className={cn("text-right font-medium", f.draftsPending > 0 ? "text-amber-700" : "text-slate-400")}>{f.draftsPending}</TableCell>
-                    <TableCell><Badge className={`border text-xs font-semibold capitalize ${humanBadge(f.status)}`}>{f.status}</Badge></TableCell>
+                    <TableCell><Badge className={`border text-xs font-semibold ${humanBadge(f.status)}`}>{humanStatusLabel(f.status)}</Badge></TableCell>
                     <TableCell className="text-right">
-                      {f.status !== "active" && (
+                      {(f.status === "drafts-pending" || f.status === "no-content") && (
                         <Button size="sm" variant="outline" className="text-xs h-7"
                           disabled={reminded.has(f.id)}
                           onClick={() => { setReminded((p) => new Set(p).add(f.id)); toast({ title: "Reminder sent", description: `${f.name} has been reminded to publish pending content.` }); }}

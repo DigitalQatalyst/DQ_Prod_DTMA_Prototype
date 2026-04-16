@@ -146,11 +146,11 @@ const CourseBuilder = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-[#F5F6FA] flex">
       {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#1e2348] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
         <div className="flex flex-col h-full">
-          <div className="p-4 border-b border-white/10">
+          <div className="p-6 border-b border-white/10">
             <Link to="/" className="flex items-center gap-3">
               <img
                 src="/dtma-logo.png"
@@ -170,14 +170,14 @@ const CourseBuilder = () => {
                 <button
                   key={step.id}
                   onClick={() => setCurrentStep(step.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left text-[14px] leading-[20px] font-medium ${
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-left text-[14px] leading-[20px] font-medium ${
                     currentStep === step.id
-                      ? "bg-[#ff6b4d] text-white"
-                      : "text-white/70 hover:bg-white/10"
+                      ? "bg-[#ff6b4d] text-white shadow-lg"
+                      : "text-white/80 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   {isCompleted ? (
-                    <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 flex-shrink-0 text-emerald-400" />
                   ) : (
                     <Circle className="w-5 h-5 flex-shrink-0" />
                   )}
@@ -212,28 +212,28 @@ const CourseBuilder = () => {
       {/* Main Content */}
       <div className="flex-1 lg:ml-64">
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-background border-b border-border">
+        <header className="sticky top-0 z-40 bg-white border-b border-[#E5E7EB] shadow-sm">
           <div className="p-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={handleBack}
-                className="p-2 hover:bg-[#FFE9E4] rounded-lg transition-colors"
+                className="p-2 hover:bg-[#fff0ed] rounded-xl transition-colors"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-6 h-6 text-[#1e2348]" />
               </button>
               <div>
-                <h1 className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">{course.title || "New Course"}</h1>
-                <p className="text-[13px] leading-[18px] font-normal text-muted-foreground">
+                <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">{course.title || "New Course"}</h1>
+                <p className="text-[13px] leading-[18px] font-normal text-[#4B5563]">
                   {lastSaved ? `Last saved ${lastSaved.toLocaleTimeString()}` : "Not saved yet"}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium hover:bg-[#FFE9E4]">
+              <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]">
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
               </Button>
-              <Button size="sm" onClick={handleSave} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">
+              <Button size="sm" onClick={handleSave} className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[14px] leading-[20px] font-medium shadow-sm">
                 <Save className="w-4 h-4 mr-2" />
                 Save
               </Button>
@@ -244,9 +244,9 @@ const CourseBuilder = () => {
           <div className="px-6 pb-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[13px] leading-[18px] font-medium text-[#1e2348]">Progress</span>
-              <span className="text-[13px] leading-[18px] font-normal text-muted-foreground">{completedSteps} of {STEPS.length}</span>
+              <span className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{completedSteps} of {STEPS.length}</span>
             </div>
-            <Progress value={progressPercent} className="h-2" />
+            <Progress value={progressPercent} className="h-2 bg-[#E5E7EB]" />
           </div>
         </header>
 
@@ -261,33 +261,33 @@ const CourseBuilder = () => {
 
 // Step Components
 const CourseBasicsStep = ({ course }: any) => (
-  <div className="max-w-4xl">
-    <div className="bg-card rounded-xl p-6 border border-border">
-      <h2 className="text-[20px] leading-[28px] font-medium mb-6 text-[#1e2348]">Course Basics</h2>
-      <div className="space-y-5">
+  <div className="w-full">
+    <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm">
+      <h2 className="text-[24px] leading-[32px] font-semibold mb-6 text-[#1e2348]">Course Basics</h2>
+      <div className="space-y-6">
         <div>
-          <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Course Title</label>
-          <p className="text-[16px] leading-[24px] font-medium text-[#1e2348]">{course.title}</p>
+          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Course Title</label>
+          <p className="text-[18px] leading-[28px] font-semibold text-[#1e2348]">{course.title}</p>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Category</label>
-            <p className="text-[14px] leading-[20px] font-normal capitalize text-muted-foreground">{course.category}</p>
+            <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Category</label>
+            <p className="text-[15px] leading-[22px] font-medium capitalize text-[#1e2348]">{course.category}</p>
           </div>
           <div>
-            <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Level</label>
-            <p className="text-[14px] leading-[20px] font-normal capitalize text-muted-foreground">{course.level}</p>
+            <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Level</label>
+            <p className="text-[15px] leading-[22px] font-medium capitalize text-[#1e2348]">{course.level}</p>
           </div>
         </div>
         <div>
-          <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Description</label>
-          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">{course.description || "No description provided"}</p>
+          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Description</label>
+          <p className="text-[14px] leading-[22px] font-normal text-[#4B5563]">{course.description || "No description provided"}</p>
         </div>
         <div>
-          <label className="block text-[12px] leading-[16px] font-medium mb-2 text-[#1e2348]">Price</label>
-          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">${course.price}</p>
+          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Price</label>
+          <p className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">${course.price}</p>
         </div>
-        <Badge className="w-fit bg-green-100 text-green-700 hover:bg-green-100 text-[12px] leading-[16px] font-medium">Completed</Badge>
+        <Badge className="w-fit bg-emerald-100 text-emerald-700 hover:bg-emerald-100 text-[12px] leading-[16px] font-semibold px-3 py-1">✓ Completed</Badge>
       </div>
     </div>
   </div>
@@ -693,59 +693,59 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
   };
 
   return (
-    <div className="max-w-4xl">
-      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
+    <div className="w-full">
+      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h2 className="text-xl font-semibold mb-2">Curriculum</h2>
-            <p className="text-sm text-muted-foreground">Add modules and lessons to your course.</p>
+            <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Curriculum</h2>
+            <p className="text-[14px] leading-[20px] text-[#4B5563]">Add modules and lessons to your course.</p>
           </div>
-          <Button onClick={addSection} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium" size="sm">
+          <Button onClick={addSection} className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[14px] leading-[20px] font-medium shadow-sm" size="sm">
             <Plus className="w-4 h-4 mr-2" />
             Add Module
           </Button>
         </div>
 
         {!hasValidCurriculum && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-red-900">Curriculum requirements not met</p>
-              <p className="text-xs text-red-800 mt-1">Add at least 1 section with at least 1 lesson to proceed.</p>
+              <p className="text-[14px] leading-[20px] font-semibold text-red-900">Curriculum requirements not met</p>
+              <p className="text-[13px] leading-[18px] text-red-800 mt-1">Add at least 1 section with at least 1 lesson to proceed.</p>
             </div>
           </div>
         )}
 
         {sections.length === 0 ? (
-          <div className="text-center py-12">
-            <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
-            <p className="text-muted-foreground mb-4">No sections yet. Create your first section to get started.</p>
+          <div className="text-center py-16 bg-[#F5F6FA] rounded-xl">
+            <FileText className="w-12 h-12 text-[#9CA3AF] mx-auto mb-3" />
+            <p className="text-[#4B5563] mb-4">No sections yet. Create your first section to get started.</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {sections.map((section) => (
               <div 
                 key={section.id} 
-                className="border border-border rounded-lg overflow-hidden"
+                className="border border-[#E5E7EB] rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
                 draggable
                 onDragStart={(e) => handleSectionDragStart(e, section.id)}
                 onDragOver={handleSectionDragOver}
                 onDrop={(e) => handleSectionDrop(e, section.id)}
               >
-                <div className="bg-muted/50 p-4 flex items-center justify-between cursor-move hover:bg-muted" onClick={() => toggleSection(section.id)}>
+                <div className="bg-[#F5F6FA] p-4 flex items-center justify-between cursor-move hover:bg-[#e9e9ed] transition-colors" onClick={() => toggleSection(section.id)}>
                   <div className="flex items-center gap-3 flex-1">
-                    <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
-                    <ChevronLeft className={`w-4 h-4 transition-transform ${expandedSections.has(section.id) ? 'rotate-90' : ''}`} />
+                    <GripVertical className="w-5 h-5 text-[#9CA3AF] cursor-grab active:cursor-grabbing" />
+                    <ChevronLeft className={`w-5 h-5 text-[#1e2348] transition-transform ${expandedSections.has(section.id) ? 'rotate-90' : ''}`} />
                     <Input
                       value={section.title}
                       onChange={(e) => updateSectionTitle(section.id, e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      className="bg-transparent border-0 font-medium text-sm p-0 h-auto"
+                      className="bg-transparent border-0 font-semibold text-[15px] leading-[22px] text-[#1e2348] p-0 h-auto focus-visible:ring-0"
                       placeholder="Section title"
                     />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">{section.lessons?.length || 0} lessons</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[13px] leading-[18px] text-[#4B5563] font-medium">{section.lessons?.length || 0} lessons</span>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -753,6 +753,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                         e.stopPropagation();
                         deleteSection(section.id);
                       }}
+                      className="hover:bg-red-50 hover:text-red-600"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -760,23 +761,23 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                 </div>
 
                 {expandedSections.has(section.id) && (
-                  <div className="p-4 space-y-3 border-t border-border bg-background">
+                  <div className="p-5 space-y-4 border-t border-[#E5E7EB] bg-white">
                     {section.lessons?.map((lesson: any) => (
                       <div 
                         key={lesson.id} 
-                        className="border border-border rounded-lg p-4 bg-card"
+                        className="border border-[#E5E7EB] rounded-xl p-5 bg-white hover:border-[#ff6b4d]/30 hover:shadow-sm transition-all"
                         draggable
                         onDragStart={(e) => handleLessonDragStart(e, section.id, lesson.id)}
                         onDragOver={handleLessonDragOver}
                         onDrop={(e) => handleLessonDrop(e, section.id, lesson.id)}
                       >
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2 flex-1">
-                            <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing flex-shrink-0" />
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3 flex-1">
+                            <GripVertical className="w-4 h-4 text-[#9CA3AF] cursor-grab active:cursor-grabbing flex-shrink-0" />
                             <Input
                               value={lesson.title}
                               onChange={(e) => updateLessonTitle(section.id, lesson.id, e.target.value)}
-                              className="bg-transparent border-0 font-medium text-sm p-0 h-auto flex-1"
+                              className="bg-transparent border-0 font-semibold text-[14px] leading-[20px] text-[#1e2348] p-0 h-auto flex-1 focus-visible:ring-0"
                               placeholder="Lesson title"
                             />
                           </div>
@@ -784,6 +785,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="ghost"
                             size="sm"
                             onClick={() => deleteLesson(section.id, lesson.id)}
+                            className="hover:bg-red-50 hover:text-red-600"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -816,12 +818,12 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                           </div>
                         )}
 
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'video')}
-                            className="text-xs hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
+                            className="text-[12px] leading-[16px] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]"
                           >
                             <Video className="w-3 h-3 mr-1" />
                             Upload Video
@@ -830,7 +832,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'pdf')}
-                            className="text-xs hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
+                            className="text-[12px] leading-[16px] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]"
                           >
                             <FileText className="w-3 h-3 mr-1" />
                             Upload PDF
@@ -839,7 +841,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'download')}
-                            className="text-xs hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
+                            className="text-[12px] leading-[16px] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]"
                           >
                             <Upload className="w-3 h-3 mr-1" />
                             Upload Resource
@@ -848,7 +850,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant={lesson.quiz?.enabled ? "default" : "outline"}
                             size="sm"
                             onClick={() => lesson.quiz?.enabled ? toggleQuiz(lesson.id) : enableLessonQuiz(section.id, lesson.id)}
-                            className={`text-xs ${!lesson.quiz?.enabled ? 'hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]' : ''}`}
+                            className={`text-[12px] leading-[16px] ${lesson.quiz?.enabled ? 'bg-[#ff6b4d] hover:bg-[#e66045]' : 'hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]'}`}
                           >
                             <HelpCircle className="w-3 h-3 mr-1" />
                             {lesson.quiz?.enabled ? `Quiz (${lesson.quiz.questions?.length || 0})` : 'Add Quiz'}
@@ -1138,7 +1140,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                       variant="outline"
                       size="sm"
                       onClick={() => addLesson(section.id)}
-                      className="w-full hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
+                      className="w-full hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB] text-[13px] leading-[18px] font-medium"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Lesson
@@ -1152,8 +1154,8 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
-        <Button disabled={!hasValidCurriculum} onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB] text-[14px] leading-[20px] font-medium">Save as Draft</Button>
+        <Button disabled={!hasValidCurriculum} onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[14px] leading-[20px] font-medium shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -1234,17 +1236,17 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
   };
 
   return (
-    <div className="max-w-4xl">
-      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
-        <h2 className="text-xl font-semibold mb-2">Course Media</h2>
-        <p className="text-sm text-muted-foreground mb-6">Upload course thumbnail, promo video, and define learning objectives.</p>
+    <div className="w-full">
+      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Course Media</h2>
+        <p className="text-[14px] leading-[20px] text-[#4B5563] mb-6">Upload course thumbnail, promo video, and define learning objectives.</p>
 
         {!hasThumbnail && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-red-900">Thumbnail required</p>
-              <p className="text-xs text-red-800 mt-1">You must upload a course thumbnail before submission.</p>
+              <p className="text-[14px] leading-[20px] font-semibold text-red-900">Thumbnail required</p>
+              <p className="text-[13px] leading-[18px] text-red-800 mt-1">You must upload a course thumbnail before submission.</p>
             </div>
           </div>
         )}
@@ -1252,17 +1254,17 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
         <div className="space-y-6">
           {/* Course Thumbnail */}
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Course Thumbnail <span className="text-destructive">*</span>
+            <label className="block text-[14px] leading-[20px] font-semibold mb-2 text-[#1e2348]">
+              Course Thumbnail <span className="text-red-600">*</span>
             </label>
-            <p className="text-xs text-muted-foreground mb-3">Recommended size: 1280x720px (16:9 ratio)</p>
+            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">Recommended size: 1280x720px (16:9 ratio)</p>
             {thumbnailPreview ? (
               <div className="relative w-full max-w-md">
-                <img src={thumbnailPreview} alt="Thumbnail preview" className="w-full rounded-lg border border-border" />
+                <img src={thumbnailPreview} alt="Thumbnail preview" className="w-full rounded-xl border border-[#E5E7EB] shadow-sm" />
                 <Button
                   variant="destructive"
                   size="sm"
-                  className="absolute top-2 right-2"
+                  className="absolute top-2 right-2 shadow-lg"
                   onClick={() => {
                     setThumbnail(null);
                     setThumbnailPreview("");
@@ -1272,7 +1274,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                 </Button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-[#ff6b4d] transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-[#E5E7EB] rounded-xl p-8 text-center hover:border-[#ff6b4d] hover:bg-[#fff0ed]/30 transition-colors cursor-pointer">
                 <input
                   type="file"
                   accept="image/*"
@@ -1281,9 +1283,9 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                   id="thumbnail-upload"
                 />
                 <label htmlFor="thumbnail-upload" className="cursor-pointer">
-                  <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                  <p className="text-sm font-medium">Click to upload thumbnail</p>
-                  <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 10MB</p>
+                  <Upload className="w-8 h-8 mx-auto mb-2 text-[#9CA3AF]" />
+                  <p className="text-[14px] leading-[20px] font-medium text-[#1e2348]">Click to upload thumbnail</p>
+                  <p className="text-[13px] leading-[18px] text-[#4B5563] mt-1">PNG, JPG up to 10MB</p>
                 </label>
               </div>
             )}
@@ -1291,15 +1293,15 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
 
           {/* Promo Video */}
           <div>
-            <label className="block text-sm font-medium mb-2">Promo Video (Optional)</label>
-            <p className="text-xs text-muted-foreground mb-3">A short video introducing your course</p>
+            <label className="block text-[14px] leading-[20px] font-semibold mb-2 text-[#1e2348]">Promo Video (Optional)</label>
+            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">A short video introducing your course</p>
             {promoVideoPreview ? (
               <div className="relative w-full max-w-md">
-                <video src={promoVideoPreview} controls className="w-full rounded-lg border border-border" />
+                <video src={promoVideoPreview} controls className="w-full rounded-xl border border-[#E5E7EB] shadow-sm" />
                 <Button
                   variant="destructive"
                   size="sm"
-                  className="absolute top-2 right-2"
+                  className="absolute top-2 right-2 shadow-lg"
                   onClick={() => {
                     setPromoVideo(null);
                     setPromoVideoPreview("");
@@ -1309,7 +1311,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                 </Button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-[#ff6b4d] transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-[#E5E7EB] rounded-xl p-8 text-center hover:border-[#ff6b4d] hover:bg-[#fff0ed]/30 transition-colors cursor-pointer">over:border-[#ff6b4d] transition-colors cursor-pointer">
                 <input
                   type="file"
                   accept="video/*"
@@ -1499,9 +1501,9 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
       practicalTitle, practicalInstructions, whatsappPracticeEnabled, aiAssessmentEnabled, hasValidContent]);
 
   return (
-    <div className="max-w-4xl">
-      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
-        <h2 className="text-xl font-semibold mb-2">Final Assessment</h2>
+    <div className="w-full">
+      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Final Assessment</h2>
         <p className="text-sm text-muted-foreground mb-6">Configure quizzes, assignments, and evaluation methods.</p>
 
         {assessmentRequired && (
@@ -2165,9 +2167,9 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
   }, [courseId, certificationEnabled, requireWatchAll, requirePassAssessment, requireSubmitAssignment, passingThreshold]);
 
   return (
-    <div className="max-w-4xl">
-      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
-        <h2 className="text-xl font-semibold mb-2">Eligibility & Certification</h2>
+    <div className="w-full">
+      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Eligibility & Certification</h2>
         <p className="text-sm text-muted-foreground mb-6">Configure certification rules and completion requirements.</p>
 
         <div className="space-y-6">
@@ -2483,9 +2485,9 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
   const discountedPrice = hasDiscount && discountValue ? calculateDiscountedPrice() : null;
 
   return (
-    <div className="max-w-4xl">
-      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
-        <h2 className="text-xl font-semibold mb-2">Pricing & Settings</h2>
+    <div className="w-full">
+      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Pricing & Settings</h2>
         <p className="text-sm text-muted-foreground mb-6">Edit pricing, discounts, and course settings.</p>
 
         <div className="space-y-6">
@@ -3009,9 +3011,9 @@ const SubmitStep = ({ course, onSave }: any) => {
   };
 
   return (
-    <div className="max-w-4xl">
-      <div className="bg-card rounded-2xl p-6 border border-border mb-6">
-        <h2 className="text-xl font-semibold mb-2">Submit for Review</h2>
+    <div className="w-full">
+      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Submit for Review</h2>
         <p className="text-sm text-muted-foreground mb-6">Review your course and submit for admin approval.</p>
 
         {/* Progress Bar */}

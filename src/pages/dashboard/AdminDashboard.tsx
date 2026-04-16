@@ -210,12 +210,12 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
 
   return (
     <div className="space-y-8">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-foreground">Course &amp; Content Management</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Course &amp; Content Management</h1>
 
       {/* ── Section 1: Authoring & Publishing ── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-[20px] leading-[28px] font-semibold text-foreground">Course Authoring &amp; Publishing</h2>
+          <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Course Authoring &amp; Publishing</h2>
           <Button 
             onClick={onNavigateToPending}
             className="bg-[#ff6b4d] hover:bg-[#e56045] text-white gap-2"
@@ -228,10 +228,10 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         {/* Summary stat pills */}
         <div className="flex flex-wrap gap-3 mb-5">
           {[
-            { label: 'Total Courses', value: MOCK_COURSES.length, color: 'bg-[#1e2348]/5 text-[#1e2348]' },
-            { label: 'Published',     value: published,            color: 'bg-emerald-50 text-emerald-700' },
-            { label: 'Draft',         value: drafts,               color: 'bg-amber-50 text-amber-700' },
-            { label: 'Pending Review',value: pending,              color: 'bg-blue-50 text-blue-700' },
+            { label: 'Total Courses', value: MOCK_COURSES.length, color: 'bg-[#e9e9ed] text-[#1e2348]' },
+            { label: 'Published',     value: published,            color: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
+            { label: 'Draft',         value: drafts,               color: 'bg-amber-50 text-amber-700 border border-amber-200' },
+            { label: 'Pending Review',value: pending,              color: 'bg-blue-50 text-blue-700 border border-blue-200' },
           ].map(pill => (
             <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
               <span className="font-bold text-[15px]">{pill.value}</span>
@@ -243,21 +243,21 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         {/* Search + filter bar */}
         <div className="flex flex-wrap gap-3 mb-5">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <input
               type="text"
               placeholder="Search courses or instructors…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+              className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
             />
           </div>
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+              className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
             >
               <option value="all">All Statuses</option>
               <option value="published">Published</option>
@@ -266,11 +266,11 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
             </select>
           </div>
           <div className="relative">
-            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <select
               value={categoryFilter}
               onChange={e => setCategoryFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+              className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
             >
               {CATEGORIES.map(cat => <option key={cat}>{cat}</option>)}
             </select>
@@ -278,7 +278,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         </div>
 
         {/* Courses table */}
-        <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-[#1e2348]">
@@ -291,33 +291,33 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
               <tbody>
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-[14px] text-muted-foreground">
+                    <td colSpan={8} className="text-center py-12 text-[14px] text-[#9CA3AF]">
                       <BookOpen className="w-8 h-8 mx-auto mb-2 opacity-30" />
                       No courses match your filters.
                     </td>
                   </tr>
                 ) : filtered.map((course, idx) => (
-                  <tr key={course.id} className={`border-t border-border transition-colors hover:bg-muted/30 ${idx % 2 === 0 ? '' : 'bg-muted/10'}`}>
+                  <tr key={course.id} className={`border-t border-[#E5E7EB] transition-colors hover:bg-[#F5F6FA] ${idx % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-[14px] text-foreground max-w-[200px] truncate" title={course.title}>{course.title}</div>
+                      <div className="font-medium text-[14px] text-[#1e2348] max-w-[200px] truncate" title={course.title}>{course.title}</div>
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">{course.instructor}</td>
-                    <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">{course.category}</td>
+                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.instructor}</td>
+                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.category}</td>
                     <td className="px-4 py-3">
-                      <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#1e2348]/10 text-[#1e2348] font-medium capitalize">{course.level}</span>
+                      <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-medium capitalize">{course.level}</span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${STATUS_STYLES[course.status]}`}>
                         {course.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[14px] font-medium text-foreground">{course.enrollments.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">{course.lastUpdated}</td>
+                    <td className="px-4 py-3 text-[14px] font-medium text-[#1e2348]">{course.enrollments.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.lastUpdated}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <button 
                           onClick={() => handlePreviewCourse(course.id)}
-                          className="p-1.5 rounded-lg hover:bg-[#1e2348]/10 text-[#1e2348] transition-colors" 
+                          className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors" 
                           title="Preview course"
                         >
                           <Eye className="w-4 h-4" />
@@ -325,7 +325,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <button 
-                              className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
+                              className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
                               title="More actions"
                             >
                               <MoreVertical className="w-4 h-4" />
@@ -369,24 +369,24 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
       {/* ── Section 2: Course Performance Analytics ── */}
       <section>
         <div className="mb-4">
-          <h2 className="text-[20px] leading-[28px] font-semibold text-foreground">Course Performance Analytics</h2>
-          <p className="text-[13px] text-muted-foreground mt-0.5">Track engagement, completion rates, and learner feedback across all courses.</p>
+          <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Course Performance Analytics</h2>
+          <p className="text-[13px] text-[#4B5563] mt-0.5">Track engagement, completion rates, and learner feedback across all courses.</p>
         </div>
 
         {/* KPI stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {[
-            { icon: BookOpen,   label: 'Total Courses',      value: MOCK_COURSES.length,               suffix: '',   color: 'text-[#ff6b4d]', bg: 'bg-[#ff6b4d]/10' },
-            { icon: TrendingUp, label: 'Avg Completion Rate', value: avgCompletion,                     suffix: '%',  color: 'text-emerald-600', bg: 'bg-emerald-100' },
-            { icon: Star,       label: 'Avg Course Rating',   value: avgRating,                         suffix: '★', color: 'text-amber-500',  bg: 'bg-amber-100' },
-            { icon: Users,      label: 'Total Enrollments',   value: totalEnrollments.toLocaleString(), suffix: '',   color: 'text-blue-600',   bg: 'bg-blue-100' },
+            { icon: BookOpen,   label: 'Total Courses',      value: MOCK_COURSES.length,               suffix: '',   color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+            { icon: TrendingUp, label: 'Avg Completion Rate', value: avgCompletion,                     suffix: '%',  color: 'text-emerald-600', bg: 'bg-emerald-50' },
+            { icon: Star,       label: 'Avg Course Rating',   value: avgRating,                         suffix: '★', color: 'text-amber-500',  bg: 'bg-amber-50' },
+            { icon: Users,      label: 'Total Enrollments',   value: totalEnrollments.toLocaleString(), suffix: '',   color: 'text-blue-600',   bg: 'bg-blue-50' },
           ].map(card => (
-            <div key={card.label} className="bg-card rounded-2xl p-5 shadow-sm border border-border">
+            <div key={card.label} className="bg-white rounded-2xl p-5 shadow-sm border border-[#E5E7EB]">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${card.bg}`}>
                 <card.icon className={`w-5 h-5 ${card.color}`} />
               </div>
-              <div className="text-[22px] font-bold text-foreground">{card.value}{card.suffix}</div>
-              <div className="text-[12px] text-muted-foreground mt-0.5">{card.label}</div>
+              <div className="text-[22px] font-bold text-[#1e2348]">{card.value}{card.suffix}</div>
+              <div className="text-[12px] text-[#4B5563] mt-0.5">{card.label}</div>
             </div>
           ))}
         </div>
@@ -518,6 +518,106 @@ const QUIZ_TYPE_STYLE: Record<string, string> = {
   Assignment: 'bg-purple-100 text-purple-700',
 };
 
+// ─── Mock scheduled sessions data ─────────────────────────────────────────────
+const MOCK_SCHEDULED_SESSIONS = [
+  { 
+    id: 'sess1', 
+    title: 'Week 1: Introduction to Economy 4.0', 
+    course: 'Mastering Economy 4.0', 
+    instructor: 'Dr. Aisha Mensah',
+    type: 'live' as const,
+    date: '2026-04-18',
+    startTime: '14:00',
+    endTime: '16:00',
+    enrolled: 45,
+    capacity: 50,
+    meetingLink: 'https://meet.dtma.ae/economy-week1',
+    status: 'upcoming' as const
+  },
+  { 
+    id: 'sess2', 
+    title: 'Module 2: Cognitive Organizations Deep Dive', 
+    course: 'Decoding Digital Cognitive Organisations', 
+    instructor: 'James Okafor',
+    type: 'hybrid' as const,
+    date: '2026-04-19',
+    startTime: '10:00',
+    endTime: '12:00',
+    enrolled: 32,
+    capacity: 40,
+    meetingLink: 'https://meet.dtma.ae/cognitive-module2',
+    status: 'upcoming' as const
+  },
+  { 
+    id: 'sess3', 
+    title: 'Platform Architecture Workshop', 
+    course: 'Building Powerful Digital Business Platforms', 
+    instructor: 'Priya Nair',
+    type: 'live' as const,
+    date: '2026-04-20',
+    startTime: '15:00',
+    endTime: '17:30',
+    enrolled: 28,
+    capacity: 30,
+    meetingLink: 'https://meet.dtma.ae/platform-workshop',
+    status: 'upcoming' as const
+  },
+  { 
+    id: 'sess4', 
+    title: 'Digital Transformation Case Studies', 
+    course: 'Navigating Digital Transformation 2.0', 
+    instructor: 'Marcus Webb',
+    type: 'recorded' as const,
+    date: '2026-04-15',
+    startTime: '13:00',
+    endTime: '14:30',
+    enrolled: 67,
+    capacity: 100,
+    meetingLink: 'https://meet.dtma.ae/transformation-cases',
+    status: 'completed' as const
+  },
+  { 
+    id: 'sess5', 
+    title: 'AI & Automation in Digital Workspaces', 
+    course: 'Optimizing Digital Workers and Workspaces', 
+    instructor: 'Sofia Reyes',
+    type: 'live' as const,
+    date: '2026-04-21',
+    startTime: '11:00',
+    endTime: '13:00',
+    enrolled: 38,
+    capacity: 45,
+    meetingLink: 'https://meet.dtma.ae/ai-workspaces',
+    status: 'upcoming' as const
+  },
+  { 
+    id: 'sess6', 
+    title: 'Leveraging Digital Accelerators Q&A', 
+    course: 'Leveraging Digital Accelerators for Growth', 
+    instructor: 'Dr. Aisha Mensah',
+    type: 'hybrid' as const,
+    date: '2026-04-22',
+    startTime: '16:00',
+    endTime: '17:00',
+    enrolled: 41,
+    capacity: 50,
+    meetingLink: 'https://meet.dtma.ae/accelerators-qa',
+    status: 'upcoming' as const
+  },
+];
+
+const SESSION_TYPE_STYLE: Record<string, { bg: string; text: string; icon: string }> = {
+  live: { bg: 'bg-red-100', text: 'text-red-700', icon: '🔴' },
+  hybrid: { bg: 'bg-purple-100', text: 'text-purple-700', icon: '🔄' },
+  recorded: { bg: 'bg-blue-100', text: 'text-blue-700', icon: '📹' },
+};
+
+const SESSION_STATUS_STYLE: Record<string, { bg: string; text: string }> = {
+  upcoming: { bg: 'bg-emerald-100', text: 'text-emerald-700' },
+  completed: { bg: 'bg-gray-100', text: 'text-gray-700' },
+  cancelled: { bg: 'bg-red-100', text: 'text-red-700' },
+};
+
 // ─── AssessmentsTab ───────────────────────────────────────────────────────────
 const AssessmentsTab = () => {
   const [quizSearch, setQuizSearch] = useState('');
@@ -525,6 +625,8 @@ const AssessmentsTab = () => {
   const [scores, setScores] = useState<Record<string, string>>({});
   const [feedbacks, setFeedbacks] = useState<Record<string, string>>({});
   const [graded, setGraded] = useState<Record<string, boolean>>({});
+  const [viewingAssessment, setViewingAssessment] = useState<typeof MOCK_QUIZZES[0] | null>(null);
+  const [editingAssessment, setEditingAssessment] = useState<typeof MOCK_QUIZZES[0] | null>(null);
 
   const filteredQuizzes = MOCK_QUIZZES.filter(q =>
     q.title.toLowerCase().includes(quizSearch.toLowerCase()) ||
@@ -544,16 +646,16 @@ const AssessmentsTab = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-foreground">Assessments &amp; Evaluation</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Assessments &amp; Evaluation</h1>
 
       {/* Stat pills */}
       <div className="flex flex-wrap gap-3">
         {[
-          { label: 'Total Assessments',  value: MOCK_QUIZZES.length,                                    color: 'bg-[#1e2348]/5 text-[#1e2348]'    },
-          { label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                       color: 'bg-blue-50 text-blue-700'          },
-          { label: 'Avg Score',          value: `${avgScore}%`,                                          color: 'bg-amber-50 text-amber-700'        },
-          { label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                       color: 'bg-emerald-50 text-emerald-700'    },
-          { label: 'Pending Grading',    value: MOCK_SUBMISSIONS.filter(s => !graded[s.id]).length,      color: 'bg-red-50 text-red-700'            },
+          { label: 'Total Assessments',  value: MOCK_QUIZZES.length,                                    color: 'bg-[#e9e9ed] text-[#1e2348]'    },
+          { label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                       color: 'bg-blue-50 text-blue-700 border border-blue-200'          },
+          { label: 'Avg Score',          value: `${avgScore}%`,                                          color: 'bg-amber-50 text-amber-700 border border-amber-200'        },
+          { label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                       color: 'bg-emerald-50 text-emerald-700 border border-emerald-200'    },
+          { label: 'Pending Grading',    value: MOCK_SUBMISSIONS.filter(s => !graded[s.id]).length,      color: 'bg-red-50 text-red-700 border border-red-200'            },
         ].map(p => (
           <div key={p.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${p.color}`}>
             <span className="font-bold text-[15px]">{p.value}</span>
@@ -563,15 +665,15 @@ const AssessmentsTab = () => {
       </div>
 
       {/* Section tabs */}
-      <div className="flex gap-1 bg-muted/50 p-1 rounded-xl w-fit">
+      <div className="flex gap-1 bg-[#F5F6FA] p-1 rounded-xl w-fit">
         {sections.map(s => (
           <button
             key={s.id}
             onClick={() => setActiveSection(s.id)}
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
               activeSection === s.id
-                ? 'bg-white shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-white shadow-sm text-[#1e2348]'
+                : 'text-[#4B5563] hover:text-[#1e2348]'
             }`}
           >
             {s.label}
@@ -584,18 +686,18 @@ const AssessmentsTab = () => {
         <div className="space-y-5">
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
               <input
                 type="text"
                 placeholder="Search assessments or courses…"
                 value={quizSearch}
                 onChange={e => setQuizSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
               />
             </div>
           </div>
 
-          <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-[#1e2348]">
@@ -608,32 +710,32 @@ const AssessmentsTab = () => {
                 <tbody>
                   {filteredQuizzes.length === 0 ? (
                     <tr>
-                      <td colSpan={9} className="text-center py-10 text-[14px] text-muted-foreground">
+                      <td colSpan={9} className="text-center py-10 text-[14px] text-[#9CA3AF]">
                         No assessments match your search.
                       </td>
                     </tr>
                   ) : filteredQuizzes.map((q, idx) => (
-                    <tr key={q.id} className={`border-t border-border hover:bg-muted/20 transition-colors ${idx % 2 === 0 ? '' : 'bg-muted/10'}`}>
+                    <tr key={q.id} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] transition-colors ${idx % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
                       <td className="px-4 py-3">
-                        <div className="font-medium text-[13px] text-foreground max-w-[180px] truncate" title={q.title}>{q.title}</div>
+                        <div className="font-medium text-[13px] text-[#1e2348] max-w-[180px] truncate" title={q.title}>{q.title}</div>
                       </td>
-                      <td className="px-4 py-3 text-[12px] text-muted-foreground max-w-[160px] truncate" title={q.course}>{q.course}</td>
+                      <td className="px-4 py-3 text-[12px] text-[#4B5563] max-w-[160px] truncate" title={q.course}>{q.course}</td>
                       <td className="px-4 py-3">
                         <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${QUIZ_TYPE_STYLE[q.type]}`}>{q.type}</span>
                       </td>
-                      <td className="px-4 py-3 text-[13px] text-center text-foreground">{q.questions}</td>
-                      <td className="px-4 py-3 text-[13px] text-center font-medium text-foreground">{q.submissions.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-[13px] text-center text-[#1e2348]">{q.questions}</td>
+                      <td className="px-4 py-3 text-[13px] text-center font-medium text-[#1e2348]">{q.submissions.toLocaleString()}</td>
                       <td className="px-4 py-3">
                         {q.avgScore > 0 ? (
                           <div className="flex items-center gap-1.5">
-                            <div className="w-14 h-1.5 rounded-full bg-muted overflow-hidden">
+                            <div className="w-14 h-1.5 rounded-full bg-[#E5E7EB] overflow-hidden">
                               <div className={`h-full rounded-full ${q.avgScore >= 75 ? 'bg-emerald-500' : q.avgScore >= 60 ? 'bg-amber-400' : 'bg-red-400'}`} style={{ width: `${q.avgScore}%` }} />
                             </div>
-                            <span className="text-[12px] text-muted-foreground">{q.avgScore}%</span>
+                            <span className="text-[12px] text-[#4B5563]">{q.avgScore}%</span>
                           </div>
-                        ) : <span className="text-[12px] text-muted-foreground">—</span>}
+                        ) : <span className="text-[12px] text-[#9CA3AF]">—</span>}
                       </td>
-                      <td className="px-4 py-3 text-[13px] text-center font-medium text-foreground">{q.passRate > 0 ? `${q.passRate}%` : '—'}</td>
+                      <td className="px-4 py-3 text-[13px] text-center font-medium text-[#1e2348]">{q.passRate > 0 ? `${q.passRate}%` : '—'}</td>
                       <td className="px-4 py-3">
                         <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold capitalize ${q.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                           {q.status}
@@ -641,8 +743,20 @@ const AssessmentsTab = () => {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1">
-                          <button className="p-1.5 rounded-lg hover:bg-[#ff6b4d]/10 text-[#ff6b4d] transition-colors" title="Edit"><Edit className="w-4 h-4" /></button>
-                          <button className="p-1.5 rounded-lg hover:bg-[#1e2348]/10 text-[#1e2348] transition-colors" title="View"><Eye className="w-4 h-4" /></button>
+                          <button 
+                            onClick={() => setEditingAssessment(q)}
+                            className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors" 
+                            title="Edit"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button 
+                            onClick={() => setViewingAssessment(q)}
+                            className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors" 
+                            title="View"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -792,6 +906,302 @@ const AssessmentsTab = () => {
                 <div className="text-[12px] text-muted-foreground mt-0.5">{card.label}</div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* View Assessment Modal */}
+      {viewingAssessment && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-[#E5E7EB]">
+              <div>
+                <h2 className="text-[20px] font-semibold text-[#1e2348]">{viewingAssessment.title}</h2>
+                <p className="text-[13px] text-[#4B5563] mt-1">{viewingAssessment.course}</p>
+              </div>
+              <button 
+                onClick={() => setViewingAssessment(null)}
+                className="p-2 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {/* Assessment Details */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Type</div>
+                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.type}</div>
+                </div>
+                <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Questions</div>
+                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.questions}</div>
+                </div>
+                <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Status</div>
+                  <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold capitalize inline-block ${viewingAssessment.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                    {viewingAssessment.status}
+                  </span>
+                </div>
+                <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Submissions</div>
+                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.submissions.toLocaleString()}</div>
+                </div>
+              </div>
+
+              {/* Performance Metrics */}
+              <div>
+                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-3">Performance Metrics</h3>
+                <div className="space-y-3">
+                  <div className="bg-[#F5F6FA] rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[13px] text-[#4B5563]">Average Score</span>
+                      <span className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.avgScore}%</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full ${viewingAssessment.avgScore >= 75 ? 'bg-emerald-500' : viewingAssessment.avgScore >= 60 ? 'bg-amber-400' : 'bg-red-400'}`} 
+                        style={{ width: `${viewingAssessment.avgScore}%` }} 
+                      />
+                    </div>
+                  </div>
+                  <div className="bg-[#F5F6FA] rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[13px] text-[#4B5563]">Pass Rate</span>
+                      <span className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.passRate}%</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
+                      <div 
+                        className="h-full rounded-full bg-[#ff6b4d]" 
+                        style={{ width: `${viewingAssessment.passRate}%` }} 
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sample Questions Preview */}
+              <div>
+                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-3">Sample Questions</h3>
+                <div className="space-y-3">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="flex items-start gap-3">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1e2348] text-white text-[11px] font-bold flex items-center justify-center">
+                          {i}
+                        </span>
+                        <div className="flex-1">
+                          <p className="text-[13px] text-[#1e2348]">
+                            {viewingAssessment.type === 'Quiz' 
+                              ? `Sample multiple choice question ${i} for ${viewingAssessment.title}`
+                              : `Sample assignment question ${i} for ${viewingAssessment.title}`
+                            }
+                          </p>
+                          <p className="text-[11px] text-[#9CA3AF] mt-1">
+                            {viewingAssessment.type === 'Quiz' ? 'Multiple Choice' : 'Open-ended'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-[#E5E7EB]">
+              <button 
+                onClick={() => setViewingAssessment(null)}
+                className="px-4 py-2 rounded-xl border border-[#E5E7EB] text-[#4B5563] hover:bg-[#F5F6FA] transition-colors text-[13px] font-medium"
+              >
+                Close
+              </button>
+              <button 
+                onClick={() => {
+                  setEditingAssessment(viewingAssessment);
+                  setViewingAssessment(null);
+                }}
+                className="px-4 py-2 rounded-xl bg-[#ff6b4d] hover:bg-[#e66045] text-white transition-colors text-[13px] font-medium"
+              >
+                Edit Assessment
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Assessment Modal */}
+      {editingAssessment && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-[#E5E7EB]">
+              <h2 className="text-[20px] font-semibold text-[#1e2348]">Edit Assessment</h2>
+              <button 
+                onClick={() => setEditingAssessment(null)}
+                className="p-2 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 space-y-5">
+              {/* Basic Information */}
+              <div>
+                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Assessment Title</label>
+                <input
+                  type="text"
+                  defaultValue={editingAssessment.title}
+                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  placeholder="Enter assessment title"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Course</label>
+                <input
+                  type="text"
+                  defaultValue={editingAssessment.course}
+                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  placeholder="Enter course name"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Type</label>
+                  <select
+                    defaultValue={editingAssessment.type}
+                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  >
+                    <option value="Quiz">Quiz</option>
+                    <option value="Assignment">Assignment</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Number of Questions</label>
+                  <input
+                    type="number"
+                    defaultValue={editingAssessment.questions}
+                    min={1}
+                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Status</label>
+                <select
+                  defaultValue={editingAssessment.status}
+                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                >
+                  <option value="active">Active</option>
+                  <option value="draft">Draft</option>
+                </select>
+              </div>
+
+              {/* Assessment Settings */}
+              <div className="border-t border-[#E5E7EB] pt-5">
+                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-4">Assessment Settings</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                    <div>
+                      <div className="text-[13px] font-medium text-[#1e2348]">Time Limit</div>
+                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Set a time limit for this assessment</div>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder="Minutes"
+                      defaultValue={60}
+                      className="w-24 px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                    <div>
+                      <div className="text-[13px] font-medium text-[#1e2348]">Passing Score</div>
+                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Minimum score required to pass</div>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder="%"
+                      defaultValue={70}
+                      min={0}
+                      max={100}
+                      className="w-24 px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                    <div>
+                      <div className="text-[13px] font-medium text-[#1e2348]">Allow Multiple Attempts</div>
+                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Let learners retake this assessment</div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      defaultChecked
+                      className="w-5 h-5 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                    <div>
+                      <div className="text-[13px] font-medium text-[#1e2348]">Randomize Questions</div>
+                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Show questions in random order</div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      className="w-5 h-5 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Questions Management */}
+              <div className="border-t border-[#E5E7EB] pt-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[15px] font-semibold text-[#1e2348]">Questions</h3>
+                  <button className="px-3 py-1.5 rounded-lg bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[12px] font-medium transition-colors">
+                    + Add Question
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="flex items-start gap-3">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1e2348] text-white text-[11px] font-bold flex items-center justify-center">
+                          {i}
+                        </span>
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            defaultValue={`Question ${i} for ${editingAssessment.title}`}
+                            className="w-full px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                          />
+                        </div>
+                        <button className="p-1.5 rounded-lg hover:bg-white text-red-500 transition-colors">
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-[#E5E7EB]">
+              <button 
+                onClick={() => setEditingAssessment(null)}
+                className="px-4 py-2 rounded-xl border border-[#E5E7EB] text-[#4B5563] hover:bg-[#F5F6FA] transition-colors text-[13px] font-medium"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  // Save logic would go here
+                  setEditingAssessment(null);
+                }}
+                className="px-4 py-2 rounded-xl bg-[#ff6b4d] hover:bg-[#e66045] text-white transition-colors text-[13px] font-medium"
+              >
+                Save Changes
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -958,15 +1368,15 @@ const PendingApprovalsTab = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-foreground">Pending Course Approvals</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Pending Course Approvals</h1>
 
       {/* Stat pills */}
       <div className="flex flex-wrap gap-3">
         {[
-          { label: 'Awaiting Review',     value: MOCK_PENDING.length, color: 'bg-blue-50 text-blue-700'       },
-          { label: 'Approved This Month', value: 12,                  color: 'bg-emerald-50 text-emerald-700'  },
-          { label: 'Rejected This Month', value: 2,                   color: 'bg-red-50 text-red-700'          },
-          { label: 'Changes Requested',   value: 1,                   color: 'bg-amber-50 text-amber-700'      },
+          { label: 'Awaiting Review',     value: MOCK_PENDING.length, color: 'bg-[#e9e9ed] text-[#1e2348] border border-[#dddee4]'       },
+          { label: 'Approved This Month', value: 12,                  color: 'bg-white text-green-700 border border-[#E5E7EB]'  },
+          { label: 'Rejected This Month', value: 2,                   color: 'bg-white text-red-700 border border-[#E5E7EB]'          },
+          { label: 'Changes Requested',   value: 1,                   color: 'bg-white text-amber-700 border border-[#E5E7EB]'      },
         ].map(p => (
           <div key={p.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${p.color}`}>
             <span className="font-bold text-[15px]">{p.value}</span>
@@ -978,38 +1388,45 @@ const PendingApprovalsTab = () => {
       {/* Search + filter */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
           <input
             type="text"
             placeholder="Search by course or instructor…"
             value={pendingSearch}
             onChange={e => setPendingSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+            className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
           />
         </div>
-        <div className="relative">
-          <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <select
-            value={pendingCategory}
-            onChange={e => setPendingCategory(e.target.value)}
-            className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
-          >
-            {PENDING_CATEGORIES.map(cat => <option key={cat}>{cat}</option>)}
-          </select>
-        </div>
+        <Select value={pendingCategory} onValueChange={setPendingCategory}>
+          <SelectTrigger className="w-[200px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
+            <BookOpen className="w-4 h-4 mr-2 text-[#9CA3AF]" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {PENDING_CATEGORIES.map(cat => (
+              <SelectItem 
+                key={cat} 
+                value={cat}
+                className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]"
+              >
+                {cat}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Review cards */}
         <div className="lg:col-span-2 space-y-5">
           {filtered.length === 0 ? (
-            <div className="bg-card rounded-2xl p-12 text-center border border-border">
+            <div className="bg-white rounded-2xl p-12 text-center border border-[#E5E7EB]">
               <CheckCircle className="w-12 h-12 text-[#ff6b4d] mx-auto mb-3" />
-              <h3 className="text-[18px] font-semibold mb-1">All caught up!</h3>
-              <p className="text-[14px] text-muted-foreground">No courses match your filters.</p>
+              <h3 className="text-[18px] font-semibold mb-1 text-[#1e2348]">All caught up!</h3>
+              <p className="text-[14px] text-[#4B5563]">No courses match your filters.</p>
             </div>
           ) : filtered.map(course => (
-            <div key={course.id} className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+            <div key={course.id} className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden">
               <div className="flex gap-4 p-5">
                 <img
                   src={course.thumbnail}
@@ -1018,32 +1435,32 @@ const PendingApprovalsTab = () => {
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-[16px] font-semibold text-foreground leading-tight">{course.title}</h3>
-                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-semibold whitespace-nowrap flex-shrink-0">
+                    <h3 className="text-[16px] font-semibold text-[#1e2348] leading-tight">{course.title}</h3>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-semibold whitespace-nowrap flex-shrink-0">
                       Pending Review
                     </span>
                   </div>
-                  <p className="text-[13px] text-muted-foreground mt-1">
-                    by <span className="font-medium text-foreground">{course.instructor}</span> · {course.email}
+                  <p className="text-[13px] text-[#4B5563] mt-1">
+                    by <span className="font-medium text-[#1e2348]">{course.instructor}</span> · {course.email}
                   </p>
                   <div className="flex flex-wrap items-center gap-2 mt-2">
-                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#1e2348]/10 text-[#1e2348] font-medium">{course.category}</span>
-                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">{course.level}</span>
-                    <span className="text-[12px] text-muted-foreground flex items-center gap-1"><Clock className="w-3 h-3" />{course.duration}</span>
-                    <span className="text-[12px] text-muted-foreground">{course.lessons} lessons</span>
+                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-medium">{course.category}</span>
+                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#F5F6FA] text-[#4B5563] capitalize">{course.level}</span>
+                    <span className="text-[12px] text-[#4B5563] flex items-center gap-1"><Clock className="w-3 h-3" />{course.duration}</span>
+                    <span className="text-[12px] text-[#4B5563]">{course.lessons} lessons</span>
                     <span className="text-[13px] font-semibold text-[#ff6b4d]">${course.price}</span>
                   </div>
                 </div>
               </div>
 
               <div className="px-5 pb-4">
-                <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-2">{course.description}</p>
-                <p className="text-[12px] text-muted-foreground mt-2 flex items-center gap-1">
+                <p className="text-[13px] text-[#4B5563] leading-relaxed line-clamp-2">{course.description}</p>
+                <p className="text-[12px] text-[#9CA3AF] mt-2 flex items-center gap-1">
                   <Calendar className="w-3 h-3" /> Submitted: {course.submittedDate}
                 </p>
                 
                 {/* WhatsApp & AI Settings */}
-                <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border">
+                <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[#E5E7EB]">
                   {course.whatsappEnabled ? (
                     <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-green-50 border border-green-200">
                       <MessageSquare className="w-3.5 h-3.5 text-green-600" />
@@ -1059,7 +1476,7 @@ const PendingApprovalsTab = () => {
                   )}
                   
                   {course.aiTutorEnabled ? (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#fff0ed] border border-[#ffe9e4]">
                       <Bot className="w-3.5 h-3.5 text-[#ff6b4d]" />
                       <span className="text-[11px] font-medium text-[#ff6b4d]">
                         AI Tutor: {course.aiTone.charAt(0).toUpperCase() + course.aiTone.slice(1)} tone
@@ -1074,13 +1491,13 @@ const PendingApprovalsTab = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 px-5 py-3 bg-muted/30 border-t border-border">
+              <div className="flex items-center gap-3 px-5 py-3 bg-[#F5F6FA] border-t border-[#E5E7EB]">
                 {confirmingId === course.id ? (
                   <>
-                    <span className="text-[13px] text-muted-foreground flex-1">Confirm approval?</span>
+                    <span className="text-[13px] text-[#4B5563] flex-1">Confirm approval?</span>
                     <button
                       onClick={() => setConfirmingId(null)}
-                      className="px-3 py-1.5 rounded-lg border border-border text-[13px] hover:bg-muted transition-colors"
+                      className="px-3 py-1.5 rounded-lg border border-[#E5E7EB] text-[13px] hover:bg-white transition-colors"
                     >
                       Cancel
                     </button>
@@ -1107,7 +1524,7 @@ const PendingApprovalsTab = () => {
                     </button>
                     <button 
                       onClick={() => handlePreview(course)}
-                      className="ml-auto px-3 py-1.5 rounded-lg border border-border text-[13px] text-muted-foreground hover:bg-[#FFE9E4] transition-colors flex items-center gap-1.5"
+                      className="ml-auto px-3 py-1.5 rounded-lg border border-[#E5E7EB] text-[13px] text-[#4B5563] hover:bg-[#fff0ed] hover:text-[#ff6b4d] transition-colors flex items-center gap-1.5"
                     >
                       <Eye className="w-3.5 h-3.5" /> Preview
                     </button>
@@ -1119,10 +1536,10 @@ const PendingApprovalsTab = () => {
         </div>
 
         {/* Recent Activity sidebar */}
-        <div className="bg-card rounded-2xl border border-border shadow-sm h-fit">
-          <div className="px-5 py-4 border-b border-border">
-            <h3 className="text-[16px] font-semibold text-foreground">Recent Review Activity</h3>
-            <p className="text-[12px] text-muted-foreground mt-0.5">Last 5 review decisions</p>
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm h-fit">
+          <div className="px-5 py-4 border-b border-[#E5E7EB]">
+            <h3 className="text-[16px] font-semibold text-[#1e2348]">Recent Review Activity</h3>
+            <p className="text-[12px] text-[#4B5563] mt-0.5">Last 5 review decisions</p>
           </div>
           <div className="p-5 space-y-4">
             {RECENT_ACTIVITY.map((item, i) => (
@@ -1133,17 +1550,17 @@ const PendingApprovalsTab = () => {
                   {item.action === 'changes requested' && <MessageSquare className={`w-3.5 h-3.5 ${item.color}`} />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-foreground truncate">{item.course}</p>
-                  <p className="text-[12px] text-muted-foreground">
+                  <p className="text-[13px] font-medium text-[#1e2348] truncate">{item.course}</p>
+                  <p className="text-[12px] text-[#4B5563]">
                     <span className={`font-medium capitalize ${item.color}`}>{item.action}</span> by {item.reviewer}
                   </p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{item.time}</p>
+                  <p className="text-[11px] text-[#9CA3AF] mt-0.5">{item.time}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className="px-5 pb-5">
-            <button className="w-full py-2 text-[13px] text-[#ff6b4d] font-medium border border-[#ff6b4d]/30 rounded-xl hover:bg-[#ff6b4d]/5 transition-colors">
+            <button className="w-full py-2 text-[13px] text-[#ff6b4d] font-medium border border-[#ff6b4d]/30 rounded-xl hover:bg-[#fff0ed] transition-colors">
               View Full History
             </button>
           </div>
@@ -1493,88 +1910,202 @@ const AdminDashboard = () => {
         <main className="p-6 lg:p-8">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">Platform Overview</h1>
+            <div className="space-y-8">
+              {/* Header */}
+              <div>
+                <h1 className="text-[32px] leading-[40px] font-semibold text-[#1e2348] mb-2">Platform Overview</h1>
+                <p className="text-[14px] leading-[20px] text-[#9CA3AF]">Monitor key metrics and platform performance at a glance</p>
+              </div>
               
               {analyticsLoading ? (
-                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Loading analytics...</p>
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <div className="w-12 h-12 border-4 border-[#E5E7EB] border-t-[#ff6b4d] rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-[14px] leading-[20px] font-normal text-[#9CA3AF]">Loading analytics...</p>
+                  </div>
+                </div>
               ) : (
                 <>
-                  {/* Stats Grid */}
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                          <Users className="w-5 h-5 text-[#ff6b4d]" />
+                  {/* Primary Stats Grid - Clean Executive Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {/* Total Users Card */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-[#fff0ed] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
+                          <Users className="w-6 h-6 text-[#ff6b4d]" />
+                        </div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
+                          <ArrowUpRight className="w-3 h-3" />
+                          <span>+12%</span>
                         </div>
                       </div>
-                      <div className="text-[24px] leading-[32px] font-medium">{analytics?.totalUsers || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Total Users</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.totalUsers || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Users</div>
+                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Active platform members</div>
                     </div>
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                          <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
+
+                    {/* Published Courses Card */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-[#e9e9ed] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
+                          <BookOpen className="w-6 h-6 text-[#1e2348]" />
+                        </div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
+                          <ArrowUpRight className="w-3 h-3" />
+                          <span>+8%</span>
                         </div>
                       </div>
-                      <div className="text-[24px] leading-[32px] font-medium">{analytics?.publishedCourses || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Published Courses</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.publishedCourses || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Published Courses</div>
+                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Live learning content</div>
                     </div>
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                          <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
+
+                    {/* Enrollments Card */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-[#fff0ed] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
+                          <TrendingUp className="w-6 h-6 text-[#ff6b4d]" />
+                        </div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
+                          <ArrowUpRight className="w-3 h-3" />
+                          <span>+24%</span>
                         </div>
                       </div>
-                      <div className="text-[24px] leading-[32px] font-medium">{analytics?.totalEnrollments || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Enrollments</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.totalEnrollments || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Enrollments</div>
+                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Course registrations</div>
                     </div>
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                          <Award className="w-5 h-5 text-[#ff6b4d]" />
+
+                    {/* Certificates Card */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-[#e9e9ed] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
+                          <Award className="w-6 h-6 text-[#1e2348]" />
+                        </div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
+                          <ArrowUpRight className="w-3 h-3" />
+                          <span>+18%</span>
                         </div>
                       </div>
-                      <div className="text-[24px] leading-[32px] font-medium">{analytics?.certificatesIssued || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Certificates</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.certificatesIssued || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Certificates Issued</div>
+                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Completed achievements</div>
                     </div>
                   </div>
 
-                  {/* Role Distribution */}
-                  <div className="grid lg:grid-cols-2 gap-6">
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <h3 className="text-[20px] leading-[28px] font-medium mb-4">Users by Role</h3>
+                  {/* Secondary Metrics Row */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Users by Role */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Users by Role</h3>
+                        <div className="w-8 h-8 bg-[#F5F6FA] rounded-lg flex items-center justify-center">
+                          <Users2 className="w-4 h-4 text-[#4B5563]" />
+                        </div>
+                      </div>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Learners</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.usersByRole.learner || 0}</span>
+                        <div className="flex items-center justify-between group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-[#ff6b4d]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Learners</span>
+                          </div>
+                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.learner || 0}</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Instructors</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.usersByRole.instructor || 0}</span>
+                        <div className="flex items-center justify-between group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-[#1e2348]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Instructors</span>
+                          </div>
+                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.instructor || 0}</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Admins</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.usersByRole.admin || 0}</span>
+                        <div className="flex items-center justify-between group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-[#9CA3AF]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Admins</span>
+                          </div>
+                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.admin || 0}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <h3 className="text-[20px] leading-[28px] font-medium mb-4">Quick Stats</h3>
+                    {/* Performance Metrics */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Performance</h3>
+                        <div className="w-8 h-8 bg-[#F5F6FA] rounded-lg flex items-center justify-center">
+                          <BarChart2 className="w-4 h-4 text-[#4B5563]" />
+                        </div>
+                      </div>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Completion Rate</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.completionRate || 0}%</span>
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</span>
+                            <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.completionRate || 0}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-[#F5F6FA] rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-[#ff6b4d] to-[#e66045] rounded-full transition-all duration-500"
+                              style={{ width: `${analytics?.completionRate || 0}%` }}
+                            ></div>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Pending Reviews</span>
-                          <span className="text-[16px] leading-[24px] font-medium text-amber-600">{analytics?.pendingReviews || 0}</span>
+                        <div className="pt-2 border-t border-[#E5E7EB]">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg. Course Rating</span>
+                            <div className="flex items-center gap-1">
+                              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                              <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">4.7</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Total Courses</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.totalCourses || 0}</span>
+                      </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 text-white">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-[18px] leading-[26px] font-semibold">Quick Actions</h3>
+                        <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                          <Target className="w-4 h-4" />
                         </div>
+                      </div>
+                      <div className="space-y-3">
+                        <button 
+                          onClick={() => setActiveTab('pending')}
+                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Clock className="w-4 h-4" />
+                            <span className="text-[14px] leading-[20px] font-medium">Pending Reviews</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[16px] leading-[24px] font-bold text-[#ff6b4d]">{analytics?.pendingReviews || 0}</span>
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </button>
+                        <button 
+                          onClick={() => setActiveTab('courses')}
+                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <BookOpen className="w-4 h-4" />
+                            <span className="text-[14px] leading-[20px] font-medium">Total Courses</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[16px] leading-[24px] font-bold">{analytics?.totalCourses || 0}</span>
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </button>
+                        <button 
+                          onClick={() => setActiveTab('users')}
+                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Users className="w-4 h-4" />
+                            <span className="text-[14px] leading-[20px] font-medium">Manage Users</span>
+                          </div>
+                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1587,10 +2118,10 @@ const AdminDashboard = () => {
           {activeTab === 'users' && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h1 className="text-[28px] leading-[36px] font-semibold">User Management</h1>
+                <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">User Management</h1>
                 <Button 
                   onClick={() => setShowCreateUserModal(true)}
-                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
                 >
                   <UserPlusIcon className="w-4 h-4 mr-2" />
                   Create User
@@ -1600,11 +2131,11 @@ const AdminDashboard = () => {
               {/* Stats */}
               <div className="flex flex-wrap gap-3 mb-5">
                 {[
-                  { label: 'Total Users', value: MOCK_USERS.length, color: 'bg-[#1e2348]/5 text-[#1e2348]' },
-                  { label: 'Admins', value: MOCK_USERS.filter(u => u.role === 'admin').length, color: 'bg-purple-50 text-purple-700' },
-                  { label: 'Instructors', value: MOCK_USERS.filter(u => u.role === 'instructor').length, color: 'bg-blue-50 text-blue-700' },
-                  { label: 'Learners', value: MOCK_USERS.filter(u => u.role === 'learner').length, color: 'bg-emerald-50 text-emerald-700' },
-                  { label: 'Active', value: MOCK_USERS.filter(u => u.status === 'active').length, color: 'bg-green-50 text-green-700' },
+                  { label: 'Total Users', value: MOCK_USERS.length, color: 'bg-[#e9e9ed] text-[#1e2348] border border-[#dddee4]' },
+                  { label: 'Admins', value: MOCK_USERS.filter(u => u.role === 'admin').length, color: 'bg-white text-[#1e2348] border border-[#E5E7EB]' },
+                  { label: 'Instructors', value: MOCK_USERS.filter(u => u.role === 'instructor').length, color: 'bg-white text-[#1e2348] border border-[#E5E7EB]' },
+                  { label: 'Learners', value: MOCK_USERS.filter(u => u.role === 'learner').length, color: 'bg-white text-emerald-700 border border-[#E5E7EB]' },
+                  { label: 'Active', value: MOCK_USERS.filter(u => u.status === 'active').length, color: 'bg-white text-emerald-700 border border-[#E5E7EB]' },
                 ].map(pill => (
                   <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
                     <span className="font-bold text-[15px]">{pill.value}</span>
@@ -1616,21 +2147,21 @@ const AdminDashboard = () => {
               {/* Search and Filters */}
               <div className="flex flex-wrap gap-3 mb-5">
                 <div className="relative flex-1 min-w-[200px]">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                   <input
                     type="text"
                     placeholder="Search by name or email…"
                     value={userSearch}
                     onChange={e => setUserSearch(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
                   />
                 </div>
                 <div className="relative">
-                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                   <select
                     value={userRoleFilter}
                     onChange={e => setUserRoleFilter(e.target.value)}
-                    className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
                   >
                     <option value="all">All Roles</option>
                     <option value="admin">Admin</option>
@@ -1639,11 +2170,11 @@ const AdminDashboard = () => {
                   </select>
                 </div>
                 <div className="relative">
-                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                   <select
                     value={userStatusFilter}
                     onChange={e => setUserStatusFilter(e.target.value)}
-                    className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
                   >
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
@@ -1652,7 +2183,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
               
-              <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full" role="table" aria-label="User management table">
                     <thead className="bg-[#1e2348]">
@@ -1669,22 +2200,22 @@ const AdminDashboard = () => {
                     <tbody>
                       {filteredUsers.length === 0 ? (
                         <tr>
-                          <td colSpan={7} className="text-center py-12 text-[14px] text-muted-foreground">
+                          <td colSpan={7} className="text-center py-12 text-[14px] text-[#4B5563]">
                             <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
                             No users match your filters.
                           </td>
                         </tr>
                       ) : filteredUsers.map((user, idx) => (
-                        <tr key={user.id} className={`border-t border-border transition-colors hover:bg-muted/30 ${idx % 2 === 0 ? '' : 'bg-muted/10'}`}>
+                        <tr key={user.id} className={`border-t border-[#E5E7EB] transition-colors hover:bg-[#F5F6FA] ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F5F6FA]'}`}>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center text-[14px] font-medium text-[#ff6b4d]">
+                              <div className="w-10 h-10 rounded-full bg-[#fff0ed] flex items-center justify-center text-[14px] font-medium text-[#ff6b4d]">
                                 {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
                               </div>
-                              <span className="text-[14px] font-medium text-foreground">{user.full_name}</span>
+                              <span className="text-[14px] font-medium text-[#1e2348]">{user.full_name}</span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-[13px] text-muted-foreground">{user.email}</td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{user.email}</td>
                           <td className="px-4 py-3">
                             <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${ROLE_STYLES[user.role]}`}>
                               {user.role}
@@ -1695,24 +2226,24 @@ const AdminDashboard = () => {
                               {user.status}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">
                             {new Date(user.created_at).toLocaleDateString()}
                           </td>
-                          <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">
                             {new Date(user.lastLogin).toLocaleDateString()}
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-1">
                               <button 
                                 onClick={() => handleEditUser(user.id)}
-                                className="p-1.5 rounded-lg hover:bg-[#ff6b4d]/10 text-[#ff6b4d] transition-colors" 
+                                className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors" 
                                 title="Edit user"
                               >
                                 <Edit className="w-4 h-4" />
                               </button>
                               <button 
                                 onClick={() => handleViewUser(user.id)}
-                                className="p-1.5 rounded-lg hover:bg-[#1e2348]/10 text-[#1e2348] transition-colors" 
+                                className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors" 
                                 title="View user details"
                               >
                                 <Eye className="w-4 h-4" />
@@ -1720,7 +2251,7 @@ const AdminDashboard = () => {
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <button 
-                                    className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
+                                    className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
                                     title="More actions"
                                   >
                                     <MoreVertical className="w-4 h-4" />
@@ -1804,25 +2335,161 @@ const AdminDashboard = () => {
           {/* Training Delivery Tab */}
           {activeTab === 'scheduling' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Training Delivery & Scheduling</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Training Delivery & Scheduling</h1>
               <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Class Setup & Cohort Scheduling</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Class Setup & Cohort Scheduling</h3>
+                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
                     Schedule live classes, manage cohorts, and track attendance.
                   </p>
                   <Button 
                     onClick={() => setShowScheduleModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
                   >
                     Schedule Class
                   </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Training Calendar</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    View and manage all scheduled training sessions.
-                  </p>
+                
+                {/* Training Calendar Section */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-[20px] leading-[28px] font-medium text-[#1e2348]">Training Calendar</h3>
+                    <div className="flex items-center gap-3">
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-[180px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
+                          <SelectValue placeholder="Filter by type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">All Sessions</SelectItem>
+                          <SelectItem value="live" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Live Only</SelectItem>
+                          <SelectItem value="hybrid" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Hybrid Only</SelectItem>
+                          <SelectItem value="recorded" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Recorded Only</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select defaultValue="upcoming">
+                        <SelectTrigger className="w-[180px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
+                          <SelectValue placeholder="Filter by status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">All Status</SelectItem>
+                          <SelectItem value="upcoming" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Upcoming</SelectItem>
+                          <SelectItem value="completed" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Completed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Stats Row */}
+                  <div className="grid grid-cols-4 gap-4 mb-6">
+                    <div className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Total Sessions</div>
+                      <div className="text-[24px] font-bold text-[#1e2348]">{MOCK_SCHEDULED_SESSIONS.length}</div>
+                    </div>
+                    <div className="bg-[#fff0ed] rounded-xl p-4">
+                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Upcoming</div>
+                      <div className="text-[24px] font-bold text-[#ff6b4d]">
+                        {MOCK_SCHEDULED_SESSIONS.filter(s => s.status === 'upcoming').length}
+                      </div>
+                    </div>
+                    <div className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Total Enrolled</div>
+                      <div className="text-[24px] font-bold text-[#1e2348]">
+                        {MOCK_SCHEDULED_SESSIONS.reduce((sum, s) => sum + s.enrolled, 0)}
+                      </div>
+                    </div>
+                    <div className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Avg Capacity</div>
+                      <div className="text-[24px] font-bold text-[#1e2348]">
+                        {Math.round((MOCK_SCHEDULED_SESSIONS.reduce((sum, s) => sum + (s.enrolled / s.capacity * 100), 0) / MOCK_SCHEDULED_SESSIONS.length))}%
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sessions List */}
+                  <div className="space-y-3">
+                    {MOCK_SCHEDULED_SESSIONS.map((session) => (
+                      <div 
+                        key={session.id} 
+                        className="border border-[#E5E7EB] rounded-xl p-4 hover:border-[#ff6b4d]/30 hover:bg-[#fff0ed]/20 transition-all"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h4 className="text-[15px] font-semibold text-[#1e2348]">{session.title}</h4>
+                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${SESSION_TYPE_STYLE[session.type].bg} ${SESSION_TYPE_STYLE[session.type].text}`}>
+                                {SESSION_TYPE_STYLE[session.type].icon} {session.type}
+                              </span>
+                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold capitalize ${SESSION_STATUS_STYLE[session.status].bg} ${SESSION_STATUS_STYLE[session.status].text}`}>
+                                {session.status}
+                              </span>
+                            </div>
+                            <p className="text-[13px] text-[#4B5563] mb-2">{session.course}</p>
+                            <div className="flex items-center gap-4 text-[12px] text-[#9CA3AF]">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="w-3.5 h-3.5" />
+                                <span>{new Date(session.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-3.5 h-3.5" />
+                                <span>{session.startTime} - {session.endTime}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Users className="w-3.5 h-3.5" />
+                                <span>{session.instructor}</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-col items-end gap-2">
+                            <div className="text-right">
+                              <div className="text-[13px] font-semibold text-[#1e2348]">
+                                {session.enrolled}/{session.capacity}
+                              </div>
+                              <div className="text-[11px] text-[#9CA3AF]">enrolled</div>
+                            </div>
+                            <div className="w-24 h-1.5 rounded-full bg-[#E5E7EB] overflow-hidden">
+                              <div 
+                                className="h-full rounded-full bg-[#ff6b4d]" 
+                                style={{ width: `${(session.enrolled / session.capacity) * 100}%` }} 
+                              />
+                            </div>
+                            <div className="flex items-center gap-1 mt-2">
+                              {session.status === 'upcoming' && (
+                                <>
+                                  <button 
+                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors"
+                                    title="Edit Session"
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                    title="View Details"
+                                  >
+                                    <Eye className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                    title="Copy Meeting Link"
+                                  >
+                                    <LinkIcon className="w-4 h-4" />
+                                  </button>
+                                </>
+                              )}
+                              {session.status === 'completed' && (
+                                <button 
+                                  className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                  title="View Recording"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1831,23 +2498,23 @@ const AdminDashboard = () => {
           {/* Enrollment Tab */}
           {activeTab === 'enrollment' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Student & Enrollment Management</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Student & Enrollment Management</h1>
               <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Enrollment Dashboard</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Enrollment Dashboard</h3>
+                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
                     Manage student enrollments, approvals, and bulk operations.
                   </p>
                   <Button 
                     onClick={() => setShowBulkEnrollModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
                   >
                     Bulk Enroll
                   </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Seat Management</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Seat Management</h3>
+                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                     Track available seats and manage course capacity.
                   </p>
                 </div>
@@ -1858,23 +2525,23 @@ const AdminDashboard = () => {
           {/* Faculty Tab */}
           {activeTab === 'faculty' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Faculty & Program Operations</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Faculty & Program Operations</h1>
               <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Faculty Dashboard</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Faculty Dashboard</h3>
+                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
                     Manage faculty members, assignments, and performance.
                   </p>
                   <Button 
                     onClick={() => setShowAddFacultyModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
                   >
                     Add Faculty
                   </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Program Builder</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Program Builder</h3>
+                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                     Create and manage learning programs and curriculum.
                   </p>
                 </div>
@@ -1888,7 +2555,7 @@ const AdminDashboard = () => {
           {/* Governance Tab */}
           {activeTab === 'governance' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Content Governance & Compliance</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Content Governance & Compliance</h1>
               
               {/* Statistics */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -2914,19 +3581,34 @@ const AdminDashboard = () => {
                 <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                   Select Course *
                 </label>
-                <select
+                <Select
                   value={scheduleForm.course}
-                  onChange={(e) => setScheduleForm({ ...scheduleForm, course: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  onValueChange={(value) => setScheduleForm({ ...scheduleForm, course: value })}
                 >
-                  <option value="">Choose a course...</option>
-                  <option value="economy-40">Mastering Economy 4.0</option>
-                  <option value="cognitive-org">Decoding Digital Cognitive Organisations</option>
-                  <option value="business-platforms">Building Powerful Digital Business Platforms</option>
-                  <option value="transformation">Navigating Digital Transformation 2.0</option>
-                  <option value="digital-workers">Optimizing Digital Workers and Workspaces</option>
-                  <option value="digital-accelerators">Leveraging Digital Accelerators for Growth</option>
-                </select>
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                    <SelectValue placeholder="Choose a course..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="economy-40" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Mastering Economy 4.0
+                    </SelectItem>
+                    <SelectItem value="cognitive-org" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Decoding Digital Cognitive Organisations
+                    </SelectItem>
+                    <SelectItem value="business-platforms" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Building Powerful Digital Business Platforms
+                    </SelectItem>
+                    <SelectItem value="transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Navigating Digital Transformation 2.0
+                    </SelectItem>
+                    <SelectItem value="digital-workers" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Optimizing Digital Workers and Workspaces
+                    </SelectItem>
+                    <SelectItem value="digital-accelerators" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Leveraging Digital Accelerators for Growth
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Session Type */}
@@ -2973,18 +3655,31 @@ const AdminDashboard = () => {
                 <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                   Instructor *
                 </label>
-                <select
+                <Select
                   value={scheduleForm.instructor}
-                  onChange={(e) => setScheduleForm({ ...scheduleForm, instructor: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  onValueChange={(value) => setScheduleForm({ ...scheduleForm, instructor: value })}
                 >
-                  <option value="">Select instructor...</option>
-                  <option value="dr-aisha">Dr. Aisha Mensah</option>
-                  <option value="james">James Okafor</option>
-                  <option value="priya">Priya Nair</option>
-                  <option value="marcus">Marcus Webb</option>
-                  <option value="sofia">Sofia Reyes</option>
-                </select>
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                    <SelectValue placeholder="Select instructor..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="dr-aisha" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Dr. Aisha Mensah
+                    </SelectItem>
+                    <SelectItem value="james" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      James Okafor
+                    </SelectItem>
+                    <SelectItem value="priya" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Priya Nair
+                    </SelectItem>
+                    <SelectItem value="marcus" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Marcus Webb
+                    </SelectItem>
+                    <SelectItem value="sofia" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Sofia Reyes
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Date and Time */}
@@ -3239,19 +3934,34 @@ const AdminDashboard = () => {
                 <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                   Select Course *
                 </label>
-                <select
+                <Select
                   value={bulkEnrollForm.course}
-                  onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, course: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  onValueChange={(value) => setBulkEnrollForm({ ...bulkEnrollForm, course: value })}
                 >
-                  <option value="">Choose a course...</option>
-                  <option value="economy-40">Mastering Economy 4.0</option>
-                  <option value="cognitive-org">Decoding Digital Cognitive Organisations</option>
-                  <option value="business-platforms">Building Powerful Digital Business Platforms</option>
-                  <option value="transformation">Navigating Digital Transformation 2.0</option>
-                  <option value="digital-workers">Optimizing Digital Workers and Workspaces</option>
-                  <option value="digital-accelerators">Leveraging Digital Accelerators for Growth</option>
-                </select>
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                    <SelectValue placeholder="Choose a course..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="economy-40" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Mastering Economy 4.0
+                    </SelectItem>
+                    <SelectItem value="cognitive-org" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Decoding Digital Cognitive Organisations
+                    </SelectItem>
+                    <SelectItem value="business-platforms" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Building Powerful Digital Business Platforms
+                    </SelectItem>
+                    <SelectItem value="transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Navigating Digital Transformation 2.0
+                    </SelectItem>
+                    <SelectItem value="digital-workers" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Optimizing Digital Workers and Workspaces
+                    </SelectItem>
+                    <SelectItem value="digital-accelerators" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Leveraging Digital Accelerators for Growth
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Enrollment Method */}
@@ -3614,19 +4324,34 @@ const AdminDashboard = () => {
                     <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                       Department *
                     </label>
-                    <select
+                    <Select
                       value={facultyForm.department}
-                      onChange={(e) => setFacultyForm({ ...facultyForm, department: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      onValueChange={(value) => setFacultyForm({ ...facultyForm, department: value })}
                     >
-                      <option value="">Select department...</option>
-                      <option value="digital-transformation">Digital Transformation</option>
-                      <option value="ai-technology">AI & Technology</option>
-                      <option value="leadership">Leadership & Management</option>
-                      <option value="data-analytics">Data & Analytics</option>
-                      <option value="cybersecurity">Cybersecurity</option>
-                      <option value="business-strategy">Business Strategy</option>
-                    </select>
+                      <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                        <SelectValue placeholder="Select department..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="digital-transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Digital Transformation
+                        </SelectItem>
+                        <SelectItem value="ai-technology" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          AI & Technology
+                        </SelectItem>
+                        <SelectItem value="leadership" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Leadership & Management
+                        </SelectItem>
+                        <SelectItem value="data-analytics" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Data & Analytics
+                        </SelectItem>
+                        <SelectItem value="cybersecurity" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Cybersecurity
+                        </SelectItem>
+                        <SelectItem value="business-strategy" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Business Strategy
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>

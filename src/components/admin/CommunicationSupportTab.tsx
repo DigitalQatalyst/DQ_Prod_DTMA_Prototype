@@ -3,6 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/card';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   Send,
   MessageSquare,
   Bell,
@@ -61,10 +68,10 @@ export const CommunicationSupportTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-[28px] leading-[36px] font-semibold text-foreground">Communication & Support</h1>
+        <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Communication & Support</h1>
         <div className="flex gap-2">
           {activeSection === 'announcements' && (
-            <Button onClick={() => setShowAnnouncementModal(true)} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white gap-2">
+            <Button onClick={() => setShowAnnouncementModal(true)} className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white gap-2 transition-colors">
               <Plus className="w-4 h-4" />
               Create Announcement
             </Button>
@@ -74,54 +81,54 @@ export const CommunicationSupportTab = () => {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-5">
+        <Card className="p-5 bg-white border-[#E5E7EB]">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-              <Bell className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 bg-[#e9e9ed] rounded-xl flex items-center justify-center">
+              <Bell className="w-5 h-5 text-[#1e2348]" />
             </div>
             <div>
-              <p className="text-[12px] leading-[16px] font-medium text-muted-foreground">Total Announcements</p>
-              <p className="text-[24px] leading-[32px] font-medium text-foreground">{MOCK_ANNOUNCEMENTS.length}</p>
+              <p className="text-[12px] leading-[16px] font-medium text-[#4B5563]">Total Announcements</p>
+              <p className="text-[24px] leading-[32px] font-medium text-[#1e2348]">{MOCK_ANNOUNCEMENTS.length}</p>
             </div>
           </div>
         </Card>
-        <Card className="p-5">
+        <Card className="p-5 bg-white border-[#E5E7EB]">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-              <Headphones className="w-5 h-5 text-orange-600" />
+            <div className="w-10 h-10 bg-[#fff0ed] rounded-xl flex items-center justify-center">
+              <Headphones className="w-5 h-5 text-[#ff6b4d]" />
             </div>
             <div>
-              <p className="text-[12px] leading-[16px] font-medium text-muted-foreground">Open Tickets</p>
-              <p className="text-[24px] leading-[32px] font-medium text-foreground">{MOCK_TICKETS.filter(t => t.status === 'open').length}</p>
+              <p className="text-[12px] leading-[16px] font-medium text-[#4B5563]">Open Tickets</p>
+              <p className="text-[24px] leading-[32px] font-medium text-[#1e2348]">{MOCK_TICKETS.filter(t => t.status === 'open').length}</p>
             </div>
           </div>
         </Card>
-        <Card className="p-5">
+        <Card className="p-5 bg-white border-[#E5E7EB]">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
               <MessageCircle className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="text-[12px] leading-[16px] font-medium text-muted-foreground">WhatsApp Messages</p>
-              <p className="text-[24px] leading-[32px] font-medium text-foreground">{MOCK_WHATSAPP_MESSAGES.filter(m => m.status === 'unread').length}</p>
+              <p className="text-[12px] leading-[16px] font-medium text-[#4B5563]">WhatsApp Messages</p>
+              <p className="text-[24px] leading-[32px] font-medium text-[#1e2348]">{MOCK_WHATSAPP_MESSAGES.filter(m => m.status === 'unread').length}</p>
             </div>
           </div>
         </Card>
-        <Card className="p-5">
+        <Card className="p-5 bg-white border-[#E5E7EB]">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-purple-600" />
+            <div className="w-10 h-10 bg-[#e9e9ed] rounded-xl flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-[#1e2348]" />
             </div>
             <div>
-              <p className="text-[12px] leading-[16px] font-medium text-muted-foreground">Avg Response Time</p>
-              <p className="text-[24px] leading-[32px] font-medium text-foreground">2.4h</p>
+              <p className="text-[12px] leading-[16px] font-medium text-[#4B5563]">Avg Response Time</p>
+              <p className="text-[24px] leading-[32px] font-medium text-[#1e2348]">2.4h</p>
             </div>
           </div>
         </Card>
       </div>
 
       {/* Section Tabs */}
-      <div className="flex gap-1 bg-muted/50 p-1 rounded-xl w-fit">
+      <div className="flex gap-1 bg-[#F5F6FA] p-1 rounded-xl w-fit">
         {[
           { id: 'announcements', label: 'Announcements', icon: Bell },
           { id: 'support', label: 'Support Tickets', icon: Headphones, badge: MOCK_TICKETS.filter(t => t.status === 'open').length },
@@ -132,14 +139,14 @@ export const CommunicationSupportTab = () => {
             onClick={() => setActiveSection(section.id as any)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[14px] leading-[20px] font-normal transition-colors ${
               activeSection === section.id
-                ? 'bg-white shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-white shadow-sm text-[#1e2348]'
+                : 'text-[#4B5563] hover:text-[#ff6b4d] hover:bg-[#fff0ed]/50'
             }`}
           >
             <section.icon className="w-4 h-4" />
             {section.label}
             {section.badge && section.badge > 0 && (
-              <Badge className="bg-[#ff6b4d] text-white text-[10px] leading-[14px] font-medium px-1.5 py-0.5">{section.badge}</Badge>
+              <Badge className="bg-[#ff6b4d] text-white text-[10px] leading-[14px] font-medium px-1.5 py-0.5 hover:bg-[#e66045]">{section.badge}</Badge>
             )}
           </button>
         ))}
@@ -152,12 +159,17 @@ export const CommunicationSupportTab = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-[20px] leading-[28px] font-medium text-foreground">Announcement Manager</h2>
               <div className="flex gap-2">
-                <select className="px-3 py-2 border border-border rounded-lg text-[14px] leading-[20px] font-normal">
-                  <option>All Status</option>
-                  <option>Sent</option>
-                  <option>Scheduled</option>
-                  <option>Draft</option>
-                </select>
+                <Select defaultValue="all">
+                  <SelectTrigger className="w-[140px] px-3 py-2 border border-border rounded-lg text-[14px] leading-[20px] font-normal">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">All Status</SelectItem>
+                    <SelectItem value="sent" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Sent</SelectItem>
+                    <SelectItem value="scheduled" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Scheduled</SelectItem>
+                    <SelectItem value="draft" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Draft</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
@@ -233,16 +245,20 @@ export const CommunicationSupportTab = () => {
                     className="pl-9 pr-4 py-2 border border-border rounded-lg text-[14px] leading-[20px] font-normal"
                   />
                 </div>
-                <select 
+                <Select 
                   value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 border border-border rounded-lg text-[14px] leading-[20px] font-normal"
+                  onValueChange={(value) => setStatusFilter(value)}
                 >
-                  <option value="all">All Status</option>
-                  <option value="open">Open</option>
-                  <option value="in-progress">In Progress</option>
-                  <option value="resolved">Resolved</option>
-                </select>
+                  <SelectTrigger className="w-[140px] px-3 py-2 border border-border rounded-lg text-[14px] leading-[20px] font-normal">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">All Status</SelectItem>
+                    <SelectItem value="open" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Open</SelectItem>
+                    <SelectItem value="in-progress" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">In Progress</SelectItem>
+                    <SelectItem value="resolved" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Resolved</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

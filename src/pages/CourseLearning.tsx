@@ -81,6 +81,11 @@ const CourseLearning = () => {
   const [isAIToolsCollapsed, setIsAIToolsCollapsed] = useState(false);
   const [isCourseContentCollapsed, setIsCourseContentCollapsed] = useState(false);
   
+  // Personal Notes state
+  const [showPersonalNotes, setShowPersonalNotes] = useState(false);
+  const [personalNotes, setPersonalNotes] = useState<Record<string, string>>({});
+  const [currentNote, setCurrentNote] = useState("");
+  
   // Quiz state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [quizStartTime, setQuizStartTime] = useState<number | null>(null);
@@ -328,6 +333,78 @@ const CourseLearning = () => {
       }
     }
   }, [courseId]);
+
+  // Load personal notes from localStorage
+  useEffect(() => {
+    if (courseId) {
+      const savedNotes = localStorage.getItem(`course_${courseId}_personal_notes`);
+      if (savedNotes) {
+        const notes = JSON.parse(savedNotes);
+        setPersonalNotes(notes);
+        if (selectedLesson?.id && notes[selectedLesson.id]) {
+          setCurrentNote(notes[selectedLesson.id]);
+        }
+      }
+    }
+  }, [courseId]);
+
+  // Update current note when lesson changes
+  useEffect(() => {
+    if (selectedLesson?.id) {
+      setCurrentNote(personalNotes[selectedLesson.id] || "");
+    }
+  }, [selectedLesson?.id, personalNotes]);
+
+  // Auto-save notes
+  const handleNotesChange = (value: string) => {
+    setCurrentNote(value);
+    if (selectedLesson?.id && courseId) {
+      const updatedNotes = { ...personalNotes, [selectedLesson.id]: value };
+      setPersonalNotes(updatedNotes);
+      localStorage.setItem(`course_${courseId}_personal_notes`, JSON.stringify(updatedNotes));
+    }
+  };
+
+  // Download notes as text file
+  const handleDownloadNotes = () => {
+    if (!courseId || Object.keys(personalNotes).length === 0) {
+      alert("No notes to download!");
+      return;
+    }
+
+    let notesContent = `Course Notes - ${course?.title || "Course"}\n`;
+    notesContent += `Generated on: ${new Date().toLocaleDateString()}\n`;
+    notesContent += `${"=".repeat(60)}\n\n`;
+
+    // Organize notes by module and lesson
+    courseData.modules?.forEach((module: any) => {
+      let moduleHasNotes = false;
+      let moduleContent = `\n${module.title}\n${"-".repeat(module.title.length)}\n\n`;
+
+      module.lessons?.forEach((lesson: any) => {
+        if (personalNotes[lesson.id]) {
+          moduleHasNotes = true;
+          moduleContent += `${lesson.title}\n`;
+          moduleContent += `${personalNotes[lesson.id]}\n\n`;
+        }
+      });
+
+      if (moduleHasNotes) {
+        notesContent += moduleContent;
+      }
+    });
+
+    // Create and download file
+    const blob = new Blob([notesContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${course?.title || 'Course'}_Notes_${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   if (authLoading || courseLoading || enrollmentLoading) {
     return (
@@ -895,6 +972,27 @@ const CourseLearning = () => {
                         <ChevronRight className="w-5 h-5 text-blue-400 group-hover:text-blue-600 transition-colors" />
                       </div>
                     </button>
+
+                    {/* Personal Notes */}
+                    <button 
+                      onClick={() => setShowPersonalNotes(true)}
+                      className="group w-full relative bg-orange-50 hover:bg-orange-100 rounded-xl p-4 text-left transition-all"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-[#ff6b4d]/20 rounded-lg flex items-center justify-center shrink-0">
+                            <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
+                          </div>
+                          <div>
+                            <h4 className="text-[#1e2348] text-[16px] leading-[24px] font-normal">My Notes</h4>
+                            {currentNote && (
+                              <p className="text-[#ff6b4d] text-[11px] leading-[16px] font-medium">Last edited</p>
+                            )}
+                          </div>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-[#ff6b4d]/60 group-hover:text-[#ff6b4d] transition-colors" />
+                      </div>
+                    </button>
                   </div>
                   )}
                 </Card>
@@ -1386,6 +1484,122 @@ const CourseLearning = () => {
                 <Button variant="outline" className="flex-1 hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" onClick={() => setShowAINotes(false)}>
                   Close
                 </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Personal Notes Modal */}
+      {showPersonalNotes && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+            {/* Header */}
+            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-lg flex items-center justify-center shadow-sm">
+                    <BookOpen className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">My Notes</h2>
+                    <p className="text-gray-500 text-[14px] leading-[20px] font-normal">
+                      {selectedLesson?.title || "Current Lesson"}
+                    </p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowPersonalNotes(false)} 
+                  className="p-2 hover:bg-white/50 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </div>
+              
+              {/* Auto-save indicator */}
+              <div className="flex items-center gap-2 text-green-600 text-[12px] leading-[16px] font-medium">
+                <CheckCircle className="w-3 h-3" />
+                <span>Auto-saved</span>
+              </div>
+            </div>
+
+            {/* Notes Editor */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <textarea
+                value={currentNote}
+                onChange={(e) => handleNotesChange(e.target.value)}
+                placeholder="Start typing your notes here... Your notes will be automatically saved."
+                className="w-full h-full min-h-[400px] p-4 border-2 border-gray-200 rounded-xl focus:border-[#ff6b4d] focus:outline-none resize-none text-[16px] leading-[24px] font-normal"
+              />
+            </div>
+
+            {/* Footer with Actions */}
+            <div className="p-6 border-t border-gray-200 bg-gray-50">
+              <div className="flex items-center justify-between mb-4">
+                <div className="text-[14px] leading-[20px] text-gray-600">
+                  <span className="font-medium">{Object.keys(personalNotes).filter(key => personalNotes[key]).length}</span> lessons with notes
+                </div>
+                <div className="text-[14px] leading-[20px] text-gray-600">
+                  {currentNote.length} characters
+                </div>
+              </div>
+              
+              <div className="flex gap-3">
+                <Button
+                  onClick={handleDownloadNotes}
+                  disabled={Object.keys(personalNotes).filter(key => personalNotes[key]).length === 0}
+                  className="flex-1 bg-gradient-to-r from-[#1e2348] to-[#2a3058] hover:from-[#2a3058] hover:to-[#1e2348] text-white shadow-lg"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download All Notes
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (selectedLesson?.id && currentNote) {
+                      const lessonTitle = selectedLesson.title.replace(/[^a-z0-9]/gi, '_');
+                      const content = `${selectedLesson.title}\n${"=".repeat(selectedLesson.title.length)}\n\n${currentNote}`;
+                      const blob = new Blob([content], { type: 'text/plain' });
+                      const url = URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `${lessonTitle}_Notes.txt`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      URL.revokeObjectURL(url);
+                    }
+                  }}
+                  disabled={!currentNote}
+                  variant="outline"
+                  className="flex-1 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d]/10"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download This Note
+                </Button>
+                <Button
+                  onClick={() => setShowPersonalNotes(false)}
+                  variant="outline"
+                  className="hover:bg-gray-100"
+                >
+                  Close
+                </Button>
+              </div>
+
+              {/* Tips */}
+              <div className="mt-4 bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5 border-2 border-[#ff6b4d]/20 rounded-lg p-3">
+                <div className="flex items-start gap-2">
+                  <div className="w-5 h-5 bg-[#ff6b4d] rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-white text-[12px]">💡</span>
+                  </div>
+                  <div>
+                    <p className="text-[#1e2348] text-[13px] leading-[18px] font-semibold mb-1">Pro Tips:</p>
+                    <ul className="text-[#1e2348]/80 text-[12px] leading-[18px] space-y-1">
+                      <li>• Your notes are automatically saved as you type</li>
+                      <li>• Download individual lesson notes or all notes at once</li>
+                      <li>• Notes are organized by lesson for easy reference</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

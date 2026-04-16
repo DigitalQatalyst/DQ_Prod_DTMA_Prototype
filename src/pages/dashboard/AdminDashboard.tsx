@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAnalytics, usePendingCourses, useAdminUsers, useReviewCourse, useUpdateUserRole } from '@/hooks/useAdmin';
 import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
@@ -7,8 +7,16 @@ import { InviteManagement } from '@/components/admin/InviteManagement';
 import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalyticsDashboard';
 import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
 import { CommunicationSupportTab } from '@/components/admin/CommunicationSupportTab';
+import { CoursePreviewModal } from '@/components/admin/CoursePreviewModal';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
@@ -76,19 +84,22 @@ import {
   AlertCircle,
   ThumbsUp,
   ThumbsDown,
+  MoreVertical,
+  Copy,
+  Archive,
+  Trash2,
 } from 'lucide-react';
 
 type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'whatsapp-analytics' | 'ai-usage' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 const MOCK_COURSES = [
-  { id: '1', title: 'Digital Transformation Fundamentals', instructor: 'Dr. Aisha Mensah', category: 'Digital Skills', level: 'Beginner', status: 'published', enrollments: 342, lastUpdated: '2026-03-20', rating: 4.8, completion: 72, revenue: 8550 },
-  { id: '2', title: 'AI & Automation in the Workplace', instructor: 'James Okafor', category: 'AI & Technology', level: 'Intermediate', status: 'published', enrollments: 219, lastUpdated: '2026-03-18', rating: 4.6, completion: 65, revenue: 5475 },
-  { id: '3', title: 'Data-Driven Decision Making', instructor: 'Priya Nair', category: 'Analytics', level: 'Intermediate', status: 'draft', enrollments: 0, lastUpdated: '2026-03-25', rating: 0, completion: 0, revenue: 0 },
-  { id: '4', title: 'Leadership in the Digital Age', instructor: 'Marcus Webb', category: 'Leadership', level: 'Advanced', status: 'pending', enrollments: 0, lastUpdated: '2026-03-22', rating: 0, completion: 0, revenue: 0 },
-  { id: '5', title: 'Agile Project Management', instructor: 'Sofia Reyes', category: 'Management', level: 'Intermediate', status: 'published', enrollments: 187, lastUpdated: '2026-03-15', rating: 4.5, completion: 58, revenue: 4675 },
-  { id: '6', title: 'Cybersecurity Essentials', instructor: 'Dr. Kwame Asante', category: 'Digital Skills', level: 'Beginner', status: 'published', enrollments: 154, lastUpdated: '2026-03-10', rating: 4.7, completion: 81, revenue: 3850 },
-  { id: '7', title: 'Emotional Intelligence at Work', instructor: 'Lindiwe Dube', category: 'Leadership', level: 'Beginner', status: 'draft', enrollments: 0, lastUpdated: '2026-03-26', rating: 0, completion: 0, revenue: 0 },
+  { id: '1', title: 'Mastering Economy 4.0', instructor: 'DTMA Faculty', category: 'Digital Economy', level: 'Beginner', status: 'published', enrollments: 342, lastUpdated: '2026-03-20', rating: 4.8, completion: 72, revenue: 8550 },
+  { id: '2', title: 'Decoding Digital Cognitive Organisations', instructor: 'DTMA Faculty', category: 'Digital Cognitive Organisation', level: 'Intermediate', status: 'published', enrollments: 219, lastUpdated: '2026-03-18', rating: 4.9, completion: 65, revenue: 5475 },
+  { id: '3', title: 'Building Powerful Digital Business Platforms', instructor: 'DTMA Faculty', category: 'Digital Business Platform', level: 'Intermediate', status: 'draft', enrollments: 0, lastUpdated: '2026-03-25', rating: 0, completion: 0, revenue: 0 },
+  { id: '4', title: 'Navigating Digital Transformation 2.0', instructor: 'DTMA Faculty', category: 'Digital Transformation', level: 'Advanced', status: 'pending', enrollments: 0, lastUpdated: '2026-03-22', rating: 0, completion: 0, revenue: 0 },
+  { id: '5', title: 'Optimizing Digital Workers and Workspaces', instructor: 'DTMA Faculty', category: 'Digital Worker & Workspace', level: 'Beginner', status: 'published', enrollments: 187, lastUpdated: '2026-03-15', rating: 4.6, completion: 58, revenue: 4675 },
+  { id: '6', title: 'Leveraging Digital Accelerators for Growth', instructor: 'DTMA Faculty', category: 'Digital Accelerators', level: 'Advanced', status: 'published', enrollments: 154, lastUpdated: '2026-03-10', rating: 4.9, completion: 81, revenue: 3850 },
 ];
 
 const STATUS_STYLES: Record<string, string> = {
@@ -97,13 +108,84 @@ const STATUS_STYLES: Record<string, string> = {
   pending:   'bg-blue-100 text-blue-700',
 };
 
-const CATEGORIES = ['All Categories', 'Digital Skills', 'AI & Technology', 'Analytics', 'Leadership', 'Management'];
+const CATEGORIES = ['All Categories', 'Digital Economy', 'Digital Cognitive Organisation', 'Digital Business Platform', 'Digital Transformation', 'Digital Worker & Workspace', 'Digital Accelerators'];
+
+// ─── Mock users data ──────────────────────────────────────────────────────────
+const MOCK_USERS = [
+  { id: '1', full_name: 'Sarah Johnson', email: 'sarah.johnson@dtma.ae', role: 'admin', created_at: '2026-01-15', status: 'active', lastLogin: '2026-04-14' },
+  { id: '2', full_name: 'Ahmed Al-Mansoori', email: 'ahmed.mansoori@dtma.ae', role: 'instructor', created_at: '2026-02-10', status: 'active', lastLogin: '2026-04-13' },
+  { id: '3', full_name: 'Maria Garcia', email: 'maria.garcia@example.com', role: 'learner', created_at: '2026-03-05', status: 'active', lastLogin: '2026-04-15' },
+  { id: '4', full_name: 'John Smith', email: 'john.smith@example.com', role: 'learner', created_at: '2026-03-12', status: 'active', lastLogin: '2026-04-14' },
+  { id: '5', full_name: 'Fatima Hassan', email: 'fatima.hassan@dtma.ae', role: 'instructor', created_at: '2026-02-20', status: 'active', lastLogin: '2026-04-12' },
+  { id: '6', full_name: 'David Chen', email: 'david.chen@example.com', role: 'learner', created_at: '2026-03-18', status: 'active', lastLogin: '2026-04-15' },
+  { id: '7', full_name: 'Aisha Mohammed', email: 'aisha.mohammed@example.com', role: 'learner', created_at: '2026-03-22', status: 'inactive', lastLogin: '2026-03-25' },
+  { id: '8', full_name: 'Robert Taylor', email: 'robert.taylor@dtma.ae', role: 'admin', created_at: '2026-01-20', status: 'active', lastLogin: '2026-04-14' },
+  { id: '9', full_name: 'Layla Ibrahim', email: 'layla.ibrahim@example.com', role: 'learner', created_at: '2026-03-28', status: 'active', lastLogin: '2026-04-13' },
+  { id: '10', full_name: 'Michael Brown', email: 'michael.brown@example.com', role: 'learner', created_at: '2026-04-02', status: 'active', lastLogin: '2026-04-15' },
+];
+
+const ROLE_STYLES: Record<string, string> = {
+  admin: 'bg-purple-100 text-purple-700',
+  instructor: 'bg-blue-100 text-blue-700',
+  learner: 'bg-emerald-100 text-emerald-700',
+};
+
+const STATUS_BADGE_STYLES: Record<string, string> = {
+  active: 'bg-emerald-100 text-emerald-700',
+  inactive: 'bg-gray-100 text-gray-700',
+};
 
 // ─── CourseManagementTab ──────────────────────────────────────────────────────
 const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () => void }) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
+  const [previewCourse, setPreviewCourse] = useState<typeof MOCK_COURSES[0] | null>(null);
+
+  // Handler for editing a course
+  const handleEditCourse = (courseId: string) => {
+    navigate(`/course-builder/${courseId}`);
+  };
+
+  // Handler for previewing a course
+  const handlePreviewCourse = (courseId: string) => {
+    const course = MOCK_COURSES.find(c => c.id === courseId);
+    if (course) {
+      setPreviewCourse(course);
+    }
+  };
+
+  // Handler for duplicating a course
+  const handleDuplicateCourse = (courseId: string, courseTitle: string) => {
+    toast({
+      title: "Course Duplicated",
+      description: `"${courseTitle}" has been duplicated successfully.`,
+    });
+    // TODO: Implement actual duplication logic
+  };
+
+  // Handler for archiving a course
+  const handleArchiveCourse = (courseId: string, courseTitle: string) => {
+    toast({
+      title: "Course Archived",
+      description: `"${courseTitle}" has been archived.`,
+    });
+    // TODO: Implement actual archive logic
+  };
+
+  // Handler for deleting a course
+  const handleDeleteCourse = (courseId: string, courseTitle: string) => {
+    if (window.confirm(`Are you sure you want to delete "${courseTitle}"? This action cannot be undone.`)) {
+      toast({
+        title: "Course Deleted",
+        description: `"${courseTitle}" has been permanently deleted.`,
+        variant: "destructive",
+      });
+      // TODO: Implement actual delete logic
+    }
+  };
 
   const filtered = MOCK_COURSES.filter(c => {
     const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -233,12 +315,47 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
                     <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">{course.lastUpdated}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
-                        <button className="p-1.5 rounded-lg hover:bg-[#ff6b4d]/10 text-[#ff6b4d] transition-colors" title="Edit course">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="p-1.5 rounded-lg hover:bg-[#1e2348]/10 text-[#1e2348] transition-colors" title="Preview course">
+                        <button 
+                          onClick={() => handlePreviewCourse(course.id)}
+                          className="p-1.5 rounded-lg hover:bg-[#1e2348]/10 text-[#1e2348] transition-colors" 
+                          title="Preview course"
+                        >
                           <Eye className="w-4 h-4" />
                         </button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button 
+                              className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
+                              title="More actions"
+                            >
+                              <MoreVertical className="w-4 h-4" />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem 
+                              onClick={() => handleDuplicateCourse(course.id, course.title)}
+                              className="cursor-pointer"
+                            >
+                              <Copy className="w-4 h-4 mr-2" />
+                              Duplicate Course
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => handleArchiveCourse(course.id, course.title)}
+                              className="cursor-pointer"
+                            >
+                              <Archive className="w-4 h-4 mr-2" />
+                              Archive Course
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem 
+                              onClick={() => handleDeleteCourse(course.id, course.title)}
+                              className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete Course
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </td>
                   </tr>
@@ -357,25 +474,34 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         </div>
       </section>
 
+      {/* Course Preview Modal */}
+      {previewCourse && (
+        <CoursePreviewModal
+          isOpen={!!previewCourse}
+          onClose={() => setPreviewCourse(null)}
+          course={previewCourse}
+          onEdit={handleEditCourse}
+        />
+      )}
     </div>
   );
 };
 
 // ─── Mock assessments data ────────────────────────────────────────────────────
 const MOCK_QUIZZES = [
-  { id: 'q1', title: 'Module 1: Digital Fundamentals Check', course: 'Digital Transformation Fundamentals', type: 'Quiz',       questions: 15, submissions: 287, avgScore: 78, passRate: 84, status: 'active'   },
-  { id: 'q2', title: 'AI Concepts Mid-Course Assessment',    course: 'AI & Automation in the Workplace',  type: 'Quiz',       questions: 20, submissions: 174, avgScore: 71, passRate: 76, status: 'active'   },
-  { id: 'q3', title: 'Capstone Project Submission',          course: 'Data-Driven Decision Making',       type: 'Assignment', questions: 5,  submissions: 52,  avgScore: 82, passRate: 90, status: 'active'   },
-  { id: 'q4', title: 'Leadership Style Reflection',          course: 'Leadership in the Digital Age',     type: 'Assignment', questions: 3,  submissions: 0,   avgScore: 0,  passRate: 0,  status: 'draft'    },
-  { id: 'q5', title: 'Agile Sprint Planning Quiz',           course: 'Agile Project Management',         type: 'Quiz',       questions: 12, submissions: 143, avgScore: 74, passRate: 79, status: 'active'   },
-  { id: 'q6', title: 'Security Threat Identification',       course: 'Cybersecurity Essentials',         type: 'Quiz',       questions: 18, submissions: 121, avgScore: 69, passRate: 71, status: 'active'   },
+  { id: 'q1', title: 'Module 1: Economy 4.0 Fundamentals Check', course: 'Mastering Economy 4.0', type: 'Quiz',       questions: 15, submissions: 287, avgScore: 78, passRate: 84, status: 'active'   },
+  { id: 'q2', title: 'Digital Cognitive Organizations Assessment',    course: 'Decoding Digital Cognitive Organisations',  type: 'Quiz',       questions: 20, submissions: 174, avgScore: 71, passRate: 76, status: 'active'   },
+  { id: 'q3', title: 'Platform Architecture Project',          course: 'Building Powerful Digital Business Platforms',       type: 'Assignment', questions: 5,  submissions: 52,  avgScore: 82, passRate: 90, status: 'active'   },
+  { id: 'q4', title: 'Transformation Strategy Reflection',          course: 'Navigating Digital Transformation 2.0',     type: 'Assignment', questions: 3,  submissions: 0,   avgScore: 0,  passRate: 0,  status: 'draft'    },
+  { id: 'q5', title: 'Digital Workspace Optimization Quiz',           course: 'Optimizing Digital Workers and Workspaces',         type: 'Quiz',       questions: 12, submissions: 143, avgScore: 74, passRate: 79, status: 'active'   },
+  { id: 'q6', title: 'AI & Automation Accelerators Quiz',       course: 'Leveraging Digital Accelerators for Growth',         type: 'Quiz',       questions: 18, submissions: 121, avgScore: 69, passRate: 71, status: 'active'   },
 ];
 
 const MOCK_SUBMISSIONS = [
-  { id: 's1', learner: 'Amara Osei',    assessment: 'Capstone Project Submission',       course: 'Data-Driven Decision Making',      submitted: '2026-03-26', score: null, maxScore: 100 },
-  { id: 's2', learner: 'James Kariuki', assessment: 'Leadership Style Reflection',       course: 'Leadership in the Digital Age',    submitted: '2026-03-25', score: null, maxScore: 100 },
-  { id: 's3', learner: 'Fatou Diallo',  assessment: 'Capstone Project Submission',       course: 'Data-Driven Decision Making',      submitted: '2026-03-25', score: null, maxScore: 100 },
-  { id: 's4', learner: 'Kofi Mensah',   assessment: 'Leadership Style Reflection',       course: 'Leadership in the Digital Age',    submitted: '2026-03-24', score: null, maxScore: 100 },
+  { id: 's1', learner: 'Amara Osei',    assessment: 'Platform Architecture Project',       course: 'Building Powerful Digital Business Platforms',      submitted: '2026-03-26', score: null, maxScore: 100 },
+  { id: 's2', learner: 'James Kariuki', assessment: 'Transformation Strategy Reflection',       course: 'Navigating Digital Transformation 2.0',    submitted: '2026-03-25', score: null, maxScore: 100 },
+  { id: 's3', learner: 'Fatou Diallo',  assessment: 'Platform Architecture Project',       course: 'Building Powerful Digital Business Platforms',      submitted: '2026-03-25', score: null, maxScore: 100 },
+  { id: 's4', learner: 'Kofi Mensah',   assessment: 'Transformation Strategy Reflection',       course: 'Navigating Digital Transformation 2.0',    submitted: '2026-03-24', score: null, maxScore: 100 },
 ];
 
 const SCORE_DISTRIBUTION = [
@@ -676,76 +802,151 @@ const AssessmentsTab = () => {
 // ─── Mock pending review data ─────────────────────────────────────────────────
 const MOCK_PENDING = [
   {
-    id: 'p1',
-    title: 'Data-Driven Decision Making',
-    instructor: 'Priya Nair',
-    email: 'p.nair@dtma.com',
-    category: 'Analytics',
-    level: 'Intermediate',
+    id: 'course-economy-40',
+    title: 'Mastering Economy 4.0',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Economy',
+    level: 'Beginner',
     price: 149,
-    duration: '6h 30m',
-    lessons: 18,
-    submittedDate: '2026-03-25',
-    description: 'A comprehensive course on using data analytics to drive strategic business decisions. Learners will master dashboards, KPIs, and data storytelling using real-world datasets.',
-    thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80',
+    duration: '1 hour',
+    lessons: 6,
+    submittedDate: '2026-04-10',
+    description: 'Master the fundamentals of the digital economy and understand how Economy 4.0 is reshaping industries, business models, and competitive dynamics.',
+    thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop',
     whatsappEnabled: true,
     whatsappDeliveryType: 'both',
     aiTutorEnabled: true,
     aiTone: 'professional',
   },
   {
-    id: 'p2',
-    title: 'Leadership in the Digital Age',
-    instructor: 'Marcus Webb',
-    email: 'm.webb@dtma.com',
-    category: 'Leadership',
-    level: 'Advanced',
-    price: 199,
-    duration: '8h 15m',
-    lessons: 24,
-    submittedDate: '2026-03-22',
-    description: 'Equip leaders with the mindset and tools to thrive in rapidly evolving digital environments. Covers agile leadership, remote team management, and digital culture transformation.',
-    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80',
+    id: 'course-cognitive-org',
+    title: 'Decoding Digital Cognitive Organisations',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Cognitive Organisation',
+    level: 'Intermediate',
+    price: 149,
+    duration: '15 hours',
+    lessons: 45,
+    submittedDate: '2026-04-08',
+    description: 'Transform your organization into an intelligent, learning entity that adapts and thrives in the digital age through AI-driven decision making and continuous learning.',
+    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop',
     whatsappEnabled: true,
     whatsappDeliveryType: 'daily',
     aiTutorEnabled: true,
     aiTone: 'encouraging',
   },
   {
-    id: 'p3',
-    title: 'Emotional Intelligence at Work',
-    instructor: 'Lindiwe Dube',
-    email: 'l.dube@dtma.com',
-    category: 'Leadership',
+    id: 'course-business-platforms',
+    title: 'Building Powerful Digital Business Platforms',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Business Platform',
+    level: 'Intermediate',
+    price: 149,
+    duration: '18 hours',
+    lessons: 54,
+    submittedDate: '2026-04-12',
+    description: 'Master the architecture, design, and implementation of scalable digital business platforms that drive innovation and competitive advantage.',
+    thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'both',
+    aiTutorEnabled: true,
+    aiTone: 'professional',
+  },
+  {
+    id: 'course-transformation',
+    title: 'Navigating Digital Transformation 2.0',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Transformation',
+    level: 'Advanced',
+    price: 149,
+    duration: '16 hours',
+    lessons: 48,
+    submittedDate: '2026-04-09',
+    description: 'Lead successful digital transformation initiatives with proven strategies, change management techniques, and agile methodologies.',
+    thumbnail: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=1200&auto=format&fit=crop',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'daily',
+    aiTutorEnabled: true,
+    aiTone: 'encouraging',
+  },
+  {
+    id: 'course-digital-workers',
+    title: 'Optimizing Digital Workers and Workspaces',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Worker & Workspace',
     level: 'Beginner',
-    price: 99,
-    duration: '4h 45m',
-    lessons: 14,
-    submittedDate: '2026-03-26',
-    description: 'Develop self-awareness, empathy, and interpersonal skills to foster a more collaborative and productive workplace. Includes practical exercises and reflective assignments.',
-    thumbnail: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
-    whatsappEnabled: false,
-    whatsappDeliveryType: null,
+    price: 149,
+    duration: '10 hours',
+    lessons: 30,
+    submittedDate: '2026-04-11',
+    description: 'Master the tools, practices, and mindset needed to thrive as a digital worker in modern, distributed work environments.',
+    thumbnail: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'both',
     aiTutorEnabled: true,
     aiTone: 'friendly',
+  },
+  {
+    id: 'course-digital-accelerators',
+    title: 'Leveraging Digital Accelerators for Growth',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Accelerators',
+    level: 'Advanced',
+    price: 149,
+    duration: '20 hours',
+    lessons: 60,
+    submittedDate: '2026-04-07',
+    description: 'Harness emerging technologies like AI, blockchain, IoT, and automation to accelerate business growth and innovation.',
+    thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1200&auto=format&fit=crop',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'daily',
+    aiTutorEnabled: true,
+    aiTone: 'professional',
   },
 ];
 
 const RECENT_ACTIVITY = [
-  { action: 'approved',           course: 'Digital Transformation Fundamentals', reviewer: 'Admin', time: '2 hours ago', color: 'text-emerald-600', bg: 'bg-emerald-100' },
-  { action: 'rejected',           course: 'Python for Beginners v2',             reviewer: 'Admin', time: '5 hours ago', color: 'text-red-600',     bg: 'bg-red-100'     },
-  { action: 'approved',           course: 'Agile Project Management',            reviewer: 'Admin', time: 'Yesterday',   color: 'text-emerald-600', bg: 'bg-emerald-100' },
+  { action: 'approved',           course: 'Mastering Economy 4.0', reviewer: 'Admin', time: '2 hours ago', color: 'text-emerald-600', bg: 'bg-emerald-100' },
+  { action: 'rejected',           course: 'Advanced Data Analytics',             reviewer: 'Admin', time: '5 hours ago', color: 'text-red-600',     bg: 'bg-red-100'     },
+  { action: 'approved',           course: 'Optimizing Digital Workers and Workspaces',            reviewer: 'Admin', time: 'Yesterday',   color: 'text-emerald-600', bg: 'bg-emerald-100' },
   { action: 'changes requested',  course: 'Cloud Architecture Basics',           reviewer: 'Admin', time: 'Yesterday',   color: 'text-amber-600',   bg: 'bg-amber-100'   },
-  { action: 'approved',           course: 'AI & Automation in the Workplace',    reviewer: 'Admin', time: '2 days ago',  color: 'text-emerald-600', bg: 'bg-emerald-100' },
+  { action: 'approved',           course: 'Decoding Digital Cognitive Organisations',    reviewer: 'Admin', time: '2 days ago',  color: 'text-emerald-600', bg: 'bg-emerald-100' },
 ];
 
-const PENDING_CATEGORIES = ['All Categories', 'Analytics', 'Leadership', 'Digital Skills', 'Management'];
+const PENDING_CATEGORIES = ['All Categories', 'Digital Economy', 'Digital Cognitive Organisation', 'Digital Business Platform', 'Digital Transformation', 'Digital Worker & Workspace', 'Digital Accelerators'];
 
 // ─── PendingApprovalsTab ──────────────────────────────────────────────────────
 const PendingApprovalsTab = () => {
   const [pendingSearch, setPendingSearch] = useState('');
   const [pendingCategory, setPendingCategory] = useState('All Categories');
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
+  const [previewCourse, setPreviewCourse] = useState<any>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const handlePreview = (course: any) => {
+    // Convert pending course to the format expected by CoursePreviewModal
+    const courseForPreview = {
+      id: course.id,
+      title: course.title,
+      instructor: course.instructor,
+      category: course.category,
+      level: course.level,
+      status: 'pending',
+      enrollments: 0,
+      lastUpdated: course.submittedDate,
+      rating: 0,
+      completion: 0,
+      revenue: 0,
+    };
+    setPreviewCourse(courseForPreview);
+    setIsPreviewOpen(true);
+  };
 
   const filtered = MOCK_PENDING.filter(c => {
     const matchSearch =
@@ -904,7 +1105,10 @@ const PendingApprovalsTab = () => {
                     <button className="px-4 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-[13px] font-medium border border-red-200 transition-colors flex items-center gap-1.5">
                       <XCircle className="w-3.5 h-3.5" /> Reject
                     </button>
-                    <button className="ml-auto px-3 py-1.5 rounded-lg border border-border text-[13px] text-muted-foreground hover:bg-[#FFE9E4] transition-colors flex items-center gap-1.5">
+                    <button 
+                      onClick={() => handlePreview(course)}
+                      className="ml-auto px-3 py-1.5 rounded-lg border border-border text-[13px] text-muted-foreground hover:bg-[#FFE9E4] transition-colors flex items-center gap-1.5"
+                    >
                       <Eye className="w-3.5 h-3.5" /> Preview
                     </button>
                   </>
@@ -945,6 +1149,18 @@ const PendingApprovalsTab = () => {
           </div>
         </div>
       </div>
+
+      {/* Course Preview Modal */}
+      {previewCourse && (
+        <CoursePreviewModal
+          isOpen={isPreviewOpen}
+          onClose={() => {
+            setIsPreviewOpen(false);
+            setPreviewCourse(null);
+          }}
+          course={previewCourse}
+        />
+      )}
     </div>
   );
 };
@@ -959,6 +1175,61 @@ const AdminDashboard = () => {
   const [showAddFacultyModal, setShowAddFacultyModal] = useState(false);
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
   const [showReviewContentModal, setShowReviewContentModal] = useState(false);
+  
+  // User Management State
+  const [userSearch, setUserSearch] = useState('');
+  const [userRoleFilter, setUserRoleFilter] = useState('all');
+  const [userStatusFilter, setUserStatusFilter] = useState('all');
+
+  // Filter users based on search and filters
+  const filteredUsers = MOCK_USERS.filter(user => {
+    const matchSearch = user.full_name.toLowerCase().includes(userSearch.toLowerCase()) ||
+      user.email.toLowerCase().includes(userSearch.toLowerCase());
+    const matchRole = userRoleFilter === 'all' || user.role === userRoleFilter;
+    const matchStatus = userStatusFilter === 'all' || user.status === userStatusFilter;
+    return matchSearch && matchRole && matchStatus;
+  });
+
+  // User Management Handlers
+  const handleEditUser = (userId: string) => {
+    toast({
+      title: "Edit User",
+      description: "User edit functionality coming soon.",
+    });
+  };
+
+  const handleViewUser = (userId: string) => {
+    toast({
+      title: "View User",
+      description: "User details view coming soon.",
+    });
+  };
+
+  const handleResetPassword = (userId: string, email: string) => {
+    toast({
+      title: "Password Reset",
+      description: `Password reset link sent to ${email}`,
+    });
+  };
+
+  const handleToggleStatus = (userId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    toast({
+      title: "Status Updated",
+      description: `User ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully.`,
+    });
+  };
+
+  const handleDeleteUser = (userId: string, userName: string) => {
+    if (window.confirm(`Are you sure you want to delete ${userName}? This action cannot be undone.`)) {
+      toast({
+        title: "User Deleted",
+        description: `${userName} has been permanently deleted.`,
+        variant: "destructive",
+      });
+    }
+  };
+  
   const [announcementForm, setAnnouncementForm] = useState({
     title: '',
     message: '',
@@ -1325,70 +1596,178 @@ const AdminDashboard = () => {
                   Create User
                 </Button>
               </div>
-              
-              {usersLoading ? (
-                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Loading users...</p>
-              ) : (
-                <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full" role="table" aria-label="User management table">
-                      <thead className="bg-[#1e2348]">
-                        <tr>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">User</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Email</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Role</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Joined</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {users?.map((user) => (
-                          <tr key={user.id} className="border-t border-border">
-                            <td className="p-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center text-[14px] leading-[20px] font-medium text-[#ff6b4d]" aria-hidden="true">
-                                  {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
-                                </div>
-                                <span className="text-[16px] leading-[24px] font-normal">{user.full_name || 'No name'}</span>
-                              </div>
-                            </td>
-                            <td className="p-4 text-[14px] leading-[20px] font-normal text-muted-foreground">{user.email}</td>
-                            <td className="p-4">
-                              <Select
-                                value={user.role}
-                                onValueChange={(value) => handleUpdateRole(user.id, value as 'learner' | 'instructor' | 'admin')}
-                              >
-                                <SelectTrigger className="w-32" aria-label={`Change role for ${user.full_name || user.email}`}>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="learner">Learner</SelectItem>
-                                  <SelectItem value="instructor">Instructor</SelectItem>
-                                  <SelectItem value="admin">Admin</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </td>
-                            <td className="p-4 text-[14px] leading-[20px] font-normal text-muted-foreground">
-                              {new Date(user.created_at).toLocaleDateString()}
-                            </td>
-                            <td className="p-4">
-                              <Button variant="ghost" size="sm" aria-label={`View details for ${user.full_name || user.email}`}>
-                                <Eye className="w-4 h-4" aria-hidden="true" />
-                                <span className="sr-only">View user details</span>
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+
+              {/* Stats */}
+              <div className="flex flex-wrap gap-3 mb-5">
+                {[
+                  { label: 'Total Users', value: MOCK_USERS.length, color: 'bg-[#1e2348]/5 text-[#1e2348]' },
+                  { label: 'Admins', value: MOCK_USERS.filter(u => u.role === 'admin').length, color: 'bg-purple-50 text-purple-700' },
+                  { label: 'Instructors', value: MOCK_USERS.filter(u => u.role === 'instructor').length, color: 'bg-blue-50 text-blue-700' },
+                  { label: 'Learners', value: MOCK_USERS.filter(u => u.role === 'learner').length, color: 'bg-emerald-50 text-emerald-700' },
+                  { label: 'Active', value: MOCK_USERS.filter(u => u.status === 'active').length, color: 'bg-green-50 text-green-700' },
+                ].map(pill => (
+                  <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
+                    <span className="font-bold text-[15px]">{pill.value}</span>
+                    <span>{pill.label}</span>
                   </div>
-                  {(!users || users.length === 0) && (
-                    <div className="p-8 text-center text-[14px] leading-[20px] font-normal text-muted-foreground">
-                      No users found.
-                    </div>
-                  )}
+                ))}
+              </div>
+
+              {/* Search and Filters */}
+              <div className="flex flex-wrap gap-3 mb-5">
+                <div className="relative flex-1 min-w-[200px]">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder="Search by name or email…"
+                    value={userSearch}
+                    onChange={e => setUserSearch(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                  />
                 </div>
-              )}
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <select
+                    value={userRoleFilter}
+                    onChange={e => setUserRoleFilter(e.target.value)}
+                    className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                  >
+                    <option value="all">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="learner">Learner</option>
+                  </select>
+                </div>
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <select
+                    value={userStatusFilter}
+                    onChange={e => setUserStatusFilter(e.target.value)}
+                    className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full" role="table" aria-label="User management table">
+                    <thead className="bg-[#1e2348]">
+                      <tr>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">User</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Email</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Role</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Status</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Joined</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Last Login</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredUsers.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="text-center py-12 text-[14px] text-muted-foreground">
+                            <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                            No users match your filters.
+                          </td>
+                        </tr>
+                      ) : filteredUsers.map((user, idx) => (
+                        <tr key={user.id} className={`border-t border-border transition-colors hover:bg-muted/30 ${idx % 2 === 0 ? '' : 'bg-muted/10'}`}>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center text-[14px] font-medium text-[#ff6b4d]">
+                                {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
+                              </div>
+                              <span className="text-[14px] font-medium text-foreground">{user.full_name}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-[13px] text-muted-foreground">{user.email}</td>
+                          <td className="px-4 py-3">
+                            <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${ROLE_STYLES[user.role]}`}>
+                              {user.role}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${STATUS_BADGE_STYLES[user.status]}`}>
+                              {user.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">
+                            {new Date(user.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">
+                            {new Date(user.lastLogin).toLocaleDateString()}
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-1">
+                              <button 
+                                onClick={() => handleEditUser(user.id)}
+                                className="p-1.5 rounded-lg hover:bg-[#ff6b4d]/10 text-[#ff6b4d] transition-colors" 
+                                title="Edit user"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button 
+                                onClick={() => handleViewUser(user.id)}
+                                className="p-1.5 rounded-lg hover:bg-[#1e2348]/10 text-[#1e2348] transition-colors" 
+                                title="View user details"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <button 
+                                    className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground transition-colors"
+                                    title="More actions"
+                                  >
+                                    <MoreVertical className="w-4 h-4" />
+                                  </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-48">
+                                  <DropdownMenuItem 
+                                    onClick={() => handleResetPassword(user.id, user.email)}
+                                    className="cursor-pointer"
+                                  >
+                                    <Lock className="w-4 h-4 mr-2" />
+                                    Reset Password
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    onClick={() => handleToggleStatus(user.id, user.status)}
+                                    className="cursor-pointer"
+                                  >
+                                    {user.status === 'active' ? (
+                                      <>
+                                        <XCircle className="w-4 h-4 mr-2" />
+                                        Deactivate User
+                                      </>
+                                    ) : (
+                                      <>
+                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                        Activate User
+                                      </>
+                                    )}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem 
+                                    onClick={() => handleDeleteUser(user.id, user.full_name)}
+                                    className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+                                  >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete User
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1510,24 +1889,230 @@ const AdminDashboard = () => {
           {activeTab === 'governance' && (
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Content Governance & Compliance</h1>
-              <div className="grid gap-6">
+              
+              {/* Statistics */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {[
+                  { icon: CheckCircle, label: 'Approved Content', value: '342', color: 'text-emerald-600', bg: 'bg-emerald-100' },
+                  { icon: Clock, label: 'Pending Review', value: '28', color: 'text-amber-600', bg: 'bg-amber-100' },
+                  { icon: ShieldIcon, label: 'Compliance Score', value: '94%', color: 'text-blue-600', bg: 'bg-blue-100' },
+                  { icon: AlertTriangle, label: 'Issues Found', value: '12', color: 'text-red-600', bg: 'bg-red-100' },
+                ].map(stat => (
+                  <div key={stat.label} className="bg-card rounded-2xl p-5 shadow-sm border border-border">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${stat.bg}`}>
+                      <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                    </div>
+                    <div className="text-[22px] font-bold text-foreground">{stat.value}</div>
+                    <div className="text-[12px] text-muted-foreground mt-0.5">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-6">
+                {/* Content CMS & Moderation */}
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Content CMS & Moderation</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Review and moderate course content for quality and compliance.
-                  </p>
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-[#ff6b4d]/10 flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-6 h-6 text-[#ff6b4d]" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Content CMS & Moderation</h3>
+                      <p className="text-[13px] text-muted-foreground mb-4">
+                        Review and moderate course content for quality and compliance. Ensure all materials meet institutional standards.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Pending Reviews</span>
+                      <span className="text-[14px] font-semibold text-foreground">28 items</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Avg Review Time</span>
+                      <span className="text-[14px] font-semibold text-foreground">2.4 days</span>
+                    </div>
+                  </div>
                   <Button 
                     onClick={() => setShowReviewContentModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="w-full bg-[#ff6b4d] hover:bg-[#e56045] text-white"
                   >
+                    <FileText className="w-4 h-4 mr-2" />
                     Review Content
                   </Button>
                 </div>
+
+                {/* Accessibility Standards */}
                 <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Accessibility Standards</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Ensure all content meets accessibility requirements.
-                  </p>
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                      <Eye className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Accessibility Standards</h3>
+                      <p className="text-[13px] text-muted-foreground mb-4">
+                        Ensure all content meets WCAG 2.1 AA accessibility requirements for inclusive learning.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-emerald-600" />
+                        <span className="text-[13px] text-muted-foreground">WCAG 2.1 AA Compliant</span>
+                      </div>
+                      <span className="text-[14px] font-semibold text-emerald-600">89%</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="w-4 h-4 text-amber-600" />
+                        <span className="text-[13px] text-muted-foreground">Issues to Fix</span>
+                      </div>
+                      <span className="text-[14px] font-semibold text-amber-600">34</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Accessibility Audit", description: "Running accessibility audit..." })}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Run Accessibility Audit
+                  </Button>
+                </div>
+
+                {/* Copyright & IP Protection */}
+                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
+                      <ShieldIcon className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Copyright & IP Protection</h3>
+                      <p className="text-[13px] text-muted-foreground mb-4">
+                        Monitor and protect intellectual property. Detect plagiarism and unauthorized content usage.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Content Scanned</span>
+                      <span className="text-[14px] font-semibold text-foreground">1,247 items</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Violations Detected</span>
+                      <span className="text-[14px] font-semibold text-red-600">3</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Plagiarism Check", description: "Scanning content for plagiarism..." })}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <ShieldIcon className="w-4 h-4 mr-2" />
+                    Run Plagiarism Check
+                  </Button>
+                </div>
+
+                {/* Data Privacy & GDPR */}
+                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <Lock className="w-6 h-6 text-green-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Data Privacy & GDPR</h3>
+                      <p className="text-[13px] text-muted-foreground mb-4">
+                        Ensure compliance with GDPR, FERPA, and other data protection regulations.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-emerald-600" />
+                        <span className="text-[13px] text-muted-foreground">GDPR Compliant</span>
+                      </div>
+                      <span className="text-[14px] font-semibold text-emerald-600">Yes</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Data Requests</span>
+                      <span className="text-[14px] font-semibold text-foreground">7 pending</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Privacy Audit", description: "Reviewing data privacy compliance..." })}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Lock className="w-4 h-4 mr-2" />
+                    View Privacy Dashboard
+                  </Button>
+                </div>
+
+                {/* Quality Assurance */}
+                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+                      <Star className="w-6 h-6 text-amber-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Quality Assurance</h3>
+                      <p className="text-[13px] text-muted-foreground mb-4">
+                        Monitor content quality metrics and learner feedback to maintain high standards.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Avg Quality Score</span>
+                      <span className="text-[14px] font-semibold text-foreground">4.6/5.0</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Courses Audited</span>
+                      <span className="text-[14px] font-semibold text-foreground">156/180</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Quality Report", description: "Generating quality assurance report..." })}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Star className="w-4 h-4 mr-2" />
+                    View Quality Reports
+                  </Button>
+                </div>
+
+                {/* Version Control & Audit Trail */}
+                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-6 h-6 text-indigo-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Version Control & Audit Trail</h3>
+                      <p className="text-[13px] text-muted-foreground mb-4">
+                        Track all content changes and maintain comprehensive audit logs for compliance.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Content Versions</span>
+                      <span className="text-[14px] font-semibold text-foreground">2,847</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-[13px] text-muted-foreground">Recent Changes</span>
+                      <span className="text-[14px] font-semibold text-foreground">142 today</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Audit Trail", description: "Loading audit trail..." })}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Clock className="w-4 h-4 mr-2" />
+                    View Audit Trail
+                  </Button>
                 </div>
               </div>
             </div>
@@ -2335,11 +2920,12 @@ const AdminDashboard = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
                 >
                   <option value="">Choose a course...</option>
-                  <option value="digital-transformation">Digital Transformation Fundamentals</option>
-                  <option value="ai-automation">AI & Automation in the Workplace</option>
-                  <option value="data-driven">Data-Driven Decision Making</option>
-                  <option value="leadership">Leadership in the Digital Age</option>
-                  <option value="agile">Agile Project Management</option>
+                  <option value="economy-40">Mastering Economy 4.0</option>
+                  <option value="cognitive-org">Decoding Digital Cognitive Organisations</option>
+                  <option value="business-platforms">Building Powerful Digital Business Platforms</option>
+                  <option value="transformation">Navigating Digital Transformation 2.0</option>
+                  <option value="digital-workers">Optimizing Digital Workers and Workspaces</option>
+                  <option value="digital-accelerators">Leveraging Digital Accelerators for Growth</option>
                 </select>
               </div>
 
@@ -2659,12 +3245,12 @@ const AdminDashboard = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
                 >
                   <option value="">Choose a course...</option>
-                  <option value="digital-transformation">Digital Transformation Fundamentals</option>
-                  <option value="ai-automation">AI & Automation in the Workplace</option>
-                  <option value="data-driven">Data-Driven Decision Making</option>
-                  <option value="leadership">Leadership in the Digital Age</option>
-                  <option value="agile">Agile Project Management</option>
-                  <option value="cybersecurity">Cybersecurity Essentials</option>
+                  <option value="economy-40">Mastering Economy 4.0</option>
+                  <option value="cognitive-org">Decoding Digital Cognitive Organisations</option>
+                  <option value="business-platforms">Building Powerful Digital Business Platforms</option>
+                  <option value="transformation">Navigating Digital Transformation 2.0</option>
+                  <option value="digital-workers">Optimizing Digital Workers and Workspaces</option>
+                  <option value="digital-accelerators">Leveraging Digital Accelerators for Growth</option>
                 </select>
               </div>
 
@@ -3183,7 +3769,7 @@ const AdminDashboard = () => {
                     Assign to Courses
                   </label>
                   <div className="space-y-2">
-                    {['Digital Transformation Fundamentals', 'AI & Automation in the Workplace', 'Leadership in the Digital Age', 'Agile Project Management', 'Cybersecurity Essentials'].map((course) => (
+                    {['Mastering Economy 4.0', 'Decoding Digital Cognitive Organisations', 'Building Powerful Digital Business Platforms', 'Navigating Digital Transformation 2.0', 'Optimizing Digital Workers and Workspaces', 'Leveraging Digital Accelerators for Growth'].map((course) => (
                       <label key={course} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
                         <input
                           type="checkbox"
@@ -3682,10 +4268,12 @@ const AdminDashboard = () => {
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
                     >
                       <option value="">Choose content...</option>
-                      <option value="dt-fundamentals">Digital Transformation Fundamentals</option>
-                      <option value="ai-automation">AI & Automation in the Workplace</option>
-                      <option value="data-driven">Data-Driven Decision Making</option>
-                      <option value="leadership">Leadership in the Digital Age</option>
+                      <option value="economy-40">Mastering Economy 4.0</option>
+                      <option value="cognitive-org">Decoding Digital Cognitive Organisations</option>
+                      <option value="business-platforms">Building Powerful Digital Business Platforms</option>
+                      <option value="transformation">Navigating Digital Transformation 2.0</option>
+                      <option value="digital-workers">Optimizing Digital Workers and Workspaces</option>
+                      <option value="digital-accelerators">Leveraging Digital Accelerators for Growth</option>
                     </select>
                   </div>
                 </div>

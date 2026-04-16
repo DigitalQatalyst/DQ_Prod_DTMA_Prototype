@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { CoursePreviewModal } from "@/components/admin/CoursePreviewModal";
 import {
   ChevronLeft,
   Save,
@@ -55,6 +56,7 @@ const CourseBuilder = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [, setRefresh] = useState(0); // Force re-render for progress updates
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   // Get stored course data to check completion
   const storedCourse = courseId ? JSON.parse(localStorage.getItem(`course_${courseId}`) || '{}') : {};
@@ -91,7 +93,7 @@ const CourseBuilder = () => {
   }, [courseId]);
 
   const handleBack = () => {
-    navigate("/dashboard/instructor");
+    navigate("/dashboard", { state: { tab: "courses" } });
   };
 
   const handleSave = () => {
@@ -104,8 +106,7 @@ const CourseBuilder = () => {
   };
 
   const handlePreview = () => {
-    // Navigate to the course detail page to preview
-    navigate(`/courses/${courseId}`);
+    setShowPreviewModal(true);
   };
 
   const handleContinue = () => {
@@ -216,7 +217,7 @@ const CourseBuilder = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={handleBack}
-                className="p-2 hover:bg-accent rounded-lg transition-colors"
+                className="p-2 hover:bg-[#FFE9E4] rounded-lg transition-colors"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
@@ -3084,6 +3085,31 @@ const SubmitStep = ({ course, onSave }: any) => {
           {isSubmitting ? "Submitting..." : "Submit for Review"}
         </Button>
       </div>
+
+      {/* Course Preview Modal */}
+      {course && (
+        <CoursePreviewModal
+          isOpen={showPreviewModal}
+          onClose={() => setShowPreviewModal(false)}
+          course={{
+            id: course.id,
+            title: course.title || "Untitled Course",
+            instructor: profile?.full_name || "Instructor",
+            category: storedCourse.category || "Uncategorized",
+            level: storedCourse.level || "Beginner",
+            status: "draft",
+            enrollments: 0,
+            lastUpdated: lastSaved?.toLocaleDateString() || new Date().toLocaleDateString(),
+            rating: 0,
+            completion: 0,
+            revenue: 0,
+          }}
+          onEdit={() => {
+            setShowPreviewModal(false);
+            // Already in edit mode, just close modal
+          }}
+        />
+      )}
     </div>
   );
 };

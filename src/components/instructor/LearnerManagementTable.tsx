@@ -115,6 +115,7 @@ export const LearnerManagementTable = () => {
   const { toast } = useToast();
   const [learners] = useState<Learner[]>(mockLearners);
   const [searchQuery, setSearchQuery] = useState("");
+  const [courseFilter, setCourseFilter] = useState<string>("all");
   const [whatsappFilter, setWhatsappFilter] = useState<"all" | "opted-in" | "not-opted-in">("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "completed" | "inactive">("all");
   const [sortField, setSortField] = useState<SortField>("enrolledDate");
@@ -122,6 +123,12 @@ export const LearnerManagementTable = () => {
   const [selectedLearners, setSelectedLearners] = useState<Set<string>>(new Set());
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [messageContent, setMessageContent] = useState("");
+
+  // Get unique courses from learners
+  const uniqueCourses = useMemo(() => {
+    const courses = Array.from(new Set(learners.map(l => l.courseName)));
+    return courses.sort();
+  }, [learners]);
 
   // Filter and sort learners
   const filteredAndSortedLearners = useMemo(() => {
@@ -132,6 +139,9 @@ export const LearnerManagementTable = () => {
         learner.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         learner.courseName.toLowerCase().includes(searchQuery.toLowerCase());
 
+      // Course filter
+      const matchesCourse = courseFilter === "all" || learner.courseName === courseFilter;
+
       // WhatsApp filter
       const matchesWhatsApp =
         whatsappFilter === "all" ||
@@ -141,7 +151,7 @@ export const LearnerManagementTable = () => {
       // Status filter
       const matchesStatus = statusFilter === "all" || learner.status === statusFilter;
 
-      return matchesSearch && matchesWhatsApp && matchesStatus;
+      return matchesSearch && matchesCourse && matchesWhatsApp && matchesStatus;
     });
 
     // Sort
@@ -162,7 +172,7 @@ export const LearnerManagementTable = () => {
     });
 
     return filtered;
-  }, [learners, searchQuery, whatsappFilter, statusFilter, sortField, sortDirection]);
+  }, [learners, searchQuery, courseFilter, whatsappFilter, statusFilter, sortField, sortDirection]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -349,6 +359,22 @@ export const LearnerManagementTable = () => {
             </div>
           </div>
 
+          {/* Course Filter */}
+          <Select value={courseFilter} onValueChange={setCourseFilter}>
+            <SelectTrigger className="w-full lg:w-[250px]">
+              <Filter className="w-4 h-4 mr-2" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Courses</SelectItem>
+              {uniqueCourses.map((course) => (
+                <SelectItem key={course} value={course}>
+                  {course}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           {/* WhatsApp Filter */}
           <Select value={whatsappFilter} onValueChange={(v: any) => setWhatsappFilter(v)}>
             <SelectTrigger className="w-full lg:w-[200px]">
@@ -387,7 +413,7 @@ export const LearnerManagementTable = () => {
         </div>
 
         {/* Active Filters Display */}
-        {(searchQuery || whatsappFilter !== "all" || statusFilter !== "all") && (
+        {(searchQuery || courseFilter !== "all" || whatsappFilter !== "all" || statusFilter !== "all") && (
           <div className="flex items-center gap-2 mt-4 flex-wrap">
             <span className="text-sm text-muted-foreground">Active filters:</span>
             {searchQuery && (
@@ -396,6 +422,15 @@ export const LearnerManagementTable = () => {
                 <X
                   className="w-3 h-3 cursor-pointer"
                   onClick={() => setSearchQuery("")}
+                />
+              </Badge>
+            )}
+            {courseFilter !== "all" && (
+              <Badge variant="secondary" className="gap-1">
+                Course: {courseFilter}
+                <X
+                  className="w-3 h-3 cursor-pointer"
+                  onClick={() => setCourseFilter("all")}
                 />
               </Badge>
             )}

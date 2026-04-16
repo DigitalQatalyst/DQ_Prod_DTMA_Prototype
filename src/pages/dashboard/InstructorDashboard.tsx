@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useMemo, useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   useInstructorCourses,
@@ -93,6 +93,7 @@ const InstructorDashboard = () => {
   const { profile, signOut, role } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -103,6 +104,15 @@ const InstructorDashboard = () => {
     description: '',
     price: '',
   });
+
+  // Check for tab state from navigation
+  useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab);
+      // Clear the state after using it
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, location.pathname, navigate]);
 
   // Check if instructor is in verification pending state
   // For now, we'll use a flag from localStorage that gets set when they complete verification

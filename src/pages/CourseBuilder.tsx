@@ -707,11 +707,11 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
         </div>
 
         {!hasValidCurriculum && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-amber-900">Curriculum requirements not met</p>
-              <p className="text-xs text-amber-800 mt-1">Add at least 1 section with at least 1 lesson to proceed.</p>
+              <p className="text-sm font-medium text-red-900">Curriculum requirements not met</p>
+              <p className="text-xs text-red-800 mt-1">Add at least 1 section with at least 1 lesson to proceed.</p>
             </div>
           </div>
         )}
@@ -1240,11 +1240,11 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
         <p className="text-sm text-muted-foreground mb-6">Upload course thumbnail, promo video, and define learning objectives.</p>
 
         {!hasThumbnail && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-amber-900">Thumbnail required</p>
-              <p className="text-xs text-amber-800 mt-1">You must upload a course thumbnail before submission.</p>
+              <p className="text-sm font-medium text-red-900">Thumbnail required</p>
+              <p className="text-xs text-red-800 mt-1">You must upload a course thumbnail before submission.</p>
             </div>
           </div>
         )}
@@ -1505,11 +1505,11 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
         <p className="text-sm text-muted-foreground mb-6">Configure quizzes, assignments, and evaluation methods.</p>
 
         {assessmentRequired && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-amber-900">Assessment required</p>
-              <p className="text-xs text-amber-800 mt-1">Certification is enabled. You must select an assessment type.</p>
+              <p className="text-sm font-medium text-red-900">Assessment required</p>
+              <p className="text-xs text-red-800 mt-1">Certification is enabled. You must select an assessment type.</p>
             </div>
           </div>
         )}
@@ -1710,11 +1710,11 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
               <h3 className="text-lg font-semibold mb-4">Quiz Builder</h3>
               
               {!hasValidQuiz && quizQuestions.length > 0 && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-amber-900">Incomplete questions</p>
-                    <p className="text-xs text-amber-800 mt-1">All questions must have a correct answer marked.</p>
+                    <p className="text-sm font-medium text-red-900">Incomplete questions</p>
+                    <p className="text-xs text-red-800 mt-1">All questions must have a correct answer marked.</p>
                   </div>
                 </div>
               )}
@@ -1876,11 +1876,11 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
               <h3 className="text-lg font-semibold mb-4">Assignment Setup</h3>
               
               {!hasValidAssignment && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-amber-900">Instructions or brief required</p>
-                    <p className="text-xs text-amber-800 mt-1">Provide either written instructions or upload a brief document.</p>
+                    <p className="text-sm font-medium text-red-900">Instructions or brief required</p>
+                    <p className="text-xs text-red-800 mt-1">Provide either written instructions or upload a brief document.</p>
                   </div>
                 </div>
               )}
@@ -2078,11 +2078,11 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
               <h3 className="text-lg font-semibold mb-4">Practical Evaluation Setup</h3>
               
               {!hasValidPractical && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-amber-900">Instructions required</p>
-                    <p className="text-xs text-amber-800 mt-1">Provide instructions for the practical evaluation.</p>
+                    <p className="text-sm font-medium text-red-900">Instructions required</p>
+                    <p className="text-xs text-red-800 mt-1">Provide instructions for the practical evaluation.</p>
                   </div>
                 </div>
               )}
@@ -3033,15 +3033,15 @@ const SubmitStep = ({ course, onSave }: any) => {
                 className={`flex items-center gap-3 p-3 rounded-lg border ${
                   item.completed
                     ? "bg-green-50 border-green-200"
-                    : "bg-amber-50 border-amber-200"
+                    : "bg-red-50 border-red-200"
                 }`}
               >
                 {item.completed ? (
                   <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
                 ) : (
-                  <Circle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                  <Circle className="w-5 h-5 text-red-600 flex-shrink-0" />
                 )}
-                <span className={`text-sm ${item.completed ? "text-green-900" : "text-amber-900"}`}>
+                <span className={`text-sm ${item.completed ? "text-green-900" : "text-red-900"}`}>
                   {item.label}
                 </span>
               </div>
@@ -3051,11 +3051,11 @@ const SubmitStep = ({ course, onSave }: any) => {
 
         {/* Missing Items Warning */}
         {!isValid && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-amber-900">Missing required items</p>
-              <p className="text-xs text-amber-800 mt-1">
+              <p className="text-sm font-medium text-red-900">Missing required items</p>
+              <p className="text-xs text-red-800 mt-1">
                 Complete all checklist items before submitting for review.
               </p>
             </div>

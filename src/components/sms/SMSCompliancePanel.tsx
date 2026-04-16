@@ -168,14 +168,28 @@ export default function SMSCompliancePanel() {
                         <Badge className={`border text-xs font-semibold ${accredBadge(body.status)}`}>{accredLabel[body.status]}</Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        {needsAction && (
+                        {body.status === "expiring-soon" || body.status === "expired" || body.status === "renewal-overdue" ? (
                           <Button size="sm" variant="outline" className="text-xs h-7"
                             disabled={escalatedIds.has(body.id)}
                             onClick={() => escalate(body.id, body.name)}
                           >
                             {escalatedIds.has(body.id) ? "Escalated" : <><Flag className="h-3 w-3 mr-1" />Escalate</>}
                           </Button>
-                        )}
+                        ) : body.status === "renewal-in-progress" ? (
+                          <Button size="sm" variant="outline" className="text-xs h-7"
+                            disabled={escalatedIds.has(body.id + "-check")}
+                            onClick={() => { setEscalatedIds((p) => new Set(p).add(body.id + "-check")); toast({ title: "Status check sent", description: `Compliance officer asked for a renewal update on ${body.name}.` }); }}
+                          >
+                            {escalatedIds.has(body.id + "-check") ? "Sent" : "Check Status"}
+                          </Button>
+                        ) : body.status === "pending" ? (
+                          <Button size="sm" variant="outline" className="text-xs h-7"
+                            disabled={escalatedIds.has(body.id + "-followup")}
+                            onClick={() => { setEscalatedIds((p) => new Set(p).add(body.id + "-followup")); toast({ title: "Follow-up sent", description: `Compliance officer nudged to progress the ${body.name} application.` }); }}
+                          >
+                            {escalatedIds.has(body.id + "-followup") ? "Sent" : "Follow Up"}
+                          </Button>
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   );

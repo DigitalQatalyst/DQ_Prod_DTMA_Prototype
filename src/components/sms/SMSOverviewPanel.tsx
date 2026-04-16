@@ -142,7 +142,7 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
               <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3"><ShieldCheck className="w-5 h-5 text-amber-600" /></div>
               <div className="text-[24px] leading-[32px] font-medium text-amber-700">1</div>
               <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
-                Compliance
+                Accreditation
                 <Tip text="Accreditations expiring within 60 days or already expired. Lapsed accreditation affects the official status of the courses it covers." />
               </div>
               <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">14 days to KNQA expiry</div>

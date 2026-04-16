@@ -36,7 +36,7 @@ const navItems: { id: SMSTab; label: string; icon: React.ElementType }[] = [
   { id: 'finance',    label: 'Finance',     icon: Banknote        },
   { id: 'billing',    label: 'Billing',     icon: CreditCard      },
   { id: 'partners',   label: 'Partners',    icon: Globe           },
-  { id: 'compliance', label: 'Compliance',  icon: ShieldCheck     },
+  { id: 'compliance', label: 'Accreditation', icon: ShieldCheck     },
   { id: 'staff',      label: 'Staff',       icon: UserCog         },
 ];
 

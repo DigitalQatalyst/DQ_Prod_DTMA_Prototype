@@ -193,7 +193,7 @@ export const CollaborationTools = () => {
                       <MessageCircle className="w-4 h-4" />
                       {thread.replies} replies
                     </button>
-                    <Button variant="ghost" size="sm" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    <Button variant="ghost" size="sm" className="hover:bg-[#FFE9E4] hover:text-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       View Thread
                     </Button>
                   </div>

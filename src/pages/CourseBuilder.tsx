@@ -135,7 +135,7 @@ const CourseBuilder = () => {
       case "pricing":
         return <PricingStep course={course} onSave={handleSave} onContinue={handleContinue} />;
       case "submit":
-        return <SubmitStep course={course} />;
+        return <SubmitStep course={course} onSave={handleSave} />;
       default:
         return null;
     }
@@ -2427,6 +2427,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
   const [hasEnrollmentCap, setHasEnrollmentCap] = useState(storedCourse.hasEnrollmentCap || false);
   const [enrollmentCap, setEnrollmentCap] = useState(storedCourse.enrollmentCap || "");
   const [language, setLanguage] = useState(storedCourse.language || "English");
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
   // WhatsApp Learning Settings
   const [whatsappLearningEnabled, setWhatsappLearningEnabled] = useState(storedCourse.whatsappLearningEnabled || false);
@@ -2622,22 +2623,49 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
           <div>
             <label className="block text-sm font-medium mb-2">Course Language</label>
             <p className="text-xs text-muted-foreground mb-3">Primary language of instruction</p>
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="w-full max-w-xs px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]"
-            >
-              <option value="English">English</option>
-              <option value="Spanish">Spanish</option>
-              <option value="French">French</option>
-              <option value="German">German</option>
-              <option value="Italian">Italian</option>
-              <option value="Portuguese">Portuguese</option>
-              <option value="Chinese">Chinese</option>
-              <option value="Japanese">Japanese</option>
-              <option value="Korean">Korean</option>
-              <option value="Arabic">Arabic</option>
-            </select>
+            
+            {/* Custom Dropdown */}
+            <div className="relative w-full max-w-xs">
+              <button
+                type="button"
+                onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+                className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] flex items-center justify-between text-left"
+              >
+                <span>{language}</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {isLanguageDropdownOpen && (
+                <>
+                  {/* Backdrop to close dropdown */}
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setIsLanguageDropdownOpen(false)}
+                  />
+                  
+                  {/* Dropdown Menu */}
+                  <div className="absolute z-20 w-full mt-1 bg-white border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                    {['English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 'Chinese', 'Japanese', 'Korean', 'Arabic'].map((lang) => (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => {
+                          setLanguage(lang);
+                          setIsLanguageDropdownOpen(false);
+                        }}
+                        className={`w-full px-3 py-2 text-left transition-colors ${
+                          language === lang
+                            ? 'bg-[#ff6b4d] text-white'
+                            : 'hover:bg-[#FFE9E4] text-[#1e2348]'
+                        }`}
+                      >
+                        {lang}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           {/* WhatsApp Learning Settings */}
@@ -3085,33 +3113,9 @@ const SubmitStep = ({ course, onSave }: any) => {
           {isSubmitting ? "Submitting..." : "Submit for Review"}
         </Button>
       </div>
-
-      {/* Course Preview Modal */}
-      {course && (
-        <CoursePreviewModal
-          isOpen={showPreviewModal}
-          onClose={() => setShowPreviewModal(false)}
-          course={{
-            id: course.id,
-            title: course.title || "Untitled Course",
-            instructor: profile?.full_name || "Instructor",
-            category: storedCourse.category || "Uncategorized",
-            level: storedCourse.level || "Beginner",
-            status: "draft",
-            enrollments: 0,
-            lastUpdated: lastSaved?.toLocaleDateString() || new Date().toLocaleDateString(),
-            rating: 0,
-            completion: 0,
-            revenue: 0,
-          }}
-          onEdit={() => {
-            setShowPreviewModal(false);
-            // Already in edit mode, just close modal
-          }}
-        />
-      )}
     </div>
   );
 };
+
 
 export default CourseBuilder;

@@ -40,7 +40,6 @@ import {
 } from 'lucide-react';
 import { ProfileManagement } from '@/components/dashboard/ProfileManagement';
 import { ProgressTracking } from '@/components/dashboard/ProgressTracking';
-import { AssessmentsQuizzes } from '@/components/dashboard/AssessmentsQuizzes';
 import { AssignmentsCredentials } from '@/components/dashboard/AssignmentsCredentials';
 import { CertificatesBadges } from '@/components/dashboard/CertificatesBadges';
 import { CollaborationTools } from '@/components/dashboard/CollaborationTools';
@@ -228,17 +227,6 @@ const LearnerDashboard = () => {
               <span className="text-[16px] leading-[24px] font-normal">Microlearning Paths</span>
             </button>
             <button
-              onClick={() => setActiveTab('assessments')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'assessments' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <FileText className="w-5 h-5" />
-              <span className="text-[16px] leading-[24px] font-normal">Assessments</span>
-            </button>
-            <button
               onClick={() => setActiveTab('assignments')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                 activeTab === 'assignments' 
@@ -364,7 +352,6 @@ const LearnerDashboard = () => {
               {activeTab === 'certificates' && 'Certificates & Badges'}
               {activeTab === 'profile' && 'Profile Settings'}
               {activeTab === 'progress' && 'Progress & Notes'}
-              {activeTab === 'assessments' && 'Assessments'}
               {activeTab === 'assignments' && 'Assignments & Capstones'}
               {activeTab === 'collaboration' && 'Discussions'}
               {activeTab === 'live' && 'Live Classes'}
@@ -876,11 +863,6 @@ const LearnerDashboard = () => {
           {/* Progress & Notes Tab */}
           {activeTab === 'progress' && (
             <ProgressTracking />
-          )}
-
-          {/* Assessments & Quizzes Tab */}
-          {activeTab === 'assessments' && (
-            <AssessmentsQuizzes />
           )}
 
           {/* Assignments & Credentials Tab */}

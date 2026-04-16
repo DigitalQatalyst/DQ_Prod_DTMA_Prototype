@@ -203,7 +203,7 @@ export const LiveClassesNotifications = () => {
                         <Video className="w-4 h-4 mr-2" />
                         Join Class
                       </Button>
-                      <Button variant="outline" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                      <Button variant="outline" className="hover:bg-[#FFE9E4] hover:text-[#ff6b4d] hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                         <Calendar className="w-4 h-4 mr-2" />
                         Add to Calendar
                       </Button>

@@ -132,7 +132,7 @@ export default function SMSStudentsPanel() {
             <Table>
               <TableHeader><TableRow className="bg-slate-50">
                 <TableHead>Student</TableHead>
-                <TableHead>Progress</TableHead>
+                <TableHead><span className="flex items-center gap-1">Course Progress<Tip text="Number of enrolled courses the student has fully completed." /></span></TableHead>
                 <TableHead>
                   <span className="flex items-center gap-1">
                     Last Active <Tip text="Days since the student last logged in and engaged with course content. Amber if over 14 days." />
@@ -161,9 +161,9 @@ export default function SMSStudentsPanel() {
                         <div className="text-xs text-slate-500">{s.email}</div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Progress value={pct} className={`h-2 w-16 [&>div]:${barColor}`} />
-                          <span className="text-xs text-slate-500">{s.completed}/{s.enrolled}</span>
+                        <div className="flex flex-col gap-1">
+                          <Progress value={pct} className={`h-1.5 w-20 [&>div]:${barColor}`} />
+                          <span className="text-xs text-slate-500">{s.completed} of {s.enrolled} completed</span>
                         </div>
                       </TableCell>
                       <TableCell>

@@ -12,6 +12,7 @@ import {
   Menu,
   X,
   LogOut,
+  UserCog,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -23,18 +24,20 @@ import SMSFinancePanel    from '@/components/sms/SMSFinancePanel';
 import SMSBillingPanel    from '@/components/sms/SMSBillingPanel';
 import SMSPartnersPanel   from '@/components/sms/SMSPartnersPanel';
 import SMSCompliancePanel from '@/components/sms/SMSCompliancePanel';
+import SMSStaffPanel      from '@/components/sms/SMSStaffPanel';
 
-type SMSTab = 'overview' | 'courses' | 'faculty' | 'students' | 'finance' | 'billing' | 'partners' | 'compliance';
+type SMSTab = 'overview' | 'courses' | 'faculty' | 'students' | 'finance' | 'billing' | 'partners' | 'compliance' | 'staff';
 
 const navItems: { id: SMSTab; label: string; icon: React.ElementType }[] = [
-  { id: 'overview',   label: 'Overview',          icon: LayoutDashboard },
-  { id: 'courses',    label: 'Courses',           icon: BookOpen        },
-  { id: 'faculty',    label: 'Faculty',           icon: Users           },
-  { id: 'students',   label: 'Students',          icon: GraduationCap   },
-  { id: 'finance',    label: 'Finance',           icon: Banknote        },
-  { id: 'billing',    label: 'Billing',           icon: CreditCard      },
-  { id: 'partners',   label: 'Partners',          icon: Globe           },
-  { id: 'compliance', label: 'Compliance',        icon: ShieldCheck     },
+  { id: 'overview',   label: 'Overview',    icon: LayoutDashboard },
+  { id: 'courses',    label: 'Courses',     icon: BookOpen        },
+  { id: 'faculty',    label: 'Faculty',     icon: Users           },
+  { id: 'students',   label: 'Students',    icon: GraduationCap   },
+  { id: 'finance',    label: 'Finance',     icon: Banknote        },
+  { id: 'billing',    label: 'Billing',     icon: CreditCard      },
+  { id: 'partners',   label: 'Partners',    icon: Globe           },
+  { id: 'compliance', label: 'Compliance',  icon: ShieldCheck     },
+  { id: 'staff',      label: 'Staff',       icon: UserCog         },
 ];
 
 export default function SMSDashboard() {
@@ -79,8 +82,8 @@ export default function SMSDashboard() {
                 SM
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-[14px] leading-[20px] font-medium truncate">School Manager</div>
-                <div className="text-[12px] leading-[16px] font-normal text-white/60">SMS Portal</div>
+                <div className="text-[14px] leading-[20px] font-medium truncate">Academy Manager</div>
+                <div className="text-[12px] leading-[16px] font-normal text-white/60">AMS Portal</div>
               </div>
             </div>
             <Link to="/admin">
@@ -100,7 +103,7 @@ export default function SMSDashboard() {
           <button onClick={() => setSidebarOpen(true)} className="p-2 hover:bg-accent rounded-lg">
             <Menu className="w-6 h-6" />
           </button>
-          <span className="font-semibold">School Management</span>
+          <span className="font-semibold">Academy Management</span>
           <div className="w-10" />
         </header>
 
@@ -122,6 +125,7 @@ export default function SMSDashboard() {
           {activeTab === 'billing'    && <SMSBillingPanel />}
           {activeTab === 'partners'   && <SMSPartnersPanel />}
           {activeTab === 'compliance' && <SMSCompliancePanel />}
+          {activeTab === 'staff'      && <SMSStaffPanel />}
         </main>
       </div>
     </div>

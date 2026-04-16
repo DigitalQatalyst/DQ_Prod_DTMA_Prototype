@@ -223,7 +223,7 @@ export default function SMSCoursesPanel() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="border-slate-200/80 shadow-sm">
           <CardHeader>
-            <CardTitle>Category Performance</CardTitle>
+            <CardTitle>Performance by Category</CardTitle>
             <CardDescription>Enrollment and revenue by subject area. Flag fast-growing categories to the partnership manager to source more courses.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -253,8 +253,8 @@ export default function SMSCoursesPanel() {
 
         <Card className="border-slate-200/80 shadow-sm">
           <CardHeader>
-            <CardTitle>Trending Topics</CardTitle>
-            <CardDescription>Topics students are searching for — potential gaps in your catalogue. Flag to the content team to commission a new course.</CardDescription>
+            <CardTitle>In-Demand Topics</CardTitle>
+            <CardDescription>Topics students are searching for that don't yet have a course. Flag to the content team to commission one.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {trendTopics.map((t) => (

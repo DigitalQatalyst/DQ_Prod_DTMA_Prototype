@@ -84,13 +84,13 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
             {/* Faculty */}
             <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('faculty')}>
               <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-3"><UserCheck className="w-5 h-5 text-indigo-600" /></div>
-              <div className="text-[24px] leading-[32px] font-medium">2 / 6</div>
+              <div className="text-[24px] leading-[32px] font-medium">10</div>
               <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
                 Faculty
-                <Tip text="Human instructors active / AI agents operational. Human faculty create content; AI agents handle all student Q&A." />
+                <Tip text="Total faculty: 4 human instructors (content creators) + 6 AI agents (handle all student Q&A)." />
               </div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">instructors · AI agents</div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">2 need attention</div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">4 instructors · 6 AI agents</div>
+              <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">4 need attention</div>
             </div>
             {/* Partners */}
             <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('partners')}>

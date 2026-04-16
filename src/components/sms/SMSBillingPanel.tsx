@@ -3,28 +3,10 @@ import { AlertCircle, Flag, Info } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-type AccessStatus = "active" | "payment-failed" | "cancelled" | "refunded" | "expired";
-
-interface StudentAccess {
-  id: string; name: string; email: string; course: string;
-  accessType: "one-time" | "subscription" | "free";
-  status: AccessStatus;
-  purchaseDate: string;
-  renewalDate?: string;
-}
-
-const studentAccess: StudentAccess[] = [
-  { id: "SA-01", name: "Amina Osei",   email: "amina@example.com",  course: "Digital Transformation Fundamentals", accessType: "one-time",     status: "active",         purchaseDate: "2026-03-01" },
-  { id: "SA-02", name: "Noah Mensah",  email: "noah@example.com",   course: "AI & Automation in the Workplace",    accessType: "subscription", status: "active",         purchaseDate: "2026-01-15", renewalDate: "2026-05-15" },
-  { id: "SA-03", name: "Irene Mwangi", email: "irene@example.com",  course: "Agile Project Management",            accessType: "one-time",     status: "payment-failed", purchaseDate: "2026-04-01" },
-  { id: "SA-04", name: "Kwame Asante", email: "kwame@example.com",  course: "AI & Automation in the Workplace",    accessType: "subscription", status: "expired",        purchaseDate: "2026-01-10", renewalDate: "2026-04-10" },
-  { id: "SA-05", name: "Sofia Reyes",  email: "sofia@example.com",  course: "Digital Transformation Fundamentals", accessType: "one-time",     status: "refunded",       purchaseDate: "2026-03-20" },
-];
 
 interface BillingIssue {
   id: string; name: string; course: string; amount: number;
@@ -46,20 +28,6 @@ const daysFrom  = (d: string) => Math.round((TODAY.getTime() - new Date(d).getTi
 const daysUntil = (d: string) => Math.round((new Date(d).getTime() - TODAY.getTime()) / 86_400_000);
 const fmtDate   = (d: string) => new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
-function accessBadge(s: AccessStatus) {
-  const map: Record<AccessStatus, string> = {
-    "active":         "border-emerald-200 bg-emerald-50 text-emerald-700",
-    "payment-failed": "border-rose-300 bg-rose-100 text-rose-800",
-    "cancelled":      "border-slate-200 bg-slate-50 text-slate-600",
-    "refunded":       "border-sky-200 bg-sky-50 text-sky-700",
-    "expired":        "border-amber-200 bg-amber-50 text-amber-800",
-  };
-  return map[s];
-}
-function accessLabel(s: AccessStatus) {
-  const map: Record<AccessStatus, string> = { "active": "Active", "payment-failed": "Payment Failed", "cancelled": "Cancelled", "refunded": "Refunded", "expired": "Expired" };
-  return map[s];
-}
 function issueBadge(s: string) {
   if (s === "resolved")     return "border-emerald-200 bg-emerald-50 text-emerald-700";
   if (s === "under-review") return "border-sky-200 bg-sky-50 text-sky-700";
@@ -77,15 +45,10 @@ export default function SMSBillingPanel() {
   const { toast } = useToast();
   const [flaggedIds,    setFlaggedIds]    = useState<Set<string>>(new Set());
   const [showResolved,  setShowResolved]  = useState(false);
-  const [showAllAccess, setShowAllAccess] = useState(false);
-
-  const actionableAccess = studentAccess.filter((s) => s.status !== "active");
-  const displayedAccess  = showAllAccess ? studentAccess : actionableAccess;
   const openIssues       = billingIssues.filter((b) => b.status !== "resolved");
   const resolvedIssues   = billingIssues.filter((b) => b.status === "resolved");
   const failures         = (showResolved ? billingIssues : openIssues).filter((b) => b.type === "failed-payment");
   const refunds          = (showResolved ? billingIssues : openIssues).filter((b) => b.type === "refund-request");
-  const failedRenewals   = studentAccess.filter((s) => s.status === "payment-failed" || s.status === "expired").length;
 
   const flagUrgent = (id: string, name: string) => {
     setFlaggedIds((prev) => new Set(prev).add(id));
@@ -97,17 +60,17 @@ export default function SMSBillingPanel() {
       <div>
         <h2 className="text-[28px] leading-[36px] font-semibold">Billing</h2>
         <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Student access status, failed payments, and refund requests. Escalate issues to the finance team.
+          Failed payments and refund requests. Escalate issues to the finance team.
         </p>
       </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", failedRenewals > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
+        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", openIssues.length > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
           <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3">
             <AlertCircle className="w-5 h-5 text-rose-500" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", failedRenewals > 0 && "text-rose-700")}>{failedRenewals}</div>
+          <div className={cn("text-[24px] leading-[32px] font-medium", openIssues.length > 0 && "text-rose-700")}>{openIssues.filter(b => b.type === "failed-payment").length}</div>
           <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
             Lost Access
             <Tip text="Students whose payment failed or subscription expired — they can no longer view course content." />
@@ -136,89 +99,6 @@ export default function SMSBillingPanel() {
           <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Total open issue value</div>
         </div>
       </div>
-
-      {/* Student Access */}
-      <Card className="border-slate-200/80 shadow-sm">
-        <CardHeader>
-          <CardTitle>Student Access</CardTitle>
-          <CardDescription>Access is granted at point of purchase. Students with failed or expired access can no longer view course content.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {failedRenewals > 0 && (
-            <div className="rounded-xl border border-rose-200 bg-rose-50/50 px-4 py-3 text-sm text-rose-800">
-              <span className="font-semibold">{failedRenewals} students have lost access</span>{" — "}failed payment or expired subscription
-            </div>
-          )}
-          <div className="flex gap-2">
-            <button onClick={() => setShowAllAccess(false)} className={cn("rounded-lg px-3 py-1.5 text-xs font-medium border transition-colors", !showAllAccess ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50")}>
-              Needs Attention ({actionableAccess.length})
-            </button>
-            <button onClick={() => setShowAllAccess(true)} className={cn("rounded-lg px-3 py-1.5 text-xs font-medium border transition-colors", showAllAccess ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50")}>
-              All Students ({studentAccess.length})
-            </button>
-          </div>
-          <div className="overflow-hidden rounded-2xl border border-slate-200">
-            <Table>
-              <TableHeader><TableRow>
-                <TableHead>Student</TableHead>
-                <TableHead>Course</TableHead>
-                <TableHead>Access Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Purchase / Renewal</TableHead>
-                <TableHead className="text-right">Action</TableHead>
-              </TableRow></TableHeader>
-              <TableBody>
-                {displayedAccess.slice().sort((a, b) => {
-                  const order: Record<AccessStatus, number> = { "payment-failed": 0, expired: 1, cancelled: 2, refunded: 3, active: 4 };
-                  return order[a.status] - order[b.status];
-                }).map((s) => {
-                  const renewsIn = s.renewalDate ? daysUntil(s.renewalDate) : null;
-                  return (
-                    <TableRow key={s.id} className={cn(s.status === "payment-failed" || s.status === "expired" ? "bg-rose-50/30" : "")}>
-                      <TableCell>
-                        <div className="font-medium text-slate-900">{s.name}</div>
-                        <div className="text-xs text-slate-500">{s.email}</div>
-                      </TableCell>
-                      <TableCell className="text-sm text-slate-600 max-w-[160px] truncate">{s.course}</TableCell>
-                      <TableCell>
-                        <Badge className={cn("border text-xs capitalize",
-                          s.accessType === "subscription" ? "border-sky-200 bg-sky-50 text-sky-700" :
-                          s.accessType === "free"         ? "border-slate-200 bg-slate-50 text-slate-600" :
-                                                            "border-emerald-200 bg-emerald-50 text-emerald-700"
-                        )}>
-                          {s.accessType === "one-time" ? "One-time" : s.accessType}
-                        </Badge>
-                      </TableCell>
-                      <TableCell><Badge className={`border text-xs font-semibold ${accessBadge(s.status)}`}>{accessLabel(s.status)}</Badge></TableCell>
-                      <TableCell className="text-sm">
-                        {s.accessType === "subscription" && s.renewalDate ? (
-                          renewsIn !== null && renewsIn < 0
-                            ? <span className="text-rose-600 font-medium">Expired {fmtDate(s.renewalDate)}</span>
-                            : renewsIn !== null && renewsIn <= 14
-                              ? <span className="text-amber-700 font-medium">Renews in {renewsIn}d</span>
-                              : <span className="text-slate-500">Renews {fmtDate(s.renewalDate)}</span>
-                        ) : (
-                          <span className="text-slate-500">Purchased {fmtDate(s.purchaseDate)}</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {(s.status === "payment-failed" || s.status === "expired") && (
-                          <Button size="sm" variant="outline" className="text-xs h-7"
-                            disabled={flaggedIds.has(s.id)}
-                            onClick={() => { setFlaggedIds((prev) => new Set(prev).add(s.id)); toast({ title: "Escalated to Finance", description: `${s.name}'s access issue has been flagged for the finance team.` }); }}
-                          >
-                            {flaggedIds.has(s.id) ? "Escalated" : <><Flag className="h-3 w-3 mr-1" />Escalate</>}
-                          </Button>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Billing Issues */}
       <Card className="border-slate-200/80 shadow-sm">

@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
@@ -132,7 +131,7 @@ export default function SMSStudentsPanel() {
             <Table>
               <TableHeader><TableRow className="bg-slate-50">
                 <TableHead>Student</TableHead>
-                <TableHead><span className="flex items-center gap-1">Course Progress<Tip text="Number of enrolled courses the student has fully completed." /></span></TableHead>
+                <TableHead><span className="flex items-center gap-1">Progress Status<Tip text="Overall progress across all enrolled courses. On Track = ≥66% complete and active. At Risk = below 66% or inactive 14d+. Stalled = no activity and low completion." /></span></TableHead>
                 <TableHead>
                   <span className="flex items-center gap-1">
                     Last Active <Tip text="Days since the student last logged in and engaged with course content. Amber if over 14 days." />
@@ -153,7 +152,12 @@ export default function SMSStudentsPanel() {
                   const lostAccess = s.accessStatus === "payment-failed" || s.accessStatus === "expired";
                   const inactive   = s.accessStatus === "active" && s.lastActiveDaysAgo >= 14;
                   const needsAction = lostAccess || inactive;
-                  const barColor = pct >= 80 ? "bg-emerald-500" : pct >= 40 ? "bg-amber-400" : "bg-rose-500";
+                  // Progress status: derived from completion + inactivity
+                  const progressStatus =
+                    lostAccess                              ? { label: "No Access",  cls: "border-rose-200 bg-rose-50 text-rose-700"     } :
+                    pct >= 66 && !inactive                  ? { label: "On Track",   cls: "border-emerald-200 bg-emerald-50 text-emerald-700" } :
+                    inactive || (pct < 66 && pct > 0)       ? { label: "At Risk",    cls: "border-amber-200 bg-amber-50 text-amber-800"   } :
+                                                              { label: "Stalled",    cls: "border-rose-200 bg-rose-50 text-rose-700"     };
                   return (
                     <TableRow key={s.id} className={lostAccess ? "bg-rose-50/40" : inactive ? "bg-amber-50/30" : ""}>
                       <TableCell>
@@ -161,9 +165,9 @@ export default function SMSStudentsPanel() {
                         <div className="text-xs text-slate-500">{s.email}</div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex flex-col gap-1">
-                          <Progress value={pct} className={`h-1.5 w-20 [&>div]:${barColor}`} />
-                          <span className="text-xs text-slate-500">{s.completed} of {s.enrolled} completed</span>
+                        <div className="flex flex-col gap-0.5">
+                          <Badge className={`border text-xs font-semibold w-fit ${progressStatus.cls}`}>{progressStatus.label}</Badge>
+                          <span className="text-xs text-slate-400">{s.completed}/{s.enrolled} courses</span>
                         </div>
                       </TableCell>
                       <TableCell>

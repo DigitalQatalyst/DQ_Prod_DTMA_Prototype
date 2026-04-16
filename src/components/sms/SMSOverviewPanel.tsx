@@ -231,6 +231,42 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
         </Card>
       </div>
 
+      {/* Staff snapshot — who to contact per team */}
+      <Card className="border-slate-200 shadow-sm">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center justify-between">
+            Staff — Who to Contact
+            <Button variant="ghost" size="sm" className="text-xs h-7 text-slate-400 hover:text-slate-700 gap-1" onClick={() => onNavigate('staff')}>
+              Full directory <ChevronRight className="h-3.5 w-3.5" />
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {[
+              { team: "Finance",      contact: "Fatima Al-Rashid", role: "Finance Manager",     status: "available" as const, purpose: "Billing, payments, refunds"       },
+              { team: "Support",      contact: "Priya Nair",       role: "Head of Support",     status: "busy"      as const, purpose: "Student access, Q&A issues"       },
+              { team: "Partnerships", contact: "Leila Haddad",     role: "Partnership Manager", status: "away"      as const, purpose: "Partners, course sourcing"         },
+              { team: "Compliance",   contact: "James Thornton",   role: "Compliance Officer",  status: "available" as const, purpose: "Accreditation, compliance issues"  },
+            ].map((s) => (
+              <div key={s.team} className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 gap-3">
+                <div>
+                  <div className="text-sm font-medium text-slate-900">{s.contact}</div>
+                  <div className="text-xs text-slate-500">{s.purpose}</div>
+                </div>
+                <Badge className={cn("border text-xs font-semibold shrink-0",
+                  s.status === "available" ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
+                  s.status === "busy"      ? "border-amber-200 bg-amber-50 text-amber-800" :
+                                             "border-slate-200 bg-slate-50 text-slate-500"
+                )}>
+                  {s.status === "available" ? "Available" : s.status === "busy" ? "Busy" : "Away"}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* 4. Horizon — low-weight footer band */}
       <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-3">Next 30 Days</p>

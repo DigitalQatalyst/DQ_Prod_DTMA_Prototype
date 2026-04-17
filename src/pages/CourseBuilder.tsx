@@ -1311,7 +1311,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                 </Button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-[#E5E7EB] rounded-xl p-8 text-center hover:border-[#ff6b4d] hover:bg-[#fff0ed]/30 transition-colors cursor-pointer">over:border-[#ff6b4d] transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-[#E5E7EB] rounded-xl p-8 text-center hover:border-[#ff6b4d] hover:bg-[#fff0ed]/30 transition-colors cursor-pointer">
                 <input
                   type="file"
                   accept="video/*"

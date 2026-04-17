@@ -10,6 +10,7 @@ import { CommunicationSupportTab } from '@/components/admin/CommunicationSupport
 import { CoursePreviewModal } from '@/components/admin/CoursePreviewModal';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -88,6 +89,10 @@ import {
   Copy,
   Archive,
   Trash2,
+  Plus,
+  DollarSign,
+  Share2,
+  Activity,
 } from 'lucide-react';
 
 type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'whatsapp-analytics' | 'ai-usage' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
@@ -105,7 +110,7 @@ const MOCK_COURSES = [
 const STATUS_STYLES: Record<string, string> = {
   published: 'bg-emerald-100 text-emerald-700',
   draft:     'bg-amber-100 text-amber-700',
-  pending:   'bg-blue-100 text-blue-700',
+  pending:   'bg-purple-100 text-purple-700',
 };
 
 const CATEGORIES = ['All Categories', 'Digital Economy', 'Digital Cognitive Organisation', 'Digital Business Platform', 'Digital Transformation', 'Digital Worker & Workspace', 'Digital Accelerators'];
@@ -126,7 +131,7 @@ const MOCK_USERS = [
 
 const ROLE_STYLES: Record<string, string> = {
   admin: 'bg-purple-100 text-purple-700',
-  instructor: 'bg-blue-100 text-blue-700',
+  instructor: 'bg-[#fff0ed] text-[#ff6b4d]',
   learner: 'bg-emerald-100 text-emerald-700',
 };
 
@@ -231,7 +236,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
             { label: 'Total Courses', value: MOCK_COURSES.length, color: 'bg-[#e9e9ed] text-[#1e2348]' },
             { label: 'Published',     value: published,            color: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
             { label: 'Draft',         value: drafts,               color: 'bg-amber-50 text-amber-700 border border-amber-200' },
-            { label: 'Pending Review',value: pending,              color: 'bg-blue-50 text-blue-700 border border-blue-200' },
+            { label: 'Pending Review',value: pending,              color: 'bg-purple-50 text-purple-700 border border-purple-200' },
           ].map(pill => (
             <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
               <span className="font-bold text-[15px]">{pill.value}</span>
@@ -379,7 +384,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
             { icon: BookOpen,   label: 'Total Courses',      value: MOCK_COURSES.length,               suffix: '',   color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
             { icon: TrendingUp, label: 'Avg Completion Rate', value: avgCompletion,                     suffix: '%',  color: 'text-emerald-600', bg: 'bg-emerald-50' },
             { icon: Star,       label: 'Avg Course Rating',   value: avgRating,                         suffix: '★', color: 'text-amber-500',  bg: 'bg-amber-50' },
-            { icon: Users,      label: 'Total Enrollments',   value: totalEnrollments.toLocaleString(), suffix: '',   color: 'text-blue-600',   bg: 'bg-blue-50' },
+            { icon: Users,      label: 'Total Enrollments',   value: totalEnrollments.toLocaleString(), suffix: '',   color: 'text-purple-600',   bg: 'bg-purple-50' },
           ].map(card => (
             <div key={card.label} className="bg-white rounded-2xl p-5 shadow-sm border border-[#E5E7EB]">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${card.bg}`}>
@@ -506,7 +511,7 @@ const MOCK_SUBMISSIONS = [
 
 const SCORE_DISTRIBUTION = [
   { range: '90–100', count: 48,  color: 'bg-emerald-500' },
-  { range: '80–89',  count: 112, color: 'bg-blue-500'    },
+  { range: '80–89',  count: 112, color: 'bg-[#ff6b4d]'    },
   { range: '70–79',  count: 134, color: 'bg-amber-400'   },
   { range: '60–69',  count: 67,  color: 'bg-orange-400'  },
   { range: 'Below 60', count: 31, color: 'bg-red-400'    },
@@ -514,7 +519,7 @@ const SCORE_DISTRIBUTION = [
 const DIST_MAX = Math.max(...SCORE_DISTRIBUTION.map(d => d.count));
 
 const QUIZ_TYPE_STYLE: Record<string, string> = {
-  Quiz:       'bg-blue-100 text-blue-700',
+  Quiz:       'bg-[#fff0ed] text-[#ff6b4d]',
   Assignment: 'bg-purple-100 text-purple-700',
 };
 
@@ -609,7 +614,7 @@ const MOCK_SCHEDULED_SESSIONS = [
 const SESSION_TYPE_STYLE: Record<string, { bg: string; text: string; icon: string }> = {
   live: { bg: 'bg-red-100', text: 'text-red-700', icon: '🔴' },
   hybrid: { bg: 'bg-purple-100', text: 'text-purple-700', icon: '🔄' },
-  recorded: { bg: 'bg-blue-100', text: 'text-blue-700', icon: '📹' },
+  recorded: { bg: 'bg-[#fff0ed]', text: 'text-[#ff6b4d]', icon: '📹' },
 };
 
 const SESSION_STATUS_STYLE: Record<string, { bg: string; text: string }> = {
@@ -652,7 +657,7 @@ const AssessmentsTab = () => {
       <div className="flex flex-wrap gap-3">
         {[
           { label: 'Total Assessments',  value: MOCK_QUIZZES.length,                                    color: 'bg-[#e9e9ed] text-[#1e2348]'    },
-          { label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                       color: 'bg-blue-50 text-blue-700 border border-blue-200'          },
+          { label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                       color: 'bg-[#fff0ed] text-[#ff6b4d] border border-[#ff6b4d]/30'          },
           { label: 'Avg Score',          value: `${avgScore}%`,                                          color: 'bg-amber-50 text-amber-700 border border-amber-200'        },
           { label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                       color: 'bg-emerald-50 text-emerald-700 border border-emerald-200'    },
           { label: 'Pending Grading',    value: MOCK_SUBMISSIONS.filter(s => !graded[s.id]).length,      color: 'bg-red-50 text-red-700 border border-red-200'            },
@@ -894,7 +899,7 @@ const AssessmentsTab = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { icon: Award,      label: 'Highest Avg Score',  value: `${Math.max(...activeQuizzes.map(q => q.avgScore))}%`, color: 'text-emerald-600', bg: 'bg-emerald-100' },
-              { icon: TrendingUp, label: 'Highest Pass Rate',  value: `${Math.max(...activeQuizzes.map(q => q.passRate))}%`, color: 'text-blue-600',    bg: 'bg-blue-100'    },
+              { icon: TrendingUp, label: 'Highest Pass Rate',  value: `${Math.max(...activeQuizzes.map(q => q.passRate))}%`, color: 'text-purple-600',    bg: 'bg-purple-100'    },
               { icon: Target,     label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                     color: 'text-amber-600',   bg: 'bg-amber-100'   },
               { icon: Users,      label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                     color: 'text-[#ff6b4d]',   bg: 'bg-[#ff6b4d]/10'},
             ].map(card => (
@@ -1586,6 +1591,7 @@ const AdminDashboard = () => {
   const { profile, signOut, role } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
+  const [governanceSubTab, setGovernanceSubTab] = useState<'overview' | 'workflow' | 'reporting' | 'scanning' | 'policies' | 'activity'>('overview');
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
   const [showBulkEnrollModal, setShowBulkEnrollModal] = useState(false);
@@ -1726,6 +1732,43 @@ const AdminDashboard = () => {
     reviewerComments: '',
     priority: 'normal' as 'low' | 'normal' | 'high' | 'urgent',
   });
+  
+  // Certification & Customer Success State
+  const [showCreateTemplateModal, setShowCreateTemplateModal] = useState(false);
+  const [showCreateBadgeModal, setShowCreateBadgeModal] = useState(false);
+  const [showVerifyCertificateModal, setShowVerifyCertificateModal] = useState(false);
+  const [showIssuanceRulesModal, setShowIssuanceRulesModal] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<any>(null);
+  const [editingTemplate, setEditingTemplate] = useState<any>(null);
+  
+  const [certificateTemplateForm, setCertificateTemplateForm] = useState({
+    name: '',
+    type: 'course' as 'course' | 'badge' | 'specialization' | 'micro' | 'executive' | 'team',
+    description: '',
+    orientation: 'landscape' as 'landscape' | 'portrait',
+    backgroundColor: '#ffffff',
+    borderStyle: 'classic' as 'classic' | 'modern' | 'minimal' | 'elegant',
+    includeQRCode: true,
+    includeSignature: true,
+    includeDate: true,
+    includeCredentialID: true,
+  });
+  
+  const [badgeForm, setBadgeForm] = useState({
+    name: '',
+    description: '',
+    category: 'achievement' as 'achievement' | 'skill' | 'milestone' | 'special',
+    icon: '🏆',
+    criteria: '',
+    points: 100,
+    stackable: true,
+  });
+  
+  const [verifyCertificateForm, setVerifyCertificateForm] = useState({
+    certificateID: '',
+    verificationMethod: 'id' as 'id' | 'qr' | 'blockchain',
+  });
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { data: analytics, isLoading: analyticsLoading } = useAdminAnalytics();
@@ -2558,50 +2601,75 @@ const AdminDashboard = () => {
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Content Governance & Compliance</h1>
               
               {/* Statistics */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {[
-                  { icon: CheckCircle, label: 'Approved Content', value: '342', color: 'text-emerald-600', bg: 'bg-emerald-100' },
-                  { icon: Clock, label: 'Pending Review', value: '28', color: 'text-amber-600', bg: 'bg-amber-100' },
-                  { icon: ShieldIcon, label: 'Compliance Score', value: '94%', color: 'text-blue-600', bg: 'bg-blue-100' },
-                  { icon: AlertTriangle, label: 'Issues Found', value: '12', color: 'text-red-600', bg: 'bg-red-100' },
+                  { icon: CheckCircle, label: 'Approved Content', value: '342', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                  { icon: Clock, label: 'Pending Review', value: '28', color: 'text-amber-600', bg: 'bg-amber-50' },
+                  { icon: ShieldIcon, label: 'Compliance Score', value: '94%', color: 'text-purple-600', bg: 'bg-purple-50' },
+                  { icon: AlertTriangle, label: 'Issues Found', value: '12', color: 'text-red-600', bg: 'bg-red-50' },
                 ].map(stat => (
-                  <div key={stat.label} className="bg-card rounded-2xl p-5 shadow-sm border border-border">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${stat.bg}`}>
-                      <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
+                      <stat.icon className={`w-7 h-7 ${stat.color}`} />
                     </div>
-                    <div className="text-[22px] font-bold text-foreground">{stat.value}</div>
-                    <div className="text-[12px] text-muted-foreground mt-0.5">{stat.label}</div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
+                    <div className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{stat.label}</div>
                   </div>
                 ))}
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-6">
+              {/* Governance Sub-Tabs */}
+              <Tabs value={governanceSubTab} onValueChange={(value: any) => setGovernanceSubTab(value)} className="w-full">
+                <TabsList className="bg-white border border-[#E5E7EB] p-1 rounded-xl mb-6">
+                  <TabsTrigger value="overview" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger value="workflow" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Workflow
+                  </TabsTrigger>
+                  <TabsTrigger value="reporting" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Reporting
+                  </TabsTrigger>
+                  <TabsTrigger value="scanning" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Scanning
+                  </TabsTrigger>
+                  <TabsTrigger value="policies" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Policies
+                  </TabsTrigger>
+                  <TabsTrigger value="activity" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Activity
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Overview Tab */}
+                <TabsContent value="overview" className="mt-0">
+                  <div className="grid lg:grid-cols-2 gap-6">
                 {/* Content CMS & Moderation */}
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-[#ff6b4d]/10 flex items-center justify-center flex-shrink-0">
-                      <FileText className="w-6 h-6 text-[#ff6b4d]" />
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-[#fff0ed] flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-7 h-7 text-[#ff6b4d]" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Content CMS & Moderation</h3>
-                      <p className="text-[13px] text-muted-foreground mb-4">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Content CMS & Moderation</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                         Review and moderate course content for quality and compliance. Ensure all materials meet institutional standards.
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Pending Reviews</span>
-                      <span className="text-[14px] font-semibold text-foreground">28 items</span>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Pending Reviews</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">28 items</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Avg Review Time</span>
-                      <span className="text-[14px] font-semibold text-foreground">2.4 days</span>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Avg Review Time</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">2.4 days</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => setShowReviewContentModal(true)}
-                    className="w-full bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="w-full bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     Review Content
@@ -2609,38 +2677,38 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Accessibility Standards */}
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                      <Eye className="w-6 h-6 text-blue-600" />
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                      <Eye className="w-7 h-7 text-purple-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Accessibility Standards</h3>
-                      <p className="text-[13px] text-muted-foreground mb-4">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Accessibility Standards</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                         Ensure all content meets WCAG 2.1 AA accessibility requirements for inclusive learning.
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-emerald-600" />
-                        <span className="text-[13px] text-muted-foreground">WCAG 2.1 AA Compliant</span>
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">WCAG 2.1 AA Compliant</span>
                       </div>
-                      <span className="text-[14px] font-semibold text-emerald-600">89%</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-emerald-600">89%</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
                       <div className="flex items-center gap-2">
-                        <AlertTriangle className="w-4 h-4 text-amber-600" />
-                        <span className="text-[13px] text-muted-foreground">Issues to Fix</span>
+                        <AlertTriangle className="w-5 h-5 text-amber-600" />
+                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Issues to Fix</span>
                       </div>
-                      <span className="text-[14px] font-semibold text-amber-600">34</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-amber-600">34</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Accessibility Audit", description: "Running accessibility audit..." })}
                     variant="outline"
-                    className="w-full"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     Run Accessibility Audit
@@ -2648,32 +2716,32 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Copyright & IP Protection */}
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
-                      <ShieldIcon className="w-6 h-6 text-purple-600" />
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                      <ShieldIcon className="w-7 h-7 text-purple-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Copyright & IP Protection</h3>
-                      <p className="text-[13px] text-muted-foreground mb-4">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Copyright & IP Protection</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                         Monitor and protect intellectual property. Detect plagiarism and unauthorized content usage.
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Content Scanned</span>
-                      <span className="text-[14px] font-semibold text-foreground">1,247 items</span>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Content Scanned</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">1,247 items</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Violations Detected</span>
-                      <span className="text-[14px] font-semibold text-red-600">3</span>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Violations Detected</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-red-600">3</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Plagiarism Check", description: "Scanning content for plagiarism..." })}
                     variant="outline"
-                    className="w-full"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
                   >
                     <ShieldIcon className="w-4 h-4 mr-2" />
                     Run Plagiarism Check
@@ -2681,35 +2749,35 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Data Privacy & GDPR */}
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
-                      <Lock className="w-6 h-6 text-green-600" />
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
+                      <Lock className="w-7 h-7 text-green-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Data Privacy & GDPR</h3>
-                      <p className="text-[13px] text-muted-foreground mb-4">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Data Privacy & GDPR</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                         Ensure compliance with GDPR, FERPA, and other data protection regulations.
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-emerald-600" />
-                        <span className="text-[13px] text-muted-foreground">GDPR Compliant</span>
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">GDPR Compliant</span>
                       </div>
-                      <span className="text-[14px] font-semibold text-emerald-600">Yes</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-emerald-600">Yes</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Data Requests</span>
-                      <span className="text-[14px] font-semibold text-foreground">7 pending</span>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Data Requests</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">7 pending</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Privacy Audit", description: "Reviewing data privacy compliance..." })}
                     variant="outline"
-                    className="w-full"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
                   >
                     <Lock className="w-4 h-4 mr-2" />
                     View Privacy Dashboard
@@ -2717,32 +2785,32 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Quality Assurance */}
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
-                      <Star className="w-6 h-6 text-amber-600" />
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                      <Star className="w-7 h-7 text-amber-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Quality Assurance</h3>
-                      <p className="text-[13px] text-muted-foreground mb-4">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Quality Assurance</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                         Monitor content quality metrics and learner feedback to maintain high standards.
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Avg Quality Score</span>
-                      <span className="text-[14px] font-semibold text-foreground">4.6/5.0</span>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Avg Quality Score</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">4.6/5.0</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Courses Audited</span>
-                      <span className="text-[14px] font-semibold text-foreground">156/180</span>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Courses Audited</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">156/180</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Quality Report", description: "Generating quality assurance report..." })}
                     variant="outline"
-                    className="w-full"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
                   >
                     <Star className="w-4 h-4 mr-2" />
                     View Quality Reports
@@ -2750,58 +2818,786 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Version Control & Audit Trail */}
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-6 h-6 text-indigo-600" />
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-7 h-7 text-indigo-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] font-semibold mb-2 text-foreground">Version Control & Audit Trail</h3>
-                      <p className="text-[13px] text-muted-foreground mb-4">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Version Control & Audit Trail</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                         Track all content changes and maintain comprehensive audit logs for compliance.
                       </p>
                     </div>
                   </div>
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Content Versions</span>
-                      <span className="text-[14px] font-semibold text-foreground">2,847</span>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Content Versions</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">2,847</span>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
-                      <span className="text-[13px] text-muted-foreground">Recent Changes</span>
-                      <span className="text-[14px] font-semibold text-foreground">142 today</span>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Recent Changes</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">142 today</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Audit Trail", description: "Loading audit trail..." })}
                     variant="outline"
-                    className="w-full"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
                   >
                     <Clock className="w-4 h-4 mr-2" />
                     View Audit Trail
                   </Button>
                 </div>
               </div>
+            </TabsContent>
+
+                {/* Workflow Tab */}
+                <TabsContent value="workflow" className="mt-0">
+                  {/* Content Workflow Management */}
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Content Workflow Management</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                          Configure approval workflows and content lifecycle stages
+                        </p>
+                      </div>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create Workflow
+                      </Button>
+                    </div>
+
+                    <div className="grid lg:grid-cols-3 gap-6">
+                      {[
+                        { 
+                          stage: 'Draft', 
+                          count: 45, 
+                          color: 'bg-[#F5F6FA]', 
+                          textColor: 'text-[#4B5563]',
+                          icon: FileText 
+                        },
+                        { 
+                          stage: 'In Review', 
+                          count: 28, 
+                          color: 'bg-amber-50', 
+                          textColor: 'text-amber-700',
+                          icon: Clock 
+                        },
+                        { 
+                          stage: 'Published', 
+                          count: 342, 
+                          color: 'bg-emerald-50', 
+                          textColor: 'text-emerald-700',
+                          icon: CheckCircle 
+                        },
+                      ].map((workflow) => (
+                        <div key={workflow.stage} className={`${workflow.color} rounded-xl p-6 border border-[#E5E7EB]`}>
+                          <div className="flex items-center gap-3 mb-4">
+                            <workflow.icon className={`w-6 h-6 ${workflow.textColor}`} />
+                            <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{workflow.stage}</h3>
+                          </div>
+                          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-2">{workflow.count}</div>
+                          <p className="text-[13px] leading-[18px] font-normal text-[#4B5563]">Content items</p>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="mt-4 w-full hover:bg-white/50 hover:text-[#ff6b4d]"
+                          >
+                            View Details →
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Reporting Tab */}
+                <TabsContent value="reporting" className="mt-0">
+                  {/* Compliance Reporting */}
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Compliance Reporting</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                          Generate and export compliance reports for audits and regulatory requirements
+                        </p>
+                      </div>
+                      <Button 
+                        variant="outline"
+                        className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Export Report
+                      </Button>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {[
+                        { label: 'WCAG Compliance', value: '89%', status: 'good', icon: Eye },
+                        { label: 'GDPR Compliance', value: '100%', status: 'excellent', icon: Lock },
+                        { label: 'Copyright Clear', value: '97%', status: 'good', icon: ShieldIcon },
+                        { label: 'Quality Score', value: '4.6/5', status: 'excellent', icon: Star },
+                      ].map((metric) => (
+                        <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                          <div className="flex items-center gap-2 mb-3">
+                            <metric.icon className="w-5 h-5 text-[#4B5563]" />
+                            <span className="text-[13px] leading-[18px] font-medium text-[#4B5563]">{metric.label}</span>
+                          </div>
+                          <div className="text-[24px] leading-[32px] font-bold text-[#1e2348]">{metric.value}</div>
+                          <div className={`inline-flex items-center gap-1 mt-2 px-2 py-1 rounded-lg text-[11px] font-semibold ${
+                            metric.status === 'excellent' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                          }`}>
+                            {metric.status === 'excellent' ? '✓ Excellent' : '⚠ Needs Attention'}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Scanning Tab */}
+                <TabsContent value="scanning" className="mt-0">
+                  {/* Automated Content Scanning */}
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Automated Content Scanning</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                          Configure automated scans for accessibility, plagiarism, and quality checks
+                        </p>
+                      </div>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                        <Settings className="w-4 h-4 mr-2" />
+                        Configure Scans
+                      </Button>
+                    </div>
+
+                    <div className="space-y-4">
+                      {[
+                        { 
+                          name: 'Accessibility Scan', 
+                          schedule: 'Daily at 2:00 AM', 
+                          lastRun: '2 hours ago', 
+                          status: 'active',
+                          issues: 34 
+                        },
+                        { 
+                          name: 'Plagiarism Detection', 
+                          schedule: 'On content upload', 
+                          lastRun: '15 minutes ago', 
+                          status: 'active',
+                          issues: 3 
+                        },
+                        { 
+                          name: 'Quality Assessment', 
+                          schedule: 'Weekly on Monday', 
+                          lastRun: '3 days ago', 
+                          status: 'active',
+                          issues: 12 
+                        },
+                        { 
+                          name: 'Link Validation', 
+                          schedule: 'Daily at 3:00 AM', 
+                          lastRun: '1 hour ago', 
+                          status: 'active',
+                          issues: 8 
+                        },
+                      ].map((scan) => (
+                        <div key={scan.name} className="flex items-center justify-between p-5 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:bg-[#e9e9ed] transition-colors">
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center border border-[#E5E7EB]">
+                              <Settings className="w-6 h-6 text-[#ff6b4d]" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="text-[15px] leading-[22px] font-semibold text-[#1e2348] mb-1">{scan.name}</h3>
+                              <div className="flex items-center gap-4 text-[13px] leading-[18px] text-[#4B5563]">
+                                <span>Schedule: {scan.schedule}</span>
+                                <span>•</span>
+                                <span>Last run: {scan.lastRun}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <div className="text-[18px] leading-[24px] font-bold text-[#1e2348]">{scan.issues}</div>
+                              <div className="text-[12px] leading-[16px] text-[#4B5563]">Issues</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                              <span className="text-[13px] leading-[18px] font-medium text-emerald-600">Active</span>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className="hover:bg-white hover:text-[#ff6b4d]"
+                            >
+                              <Settings className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Policies Tab */}
+                <TabsContent value="policies" className="mt-0">
+                  {/* Policy & Standards Management */}
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Policy & Standards Management</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                          Define and enforce content policies, guidelines, and institutional standards
+                        </p>
+                      </div>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Policy
+                      </Button>
+                    </div>
+
+                    <div className="grid lg:grid-cols-2 gap-6">
+                      {[
+                        {
+                          title: 'Content Quality Standards',
+                          description: 'Minimum requirements for course content quality and presentation',
+                          rules: 12,
+                          enforced: true,
+                          icon: Star,
+                          color: 'bg-amber-50'
+                        },
+                        {
+                          title: 'Accessibility Guidelines',
+                          description: 'WCAG 2.1 AA compliance requirements for all learning materials',
+                          rules: 8,
+                          enforced: true,
+                          icon: Eye,
+                          color: 'bg-purple-50'
+                        },
+                        {
+                          title: 'Copyright Policy',
+                          description: 'Rules for using third-party content and intellectual property',
+                          rules: 15,
+                          enforced: true,
+                          icon: ShieldIcon,
+                          color: 'bg-purple-50'
+                        },
+                        {
+                          title: 'Data Privacy Standards',
+                          description: 'GDPR and FERPA compliance requirements for learner data',
+                          rules: 10,
+                          enforced: true,
+                          icon: Lock,
+                          color: 'bg-green-50'
+                        },
+                      ].map((policy) => (
+                        <div key={policy.title} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                          <div className="flex items-start gap-4 mb-4">
+                            <div className={`w-14 h-14 rounded-xl ${policy.color} flex items-center justify-center flex-shrink-0`}>
+                              <policy.icon className="w-7 h-7 text-[#1e2348]" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{policy.title}</h3>
+                              <p className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{policy.description}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB]">
+                            <div className="flex items-center gap-4">
+                              <div className="text-[13px] leading-[18px] text-[#4B5563]">
+                                <span className="font-semibold text-[#1e2348]">{policy.rules}</span> rules
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                <span className="text-[13px] leading-[18px] font-medium text-emerald-600">Enforced</span>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className="hover:bg-white hover:text-[#ff6b4d]"
+                            >
+                              Edit Policy →
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Activity Tab */}
+                <TabsContent value="activity" className="mt-0">
+                  {/* Recent Activity & Alerts */}
+                  <div className="grid lg:grid-cols-2 gap-6">
+                    {/* Recent Activity */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-5">Recent Activity</h2>
+                      <div className="space-y-4">
+                        {[
+                          { action: 'Content approved', item: 'Digital Marketing 101', time: '5 minutes ago', type: 'success' },
+                          { action: 'Accessibility issue detected', item: 'Python Basics', time: '12 minutes ago', type: 'warning' },
+                          { action: 'Policy violation flagged', item: 'Web Development', time: '1 hour ago', type: 'error' },
+                          { action: 'Quality review completed', item: 'Data Science Course', time: '2 hours ago', type: 'success' },
+                          { action: 'Content updated', item: 'Machine Learning', time: '3 hours ago', type: 'info' },
+                        ].map((activity, index) => (
+                          <div key={index} className="flex items-start gap-3 p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                            <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
+                              activity.type === 'success' ? 'bg-emerald-500' :
+                              activity.type === 'warning' ? 'bg-amber-500' :
+                              activity.type === 'error' ? 'bg-red-500' : 'bg-[#ff6b4d]'
+                            }`}></div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[14px] leading-[20px] font-medium text-[#1e2348]">{activity.action}</p>
+                              <p className="text-[13px] leading-[18px] text-[#4B5563] truncate">{activity.item}</p>
+                              <p className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">{activity.time}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full mt-4 hover:bg-[#F5F6FA] hover:text-[#ff6b4d]"
+                      >
+                        View All Activity →
+                      </Button>
+                    </div>
+
+                    {/* Compliance Alerts */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                      <div className="flex items-center justify-between mb-5">
+                        <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Compliance Alerts</h2>
+                        <Badge className="bg-red-100 text-red-700 hover:bg-red-100">12 Active</Badge>
+                      </div>
+                      <div className="space-y-4">
+                        {[
+                          { 
+                            severity: 'high', 
+                            title: 'Copyright violation detected', 
+                            course: 'Web Development Bootcamp',
+                            action: 'Review Required'
+                          },
+                          { 
+                            severity: 'medium', 
+                            title: 'Accessibility issues found', 
+                            course: 'Python for Beginners',
+                            action: 'Fix Issues'
+                          },
+                          { 
+                            severity: 'high', 
+                            title: 'GDPR data request pending', 
+                            course: 'User: john.doe@example.com',
+                            action: 'Process Request'
+                          },
+                          { 
+                            severity: 'low', 
+                            title: 'Quality score below threshold', 
+                            course: 'Introduction to AI',
+                            action: 'Review Content'
+                          },
+                        ].map((alert, index) => (
+                          <div key={index} className={`p-4 rounded-xl border-2 ${
+                            alert.severity === 'high' ? 'bg-red-50 border-red-200' :
+                            alert.severity === 'medium' ? 'bg-amber-50 border-amber-200' :
+                            'bg-purple-50 border-purple-200'
+                          }`}>
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <AlertTriangle className={`w-5 h-5 ${
+                                  alert.severity === 'high' ? 'text-red-600' :
+                                  alert.severity === 'medium' ? 'text-amber-600' :
+                                  'text-purple-600'
+                                }`} />
+                                <span className={`text-[11px] leading-[16px] font-bold uppercase tracking-wide ${
+                                  alert.severity === 'high' ? 'text-red-700' :
+                                  alert.severity === 'medium' ? 'text-amber-700' :
+                                  'text-purple-700'
+                                }`}>
+                                  {alert.severity} Priority
+                                </span>
+                              </div>
+                            </div>
+                            <h3 className="text-[14px] leading-[20px] font-semibold text-[#1e2348] mb-1">{alert.title}</h3>
+                            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">{alert.course}</p>
+                            <Button 
+                              size="sm"
+                              className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[12px] h-8"
+                            >
+                              {alert.action} →
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </div>
           )}
 
           {/* Organizations Tab */}
           {activeTab === 'organizations' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Organization & Integration Management</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Organization Management</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Manage organizational accounts and multi-tenant access.
-                  </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Add Organization</Button>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Organization & Integration Management</h1>
+              
+              {/* Statistics */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {[
+                  { icon: Building2, label: 'Active Organizations', value: '24', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                  { icon: Users2, label: 'Total Users', value: '1,847', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                  { icon: Globe, label: 'Active Integrations', value: '12', color: 'text-purple-600', bg: 'bg-purple-50' },
+                  { icon: TrendingUp, label: 'API Calls Today', value: '45.2K', color: 'text-amber-600', bg: 'bg-amber-50' },
+                ].map(stat => (
+                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
+                      <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
+                    <div className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-8">
+                {/* Organization Management */}
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Organization Management</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Manage organizational accounts, multi-tenant access, and hierarchies
+                      </p>
+                    </div>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Organization
+                    </Button>
+                  </div>
+
+                  {/* Organizations List */}
+                  <div className="space-y-4">
+                    {[
+                      { 
+                        name: 'DTMA Academy', 
+                        type: 'Enterprise', 
+                        users: 450, 
+                        courses: 28, 
+                        status: 'active',
+                        plan: 'Enterprise Plus',
+                        renewal: 'Dec 2026'
+                      },
+                      { 
+                        name: 'Tech University', 
+                        type: 'Educational', 
+                        users: 1200, 
+                        courses: 45, 
+                        status: 'active',
+                        plan: 'Academic',
+                        renewal: 'Mar 2027'
+                      },
+                      { 
+                        name: 'Corporate Training Co', 
+                        type: 'Corporate', 
+                        users: 85, 
+                        courses: 12, 
+                        status: 'active',
+                        plan: 'Business',
+                        renewal: 'Aug 2026'
+                      },
+                      { 
+                        name: 'Startup Accelerator', 
+                        type: 'Startup', 
+                        users: 112, 
+                        courses: 8, 
+                        status: 'trial',
+                        plan: 'Trial',
+                        renewal: 'May 2026'
+                      },
+                    ].map((org, index) => (
+                      <div key={index} className="flex items-center justify-between p-6 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center border border-[#E5E7EB]">
+                            <Building2 className="w-8 h-8 text-[#ff6b4d]" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{org.name}</h3>
+                              <Badge className={`${
+                                org.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                              }`}>
+                                {org.status === 'active' ? 'Active' : 'Trial'}
+                              </Badge>
+                              <Badge variant="outline" className="border-[#E5E7EB]">{org.type}</Badge>
+                            </div>
+                            <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#4B5563]">
+                              <span><span className="font-semibold text-[#1e2348]">{org.users}</span> users</span>
+                              <span>•</span>
+                              <span><span className="font-semibold text-[#1e2348]">{org.courses}</span> courses</span>
+                              <span>•</span>
+                              <span>Plan: <span className="font-semibold text-[#1e2348]">{org.plan}</span></span>
+                              <span>•</span>
+                              <span>Renewal: {org.renewal}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                            <Settings className="w-4 h-4 mr-2" />
+                            Manage
+                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                                <MoreVertical className="w-4 h-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem>View Details</DropdownMenuItem>
+                              <DropdownMenuItem>Edit Settings</DropdownMenuItem>
+                              <DropdownMenuItem>Manage Users</DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem className="text-red-600">Suspend</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">External Integrations</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Configure integrations with external systems and APIs.
-                  </p>
+
+                {/* External Integrations */}
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">External Integrations</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Configure integrations with external systems, LMS platforms, and APIs
+                      </p>
+                    </div>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Integration
+                    </Button>
+                  </div>
+
+                  <div className="grid lg:grid-cols-2 gap-6">
+                    {[
+                      {
+                        name: 'Canvas LMS',
+                        type: 'LMS Platform',
+                        status: 'connected',
+                        lastSync: '2 hours ago',
+                        icon: BookOpen,
+                        color: 'bg-[#fff0ed]',
+                        iconColor: 'text-[#ff6b4d]'
+                      },
+                      {
+                        name: 'Zoom',
+                        type: 'Video Conferencing',
+                        status: 'connected',
+                        lastSync: '15 minutes ago',
+                        icon: Video,
+                        color: 'bg-indigo-50',
+                        iconColor: 'text-indigo-600'
+                      },
+                      {
+                        name: 'Stripe',
+                        type: 'Payment Gateway',
+                        status: 'connected',
+                        lastSync: '1 hour ago',
+                        icon: DollarSign,
+                        color: 'bg-purple-50',
+                        iconColor: 'text-purple-600'
+                      },
+                      {
+                        name: 'Google Workspace',
+                        type: 'SSO Provider',
+                        status: 'connected',
+                        lastSync: '30 minutes ago',
+                        icon: Globe,
+                        color: 'bg-red-50',
+                        iconColor: 'text-red-600'
+                      },
+                      {
+                        name: 'Salesforce',
+                        type: 'CRM',
+                        status: 'pending',
+                        lastSync: 'Not synced',
+                        icon: Users2,
+                        color: 'bg-cyan-50',
+                        iconColor: 'text-cyan-600'
+                      },
+                      {
+                        name: 'Slack',
+                        type: 'Communication',
+                        status: 'connected',
+                        lastSync: '5 minutes ago',
+                        icon: MessageSquare,
+                        color: 'bg-pink-50',
+                        iconColor: 'text-pink-600'
+                      },
+                    ].map((integration, index) => (
+                      <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className={`w-14 h-14 rounded-xl ${integration.color} flex items-center justify-center flex-shrink-0`}>
+                            <integration.icon className={`w-7 h-7 ${integration.iconColor}`} />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{integration.name}</h3>
+                              <div className={`flex items-center gap-1 ${
+                                integration.status === 'connected' ? 'text-emerald-600' : 'text-amber-600'
+                              }`}>
+                                <div className={`w-2 h-2 rounded-full ${
+                                  integration.status === 'connected' ? 'bg-emerald-500' : 'bg-amber-500'
+                                }`}></div>
+                                <span className="text-[12px] leading-[16px] font-medium capitalize">{integration.status}</span>
+                              </div>
+                            </div>
+                            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-1">{integration.type}</p>
+                            <p className="text-[12px] leading-[16px] text-[#9CA3AF]">Last sync: {integration.lastSync}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 pt-4 border-t border-[#E5E7EB]">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="flex-1 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                          >
+                            <Settings className="w-4 h-4 mr-2" />
+                            Configure
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="hover:bg-white hover:text-[#ff6b4d]"
+                          >
+                            Test
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* API Management */}
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">API Management</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Manage API keys, webhooks, and developer access
+                      </p>
+                    </div>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Generate API Key
+                    </Button>
+                  </div>
+
+                  <div className="grid md:grid-cols-3 gap-6 mb-6">
+                    {[
+                      { label: 'API Keys', value: '8', icon: LinkIcon },
+                      { label: 'Webhooks', value: '12', icon: Send },
+                      { label: 'Rate Limit', value: '10K/hr', icon: TrendingUp },
+                    ].map((metric) => (
+                      <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                        <div className="flex items-center gap-2 mb-3">
+                          <metric.icon className="w-5 h-5 text-[#4B5563]" />
+                          <span className="text-[13px] leading-[18px] font-medium text-[#4B5563]">{metric.label}</span>
+                        </div>
+                        <div className="text-[28px] leading-[36px] font-bold text-[#1e2348]">{metric.value}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* API Keys List */}
+                  <div className="space-y-3">
+                    {[
+                      { name: 'Production API Key', created: 'Jan 15, 2026', lastUsed: '2 hours ago', status: 'active' },
+                      { name: 'Development API Key', created: 'Feb 20, 2026', lastUsed: '1 day ago', status: 'active' },
+                      { name: 'Testing API Key', created: 'Mar 10, 2026', lastUsed: 'Never', status: 'inactive' },
+                    ].map((key, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB]">
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
+                            <LinkIcon className="w-5 h-5 text-[#ff6b4d]" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-[14px] leading-[20px] font-semibold text-[#1e2348] mb-1">{key.name}</h3>
+                            <div className="flex items-center gap-4 text-[12px] leading-[16px] text-[#4B5563]">
+                              <span>Created: {key.created}</span>
+                              <span>•</span>
+                              <span>Last used: {key.lastUsed}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge className={`${
+                            key.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-[#F5F6FA] text-[#9CA3AF]'
+                          }`}>
+                            {key.status}
+                          </Badge>
+                          <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                            <Settings className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* SSO Configuration */}
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Single Sign-On (SSO)</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Configure SAML, OAuth, and other SSO providers for seamless authentication
+                      </p>
+                    </div>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add SSO Provider
+                    </Button>
+                  </div>
+
+                  <div className="grid lg:grid-cols-3 gap-6">
+                    {[
+                      { provider: 'Google Workspace', type: 'OAuth 2.0', users: 450, status: 'active' },
+                      { provider: 'Microsoft Azure AD', type: 'SAML 2.0', users: 320, status: 'active' },
+                      { provider: 'Okta', type: 'SAML 2.0', users: 180, status: 'active' },
+                    ].map((sso, index) => (
+                      <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB]">
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
+                            <ShieldIcon className="w-5 h-5 text-[#ff6b4d]" />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                            <span className="text-[12px] leading-[16px] font-medium text-emerald-600">Active</span>
+                          </div>
+                        </div>
+                        <h3 className="text-[15px] leading-[22px] font-semibold text-[#1e2348] mb-1">{sso.provider}</h3>
+                        <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">{sso.type}</p>
+                        <div className="text-[12px] leading-[16px] text-[#4B5563]">
+                          <span className="font-semibold text-[#1e2348]">{sso.users}</span> users authenticated
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="w-full mt-4 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                        >
+                          Configure
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -2809,43 +3605,1171 @@ const AdminDashboard = () => {
 
           {/* Certification Tab */}
           {activeTab === 'certification' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Certification & Customer Success</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Certificate Template Management</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Design and manage certificate templates for courses.
-                  </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Create Template</Button>
+            <div className="space-y-8">
+              <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Certification & Customer Success</h1>
+
+              {/* Statistics Overview */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { icon: Award, label: 'Certificates Issued', value: '2,847', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                  { icon: TrendingUp, label: 'Completion Rate', value: '78%', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                  { icon: Users, label: 'Active Learners', value: '1,234', color: 'text-purple-600', bg: 'bg-purple-50' },
+                  { icon: Star, label: 'Avg Satisfaction', value: '4.7★', color: 'text-amber-500', bg: 'bg-amber-50' },
+                ].map(stat => (
+                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
+                      <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
+                    <div className="text-[13px] leading-[18px] text-[#4B5563]">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Certificate Template Management */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Certificate Template Management</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Design and manage certificate templates for courses and achievements
+                    </p>
+                  </div>
+                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white" onClick={() => setShowCreateTemplateModal(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Template
+                  </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Customer Success Tracking</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Track learner success metrics and engagement.
-                  </p>
+
+                {/* Template List */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[
+                    { 
+                      name: 'Course Completion Certificate', 
+                      type: 'Course', 
+                      courses: 28, 
+                      issued: 1847,
+                      status: 'active',
+                      preview: '📜'
+                    },
+                    { 
+                      name: 'Professional Achievement Badge', 
+                      type: 'Badge', 
+                      courses: 12, 
+                      issued: 543,
+                      status: 'active',
+                      preview: '🏆'
+                    },
+                    { 
+                      name: 'Specialization Certificate', 
+                      type: 'Specialization', 
+                      courses: 6, 
+                      issued: 287,
+                      status: 'active',
+                      preview: '🎓'
+                    },
+                    { 
+                      name: 'Micro-Credential Certificate', 
+                      type: 'Micro', 
+                      courses: 15, 
+                      issued: 892,
+                      status: 'active',
+                      preview: '⭐'
+                    },
+                    { 
+                      name: 'Executive Program Certificate', 
+                      type: 'Executive', 
+                      courses: 4, 
+                      issued: 156,
+                      status: 'draft',
+                      preview: '👔'
+                    },
+                    { 
+                      name: 'Team Achievement Award', 
+                      type: 'Team', 
+                      courses: 8, 
+                      issued: 234,
+                      status: 'active',
+                      preview: '👥'
+                    },
+                  ].map((template, index) => (
+                    <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center text-3xl border border-[#E5E7EB]">
+                          {template.preview}
+                        </div>
+                        <Badge className={`${
+                          template.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                        }`}>
+                          {template.status}
+                        </Badge>
+                      </div>
+                      <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{template.name}</h3>
+                      <div className="flex items-center gap-2 mb-4">
+                        <Badge variant="outline" className="border-[#E5E7EB] text-[#4B5563]">{template.type}</Badge>
+                      </div>
+                      <div className="flex items-center justify-between text-[13px] text-[#4B5563] mb-4">
+                        <span><span className="font-semibold text-[#1e2348]">{template.courses}</span> courses</span>
+                        <span><span className="font-semibold text-[#1e2348]">{template.issued}</span> issued</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="flex-1 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                          onClick={() => setPreviewTemplate(template)}
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          Preview
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]"
+                          onClick={() => setEditingTemplate(template)}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
+
+              {/* Certificate Issuance & Verification */}
+              <div className="grid lg:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-start gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-[#fff0ed] flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-7 h-7 text-[#ff6b4d]" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Certificate Issuance</h2>
+                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                        Automated and manual certificate generation and distribution
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {[
+                      { label: 'Auto-Issue on Completion', value: 'Enabled', status: 'active' },
+                      { label: 'Manual Review Required', value: 'Disabled', status: 'inactive' },
+                      { label: 'Email Delivery', value: 'Enabled', status: 'active' },
+                      { label: 'Blockchain Verification', value: 'Enabled', status: 'active' },
+                    ].map((setting, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg border border-[#E5E7EB]">
+                        <span className="text-[14px] font-medium text-[#1e2348]">{setting.label}</span>
+                        <div className="flex items-center gap-3">
+                          <Badge className={`${
+                            setting.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-[#F5F6FA] text-[#9CA3AF]'
+                          }`}>
+                            {setting.value}
+                          </Badge>
+                          <Button variant="ghost" size="sm" className="hover:bg-white hover:text-[#ff6b4d]">
+                            <Settings className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button className="w-full mt-6 bg-[#ff6b4d] hover:bg-[#e66045] text-white" onClick={() => setShowIssuanceRulesModal(true)}>
+                    Configure Issuance Rules
+                  </Button>
+                </div>
+
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-start gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-7 h-7 text-purple-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Verification System</h2>
+                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                        Certificate authenticity verification and fraud prevention
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {[
+                      { label: 'Verified Today', value: '47' },
+                      { label: 'Total Verified', value: '12.4K' },
+                      { label: 'Fraud Detected', value: '3' },
+                      { label: 'Verification Rate', value: '99.8%' },
+                    ].map((metric) => (
+                      <div key={metric.label} className="bg-[#F5F6FA] rounded-lg p-4 border border-[#E5E7EB]">
+                        <div className="text-[24px] font-bold text-[#1e2348] mb-1">{metric.value}</div>
+                        <div className="text-[12px] text-[#4B5563]">{metric.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button variant="outline" className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]" onClick={() => setShowVerifyCertificateModal(true)}>
+                    <Search className="w-4 h-4 mr-2" />
+                    Verify Certificate
+                  </Button>
+                </div>
+              </div>
+
+              {/* Customer Success Tracking */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Customer Success Tracking</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Monitor learner success metrics, engagement, and satisfaction
+                    </p>
+                  </div>
+                  <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <Download className="w-4 h-4 mr-2" />
+                    Export Report
+                  </Button>
+                </div>
+
+                {/* Success Metrics */}
+                <div className="grid md:grid-cols-4 gap-4 mb-8">
+                  {[
+                    { icon: Target, label: 'Goal Achievement', value: '82%', trend: '+5%', up: true },
+                    { icon: Clock, label: 'Avg Time to Complete', value: '6.2 weeks', trend: '-0.8 weeks', up: true },
+                    { icon: TrendingUp, label: 'Career Advancement', value: '67%', trend: '+12%', up: true },
+                    { icon: Star, label: 'NPS Score', value: '72', trend: '+8', up: true },
+                  ].map((metric) => (
+                    <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                      <div className="flex items-center gap-2 mb-3">
+                        <metric.icon className="w-5 h-5 text-[#4B5563]" />
+                        <span className="text-[12px] font-medium text-[#4B5563]">{metric.label}</span>
+                      </div>
+                      <div className="text-[24px] font-bold text-[#1e2348] mb-1">{metric.value}</div>
+                      <div className={`text-[12px] font-medium ${metric.up ? 'text-emerald-600' : 'text-red-600'}`}>
+                        {metric.trend}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Learner Journey Stages */}
+                <div className="mb-8">
+                  <h3 className="text-[18px] leading-[24px] font-semibold text-[#1e2348] mb-4">Learner Journey Stages</h3>
+                  <div className="grid md:grid-cols-5 gap-4">
+                    {[
+                      { stage: 'Onboarding', count: 234, color: 'bg-purple-500' },
+                      { stage: 'Active Learning', count: 892, color: 'bg-[#ff6b4d]' },
+                      { stage: 'Near Completion', count: 156, color: 'bg-amber-500' },
+                      { stage: 'Completed', count: 1847, color: 'bg-emerald-500' },
+                      { stage: 'At Risk', count: 67, color: 'bg-red-500' },
+                    ].map((stage) => (
+                      <div key={stage.stage} className="bg-white rounded-xl p-5 border-2 border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div className={`w-3 h-3 rounded-full ${stage.color} mb-3`}></div>
+                        <div className="text-[28px] font-bold text-[#1e2348] mb-1">{stage.count}</div>
+                        <div className="text-[13px] text-[#4B5563]">{stage.stage}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Recent Success Stories */}
+                <div>
+                  <h3 className="text-[18px] leading-[24px] font-semibold text-[#1e2348] mb-4">Recent Success Stories</h3>
+                  <div className="space-y-3">
+                    {[
+                      { 
+                        learner: 'Sarah Johnson', 
+                        achievement: 'Completed Digital Transformation Specialization', 
+                        outcome: 'Promoted to Senior Manager',
+                        date: '2 days ago',
+                        rating: 5
+                      },
+                      { 
+                        learner: 'Ahmed Al-Mansoori', 
+                        achievement: 'Earned 6 Professional Certificates', 
+                        outcome: 'Started new role at Fortune 500',
+                        date: '5 days ago',
+                        rating: 5
+                      },
+                      { 
+                        learner: 'Maria Garcia', 
+                        achievement: 'Mastered Economy 4.0 Course', 
+                        outcome: 'Led digital initiative at company',
+                        date: '1 week ago',
+                        rating: 4
+                      },
+                    ].map((story, index) => (
+                      <div key={index} className="flex items-start gap-4 p-5 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div className="w-12 h-12 rounded-full bg-[#ff6b4d] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                          {story.learner.charAt(0)}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-2">
+                            <div>
+                              <h4 className="text-[15px] font-semibold text-[#1e2348]">{story.learner}</h4>
+                              <p className="text-[13px] text-[#4B5563]">{story.achievement}</p>
+                            </div>
+                            <span className="text-[12px] text-[#9CA3AF]">{story.date}</span>
+                          </div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge className="bg-emerald-100 text-emerald-700">
+                              <TrendingUp className="w-3 h-3 mr-1" />
+                              {story.outcome}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {Array.from({ length: story.rating }).map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Badge & Micro-Credentials */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Digital Badges & Micro-Credentials</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Manage stackable credentials and achievement badges
+                    </p>
+                  </div>
+                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white" onClick={() => setShowCreateBadgeModal(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Badge
+                  </Button>
+                </div>
+
+                <div className="grid md:grid-cols-4 gap-6">
+                  {[
+                    { name: 'AI Mastery', earned: 234, icon: '🤖', color: 'bg-purple-50' },
+                    { name: 'Leadership Excellence', earned: 189, icon: '👑', color: 'bg-amber-50' },
+                    { name: 'Innovation Champion', earned: 156, icon: '💡', color: 'bg-emerald-50' },
+                    { name: 'Digital Pioneer', earned: 298, icon: '🚀', color: 'bg-[#fff0ed]' },
+                  ].map((badge, index) => (
+                    <div key={index} className={`${badge.color} rounded-xl p-6 border border-[#E5E7EB] text-center hover:shadow-md transition-shadow`}>
+                      <div className="text-5xl mb-3">{badge.icon}</div>
+                      <h3 className="text-[15px] font-semibold text-[#1e2348] mb-2">{badge.name}</h3>
+                      <div className="text-[13px] text-[#4B5563]">
+                        <span className="font-bold text-[#1e2348]">{badge.earned}</span> earned
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Create Template Modal */}
+              {showCreateTemplateModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Create Certificate Template</h2>
+                      <button onClick={() => setShowCreateTemplateModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[#4B5563]" />
+                      </button>
+                    </div>
+                    <div className="p-6 space-y-6">
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Template Name</label>
+                        <input
+                          type="text"
+                          value={certificateTemplateForm.name}
+                          onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, name: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          placeholder="e.g., Professional Certificate"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Template Type</label>
+                        <div className="grid grid-cols-3 gap-3">
+                          {['course', 'badge', 'specialization', 'micro', 'executive', 'team'].map((type) => (
+                            <button
+                              key={type}
+                              onClick={() => setCertificateTemplateForm({ ...certificateTemplateForm, type: type as any })}
+                              className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                                certificateTemplateForm.type === type
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                              }`}
+                            >
+                              {type}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Description</label>
+                        <textarea
+                          value={certificateTemplateForm.description}
+                          onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, description: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[100px]"
+                          placeholder="Describe the certificate template..."
+                        />
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Orientation</label>
+                          <select
+                            value={certificateTemplateForm.orientation}
+                            onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, orientation: e.target.value as any })}
+                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          >
+                            <option value="landscape">Landscape</option>
+                            <option value="portrait">Portrait</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Border Style</label>
+                          <select
+                            value={certificateTemplateForm.borderStyle}
+                            onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, borderStyle: e.target.value as any })}
+                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          >
+                            <option value="classic">Classic</option>
+                            <option value="modern">Modern</option>
+                            <option value="minimal">Minimal</option>
+                            <option value="elegant">Elegant</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-3">Include Elements</label>
+                        <div className="space-y-3">
+                          {[
+                            { key: 'includeQRCode', label: 'QR Code for Verification' },
+                            { key: 'includeSignature', label: 'Digital Signature' },
+                            { key: 'includeDate', label: 'Issue Date' },
+                            { key: 'includeCredentialID', label: 'Credential ID' },
+                          ].map((element) => (
+                            <label key={element.key} className="flex items-center gap-3 p-3 bg-[#F5F6FA] rounded-lg cursor-pointer hover:bg-[#E5E7EB] transition-colors">
+                              <input
+                                type="checkbox"
+                                checked={certificateTemplateForm[element.key as keyof typeof certificateTemplateForm] as boolean}
+                                onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, [element.key]: e.target.checked })}
+                                className="w-5 h-5 text-[#ff6b4d] rounded focus:ring-[#ff6b4d]"
+                              />
+                              <span className="text-[14px] text-[#1e2348]">{element.label}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          onClick={() => setShowCreateTemplateModal(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          onClick={() => {
+                            toast({ title: "Template Created", description: `"${certificateTemplateForm.name}" has been created successfully.` });
+                            setShowCreateTemplateModal(false);
+                            setCertificateTemplateForm({
+                              name: '',
+                              type: 'course',
+                              description: '',
+                              orientation: 'landscape',
+                              backgroundColor: '#ffffff',
+                              borderStyle: 'classic',
+                              includeQRCode: true,
+                              includeSignature: true,
+                              includeDate: true,
+                              includeCredentialID: true,
+                            });
+                          }}
+                        >
+                          Create Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Create Badge Modal */}
+              {showCreateBadgeModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Create Digital Badge</h2>
+                      <button onClick={() => setShowCreateBadgeModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[#4B5563]" />
+                      </button>
+                    </div>
+                    <div className="p-6 space-y-6">
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Badge Name</label>
+                        <input
+                          type="text"
+                          value={badgeForm.name}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, name: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          placeholder="e.g., AI Mastery"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Badge Icon</label>
+                        <div className="grid grid-cols-6 gap-3">
+                          {['🏆', '⭐', '🎓', '💡', '🚀', '👑', '🤖', '💪', '🎯', '🔥', '✨', '🌟'].map((emoji) => (
+                            <button
+                              key={emoji}
+                              onClick={() => setBadgeForm({ ...badgeForm, icon: emoji })}
+                              className={`text-3xl p-4 rounded-lg border-2 transition-all ${
+                                badgeForm.icon === emoji
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10'
+                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                              }`}
+                            >
+                              {emoji}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Category</label>
+                        <div className="grid grid-cols-2 gap-3">
+                          {['achievement', 'skill', 'milestone', 'special'].map((category) => (
+                            <button
+                              key={category}
+                              onClick={() => setBadgeForm({ ...badgeForm, category: category as any })}
+                              className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                                badgeForm.category === category
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                              }`}
+                            >
+                              {category}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Description</label>
+                        <textarea
+                          value={badgeForm.description}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, description: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[80px]"
+                          placeholder="Describe what this badge represents..."
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Earning Criteria</label>
+                        <textarea
+                          value={badgeForm.criteria}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, criteria: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[80px]"
+                          placeholder="What must learners do to earn this badge?"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Points Value</label>
+                        <input
+                          type="number"
+                          value={badgeForm.points}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, points: parseInt(e.target.value) })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          min="0"
+                        />
+                      </div>
+
+                      <label className="flex items-center gap-3 p-3 bg-[#F5F6FA] rounded-lg cursor-pointer hover:bg-[#E5E7EB] transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={badgeForm.stackable}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, stackable: e.target.checked })}
+                          className="w-5 h-5 text-[#ff6b4d] rounded focus:ring-[#ff6b4d]"
+                        />
+                        <span className="text-[14px] text-[#1e2348]">Stackable (can be earned multiple times)</span>
+                      </label>
+
+                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          onClick={() => setShowCreateBadgeModal(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          onClick={() => {
+                            toast({ title: "Badge Created", description: `"${badgeForm.name}" badge has been created successfully.` });
+                            setShowCreateBadgeModal(false);
+                            setBadgeForm({
+                              name: '',
+                              description: '',
+                              category: 'achievement',
+                              icon: '🏆',
+                              criteria: '',
+                              points: 100,
+                              stackable: true,
+                            });
+                          }}
+                        >
+                          Create Badge
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Verify Certificate Modal */}
+              {showVerifyCertificateModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-2xl max-w-lg w-full">
+                    <div className="border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Verify Certificate</h2>
+                      <button onClick={() => setShowVerifyCertificateModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[#4B5563]" />
+                      </button>
+                    </div>
+                    <div className="p-6 space-y-6">
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Verification Method</label>
+                        <div className="grid grid-cols-3 gap-3 mb-4">
+                          {[
+                            { value: 'id', label: 'Certificate ID', icon: '🔢' },
+                            { value: 'qr', label: 'QR Code', icon: '📱' },
+                            { value: 'blockchain', label: 'Blockchain', icon: '⛓️' },
+                          ].map((method) => (
+                            <button
+                              key={method.value}
+                              onClick={() => setVerifyCertificateForm({ ...verifyCertificateForm, verificationMethod: method.value as any })}
+                              className={`flex flex-col items-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
+                                verifyCertificateForm.verificationMethod === method.value
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                              }`}
+                            >
+                              <span className="text-2xl">{method.icon}</span>
+                              <span>{method.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {verifyCertificateForm.verificationMethod === 'id' && (
+                        <div>
+                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Certificate ID</label>
+                          <input
+                            type="text"
+                            value={verifyCertificateForm.certificateID}
+                            onChange={(e) => setVerifyCertificateForm({ ...verifyCertificateForm, certificateID: e.target.value })}
+                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                            placeholder="Enter certificate ID..."
+                          />
+                        </div>
+                      )}
+
+                      {verifyCertificateForm.verificationMethod === 'qr' && (
+                        <div className="text-center py-8">
+                          <div className="w-48 h-48 mx-auto bg-[#F5F6FA] rounded-xl flex items-center justify-center border-2 border-dashed border-[#E5E7EB]">
+                            <div className="text-center">
+                              <Upload className="w-12 h-12 mx-auto mb-2 text-[#9CA3AF]" />
+                              <p className="text-[14px] text-[#4B5563]">Scan or upload QR code</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {verifyCertificateForm.verificationMethod === 'blockchain' && (
+                        <div>
+                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Blockchain Transaction Hash</label>
+                          <input
+                            type="text"
+                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                            placeholder="Enter transaction hash..."
+                          />
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          onClick={() => setShowVerifyCertificateModal(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          onClick={() => {
+                            toast({ 
+                              title: "Certificate Verified", 
+                              description: "This certificate is authentic and was issued by DTMA Academy." 
+                            });
+                            setShowVerifyCertificateModal(false);
+                          }}
+                        >
+                          Verify
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Template Preview Modal */}
+              {previewTemplate && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-[24px] font-semibold text-[#1e2348]">{previewTemplate.name}</h2>
+                        <p className="text-[14px] text-[#4B5563]">Template Preview</p>
+                      </div>
+                      <button onClick={() => setPreviewTemplate(null)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[#4B5563]" />
+                      </button>
+                    </div>
+                    <div className="p-8">
+                      {/* Certificate Preview matching learner/instructor dashboard design */}
+                      <div className="aspect-[16/11] bg-gradient-to-r from-[#1e2348] via-[#2a3058] to-[#ff6b4d] rounded-xl overflow-hidden shadow-2xl border-4 border-white">
+                        <div className="h-full flex flex-col items-center justify-center text-white p-12 relative">
+                          {/* Decorative corner elements */}
+                          <div className="absolute top-6 left-6 w-16 h-16 border-t-4 border-l-4 border-white/30 rounded-tl-xl"></div>
+                          <div className="absolute top-6 right-6 w-16 h-16 border-t-4 border-r-4 border-white/30 rounded-tr-xl"></div>
+                          <div className="absolute bottom-6 left-6 w-16 h-16 border-b-4 border-l-4 border-white/30 rounded-bl-xl"></div>
+                          <div className="absolute bottom-6 right-6 w-16 h-16 border-b-4 border-r-4 border-white/30 rounded-br-xl"></div>
+                          
+                          {/* Certificate icon */}
+                          <div className="w-20 h-20 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm mb-6">
+                            <div className="text-5xl">{previewTemplate.preview}</div>
+                          </div>
+                          
+                          {/* Certificate content */}
+                          <h3 className="text-[40px] font-bold mb-6 tracking-wide">Certificate of Completion</h3>
+                          <p className="text-[18px] mb-4 text-white/90">This certifies that</p>
+                          <p className="text-[32px] font-bold mb-6 tracking-wide">[Learner Name]</p>
+                          <p className="text-[16px] mb-4 text-white/90">has successfully completed</p>
+                          <p className="text-[28px] font-bold mb-8 text-center max-w-2xl">[Course Title]</p>
+                          
+                          {/* Certificate details */}
+                          <div className="flex items-center gap-12 text-[14px] mt-4">
+                            <div className="text-center">
+                              <p className="text-white/70 mb-1">Issue Date</p>
+                              <p className="font-semibold text-[16px]">[Date]</p>
+                            </div>
+                            <div className="w-px h-12 bg-white/30"></div>
+                            <div className="text-center">
+                              <p className="text-white/70 mb-1">Credential ID</p>
+                              <p className="font-semibold text-[16px] font-mono">[ID]</p>
+                            </div>
+                          </div>
+                          
+                          {/* KHDA Badge */}
+                          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+                            <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
+                              <p className="text-[12px] font-medium text-white/90">KHDA-Attested Certificate</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Action buttons */}
+                      <div className="mt-6 flex items-center gap-3">
+                        <Button variant="outline" className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]" onClick={() => setPreviewTemplate(null)}>
+                          Close
+                        </Button>
+                        <Button className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                          <Download className="w-4 h-4 mr-2" />
+                          Download Sample
+                        </Button>
+                        <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                          <Share2 className="w-4 h-4 mr-2" />
+                          Share
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
           {/* Commerce Tab */}
           {activeTab === 'commerce' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Commerce & Billing Operations</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Course Pricing & Plans</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Manage course pricing, discount codes, and subscription plans.
-                  </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Set Pricing</Button>
+            <div className="space-y-8">
+              <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Commerce & Billing Operations</h1>
+
+              {/* Revenue Overview Statistics */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { icon: DollarSign, label: 'Total Revenue', value: '$284,750', trend: '+18%', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                  { icon: TrendingUp, label: 'Monthly Recurring', value: '$42,890', trend: '+12%', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                  { icon: Users, label: 'Paying Customers', value: '1,847', trend: '+24%', color: 'text-purple-600', bg: 'bg-purple-50' },
+                  { icon: Award, label: 'Avg Order Value', value: '$154', trend: '+8%', color: 'text-amber-500', bg: 'bg-amber-50' },
+                ].map(stat => (
+                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
+                      <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-[13px] leading-[18px] text-[#4B5563]">{stat.label}</div>
+                      <div className="text-[12px] font-medium text-emerald-600">{stat.trend}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Course Pricing & Plans */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Course Pricing & Plans</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Manage course pricing, discount codes, and subscription plans
+                    </p>
+                  </div>
+                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Pricing Plan
+                  </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Payment & Refunds</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Process payments, manage refunds, and view transaction history.
-                  </p>
+
+                {/* Pricing Plans Grid */}
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  {[
+                    { 
+                      name: 'Individual Course', 
+                      price: '$99', 
+                      period: 'one-time',
+                      courses: 28,
+                      sales: 1247,
+                      revenue: '$123,453',
+                      status: 'active'
+                    },
+                    { 
+                      name: 'Monthly Subscription', 
+                      price: '$49', 
+                      period: 'per month',
+                      courses: 'All',
+                      sales: 342,
+                      revenue: '$16,758',
+                      status: 'active'
+                    },
+                    { 
+                      name: 'Annual Subscription', 
+                      price: '$499', 
+                      period: 'per year',
+                      courses: 'All',
+                      sales: 258,
+                      revenue: '$128,742',
+                      status: 'active'
+                    },
+                  ].map((plan, index) => (
+                    <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border-2 border-[#E5E7EB] hover:border-[#ff6b4d] hover:shadow-md transition-all">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="text-[18px] font-semibold text-[#1e2348] mb-1">{plan.name}</h3>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-[32px] font-bold text-[#ff6b4d]">{plan.price}</span>
+                            <span className="text-[14px] text-[#4B5563]">{plan.period}</span>
+                          </div>
+                        </div>
+                        <Badge className="bg-emerald-100 text-emerald-700">{plan.status}</Badge>
+                      </div>
+                      <div className="space-y-3 mb-4">
+                        <div className="flex items-center justify-between text-[13px]">
+                          <span className="text-[#4B5563]">Courses</span>
+                          <span className="font-semibold text-[#1e2348]">{plan.courses}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[13px]">
+                          <span className="text-[#4B5563]">Total Sales</span>
+                          <span className="font-semibold text-[#1e2348]">{plan.sales}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[13px]">
+                          <span className="text-[#4B5563]">Revenue</span>
+                          <span className="font-semibold text-[#1e2348]">{plan.revenue}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex-1 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Discount Codes */}
+                <div className="border-t border-[#E5E7EB] pt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-[18px] font-semibold text-[#1e2348]">Active Discount Codes</h3>
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create Code
+                    </Button>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {[
+                      { code: 'WELCOME20', discount: '20%', uses: 234, limit: 500, expires: '2026-06-30' },
+                      { code: 'SUMMER50', discount: '50%', uses: 89, limit: 100, expires: '2026-08-31' },
+                      { code: 'EARLYBIRD', discount: '$25', uses: 156, limit: 200, expires: '2026-05-15' },
+                      { code: 'STUDENT15', discount: '15%', uses: 412, limit: 1000, expires: '2026-12-31' },
+                    ].map((code, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-white rounded-lg border border-[#E5E7EB]">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="font-mono font-bold text-[16px] text-[#1e2348]">{code.code}</span>
+                            <Badge className="bg-[#fff0ed] text-[#ff6b4d]">{code.discount} off</Badge>
+                          </div>
+                          <div className="flex items-center gap-4 text-[12px] text-[#4B5563]">
+                            <span>{code.uses}/{code.limit} uses</span>
+                            <span>•</span>
+                            <span>Expires {code.expires}</span>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                          <Copy className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment & Refunds */}
+              <div className="grid lg:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-start gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-7 h-7 text-emerald-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Payment Processing</h2>
+                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                        Monitor payment transactions and success rates
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {[
+                      { label: 'Successful', value: '2,847', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                      { label: 'Pending', value: '23', color: 'text-amber-600', bg: 'bg-amber-50' },
+                      { label: 'Failed', value: '12', color: 'text-red-600', bg: 'bg-red-50' },
+                      { label: 'Success Rate', value: '99.6%', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                    ].map((metric) => (
+                      <div key={metric.label} className={`${metric.bg} rounded-lg p-4 border border-[#E5E7EB]`}>
+                        <div className={`text-[24px] font-bold ${metric.color} mb-1`}>{metric.value}</div>
+                        <div className="text-[12px] text-[#4B5563]">{metric.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-[16px] font-semibold text-[#1e2348]">Payment Methods</h3>
+                    {[
+                      { method: 'Credit/Debit Cards', percentage: 68, icon: '💳' },
+                      { method: 'PayPal', percentage: 22, icon: '🅿️' },
+                      { method: 'Bank Transfer', percentage: 10, icon: '🏦' },
+                    ].map((pm) => (
+                      <div key={pm.method} className="flex items-center gap-3">
+                        <span className="text-2xl">{pm.icon}</span>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[14px] font-medium text-[#1e2348]">{pm.method}</span>
+                            <span className="text-[13px] font-semibold text-[#4B5563]">{pm.percentage}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-[#F5F6FA] rounded-full overflow-hidden">
+                            <div className="h-full bg-[#ff6b4d] rounded-full" style={{ width: `${pm.percentage}%` }}></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-start gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                      <ArrowUpRight className="w-7 h-7 text-amber-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Refunds & Disputes</h2>
+                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                        Manage refund requests and payment disputes
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {[
+                      { label: 'Pending Refunds', value: '8' },
+                      { label: 'Processed', value: '142' },
+                      { label: 'Total Refunded', value: '$12,450' },
+                      { label: 'Refund Rate', value: '4.2%' },
+                    ].map((metric) => (
+                      <div key={metric.label} className="bg-[#F5F6FA] rounded-lg p-4 border border-[#E5E7EB]">
+                        <div className="text-[20px] font-bold text-[#1e2348] mb-1">{metric.value}</div>
+                        <div className="text-[12px] text-[#4B5563]">{metric.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-[16px] font-semibold text-[#1e2348] mb-3">Recent Refund Requests</h3>
+                    {[
+                      { user: 'John Smith', course: 'Digital Economy', amount: '$99', date: '2 hours ago', status: 'pending' },
+                      { user: 'Sarah Lee', course: 'Platform Economics', amount: '$99', date: '5 hours ago', status: 'pending' },
+                      { user: 'Mike Chen', course: 'Digital Transformation', amount: '$99', date: '1 day ago', status: 'approved' },
+                    ].map((refund, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-[#F5F6FA] rounded-lg border border-[#E5E7EB]">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[14px] font-medium text-[#1e2348]">{refund.user}</span>
+                            <Badge className={`${
+                              refund.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'
+                            }`}>
+                              {refund.status}
+                            </Badge>
+                          </div>
+                          <div className="text-[12px] text-[#4B5563]">
+                            {refund.course} • {refund.amount} • {refund.date}
+                          </div>
+                        </div>
+                        {refund.status === 'pending' && (
+                          <div className="flex items-center gap-2">
+                            <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Approve
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Transaction History */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Transaction History</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      View and manage all payment transactions
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#F5F6FA]">
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter
+                    </Button>
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-[#1e2348]">
+                      <tr>
+                        {['Transaction ID', 'Customer', 'Course/Plan', 'Amount', 'Payment Method', 'Status', 'Date', 'Actions'].map(h => (
+                          <th key={h} className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { id: 'TXN-2024-5847', customer: 'Sarah Johnson', item: 'Annual Subscription', amount: '$499', method: 'Credit Card', status: 'completed', date: '2026-04-17 14:23' },
+                        { id: 'TXN-2024-5846', customer: 'Ahmed Al-Mansoori', item: 'Digital Economy Course', amount: '$99', method: 'PayPal', status: 'completed', date: '2026-04-17 13:45' },
+                        { id: 'TXN-2024-5845', customer: 'Maria Garcia', item: 'Monthly Subscription', amount: '$49', method: 'Credit Card', status: 'pending', date: '2026-04-17 12:10' },
+                        { id: 'TXN-2024-5844', customer: 'John Smith', item: 'Platform Economics', amount: '$99', method: 'Bank Transfer', status: 'completed', date: '2026-04-17 11:30' },
+                        { id: 'TXN-2024-5843', customer: 'Fatima Hassan', item: 'Digital Transformation', amount: '$99', method: 'Credit Card', status: 'failed', date: '2026-04-17 10:15' },
+                      ].map((txn, index) => (
+                        <tr key={index} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] ${index % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
+                          <td className="px-4 py-3">
+                            <span className="font-mono text-[13px] text-[#1e2348]">{txn.id}</span>
+                          </td>
+                          <td className="px-4 py-3 text-[14px] font-medium text-[#1e2348]">{txn.customer}</td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{txn.item}</td>
+                          <td className="px-4 py-3 text-[14px] font-semibold text-[#1e2348]">{txn.amount}</td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{txn.method}</td>
+                          <td className="px-4 py-3">
+                            <Badge className={`${
+                              txn.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
+                              txn.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                              'bg-red-100 text-red-700'
+                            }`}>
+                              {txn.status}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{txn.date}</td>
+                          <td className="px-4 py-3">
+                            <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Revenue Analytics */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Revenue Analytics</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Track revenue trends and performance metrics
+                    </p>
+                  </div>
+                  <select className="px-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>This year</option>
+                  </select>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    { label: 'Course Sales', value: '$156,890', change: '+15%', icon: BookOpen },
+                    { label: 'Subscriptions', value: '$89,640', change: '+22%', icon: Users },
+                    { label: 'Certifications', value: '$38,220', change: '+8%', icon: Award },
+                  ].map((metric) => (
+                    <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB]">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
+                          <metric.icon className="w-6 h-6 text-[#ff6b4d]" />
+                        </div>
+                        <div>
+                          <div className="text-[12px] text-[#4B5563] mb-1">{metric.label}</div>
+                          <div className="text-[24px] font-bold text-[#1e2348]">{metric.value}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4 text-emerald-600" />
+                        <span className="text-[13px] font-medium text-emerald-600">{metric.change} vs last period</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -2854,20 +4778,231 @@ const AdminDashboard = () => {
           {/* System Settings Tab */}
           {activeTab === 'system' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">User, Roles & System Administration</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">System Settings</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Configure platform settings, policies, and feature flags.
-                  </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Configure Settings</Button>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">User, Roles & System Administration</h1>
+              
+              {/* Statistics Overview */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-2">
+                    <Shield className="w-8 h-8 text-[#ff6b4d]" />
+                    <span className="text-[13px] text-[#10B981] font-medium">Active</span>
+                  </div>
+                  <p className="text-[32px] font-bold text-[#1e2348]">8</p>
+                  <p className="text-[14px] text-[#4B5563]">User Roles</p>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Audit Logs</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    View system audit logs and compliance reports.
-                  </p>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-2">
+                    <Activity className="w-8 h-8 text-[#ff6b4d]" />
+                    <span className="text-[13px] text-[#10B981] font-medium">+8%</span>
+                  </div>
+                  <p className="text-[32px] font-bold text-[#1e2348]">1,234</p>
+                  <p className="text-[14px] text-[#4B5563]">Active Sessions</p>
+                </div>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-2">
+                    <FileText className="w-8 h-8 text-[#ff6b4d]" />
+                    <span className="text-[13px] text-[#4B5563] font-medium">Last 24h</span>
+                  </div>
+                  <p className="text-[32px] font-bold text-[#1e2348]">3,456</p>
+                  <p className="text-[14px] text-[#4B5563]">Audit Events</p>
+                </div>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-2">
+                    <Lock className="w-8 h-8 text-[#ff6b4d]" />
+                    <span className="text-[13px] text-emerald-600 font-medium">Secure</span>
+                  </div>
+                  <p className="text-[32px] font-bold text-[#1e2348]">99.9%</p>
+                  <p className="text-[14px] text-[#4B5563]">System Uptime</p>
+                </div>
+              </div>
+
+              {/* Roles & Permissions */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] mb-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Roles & Permissions</h3>
+                    <p className="text-[14px] text-[#4B5563] mt-1">Define and manage user roles with granular permissions</p>
+                  </div>
+                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Role
+                  </Button>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    { name: 'Super Admin', users: 3, permissions: 'Full Access', color: 'bg-red-100 text-red-700' },
+                    { name: 'Admin', users: 12, permissions: '45 Permissions', color: 'bg-[#fff0ed] text-[#ff6b4d]' },
+                    { name: 'Instructor', users: 156, permissions: '28 Permissions', color: 'bg-blue-100 text-blue-700' },
+                    { name: 'Content Manager', users: 8, permissions: '22 Permissions', color: 'bg-purple-100 text-purple-700' },
+                    { name: 'Learner', users: 2654, permissions: '12 Permissions', color: 'bg-green-100 text-green-700' },
+                    { name: 'Guest', users: 14, permissions: '5 Permissions', color: 'bg-gray-100 text-gray-600' },
+                    { name: 'Support Staff', users: 6, permissions: '18 Permissions', color: 'bg-amber-100 text-amber-700' },
+                    { name: 'Auditor', users: 2, permissions: 'Read Only', color: 'bg-indigo-100 text-indigo-700' },
+                  ].map((role, index) => (
+                    <div key={index} className="bg-[#F5F6FA] rounded-xl p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-3">
+                        <Shield className="w-6 h-6 text-[#ff6b4d]" />
+                        <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <h4 className="text-[16px] font-semibold text-[#1e2348] mb-2">{role.name}</h4>
+                      <p className="text-[13px] text-[#4B5563] mb-3">{role.permissions}</p>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-[#9CA3AF]" />
+                        <span className="text-[13px] text-[#4B5563]">{role.users} users</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* System Settings */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] mb-6">
+                <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-6">System Settings</h3>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* General Settings */}
+                  <div className="space-y-4">
+                    <h4 className="text-[16px] font-semibold text-[#1e2348] mb-4">General Settings</h4>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Platform Name</p>
+                        <p className="text-[13px] text-[#4B5563]">DTMA Learning Platform</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Time Zone</p>
+                        <p className="text-[13px] text-[#4B5563]">UTC+04:00 (Dubai)</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Default Language</p>
+                        <p className="text-[13px] text-[#4B5563]">English (US)</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Maintenance Mode</p>
+                        <p className="text-[13px] text-[#4B5563]">Disabled</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Security Settings */}
+                  <div className="space-y-4">
+                    <h4 className="text-[16px] font-semibold text-[#1e2348] mb-4">Security Settings</h4>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Two-Factor Authentication</p>
+                        <p className="text-[13px] text-[#4B5563]">Required for admins</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" defaultChecked />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                      </label>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Session Timeout</p>
+                        <p className="text-[13px] text-[#4B5563]">30 minutes of inactivity</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Password Policy</p>
+                        <p className="text-[13px] text-[#4B5563]">Strong (12+ chars, mixed)</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">IP Whitelist</p>
+                        <p className="text-[13px] text-[#4B5563]">8 addresses configured</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Settings className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Audit Logs */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Audit Logs</h3>
+                    <p className="text-[14px] text-[#4B5563] mt-1">Track all system activities and user actions</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter
+                    </Button>
+                    <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {[
+                    { action: 'User Login', user: 'Sarah Johnson', details: 'Successful login from 192.168.1.100', time: '2 mins ago', type: 'success' },
+                    { action: 'Role Updated', user: 'Michael Chen', details: 'Changed role from Learner to Instructor', time: '15 mins ago', type: 'info' },
+                    { action: 'Course Published', user: 'Emma Williams', details: 'Published "Digital Transformation Fundamentals"', time: '1 hour ago', type: 'success' },
+                    { action: 'Failed Login Attempt', user: 'Unknown', details: 'Multiple failed attempts from 203.45.67.89', time: '2 hours ago', type: 'warning' },
+                    { action: 'User Suspended', user: 'Admin', details: 'Suspended user account: john.doe@example.com', time: '3 hours ago', type: 'error' },
+                    { action: 'Settings Changed', user: 'Sarah Johnson', details: 'Updated system timezone settings', time: '5 hours ago', type: 'info' },
+                  ].map((log, index) => (
+                    <div key={index} className="flex items-start gap-4 p-4 bg-[#F5F6FA] rounded-lg hover:bg-[#fff0ed] transition-colors">
+                      <div className={`w-2 h-2 rounded-full mt-2 ${
+                        log.type === 'success' ? 'bg-emerald-500' :
+                        log.type === 'warning' ? 'bg-amber-500' :
+                        log.type === 'error' ? 'bg-red-500' :
+                        'bg-blue-500'
+                      }`} />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="text-[14px] font-semibold text-[#1e2348]">{log.action}</p>
+                          <span className="text-[13px] text-[#4B5563]">{log.time}</span>
+                        </div>
+                        <p className="text-[13px] text-[#4B5563] mb-1">{log.details}</p>
+                        <p className="text-[12px] text-[#9CA3AF]">By: {log.user}</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 flex items-center justify-center">
+                  <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    Load More Logs
+                  </Button>
                 </div>
               </div>
             </div>
@@ -3490,7 +5625,7 @@ const AdminDashboard = () => {
                     <div className={`w-2 h-2 rounded-full mt-2 ${
                       announcementForm.priority === 'urgent' ? 'bg-red-500' :
                       announcementForm.priority === 'high' ? 'bg-orange-500' :
-                      announcementForm.priority === 'normal' ? 'bg-blue-500' :
+                      announcementForm.priority === 'normal' ? 'bg-[#ff6b4d]' :
                       'bg-gray-400'
                     }`} />
                     <div className="flex-1">
@@ -4038,9 +6173,9 @@ const AdminDashboard = () => {
                       </p>
                     )}
                   </div>
-                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                    <p className="text-[12px] text-blue-900 font-medium mb-2">CSV Format Requirements:</p>
-                    <ul className="text-[12px] text-blue-800 space-y-1 ml-4 list-disc">
+                  <div className="mt-4 p-4 bg-[#fff0ed] rounded-lg">
+                    <p className="text-[12px] text-[#1e2348] font-medium mb-2">CSV Format Requirements:</p>
+                    <ul className="text-[12px] text-[#4B5563] space-y-1 ml-4 list-disc">
                       <li>First column: Email address (required)</li>
                       <li>Second column: Full name (optional)</li>
                       <li>Third column: Organization (optional)</li>
@@ -4766,8 +6901,8 @@ const AdminDashboard = () => {
                       </button>
                     ))}
                   </div>
-                  <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-[12px] text-blue-900">
+                  <div className="mt-3 p-3 bg-[#fff0ed] rounded-lg">
+                    <p className="text-[12px] text-[#1e2348]">
                       {createUserForm.role === 'learner' && 'Learners can enroll in courses, access content, and track their progress.'}
                       {createUserForm.role === 'instructor' && 'Instructors can create courses, manage content, and interact with learners.'}
                       {createUserForm.role === 'admin' && 'Admins have full access to all platform features and settings.'}

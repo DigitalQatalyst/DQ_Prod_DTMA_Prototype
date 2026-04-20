@@ -36,6 +36,8 @@ import {
   BookOpen,
   Lock,
   Clock,
+  Mic,
+  Copy,
 } from "lucide-react";
 import {
   Select,
@@ -46,6 +48,7 @@ import {
 } from "@/components/ui/select";
 import { CourseTutorAI } from "@/components/mentor/CourseTutorAI";
 import { WhatsAppLearning } from "@/components/learning/WhatsAppLearning";
+import { Module1Resource } from "@/components/learning/Module1Resource";
 import { Card } from "@/components/ui/card";
 import { getCourseById } from "@/data/dtmaCoursesNew";
 import { getQuizByModuleId } from "@/data/quizzes/quizLoader";
@@ -83,8 +86,11 @@ const CourseLearning = () => {
   
   // Personal Notes state
   const [showPersonalNotes, setShowPersonalNotes] = useState(false);
+  const [noteTakerTab, setNoteTakerTab] = useState<'personal' | 'ai'>('personal'); // Tab state for Note Taker
   const [personalNotes, setPersonalNotes] = useState<Record<string, string>>({});
   const [currentNote, setCurrentNote] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const [recognition, setRecognition] = useState<any>(null);
   
   // Quiz state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -348,6 +354,83 @@ const CourseLearning = () => {
     }
   }, [courseId]);
 
+  // Initialize Speech Recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognitionInstance = new SpeechRecognition();
+        recognitionInstance.continuous = true;
+        recognitionInstance.interimResults = true;
+        recognitionInstance.lang = 'en-US';
+
+        recognitionInstance.onresult = (event: any) => {
+          let interimTranscript = '';
+          let finalTranscript = '';
+
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript + ' ';
+            } else {
+              interimTranscript += transcript;
+            }
+          }
+
+          if (finalTranscript) {
+            setCurrentNote(prev => {
+              const newNote = prev + finalTranscript;
+              if (selectedLesson?.id && courseId) {
+                const updatedNotes = { ...personalNotes, [selectedLesson.id]: newNote };
+                setPersonalNotes(updatedNotes);
+                localStorage.setItem(`course_${courseId}_personal_notes`, JSON.stringify(updatedNotes));
+              }
+              return newNote;
+            });
+          }
+        };
+
+        recognitionInstance.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setIsListening(false);
+        };
+
+        recognitionInstance.onend = () => {
+          setIsListening(false);
+        };
+
+        setRecognition(recognitionInstance);
+      }
+    }
+  }, []);
+
+  // Voice input handlers
+  const startListening = () => {
+    if (recognition) {
+      try {
+        recognition.start();
+        setIsListening(true);
+      } catch (error) {
+        console.error('Error starting recognition:', error);
+      }
+    }
+  };
+
+  const stopListening = () => {
+    if (recognition) {
+      recognition.stop();
+      setIsListening(false);
+    }
+  };
+
+  const toggleListening = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  };
+
   // Update current note when lesson changes
   useEffect(() => {
     if (selectedLesson?.id) {
@@ -549,13 +632,17 @@ const CourseLearning = () => {
               </Card>
             </div>
 
-            {/* Main Player - MIDDLE - 6 columns (9 columns when quiz is active) */}
-            <div className={`space-y-4 ${selectedLesson?.isQuiz ? 'lg:col-span-9' : 'lg:col-span-6'}`}>
+            {/* Main Player - MIDDLE - 6 columns (9 columns when quiz or reading resource is active) */}
+            <div className={`space-y-4 ${selectedLesson?.isQuiz || selectedLesson?.type === 'reading' ? 'lg:col-span-9' : 'lg:col-span-6'}`}>
               {/* Only show video player for non-quiz/non-assignment lessons */}
               {!selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
                 <div className="overflow-hidden rounded-lg">
-                  {/* Video/Content Area */}
-                  {selectedLesson?.video_url || selectedLesson?.videoUrl ? (
+                  {/* Reading Resource - Embedded Component */}
+                  {selectedLesson?.type === 'reading' && selectedLesson?.videoUrl ? (
+                    <Module1Resource />
+                  ) : (
+                  /* Video/Content Area */
+                  (selectedLesson?.video_url || selectedLesson?.videoUrl) ? (
                     <div className="relative bg-black aspect-video">
                       {mediaMode === 'video' ? (
                         <video
@@ -623,7 +710,8 @@ const CourseLearning = () => {
                         <Headphones className="w-20 h-20 text-white" />
                       </div>
                     </div>
-                  ) : null}
+                  ) : null
+                  )}
 
                   {/* Controls - Hidden when using native video controls */}
                   {false && (selectedLesson?.video_url || selectedLesson?.videoUrl || selectedLesson?.type === 'audio') && (
@@ -917,8 +1005,8 @@ const CourseLearning = () => {
               )}
             </div>
 
-            {/* AI Learning Tools - RIGHT SIDE - 3 columns - Hidden during quizzes */}
-            {!selectedLesson?.isQuiz && (
+            {/* AI Learning Tools - RIGHT SIDE - 3 columns - Hidden during quizzes and reading resources */}
+            {!selectedLesson?.isQuiz && selectedLesson?.type !== 'reading' && (
               <div className="lg:col-span-3">
                 <Card className="p-6 sticky top-24">
                   <div className="flex items-center justify-between mb-6">
@@ -956,38 +1044,19 @@ const CourseLearning = () => {
                       </div>
                     </button>
 
-                    {/* AI Notes */}
-                    <button 
-                      onClick={handleGenerateAINotes}
-                      disabled={generatingAI}
-                      className="group w-full relative bg-blue-50 hover:bg-blue-100 rounded-xl p-4 text-left transition-all disabled:opacity-50"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-blue-200 rounded-lg flex items-center justify-center shrink-0">
-                            {generatingAI ? <Loader2 className="w-5 h-5 text-blue-700 animate-spin" /> : <FileText className="w-5 h-5 text-blue-700" />}
-                          </div>
-                          <h4 className="text-blue-900 text-[16px] leading-[24px] font-normal">AI Notes</h4>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-blue-400 group-hover:text-blue-600 transition-colors" />
-                      </div>
-                    </button>
-
-                    {/* Personal Notes */}
+                    {/* Note Taker (Combined AI Notes + My Notes) */}
                     <button 
                       onClick={() => setShowPersonalNotes(true)}
-                      className="group w-full relative bg-orange-50 hover:bg-orange-100 rounded-xl p-4 text-left transition-all"
+                      className="group w-full relative bg-gradient-to-r from-[#ff6b4d]/10 to-blue-50 hover:from-[#ff6b4d]/20 hover:to-blue-100 rounded-xl p-4 text-left transition-all border border-[#ff6b4d]/20"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-[#ff6b4d]/20 rounded-lg flex items-center justify-center shrink-0">
-                            <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+                            <BookOpen className="w-5 h-5 text-white" />
                           </div>
                           <div>
-                            <h4 className="text-[#1e2348] text-[16px] leading-[24px] font-normal">My Notes</h4>
-                            {currentNote && (
-                              <p className="text-[#ff6b4d] text-[11px] leading-[16px] font-medium">Last edited</p>
-                            )}
+                            <h4 className="text-[#1e2348] text-[16px] leading-[24px] font-semibold">Note Taker</h4>
+                            <p className="text-[#4B5563] text-[12px] leading-[16px] font-normal">AI notes & personal notes</p>
                           </div>
                         </div>
                         <ChevronRight className="w-5 h-5 text-[#ff6b4d]/60 group-hover:text-[#ff6b4d] transition-colors" />
@@ -1002,16 +1071,18 @@ const CourseLearning = () => {
         </div>
       </main>
 
-      {/* Course Tutor AI */}
-      <CourseTutorAI
-        courseTitle={courseData.title || course?.title || "Course"}
-        moduleTitle={currentModuleTitle}
-        lessonTitle={selectedLesson?.title || ""}
-        lessonContent={selectedLesson?.content || ""}
-        isQuiz={selectedLesson?.isQuiz || false}
-        isAssignment={selectedLesson?.isAssignment || false}
-        currentProgress={progressPercent}
-      />
+      {/* Course Tutor AI - Hidden during quizzes and reading resources */}
+      {!selectedLesson?.isQuiz && selectedLesson?.type !== 'reading' && (
+        <CourseTutorAI
+          courseTitle={courseData.title || course?.title || "Course"}
+          moduleTitle={currentModuleTitle}
+          lessonTitle={selectedLesson?.title || ""}
+          lessonContent={selectedLesson?.content || ""}
+          isQuiz={selectedLesson?.isQuiz || false}
+          isAssignment={selectedLesson?.isAssignment || false}
+          currentProgress={progressPercent}
+        />
+      )}
 
       {/* Celebration Modal with Fireworks - Shows after passing final module */}
       {showCelebration && (
@@ -1448,160 +1519,246 @@ const CourseLearning = () => {
         </div>
       )}
 
-      {/* AI Notes Modal */}
-      {showAINotes && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-[24px] leading-[32px] font-medium">AI Generated Notes</h2>
-                <button onClick={() => setShowAINotes(false)} className="p-2 hover:bg-gray-100 rounded-lg">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <h3 className="font-semibold mb-2 text-[18px] leading-[28px]">Key Points</h3>
-                  <ul className="space-y-2 text-gray-700 text-[14px] leading-[20px] font-normal">
-                    <li>• {selectedLesson?.title} covers fundamental concepts</li>
-                    <li>• Important to understand the core principles before moving forward</li>
-                    <li>• Practice exercises help reinforce learning</li>
-                    <li>• Review the material multiple times for better retention</li>
-                  </ul>
-                </div>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="font-semibold mb-2 text-[18px] leading-[28px]">Summary</h3>
-                  <p className="text-gray-700 text-[14px] leading-[20px] font-normal">
-                    {selectedLesson?.content || "This lesson provides an overview of the key concepts and practical applications in the field."}
-                  </p>
-                </div>
-              </div>
-              <div className="mt-6 flex gap-3">
-                <Button className="flex-1 bg-[#ff6b4d] hover:bg-[#e56045]">
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Notes
-                </Button>
-                <Button variant="outline" className="flex-1 hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" onClick={() => setShowAINotes(false)}>
-                  Close
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Personal Notes Modal */}
+      {/* Note Taker Modal (Combined AI Notes + Personal Notes) */}
       {showPersonalNotes && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+          <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] flex flex-col shadow-2xl">
             {/* Header */}
             <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-lg flex items-center justify-center shadow-sm">
-                    <BookOpen className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">My Notes</h2>
-                    <p className="text-gray-500 text-[14px] leading-[20px] font-normal">
-                      {selectedLesson?.title || "Current Lesson"}
-                    </p>
-                  </div>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">Note Taker</h2>
+                  <p className="text-[#4B5563] text-[14px] leading-[20px] font-normal">
+                    {selectedLesson?.title || "Current Lesson"}
+                  </p>
                 </div>
                 <button 
                   onClick={() => setShowPersonalNotes(false)} 
                   className="p-2 hover:bg-white/50 rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5 text-gray-500" />
+                  <X className="w-5 h-5 text-[#4B5563]" />
                 </button>
               </div>
               
-              {/* Auto-save indicator */}
-              <div className="flex items-center gap-2 text-green-600 text-[12px] leading-[16px] font-medium">
-                <CheckCircle className="w-3 h-3" />
-                <span>Auto-saved</span>
-              </div>
-            </div>
-
-            {/* Notes Editor */}
-            <div className="flex-1 overflow-y-auto p-6">
-              <textarea
-                value={currentNote}
-                onChange={(e) => handleNotesChange(e.target.value)}
-                placeholder="Start typing your notes here... Your notes will be automatically saved."
-                className="w-full h-full min-h-[400px] p-4 border-2 border-gray-200 rounded-xl focus:border-[#ff6b4d] focus:outline-none resize-none text-[16px] leading-[24px] font-normal"
-              />
-            </div>
-
-            {/* Footer with Actions */}
-            <div className="p-6 border-t border-gray-200 bg-gray-50">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-[14px] leading-[20px] text-gray-600">
-                  <span className="font-medium">{Object.keys(personalNotes).filter(key => personalNotes[key]).length}</span> lessons with notes
-                </div>
-                <div className="text-[14px] leading-[20px] text-gray-600">
-                  {currentNote.length} characters
-                </div>
-              </div>
-              
-              <div className="flex gap-3">
-                <Button
-                  onClick={handleDownloadNotes}
-                  disabled={Object.keys(personalNotes).filter(key => personalNotes[key]).length === 0}
-                  className="flex-1 bg-gradient-to-r from-[#1e2348] to-[#2a3058] hover:from-[#2a3058] hover:to-[#1e2348] text-white shadow-lg"
+              {/* Tabs */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setNoteTakerTab('personal')}
+                  className={`flex-1 px-4 py-2.5 rounded-lg font-medium text-[14px] transition-all ${
+                    noteTakerTab === 'personal'
+                      ? 'bg-[#1e2348] text-white shadow-sm'
+                      : 'bg-white text-[#4B5563] hover:bg-gray-50 border border-gray-200'
+                  }`}
                 >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download All Notes
-                </Button>
-                <Button
+                  <div className="flex items-center justify-center gap-2">
+                    <BookOpen className="w-4 h-4" />
+                    <span>My Notes</span>
+                  </div>
+                </button>
+                <button
                   onClick={() => {
-                    if (selectedLesson?.id && currentNote) {
-                      const lessonTitle = selectedLesson.title.replace(/[^a-z0-9]/gi, '_');
-                      const content = `${selectedLesson.title}\n${"=".repeat(selectedLesson.title.length)}\n\n${currentNote}`;
-                      const blob = new Blob([content], { type: 'text/plain' });
-                      const url = URL.createObjectURL(blob);
-                      const link = document.createElement('a');
-                      link.href = url;
-                      link.download = `${lessonTitle}_Notes.txt`;
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                      URL.revokeObjectURL(url);
+                    setNoteTakerTab('ai');
+                    if (!showAINotes) {
+                      handleGenerateAINotes();
                     }
                   }}
-                  disabled={!currentNote}
-                  variant="outline"
-                  className="flex-1 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d]/10"
+                  disabled={generatingAI}
+                  className={`flex-1 px-4 py-2.5 rounded-lg font-medium text-[14px] transition-all disabled:opacity-50 ${
+                    noteTakerTab === 'ai'
+                      ? 'bg-[#1e2348] text-white shadow-sm'
+                      : 'bg-white text-[#4B5563] hover:bg-gray-50 border border-gray-200'
+                  }`}
                 >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download This Note
-                </Button>
-                <Button
-                  onClick={() => setShowPersonalNotes(false)}
-                  variant="outline"
-                  className="hover:bg-gray-100"
-                >
-                  Close
-                </Button>
-              </div>
-
-              {/* Tips */}
-              <div className="mt-4 bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5 border-2 border-[#ff6b4d]/20 rounded-lg p-3">
-                <div className="flex items-start gap-2">
-                  <div className="w-5 h-5 bg-[#ff6b4d] rounded-full flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-white text-[12px]">💡</span>
+                  <div className="flex items-center justify-center gap-2">
+                    {generatingAI ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <FileText className="w-4 h-4" />
+                    )}
+                    <span>AI Notes</span>
                   </div>
-                  <div>
-                    <p className="text-[#1e2348] text-[13px] leading-[18px] font-semibold mb-1">Pro Tips:</p>
-                    <ul className="text-[#1e2348]/80 text-[12px] leading-[18px] space-y-1">
-                      <li>• Your notes are automatically saved as you type</li>
-                      <li>• Download individual lesson notes or all notes at once</li>
-                      <li>• Notes are organized by lesson for easy reference</li>
-                    </ul>
+                </button>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto">
+              {noteTakerTab === 'personal' ? (
+                /* Personal Notes Tab */
+                <div className="p-6">
+                  {/* Auto-save indicator */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2 text-green-600 text-[12px] leading-[16px] font-medium">
+                      <CheckCircle className="w-3 h-3" />
+                      <span>Auto-saved</span>
+                    </div>
+                    
+                    {/* Voice Input Button - Always Visible */}
+                    {recognition ? (
+                      <button
+                        onClick={toggleListening}
+                        className={`group relative w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all ${
+                          isListening
+                            ? 'bg-red-500 hover:bg-red-600 animate-pulse'
+                            : 'bg-gradient-to-br from-[#ff6b4d] to-[#e66045] hover:from-[#e66045] hover:to-[#ff6b4d]'
+                        }`}
+                        title={isListening ? 'Stop recording' : 'Start voice input'}
+                      >
+                        <Mic className={`w-5 h-5 text-white ${isListening ? 'animate-pulse' : ''}`} />
+                        
+                        {/* Listening indicator */}
+                        {isListening && (
+                          <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                          </span>
+                        )}
+                        
+                        {/* Tooltip */}
+                        <span className="absolute top-full mt-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                          {isListening ? 'Click to stop' : 'Click to dictate'}
+                        </span>
+                      </button>
+                    ) : (
+                      <div className="text-xs text-gray-400 text-center">
+                        Voice input not available
+                      </div>
+                    )}
+                  </div>
+
+                  <textarea
+                    value={currentNote}
+                    onChange={(e) => handleNotesChange(e.target.value)}
+                    placeholder="Start typing your notes here... Your notes will be automatically saved."
+                    className="w-full min-h-[250px] max-h-[400px] p-4 border-2 border-gray-200 rounded-xl focus:border-[#ff6b4d] focus:outline-none resize-y text-[16px] leading-[24px] font-normal overflow-x-hidden"
+                  />
+                </div>
+              ) : (
+                /* AI Notes Tab */
+                <div className="p-6">
+                  {generatingAI ? (
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <Loader2 className="w-12 h-12 text-[#1e2348] animate-spin mb-4" />
+                      <p className="text-[#4B5563] text-[14px]">Generating AI notes...</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="bg-[#1e2348]/5 rounded-xl p-6 border border-[#1e2348]/10">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-8 h-8 bg-[#1e2348] rounded-lg flex items-center justify-center">
+                            <FileText className="w-4 h-4 text-white" />
+                          </div>
+                          <h3 className="font-semibold text-[18px] leading-[28px] text-[#1e2348]">Key Points</h3>
+                        </div>
+                        <ul className="space-y-2 text-[#4B5563] text-[14px] leading-[20px] font-normal">
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ff6b4d] mt-1">•</span>
+                            <span>{selectedLesson?.title} covers fundamental concepts</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ff6b4d] mt-1">•</span>
+                            <span>Important to understand the core principles before moving forward</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ff6b4d] mt-1">•</span>
+                            <span>Practice exercises help reinforce learning</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-[#ff6b4d] mt-1">•</span>
+                            <span>Review the material multiple times for better retention</span>
+                          </li>
+                        </ul>
+                      </div>
+                      
+                      <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-8 h-8 bg-[#4B5563] rounded-lg flex items-center justify-center">
+                            <BookOpen className="w-4 h-4 text-white" />
+                          </div>
+                          <h3 className="font-semibold text-[18px] leading-[28px] text-[#1e2348]">Summary</h3>
+                        </div>
+                        <p className="text-[#4B5563] text-[14px] leading-[20px] font-normal">
+                          {selectedLesson?.content || "This lesson provides an overview of the key concepts and practical applications in the field."}
+                        </p>
+                      </div>
+
+                      <div className="pt-4">
+                        <Button className="w-full bg-[#1e2348] hover:bg-[#2a3058] text-white">
+                          <Download className="w-4 h-4 mr-2" />
+                          Download AI Notes
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Footer with Actions - Only show on My Notes tab */}
+            {noteTakerTab === 'personal' && (
+              <div className="p-6 border-t border-gray-200 bg-gray-50">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-[14px] leading-[20px] text-gray-600">
+                    <span className="font-medium">{Object.keys(personalNotes).filter(key => personalNotes[key]).length}</span> lessons with notes
+                  </div>
+                  <div className="text-[14px] leading-[20px] text-gray-600">
+                    {currentNote.length} characters
+                  </div>
+                </div>
+                
+                <div className="flex gap-3">
+                  <Button
+                    onClick={handleDownloadNotes}
+                    disabled={Object.keys(personalNotes).filter(key => personalNotes[key]).length === 0}
+                    className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-lg"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download All Notes
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (selectedLesson?.id && currentNote) {
+                        const lessonTitle = selectedLesson.title.replace(/[^a-z0-9]/gi, '_');
+                        const content = `${selectedLesson.title}\n${"=".repeat(selectedLesson.title.length)}\n\n${currentNote}`;
+                        const blob = new Blob([content], { type: 'text/plain' });
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `${lessonTitle}_Notes.txt`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                      }
+                    }}
+                    disabled={!currentNote}
+                    variant="outline"
+                    className="flex-1 border-2 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d]/10"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download This Note
+                  </Button>
+                </div>
+
+                {/* Tips */}
+                <div className="mt-4 bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5 border-2 border-[#ff6b4d]/20 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <div className="w-5 h-5 bg-[#ff6b4d] rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="text-white text-[12px]">💡</span>
+                    </div>
+                    <div>
+                      <p className="text-[#1e2348] text-[13px] leading-[18px] font-semibold mb-1">Pro Tips:</p>
+                      <ul className="text-[#1e2348]/80 text-[12px] leading-[18px] space-y-1">
+                        <li>• Your notes are automatically saved as you type</li>
+                        <li>• Use the microphone button to dictate notes hands-free</li>
+                        <li>• Download individual lesson notes or all notes at once</li>
+                        <li>• Notes are organized by lesson for easy reference</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

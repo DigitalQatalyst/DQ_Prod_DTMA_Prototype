@@ -105,6 +105,13 @@ export const dtmaCoursesNew: Course[] = [
             type: 'quiz',
             quizId: 'economy-module-1-quiz', // Links to the quiz data
           },
+          {
+            id: 'economy-m1-resource',
+            title: 'Module 1 Resource: Digital Cognitive Organizations',
+            duration: '5 min',
+            type: 'reading',
+            videoUrl: 'https://preview.shorthand.com/txIVdYFVuIZmVbdJ',
+          },
         ],
       },
       {

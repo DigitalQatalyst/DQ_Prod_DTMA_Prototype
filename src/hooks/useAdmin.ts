@@ -38,7 +38,9 @@ export function usePendingCourses() {
 // Approve or reject a course (no-op in mock)
 export function useReviewCourse() {
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async ({ courseId, action }: { courseId: string; action: 'approve' | 'reject' }) => {
+      // Mock implementation - in real app, this would call an API
+      console.log(`Course ${courseId} ${action}ed`);
       return;
     },
   });

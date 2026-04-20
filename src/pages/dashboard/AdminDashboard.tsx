@@ -1598,6 +1598,10 @@ const AdminDashboard = () => {
   const [showAddFacultyModal, setShowAddFacultyModal] = useState(false);
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
   const [showReviewContentModal, setShowReviewContentModal] = useState(false);
+  const [showCreateProgramModal, setShowCreateProgramModal] = useState(false);
+  const [showFacultyListModal, setShowFacultyListModal] = useState(false);
+  const [showPerformanceReportsModal, setShowPerformanceReportsModal] = useState(false);
+  const [facultySubTab, setFacultySubTab] = useState<'overview' | 'faculty-list' | 'programs' | 'assignments' | 'performance'>('overview');
   
   // User Management State
   const [userSearch, setUserSearch] = useState('');
@@ -2540,26 +2544,241 @@ const AdminDashboard = () => {
 
           {/* Enrollment Tab */}
           {activeTab === 'enrollment' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Student & Enrollment Management</h1>
-              <div className="grid gap-6">
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Enrollment Dashboard</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
-                    Manage student enrollments, approvals, and bulk operations.
-                  </p>
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Student & Enrollment Management</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage enrollments, track capacity, and oversee student operations</p>
+              </div>
+
+              {/* Statistics Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                      <Users className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">1,247</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Enrolled</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+18% this month</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Clock className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">23</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Pending Approval</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                    <span>Requires action</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                      <BookOpen className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">42</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Courses</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                    <span>With enrollments</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <CheckCircle className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">89%</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+5% vs last month</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Enrollment Dashboard */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Enrollment Dashboard</h3>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Manage student enrollments, approvals, and bulk operations</p>
+                  </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-4">
                   <Button 
                     onClick={() => setShowBulkEnrollModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
+                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm h-auto py-4"
                   >
-                    Bulk Enroll
+                    <Upload className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">Bulk Enroll Students</div>
+                      <div className="text-xs opacity-90">Upload CSV or Excel file</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    variant="outline"
+                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                  >
+                    <FileText className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">View Pending Approvals</div>
+                      <div className="text-xs opacity-70">23 awaiting review</div>
+                    </div>
                   </Button>
                 </div>
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Seat Management</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
-                    Track available seats and manage course capacity.
-                  </p>
+              </div>
+
+              {/* Seat Management - Enhanced */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                    <Building2 className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Seat Management</h3>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Track available seats and manage course capacity across all programs</p>
+                  </div>
+                </div>
+
+                {/* Capacity Overview */}
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-[#F5F6FA] to-[#E5E7EB] rounded-xl p-6 border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">Total Capacity</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <Users className="w-5 h-5 text-[#1e2348]" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-1">2,500</div>
+                    <div className="text-[13px] leading-[18px] text-[#4B5563]">Seats across all courses</div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-emerald-900">Occupied</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-emerald-900 mb-1">1,247</div>
+                    <div className="text-[13px] leading-[18px] text-emerald-700">50% utilization rate</div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-blue-900">Available</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <Sparkles className="w-5 h-5 text-blue-600" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-blue-900 mb-1">1,253</div>
+                    <div className="text-[13px] leading-[18px] text-blue-700">Ready for enrollment</div>
+                  </div>
+                </div>
+
+                {/* Course-wise Seat Breakdown */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Course Capacity Breakdown</h4>
+                    <Button variant="outline" size="sm" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Manage Capacity
+                    </Button>
+                  </div>
+
+                  {/* Sample Course Capacity Cards */}
+                  {[
+                    { name: 'Digital Transformation Strategy', total: 500, occupied: 387, status: 'healthy', color: 'emerald' },
+                    { name: 'Digital Business Platform', total: 400, occupied: 312, status: 'healthy', color: 'emerald' },
+                    { name: 'Digital Accelerators', total: 350, occupied: 298, status: 'warning', color: 'amber' },
+                    { name: 'Digital Workers', total: 300, occupied: 250, status: 'healthy', color: 'emerald' },
+                  ].map((course, index) => {
+                    const percentage = Math.round((course.occupied / course.total) * 100);
+                    const available = course.total - course.occupied;
+                    
+                    return (
+                      <div key={index} className="bg-gradient-to-r from-white to-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-all">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <h5 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-1">{course.name}</h5>
+                            <div className="flex items-center gap-4 text-[13px] leading-[18px] text-[#4B5563]">
+                              <span className="flex items-center gap-1">
+                                <Users className="w-4 h-4" />
+                                {course.occupied} enrolled
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Sparkles className="w-4 h-4" />
+                                {available} available
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Building2 className="w-4 h-4" />
+                                {course.total} total
+                              </span>
+                            </div>
+                          </div>
+                          <div className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
+                            course.status === 'healthy' 
+                              ? 'bg-emerald-100 text-emerald-700' 
+                              : 'bg-amber-100 text-amber-700'
+                          }`}>
+                            {percentage}% Full
+                          </div>
+                        </div>
+                        
+                        {/* Progress Bar */}
+                        <div className="relative">
+                          <div className="w-full bg-[#E5E7EB] rounded-full h-3 overflow-hidden">
+                            <div 
+                              className={`h-full rounded-full transition-all ${
+                                course.status === 'healthy'
+                                  ? 'bg-gradient-to-r from-emerald-400 to-emerald-600'
+                                  : 'bg-gradient-to-r from-amber-400 to-amber-600'
+                              }`}
+                              style={{ width: `${percentage}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between mt-2 text-[12px] text-[#4B5563]">
+                            <span>0</span>
+                            <span>{course.total}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Quick Actions */}
+                <div className="mt-8 pt-6 border-t border-[#E5E7EB]">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Seats
+                    </Button>
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Download className="w-4 h-4 mr-2" />
+                      Export Report
+                    </Button>
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <AlertCircle className="w-4 h-4 mr-2" />
+                      View Alerts
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2567,26 +2786,387 @@ const AdminDashboard = () => {
 
           {/* Faculty Tab */}
           {activeTab === 'faculty' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Faculty & Program Operations</h1>
-              <div className="grid gap-6">
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Faculty Dashboard</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
-                    Manage faculty members, assignments, and performance.
-                  </p>
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Faculty & Program Operations</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage faculty members, assignments, and learning programs</p>
+              </div>
+
+              {/* Statistics Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                      <GraduationCap className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">87</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Faculty</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+12 this quarter</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                      <BookOpen className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">24</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Learning Programs</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                    <span>Across 6 categories</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Star className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">4.8</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg Faculty Rating</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-amber-600 font-medium">
+                    <Star className="w-4 h-4 fill-amber-600" />
+                    <span>Based on 2,341 reviews</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Target className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">156</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Assignments</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>92% completion rate</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Faculty Dashboard */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <GraduationCap className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Faculty Dashboard</h3>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Manage faculty members, assignments, and performance tracking</p>
+                  </div>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-4">
                   <Button 
                     onClick={() => setShowAddFacultyModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
+                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm h-auto py-4"
                   >
-                    Add Faculty
+                    <UserPlus className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">Add Faculty Member</div>
+                      <div className="text-xs opacity-90">Invite new instructor</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => setFacultySubTab('faculty-list')}
+                    variant="outline"
+                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                  >
+                    <Users className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">View All Faculty</div>
+                      <div className="text-xs opacity-70">87 active members</div>
+                    </div>
+                  </Button>
+
+                  <Button 
+                    onClick={() => setFacultySubTab('performance')}
+                    variant="outline"
+                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                  >
+                    <BarChart2 className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">Performance Reports</div>
+                      <div className="text-xs opacity-70">Analytics & insights</div>
+                    </div>
                   </Button>
                 </div>
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Program Builder</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
-                    Create and manage learning programs and curriculum.
-                  </p>
+              </div>
+
+              {/* Program Builder - Enhanced */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                    <BookOpen className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Program Builder</h3>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Create and manage comprehensive learning programs and curriculum pathways</p>
+                  </div>
+                </div>
+
+                {/* Program Overview */}
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-[#F5F6FA] to-[#E5E7EB] rounded-xl p-6 border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">Total Programs</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <BookOpen className="w-5 h-5 text-[#1e2348]" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-1">24</div>
+                    <div className="text-[13px] leading-[18px] text-[#4B5563]">Active learning programs</div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-emerald-900">Published</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-emerald-900 mb-1">18</div>
+                    <div className="text-[13px] leading-[18px] text-emerald-700">Live and enrolling</div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-6 border border-amber-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-amber-900">In Development</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <Clock className="w-5 h-5 text-amber-600" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-amber-900 mb-1">6</div>
+                    <div className="text-[13px] leading-[18px] text-amber-700">Being created</div>
+                  </div>
+                </div>
+
+                {/* Program Categories */}
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Program Categories</h4>
+                    <Button 
+                      onClick={() => setShowCreateProgramModal(true)}
+                      variant="outline" 
+                      size="sm" 
+                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create New Program
+                    </Button>
+                  </div>
+
+                  {/* Sample Program Categories */}
+                  {[
+                    { 
+                      name: 'Digital Transformation', 
+                      programs: 6, 
+                      courses: 24, 
+                      students: 487,
+                      icon: Sparkles,
+                      color: 'from-purple-400 to-purple-600',
+                      bgColor: 'from-purple-50 to-purple-100',
+                      borderColor: 'border-purple-200'
+                    },
+                    { 
+                      name: 'Business Platform', 
+                      programs: 4, 
+                      courses: 18, 
+                      students: 356,
+                      icon: Building2,
+                      color: 'from-blue-400 to-blue-600',
+                      bgColor: 'from-blue-50 to-blue-100',
+                      borderColor: 'border-blue-200'
+                    },
+                    { 
+                      name: 'Digital Accelerators', 
+                      programs: 5, 
+                      courses: 22, 
+                      students: 412,
+                      icon: TrendingUp,
+                      color: 'from-emerald-400 to-emerald-600',
+                      bgColor: 'from-emerald-50 to-emerald-100',
+                      borderColor: 'border-emerald-200'
+                    },
+                    { 
+                      name: 'Digital Workers', 
+                      programs: 4, 
+                      courses: 16, 
+                      students: 298,
+                      icon: Users,
+                      color: 'from-orange-400 to-orange-600',
+                      bgColor: 'from-orange-50 to-orange-100',
+                      borderColor: 'border-orange-200'
+                    },
+                    { 
+                      name: 'Digital Economy', 
+                      programs: 3, 
+                      courses: 14, 
+                      students: 234,
+                      icon: DollarSign,
+                      color: 'from-green-400 to-green-600',
+                      bgColor: 'from-green-50 to-green-100',
+                      borderColor: 'border-green-200'
+                    },
+                    { 
+                      name: 'Cognitive Organization', 
+                      programs: 2, 
+                      courses: 10, 
+                      students: 178,
+                      icon: Brain,
+                      color: 'from-pink-400 to-pink-600',
+                      bgColor: 'from-pink-50 to-pink-100',
+                      borderColor: 'border-pink-200'
+                    },
+                  ].map((category, index) => {
+                    const Icon = category.icon;
+                    return (
+                      <div key={index} className={`bg-gradient-to-r ${category.bgColor} rounded-xl p-6 border ${category.borderColor} hover:shadow-md transition-all`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className={`w-14 h-14 bg-gradient-to-br ${category.color} rounded-xl flex items-center justify-center shadow-sm`}>
+                              <Icon className="w-7 h-7 text-white" />
+                            </div>
+                            <div className="flex-1">
+                              <h5 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{category.name}</h5>
+                              <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#4B5563]">
+                                <span className="flex items-center gap-1.5">
+                                  <BookOpen className="w-4 h-4" />
+                                  {category.programs} programs
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                  <FileText className="w-4 h-4" />
+                                  {category.courses} courses
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                  <Users className="w-4 h-4" />
+                                  {category.students} students
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button 
+                              onClick={() => {
+                                setFacultySubTab('programs');
+                                toast({
+                                  title: "Program Details",
+                                  description: `Viewing ${category.name} programs`,
+                                });
+                              }}
+                              variant="outline" 
+                              size="sm" 
+                              className="border-[#E5E7EB] hover:bg-white hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                            >
+                              <Eye className="w-4 h-4 mr-1" />
+                              View
+                            </Button>
+                            <Button 
+                              onClick={() => {
+                                toast({
+                                  title: "Edit Program",
+                                  description: `Editing ${category.name} program settings`,
+                                });
+                              }}
+                              variant="outline" 
+                              size="sm" 
+                              className="border-[#E5E7EB] hover:bg-white hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                            >
+                              <Edit className="w-4 h-4 mr-1" />
+                              Edit
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Program Builder Features */}
+                <div className="bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5 rounded-xl p-6 border border-[#ff6b4d]/20 mb-6">
+                  <h4 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-4">Program Builder Features</h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {[
+                      { icon: Target, title: 'Learning Pathways', desc: 'Create structured learning journeys' },
+                      { icon: Calendar, title: 'Scheduling', desc: 'Set program timelines and milestones' },
+                      { icon: Award, title: 'Certifications', desc: 'Design completion certificates' },
+                      { icon: Users2, title: 'Cohort Management', desc: 'Organize student groups' },
+                      { icon: BarChart2, title: 'Progress Tracking', desc: 'Monitor program completion' },
+                      { icon: Settings, title: 'Prerequisites', desc: 'Set course requirements' },
+                    ].map((feature, index) => {
+                      const Icon = feature.icon;
+                      return (
+                        <div key={index} className="flex items-start gap-3 bg-white rounded-lg p-4 border border-[#E5E7EB]">
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-lg flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">{feature.title}</div>
+                            <div className="text-[12px] leading-[18px] text-[#4B5563] mt-1">{feature.desc}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="pt-6 border-t border-[#E5E7EB]">
+                  <div className="grid md:grid-cols-4 gap-4">
+                    <Button 
+                      onClick={() => setShowCreateProgramModal(true)}
+                      className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      New Program
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        toast({
+                          title: "Duplicate Program",
+                          description: "Select a program to duplicate from the list above",
+                        });
+                      }}
+                      variant="outline" 
+                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Duplicate Program
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        toast({
+                          title: "Export Programs",
+                          description: "Exporting program data to CSV...",
+                        });
+                      }}
+                      variant="outline" 
+                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Export Programs
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        toast({
+                          title: "Program Settings",
+                          description: "Opening program configuration settings",
+                        });
+                      }}
+                      variant="outline" 
+                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -3606,36 +4186,85 @@ const AdminDashboard = () => {
           {/* Certification Tab */}
           {activeTab === 'certification' && (
             <div className="space-y-8">
-              <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Certification & Customer Success</h1>
+              <div>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Certification & Customer Success</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage certificates, badges, and learner achievements</p>
+              </div>
 
               {/* Statistics Overview */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                  { icon: Award, label: 'Certificates Issued', value: '2,847', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
-                  { icon: TrendingUp, label: 'Completion Rate', value: '78%', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                  { icon: Users, label: 'Active Learners', value: '1,234', color: 'text-purple-600', bg: 'bg-purple-50' },
-                  { icon: Star, label: 'Avg Satisfaction', value: '4.7★', color: 'text-amber-500', bg: 'bg-amber-50' },
-                ].map(stat => (
-                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
-                      <stat.icon className={`w-7 h-7 ${stat.color}`} />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                      <Award className="w-7 h-7 text-white" />
                     </div>
-                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
-                    <div className="text-[13px] leading-[18px] text-[#4B5563]">{stat.label}</div>
                   </div>
-                ))}
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">2,847</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Certificates Issued</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+234 this month</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <TrendingUp className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">78%</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <ArrowUpRight className="w-4 h-4" />
+                    <span>+5% from last month</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Users className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">1,234</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Learners</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                    <span>Pursuing certifications</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Star className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">4.7★</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg Satisfaction</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-amber-600 font-medium">
+                    <Star className="w-4 h-4 fill-amber-600" />
+                    <span>Based on 1,847 reviews</span>
+                  </div>
+                </div>
               </div>
 
               {/* Certificate Template Management */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Certificate Template Management</h2>
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                    <Award className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Certificate Template Management</h2>
                     <p className="text-[14px] leading-[20px] text-[#4B5563]">
                       Design and manage certificate templates for courses and achievements
                     </p>
                   </div>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white" onClick={() => setShowCreateTemplateModal(true)}>
+                  <Button 
+                    onClick={() => setShowCreateTemplateModal(true)}
+                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Create Template
                   </Button>
@@ -3650,7 +4279,8 @@ const AdminDashboard = () => {
                       courses: 28, 
                       issued: 1847,
                       status: 'active',
-                      preview: '📜'
+                      preview: '📜',
+                      gradient: 'from-[#ff6b4d]/10 to-[#ff6b4d]/5'
                     },
                     { 
                       name: 'Professional Achievement Badge', 
@@ -3658,7 +4288,8 @@ const AdminDashboard = () => {
                       courses: 12, 
                       issued: 543,
                       status: 'active',
-                      preview: '🏆'
+                      preview: '🏆',
+                      gradient: 'from-amber-50 to-amber-100/50'
                     },
                     { 
                       name: 'Specialization Certificate', 
@@ -3666,7 +4297,8 @@ const AdminDashboard = () => {
                       courses: 6, 
                       issued: 287,
                       status: 'active',
-                      preview: '🎓'
+                      preview: '🎓',
+                      gradient: 'from-purple-50 to-purple-100/50'
                     },
                     { 
                       name: 'Micro-Credential Certificate', 
@@ -3674,7 +4306,8 @@ const AdminDashboard = () => {
                       courses: 15, 
                       issued: 892,
                       status: 'active',
-                      preview: '⭐'
+                      preview: '⭐',
+                      gradient: 'from-emerald-50 to-emerald-100/50'
                     },
                     { 
                       name: 'Executive Program Certificate', 
@@ -3682,7 +4315,8 @@ const AdminDashboard = () => {
                       courses: 4, 
                       issued: 156,
                       status: 'draft',
-                      preview: '👔'
+                      preview: '👔',
+                      gradient: 'from-blue-50 to-blue-100/50'
                     },
                     { 
                       name: 'Team Achievement Award', 
@@ -3690,23 +4324,24 @@ const AdminDashboard = () => {
                       courses: 8, 
                       issued: 234,
                       status: 'active',
-                      preview: '👥'
+                      preview: '👥',
+                      gradient: 'from-pink-50 to-pink-100/50'
                     },
                   ].map((template, index) => (
-                    <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                    <div key={index} className={`bg-gradient-to-br ${template.gradient} rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-all cursor-pointer`}>
                       <div className="flex items-start justify-between mb-4">
-                        <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center text-3xl border border-[#E5E7EB]">
+                        <div className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl">
                           {template.preview}
                         </div>
                         <Badge className={`${
-                          template.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-                        }`}>
+                          template.status === 'active' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-amber-100 text-amber-700 border-amber-200'
+                        } border`}>
                           {template.status}
                         </Badge>
                       </div>
                       <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{template.name}</h3>
                       <div className="flex items-center gap-2 mb-4">
-                        <Badge variant="outline" className="border-[#E5E7EB] text-[#4B5563]">{template.type}</Badge>
+                        <Badge variant="outline" className="border-[#E5E7EB] text-[#4B5563] bg-white">{template.type}</Badge>
                       </div>
                       <div className="flex items-center justify-between text-[13px] text-[#4B5563] mb-4">
                         <span><span className="font-semibold text-[#1e2348]">{template.courses}</span> courses</span>
@@ -3716,17 +4351,29 @@ const AdminDashboard = () => {
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="flex-1 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
-                          onClick={() => setPreviewTemplate(template)}
+                          className="flex-1 border-[#E5E7EB] bg-white hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                          onClick={() => {
+                            setPreviewTemplate(template);
+                            toast({
+                              title: "Preview Template",
+                              description: `Viewing ${template.name}`,
+                            });
+                          }}
                         >
-                          <Eye className="w-4 h-4 mr-2" />
+                          <Eye className="w-4 h-4 mr-1" />
                           Preview
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]"
-                          onClick={() => setEditingTemplate(template)}
+                          className="bg-white hover:bg-[#fff0ed] hover:text-[#ff6b4d]"
+                          onClick={() => {
+                            setEditingTemplate(template);
+                            toast({
+                              title: "Edit Template",
+                              description: `Editing ${template.name}`,
+                            });
+                          }}
                         >
                           <Edit className="w-4 h-4" />
                         </Button>
@@ -3738,10 +4385,10 @@ const AdminDashboard = () => {
 
               {/* Certificate Issuance & Verification */}
               <div className="grid lg:grid-cols-2 gap-6">
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
                   <div className="flex items-start gap-3 mb-6">
-                    <div className="w-14 h-14 rounded-xl bg-[#fff0ed] flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="w-7 h-7 text-[#ff6b4d]" />
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <CheckCircle className="w-7 h-7 text-white" />
                     </div>
                     <div className="flex-1">
                       <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Certificate Issuance</h2>
@@ -3751,22 +4398,32 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {[
                       { label: 'Auto-Issue on Completion', value: 'Enabled', status: 'active' },
                       { label: 'Manual Review Required', value: 'Disabled', status: 'inactive' },
                       { label: 'Email Delivery', value: 'Enabled', status: 'active' },
                       { label: 'Blockchain Verification', value: 'Enabled', status: 'active' },
                     ].map((setting, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg border border-[#E5E7EB]">
+                      <div key={index} className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:bg-[#E5E7EB] transition-colors">
                         <span className="text-[14px] font-medium text-[#1e2348]">{setting.label}</span>
                         <div className="flex items-center gap-3">
                           <Badge className={`${
-                            setting.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-[#F5F6FA] text-[#9CA3AF]'
-                          }`}>
+                            setting.status === 'active' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-600 border-gray-200'
+                          } border`}>
                             {setting.value}
                           </Badge>
-                          <Button variant="ghost" size="sm" className="hover:bg-white hover:text-[#ff6b4d]">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="hover:bg-white hover:text-[#ff6b4d]"
+                            onClick={() => {
+                              toast({
+                                title: "Settings",
+                                description: `Configure ${setting.label}`,
+                              });
+                            }}
+                          >
                             <Settings className="w-4 h-4" />
                           </Button>
                         </div>
@@ -3774,50 +4431,81 @@ const AdminDashboard = () => {
                     ))}
                   </div>
 
-                  <Button className="w-full mt-6 bg-[#ff6b4d] hover:bg-[#e66045] text-white" onClick={() => setShowIssuanceRulesModal(true)}>
+                  <Button 
+                    onClick={() => setShowIssuanceRulesModal(true)}
+                    className="w-full mt-6 bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                  >
+                    <Settings className="w-4 h-4 mr-2" />
                     Configure Issuance Rules
                   </Button>
                 </div>
 
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
                   <div className="flex items-start gap-3 mb-6">
-                    <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-                      <Shield className="w-7 h-7 text-purple-600" />
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <Shield className="w-7 h-7 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Verification System</h2>
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Certificate Verification</h2>
                       <p className="text-[14px] leading-[20px] text-[#4B5563]">
-                        Certificate authenticity verification and fraud prevention
+                        Verify authenticity of issued certificates
                       </p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    {[
-                      { label: 'Verified Today', value: '47' },
-                      { label: 'Total Verified', value: '12.4K' },
-                      { label: 'Fraud Detected', value: '3' },
-                      { label: 'Verification Rate', value: '99.8%' },
-                    ].map((metric) => (
-                      <div key={metric.label} className="bg-[#F5F6FA] rounded-lg p-4 border border-[#E5E7EB]">
-                        <div className="text-[24px] font-bold text-[#1e2348] mb-1">{metric.value}</div>
-                        <div className="text-[12px] text-[#4B5563]">{metric.label}</div>
+                  <div className="space-y-4 mb-6">
+                    <div className="p-4 bg-gradient-to-r from-purple-50 to-purple-100/50 rounded-xl border border-purple-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CheckCircle className="w-5 h-5 text-purple-600" />
+                        <span className="text-[14px] font-semibold text-purple-900">Verification Methods</span>
                       </div>
-                    ))}
+                      <div className="space-y-2 text-[13px] text-purple-700">
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-purple-600"></div>
+                          <span>Certificate ID Lookup</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-purple-600"></div>
+                          <span>QR Code Scanning</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-purple-600"></div>
+                          <span>Blockchain Validation</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] text-center">
+                        <div className="text-[24px] font-bold text-[#1e2348] mb-1">2,847</div>
+                        <div className="text-[12px] text-[#4B5563]">Verified Today</div>
+                      </div>
+                      <div className="p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] text-center">
+                        <div className="text-[24px] font-bold text-[#1e2348] mb-1">99.8%</div>
+                        <div className="text-[12px] text-[#4B5563]">Success Rate</div>
+                      </div>
+                    </div>
                   </div>
 
-                  <Button variant="outline" className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]" onClick={() => setShowVerifyCertificateModal(true)}>
-                    <Search className="w-4 h-4 mr-2" />
+                  <Button 
+                    onClick={() => setShowVerifyCertificateModal(true)}
+                    variant="outline"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                  >
+                    <Shield className="w-4 h-4 mr-2" />
                     Verify Certificate
                   </Button>
                 </div>
               </div>
 
               {/* Customer Success Tracking */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Customer Success Tracking</h2>
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Customer Success Tracking</h2>
                     <p className="text-[14px] leading-[20px] text-[#4B5563]">
                       Monitor learner success metrics, engagement, and satisfaction
                     </p>
@@ -7404,6 +8092,191 @@ const AdminDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   Submit Review
                 </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Program Modal */}
+      {showCreateProgramModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Create New Learning Program</h2>
+              </div>
+              <button
+                onClick={() => setShowCreateProgramModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div className="bg-[#fff0ed] border border-[#ff6b4d]/20 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="w-5 h-5 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="text-[14px] font-semibold text-[#1e2348] mb-1">Program Builder</h3>
+                    <p className="text-[13px] text-[#4B5563]">
+                      Create comprehensive learning programs by combining multiple courses into structured pathways. 
+                      Define prerequisites, set milestones, and design certification requirements.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[14px] font-medium text-gray-700 mb-2">Program Name *</label>
+                <input
+                  type="text"
+                  placeholder="e.g., Digital Transformation Leadership Program"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[14px] font-medium text-gray-700 mb-2">Category *</label>
+                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent">
+                  <option>Select a category</option>
+                  <option>Digital Transformation</option>
+                  <option>Business Platform</option>
+                  <option>Digital Accelerators</option>
+                  <option>Digital Workers</option>
+                  <option>Digital Economy</option>
+                  <option>Cognitive Organization</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[14px] font-medium text-gray-700 mb-2">Description</label>
+                <textarea
+                  rows={4}
+                  placeholder="Describe the program objectives, target audience, and learning outcomes..."
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                />
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[14px] font-medium text-gray-700 mb-2">Duration (weeks)</label>
+                  <input
+                    type="number"
+                    placeholder="12"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[14px] font-medium text-gray-700 mb-2">Difficulty Level</label>
+                  <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent">
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Advanced</option>
+                    <option>Expert</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
+                <Button
+                  onClick={() => setShowCreateProgramModal(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowCreateProgramModal(false);
+                    toast({
+                      title: "Program Created",
+                      description: "New learning program has been created successfully.",
+                    });
+                  }}
+                  className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Program
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Faculty List Modal */}
+      {showFacultyListModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">All Faculty Members</h2>
+              </div>
+              <button
+                onClick={() => setShowFacultyListModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="bg-[#F5F6FA] rounded-xl p-8 text-center">
+                <Users className="w-12 h-12 text-[#ff6b4d] mx-auto mb-4" />
+                <h3 className="text-[18px] font-semibold text-[#1e2348] mb-2">Faculty Management</h3>
+                <p className="text-[14px] text-[#4B5563] mb-4">
+                  View and manage all faculty members, their courses, and performance metrics.
+                </p>
+                <Button
+                  onClick={() => {
+                    setShowFacultyListModal(false);
+                    setShowAddFacultyModal(true);
+                  }}
+                  className="bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                >
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Add New Faculty
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Performance Reports Modal */}
+      {showPerformanceReportsModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <BarChart2 className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Faculty Performance Reports</h2>
+              </div>
+              <button
+                onClick={() => setShowPerformanceReportsModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="bg-[#F5F6FA] rounded-xl p-8 text-center">
+                <BarChart2 className="w-12 h-12 text-[#ff6b4d] mx-auto mb-4" />
+                <h3 className="text-[18px] font-semibold text-[#1e2348] mb-2">Performance Analytics</h3>
+                <p className="text-[14px] text-[#4B5563]">
+                  Comprehensive analytics and insights on faculty performance, student ratings, and course effectiveness.
+                </p>
               </div>
             </div>
           </div>

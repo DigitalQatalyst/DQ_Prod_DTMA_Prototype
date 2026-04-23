@@ -70,13 +70,13 @@ export const AIUsageMonitoringDashboard = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-[20px] leading-[28px] font-semibold text-foreground">AI Learning Analytics</h2>
-          <p className="text-[13px] text-muted-foreground mt-0.5">Platform-wide AI usage, performance, and cost metrics</p>
+          <h2 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">AI Learning Analytics</h2>
+          <p className="text-[14px] leading-[20px] text-[#4B5563] mt-1">Platform-wide AI usage, performance, and cost metrics</p>
         </div>
         <select
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value as any)}
-          className="px-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+          className="px-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
         >
           <option value="7d">Last 7 days</option>
           <option value="30d">Last 30 days</option>
@@ -87,46 +87,46 @@ export const AIUsageMonitoringDashboard = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-card rounded-2xl p-5 shadow-sm border border-border">
-          <div className="w-10 h-10 rounded-xl bg-[#ff6b4d]/10 flex items-center justify-center mb-3">
-            <Bot className="w-5 h-5 text-[#ff6b4d]" />
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+          <div className="w-12 h-12 rounded-xl bg-[#fff0ed] flex items-center justify-center mb-3">
+            <Bot className="w-6 h-6 text-[#ff6b4d]" />
           </div>
-          <div className="text-[22px] font-bold text-foreground">{MOCK_AI_ANALYTICS.totalInteractions.toLocaleString()}</div>
-          <div className="text-[12px] text-muted-foreground mt-0.5">AI Interactions</div>
-          <div className="text-[11px] text-[#ff6b4d] font-medium mt-1">
+          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_AI_ANALYTICS.totalInteractions.toLocaleString()}</div>
+          <div className="text-[13px] text-[#4B5563] mt-1">AI Interactions</div>
+          <div className="text-[12px] text-[#ff6b4d] font-medium mt-2">
             {MOCK_AI_ANALYTICS.activeUsers} active users
           </div>
         </div>
 
-        <div className="bg-card rounded-2xl p-5 shadow-sm border border-border">
-          <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center mb-3">
-            <CheckCircle className="w-5 h-5 text-green-600" />
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+          <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-3">
+            <CheckCircle className="w-6 h-6 text-green-600" />
           </div>
-          <div className="text-[22px] font-bold text-foreground">{MOCK_AI_ANALYTICS.successRate}%</div>
-          <div className="text-[12px] text-muted-foreground mt-0.5">Success Rate</div>
-          <div className="text-[11px] text-green-600 font-medium mt-1">
+          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_AI_ANALYTICS.successRate}%</div>
+          <div className="text-[13px] text-[#4B5563] mt-1">Success Rate</div>
+          <div className="text-[12px] text-green-600 font-medium mt-2">
             Avg: {MOCK_AI_ANALYTICS.avgResponseTime}
           </div>
         </div>
 
-        <div className="bg-card rounded-2xl p-5 shadow-sm border border-border">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center mb-3">
-            <DollarSign className="w-5 h-5 text-blue-600" />
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+          <div className="w-12 h-12 rounded-xl bg-[#e9e9ed] flex items-center justify-center mb-3">
+            <DollarSign className="w-6 h-6 text-[#1e2348]" />
           </div>
-          <div className="text-[22px] font-bold text-foreground">${MOCK_AI_ANALYTICS.totalCost.toFixed(2)}</div>
-          <div className="text-[12px] text-muted-foreground mt-0.5">Total Cost</div>
-          <div className="text-[11px] text-blue-600 font-medium mt-1">
+          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">${MOCK_AI_ANALYTICS.totalCost.toFixed(2)}</div>
+          <div className="text-[13px] text-[#4B5563] mt-1">Total Cost</div>
+          <div className="text-[12px] text-[#1e2348] font-medium mt-2">
             ${MOCK_AI_ANALYTICS.avgCostPerInteraction.toFixed(3)} per interaction
           </div>
         </div>
 
-        <div className="bg-card rounded-2xl p-5 shadow-sm border border-border">
-          <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center mb-3">
-            <Zap className="w-5 h-5 text-purple-600" />
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+          <div className="w-12 h-12 rounded-xl bg-[#fff0ed] flex items-center justify-center mb-3">
+            <Zap className="w-6 h-6 text-[#ff6b4d]" />
           </div>
-          <div className="text-[22px] font-bold text-foreground">{MOCK_AI_ANALYTICS.coursesWithAI}</div>
-          <div className="text-[12px] text-muted-foreground mt-0.5">Courses with AI</div>
-          <div className="text-[11px] text-purple-600 font-medium mt-1">
+          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_AI_ANALYTICS.coursesWithAI}</div>
+          <div className="text-[13px] text-[#4B5563] mt-1">Courses with AI</div>
+          <div className="text-[12px] text-[#ff6b4d] font-medium mt-2">
             {((MOCK_AI_ANALYTICS.coursesWithAI / MOCK_AI_ANALYTICS.totalCourses) * 100).toFixed(0)}% adoption
           </div>
         </div>
@@ -134,52 +134,52 @@ export const AIUsageMonitoringDashboard = () => {
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Course AI Usage */}
-        <div className="lg:col-span-2 bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
-          <div className="px-5 py-4 border-b border-border">
-            <h3 className="text-[16px] font-semibold text-foreground">AI Usage by Course</h3>
-            <p className="text-[12px] text-muted-foreground mt-0.5">Interactions, performance, and cost breakdown</p>
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
+          <div className="px-6 py-5 border-b border-[#E5E7EB]">
+            <h3 className="text-[18px] font-semibold text-[#1e2348]">AI Usage by Course</h3>
+            <p className="text-[13px] text-[#4B5563] mt-1">Interactions, performance, and cost breakdown</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-muted/40">
+              <thead className="bg-[#1e2348]">
                 <tr>
-                  <th className="text-left px-4 py-2.5 text-[12px] font-medium text-muted-foreground">Course</th>
-                  <th className="text-left px-4 py-2.5 text-[12px] font-medium text-muted-foreground">Interactions</th>
-                  <th className="text-left px-4 py-2.5 text-[12px] font-medium text-muted-foreground">Users</th>
-                  <th className="text-left px-4 py-2.5 text-[12px] font-medium text-muted-foreground">Avg Time</th>
-                  <th className="text-left px-4 py-2.5 text-[12px] font-medium text-muted-foreground">Satisfaction</th>
-                  <th className="text-left px-4 py-2.5 text-[12px] font-medium text-muted-foreground">Cost</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Course</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Interactions</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Users</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Avg Time</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Satisfaction</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Cost</th>
                 </tr>
               </thead>
               <tbody>
                 {MOCK_COURSE_AI_USAGE.map((course, idx) => (
-                  <tr key={course.id} className={`border-t border-border hover:bg-muted/20 transition-colors ${idx % 2 === 0 ? '' : 'bg-muted/10'}`}>
+                  <tr key={course.id} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F5F6FA]'}`}>
                     <td className="px-4 py-3">
-                      <div className="text-[13px] font-medium text-foreground max-w-[200px] truncate" title={course.courseName}>
+                      <div className="text-[13px] font-medium text-[#1e2348] max-w-[200px] truncate" title={course.courseName}>
                         {course.courseName}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-[13px] font-medium text-foreground">
+                    <td className="px-4 py-3 text-[13px] font-medium text-[#1e2348]">
                       {course.interactions.toLocaleString()}
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-muted-foreground">
+                    <td className="px-4 py-3 text-[13px] text-[#4B5563]">
                       {course.users}
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-muted-foreground">
+                    <td className="px-4 py-3 text-[13px] text-[#4B5563]">
                       {course.avgTime}
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
+                      <div className="flex items-center gap-2">
+                        <div className="w-20 h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
                           <div 
                             className={`h-full rounded-full ${course.satisfaction >= 95 ? 'bg-green-500' : course.satisfaction >= 90 ? 'bg-amber-400' : 'bg-red-400'}`} 
                             style={{ width: `${course.satisfaction}%` }} 
                           />
                         </div>
-                        <span className="text-[12px] text-muted-foreground">{course.satisfaction}%</span>
+                        <span className="text-[12px] text-[#4B5563] font-medium">{course.satisfaction}%</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-[13px] font-medium text-foreground">
+                    <td className="px-4 py-3 text-[13px] font-medium text-[#1e2348]">
                       ${course.cost.toFixed(2)}
                     </td>
                   </tr>
@@ -192,27 +192,27 @@ export const AIUsageMonitoringDashboard = () => {
         {/* AI Features & Models */}
         <div className="space-y-6">
           {/* AI Features */}
-          <div className="bg-card rounded-2xl shadow-sm border border-border">
-            <div className="px-5 py-4 border-b border-border">
-              <h3 className="text-[16px] font-semibold text-foreground">AI Features Usage</h3>
-              <p className="text-[12px] text-muted-foreground mt-0.5">By feature type</p>
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB]">
+            <div className="px-5 py-4 border-b border-[#E5E7EB]">
+              <h3 className="text-[18px] font-semibold text-[#1e2348]">AI Features Usage</h3>
+              <p className="text-[13px] text-[#4B5563] mt-1">By feature type</p>
             </div>
-            <div className="p-5 space-y-3">
+            <div className="p-5 space-y-4">
               {MOCK_AI_FEATURES.map((feature) => (
                 <div key={feature.feature}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[13px] text-foreground">{feature.feature}</span>
-                    <span className="text-[12px] font-medium text-muted-foreground">{feature.percentage}%</span>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[13px] text-[#1e2348] font-medium">{feature.feature}</span>
+                    <span className="text-[13px] font-semibold text-[#ff6b4d]">{feature.percentage}%</span>
                   </div>
-                  <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                  <div className="w-full h-2.5 bg-[#E5E7EB] rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-[#ff6b4d] rounded-full transition-all" 
                       style={{ width: `${feature.percentage}%` }}
                     />
                   </div>
-                  <div className="flex items-center justify-between mt-0.5">
-                    <span className="text-[11px] text-muted-foreground">{feature.usage.toLocaleString()} uses</span>
-                    <span className="text-[11px] text-green-600 font-medium">{feature.avgSatisfaction}% satisfaction</span>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-[12px] text-[#9CA3AF]">{feature.usage.toLocaleString()} uses</span>
+                    <span className="text-[12px] text-green-600 font-medium">{feature.avgSatisfaction}% satisfaction</span>
                   </div>
                 </div>
               ))}
@@ -220,29 +220,29 @@ export const AIUsageMonitoringDashboard = () => {
           </div>
 
           {/* AI Models */}
-          <div className="bg-card rounded-2xl shadow-sm border border-border">
-            <div className="px-5 py-4 border-b border-border">
-              <h3 className="text-[16px] font-semibold text-foreground">AI Models</h3>
-              <p className="text-[12px] text-muted-foreground mt-0.5">Distribution & performance</p>
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB]">
+            <div className="px-5 py-4 border-b border-[#E5E7EB]">
+              <h3 className="text-[18px] font-semibold text-[#1e2348]">AI Models</h3>
+              <p className="text-[13px] text-[#4B5563] mt-1">Distribution & performance</p>
             </div>
             <div className="p-5 space-y-3">
               {MOCK_AI_MODELS.map((model) => (
-                <div key={model.model} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                <div key={model.model} className="flex items-center justify-between p-3 rounded-lg bg-[#F5F6FA] border border-[#E5E7EB]">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[13px] font-medium text-foreground">{model.model}</span>
+                      <span className="text-[13px] font-medium text-[#1e2348]">{model.model}</span>
                       <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
                         model.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                       }`}>
                         {model.status}
                       </span>
                     </div>
-                    <div className="text-[11px] text-muted-foreground mt-0.5">
+                    <div className="text-[11px] text-[#9CA3AF] mt-0.5">
                       {model.usage}% usage · {model.avgTime} avg
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-[13px] font-semibold text-foreground">${model.cost.toFixed(2)}</div>
+                    <div className="text-[13px] font-semibold text-[#1e2348]">${model.cost.toFixed(2)}</div>
                   </div>
                 </div>
               ))}
@@ -252,26 +252,26 @@ export const AIUsageMonitoringDashboard = () => {
       </div>
 
       {/* Common Queries */}
-      <div className="bg-card rounded-2xl shadow-sm border border-border">
-        <div className="px-5 py-4 border-b border-border">
-          <h3 className="text-[16px] font-semibold text-foreground">Most Common AI Queries</h3>
-          <p className="text-[12px] text-muted-foreground mt-0.5">Top learner questions and satisfaction ratings</p>
+      <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB]">
+        <div className="px-6 py-5 border-b border-[#E5E7EB]">
+          <h3 className="text-[18px] font-semibold text-[#1e2348]">Most Common AI Queries</h3>
+          <p className="text-[13px] text-[#4B5563] mt-1">Top learner questions and satisfaction ratings</p>
         </div>
-        <div className="p-5">
+        <div className="p-6">
           <div className="space-y-3">
             {MOCK_COMMON_QUERIES.map((query, idx) => (
-              <div key={idx} className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors">
+              <div key={idx} className="flex items-center justify-between p-4 rounded-xl hover:bg-[#F5F6FA] transition-colors border border-[#E5E7EB]">
                 <div className="flex items-center gap-3 flex-1">
-                  <div className="w-8 h-8 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center text-[#ff6b4d] font-bold text-[13px] flex-shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-[#fff0ed] flex items-center justify-center text-[#ff6b4d] font-bold text-[14px] flex-shrink-0">
                     {idx + 1}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-medium text-foreground truncate">{query.query}</div>
-                    <div className="text-[11px] text-muted-foreground">{query.count} times asked</div>
+                    <div className="text-[14px] font-medium text-[#1e2348] truncate">{query.query}</div>
+                    <div className="text-[12px] text-[#9CA3AF]">{query.count} times asked</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 flex-shrink-0">
-                  <span className="text-[13px] font-semibold text-amber-500">{query.avgRating}</span>
+                  <span className="text-[14px] font-semibold text-amber-500">{query.avgRating}</span>
                   <span className="text-amber-500">★</span>
                 </div>
               </div>
@@ -281,28 +281,28 @@ export const AIUsageMonitoringDashboard = () => {
       </div>
 
       {/* System Status */}
-      <div className="bg-card rounded-2xl p-5 shadow-sm border border-border">
-        <h3 className="text-[16px] font-semibold text-foreground mb-4">AI System Status</h3>
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+        <h3 className="text-[18px] font-semibold text-[#1e2348] mb-5">AI System Status</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-green-50 border border-green-200">
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-green-50 border border-green-200">
             <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
             <div>
-              <div className="text-[13px] font-medium text-green-900">All AI Services Online</div>
-              <div className="text-[11px] text-green-700">99.8% uptime this month</div>
+              <div className="text-[14px] font-semibold text-green-900">All AI Services Online</div>
+              <div className="text-[12px] text-green-700 mt-0.5">99.8% uptime this month</div>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-blue-50 border border-blue-200">
-            <Clock className="w-5 h-5 text-blue-600 flex-shrink-0" />
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-[#e9e9ed] border border-[#dddee4]">
+            <Clock className="w-5 h-5 text-[#1e2348] flex-shrink-0" />
             <div>
-              <div className="text-[13px] font-medium text-blue-900">Avg Response Time</div>
-              <div className="text-[11px] text-blue-700">{MOCK_AI_ANALYTICS.avgResponseTime}</div>
+              <div className="text-[14px] font-semibold text-[#1e2348]">Avg Response Time</div>
+              <div className="text-[12px] text-[#4B5563] mt-0.5">{MOCK_AI_ANALYTICS.avgResponseTime}</div>
             </div>
           </div>
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-amber-50 border border-amber-200">
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200">
             <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
             <div>
-              <div className="text-[13px] font-medium text-amber-900">API Rate Limit</div>
-              <div className="text-[11px] text-amber-700">65% capacity used</div>
+              <div className="text-[14px] font-semibold text-amber-900">API Rate Limit</div>
+              <div className="text-[12px] text-amber-700 mt-0.5">65% capacity used</div>
             </div>
           </div>
         </div>

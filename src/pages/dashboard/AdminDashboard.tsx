@@ -1,19 +1,28 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAnalytics, usePendingCourses, useAdminUsers, useReviewCourse, useUpdateUserRole } from '@/hooks/useAdmin';
 import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
 import { InviteManagement } from '@/components/admin/InviteManagement';
+import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalyticsDashboard';
+import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
+import { CommunicationSupportTab } from '@/components/admin/CommunicationSupportTab';
+import { CoursePreviewModal } from '@/components/admin/CoursePreviewModal';
 import AnalyticsPerformanceInsightsPanel from '@/components/admin/stage4/AnalyticsPerformanceInsightsPanel';
 import FinanceBillingGovernancePanel from '@/components/admin/stage4/FinanceBillingGovernancePanel';
 import OperationsSupportPanel from '@/components/admin/stage4/OperationsSupportPanel';
 import PartnerAccreditationReportingPanel from '@/components/admin/stage4/PartnerAccreditationReportingPanel';
 import RecordsCertificationGovernancePanel from '@/components/admin/stage4/RecordsCertificationGovernancePanel';
-import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalyticsDashboard';
-import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
-import { CommunicationSupportTab } from '@/components/admin/CommunicationSupportTab';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
@@ -81,35 +90,112 @@ import {
   AlertCircle,
   ThumbsUp,
   ThumbsDown,
-  ShieldCheck,
+  MoreVertical,
+  Copy,
+  Archive,
+  Trash2,
+  Plus,
+  DollarSign,
+  Share2,
+  Activity,
 } from 'lucide-react';
 
-type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'finance' | 'partner-reporting' | 'analytics-performance' | 'operations-support' | 'records-certification' | 'whatsapp-analytics' | 'ai-usage' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
+type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'finance' | 'partner-reporting' | 'analytics-performance' | 'operations-support' | 'records-certification' | 'whatsapp-analytics' | 'ai-usage' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 const MOCK_COURSES = [
-  { id: '1', title: 'Digital Transformation Fundamentals', instructor: 'Dr. Aisha Mensah', category: 'Digital Skills', level: 'Beginner', status: 'published', enrollments: 342, lastUpdated: '2026-03-20', rating: 4.8, completion: 72, revenue: 8550 },
-  { id: '2', title: 'AI & Automation in the Workplace', instructor: 'James Okafor', category: 'AI & Technology', level: 'Intermediate', status: 'published', enrollments: 219, lastUpdated: '2026-03-18', rating: 4.6, completion: 65, revenue: 5475 },
-  { id: '3', title: 'Data-Driven Decision Making', instructor: 'Priya Nair', category: 'Analytics', level: 'Intermediate', status: 'draft', enrollments: 0, lastUpdated: '2026-03-25', rating: 0, completion: 0, revenue: 0 },
-  { id: '4', title: 'Leadership in the Digital Age', instructor: 'Marcus Webb', category: 'Leadership', level: 'Advanced', status: 'pending', enrollments: 0, lastUpdated: '2026-03-22', rating: 0, completion: 0, revenue: 0 },
-  { id: '5', title: 'Agile Project Management', instructor: 'Sofia Reyes', category: 'Management', level: 'Intermediate', status: 'published', enrollments: 187, lastUpdated: '2026-03-15', rating: 4.5, completion: 58, revenue: 4675 },
-  { id: '6', title: 'Cybersecurity Essentials', instructor: 'Dr. Kwame Asante', category: 'Digital Skills', level: 'Beginner', status: 'published', enrollments: 154, lastUpdated: '2026-03-10', rating: 4.7, completion: 81, revenue: 3850 },
-  { id: '7', title: 'Emotional Intelligence at Work', instructor: 'Lindiwe Dube', category: 'Leadership', level: 'Beginner', status: 'draft', enrollments: 0, lastUpdated: '2026-03-26', rating: 0, completion: 0, revenue: 0 },
+  { id: '1', title: 'Mastering Economy 4.0', instructor: 'DTMA Faculty', category: 'Digital Economy', level: 'Beginner', status: 'published', enrollments: 342, lastUpdated: '2026-03-20', rating: 4.8, completion: 72, revenue: 8550 },
+  { id: '2', title: 'Decoding Digital Cognitive Organisations', instructor: 'DTMA Faculty', category: 'Digital Cognitive Organisation', level: 'Intermediate', status: 'published', enrollments: 219, lastUpdated: '2026-03-18', rating: 4.9, completion: 65, revenue: 5475 },
+  { id: '3', title: 'Building Powerful Digital Business Platforms', instructor: 'DTMA Faculty', category: 'Digital Business Platform', level: 'Intermediate', status: 'draft', enrollments: 0, lastUpdated: '2026-03-25', rating: 0, completion: 0, revenue: 0 },
+  { id: '4', title: 'Navigating Digital Transformation 2.0', instructor: 'DTMA Faculty', category: 'Digital Transformation', level: 'Advanced', status: 'pending', enrollments: 0, lastUpdated: '2026-03-22', rating: 0, completion: 0, revenue: 0 },
+  { id: '5', title: 'Optimizing Digital Workers and Workspaces', instructor: 'DTMA Faculty', category: 'Digital Worker & Workspace', level: 'Beginner', status: 'published', enrollments: 187, lastUpdated: '2026-03-15', rating: 4.6, completion: 58, revenue: 4675 },
+  { id: '6', title: 'Leveraging Digital Accelerators for Growth', instructor: 'DTMA Faculty', category: 'Digital Accelerators', level: 'Advanced', status: 'published', enrollments: 154, lastUpdated: '2026-03-10', rating: 4.9, completion: 81, revenue: 3850 },
 ];
 
 const STATUS_STYLES: Record<string, string> = {
   published: 'bg-emerald-100 text-emerald-700',
   draft:     'bg-amber-100 text-amber-700',
-  pending:   'bg-blue-100 text-blue-700',
+  pending:   'bg-purple-100 text-purple-700',
 };
 
-const CATEGORIES = ['All Categories', 'Digital Skills', 'AI & Technology', 'Analytics', 'Leadership', 'Management'];
+const CATEGORIES = ['All Categories', 'Digital Economy', 'Digital Cognitive Organisation', 'Digital Business Platform', 'Digital Transformation', 'Digital Worker & Workspace', 'Digital Accelerators'];
+
+// ─── Mock users data ──────────────────────────────────────────────────────────
+const MOCK_USERS = [
+  { id: '1', full_name: 'Sarah Johnson', email: 'sarah.johnson@dtma.ae', role: 'admin', created_at: '2026-01-15', status: 'active', lastLogin: '2026-04-14' },
+  { id: '2', full_name: 'Ahmed Al-Mansoori', email: 'ahmed.mansoori@dtma.ae', role: 'instructor', created_at: '2026-02-10', status: 'active', lastLogin: '2026-04-13' },
+  { id: '3', full_name: 'Maria Garcia', email: 'maria.garcia@example.com', role: 'learner', created_at: '2026-03-05', status: 'active', lastLogin: '2026-04-15' },
+  { id: '4', full_name: 'John Smith', email: 'john.smith@example.com', role: 'learner', created_at: '2026-03-12', status: 'active', lastLogin: '2026-04-14' },
+  { id: '5', full_name: 'Fatima Hassan', email: 'fatima.hassan@dtma.ae', role: 'instructor', created_at: '2026-02-20', status: 'active', lastLogin: '2026-04-12' },
+  { id: '6', full_name: 'David Chen', email: 'david.chen@example.com', role: 'learner', created_at: '2026-03-18', status: 'active', lastLogin: '2026-04-15' },
+  { id: '7', full_name: 'Aisha Mohammed', email: 'aisha.mohammed@example.com', role: 'learner', created_at: '2026-03-22', status: 'inactive', lastLogin: '2026-03-25' },
+  { id: '8', full_name: 'Robert Taylor', email: 'robert.taylor@dtma.ae', role: 'admin', created_at: '2026-01-20', status: 'active', lastLogin: '2026-04-14' },
+  { id: '9', full_name: 'Layla Ibrahim', email: 'layla.ibrahim@example.com', role: 'learner', created_at: '2026-03-28', status: 'active', lastLogin: '2026-04-13' },
+  { id: '10', full_name: 'Michael Brown', email: 'michael.brown@example.com', role: 'learner', created_at: '2026-04-02', status: 'active', lastLogin: '2026-04-15' },
+];
+
+const ROLE_STYLES: Record<string, string> = {
+  admin: 'bg-purple-100 text-purple-700',
+  instructor: 'bg-[#fff0ed] text-[#ff6b4d]',
+  learner: 'bg-emerald-100 text-emerald-700',
+};
+
+const STATUS_BADGE_STYLES: Record<string, string> = {
+  active: 'bg-emerald-100 text-emerald-700',
+  inactive: 'bg-gray-100 text-gray-700',
+};
 
 // ─── CourseManagementTab ──────────────────────────────────────────────────────
 const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () => void }) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('All Categories');
+  const [previewCourse, setPreviewCourse] = useState<typeof MOCK_COURSES[0] | null>(null);
+
+  // Handler for editing a course
+  const handleEditCourse = (courseId: string) => {
+    navigate(`/course-builder/${courseId}`);
+  };
+
+  // Handler for previewing a course
+  const handlePreviewCourse = (courseId: string) => {
+    const course = MOCK_COURSES.find(c => c.id === courseId);
+    if (course) {
+      setPreviewCourse(course);
+    }
+  };
+
+  // Handler for duplicating a course
+  const handleDuplicateCourse = (courseId: string, courseTitle: string) => {
+    toast({
+      title: "Course Duplicated",
+      description: `"${courseTitle}" has been duplicated successfully.`,
+    });
+    // TODO: Implement actual duplication logic
+  };
+
+  // Handler for archiving a course
+  const handleArchiveCourse = (courseId: string, courseTitle: string) => {
+    toast({
+      title: "Course Archived",
+      description: `"${courseTitle}" has been archived.`,
+    });
+    // TODO: Implement actual archive logic
+  };
+
+  // Handler for deleting a course
+  const handleDeleteCourse = (courseId: string, courseTitle: string) => {
+    if (window.confirm(`Are you sure you want to delete "${courseTitle}"? This action cannot be undone.`)) {
+      toast({
+        title: "Course Deleted",
+        description: `"${courseTitle}" has been permanently deleted.`,
+        variant: "destructive",
+      });
+      // TODO: Implement actual delete logic
+    }
+  };
 
   const filtered = MOCK_COURSES.filter(c => {
     const matchSearch = c.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -134,13 +220,13 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
 
   return (
     <div className="space-y-8">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-foreground">Course &amp; Content Management</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Course &amp; Content Management</h1>
 
       {/* ── Section 1: Authoring & Publishing ── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-[20px] leading-[28px] font-semibold text-foreground">Course Authoring &amp; Publishing</h2>
-          <Button
+          <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Course Authoring &amp; Publishing</h2>
+          <Button 
             onClick={onNavigateToPending}
             className="bg-[#ff6b4d] hover:bg-[#e56045] text-white gap-2"
           >
@@ -152,10 +238,10 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         {/* Summary stat pills */}
         <div className="flex flex-wrap gap-3 mb-5">
           {[
-            { label: 'Total Courses', value: MOCK_COURSES.length, color: 'bg-[#1e2348]/5 text-[#1e2348]' },
-            { label: 'Published',     value: published,            color: 'bg-emerald-50 text-emerald-700' },
-            { label: 'Draft',         value: drafts,               color: 'bg-amber-50 text-amber-700' },
-            { label: 'Pending Review',value: pending,              color: 'bg-blue-50 text-blue-700' },
+            { label: 'Total Courses', value: MOCK_COURSES.length, color: 'bg-[#e9e9ed] text-[#1e2348]' },
+            { label: 'Published',     value: published,            color: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
+            { label: 'Draft',         value: drafts,               color: 'bg-amber-50 text-amber-700 border border-amber-200' },
+            { label: 'Pending Review',value: pending,              color: 'bg-purple-50 text-purple-700 border border-purple-200' },
           ].map(pill => (
             <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
               <span className="font-bold text-[15px]">{pill.value}</span>
@@ -167,21 +253,21 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         {/* Search + filter bar */}
         <div className="flex flex-wrap gap-3 mb-5">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <input
               type="text"
               placeholder="Search courses or instructors…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+              className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
             />
           </div>
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+              className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
             >
               <option value="all">All Statuses</option>
               <option value="published">Published</option>
@@ -190,11 +276,11 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
             </select>
           </div>
           <div className="relative">
-            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <select
               value={categoryFilter}
               onChange={e => setCategoryFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+              className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
             >
               {CATEGORIES.map(cat => <option key={cat}>{cat}</option>)}
             </select>
@@ -202,7 +288,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         </div>
 
         {/* Courses table */}
-        <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-[#1e2348]">
@@ -215,36 +301,71 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
               <tbody>
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-[14px] text-muted-foreground">
+                    <td colSpan={8} className="text-center py-12 text-[14px] text-[#9CA3AF]">
                       <BookOpen className="w-8 h-8 mx-auto mb-2 opacity-30" />
                       No courses match your filters.
                     </td>
                   </tr>
                 ) : filtered.map((course, idx) => (
-                  <tr key={course.id} className={`border-t border-border transition-colors hover:bg-muted/30 ${idx % 2 === 0 ? '' : 'bg-muted/10'}`}>
+                  <tr key={course.id} className={`border-t border-[#E5E7EB] transition-colors hover:bg-[#F5F6FA] ${idx % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-[14px] text-foreground max-w-[200px] truncate" title={course.title}>{course.title}</div>
+                      <div className="font-medium text-[14px] text-[#1e2348] max-w-[200px] truncate" title={course.title}>{course.title}</div>
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">{course.instructor}</td>
-                    <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">{course.category}</td>
+                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.instructor}</td>
+                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.category}</td>
                     <td className="px-4 py-3">
-                      <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#1e2348]/10 text-[#1e2348] font-medium capitalize">{course.level}</span>
+                      <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-medium capitalize">{course.level}</span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${STATUS_STYLES[course.status]}`}>
                         {course.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[14px] font-medium text-foreground">{course.enrollments.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-[13px] text-muted-foreground whitespace-nowrap">{course.lastUpdated}</td>
+                    <td className="px-4 py-3 text-[14px] font-medium text-[#1e2348]">{course.enrollments.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.lastUpdated}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
-                        <button className="p-1.5 rounded-lg hover:bg-[#ff6b4d]/10 text-[#ff6b4d] transition-colors" title="Edit course">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="p-1.5 rounded-lg hover:bg-[#1e2348]/10 text-[#1e2348] transition-colors" title="Preview course">
+                        <button 
+                          onClick={() => handlePreviewCourse(course.id)}
+                          className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors" 
+                          title="Preview course"
+                        >
                           <Eye className="w-4 h-4" />
                         </button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button 
+                              className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+                              title="More actions"
+                            >
+                              <MoreVertical className="w-4 h-4" />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuItem 
+                              onClick={() => handleDuplicateCourse(course.id, course.title)}
+                              className="cursor-pointer"
+                            >
+                              <Copy className="w-4 h-4 mr-2" />
+                              Duplicate Course
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => handleArchiveCourse(course.id, course.title)}
+                              className="cursor-pointer"
+                            >
+                              <Archive className="w-4 h-4 mr-2" />
+                              Archive Course
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem 
+                              onClick={() => handleDeleteCourse(course.id, course.title)}
+                              className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete Course
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </td>
                   </tr>
@@ -258,24 +379,24 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
       {/* ── Section 2: Course Performance Analytics ── */}
       <section>
         <div className="mb-4">
-          <h2 className="text-[20px] leading-[28px] font-semibold text-foreground">Course Performance Analytics</h2>
-          <p className="text-[13px] text-muted-foreground mt-0.5">Track engagement, completion rates, and learner feedback across all courses.</p>
+          <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Course Performance Analytics</h2>
+          <p className="text-[13px] text-[#4B5563] mt-0.5">Track engagement, completion rates, and learner feedback across all courses.</p>
         </div>
 
         {/* KPI stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {[
-            { icon: BookOpen,   label: 'Total Courses',      value: MOCK_COURSES.length,               suffix: '',   color: 'text-[#ff6b4d]', bg: 'bg-[#ff6b4d]/10' },
-            { icon: TrendingUp, label: 'Avg Completion Rate', value: avgCompletion,                     suffix: '%',  color: 'text-emerald-600', bg: 'bg-emerald-100' },
-            { icon: Star,       label: 'Avg Course Rating',   value: avgRating,                         suffix: '★', color: 'text-amber-500',  bg: 'bg-amber-100' },
-            { icon: Users,      label: 'Total Enrollments',   value: totalEnrollments.toLocaleString(), suffix: '',   color: 'text-blue-600',   bg: 'bg-blue-100' },
+            { icon: BookOpen,   label: 'Total Courses',      value: MOCK_COURSES.length,               suffix: '',   color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+            { icon: TrendingUp, label: 'Avg Completion Rate', value: avgCompletion,                     suffix: '%',  color: 'text-emerald-600', bg: 'bg-emerald-50' },
+            { icon: Star,       label: 'Avg Course Rating',   value: avgRating,                         suffix: '★', color: 'text-amber-500',  bg: 'bg-amber-50' },
+            { icon: Users,      label: 'Total Enrollments',   value: totalEnrollments.toLocaleString(), suffix: '',   color: 'text-purple-600',   bg: 'bg-purple-50' },
           ].map(card => (
-            <div key={card.label} className="bg-card rounded-2xl p-5 shadow-sm border border-border">
+            <div key={card.label} className="bg-white rounded-2xl p-5 shadow-sm border border-[#E5E7EB]">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${card.bg}`}>
                 <card.icon className={`w-5 h-5 ${card.color}`} />
               </div>
-              <div className="text-[22px] font-bold text-foreground">{card.value}{card.suffix}</div>
-              <div className="text-[12px] text-muted-foreground mt-0.5">{card.label}</div>
+              <div className="text-[22px] font-bold text-[#1e2348]">{card.value}{card.suffix}</div>
+              <div className="text-[12px] text-[#4B5563] mt-0.5">{card.label}</div>
             </div>
           ))}
         </div>
@@ -363,30 +484,39 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         </div>
       </section>
 
+      {/* Course Preview Modal */}
+      {previewCourse && (
+        <CoursePreviewModal
+          isOpen={!!previewCourse}
+          onClose={() => setPreviewCourse(null)}
+          course={previewCourse}
+          onEdit={handleEditCourse}
+        />
+      )}
     </div>
   );
 };
 
 // ─── Mock assessments data ────────────────────────────────────────────────────
 const MOCK_QUIZZES = [
-  { id: 'q1', title: 'Module 1: Digital Fundamentals Check', course: 'Digital Transformation Fundamentals', type: 'Quiz',       questions: 15, submissions: 287, avgScore: 78, passRate: 84, status: 'active'   },
-  { id: 'q2', title: 'AI Concepts Mid-Course Assessment',    course: 'AI & Automation in the Workplace',  type: 'Quiz',       questions: 20, submissions: 174, avgScore: 71, passRate: 76, status: 'active'   },
-  { id: 'q3', title: 'Capstone Project Submission',          course: 'Data-Driven Decision Making',       type: 'Assignment', questions: 5,  submissions: 52,  avgScore: 82, passRate: 90, status: 'active'   },
-  { id: 'q4', title: 'Leadership Style Reflection',          course: 'Leadership in the Digital Age',     type: 'Assignment', questions: 3,  submissions: 0,   avgScore: 0,  passRate: 0,  status: 'draft'    },
-  { id: 'q5', title: 'Agile Sprint Planning Quiz',           course: 'Agile Project Management',         type: 'Quiz',       questions: 12, submissions: 143, avgScore: 74, passRate: 79, status: 'active'   },
-  { id: 'q6', title: 'Security Threat Identification',       course: 'Cybersecurity Essentials',         type: 'Quiz',       questions: 18, submissions: 121, avgScore: 69, passRate: 71, status: 'active'   },
+  { id: 'q1', title: 'Module 1: Economy 4.0 Fundamentals Check', course: 'Mastering Economy 4.0', type: 'Quiz',       questions: 15, submissions: 287, avgScore: 78, passRate: 84, status: 'active'   },
+  { id: 'q2', title: 'Digital Cognitive Organizations Assessment',    course: 'Decoding Digital Cognitive Organisations',  type: 'Quiz',       questions: 20, submissions: 174, avgScore: 71, passRate: 76, status: 'active'   },
+  { id: 'q3', title: 'Platform Architecture Project',          course: 'Building Powerful Digital Business Platforms',       type: 'Assignment', questions: 5,  submissions: 52,  avgScore: 82, passRate: 90, status: 'active'   },
+  { id: 'q4', title: 'Transformation Strategy Reflection',          course: 'Navigating Digital Transformation 2.0',     type: 'Assignment', questions: 3,  submissions: 0,   avgScore: 0,  passRate: 0,  status: 'draft'    },
+  { id: 'q5', title: 'Digital Workspace Optimization Quiz',           course: 'Optimizing Digital Workers and Workspaces',         type: 'Quiz',       questions: 12, submissions: 143, avgScore: 74, passRate: 79, status: 'active'   },
+  { id: 'q6', title: 'AI & Automation Accelerators Quiz',       course: 'Leveraging Digital Accelerators for Growth',         type: 'Quiz',       questions: 18, submissions: 121, avgScore: 69, passRate: 71, status: 'active'   },
 ];
 
 const MOCK_SUBMISSIONS = [
-  { id: 's1', learner: 'Amara Osei',    assessment: 'Capstone Project Submission',       course: 'Data-Driven Decision Making',      submitted: '2026-03-26', score: null, maxScore: 100 },
-  { id: 's2', learner: 'James Kariuki', assessment: 'Leadership Style Reflection',       course: 'Leadership in the Digital Age',    submitted: '2026-03-25', score: null, maxScore: 100 },
-  { id: 's3', learner: 'Fatou Diallo',  assessment: 'Capstone Project Submission',       course: 'Data-Driven Decision Making',      submitted: '2026-03-25', score: null, maxScore: 100 },
-  { id: 's4', learner: 'Kofi Mensah',   assessment: 'Leadership Style Reflection',       course: 'Leadership in the Digital Age',    submitted: '2026-03-24', score: null, maxScore: 100 },
+  { id: 's1', learner: 'Amara Osei',    assessment: 'Platform Architecture Project',       course: 'Building Powerful Digital Business Platforms',      submitted: '2026-03-26', score: null, maxScore: 100 },
+  { id: 's2', learner: 'James Kariuki', assessment: 'Transformation Strategy Reflection',       course: 'Navigating Digital Transformation 2.0',    submitted: '2026-03-25', score: null, maxScore: 100 },
+  { id: 's3', learner: 'Fatou Diallo',  assessment: 'Platform Architecture Project',       course: 'Building Powerful Digital Business Platforms',      submitted: '2026-03-25', score: null, maxScore: 100 },
+  { id: 's4', learner: 'Kofi Mensah',   assessment: 'Transformation Strategy Reflection',       course: 'Navigating Digital Transformation 2.0',    submitted: '2026-03-24', score: null, maxScore: 100 },
 ];
 
 const SCORE_DISTRIBUTION = [
   { range: '90–100', count: 48,  color: 'bg-emerald-500' },
-  { range: '80–89',  count: 112, color: 'bg-blue-500'    },
+  { range: '80–89',  count: 112, color: 'bg-[#ff6b4d]'    },
   { range: '70–79',  count: 134, color: 'bg-amber-400'   },
   { range: '60–69',  count: 67,  color: 'bg-orange-400'  },
   { range: 'Below 60', count: 31, color: 'bg-red-400'    },
@@ -394,8 +524,108 @@ const SCORE_DISTRIBUTION = [
 const DIST_MAX = Math.max(...SCORE_DISTRIBUTION.map(d => d.count));
 
 const QUIZ_TYPE_STYLE: Record<string, string> = {
-  Quiz:       'bg-blue-100 text-blue-700',
+  Quiz:       'bg-[#fff0ed] text-[#ff6b4d]',
   Assignment: 'bg-purple-100 text-purple-700',
+};
+
+// ─── Mock scheduled sessions data ─────────────────────────────────────────────
+const MOCK_SCHEDULED_SESSIONS = [
+  { 
+    id: 'sess1', 
+    title: 'Week 1: Introduction to Economy 4.0', 
+    course: 'Mastering Economy 4.0', 
+    instructor: 'Dr. Aisha Mensah',
+    type: 'live' as const,
+    date: '2026-04-18',
+    startTime: '14:00',
+    endTime: '16:00',
+    enrolled: 45,
+    capacity: 50,
+    meetingLink: 'https://meet.dtma.ae/economy-week1',
+    status: 'upcoming' as const
+  },
+  { 
+    id: 'sess2', 
+    title: 'Module 2: Cognitive Organizations Deep Dive', 
+    course: 'Decoding Digital Cognitive Organisations', 
+    instructor: 'James Okafor',
+    type: 'hybrid' as const,
+    date: '2026-04-19',
+    startTime: '10:00',
+    endTime: '12:00',
+    enrolled: 32,
+    capacity: 40,
+    meetingLink: 'https://meet.dtma.ae/cognitive-module2',
+    status: 'upcoming' as const
+  },
+  { 
+    id: 'sess3', 
+    title: 'Platform Architecture Workshop', 
+    course: 'Building Powerful Digital Business Platforms', 
+    instructor: 'Priya Nair',
+    type: 'live' as const,
+    date: '2026-04-20',
+    startTime: '15:00',
+    endTime: '17:30',
+    enrolled: 28,
+    capacity: 30,
+    meetingLink: 'https://meet.dtma.ae/platform-workshop',
+    status: 'upcoming' as const
+  },
+  { 
+    id: 'sess4', 
+    title: 'Digital Transformation Case Studies', 
+    course: 'Navigating Digital Transformation 2.0', 
+    instructor: 'Marcus Webb',
+    type: 'recorded' as const,
+    date: '2026-04-15',
+    startTime: '13:00',
+    endTime: '14:30',
+    enrolled: 67,
+    capacity: 100,
+    meetingLink: 'https://meet.dtma.ae/transformation-cases',
+    status: 'completed' as const
+  },
+  { 
+    id: 'sess5', 
+    title: 'AI & Automation in Digital Workspaces', 
+    course: 'Optimizing Digital Workers and Workspaces', 
+    instructor: 'Sofia Reyes',
+    type: 'live' as const,
+    date: '2026-04-21',
+    startTime: '11:00',
+    endTime: '13:00',
+    enrolled: 38,
+    capacity: 45,
+    meetingLink: 'https://meet.dtma.ae/ai-workspaces',
+    status: 'upcoming' as const
+  },
+  { 
+    id: 'sess6', 
+    title: 'Leveraging Digital Accelerators Q&A', 
+    course: 'Leveraging Digital Accelerators for Growth', 
+    instructor: 'Dr. Aisha Mensah',
+    type: 'hybrid' as const,
+    date: '2026-04-22',
+    startTime: '16:00',
+    endTime: '17:00',
+    enrolled: 41,
+    capacity: 50,
+    meetingLink: 'https://meet.dtma.ae/accelerators-qa',
+    status: 'upcoming' as const
+  },
+];
+
+const SESSION_TYPE_STYLE: Record<string, { bg: string; text: string; icon: string }> = {
+  live: { bg: 'bg-red-100', text: 'text-red-700', icon: '🔴' },
+  hybrid: { bg: 'bg-purple-100', text: 'text-purple-700', icon: '🔄' },
+  recorded: { bg: 'bg-[#fff0ed]', text: 'text-[#ff6b4d]', icon: '📹' },
+};
+
+const SESSION_STATUS_STYLE: Record<string, { bg: string; text: string }> = {
+  upcoming: { bg: 'bg-emerald-100', text: 'text-emerald-700' },
+  completed: { bg: 'bg-gray-100', text: 'text-gray-700' },
+  cancelled: { bg: 'bg-red-100', text: 'text-red-700' },
 };
 
 // ─── AssessmentsTab ───────────────────────────────────────────────────────────
@@ -405,6 +635,8 @@ const AssessmentsTab = () => {
   const [scores, setScores] = useState<Record<string, string>>({});
   const [feedbacks, setFeedbacks] = useState<Record<string, string>>({});
   const [graded, setGraded] = useState<Record<string, boolean>>({});
+  const [viewingAssessment, setViewingAssessment] = useState<typeof MOCK_QUIZZES[0] | null>(null);
+  const [editingAssessment, setEditingAssessment] = useState<typeof MOCK_QUIZZES[0] | null>(null);
 
   const filteredQuizzes = MOCK_QUIZZES.filter(q =>
     q.title.toLowerCase().includes(quizSearch.toLowerCase()) ||
@@ -424,16 +656,16 @@ const AssessmentsTab = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-foreground">Assessments &amp; Evaluation</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Assessments &amp; Evaluation</h1>
 
       {/* Stat pills */}
       <div className="flex flex-wrap gap-3">
         {[
-          { label: 'Total Assessments',  value: MOCK_QUIZZES.length,                                    color: 'bg-[#1e2348]/5 text-[#1e2348]'    },
-          { label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                       color: 'bg-blue-50 text-blue-700'          },
-          { label: 'Avg Score',          value: `${avgScore}%`,                                          color: 'bg-amber-50 text-amber-700'        },
-          { label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                       color: 'bg-emerald-50 text-emerald-700'    },
-          { label: 'Pending Grading',    value: MOCK_SUBMISSIONS.filter(s => !graded[s.id]).length,      color: 'bg-red-50 text-red-700'            },
+          { label: 'Total Assessments',  value: MOCK_QUIZZES.length,                                    color: 'bg-[#e9e9ed] text-[#1e2348]'    },
+          { label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                       color: 'bg-[#fff0ed] text-[#ff6b4d] border border-[#ff6b4d]/30'          },
+          { label: 'Avg Score',          value: `${avgScore}%`,                                          color: 'bg-amber-50 text-amber-700 border border-amber-200'        },
+          { label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                       color: 'bg-emerald-50 text-emerald-700 border border-emerald-200'    },
+          { label: 'Pending Grading',    value: MOCK_SUBMISSIONS.filter(s => !graded[s.id]).length,      color: 'bg-red-50 text-red-700 border border-red-200'            },
         ].map(p => (
           <div key={p.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${p.color}`}>
             <span className="font-bold text-[15px]">{p.value}</span>
@@ -443,15 +675,15 @@ const AssessmentsTab = () => {
       </div>
 
       {/* Section tabs */}
-      <div className="flex gap-1 bg-muted/50 p-1 rounded-xl w-fit">
+      <div className="flex gap-1 bg-[#F5F6FA] p-1 rounded-xl w-fit">
         {sections.map(s => (
           <button
             key={s.id}
             onClick={() => setActiveSection(s.id)}
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
               activeSection === s.id
-                ? 'bg-white shadow-sm text-foreground'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-white shadow-sm text-[#1e2348]'
+                : 'text-[#4B5563] hover:text-[#1e2348]'
             }`}
           >
             {s.label}
@@ -464,18 +696,18 @@ const AssessmentsTab = () => {
         <div className="space-y-5">
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
               <input
                 type="text"
                 placeholder="Search assessments or courses…"
                 value={quizSearch}
                 onChange={e => setQuizSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
               />
             </div>
           </div>
 
-          <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-[#1e2348]">
@@ -488,32 +720,32 @@ const AssessmentsTab = () => {
                 <tbody>
                   {filteredQuizzes.length === 0 ? (
                     <tr>
-                      <td colSpan={9} className="text-center py-10 text-[14px] text-muted-foreground">
+                      <td colSpan={9} className="text-center py-10 text-[14px] text-[#9CA3AF]">
                         No assessments match your search.
                       </td>
                     </tr>
                   ) : filteredQuizzes.map((q, idx) => (
-                    <tr key={q.id} className={`border-t border-border hover:bg-muted/20 transition-colors ${idx % 2 === 0 ? '' : 'bg-muted/10'}`}>
+                    <tr key={q.id} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] transition-colors ${idx % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
                       <td className="px-4 py-3">
-                        <div className="font-medium text-[13px] text-foreground max-w-[180px] truncate" title={q.title}>{q.title}</div>
+                        <div className="font-medium text-[13px] text-[#1e2348] max-w-[180px] truncate" title={q.title}>{q.title}</div>
                       </td>
-                      <td className="px-4 py-3 text-[12px] text-muted-foreground max-w-[160px] truncate" title={q.course}>{q.course}</td>
+                      <td className="px-4 py-3 text-[12px] text-[#4B5563] max-w-[160px] truncate" title={q.course}>{q.course}</td>
                       <td className="px-4 py-3">
                         <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${QUIZ_TYPE_STYLE[q.type]}`}>{q.type}</span>
                       </td>
-                      <td className="px-4 py-3 text-[13px] text-center text-foreground">{q.questions}</td>
-                      <td className="px-4 py-3 text-[13px] text-center font-medium text-foreground">{q.submissions.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-[13px] text-center text-[#1e2348]">{q.questions}</td>
+                      <td className="px-4 py-3 text-[13px] text-center font-medium text-[#1e2348]">{q.submissions.toLocaleString()}</td>
                       <td className="px-4 py-3">
                         {q.avgScore > 0 ? (
                           <div className="flex items-center gap-1.5">
-                            <div className="w-14 h-1.5 rounded-full bg-muted overflow-hidden">
+                            <div className="w-14 h-1.5 rounded-full bg-[#E5E7EB] overflow-hidden">
                               <div className={`h-full rounded-full ${q.avgScore >= 75 ? 'bg-emerald-500' : q.avgScore >= 60 ? 'bg-amber-400' : 'bg-red-400'}`} style={{ width: `${q.avgScore}%` }} />
                             </div>
-                            <span className="text-[12px] text-muted-foreground">{q.avgScore}%</span>
+                            <span className="text-[12px] text-[#4B5563]">{q.avgScore}%</span>
                           </div>
-                        ) : <span className="text-[12px] text-muted-foreground">—</span>}
+                        ) : <span className="text-[12px] text-[#9CA3AF]">—</span>}
                       </td>
-                      <td className="px-4 py-3 text-[13px] text-center font-medium text-foreground">{q.passRate > 0 ? `${q.passRate}%` : '—'}</td>
+                      <td className="px-4 py-3 text-[13px] text-center font-medium text-[#1e2348]">{q.passRate > 0 ? `${q.passRate}%` : '—'}</td>
                       <td className="px-4 py-3">
                         <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold capitalize ${q.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                           {q.status}
@@ -521,8 +753,20 @@ const AssessmentsTab = () => {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1">
-                          <button className="p-1.5 rounded-lg hover:bg-[#ff6b4d]/10 text-[#ff6b4d] transition-colors" title="Edit"><Edit className="w-4 h-4" /></button>
-                          <button className="p-1.5 rounded-lg hover:bg-[#1e2348]/10 text-[#1e2348] transition-colors" title="View"><Eye className="w-4 h-4" /></button>
+                          <button 
+                            onClick={() => setEditingAssessment(q)}
+                            className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors" 
+                            title="Edit"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button 
+                            onClick={() => setViewingAssessment(q)}
+                            className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors" 
+                            title="View"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -660,7 +904,7 @@ const AssessmentsTab = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { icon: Award,      label: 'Highest Avg Score',  value: `${Math.max(...activeQuizzes.map(q => q.avgScore))}%`, color: 'text-emerald-600', bg: 'bg-emerald-100' },
-              { icon: TrendingUp, label: 'Highest Pass Rate',  value: `${Math.max(...activeQuizzes.map(q => q.passRate))}%`, color: 'text-blue-600',    bg: 'bg-blue-100'    },
+              { icon: TrendingUp, label: 'Highest Pass Rate',  value: `${Math.max(...activeQuizzes.map(q => q.passRate))}%`, color: 'text-purple-600',    bg: 'bg-purple-100'    },
               { icon: Target,     label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                     color: 'text-amber-600',   bg: 'bg-amber-100'   },
               { icon: Users,      label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                     color: 'text-[#ff6b4d]',   bg: 'bg-[#ff6b4d]/10'},
             ].map(card => (
@@ -675,6 +919,302 @@ const AssessmentsTab = () => {
           </div>
         </div>
       )}
+
+      {/* View Assessment Modal */}
+      {viewingAssessment && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-[#E5E7EB]">
+              <div>
+                <h2 className="text-[20px] font-semibold text-[#1e2348]">{viewingAssessment.title}</h2>
+                <p className="text-[13px] text-[#4B5563] mt-1">{viewingAssessment.course}</p>
+              </div>
+              <button 
+                onClick={() => setViewingAssessment(null)}
+                className="p-2 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {/* Assessment Details */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Type</div>
+                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.type}</div>
+                </div>
+                <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Questions</div>
+                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.questions}</div>
+                </div>
+                <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Status</div>
+                  <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold capitalize inline-block ${viewingAssessment.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                    {viewingAssessment.status}
+                  </span>
+                </div>
+                <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Submissions</div>
+                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.submissions.toLocaleString()}</div>
+                </div>
+              </div>
+
+              {/* Performance Metrics */}
+              <div>
+                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-3">Performance Metrics</h3>
+                <div className="space-y-3">
+                  <div className="bg-[#F5F6FA] rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[13px] text-[#4B5563]">Average Score</span>
+                      <span className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.avgScore}%</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full ${viewingAssessment.avgScore >= 75 ? 'bg-emerald-500' : viewingAssessment.avgScore >= 60 ? 'bg-amber-400' : 'bg-red-400'}`} 
+                        style={{ width: `${viewingAssessment.avgScore}%` }} 
+                      />
+                    </div>
+                  </div>
+                  <div className="bg-[#F5F6FA] rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[13px] text-[#4B5563]">Pass Rate</span>
+                      <span className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.passRate}%</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
+                      <div 
+                        className="h-full rounded-full bg-[#ff6b4d]" 
+                        style={{ width: `${viewingAssessment.passRate}%` }} 
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sample Questions Preview */}
+              <div>
+                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-3">Sample Questions</h3>
+                <div className="space-y-3">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="flex items-start gap-3">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1e2348] text-white text-[11px] font-bold flex items-center justify-center">
+                          {i}
+                        </span>
+                        <div className="flex-1">
+                          <p className="text-[13px] text-[#1e2348]">
+                            {viewingAssessment.type === 'Quiz' 
+                              ? `Sample multiple choice question ${i} for ${viewingAssessment.title}`
+                              : `Sample assignment question ${i} for ${viewingAssessment.title}`
+                            }
+                          </p>
+                          <p className="text-[11px] text-[#9CA3AF] mt-1">
+                            {viewingAssessment.type === 'Quiz' ? 'Multiple Choice' : 'Open-ended'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-[#E5E7EB]">
+              <button 
+                onClick={() => setViewingAssessment(null)}
+                className="px-4 py-2 rounded-xl border border-[#E5E7EB] text-[#4B5563] hover:bg-[#F5F6FA] transition-colors text-[13px] font-medium"
+              >
+                Close
+              </button>
+              <button 
+                onClick={() => {
+                  setEditingAssessment(viewingAssessment);
+                  setViewingAssessment(null);
+                }}
+                className="px-4 py-2 rounded-xl bg-[#ff6b4d] hover:bg-[#e66045] text-white transition-colors text-[13px] font-medium"
+              >
+                Edit Assessment
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Assessment Modal */}
+      {editingAssessment && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b border-[#E5E7EB]">
+              <h2 className="text-[20px] font-semibold text-[#1e2348]">Edit Assessment</h2>
+              <button 
+                onClick={() => setEditingAssessment(null)}
+                className="p-2 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 space-y-5">
+              {/* Basic Information */}
+              <div>
+                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Assessment Title</label>
+                <input
+                  type="text"
+                  defaultValue={editingAssessment.title}
+                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  placeholder="Enter assessment title"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Course</label>
+                <input
+                  type="text"
+                  defaultValue={editingAssessment.course}
+                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  placeholder="Enter course name"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Type</label>
+                  <select
+                    defaultValue={editingAssessment.type}
+                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  >
+                    <option value="Quiz">Quiz</option>
+                    <option value="Assignment">Assignment</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Number of Questions</label>
+                  <input
+                    type="number"
+                    defaultValue={editingAssessment.questions}
+                    min={1}
+                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Status</label>
+                <select
+                  defaultValue={editingAssessment.status}
+                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                >
+                  <option value="active">Active</option>
+                  <option value="draft">Draft</option>
+                </select>
+              </div>
+
+              {/* Assessment Settings */}
+              <div className="border-t border-[#E5E7EB] pt-5">
+                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-4">Assessment Settings</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                    <div>
+                      <div className="text-[13px] font-medium text-[#1e2348]">Time Limit</div>
+                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Set a time limit for this assessment</div>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder="Minutes"
+                      defaultValue={60}
+                      className="w-24 px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                    <div>
+                      <div className="text-[13px] font-medium text-[#1e2348]">Passing Score</div>
+                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Minimum score required to pass</div>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder="%"
+                      defaultValue={70}
+                      min={0}
+                      max={100}
+                      className="w-24 px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                    <div>
+                      <div className="text-[13px] font-medium text-[#1e2348]">Allow Multiple Attempts</div>
+                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Let learners retake this assessment</div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      defaultChecked
+                      className="w-5 h-5 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                    <div>
+                      <div className="text-[13px] font-medium text-[#1e2348]">Randomize Questions</div>
+                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Show questions in random order</div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      className="w-5 h-5 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Questions Management */}
+              <div className="border-t border-[#E5E7EB] pt-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[15px] font-semibold text-[#1e2348]">Questions</h3>
+                  <button className="px-3 py-1.5 rounded-lg bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[12px] font-medium transition-colors">
+                    + Add Question
+                  </button>
+                </div>
+                <div className="space-y-3">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="flex items-start gap-3">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1e2348] text-white text-[11px] font-bold flex items-center justify-center">
+                          {i}
+                        </span>
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            defaultValue={`Question ${i} for ${editingAssessment.title}`}
+                            className="w-full px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                          />
+                        </div>
+                        <button className="p-1.5 rounded-lg hover:bg-white text-red-500 transition-colors">
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-[#E5E7EB]">
+              <button 
+                onClick={() => setEditingAssessment(null)}
+                className="px-4 py-2 rounded-xl border border-[#E5E7EB] text-[#4B5563] hover:bg-[#F5F6FA] transition-colors text-[13px] font-medium"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  // Save logic would go here
+                  setEditingAssessment(null);
+                }}
+                className="px-4 py-2 rounded-xl bg-[#ff6b4d] hover:bg-[#e66045] text-white transition-colors text-[13px] font-medium"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -682,76 +1222,151 @@ const AssessmentsTab = () => {
 // ─── Mock pending review data ─────────────────────────────────────────────────
 const MOCK_PENDING = [
   {
-    id: 'p1',
-    title: 'Data-Driven Decision Making',
-    instructor: 'Priya Nair',
-    email: 'p.nair@dtma.com',
-    category: 'Analytics',
-    level: 'Intermediate',
+    id: 'course-economy-40',
+    title: 'Mastering Economy 4.0',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Economy',
+    level: 'Beginner',
     price: 149,
-    duration: '6h 30m',
-    lessons: 18,
-    submittedDate: '2026-03-25',
-    description: 'A comprehensive course on using data analytics to drive strategic business decisions. Learners will master dashboards, KPIs, and data storytelling using real-world datasets.',
-    thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80',
+    duration: '1 hour',
+    lessons: 6,
+    submittedDate: '2026-04-10',
+    description: 'Master the fundamentals of the digital economy and understand how Economy 4.0 is reshaping industries, business models, and competitive dynamics.',
+    thumbnail: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop',
     whatsappEnabled: true,
     whatsappDeliveryType: 'both',
     aiTutorEnabled: true,
     aiTone: 'professional',
   },
   {
-    id: 'p2',
-    title: 'Leadership in the Digital Age',
-    instructor: 'Marcus Webb',
-    email: 'm.webb@dtma.com',
-    category: 'Leadership',
-    level: 'Advanced',
-    price: 199,
-    duration: '8h 15m',
-    lessons: 24,
-    submittedDate: '2026-03-22',
-    description: 'Equip leaders with the mindset and tools to thrive in rapidly evolving digital environments. Covers agile leadership, remote team management, and digital culture transformation.',
-    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80',
+    id: 'course-cognitive-org',
+    title: 'Decoding Digital Cognitive Organisations',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Cognitive Organisation',
+    level: 'Intermediate',
+    price: 149,
+    duration: '15 hours',
+    lessons: 45,
+    submittedDate: '2026-04-08',
+    description: 'Transform your organization into an intelligent, learning entity that adapts and thrives in the digital age through AI-driven decision making and continuous learning.',
+    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop',
     whatsappEnabled: true,
     whatsappDeliveryType: 'daily',
     aiTutorEnabled: true,
     aiTone: 'encouraging',
   },
   {
-    id: 'p3',
-    title: 'Emotional Intelligence at Work',
-    instructor: 'Lindiwe Dube',
-    email: 'l.dube@dtma.com',
-    category: 'Leadership',
+    id: 'course-business-platforms',
+    title: 'Building Powerful Digital Business Platforms',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Business Platform',
+    level: 'Intermediate',
+    price: 149,
+    duration: '18 hours',
+    lessons: 54,
+    submittedDate: '2026-04-12',
+    description: 'Master the architecture, design, and implementation of scalable digital business platforms that drive innovation and competitive advantage.',
+    thumbnail: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'both',
+    aiTutorEnabled: true,
+    aiTone: 'professional',
+  },
+  {
+    id: 'course-transformation',
+    title: 'Navigating Digital Transformation 2.0',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Transformation',
+    level: 'Advanced',
+    price: 149,
+    duration: '16 hours',
+    lessons: 48,
+    submittedDate: '2026-04-09',
+    description: 'Lead successful digital transformation initiatives with proven strategies, change management techniques, and agile methodologies.',
+    thumbnail: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=1200&auto=format&fit=crop',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'daily',
+    aiTutorEnabled: true,
+    aiTone: 'encouraging',
+  },
+  {
+    id: 'course-digital-workers',
+    title: 'Optimizing Digital Workers and Workspaces',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Worker & Workspace',
     level: 'Beginner',
-    price: 99,
-    duration: '4h 45m',
-    lessons: 14,
-    submittedDate: '2026-03-26',
-    description: 'Develop self-awareness, empathy, and interpersonal skills to foster a more collaborative and productive workplace. Includes practical exercises and reflective assignments.',
-    thumbnail: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80',
-    whatsappEnabled: false,
-    whatsappDeliveryType: null,
+    price: 149,
+    duration: '10 hours',
+    lessons: 30,
+    submittedDate: '2026-04-11',
+    description: 'Master the tools, practices, and mindset needed to thrive as a digital worker in modern, distributed work environments.',
+    thumbnail: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'both',
     aiTutorEnabled: true,
     aiTone: 'friendly',
+  },
+  {
+    id: 'course-digital-accelerators',
+    title: 'Leveraging Digital Accelerators for Growth',
+    instructor: 'DTMA Faculty',
+    email: 'faculty@dtma.ae',
+    category: 'Digital Accelerators',
+    level: 'Advanced',
+    price: 149,
+    duration: '20 hours',
+    lessons: 60,
+    submittedDate: '2026-04-07',
+    description: 'Harness emerging technologies like AI, blockchain, IoT, and automation to accelerate business growth and innovation.',
+    thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1200&auto=format&fit=crop',
+    whatsappEnabled: true,
+    whatsappDeliveryType: 'daily',
+    aiTutorEnabled: true,
+    aiTone: 'professional',
   },
 ];
 
 const RECENT_ACTIVITY = [
-  { action: 'approved',           course: 'Digital Transformation Fundamentals', reviewer: 'Admin', time: '2 hours ago', color: 'text-emerald-600', bg: 'bg-emerald-100' },
-  { action: 'rejected',           course: 'Python for Beginners v2',             reviewer: 'Admin', time: '5 hours ago', color: 'text-red-600',     bg: 'bg-red-100'     },
-  { action: 'approved',           course: 'Agile Project Management',            reviewer: 'Admin', time: 'Yesterday',   color: 'text-emerald-600', bg: 'bg-emerald-100' },
+  { action: 'approved',           course: 'Mastering Economy 4.0', reviewer: 'Admin', time: '2 hours ago', color: 'text-emerald-600', bg: 'bg-emerald-100' },
+  { action: 'rejected',           course: 'Advanced Data Analytics',             reviewer: 'Admin', time: '5 hours ago', color: 'text-red-600',     bg: 'bg-red-100'     },
+  { action: 'approved',           course: 'Optimizing Digital Workers and Workspaces',            reviewer: 'Admin', time: 'Yesterday',   color: 'text-emerald-600', bg: 'bg-emerald-100' },
   { action: 'changes requested',  course: 'Cloud Architecture Basics',           reviewer: 'Admin', time: 'Yesterday',   color: 'text-amber-600',   bg: 'bg-amber-100'   },
-  { action: 'approved',           course: 'AI & Automation in the Workplace',    reviewer: 'Admin', time: '2 days ago',  color: 'text-emerald-600', bg: 'bg-emerald-100' },
+  { action: 'approved',           course: 'Decoding Digital Cognitive Organisations',    reviewer: 'Admin', time: '2 days ago',  color: 'text-emerald-600', bg: 'bg-emerald-100' },
 ];
 
-const PENDING_CATEGORIES = ['All Categories', 'Analytics', 'Leadership', 'Digital Skills', 'Management'];
+const PENDING_CATEGORIES = ['All Categories', 'Digital Economy', 'Digital Cognitive Organisation', 'Digital Business Platform', 'Digital Transformation', 'Digital Worker & Workspace', 'Digital Accelerators'];
 
 // ─── PendingApprovalsTab ──────────────────────────────────────────────────────
 const PendingApprovalsTab = () => {
   const [pendingSearch, setPendingSearch] = useState('');
   const [pendingCategory, setPendingCategory] = useState('All Categories');
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
+  const [previewCourse, setPreviewCourse] = useState<any>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const handlePreview = (course: any) => {
+    // Convert pending course to the format expected by CoursePreviewModal
+    const courseForPreview = {
+      id: course.id,
+      title: course.title,
+      instructor: course.instructor,
+      category: course.category,
+      level: course.level,
+      status: 'pending',
+      enrollments: 0,
+      lastUpdated: course.submittedDate,
+      rating: 0,
+      completion: 0,
+      revenue: 0,
+    };
+    setPreviewCourse(courseForPreview);
+    setIsPreviewOpen(true);
+  };
 
   const filtered = MOCK_PENDING.filter(c => {
     const matchSearch =
@@ -763,15 +1378,15 @@ const PendingApprovalsTab = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-foreground">Pending Course Approvals</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Pending Course Approvals</h1>
 
       {/* Stat pills */}
       <div className="flex flex-wrap gap-3">
         {[
-          { label: 'Awaiting Review',     value: MOCK_PENDING.length, color: 'bg-blue-50 text-blue-700'       },
-          { label: 'Approved This Month', value: 12,                  color: 'bg-emerald-50 text-emerald-700'  },
-          { label: 'Rejected This Month', value: 2,                   color: 'bg-red-50 text-red-700'          },
-          { label: 'Changes Requested',   value: 1,                   color: 'bg-amber-50 text-amber-700'      },
+          { label: 'Awaiting Review',     value: MOCK_PENDING.length, color: 'bg-[#e9e9ed] text-[#1e2348] border border-[#dddee4]'       },
+          { label: 'Approved This Month', value: 12,                  color: 'bg-white text-green-700 border border-[#E5E7EB]'  },
+          { label: 'Rejected This Month', value: 2,                   color: 'bg-white text-red-700 border border-[#E5E7EB]'          },
+          { label: 'Changes Requested',   value: 1,                   color: 'bg-white text-amber-700 border border-[#E5E7EB]'      },
         ].map(p => (
           <div key={p.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${p.color}`}>
             <span className="font-bold text-[15px]">{p.value}</span>
@@ -783,38 +1398,45 @@ const PendingApprovalsTab = () => {
       {/* Search + filter */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
           <input
             type="text"
             placeholder="Search by course or instructor…"
             value={pendingSearch}
             onChange={e => setPendingSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+            className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
           />
         </div>
-        <div className="relative">
-          <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <select
-            value={pendingCategory}
-            onChange={e => setPendingCategory(e.target.value)}
-            className="pl-9 pr-8 py-2 border border-border rounded-xl text-[14px] bg-background appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
-          >
-            {PENDING_CATEGORIES.map(cat => <option key={cat}>{cat}</option>)}
-          </select>
-        </div>
+        <Select value={pendingCategory} onValueChange={setPendingCategory}>
+          <SelectTrigger className="w-[200px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
+            <BookOpen className="w-4 h-4 mr-2 text-[#9CA3AF]" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {PENDING_CATEGORIES.map(cat => (
+              <SelectItem 
+                key={cat} 
+                value={cat}
+                className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]"
+              >
+                {cat}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Review cards */}
         <div className="lg:col-span-2 space-y-5">
           {filtered.length === 0 ? (
-            <div className="bg-card rounded-2xl p-12 text-center border border-border">
+            <div className="bg-white rounded-2xl p-12 text-center border border-[#E5E7EB]">
               <CheckCircle className="w-12 h-12 text-[#ff6b4d] mx-auto mb-3" />
-              <h3 className="text-[18px] font-semibold mb-1">All caught up!</h3>
-              <p className="text-[14px] text-muted-foreground">No courses match your filters.</p>
+              <h3 className="text-[18px] font-semibold mb-1 text-[#1e2348]">All caught up!</h3>
+              <p className="text-[14px] text-[#4B5563]">No courses match your filters.</p>
             </div>
           ) : filtered.map(course => (
-            <div key={course.id} className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+            <div key={course.id} className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden">
               <div className="flex gap-4 p-5">
                 <img
                   src={course.thumbnail}
@@ -823,32 +1445,32 @@ const PendingApprovalsTab = () => {
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-[16px] font-semibold text-foreground leading-tight">{course.title}</h3>
-                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-semibold whitespace-nowrap flex-shrink-0">
+                    <h3 className="text-[16px] font-semibold text-[#1e2348] leading-tight">{course.title}</h3>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-semibold whitespace-nowrap flex-shrink-0">
                       Pending Review
                     </span>
                   </div>
-                  <p className="text-[13px] text-muted-foreground mt-1">
-                    by <span className="font-medium text-foreground">{course.instructor}</span> · {course.email}
+                  <p className="text-[13px] text-[#4B5563] mt-1">
+                    by <span className="font-medium text-[#1e2348]">{course.instructor}</span> · {course.email}
                   </p>
                   <div className="flex flex-wrap items-center gap-2 mt-2">
-                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#1e2348]/10 text-[#1e2348] font-medium">{course.category}</span>
-                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">{course.level}</span>
-                    <span className="text-[12px] text-muted-foreground flex items-center gap-1"><Clock className="w-3 h-3" />{course.duration}</span>
-                    <span className="text-[12px] text-muted-foreground">{course.lessons} lessons</span>
+                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-medium">{course.category}</span>
+                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#F5F6FA] text-[#4B5563] capitalize">{course.level}</span>
+                    <span className="text-[12px] text-[#4B5563] flex items-center gap-1"><Clock className="w-3 h-3" />{course.duration}</span>
+                    <span className="text-[12px] text-[#4B5563]">{course.lessons} lessons</span>
                     <span className="text-[13px] font-semibold text-[#ff6b4d]">${course.price}</span>
                   </div>
                 </div>
               </div>
 
               <div className="px-5 pb-4">
-                <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-2">{course.description}</p>
-                <p className="text-[12px] text-muted-foreground mt-2 flex items-center gap-1">
+                <p className="text-[13px] text-[#4B5563] leading-relaxed line-clamp-2">{course.description}</p>
+                <p className="text-[12px] text-[#9CA3AF] mt-2 flex items-center gap-1">
                   <Calendar className="w-3 h-3" /> Submitted: {course.submittedDate}
                 </p>
-
+                
                 {/* WhatsApp & AI Settings */}
-                <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-border">
+                <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[#E5E7EB]">
                   {course.whatsappEnabled ? (
                     <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-green-50 border border-green-200">
                       <MessageSquare className="w-3.5 h-3.5 text-green-600" />
@@ -862,9 +1484,9 @@ const PendingApprovalsTab = () => {
                       <span className="text-[11px] font-medium text-gray-500">WhatsApp: Disabled</span>
                     </div>
                   )}
-
+                  
                   {course.aiTutorEnabled ? (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#fff0ed] border border-[#ffe9e4]">
                       <Bot className="w-3.5 h-3.5 text-[#ff6b4d]" />
                       <span className="text-[11px] font-medium text-[#ff6b4d]">
                         AI Tutor: {course.aiTone.charAt(0).toUpperCase() + course.aiTone.slice(1)} tone
@@ -879,13 +1501,13 @@ const PendingApprovalsTab = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 px-5 py-3 bg-muted/30 border-t border-border">
+              <div className="flex items-center gap-3 px-5 py-3 bg-[#F5F6FA] border-t border-[#E5E7EB]">
                 {confirmingId === course.id ? (
                   <>
-                    <span className="text-[13px] text-muted-foreground flex-1">Confirm approval?</span>
+                    <span className="text-[13px] text-[#4B5563] flex-1">Confirm approval?</span>
                     <button
                       onClick={() => setConfirmingId(null)}
-                      className="px-3 py-1.5 rounded-lg border border-border text-[13px] hover:bg-muted transition-colors"
+                      className="px-3 py-1.5 rounded-lg border border-[#E5E7EB] text-[13px] hover:bg-white transition-colors"
                     >
                       Cancel
                     </button>
@@ -910,7 +1532,10 @@ const PendingApprovalsTab = () => {
                     <button className="px-4 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-[13px] font-medium border border-red-200 transition-colors flex items-center gap-1.5">
                       <XCircle className="w-3.5 h-3.5" /> Reject
                     </button>
-                    <button className="ml-auto px-3 py-1.5 rounded-lg border border-border text-[13px] text-muted-foreground hover:bg-muted transition-colors flex items-center gap-1.5">
+                    <button 
+                      onClick={() => handlePreview(course)}
+                      className="ml-auto px-3 py-1.5 rounded-lg border border-[#E5E7EB] text-[13px] text-[#4B5563] hover:bg-[#fff0ed] hover:text-[#ff6b4d] transition-colors flex items-center gap-1.5"
+                    >
                       <Eye className="w-3.5 h-3.5" /> Preview
                     </button>
                   </>
@@ -921,10 +1546,10 @@ const PendingApprovalsTab = () => {
         </div>
 
         {/* Recent Activity sidebar */}
-        <div className="bg-card rounded-2xl border border-border shadow-sm h-fit">
-          <div className="px-5 py-4 border-b border-border">
-            <h3 className="text-[16px] font-semibold text-foreground">Recent Review Activity</h3>
-            <p className="text-[12px] text-muted-foreground mt-0.5">Last 5 review decisions</p>
+        <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm h-fit">
+          <div className="px-5 py-4 border-b border-[#E5E7EB]">
+            <h3 className="text-[16px] font-semibold text-[#1e2348]">Recent Review Activity</h3>
+            <p className="text-[12px] text-[#4B5563] mt-0.5">Last 5 review decisions</p>
           </div>
           <div className="p-5 space-y-4">
             {RECENT_ACTIVITY.map((item, i) => (
@@ -935,22 +1560,34 @@ const PendingApprovalsTab = () => {
                   {item.action === 'changes requested' && <MessageSquare className={`w-3.5 h-3.5 ${item.color}`} />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-foreground truncate">{item.course}</p>
-                  <p className="text-[12px] text-muted-foreground">
+                  <p className="text-[13px] font-medium text-[#1e2348] truncate">{item.course}</p>
+                  <p className="text-[12px] text-[#4B5563]">
                     <span className={`font-medium capitalize ${item.color}`}>{item.action}</span> by {item.reviewer}
                   </p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{item.time}</p>
+                  <p className="text-[11px] text-[#9CA3AF] mt-0.5">{item.time}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className="px-5 pb-5">
-            <button className="w-full py-2 text-[13px] text-[#ff6b4d] font-medium border border-[#ff6b4d]/30 rounded-xl hover:bg-[#ff6b4d]/5 transition-colors">
+            <button className="w-full py-2 text-[13px] text-[#ff6b4d] font-medium border border-[#ff6b4d]/30 rounded-xl hover:bg-[#fff0ed] transition-colors">
               View Full History
             </button>
           </div>
         </div>
       </div>
+
+      {/* Course Preview Modal */}
+      {previewCourse && (
+        <CoursePreviewModal
+          isOpen={isPreviewOpen}
+          onClose={() => {
+            setIsPreviewOpen(false);
+            setPreviewCourse(null);
+          }}
+          course={previewCourse}
+        />
+      )}
     </div>
   );
 };
@@ -959,12 +1596,72 @@ const AdminDashboard = () => {
   const { profile, signOut, role } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<AdminTab>('overview');
+  const [governanceSubTab, setGovernanceSubTab] = useState<'overview' | 'workflow' | 'reporting' | 'scanning' | 'policies' | 'activity'>('overview');
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
   const [showBulkEnrollModal, setShowBulkEnrollModal] = useState(false);
   const [showAddFacultyModal, setShowAddFacultyModal] = useState(false);
   const [showCreateUserModal, setShowCreateUserModal] = useState(false);
   const [showReviewContentModal, setShowReviewContentModal] = useState(false);
+  const [showCreateProgramModal, setShowCreateProgramModal] = useState(false);
+  const [showFacultyListModal, setShowFacultyListModal] = useState(false);
+  const [showPerformanceReportsModal, setShowPerformanceReportsModal] = useState(false);
+  const [facultySubTab, setFacultySubTab] = useState<'overview' | 'faculty-list' | 'programs' | 'assignments' | 'performance'>('overview');
+  
+  // User Management State
+  const [userSearch, setUserSearch] = useState('');
+  const [userRoleFilter, setUserRoleFilter] = useState('all');
+  const [userStatusFilter, setUserStatusFilter] = useState('all');
+
+  // Filter users based on search and filters
+  const filteredUsers = MOCK_USERS.filter(user => {
+    const matchSearch = user.full_name.toLowerCase().includes(userSearch.toLowerCase()) ||
+      user.email.toLowerCase().includes(userSearch.toLowerCase());
+    const matchRole = userRoleFilter === 'all' || user.role === userRoleFilter;
+    const matchStatus = userStatusFilter === 'all' || user.status === userStatusFilter;
+    return matchSearch && matchRole && matchStatus;
+  });
+
+  // User Management Handlers
+  const handleEditUser = (userId: string) => {
+    toast({
+      title: "Edit User",
+      description: "User edit functionality coming soon.",
+    });
+  };
+
+  const handleViewUser = (userId: string) => {
+    toast({
+      title: "View User",
+      description: "User details view coming soon.",
+    });
+  };
+
+  const handleResetPassword = (userId: string, email: string) => {
+    toast({
+      title: "Password Reset",
+      description: `Password reset link sent to ${email}`,
+    });
+  };
+
+  const handleToggleStatus = (userId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    toast({
+      title: "Status Updated",
+      description: `User ${newStatus === 'active' ? 'activated' : 'deactivated'} successfully.`,
+    });
+  };
+
+  const handleDeleteUser = (userId: string, userName: string) => {
+    if (window.confirm(`Are you sure you want to delete ${userName}? This action cannot be undone.`)) {
+      toast({
+        title: "User Deleted",
+        description: `${userName} has been permanently deleted.`,
+        variant: "destructive",
+      });
+    }
+  };
+  
   const [announcementForm, setAnnouncementForm] = useState({
     title: '',
     message: '',
@@ -1044,6 +1741,43 @@ const AdminDashboard = () => {
     reviewerComments: '',
     priority: 'normal' as 'low' | 'normal' | 'high' | 'urgent',
   });
+  
+  // Certification & Customer Success State
+  const [showCreateTemplateModal, setShowCreateTemplateModal] = useState(false);
+  const [showCreateBadgeModal, setShowCreateBadgeModal] = useState(false);
+  const [showVerifyCertificateModal, setShowVerifyCertificateModal] = useState(false);
+  const [showIssuanceRulesModal, setShowIssuanceRulesModal] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<any>(null);
+  const [editingTemplate, setEditingTemplate] = useState<any>(null);
+  
+  const [certificateTemplateForm, setCertificateTemplateForm] = useState({
+    name: '',
+    type: 'course' as 'course' | 'badge' | 'specialization' | 'micro' | 'executive' | 'team',
+    description: '',
+    orientation: 'landscape' as 'landscape' | 'portrait',
+    backgroundColor: '#ffffff',
+    borderStyle: 'classic' as 'classic' | 'modern' | 'minimal' | 'elegant',
+    includeQRCode: true,
+    includeSignature: true,
+    includeDate: true,
+    includeCredentialID: true,
+  });
+  
+  const [badgeForm, setBadgeForm] = useState({
+    name: '',
+    description: '',
+    category: 'achievement' as 'achievement' | 'skill' | 'milestone' | 'special',
+    icon: '🏆',
+    criteria: '',
+    points: 100,
+    stackable: true,
+  });
+  
+  const [verifyCertificateForm, setVerifyCertificateForm] = useState({
+    certificateID: '',
+    verificationMethod: 'id' as 'id' | 'qr' | 'blockchain',
+  });
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { data: analytics, isLoading: analyticsLoading } = useAdminAnalytics();
@@ -1100,6 +1834,9 @@ const AdminDashboard = () => {
     { id: 'ai-usage' as AdminTab, label: 'AI Usage Monitoring', icon: Bot },
     { id: 'communication' as AdminTab, label: 'Communication', icon: Settings },
     { id: 'governance' as AdminTab, label: 'Content Governance', icon: Settings },
+    { id: 'organizations' as AdminTab, label: 'Organizations', icon: Settings },
+    { id: 'certification' as AdminTab, label: 'Certification', icon: Award },
+    { id: 'commerce' as AdminTab, label: 'Commerce & Billing', icon: Settings },
     { id: 'finance' as AdminTab, label: 'Finance & Billing', icon: BarChart2 },
     { id: 'partner-reporting' as AdminTab, label: 'Partner & Reporting', icon: Globe },
     { id: 'analytics-performance' as AdminTab, label: 'Analytics & Performance', icon: TrendingUp },
@@ -1230,88 +1967,202 @@ const AdminDashboard = () => {
         <main className="p-6 lg:p-8">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">Platform Overview</h1>
+            <div className="space-y-8">
+              {/* Header */}
+              <div>
+                <h1 className="text-[32px] leading-[40px] font-semibold text-[#1e2348] mb-2">Platform Overview</h1>
+                <p className="text-[14px] leading-[20px] text-[#9CA3AF]">Monitor key metrics and platform performance at a glance</p>
+              </div>
               
               {analyticsLoading ? (
-                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Loading analytics...</p>
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <div className="w-12 h-12 border-4 border-[#E5E7EB] border-t-[#ff6b4d] rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-[14px] leading-[20px] font-normal text-[#9CA3AF]">Loading analytics...</p>
+                  </div>
+                </div>
               ) : (
                 <>
-                  {/* Stats Grid */}
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                          <Users className="w-5 h-5 text-[#ff6b4d]" />
+                  {/* Primary Stats Grid - Clean Executive Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {/* Total Users Card */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-[#fff0ed] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
+                          <Users className="w-6 h-6 text-[#ff6b4d]" />
+                        </div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
+                          <ArrowUpRight className="w-3 h-3" />
+                          <span>+12%</span>
                         </div>
                       </div>
-                      <div className="text-[24px] leading-[32px] font-medium">{analytics?.totalUsers || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Total Users</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.totalUsers || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Users</div>
+                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Active platform members</div>
                     </div>
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                          <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
+
+                    {/* Published Courses Card */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-[#e9e9ed] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
+                          <BookOpen className="w-6 h-6 text-[#1e2348]" />
+                        </div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
+                          <ArrowUpRight className="w-3 h-3" />
+                          <span>+8%</span>
                         </div>
                       </div>
-                      <div className="text-[24px] leading-[32px] font-medium">{analytics?.publishedCourses || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Published Courses</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.publishedCourses || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Published Courses</div>
+                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Live learning content</div>
                     </div>
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                          <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
+
+                    {/* Enrollments Card */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-[#fff0ed] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
+                          <TrendingUp className="w-6 h-6 text-[#ff6b4d]" />
+                        </div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
+                          <ArrowUpRight className="w-3 h-3" />
+                          <span>+24%</span>
                         </div>
                       </div>
-                      <div className="text-[24px] leading-[32px] font-medium">{analytics?.totalEnrollments || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Enrollments</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.totalEnrollments || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Enrollments</div>
+                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Course registrations</div>
                     </div>
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                          <Award className="w-5 h-5 text-[#ff6b4d]" />
+
+                    {/* Certificates Card */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 bg-[#e9e9ed] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
+                          <Award className="w-6 h-6 text-[#1e2348]" />
+                        </div>
+                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
+                          <ArrowUpRight className="w-3 h-3" />
+                          <span>+18%</span>
                         </div>
                       </div>
-                      <div className="text-[24px] leading-[32px] font-medium">{analytics?.certificatesIssued || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Certificates</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.certificatesIssued || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Certificates Issued</div>
+                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Completed achievements</div>
                     </div>
                   </div>
 
-                  {/* Role Distribution */}
-                  <div className="grid lg:grid-cols-2 gap-6">
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <h3 className="text-[20px] leading-[28px] font-medium mb-4">Users by Role</h3>
+                  {/* Secondary Metrics Row */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Users by Role */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Users by Role</h3>
+                        <div className="w-8 h-8 bg-[#F5F6FA] rounded-lg flex items-center justify-center">
+                          <Users2 className="w-4 h-4 text-[#4B5563]" />
+                        </div>
+                      </div>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Learners</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.usersByRole.learner || 0}</span>
+                        <div className="flex items-center justify-between group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-[#ff6b4d]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Learners</span>
+                          </div>
+                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.learner || 0}</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Instructors</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.usersByRole.instructor || 0}</span>
+                        <div className="flex items-center justify-between group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-[#1e2348]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Instructors</span>
+                          </div>
+                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.instructor || 0}</span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Admins</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.usersByRole.admin || 0}</span>
+                        <div className="flex items-center justify-between group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 rounded-full bg-[#9CA3AF]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Admins</span>
+                          </div>
+                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.admin || 0}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-card rounded-2xl p-6 shadow-sm">
-                      <h3 className="text-[20px] leading-[28px] font-medium mb-4">Quick Stats</h3>
+                    {/* Performance Metrics */}
+                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Performance</h3>
+                        <div className="w-8 h-8 bg-[#F5F6FA] rounded-lg flex items-center justify-center">
+                          <BarChart2 className="w-4 h-4 text-[#4B5563]" />
+                        </div>
+                      </div>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Completion Rate</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.completionRate || 0}%</span>
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</span>
+                            <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.completionRate || 0}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-[#F5F6FA] rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-[#ff6b4d] to-[#e66045] rounded-full transition-all duration-500"
+                              style={{ width: `${analytics?.completionRate || 0}%` }}
+                            ></div>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Pending Reviews</span>
-                          <span className="text-[16px] leading-[24px] font-medium text-amber-600">{analytics?.pendingReviews || 0}</span>
+                        <div className="pt-2 border-t border-[#E5E7EB]">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg. Course Rating</span>
+                            <div className="flex items-center gap-1">
+                              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                              <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">4.7</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[14px] leading-[20px] font-normal text-muted-foreground">Total Courses</span>
-                          <span className="text-[16px] leading-[24px] font-medium">{analytics?.totalCourses || 0}</span>
+                      </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 text-white">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-[18px] leading-[26px] font-semibold">Quick Actions</h3>
+                        <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                          <Target className="w-4 h-4" />
                         </div>
+                      </div>
+                      <div className="space-y-3">
+                        <button 
+                          onClick={() => setActiveTab('pending')}
+                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Clock className="w-4 h-4" />
+                            <span className="text-[14px] leading-[20px] font-medium">Pending Reviews</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[16px] leading-[24px] font-bold text-[#ff6b4d]">{analytics?.pendingReviews || 0}</span>
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </button>
+                        <button 
+                          onClick={() => setActiveTab('courses')}
+                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <BookOpen className="w-4 h-4" />
+                            <span className="text-[14px] leading-[20px] font-medium">Total Courses</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[16px] leading-[24px] font-bold">{analytics?.totalCourses || 0}</span>
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </div>
+                        </button>
+                        <button 
+                          onClick={() => setActiveTab('users')}
+                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Users className="w-4 h-4" />
+                            <span className="text-[14px] leading-[20px] font-medium">Manage Users</span>
+                          </div>
+                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -1324,79 +2175,187 @@ const AdminDashboard = () => {
           {activeTab === 'users' && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h1 className="text-[28px] leading-[36px] font-semibold">User Management</h1>
+                <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">User Management</h1>
                 <Button 
                   onClick={() => setShowCreateUserModal(true)}
-                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
                 >
                   <UserPlusIcon className="w-4 h-4 mr-2" />
                   Create User
                 </Button>
               </div>
-              
-              {usersLoading ? (
-                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Loading users...</p>
-              ) : (
-                <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full" role="table" aria-label="User management table">
-                      <thead className="bg-[#1e2348]">
-                        <tr>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">User</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Email</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Role</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Joined</th>
-                          <th scope="col" className="text-left p-4 text-[14px] leading-[20px] font-medium text-white">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {users?.map((user) => (
-                          <tr key={user.id} className="border-t border-border">
-                            <td className="p-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center text-[14px] leading-[20px] font-medium text-[#ff6b4d]" aria-hidden="true">
-                                  {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
-                                </div>
-                                <span className="text-[16px] leading-[24px] font-normal">{user.full_name || 'No name'}</span>
-                              </div>
-                            </td>
-                            <td className="p-4 text-[14px] leading-[20px] font-normal text-muted-foreground">{user.email}</td>
-                            <td className="p-4">
-                              <Select
-                                value={user.role}
-                                onValueChange={(value) => handleUpdateRole(user.id, value as 'learner' | 'instructor' | 'admin')}
-                              >
-                                <SelectTrigger className="w-32" aria-label={`Change role for ${user.full_name || user.email}`}>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="learner">Learner</SelectItem>
-                                  <SelectItem value="instructor">Instructor</SelectItem>
-                                  <SelectItem value="admin">Admin</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </td>
-                            <td className="p-4 text-[14px] leading-[20px] font-normal text-muted-foreground">
-                              {new Date(user.created_at).toLocaleDateString()}
-                            </td>
-                            <td className="p-4">
-                              <Button variant="ghost" size="sm" aria-label={`View details for ${user.full_name || user.email}`}>
-                                <Eye className="w-4 h-4" aria-hidden="true" />
-                                <span className="sr-only">View user details</span>
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+
+              {/* Stats */}
+              <div className="flex flex-wrap gap-3 mb-5">
+                {[
+                  { label: 'Total Users', value: MOCK_USERS.length, color: 'bg-[#e9e9ed] text-[#1e2348] border border-[#dddee4]' },
+                  { label: 'Admins', value: MOCK_USERS.filter(u => u.role === 'admin').length, color: 'bg-white text-[#1e2348] border border-[#E5E7EB]' },
+                  { label: 'Instructors', value: MOCK_USERS.filter(u => u.role === 'instructor').length, color: 'bg-white text-[#1e2348] border border-[#E5E7EB]' },
+                  { label: 'Learners', value: MOCK_USERS.filter(u => u.role === 'learner').length, color: 'bg-white text-emerald-700 border border-[#E5E7EB]' },
+                  { label: 'Active', value: MOCK_USERS.filter(u => u.status === 'active').length, color: 'bg-white text-emerald-700 border border-[#E5E7EB]' },
+                ].map(pill => (
+                  <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
+                    <span className="font-bold text-[15px]">{pill.value}</span>
+                    <span>{pill.label}</span>
                   </div>
-                  {(!users || users.length === 0) && (
-                    <div className="p-8 text-center text-[14px] leading-[20px] font-normal text-muted-foreground">
-                      No users found.
-                    </div>
-                  )}
+                ))}
+              </div>
+
+              {/* Search and Filters */}
+              <div className="flex flex-wrap gap-3 mb-5">
+                <div className="relative flex-1 min-w-[200px]">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+                  <input
+                    type="text"
+                    placeholder="Search by name or email…"
+                    value={userSearch}
+                    onChange={e => setUserSearch(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                  />
                 </div>
-              )}
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+                  <select
+                    value={userRoleFilter}
+                    onChange={e => setUserRoleFilter(e.target.value)}
+                    className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                  >
+                    <option value="all">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="learner">Learner</option>
+                  </select>
+                </div>
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+                  <select
+                    value={userStatusFilter}
+                    onChange={e => setUserStatusFilter(e.target.value)}
+                    className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full" role="table" aria-label="User management table">
+                    <thead className="bg-[#1e2348]">
+                      <tr>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">User</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Email</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Role</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Status</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Joined</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Last Login</th>
+                        <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredUsers.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="text-center py-12 text-[14px] text-[#4B5563]">
+                            <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                            No users match your filters.
+                          </td>
+                        </tr>
+                      ) : filteredUsers.map((user, idx) => (
+                        <tr key={user.id} className={`border-t border-[#E5E7EB] transition-colors hover:bg-[#F5F6FA] ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F5F6FA]'}`}>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-[#fff0ed] flex items-center justify-center text-[14px] font-medium text-[#ff6b4d]">
+                                {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
+                              </div>
+                              <span className="text-[14px] font-medium text-[#1e2348]">{user.full_name}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{user.email}</td>
+                          <td className="px-4 py-3">
+                            <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${ROLE_STYLES[user.role]}`}>
+                              {user.role}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${STATUS_BADGE_STYLES[user.status]}`}>
+                              {user.status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">
+                            {new Date(user.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">
+                            {new Date(user.lastLogin).toLocaleDateString()}
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-1">
+                              <button 
+                                onClick={() => handleEditUser(user.id)}
+                                className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors" 
+                                title="Edit user"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button 
+                                onClick={() => handleViewUser(user.id)}
+                                className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors" 
+                                title="View user details"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <button 
+                                    className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+                                    title="More actions"
+                                  >
+                                    <MoreVertical className="w-4 h-4" />
+                                  </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-48">
+                                  <DropdownMenuItem 
+                                    onClick={() => handleResetPassword(user.id, user.email)}
+                                    className="cursor-pointer"
+                                  >
+                                    <Lock className="w-4 h-4 mr-2" />
+                                    Reset Password
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    onClick={() => handleToggleStatus(user.id, user.status)}
+                                    className="cursor-pointer"
+                                  >
+                                    {user.status === 'active' ? (
+                                      <>
+                                        <XCircle className="w-4 h-4 mr-2" />
+                                        Deactivate User
+                                      </>
+                                    ) : (
+                                      <>
+                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                        Activate User
+                                      </>
+                                    )}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem 
+                                    onClick={() => handleDeleteUser(user.id, user.full_name)}
+                                    className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+                                  >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete User
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1433,25 +2392,161 @@ const AdminDashboard = () => {
           {/* Training Delivery Tab */}
           {activeTab === 'scheduling' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Training Delivery & Scheduling</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Training Delivery & Scheduling</h1>
               <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Class Setup & Cohort Scheduling</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Class Setup & Cohort Scheduling</h3>
+                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
                     Schedule live classes, manage cohorts, and track attendance.
                   </p>
                   <Button 
                     onClick={() => setShowScheduleModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
                   >
                     Schedule Class
                   </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Training Calendar</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    View and manage all scheduled training sessions.
-                  </p>
+                
+                {/* Training Calendar Section */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-[20px] leading-[28px] font-medium text-[#1e2348]">Training Calendar</h3>
+                    <div className="flex items-center gap-3">
+                      <Select defaultValue="all">
+                        <SelectTrigger className="w-[180px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
+                          <SelectValue placeholder="Filter by type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">All Sessions</SelectItem>
+                          <SelectItem value="live" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Live Only</SelectItem>
+                          <SelectItem value="hybrid" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Hybrid Only</SelectItem>
+                          <SelectItem value="recorded" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Recorded Only</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select defaultValue="upcoming">
+                        <SelectTrigger className="w-[180px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
+                          <SelectValue placeholder="Filter by status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">All Status</SelectItem>
+                          <SelectItem value="upcoming" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Upcoming</SelectItem>
+                          <SelectItem value="completed" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Completed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Stats Row */}
+                  <div className="grid grid-cols-4 gap-4 mb-6">
+                    <div className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Total Sessions</div>
+                      <div className="text-[24px] font-bold text-[#1e2348]">{MOCK_SCHEDULED_SESSIONS.length}</div>
+                    </div>
+                    <div className="bg-[#fff0ed] rounded-xl p-4">
+                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Upcoming</div>
+                      <div className="text-[24px] font-bold text-[#ff6b4d]">
+                        {MOCK_SCHEDULED_SESSIONS.filter(s => s.status === 'upcoming').length}
+                      </div>
+                    </div>
+                    <div className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Total Enrolled</div>
+                      <div className="text-[24px] font-bold text-[#1e2348]">
+                        {MOCK_SCHEDULED_SESSIONS.reduce((sum, s) => sum + s.enrolled, 0)}
+                      </div>
+                    </div>
+                    <div className="bg-[#F5F6FA] rounded-xl p-4">
+                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Avg Capacity</div>
+                      <div className="text-[24px] font-bold text-[#1e2348]">
+                        {Math.round((MOCK_SCHEDULED_SESSIONS.reduce((sum, s) => sum + (s.enrolled / s.capacity * 100), 0) / MOCK_SCHEDULED_SESSIONS.length))}%
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sessions List */}
+                  <div className="space-y-3">
+                    {MOCK_SCHEDULED_SESSIONS.map((session) => (
+                      <div 
+                        key={session.id} 
+                        className="border border-[#E5E7EB] rounded-xl p-4 hover:border-[#ff6b4d]/30 hover:bg-[#fff0ed]/20 transition-all"
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h4 className="text-[15px] font-semibold text-[#1e2348]">{session.title}</h4>
+                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${SESSION_TYPE_STYLE[session.type].bg} ${SESSION_TYPE_STYLE[session.type].text}`}>
+                                {SESSION_TYPE_STYLE[session.type].icon} {session.type}
+                              </span>
+                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold capitalize ${SESSION_STATUS_STYLE[session.status].bg} ${SESSION_STATUS_STYLE[session.status].text}`}>
+                                {session.status}
+                              </span>
+                            </div>
+                            <p className="text-[13px] text-[#4B5563] mb-2">{session.course}</p>
+                            <div className="flex items-center gap-4 text-[12px] text-[#9CA3AF]">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="w-3.5 h-3.5" />
+                                <span>{new Date(session.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="w-3.5 h-3.5" />
+                                <span>{session.startTime} - {session.endTime}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Users className="w-3.5 h-3.5" />
+                                <span>{session.instructor}</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-col items-end gap-2">
+                            <div className="text-right">
+                              <div className="text-[13px] font-semibold text-[#1e2348]">
+                                {session.enrolled}/{session.capacity}
+                              </div>
+                              <div className="text-[11px] text-[#9CA3AF]">enrolled</div>
+                            </div>
+                            <div className="w-24 h-1.5 rounded-full bg-[#E5E7EB] overflow-hidden">
+                              <div 
+                                className="h-full rounded-full bg-[#ff6b4d]" 
+                                style={{ width: `${(session.enrolled / session.capacity) * 100}%` }} 
+                              />
+                            </div>
+                            <div className="flex items-center gap-1 mt-2">
+                              {session.status === 'upcoming' && (
+                                <>
+                                  <button 
+                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors"
+                                    title="Edit Session"
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                    title="View Details"
+                                  >
+                                    <Eye className="w-4 h-4" />
+                                  </button>
+                                  <button 
+                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                    title="Copy Meeting Link"
+                                  >
+                                    <LinkIcon className="w-4 h-4" />
+                                  </button>
+                                </>
+                              )}
+                              {session.status === 'completed' && (
+                                <button 
+                                  className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                  title="View Recording"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1459,26 +2554,241 @@ const AdminDashboard = () => {
 
           {/* Enrollment Tab */}
           {activeTab === 'enrollment' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Student & Enrollment Management</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Enrollment Dashboard</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Manage student enrollments, approvals, and bulk operations.
-                  </p>
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Student & Enrollment Management</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage enrollments, track capacity, and oversee student operations</p>
+              </div>
+
+              {/* Statistics Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                      <Users className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">1,247</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Enrolled</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+18% this month</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Clock className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">23</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Pending Approval</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                    <span>Requires action</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                      <BookOpen className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">42</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Courses</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                    <span>With enrollments</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <CheckCircle className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">89%</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+5% vs last month</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Enrollment Dashboard */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Enrollment Dashboard</h3>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Manage student enrollments, approvals, and bulk operations</p>
+                  </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-4">
                   <Button 
                     onClick={() => setShowBulkEnrollModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm h-auto py-4"
                   >
-                    Bulk Enroll
+                    <Upload className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">Bulk Enroll Students</div>
+                      <div className="text-xs opacity-90">Upload CSV or Excel file</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    variant="outline"
+                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                  >
+                    <FileText className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">View Pending Approvals</div>
+                      <div className="text-xs opacity-70">23 awaiting review</div>
+                    </div>
                   </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Seat Management</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Track available seats and manage course capacity.
-                  </p>
+              </div>
+
+              {/* Seat Management - Enhanced */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                    <Building2 className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Seat Management</h3>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Track available seats and manage course capacity across all programs</p>
+                  </div>
+                </div>
+
+                {/* Capacity Overview */}
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-[#F5F6FA] to-[#E5E7EB] rounded-xl p-6 border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">Total Capacity</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <Users className="w-5 h-5 text-[#1e2348]" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-1">2,500</div>
+                    <div className="text-[13px] leading-[18px] text-[#4B5563]">Seats across all courses</div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-emerald-900">Occupied</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-emerald-900 mb-1">1,247</div>
+                    <div className="text-[13px] leading-[18px] text-emerald-700">50% utilization rate</div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-blue-900">Available</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <Sparkles className="w-5 h-5 text-blue-600" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-blue-900 mb-1">1,253</div>
+                    <div className="text-[13px] leading-[18px] text-blue-700">Ready for enrollment</div>
+                  </div>
+                </div>
+
+                {/* Course-wise Seat Breakdown */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Course Capacity Breakdown</h4>
+                    <Button variant="outline" size="sm" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Manage Capacity
+                    </Button>
+                  </div>
+
+                  {/* Sample Course Capacity Cards */}
+                  {[
+                    { name: 'Digital Transformation Strategy', total: 500, occupied: 387, status: 'healthy', color: 'emerald' },
+                    { name: 'Digital Business Platform', total: 400, occupied: 312, status: 'healthy', color: 'emerald' },
+                    { name: 'Digital Accelerators', total: 350, occupied: 298, status: 'warning', color: 'amber' },
+                    { name: 'Digital Workers', total: 300, occupied: 250, status: 'healthy', color: 'emerald' },
+                  ].map((course, index) => {
+                    const percentage = Math.round((course.occupied / course.total) * 100);
+                    const available = course.total - course.occupied;
+                    
+                    return (
+                      <div key={index} className="bg-gradient-to-r from-white to-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-all">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <h5 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-1">{course.name}</h5>
+                            <div className="flex items-center gap-4 text-[13px] leading-[18px] text-[#4B5563]">
+                              <span className="flex items-center gap-1">
+                                <Users className="w-4 h-4" />
+                                {course.occupied} enrolled
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Sparkles className="w-4 h-4" />
+                                {available} available
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Building2 className="w-4 h-4" />
+                                {course.total} total
+                              </span>
+                            </div>
+                          </div>
+                          <div className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
+                            course.status === 'healthy' 
+                              ? 'bg-emerald-100 text-emerald-700' 
+                              : 'bg-amber-100 text-amber-700'
+                          }`}>
+                            {percentage}% Full
+                          </div>
+                        </div>
+                        
+                        {/* Progress Bar */}
+                        <div className="relative">
+                          <div className="w-full bg-[#E5E7EB] rounded-full h-3 overflow-hidden">
+                            <div 
+                              className={`h-full rounded-full transition-all ${
+                                course.status === 'healthy'
+                                  ? 'bg-gradient-to-r from-emerald-400 to-emerald-600'
+                                  : 'bg-gradient-to-r from-amber-400 to-amber-600'
+                              }`}
+                              style={{ width: `${percentage}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between mt-2 text-[12px] text-[#4B5563]">
+                            <span>0</span>
+                            <span>{course.total}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Quick Actions */}
+                <div className="mt-8 pt-6 border-t border-[#E5E7EB]">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Seats
+                    </Button>
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Download className="w-4 h-4 mr-2" />
+                      Export Report
+                    </Button>
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <AlertCircle className="w-4 h-4 mr-2" />
+                      View Alerts
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1486,26 +2796,387 @@ const AdminDashboard = () => {
 
           {/* Faculty Tab */}
           {activeTab === 'faculty' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Faculty & Program Operations</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Faculty Dashboard</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Manage faculty members, assignments, and performance.
-                  </p>
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Faculty & Program Operations</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage faculty members, assignments, and learning programs</p>
+              </div>
+
+              {/* Statistics Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                      <GraduationCap className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">87</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Faculty</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+12 this quarter</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                      <BookOpen className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">24</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Learning Programs</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                    <span>Across 6 categories</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Star className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">4.8</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg Faculty Rating</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-amber-600 font-medium">
+                    <Star className="w-4 h-4 fill-amber-600" />
+                    <span>Based on 2,341 reviews</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Target className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">156</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Assignments</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>92% completion rate</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Faculty Dashboard */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <GraduationCap className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Faculty Dashboard</h3>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Manage faculty members, assignments, and performance tracking</p>
+                  </div>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-4">
                   <Button 
                     onClick={() => setShowAddFacultyModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm h-auto py-4"
                   >
-                    Add Faculty
+                    <UserPlus className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">Add Faculty Member</div>
+                      <div className="text-xs opacity-90">Invite new instructor</div>
+                    </div>
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => setFacultySubTab('faculty-list')}
+                    variant="outline"
+                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                  >
+                    <Users className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">View All Faculty</div>
+                      <div className="text-xs opacity-70">87 active members</div>
+                    </div>
+                  </Button>
+
+                  <Button 
+                    onClick={() => setFacultySubTab('performance')}
+                    variant="outline"
+                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                  >
+                    <BarChart2 className="w-5 h-5 mr-2" />
+                    <div className="text-left">
+                      <div className="font-semibold">Performance Reports</div>
+                      <div className="text-xs opacity-70">Analytics & insights</div>
+                    </div>
                   </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Program Builder</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Create and manage learning programs and curriculum.
-                  </p>
+              </div>
+
+              {/* Program Builder - Enhanced */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                    <BookOpen className="w-8 h-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Program Builder</h3>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Create and manage comprehensive learning programs and curriculum pathways</p>
+                  </div>
+                </div>
+
+                {/* Program Overview */}
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-br from-[#F5F6FA] to-[#E5E7EB] rounded-xl p-6 border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">Total Programs</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <BookOpen className="w-5 h-5 text-[#1e2348]" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-1">24</div>
+                    <div className="text-[13px] leading-[18px] text-[#4B5563]">Active learning programs</div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-emerald-900">Published</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-emerald-900 mb-1">18</div>
+                    <div className="text-[13px] leading-[18px] text-emerald-700">Live and enrolling</div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-6 border border-amber-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="text-[14px] leading-[20px] font-semibold text-amber-900">In Development</div>
+                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                        <Clock className="w-5 h-5 text-amber-600" />
+                      </div>
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-bold text-amber-900 mb-1">6</div>
+                    <div className="text-[13px] leading-[18px] text-amber-700">Being created</div>
+                  </div>
+                </div>
+
+                {/* Program Categories */}
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Program Categories</h4>
+                    <Button 
+                      onClick={() => setShowCreateProgramModal(true)}
+                      variant="outline" 
+                      size="sm" 
+                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create New Program
+                    </Button>
+                  </div>
+
+                  {/* Sample Program Categories */}
+                  {[
+                    { 
+                      name: 'Digital Transformation', 
+                      programs: 6, 
+                      courses: 24, 
+                      students: 487,
+                      icon: Sparkles,
+                      color: 'from-purple-400 to-purple-600',
+                      bgColor: 'from-purple-50 to-purple-100',
+                      borderColor: 'border-purple-200'
+                    },
+                    { 
+                      name: 'Business Platform', 
+                      programs: 4, 
+                      courses: 18, 
+                      students: 356,
+                      icon: Building2,
+                      color: 'from-blue-400 to-blue-600',
+                      bgColor: 'from-blue-50 to-blue-100',
+                      borderColor: 'border-blue-200'
+                    },
+                    { 
+                      name: 'Digital Accelerators', 
+                      programs: 5, 
+                      courses: 22, 
+                      students: 412,
+                      icon: TrendingUp,
+                      color: 'from-emerald-400 to-emerald-600',
+                      bgColor: 'from-emerald-50 to-emerald-100',
+                      borderColor: 'border-emerald-200'
+                    },
+                    { 
+                      name: 'Digital Workers', 
+                      programs: 4, 
+                      courses: 16, 
+                      students: 298,
+                      icon: Users,
+                      color: 'from-orange-400 to-orange-600',
+                      bgColor: 'from-orange-50 to-orange-100',
+                      borderColor: 'border-orange-200'
+                    },
+                    { 
+                      name: 'Digital Economy', 
+                      programs: 3, 
+                      courses: 14, 
+                      students: 234,
+                      icon: DollarSign,
+                      color: 'from-green-400 to-green-600',
+                      bgColor: 'from-green-50 to-green-100',
+                      borderColor: 'border-green-200'
+                    },
+                    { 
+                      name: 'Cognitive Organization', 
+                      programs: 2, 
+                      courses: 10, 
+                      students: 178,
+                      icon: Brain,
+                      color: 'from-pink-400 to-pink-600',
+                      bgColor: 'from-pink-50 to-pink-100',
+                      borderColor: 'border-pink-200'
+                    },
+                  ].map((category, index) => {
+                    const Icon = category.icon;
+                    return (
+                      <div key={index} className={`bg-gradient-to-r ${category.bgColor} rounded-xl p-6 border ${category.borderColor} hover:shadow-md transition-all`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className={`w-14 h-14 bg-gradient-to-br ${category.color} rounded-xl flex items-center justify-center shadow-sm`}>
+                              <Icon className="w-7 h-7 text-white" />
+                            </div>
+                            <div className="flex-1">
+                              <h5 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{category.name}</h5>
+                              <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#4B5563]">
+                                <span className="flex items-center gap-1.5">
+                                  <BookOpen className="w-4 h-4" />
+                                  {category.programs} programs
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                  <FileText className="w-4 h-4" />
+                                  {category.courses} courses
+                                </span>
+                                <span className="flex items-center gap-1.5">
+                                  <Users className="w-4 h-4" />
+                                  {category.students} students
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button 
+                              onClick={() => {
+                                setFacultySubTab('programs');
+                                toast({
+                                  title: "Program Details",
+                                  description: `Viewing ${category.name} programs`,
+                                });
+                              }}
+                              variant="outline" 
+                              size="sm" 
+                              className="border-[#E5E7EB] hover:bg-white hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                            >
+                              <Eye className="w-4 h-4 mr-1" />
+                              View
+                            </Button>
+                            <Button 
+                              onClick={() => {
+                                toast({
+                                  title: "Edit Program",
+                                  description: `Editing ${category.name} program settings`,
+                                });
+                              }}
+                              variant="outline" 
+                              size="sm" 
+                              className="border-[#E5E7EB] hover:bg-white hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                            >
+                              <Edit className="w-4 h-4 mr-1" />
+                              Edit
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Program Builder Features */}
+                <div className="bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5 rounded-xl p-6 border border-[#ff6b4d]/20 mb-6">
+                  <h4 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-4">Program Builder Features</h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {[
+                      { icon: Target, title: 'Learning Pathways', desc: 'Create structured learning journeys' },
+                      { icon: Calendar, title: 'Scheduling', desc: 'Set program timelines and milestones' },
+                      { icon: Award, title: 'Certifications', desc: 'Design completion certificates' },
+                      { icon: Users2, title: 'Cohort Management', desc: 'Organize student groups' },
+                      { icon: BarChart2, title: 'Progress Tracking', desc: 'Monitor program completion' },
+                      { icon: Settings, title: 'Prerequisites', desc: 'Set course requirements' },
+                    ].map((feature, index) => {
+                      const Icon = feature.icon;
+                      return (
+                        <div key={index} className="flex items-start gap-3 bg-white rounded-lg p-4 border border-[#E5E7EB]">
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-lg flex items-center justify-center flex-shrink-0">
+                            <Icon className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">{feature.title}</div>
+                            <div className="text-[12px] leading-[18px] text-[#4B5563] mt-1">{feature.desc}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="pt-6 border-t border-[#E5E7EB]">
+                  <div className="grid md:grid-cols-4 gap-4">
+                    <Button 
+                      onClick={() => setShowCreateProgramModal(true)}
+                      className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      New Program
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        toast({
+                          title: "Duplicate Program",
+                          description: "Select a program to duplicate from the list above",
+                        });
+                      }}
+                      variant="outline" 
+                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Duplicate Program
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        toast({
+                          title: "Export Programs",
+                          description: "Exporting program data to CSV...",
+                        });
+                      }}
+                      variant="outline" 
+                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Export Programs
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        toast({
+                          title: "Program Settings",
+                          description: "Opening program configuration settings",
+                        });
+                      }}
+                      variant="outline" 
+                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      Settings
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1517,58 +3188,2519 @@ const AdminDashboard = () => {
           {/* Governance Tab */}
           {activeTab === 'governance' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">Content Governance & Compliance</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Content CMS & Moderation</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Review and moderate course content for quality and compliance.
-                  </p>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Content Governance & Compliance</h1>
+              
+              {/* Statistics */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {[
+                  { icon: CheckCircle, label: 'Approved Content', value: '342', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                  { icon: Clock, label: 'Pending Review', value: '28', color: 'text-amber-600', bg: 'bg-amber-50' },
+                  { icon: ShieldIcon, label: 'Compliance Score', value: '94%', color: 'text-purple-600', bg: 'bg-purple-50' },
+                  { icon: AlertTriangle, label: 'Issues Found', value: '12', color: 'text-red-600', bg: 'bg-red-50' },
+                ].map(stat => (
+                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
+                      <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
+                    <div className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Governance Sub-Tabs */}
+              <Tabs value={governanceSubTab} onValueChange={(value: any) => setGovernanceSubTab(value)} className="w-full">
+                <TabsList className="bg-white border border-[#E5E7EB] p-1 rounded-xl mb-6">
+                  <TabsTrigger value="overview" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger value="workflow" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Workflow
+                  </TabsTrigger>
+                  <TabsTrigger value="reporting" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Reporting
+                  </TabsTrigger>
+                  <TabsTrigger value="scanning" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Scanning
+                  </TabsTrigger>
+                  <TabsTrigger value="policies" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Policies
+                  </TabsTrigger>
+                  <TabsTrigger value="activity" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                    Activity
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Overview Tab */}
+                <TabsContent value="overview" className="mt-0">
+                  <div className="grid lg:grid-cols-2 gap-6">
+                {/* Content CMS & Moderation */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-[#fff0ed] flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-7 h-7 text-[#ff6b4d]" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Content CMS & Moderation</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Review and moderate course content for quality and compliance. Ensure all materials meet institutional standards.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Pending Reviews</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">28 items</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Avg Review Time</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">2.4 days</span>
+                    </div>
+                  </div>
                   <Button 
                     onClick={() => setShowReviewContentModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                    className="w-full bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
                   >
+                    <FileText className="w-4 h-4 mr-2" />
                     Review Content
                   </Button>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Accessibility Standards</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    Ensure all content meets accessibility requirements.
-                  </p>
+
+                {/* Accessibility Standards */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                      <Eye className="w-7 h-7 text-purple-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Accessibility Standards</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Ensure all content meets WCAG 2.1 AA accessibility requirements for inclusive learning.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">WCAG 2.1 AA Compliant</span>
+                      </div>
+                      <span className="text-[15px] leading-[22px] font-semibold text-emerald-600">89%</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle className="w-5 h-5 text-amber-600" />
+                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Issues to Fix</span>
+                      </div>
+                      <span className="text-[15px] leading-[22px] font-semibold text-amber-600">34</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Accessibility Audit", description: "Running accessibility audit..." })}
+                    variant="outline"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Run Accessibility Audit
+                  </Button>
+                </div>
+
+                {/* Copyright & IP Protection */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                      <ShieldIcon className="w-7 h-7 text-purple-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Copyright & IP Protection</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Monitor and protect intellectual property. Detect plagiarism and unauthorized content usage.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Content Scanned</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">1,247 items</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Violations Detected</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-red-600">3</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Plagiarism Check", description: "Scanning content for plagiarism..." })}
+                    variant="outline"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                  >
+                    <ShieldIcon className="w-4 h-4 mr-2" />
+                    Run Plagiarism Check
+                  </Button>
+                </div>
+
+                {/* Data Privacy & GDPR */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
+                      <Lock className="w-7 h-7 text-green-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Data Privacy & GDPR</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Ensure compliance with GDPR, FERPA, and other data protection regulations.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-5 h-5 text-emerald-600" />
+                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">GDPR Compliant</span>
+                      </div>
+                      <span className="text-[15px] leading-[22px] font-semibold text-emerald-600">Yes</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Data Requests</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">7 pending</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Privacy Audit", description: "Reviewing data privacy compliance..." })}
+                    variant="outline"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                  >
+                    <Lock className="w-4 h-4 mr-2" />
+                    View Privacy Dashboard
+                  </Button>
+                </div>
+
+                {/* Quality Assurance */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                      <Star className="w-7 h-7 text-amber-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Quality Assurance</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Monitor content quality metrics and learner feedback to maintain high standards.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Avg Quality Score</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">4.6/5.0</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Courses Audited</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">156/180</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Quality Report", description: "Generating quality assurance report..." })}
+                    variant="outline"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                  >
+                    <Star className="w-4 h-4 mr-2" />
+                    View Quality Reports
+                  </Button>
+                </div>
+
+                {/* Version Control & Audit Trail */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-3 mb-5">
+                    <div className="w-14 h-14 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-7 h-7 text-indigo-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Version Control & Audit Trail</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Track all content changes and maintain comprehensive audit logs for compliance.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3 mb-5">
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Content Versions</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">2,847</span>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Recent Changes</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">142 today</span>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={() => toast({ title: "Audit Trail", description: "Loading audit trail..." })}
+                    variant="outline"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                  >
+                    <Clock className="w-4 h-4 mr-2" />
+                    View Audit Trail
+                  </Button>
+                </div>
+              </div>
+            </TabsContent>
+
+                {/* Workflow Tab */}
+                <TabsContent value="workflow" className="mt-0">
+                  {/* Content Workflow Management */}
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Content Workflow Management</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                          Configure approval workflows and content lifecycle stages
+                        </p>
+                      </div>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create Workflow
+                      </Button>
+                    </div>
+
+                    <div className="grid lg:grid-cols-3 gap-6">
+                      {[
+                        { 
+                          stage: 'Draft', 
+                          count: 45, 
+                          color: 'bg-[#F5F6FA]', 
+                          textColor: 'text-[#4B5563]',
+                          icon: FileText 
+                        },
+                        { 
+                          stage: 'In Review', 
+                          count: 28, 
+                          color: 'bg-amber-50', 
+                          textColor: 'text-amber-700',
+                          icon: Clock 
+                        },
+                        { 
+                          stage: 'Published', 
+                          count: 342, 
+                          color: 'bg-emerald-50', 
+                          textColor: 'text-emerald-700',
+                          icon: CheckCircle 
+                        },
+                      ].map((workflow) => (
+                        <div key={workflow.stage} className={`${workflow.color} rounded-xl p-6 border border-[#E5E7EB]`}>
+                          <div className="flex items-center gap-3 mb-4">
+                            <workflow.icon className={`w-6 h-6 ${workflow.textColor}`} />
+                            <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{workflow.stage}</h3>
+                          </div>
+                          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-2">{workflow.count}</div>
+                          <p className="text-[13px] leading-[18px] font-normal text-[#4B5563]">Content items</p>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="mt-4 w-full hover:bg-white/50 hover:text-[#ff6b4d]"
+                          >
+                            View Details →
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Reporting Tab */}
+                <TabsContent value="reporting" className="mt-0">
+                  {/* Compliance Reporting */}
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Compliance Reporting</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                          Generate and export compliance reports for audits and regulatory requirements
+                        </p>
+                      </div>
+                      <Button 
+                        variant="outline"
+                        className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Export Report
+                      </Button>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {[
+                        { label: 'WCAG Compliance', value: '89%', status: 'good', icon: Eye },
+                        { label: 'GDPR Compliance', value: '100%', status: 'excellent', icon: Lock },
+                        { label: 'Copyright Clear', value: '97%', status: 'good', icon: ShieldIcon },
+                        { label: 'Quality Score', value: '4.6/5', status: 'excellent', icon: Star },
+                      ].map((metric) => (
+                        <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                          <div className="flex items-center gap-2 mb-3">
+                            <metric.icon className="w-5 h-5 text-[#4B5563]" />
+                            <span className="text-[13px] leading-[18px] font-medium text-[#4B5563]">{metric.label}</span>
+                          </div>
+                          <div className="text-[24px] leading-[32px] font-bold text-[#1e2348]">{metric.value}</div>
+                          <div className={`inline-flex items-center gap-1 mt-2 px-2 py-1 rounded-lg text-[11px] font-semibold ${
+                            metric.status === 'excellent' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                          }`}>
+                            {metric.status === 'excellent' ? '✓ Excellent' : '⚠ Needs Attention'}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Scanning Tab */}
+                <TabsContent value="scanning" className="mt-0">
+                  {/* Automated Content Scanning */}
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Automated Content Scanning</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                          Configure automated scans for accessibility, plagiarism, and quality checks
+                        </p>
+                      </div>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                        <Settings className="w-4 h-4 mr-2" />
+                        Configure Scans
+                      </Button>
+                    </div>
+
+                    <div className="space-y-4">
+                      {[
+                        { 
+                          name: 'Accessibility Scan', 
+                          schedule: 'Daily at 2:00 AM', 
+                          lastRun: '2 hours ago', 
+                          status: 'active',
+                          issues: 34 
+                        },
+                        { 
+                          name: 'Plagiarism Detection', 
+                          schedule: 'On content upload', 
+                          lastRun: '15 minutes ago', 
+                          status: 'active',
+                          issues: 3 
+                        },
+                        { 
+                          name: 'Quality Assessment', 
+                          schedule: 'Weekly on Monday', 
+                          lastRun: '3 days ago', 
+                          status: 'active',
+                          issues: 12 
+                        },
+                        { 
+                          name: 'Link Validation', 
+                          schedule: 'Daily at 3:00 AM', 
+                          lastRun: '1 hour ago', 
+                          status: 'active',
+                          issues: 8 
+                        },
+                      ].map((scan) => (
+                        <div key={scan.name} className="flex items-center justify-between p-5 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:bg-[#e9e9ed] transition-colors">
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center border border-[#E5E7EB]">
+                              <Settings className="w-6 h-6 text-[#ff6b4d]" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="text-[15px] leading-[22px] font-semibold text-[#1e2348] mb-1">{scan.name}</h3>
+                              <div className="flex items-center gap-4 text-[13px] leading-[18px] text-[#4B5563]">
+                                <span>Schedule: {scan.schedule}</span>
+                                <span>•</span>
+                                <span>Last run: {scan.lastRun}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <div className="text-[18px] leading-[24px] font-bold text-[#1e2348]">{scan.issues}</div>
+                              <div className="text-[12px] leading-[16px] text-[#4B5563]">Issues</div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                              <span className="text-[13px] leading-[18px] font-medium text-emerald-600">Active</span>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className="hover:bg-white hover:text-[#ff6b4d]"
+                            >
+                              <Settings className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Policies Tab */}
+                <TabsContent value="policies" className="mt-0">
+                  {/* Policy & Standards Management */}
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Policy & Standards Management</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                          Define and enforce content policies, guidelines, and institutional standards
+                        </p>
+                      </div>
+                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Policy
+                      </Button>
+                    </div>
+
+                    <div className="grid lg:grid-cols-2 gap-6">
+                      {[
+                        {
+                          title: 'Content Quality Standards',
+                          description: 'Minimum requirements for course content quality and presentation',
+                          rules: 12,
+                          enforced: true,
+                          icon: Star,
+                          color: 'bg-amber-50'
+                        },
+                        {
+                          title: 'Accessibility Guidelines',
+                          description: 'WCAG 2.1 AA compliance requirements for all learning materials',
+                          rules: 8,
+                          enforced: true,
+                          icon: Eye,
+                          color: 'bg-purple-50'
+                        },
+                        {
+                          title: 'Copyright Policy',
+                          description: 'Rules for using third-party content and intellectual property',
+                          rules: 15,
+                          enforced: true,
+                          icon: ShieldIcon,
+                          color: 'bg-purple-50'
+                        },
+                        {
+                          title: 'Data Privacy Standards',
+                          description: 'GDPR and FERPA compliance requirements for learner data',
+                          rules: 10,
+                          enforced: true,
+                          icon: Lock,
+                          color: 'bg-green-50'
+                        },
+                      ].map((policy) => (
+                        <div key={policy.title} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                          <div className="flex items-start gap-4 mb-4">
+                            <div className={`w-14 h-14 rounded-xl ${policy.color} flex items-center justify-center flex-shrink-0`}>
+                              <policy.icon className="w-7 h-7 text-[#1e2348]" />
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{policy.title}</h3>
+                              <p className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{policy.description}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB]">
+                            <div className="flex items-center gap-4">
+                              <div className="text-[13px] leading-[18px] text-[#4B5563]">
+                                <span className="font-semibold text-[#1e2348]">{policy.rules}</span> rules
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                <span className="text-[13px] leading-[18px] font-medium text-emerald-600">Enforced</span>
+                              </div>
+                            </div>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              className="hover:bg-white hover:text-[#ff6b4d]"
+                            >
+                              Edit Policy →
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Activity Tab */}
+                <TabsContent value="activity" className="mt-0">
+                  {/* Recent Activity & Alerts */}
+                  <div className="grid lg:grid-cols-2 gap-6">
+                    {/* Recent Activity */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-5">Recent Activity</h2>
+                      <div className="space-y-4">
+                        {[
+                          { action: 'Content approved', item: 'Digital Marketing 101', time: '5 minutes ago', type: 'success' },
+                          { action: 'Accessibility issue detected', item: 'Python Basics', time: '12 minutes ago', type: 'warning' },
+                          { action: 'Policy violation flagged', item: 'Web Development', time: '1 hour ago', type: 'error' },
+                          { action: 'Quality review completed', item: 'Data Science Course', time: '2 hours ago', type: 'success' },
+                          { action: 'Content updated', item: 'Machine Learning', time: '3 hours ago', type: 'info' },
+                        ].map((activity, index) => (
+                          <div key={index} className="flex items-start gap-3 p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                            <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
+                              activity.type === 'success' ? 'bg-emerald-500' :
+                              activity.type === 'warning' ? 'bg-amber-500' :
+                              activity.type === 'error' ? 'bg-red-500' : 'bg-[#ff6b4d]'
+                            }`}></div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[14px] leading-[20px] font-medium text-[#1e2348]">{activity.action}</p>
+                              <p className="text-[13px] leading-[18px] text-[#4B5563] truncate">{activity.item}</p>
+                              <p className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">{activity.time}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full mt-4 hover:bg-[#F5F6FA] hover:text-[#ff6b4d]"
+                      >
+                        View All Activity →
+                      </Button>
+                    </div>
+
+                    {/* Compliance Alerts */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                      <div className="flex items-center justify-between mb-5">
+                        <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Compliance Alerts</h2>
+                        <Badge className="bg-red-100 text-red-700 hover:bg-red-100">12 Active</Badge>
+                      </div>
+                      <div className="space-y-4">
+                        {[
+                          { 
+                            severity: 'high', 
+                            title: 'Copyright violation detected', 
+                            course: 'Web Development Bootcamp',
+                            action: 'Review Required'
+                          },
+                          { 
+                            severity: 'medium', 
+                            title: 'Accessibility issues found', 
+                            course: 'Python for Beginners',
+                            action: 'Fix Issues'
+                          },
+                          { 
+                            severity: 'high', 
+                            title: 'GDPR data request pending', 
+                            course: 'User: john.doe@example.com',
+                            action: 'Process Request'
+                          },
+                          { 
+                            severity: 'low', 
+                            title: 'Quality score below threshold', 
+                            course: 'Introduction to AI',
+                            action: 'Review Content'
+                          },
+                        ].map((alert, index) => (
+                          <div key={index} className={`p-4 rounded-xl border-2 ${
+                            alert.severity === 'high' ? 'bg-red-50 border-red-200' :
+                            alert.severity === 'medium' ? 'bg-amber-50 border-amber-200' :
+                            'bg-purple-50 border-purple-200'
+                          }`}>
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex items-center gap-2">
+                                <AlertTriangle className={`w-5 h-5 ${
+                                  alert.severity === 'high' ? 'text-red-600' :
+                                  alert.severity === 'medium' ? 'text-amber-600' :
+                                  'text-purple-600'
+                                }`} />
+                                <span className={`text-[11px] leading-[16px] font-bold uppercase tracking-wide ${
+                                  alert.severity === 'high' ? 'text-red-700' :
+                                  alert.severity === 'medium' ? 'text-amber-700' :
+                                  'text-purple-700'
+                                }`}>
+                                  {alert.severity} Priority
+                                </span>
+                              </div>
+                            </div>
+                            <h3 className="text-[14px] leading-[20px] font-semibold text-[#1e2348] mb-1">{alert.title}</h3>
+                            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">{alert.course}</p>
+                            <Button 
+                              size="sm"
+                              className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[12px] h-8"
+                            >
+                              {alert.action} →
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          )}
+
+          {/* Organizations Tab */}
+          {activeTab === 'organizations' && (
+            <div>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Organization & Integration Management</h1>
+              
+              {/* Statistics */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {[
+                  { icon: Building2, label: 'Active Organizations', value: '24', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                  { icon: Users2, label: 'Total Users', value: '1,847', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                  { icon: Globe, label: 'Active Integrations', value: '12', color: 'text-purple-600', bg: 'bg-purple-50' },
+                  { icon: TrendingUp, label: 'API Calls Today', value: '45.2K', color: 'text-amber-600', bg: 'bg-amber-50' },
+                ].map(stat => (
+                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
+                      <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
+                    <div className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-8">
+                {/* Organization Management */}
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Organization Management</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Manage organizational accounts, multi-tenant access, and hierarchies
+                      </p>
+                    </div>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Organization
+                    </Button>
+                  </div>
+
+                  {/* Organizations List */}
+                  <div className="space-y-4">
+                    {[
+                      { 
+                        name: 'DTMA Academy', 
+                        type: 'Enterprise', 
+                        users: 450, 
+                        courses: 28, 
+                        status: 'active',
+                        plan: 'Enterprise Plus',
+                        renewal: 'Dec 2026'
+                      },
+                      { 
+                        name: 'Tech University', 
+                        type: 'Educational', 
+                        users: 1200, 
+                        courses: 45, 
+                        status: 'active',
+                        plan: 'Academic',
+                        renewal: 'Mar 2027'
+                      },
+                      { 
+                        name: 'Corporate Training Co', 
+                        type: 'Corporate', 
+                        users: 85, 
+                        courses: 12, 
+                        status: 'active',
+                        plan: 'Business',
+                        renewal: 'Aug 2026'
+                      },
+                      { 
+                        name: 'Startup Accelerator', 
+                        type: 'Startup', 
+                        users: 112, 
+                        courses: 8, 
+                        status: 'trial',
+                        plan: 'Trial',
+                        renewal: 'May 2026'
+                      },
+                    ].map((org, index) => (
+                      <div key={index} className="flex items-center justify-between p-6 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center border border-[#E5E7EB]">
+                            <Building2 className="w-8 h-8 text-[#ff6b4d]" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{org.name}</h3>
+                              <Badge className={`${
+                                org.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                              }`}>
+                                {org.status === 'active' ? 'Active' : 'Trial'}
+                              </Badge>
+                              <Badge variant="outline" className="border-[#E5E7EB]">{org.type}</Badge>
+                            </div>
+                            <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#4B5563]">
+                              <span><span className="font-semibold text-[#1e2348]">{org.users}</span> users</span>
+                              <span>•</span>
+                              <span><span className="font-semibold text-[#1e2348]">{org.courses}</span> courses</span>
+                              <span>•</span>
+                              <span>Plan: <span className="font-semibold text-[#1e2348]">{org.plan}</span></span>
+                              <span>•</span>
+                              <span>Renewal: {org.renewal}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                            <Settings className="w-4 h-4 mr-2" />
+                            Manage
+                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                                <MoreVertical className="w-4 h-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem>View Details</DropdownMenuItem>
+                              <DropdownMenuItem>Edit Settings</DropdownMenuItem>
+                              <DropdownMenuItem>Manage Users</DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem className="text-red-600">Suspend</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* External Integrations */}
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">External Integrations</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Configure integrations with external systems, LMS platforms, and APIs
+                      </p>
+                    </div>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Integration
+                    </Button>
+                  </div>
+
+                  <div className="grid lg:grid-cols-2 gap-6">
+                    {[
+                      {
+                        name: 'Canvas LMS',
+                        type: 'LMS Platform',
+                        status: 'connected',
+                        lastSync: '2 hours ago',
+                        icon: BookOpen,
+                        color: 'bg-[#fff0ed]',
+                        iconColor: 'text-[#ff6b4d]'
+                      },
+                      {
+                        name: 'Zoom',
+                        type: 'Video Conferencing',
+                        status: 'connected',
+                        lastSync: '15 minutes ago',
+                        icon: Video,
+                        color: 'bg-indigo-50',
+                        iconColor: 'text-indigo-600'
+                      },
+                      {
+                        name: 'Stripe',
+                        type: 'Payment Gateway',
+                        status: 'connected',
+                        lastSync: '1 hour ago',
+                        icon: DollarSign,
+                        color: 'bg-purple-50',
+                        iconColor: 'text-purple-600'
+                      },
+                      {
+                        name: 'Google Workspace',
+                        type: 'SSO Provider',
+                        status: 'connected',
+                        lastSync: '30 minutes ago',
+                        icon: Globe,
+                        color: 'bg-red-50',
+                        iconColor: 'text-red-600'
+                      },
+                      {
+                        name: 'Salesforce',
+                        type: 'CRM',
+                        status: 'pending',
+                        lastSync: 'Not synced',
+                        icon: Users2,
+                        color: 'bg-cyan-50',
+                        iconColor: 'text-cyan-600'
+                      },
+                      {
+                        name: 'Slack',
+                        type: 'Communication',
+                        status: 'connected',
+                        lastSync: '5 minutes ago',
+                        icon: MessageSquare,
+                        color: 'bg-pink-50',
+                        iconColor: 'text-pink-600'
+                      },
+                    ].map((integration, index) => (
+                      <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className={`w-14 h-14 rounded-xl ${integration.color} flex items-center justify-center flex-shrink-0`}>
+                            <integration.icon className={`w-7 h-7 ${integration.iconColor}`} />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{integration.name}</h3>
+                              <div className={`flex items-center gap-1 ${
+                                integration.status === 'connected' ? 'text-emerald-600' : 'text-amber-600'
+                              }`}>
+                                <div className={`w-2 h-2 rounded-full ${
+                                  integration.status === 'connected' ? 'bg-emerald-500' : 'bg-amber-500'
+                                }`}></div>
+                                <span className="text-[12px] leading-[16px] font-medium capitalize">{integration.status}</span>
+                              </div>
+                            </div>
+                            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-1">{integration.type}</p>
+                            <p className="text-[12px] leading-[16px] text-[#9CA3AF]">Last sync: {integration.lastSync}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 pt-4 border-t border-[#E5E7EB]">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="flex-1 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                          >
+                            <Settings className="w-4 h-4 mr-2" />
+                            Configure
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="hover:bg-white hover:text-[#ff6b4d]"
+                          >
+                            Test
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* API Management */}
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">API Management</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Manage API keys, webhooks, and developer access
+                      </p>
+                    </div>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Generate API Key
+                    </Button>
+                  </div>
+
+                  <div className="grid md:grid-cols-3 gap-6 mb-6">
+                    {[
+                      { label: 'API Keys', value: '8', icon: LinkIcon },
+                      { label: 'Webhooks', value: '12', icon: Send },
+                      { label: 'Rate Limit', value: '10K/hr', icon: TrendingUp },
+                    ].map((metric) => (
+                      <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                        <div className="flex items-center gap-2 mb-3">
+                          <metric.icon className="w-5 h-5 text-[#4B5563]" />
+                          <span className="text-[13px] leading-[18px] font-medium text-[#4B5563]">{metric.label}</span>
+                        </div>
+                        <div className="text-[28px] leading-[36px] font-bold text-[#1e2348]">{metric.value}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* API Keys List */}
+                  <div className="space-y-3">
+                    {[
+                      { name: 'Production API Key', created: 'Jan 15, 2026', lastUsed: '2 hours ago', status: 'active' },
+                      { name: 'Development API Key', created: 'Feb 20, 2026', lastUsed: '1 day ago', status: 'active' },
+                      { name: 'Testing API Key', created: 'Mar 10, 2026', lastUsed: 'Never', status: 'inactive' },
+                    ].map((key, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB]">
+                        <div className="flex items-center gap-4 flex-1">
+                          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
+                            <LinkIcon className="w-5 h-5 text-[#ff6b4d]" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-[14px] leading-[20px] font-semibold text-[#1e2348] mb-1">{key.name}</h3>
+                            <div className="flex items-center gap-4 text-[12px] leading-[16px] text-[#4B5563]">
+                              <span>Created: {key.created}</span>
+                              <span>•</span>
+                              <span>Last used: {key.lastUsed}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge className={`${
+                            key.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-[#F5F6FA] text-[#9CA3AF]'
+                          }`}>
+                            {key.status}
+                          </Badge>
+                          <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                            <Copy className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                            <Settings className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* SSO Configuration */}
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Single Sign-On (SSO)</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        Configure SAML, OAuth, and other SSO providers for seamless authentication
+                      </p>
+                    </div>
+                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add SSO Provider
+                    </Button>
+                  </div>
+
+                  <div className="grid lg:grid-cols-3 gap-6">
+                    {[
+                      { provider: 'Google Workspace', type: 'OAuth 2.0', users: 450, status: 'active' },
+                      { provider: 'Microsoft Azure AD', type: 'SAML 2.0', users: 320, status: 'active' },
+                      { provider: 'Okta', type: 'SAML 2.0', users: 180, status: 'active' },
+                    ].map((sso, index) => (
+                      <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB]">
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
+                            <ShieldIcon className="w-5 h-5 text-[#ff6b4d]" />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                            <span className="text-[12px] leading-[16px] font-medium text-emerald-600">Active</span>
+                          </div>
+                        </div>
+                        <h3 className="text-[15px] leading-[22px] font-semibold text-[#1e2348] mb-1">{sso.provider}</h3>
+                        <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">{sso.type}</p>
+                        <div className="text-[12px] leading-[16px] text-[#4B5563]">
+                          <span className="font-semibold text-[#1e2348]">{sso.users}</span> users authenticated
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="w-full mt-4 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                        >
+                          Configure
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
-          {activeTab === 'finance' && <FinanceBillingGovernancePanel />}
+          {/* Certification Tab */}
+          {activeTab === 'certification' && (
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Certification & Customer Success</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage certificates, badges, and learner achievements</p>
+              </div>
 
-          {activeTab === 'partner-reporting' && <PartnerAccreditationReportingPanel />}
+              {/* Statistics Overview */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                      <Award className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">2,847</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Certificates Issued</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>+234 this month</span>
+                  </div>
+                </div>
 
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <TrendingUp className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">78%</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
+                    <ArrowUpRight className="w-4 h-4" />
+                    <span>+5% from last month</span>
+                  </div>
+                </div>
 
-          {activeTab === 'analytics-performance' && <AnalyticsPerformanceInsightsPanel />}
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Users className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">1,234</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Learners</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                    <span>Pursuing certifications</span>
+                  </div>
+                </div>
 
-          {activeTab === 'operations-support' && <OperationsSupportPanel />}
+                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
+                      <Star className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">4.7★</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg Satisfaction</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-amber-600 font-medium">
+                    <Star className="w-4 h-4 fill-amber-600" />
+                    <span>Based on 1,847 reviews</span>
+                  </div>
+                </div>
+              </div>
 
-          {activeTab === 'records-certification' && <RecordsCertificationGovernancePanel />}
+              {/* Certificate Template Management */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                    <Award className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Certificate Template Management</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Design and manage certificate templates for courses and achievements
+                    </p>
+                  </div>
+                  <Button 
+                    onClick={() => setShowCreateTemplateModal(true)}
+                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Template
+                  </Button>
+                </div>
+
+                {/* Template List */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[
+                    { 
+                      name: 'Course Completion Certificate', 
+                      type: 'Course', 
+                      courses: 28, 
+                      issued: 1847,
+                      status: 'active',
+                      preview: '📜',
+                      gradient: 'from-[#ff6b4d]/10 to-[#ff6b4d]/5'
+                    },
+                    { 
+                      name: 'Professional Achievement Badge', 
+                      type: 'Badge', 
+                      courses: 12, 
+                      issued: 543,
+                      status: 'active',
+                      preview: '🏆',
+                      gradient: 'from-amber-50 to-amber-100/50'
+                    },
+                    { 
+                      name: 'Specialization Certificate', 
+                      type: 'Specialization', 
+                      courses: 6, 
+                      issued: 287,
+                      status: 'active',
+                      preview: '🎓',
+                      gradient: 'from-purple-50 to-purple-100/50'
+                    },
+                    { 
+                      name: 'Micro-Credential Certificate', 
+                      type: 'Micro', 
+                      courses: 15, 
+                      issued: 892,
+                      status: 'active',
+                      preview: '⭐',
+                      gradient: 'from-emerald-50 to-emerald-100/50'
+                    },
+                    { 
+                      name: 'Executive Program Certificate', 
+                      type: 'Executive', 
+                      courses: 4, 
+                      issued: 156,
+                      status: 'draft',
+                      preview: '👔',
+                      gradient: 'from-blue-50 to-blue-100/50'
+                    },
+                    { 
+                      name: 'Team Achievement Award', 
+                      type: 'Team', 
+                      courses: 8, 
+                      issued: 234,
+                      status: 'active',
+                      preview: '👥',
+                      gradient: 'from-pink-50 to-pink-100/50'
+                    },
+                  ].map((template, index) => (
+                    <div key={index} className={`bg-gradient-to-br ${template.gradient} rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-all cursor-pointer`}>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl">
+                          {template.preview}
+                        </div>
+                        <Badge className={`${
+                          template.status === 'active' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-amber-100 text-amber-700 border-amber-200'
+                        } border`}>
+                          {template.status}
+                        </Badge>
+                      </div>
+                      <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{template.name}</h3>
+                      <div className="flex items-center gap-2 mb-4">
+                        <Badge variant="outline" className="border-[#E5E7EB] text-[#4B5563] bg-white">{template.type}</Badge>
+                      </div>
+                      <div className="flex items-center justify-between text-[13px] text-[#4B5563] mb-4">
+                        <span><span className="font-semibold text-[#1e2348]">{template.courses}</span> courses</span>
+                        <span><span className="font-semibold text-[#1e2348]">{template.issued}</span> issued</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="flex-1 border-[#E5E7EB] bg-white hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                          onClick={() => {
+                            setPreviewTemplate(template);
+                            toast({
+                              title: "Preview Template",
+                              description: `Viewing ${template.name}`,
+                            });
+                          }}
+                        >
+                          <Eye className="w-4 h-4 mr-1" />
+                          Preview
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="bg-white hover:bg-[#fff0ed] hover:text-[#ff6b4d]"
+                          onClick={() => {
+                            setEditingTemplate(template);
+                            toast({
+                              title: "Edit Template",
+                              description: `Editing ${template.name}`,
+                            });
+                          }}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Certificate Issuance & Verification */}
+              <div className="grid lg:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                  <div className="flex items-start gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <CheckCircle className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Certificate Issuance</h2>
+                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                        Automated and manual certificate generation and distribution
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {[
+                      { label: 'Auto-Issue on Completion', value: 'Enabled', status: 'active' },
+                      { label: 'Manual Review Required', value: 'Disabled', status: 'inactive' },
+                      { label: 'Email Delivery', value: 'Enabled', status: 'active' },
+                      { label: 'Blockchain Verification', value: 'Enabled', status: 'active' },
+                    ].map((setting, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:bg-[#E5E7EB] transition-colors">
+                        <span className="text-[14px] font-medium text-[#1e2348]">{setting.label}</span>
+                        <div className="flex items-center gap-3">
+                          <Badge className={`${
+                            setting.status === 'active' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-600 border-gray-200'
+                          } border`}>
+                            {setting.value}
+                          </Badge>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="hover:bg-white hover:text-[#ff6b4d]"
+                            onClick={() => {
+                              toast({
+                                title: "Settings",
+                                description: `Configure ${setting.label}`,
+                              });
+                            }}
+                          >
+                            <Settings className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button 
+                    onClick={() => setShowIssuanceRulesModal(true)}
+                    className="w-full mt-6 bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                  >
+                    <Settings className="w-4 h-4 mr-2" />
+                    Configure Issuance Rules
+                  </Button>
+                </div>
+
+                <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                  <div className="flex items-start gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <Shield className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Certificate Verification</h2>
+                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                        Verify authenticity of issued certificates
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 mb-6">
+                    <div className="p-4 bg-gradient-to-r from-purple-50 to-purple-100/50 rounded-xl border border-purple-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <CheckCircle className="w-5 h-5 text-purple-600" />
+                        <span className="text-[14px] font-semibold text-purple-900">Verification Methods</span>
+                      </div>
+                      <div className="space-y-2 text-[13px] text-purple-700">
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-purple-600"></div>
+                          <span>Certificate ID Lookup</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-purple-600"></div>
+                          <span>QR Code Scanning</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-purple-600"></div>
+                          <span>Blockchain Validation</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] text-center">
+                        <div className="text-[24px] font-bold text-[#1e2348] mb-1">2,847</div>
+                        <div className="text-[12px] text-[#4B5563]">Verified Today</div>
+                      </div>
+                      <div className="p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] text-center">
+                        <div className="text-[24px] font-bold text-[#1e2348] mb-1">99.8%</div>
+                        <div className="text-[12px] text-[#4B5563]">Success Rate</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Button 
+                    onClick={() => setShowVerifyCertificateModal(true)}
+                    variant="outline"
+                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                  >
+                    <Shield className="w-4 h-4 mr-2" />
+                    Verify Certificate
+                  </Button>
+                </div>
+              </div>
+
+              {/* Customer Success Tracking */}
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Customer Success Tracking</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Monitor learner success metrics, engagement, and satisfaction
+                    </p>
+                  </div>
+                  <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <Download className="w-4 h-4 mr-2" />
+                    Export Report
+                  </Button>
+                </div>
+
+                {/* Success Metrics */}
+                <div className="grid md:grid-cols-4 gap-4 mb-8">
+                  {[
+                    { icon: Target, label: 'Goal Achievement', value: '82%', trend: '+5%', up: true },
+                    { icon: Clock, label: 'Avg Time to Complete', value: '6.2 weeks', trend: '-0.8 weeks', up: true },
+                    { icon: TrendingUp, label: 'Career Advancement', value: '67%', trend: '+12%', up: true },
+                    { icon: Star, label: 'NPS Score', value: '72', trend: '+8', up: true },
+                  ].map((metric) => (
+                    <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                      <div className="flex items-center gap-2 mb-3">
+                        <metric.icon className="w-5 h-5 text-[#4B5563]" />
+                        <span className="text-[12px] font-medium text-[#4B5563]">{metric.label}</span>
+                      </div>
+                      <div className="text-[24px] font-bold text-[#1e2348] mb-1">{metric.value}</div>
+                      <div className={`text-[12px] font-medium ${metric.up ? 'text-emerald-600' : 'text-red-600'}`}>
+                        {metric.trend}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Learner Journey Stages */}
+                <div className="mb-8">
+                  <h3 className="text-[18px] leading-[24px] font-semibold text-[#1e2348] mb-4">Learner Journey Stages</h3>
+                  <div className="grid md:grid-cols-5 gap-4">
+                    {[
+                      { stage: 'Onboarding', count: 234, color: 'bg-purple-500' },
+                      { stage: 'Active Learning', count: 892, color: 'bg-[#ff6b4d]' },
+                      { stage: 'Near Completion', count: 156, color: 'bg-amber-500' },
+                      { stage: 'Completed', count: 1847, color: 'bg-emerald-500' },
+                      { stage: 'At Risk', count: 67, color: 'bg-red-500' },
+                    ].map((stage) => (
+                      <div key={stage.stage} className="bg-white rounded-xl p-5 border-2 border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div className={`w-3 h-3 rounded-full ${stage.color} mb-3`}></div>
+                        <div className="text-[28px] font-bold text-[#1e2348] mb-1">{stage.count}</div>
+                        <div className="text-[13px] text-[#4B5563]">{stage.stage}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Recent Success Stories */}
+                <div>
+                  <h3 className="text-[18px] leading-[24px] font-semibold text-[#1e2348] mb-4">Recent Success Stories</h3>
+                  <div className="space-y-3">
+                    {[
+                      { 
+                        learner: 'Sarah Johnson', 
+                        achievement: 'Completed Digital Transformation Specialization', 
+                        outcome: 'Promoted to Senior Manager',
+                        date: '2 days ago',
+                        rating: 5
+                      },
+                      { 
+                        learner: 'Ahmed Al-Mansoori', 
+                        achievement: 'Earned 6 Professional Certificates', 
+                        outcome: 'Started new role at Fortune 500',
+                        date: '5 days ago',
+                        rating: 5
+                      },
+                      { 
+                        learner: 'Maria Garcia', 
+                        achievement: 'Mastered Economy 4.0 Course', 
+                        outcome: 'Led digital initiative at company',
+                        date: '1 week ago',
+                        rating: 4
+                      },
+                    ].map((story, index) => (
+                      <div key={index} className="flex items-start gap-4 p-5 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div className="w-12 h-12 rounded-full bg-[#ff6b4d] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                          {story.learner.charAt(0)}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-2">
+                            <div>
+                              <h4 className="text-[15px] font-semibold text-[#1e2348]">{story.learner}</h4>
+                              <p className="text-[13px] text-[#4B5563]">{story.achievement}</p>
+                            </div>
+                            <span className="text-[12px] text-[#9CA3AF]">{story.date}</span>
+                          </div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge className="bg-emerald-100 text-emerald-700">
+                              <TrendingUp className="w-3 h-3 mr-1" />
+                              {story.outcome}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {Array.from({ length: story.rating }).map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Badge & Micro-Credentials */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Digital Badges & Micro-Credentials</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Manage stackable credentials and achievement badges
+                    </p>
+                  </div>
+                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white" onClick={() => setShowCreateBadgeModal(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Badge
+                  </Button>
+                </div>
+
+                <div className="grid md:grid-cols-4 gap-6">
+                  {[
+                    { name: 'AI Mastery', earned: 234, icon: '🤖', color: 'bg-purple-50' },
+                    { name: 'Leadership Excellence', earned: 189, icon: '👑', color: 'bg-amber-50' },
+                    { name: 'Innovation Champion', earned: 156, icon: '💡', color: 'bg-emerald-50' },
+                    { name: 'Digital Pioneer', earned: 298, icon: '🚀', color: 'bg-[#fff0ed]' },
+                  ].map((badge, index) => (
+                    <div key={index} className={`${badge.color} rounded-xl p-6 border border-[#E5E7EB] text-center hover:shadow-md transition-shadow`}>
+                      <div className="text-5xl mb-3">{badge.icon}</div>
+                      <h3 className="text-[15px] font-semibold text-[#1e2348] mb-2">{badge.name}</h3>
+                      <div className="text-[13px] text-[#4B5563]">
+                        <span className="font-bold text-[#1e2348]">{badge.earned}</span> earned
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Create Template Modal */}
+              {showCreateTemplateModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Create Certificate Template</h2>
+                      <button onClick={() => setShowCreateTemplateModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[#4B5563]" />
+                      </button>
+                    </div>
+                    <div className="p-6 space-y-6">
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Template Name</label>
+                        <input
+                          type="text"
+                          value={certificateTemplateForm.name}
+                          onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, name: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          placeholder="e.g., Professional Certificate"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Template Type</label>
+                        <div className="grid grid-cols-3 gap-3">
+                          {['course', 'badge', 'specialization', 'micro', 'executive', 'team'].map((type) => (
+                            <button
+                              key={type}
+                              onClick={() => setCertificateTemplateForm({ ...certificateTemplateForm, type: type as any })}
+                              className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                                certificateTemplateForm.type === type
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                              }`}
+                            >
+                              {type}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Description</label>
+                        <textarea
+                          value={certificateTemplateForm.description}
+                          onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, description: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[100px]"
+                          placeholder="Describe the certificate template..."
+                        />
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Orientation</label>
+                          <select
+                            value={certificateTemplateForm.orientation}
+                            onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, orientation: e.target.value as any })}
+                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          >
+                            <option value="landscape">Landscape</option>
+                            <option value="portrait">Portrait</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Border Style</label>
+                          <select
+                            value={certificateTemplateForm.borderStyle}
+                            onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, borderStyle: e.target.value as any })}
+                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          >
+                            <option value="classic">Classic</option>
+                            <option value="modern">Modern</option>
+                            <option value="minimal">Minimal</option>
+                            <option value="elegant">Elegant</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-3">Include Elements</label>
+                        <div className="space-y-3">
+                          {[
+                            { key: 'includeQRCode', label: 'QR Code for Verification' },
+                            { key: 'includeSignature', label: 'Digital Signature' },
+                            { key: 'includeDate', label: 'Issue Date' },
+                            { key: 'includeCredentialID', label: 'Credential ID' },
+                          ].map((element) => (
+                            <label key={element.key} className="flex items-center gap-3 p-3 bg-[#F5F6FA] rounded-lg cursor-pointer hover:bg-[#E5E7EB] transition-colors">
+                              <input
+                                type="checkbox"
+                                checked={certificateTemplateForm[element.key as keyof typeof certificateTemplateForm] as boolean}
+                                onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, [element.key]: e.target.checked })}
+                                className="w-5 h-5 text-[#ff6b4d] rounded focus:ring-[#ff6b4d]"
+                              />
+                              <span className="text-[14px] text-[#1e2348]">{element.label}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          onClick={() => setShowCreateTemplateModal(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          onClick={() => {
+                            toast({ title: "Template Created", description: `"${certificateTemplateForm.name}" has been created successfully.` });
+                            setShowCreateTemplateModal(false);
+                            setCertificateTemplateForm({
+                              name: '',
+                              type: 'course',
+                              description: '',
+                              orientation: 'landscape',
+                              backgroundColor: '#ffffff',
+                              borderStyle: 'classic',
+                              includeQRCode: true,
+                              includeSignature: true,
+                              includeDate: true,
+                              includeCredentialID: true,
+                            });
+                          }}
+                        >
+                          Create Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Create Badge Modal */}
+              {showCreateBadgeModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Create Digital Badge</h2>
+                      <button onClick={() => setShowCreateBadgeModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[#4B5563]" />
+                      </button>
+                    </div>
+                    <div className="p-6 space-y-6">
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Badge Name</label>
+                        <input
+                          type="text"
+                          value={badgeForm.name}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, name: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          placeholder="e.g., AI Mastery"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Badge Icon</label>
+                        <div className="grid grid-cols-6 gap-3">
+                          {['🏆', '⭐', '🎓', '💡', '🚀', '👑', '🤖', '💪', '🎯', '🔥', '✨', '🌟'].map((emoji) => (
+                            <button
+                              key={emoji}
+                              onClick={() => setBadgeForm({ ...badgeForm, icon: emoji })}
+                              className={`text-3xl p-4 rounded-lg border-2 transition-all ${
+                                badgeForm.icon === emoji
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10'
+                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                              }`}
+                            >
+                              {emoji}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Category</label>
+                        <div className="grid grid-cols-2 gap-3">
+                          {['achievement', 'skill', 'milestone', 'special'].map((category) => (
+                            <button
+                              key={category}
+                              onClick={() => setBadgeForm({ ...badgeForm, category: category as any })}
+                              className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
+                                badgeForm.category === category
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                              }`}
+                            >
+                              {category}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Description</label>
+                        <textarea
+                          value={badgeForm.description}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, description: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[80px]"
+                          placeholder="Describe what this badge represents..."
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Earning Criteria</label>
+                        <textarea
+                          value={badgeForm.criteria}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, criteria: e.target.value })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[80px]"
+                          placeholder="What must learners do to earn this badge?"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Points Value</label>
+                        <input
+                          type="number"
+                          value={badgeForm.points}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, points: parseInt(e.target.value) })}
+                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          min="0"
+                        />
+                      </div>
+
+                      <label className="flex items-center gap-3 p-3 bg-[#F5F6FA] rounded-lg cursor-pointer hover:bg-[#E5E7EB] transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={badgeForm.stackable}
+                          onChange={(e) => setBadgeForm({ ...badgeForm, stackable: e.target.checked })}
+                          className="w-5 h-5 text-[#ff6b4d] rounded focus:ring-[#ff6b4d]"
+                        />
+                        <span className="text-[14px] text-[#1e2348]">Stackable (can be earned multiple times)</span>
+                      </label>
+
+                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          onClick={() => setShowCreateBadgeModal(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          onClick={() => {
+                            toast({ title: "Badge Created", description: `"${badgeForm.name}" badge has been created successfully.` });
+                            setShowCreateBadgeModal(false);
+                            setBadgeForm({
+                              name: '',
+                              description: '',
+                              category: 'achievement',
+                              icon: '🏆',
+                              criteria: '',
+                              points: 100,
+                              stackable: true,
+                            });
+                          }}
+                        >
+                          Create Badge
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Verify Certificate Modal */}
+              {showVerifyCertificateModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-2xl max-w-lg w-full">
+                    <div className="border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Verify Certificate</h2>
+                      <button onClick={() => setShowVerifyCertificateModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[#4B5563]" />
+                      </button>
+                    </div>
+                    <div className="p-6 space-y-6">
+                      <div>
+                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Verification Method</label>
+                        <div className="grid grid-cols-3 gap-3 mb-4">
+                          {[
+                            { value: 'id', label: 'Certificate ID', icon: '🔢' },
+                            { value: 'qr', label: 'QR Code', icon: '📱' },
+                            { value: 'blockchain', label: 'Blockchain', icon: '⛓️' },
+                          ].map((method) => (
+                            <button
+                              key={method.value}
+                              onClick={() => setVerifyCertificateForm({ ...verifyCertificateForm, verificationMethod: method.value as any })}
+                              className={`flex flex-col items-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
+                                verifyCertificateForm.verificationMethod === method.value
+                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                              }`}
+                            >
+                              <span className="text-2xl">{method.icon}</span>
+                              <span>{method.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {verifyCertificateForm.verificationMethod === 'id' && (
+                        <div>
+                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Certificate ID</label>
+                          <input
+                            type="text"
+                            value={verifyCertificateForm.certificateID}
+                            onChange={(e) => setVerifyCertificateForm({ ...verifyCertificateForm, certificateID: e.target.value })}
+                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                            placeholder="Enter certificate ID..."
+                          />
+                        </div>
+                      )}
+
+                      {verifyCertificateForm.verificationMethod === 'qr' && (
+                        <div className="text-center py-8">
+                          <div className="w-48 h-48 mx-auto bg-[#F5F6FA] rounded-xl flex items-center justify-center border-2 border-dashed border-[#E5E7EB]">
+                            <div className="text-center">
+                              <Upload className="w-12 h-12 mx-auto mb-2 text-[#9CA3AF]" />
+                              <p className="text-[14px] text-[#4B5563]">Scan or upload QR code</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {verifyCertificateForm.verificationMethod === 'blockchain' && (
+                        <div>
+                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Blockchain Transaction Hash</label>
+                          <input
+                            type="text"
+                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                            placeholder="Enter transaction hash..."
+                          />
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                        <Button
+                          variant="outline"
+                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          onClick={() => setShowVerifyCertificateModal(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          onClick={() => {
+                            toast({ 
+                              title: "Certificate Verified", 
+                              description: "This certificate is authentic and was issued by DTMA Academy." 
+                            });
+                            setShowVerifyCertificateModal(false);
+                          }}
+                        >
+                          Verify
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Template Preview Modal */}
+              {previewTemplate && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-[24px] font-semibold text-[#1e2348]">{previewTemplate.name}</h2>
+                        <p className="text-[14px] text-[#4B5563]">Template Preview</p>
+                      </div>
+                      <button onClick={() => setPreviewTemplate(null)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[#4B5563]" />
+                      </button>
+                    </div>
+                    <div className="p-8">
+                      {/* Certificate Preview matching learner/instructor dashboard design */}
+                      <div className="aspect-[16/11] bg-gradient-to-r from-[#1e2348] via-[#2a3058] to-[#ff6b4d] rounded-xl overflow-hidden shadow-2xl border-4 border-white">
+                        <div className="h-full flex flex-col items-center justify-center text-white p-12 relative">
+                          {/* Decorative corner elements */}
+                          <div className="absolute top-6 left-6 w-16 h-16 border-t-4 border-l-4 border-white/30 rounded-tl-xl"></div>
+                          <div className="absolute top-6 right-6 w-16 h-16 border-t-4 border-r-4 border-white/30 rounded-tr-xl"></div>
+                          <div className="absolute bottom-6 left-6 w-16 h-16 border-b-4 border-l-4 border-white/30 rounded-bl-xl"></div>
+                          <div className="absolute bottom-6 right-6 w-16 h-16 border-b-4 border-r-4 border-white/30 rounded-br-xl"></div>
+                          
+                          {/* Certificate icon */}
+                          <div className="w-20 h-20 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm mb-6">
+                            <div className="text-5xl">{previewTemplate.preview}</div>
+                          </div>
+                          
+                          {/* Certificate content */}
+                          <h3 className="text-[40px] font-bold mb-6 tracking-wide">Certificate of Completion</h3>
+                          <p className="text-[18px] mb-4 text-white/90">This certifies that</p>
+                          <p className="text-[32px] font-bold mb-6 tracking-wide">[Learner Name]</p>
+                          <p className="text-[16px] mb-4 text-white/90">has successfully completed</p>
+                          <p className="text-[28px] font-bold mb-8 text-center max-w-2xl">[Course Title]</p>
+                          
+                          {/* Certificate details */}
+                          <div className="flex items-center gap-12 text-[14px] mt-4">
+                            <div className="text-center">
+                              <p className="text-white/70 mb-1">Issue Date</p>
+                              <p className="font-semibold text-[16px]">[Date]</p>
+                            </div>
+                            <div className="w-px h-12 bg-white/30"></div>
+                            <div className="text-center">
+                              <p className="text-white/70 mb-1">Credential ID</p>
+                              <p className="font-semibold text-[16px] font-mono">[ID]</p>
+                            </div>
+                          </div>
+                          
+                          {/* KHDA Badge */}
+                          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+                            <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
+                              <p className="text-[12px] font-medium text-white/90">KHDA-Attested Certificate</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Action buttons */}
+                      <div className="mt-6 flex items-center gap-3">
+                        <Button variant="outline" className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]" onClick={() => setPreviewTemplate(null)}>
+                          Close
+                        </Button>
+                        <Button className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                          <Download className="w-4 h-4 mr-2" />
+                          Download Sample
+                        </Button>
+                        <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                          <Share2 className="w-4 h-4 mr-2" />
+                          Share
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Commerce Tab */}
+          {activeTab === 'commerce' && (
+            <div className="space-y-8">
+              <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Commerce & Billing Operations</h1>
+
+              {/* Revenue Overview Statistics */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { icon: DollarSign, label: 'Total Revenue', value: '$284,750', trend: '+18%', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                  { icon: TrendingUp, label: 'Monthly Recurring', value: '$42,890', trend: '+12%', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                  { icon: Users, label: 'Paying Customers', value: '1,847', trend: '+24%', color: 'text-purple-600', bg: 'bg-purple-50' },
+                  { icon: Award, label: 'Avg Order Value', value: '$154', trend: '+8%', color: 'text-amber-500', bg: 'bg-amber-50' },
+                ].map(stat => (
+                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
+                      <stat.icon className={`w-7 h-7 ${stat.color}`} />
+                    </div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-[13px] leading-[18px] text-[#4B5563]">{stat.label}</div>
+                      <div className="text-[12px] font-medium text-emerald-600">{stat.trend}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Course Pricing & Plans */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Course Pricing & Plans</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Manage course pricing, discount codes, and subscription plans
+                    </p>
+                  </div>
+                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Pricing Plan
+                  </Button>
+                </div>
+
+                {/* Pricing Plans Grid */}
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  {[
+                    { 
+                      name: 'Individual Course', 
+                      price: '$99', 
+                      period: 'one-time',
+                      courses: 28,
+                      sales: 1247,
+                      revenue: '$123,453',
+                      status: 'active'
+                    },
+                    { 
+                      name: 'Monthly Subscription', 
+                      price: '$49', 
+                      period: 'per month',
+                      courses: 'All',
+                      sales: 342,
+                      revenue: '$16,758',
+                      status: 'active'
+                    },
+                    { 
+                      name: 'Annual Subscription', 
+                      price: '$499', 
+                      period: 'per year',
+                      courses: 'All',
+                      sales: 258,
+                      revenue: '$128,742',
+                      status: 'active'
+                    },
+                  ].map((plan, index) => (
+                    <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border-2 border-[#E5E7EB] hover:border-[#ff6b4d] hover:shadow-md transition-all">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="text-[18px] font-semibold text-[#1e2348] mb-1">{plan.name}</h3>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-[32px] font-bold text-[#ff6b4d]">{plan.price}</span>
+                            <span className="text-[14px] text-[#4B5563]">{plan.period}</span>
+                          </div>
+                        </div>
+                        <Badge className="bg-emerald-100 text-emerald-700">{plan.status}</Badge>
+                      </div>
+                      <div className="space-y-3 mb-4">
+                        <div className="flex items-center justify-between text-[13px]">
+                          <span className="text-[#4B5563]">Courses</span>
+                          <span className="font-semibold text-[#1e2348]">{plan.courses}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[13px]">
+                          <span className="text-[#4B5563]">Total Sales</span>
+                          <span className="font-semibold text-[#1e2348]">{plan.sales}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[13px]">
+                          <span className="text-[#4B5563]">Revenue</span>
+                          <span className="font-semibold text-[#1e2348]">{plan.revenue}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm" className="flex-1 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Discount Codes */}
+                <div className="border-t border-[#E5E7EB] pt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-[18px] font-semibold text-[#1e2348]">Active Discount Codes</h3>
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create Code
+                    </Button>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {[
+                      { code: 'WELCOME20', discount: '20%', uses: 234, limit: 500, expires: '2026-06-30' },
+                      { code: 'SUMMER50', discount: '50%', uses: 89, limit: 100, expires: '2026-08-31' },
+                      { code: 'EARLYBIRD', discount: '$25', uses: 156, limit: 200, expires: '2026-05-15' },
+                      { code: 'STUDENT15', discount: '15%', uses: 412, limit: 1000, expires: '2026-12-31' },
+                    ].map((code, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-white rounded-lg border border-[#E5E7EB]">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="font-mono font-bold text-[16px] text-[#1e2348]">{code.code}</span>
+                            <Badge className="bg-[#fff0ed] text-[#ff6b4d]">{code.discount} off</Badge>
+                          </div>
+                          <div className="flex items-center gap-4 text-[12px] text-[#4B5563]">
+                            <span>{code.uses}/{code.limit} uses</span>
+                            <span>•</span>
+                            <span>Expires {code.expires}</span>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                          <Copy className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment & Refunds */}
+              <div className="grid lg:grid-cols-2 gap-6">
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-start gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-7 h-7 text-emerald-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Payment Processing</h2>
+                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                        Monitor payment transactions and success rates
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {[
+                      { label: 'Successful', value: '2,847', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                      { label: 'Pending', value: '23', color: 'text-amber-600', bg: 'bg-amber-50' },
+                      { label: 'Failed', value: '12', color: 'text-red-600', bg: 'bg-red-50' },
+                      { label: 'Success Rate', value: '99.6%', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                    ].map((metric) => (
+                      <div key={metric.label} className={`${metric.bg} rounded-lg p-4 border border-[#E5E7EB]`}>
+                        <div className={`text-[24px] font-bold ${metric.color} mb-1`}>{metric.value}</div>
+                        <div className="text-[12px] text-[#4B5563]">{metric.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-[16px] font-semibold text-[#1e2348]">Payment Methods</h3>
+                    {[
+                      { method: 'Credit/Debit Cards', percentage: 68, icon: '💳' },
+                      { method: 'PayPal', percentage: 22, icon: '🅿️' },
+                      { method: 'Bank Transfer', percentage: 10, icon: '🏦' },
+                    ].map((pm) => (
+                      <div key={pm.method} className="flex items-center gap-3">
+                        <span className="text-2xl">{pm.icon}</span>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[14px] font-medium text-[#1e2348]">{pm.method}</span>
+                            <span className="text-[13px] font-semibold text-[#4B5563]">{pm.percentage}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-[#F5F6FA] rounded-full overflow-hidden">
+                            <div className="h-full bg-[#ff6b4d] rounded-full" style={{ width: `${pm.percentage}%` }}></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-start gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                      <ArrowUpRight className="w-7 h-7 text-amber-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Refunds & Disputes</h2>
+                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                        Manage refund requests and payment disputes
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {[
+                      { label: 'Pending Refunds', value: '8' },
+                      { label: 'Processed', value: '142' },
+                      { label: 'Total Refunded', value: '$12,450' },
+                      { label: 'Refund Rate', value: '4.2%' },
+                    ].map((metric) => (
+                      <div key={metric.label} className="bg-[#F5F6FA] rounded-lg p-4 border border-[#E5E7EB]">
+                        <div className="text-[20px] font-bold text-[#1e2348] mb-1">{metric.value}</div>
+                        <div className="text-[12px] text-[#4B5563]">{metric.label}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-[16px] font-semibold text-[#1e2348] mb-3">Recent Refund Requests</h3>
+                    {[
+                      { user: 'John Smith', course: 'Digital Economy', amount: '$99', date: '2 hours ago', status: 'pending' },
+                      { user: 'Sarah Lee', course: 'Platform Economics', amount: '$99', date: '5 hours ago', status: 'pending' },
+                      { user: 'Mike Chen', course: 'Digital Transformation', amount: '$99', date: '1 day ago', status: 'approved' },
+                    ].map((refund, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-[#F5F6FA] rounded-lg border border-[#E5E7EB]">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[14px] font-medium text-[#1e2348]">{refund.user}</span>
+                            <Badge className={`${
+                              refund.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'
+                            }`}>
+                              {refund.status}
+                            </Badge>
+                          </div>
+                          <div className="text-[12px] text-[#4B5563]">
+                            {refund.course} • {refund.amount} • {refund.date}
+                          </div>
+                        </div>
+                        {refund.status === 'pending' && (
+                          <div className="flex items-center gap-2">
+                            <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Approve
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Transaction History */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Transaction History</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      View and manage all payment transactions
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#F5F6FA]">
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter
+                    </Button>
+                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-[#1e2348]">
+                      <tr>
+                        {['Transaction ID', 'Customer', 'Course/Plan', 'Amount', 'Payment Method', 'Status', 'Date', 'Actions'].map(h => (
+                          <th key={h} className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { id: 'TXN-2024-5847', customer: 'Sarah Johnson', item: 'Annual Subscription', amount: '$499', method: 'Credit Card', status: 'completed', date: '2026-04-17 14:23' },
+                        { id: 'TXN-2024-5846', customer: 'Ahmed Al-Mansoori', item: 'Digital Economy Course', amount: '$99', method: 'PayPal', status: 'completed', date: '2026-04-17 13:45' },
+                        { id: 'TXN-2024-5845', customer: 'Maria Garcia', item: 'Monthly Subscription', amount: '$49', method: 'Credit Card', status: 'pending', date: '2026-04-17 12:10' },
+                        { id: 'TXN-2024-5844', customer: 'John Smith', item: 'Platform Economics', amount: '$99', method: 'Bank Transfer', status: 'completed', date: '2026-04-17 11:30' },
+                        { id: 'TXN-2024-5843', customer: 'Fatima Hassan', item: 'Digital Transformation', amount: '$99', method: 'Credit Card', status: 'failed', date: '2026-04-17 10:15' },
+                      ].map((txn, index) => (
+                        <tr key={index} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] ${index % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
+                          <td className="px-4 py-3">
+                            <span className="font-mono text-[13px] text-[#1e2348]">{txn.id}</span>
+                          </td>
+                          <td className="px-4 py-3 text-[14px] font-medium text-[#1e2348]">{txn.customer}</td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{txn.item}</td>
+                          <td className="px-4 py-3 text-[14px] font-semibold text-[#1e2348]">{txn.amount}</td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{txn.method}</td>
+                          <td className="px-4 py-3">
+                            <Badge className={`${
+                              txn.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
+                              txn.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                              'bg-red-100 text-red-700'
+                            }`}>
+                              {txn.status}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{txn.date}</td>
+                          <td className="px-4 py-3">
+                            <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Revenue Analytics */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Revenue Analytics</h2>
+                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      Track revenue trends and performance metrics
+                    </p>
+                  </div>
+                  <select className="px-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>This year</option>
+                  </select>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    { label: 'Course Sales', value: '$156,890', change: '+15%', icon: BookOpen },
+                    { label: 'Subscriptions', value: '$89,640', change: '+22%', icon: Users },
+                    { label: 'Certifications', value: '$38,220', change: '+8%', icon: Award },
+                  ].map((metric) => (
+                    <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB]">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
+                          <metric.icon className="w-6 h-6 text-[#ff6b4d]" />
+                        </div>
+                        <div>
+                          <div className="text-[12px] text-[#4B5563] mb-1">{metric.label}</div>
+                          <div className="text-[24px] font-bold text-[#1e2348]">{metric.value}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4 text-emerald-600" />
+                        <span className="text-[13px] font-medium text-emerald-600">{metric.change} vs last period</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* System Settings Tab */}
           {activeTab === 'system' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-foreground">User, Roles & System Administration</h1>
-              <div className="grid gap-6">
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">System Settings</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                    Configure platform settings, policies, and feature flags.
-                  </p>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Configure Settings</Button>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">User, Roles & System Administration</h1>
+              
+              {/* Statistics Overview */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-2">
+                    <Shield className="w-8 h-8 text-[#ff6b4d]" />
+                    <span className="text-[13px] text-[#10B981] font-medium">Active</span>
+                  </div>
+                  <p className="text-[32px] font-bold text-[#1e2348]">8</p>
+                  <p className="text-[14px] text-[#4B5563]">User Roles</p>
                 </div>
-                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-foreground">Audit Logs</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                    View system audit logs and compliance reports.
-                  </p>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-2">
+                    <Activity className="w-8 h-8 text-[#ff6b4d]" />
+                    <span className="text-[13px] text-[#10B981] font-medium">+8%</span>
+                  </div>
+                  <p className="text-[32px] font-bold text-[#1e2348]">1,234</p>
+                  <p className="text-[14px] text-[#4B5563]">Active Sessions</p>
+                </div>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-2">
+                    <FileText className="w-8 h-8 text-[#ff6b4d]" />
+                    <span className="text-[13px] text-[#4B5563] font-medium">Last 24h</span>
+                  </div>
+                  <p className="text-[32px] font-bold text-[#1e2348]">3,456</p>
+                  <p className="text-[14px] text-[#4B5563]">Audit Events</p>
+                </div>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                  <div className="flex items-center justify-between mb-2">
+                    <Lock className="w-8 h-8 text-[#ff6b4d]" />
+                    <span className="text-[13px] text-emerald-600 font-medium">Secure</span>
+                  </div>
+                  <p className="text-[32px] font-bold text-[#1e2348]">99.9%</p>
+                  <p className="text-[14px] text-[#4B5563]">System Uptime</p>
+                </div>
+              </div>
+
+              {/* Roles & Permissions */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] mb-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Roles & Permissions</h3>
+                    <p className="text-[14px] text-[#4B5563] mt-1">Define and manage user roles with granular permissions</p>
+                  </div>
+                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create Role
+                  </Button>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    { name: 'Super Admin', users: 3, permissions: 'Full Access', color: 'bg-red-100 text-red-700' },
+                    { name: 'Admin', users: 12, permissions: '45 Permissions', color: 'bg-[#fff0ed] text-[#ff6b4d]' },
+                    { name: 'Instructor', users: 156, permissions: '28 Permissions', color: 'bg-blue-100 text-blue-700' },
+                    { name: 'Content Manager', users: 8, permissions: '22 Permissions', color: 'bg-purple-100 text-purple-700' },
+                    { name: 'Learner', users: 2654, permissions: '12 Permissions', color: 'bg-green-100 text-green-700' },
+                    { name: 'Guest', users: 14, permissions: '5 Permissions', color: 'bg-gray-100 text-gray-600' },
+                    { name: 'Support Staff', users: 6, permissions: '18 Permissions', color: 'bg-amber-100 text-amber-700' },
+                    { name: 'Auditor', users: 2, permissions: 'Read Only', color: 'bg-indigo-100 text-indigo-700' },
+                  ].map((role, index) => (
+                    <div key={index} className="bg-[#F5F6FA] rounded-xl p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-3">
+                        <Shield className="w-6 h-6 text-[#ff6b4d]" />
+                        <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <h4 className="text-[16px] font-semibold text-[#1e2348] mb-2">{role.name}</h4>
+                      <p className="text-[13px] text-[#4B5563] mb-3">{role.permissions}</p>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-[#9CA3AF]" />
+                        <span className="text-[13px] text-[#4B5563]">{role.users} users</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* System Settings */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] mb-6">
+                <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-6">System Settings</h3>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* General Settings */}
+                  <div className="space-y-4">
+                    <h4 className="text-[16px] font-semibold text-[#1e2348] mb-4">General Settings</h4>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Platform Name</p>
+                        <p className="text-[13px] text-[#4B5563]">DTMA Learning Platform</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Time Zone</p>
+                        <p className="text-[13px] text-[#4B5563]">UTC+04:00 (Dubai)</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Default Language</p>
+                        <p className="text-[13px] text-[#4B5563]">English (US)</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Maintenance Mode</p>
+                        <p className="text-[13px] text-[#4B5563]">Disabled</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Security Settings */}
+                  <div className="space-y-4">
+                    <h4 className="text-[16px] font-semibold text-[#1e2348] mb-4">Security Settings</h4>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Two-Factor Authentication</p>
+                        <p className="text-[13px] text-[#4B5563]">Required for admins</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" defaultChecked />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                      </label>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Session Timeout</p>
+                        <p className="text-[13px] text-[#4B5563]">30 minutes of inactivity</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">Password Policy</p>
+                        <p className="text-[13px] text-[#4B5563]">Strong (12+ chars, mixed)</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                      <div>
+                        <p className="text-[14px] font-medium text-[#1e2348]">IP Whitelist</p>
+                        <p className="text-[13px] text-[#4B5563]">8 addresses configured</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Settings className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Audit Logs */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Audit Logs</h3>
+                    <p className="text-[14px] text-[#4B5563] mt-1">Track all system activities and user actions</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Filter className="w-4 h-4 mr-2" />
+                      Filter
+                    </Button>
+                    <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  {[
+                    { action: 'User Login', user: 'Sarah Johnson', details: 'Successful login from 192.168.1.100', time: '2 mins ago', type: 'success' },
+                    { action: 'Role Updated', user: 'Michael Chen', details: 'Changed role from Learner to Instructor', time: '15 mins ago', type: 'info' },
+                    { action: 'Course Published', user: 'Emma Williams', details: 'Published "Digital Transformation Fundamentals"', time: '1 hour ago', type: 'success' },
+                    { action: 'Failed Login Attempt', user: 'Unknown', details: 'Multiple failed attempts from 203.45.67.89', time: '2 hours ago', type: 'warning' },
+                    { action: 'User Suspended', user: 'Admin', details: 'Suspended user account: john.doe@example.com', time: '3 hours ago', type: 'error' },
+                    { action: 'Settings Changed', user: 'Sarah Johnson', details: 'Updated system timezone settings', time: '5 hours ago', type: 'info' },
+                  ].map((log, index) => (
+                    <div key={index} className="flex items-start gap-4 p-4 bg-[#F5F6FA] rounded-lg hover:bg-[#fff0ed] transition-colors">
+                      <div className={`w-2 h-2 rounded-full mt-2 ${
+                        log.type === 'success' ? 'bg-emerald-500' :
+                        log.type === 'warning' ? 'bg-amber-500' :
+                        log.type === 'error' ? 'bg-red-500' :
+                        'bg-blue-500'
+                      }`} />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="text-[14px] font-semibold text-[#1e2348]">{log.action}</p>
+                          <span className="text-[13px] text-[#4B5563]">{log.time}</span>
+                        </div>
+                        <p className="text-[13px] text-[#4B5563] mb-1">{log.details}</p>
+                        <p className="text-[12px] text-[#9CA3AF]">By: {log.user}</p>
+                      </div>
+                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 flex items-center justify-center">
+                  <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    Load More Logs
+                  </Button>
                 </div>
               </div>
             </div>
@@ -2005,6 +6137,13 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
+
+          {/* Stage4 Panels */}
+          {activeTab === 'finance' && <FinanceBillingGovernancePanel />}
+          {activeTab === 'partner-reporting' && <PartnerAccreditationReportingPanel />}
+          {activeTab === 'analytics-performance' && <AnalyticsPerformanceInsightsPanel />}
+          {activeTab === 'operations-support' && <OperationsSupportPanel />}
+          {activeTab === 'records-certification' && <RecordsCertificationGovernancePanel />}
         </main>
       </div>
 
@@ -2191,7 +6330,7 @@ const AdminDashboard = () => {
                     <div className={`w-2 h-2 rounded-full mt-2 ${
                       announcementForm.priority === 'urgent' ? 'bg-red-500' :
                       announcementForm.priority === 'high' ? 'bg-orange-500' :
-                      announcementForm.priority === 'normal' ? 'bg-blue-500' :
+                      announcementForm.priority === 'normal' ? 'bg-[#ff6b4d]' :
                       'bg-gray-400'
                     }`} />
                     <div className="flex-1">
@@ -2282,18 +6421,34 @@ const AdminDashboard = () => {
                 <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                   Select Course *
                 </label>
-                <select
+                <Select
                   value={scheduleForm.course}
-                  onChange={(e) => setScheduleForm({ ...scheduleForm, course: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  onValueChange={(value) => setScheduleForm({ ...scheduleForm, course: value })}
                 >
-                  <option value="">Choose a course...</option>
-                  <option value="digital-transformation">Digital Transformation Fundamentals</option>
-                  <option value="ai-automation">AI & Automation in the Workplace</option>
-                  <option value="data-driven">Data-Driven Decision Making</option>
-                  <option value="leadership">Leadership in the Digital Age</option>
-                  <option value="agile">Agile Project Management</option>
-                </select>
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                    <SelectValue placeholder="Choose a course..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="economy-40" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Mastering Economy 4.0
+                    </SelectItem>
+                    <SelectItem value="cognitive-org" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Decoding Digital Cognitive Organisations
+                    </SelectItem>
+                    <SelectItem value="business-platforms" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Building Powerful Digital Business Platforms
+                    </SelectItem>
+                    <SelectItem value="transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Navigating Digital Transformation 2.0
+                    </SelectItem>
+                    <SelectItem value="digital-workers" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Optimizing Digital Workers and Workspaces
+                    </SelectItem>
+                    <SelectItem value="digital-accelerators" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Leveraging Digital Accelerators for Growth
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Session Type */}
@@ -2340,18 +6495,31 @@ const AdminDashboard = () => {
                 <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                   Instructor *
                 </label>
-                <select
+                <Select
                   value={scheduleForm.instructor}
-                  onChange={(e) => setScheduleForm({ ...scheduleForm, instructor: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  onValueChange={(value) => setScheduleForm({ ...scheduleForm, instructor: value })}
                 >
-                  <option value="">Select instructor...</option>
-                  <option value="dr-aisha">Dr. Aisha Mensah</option>
-                  <option value="james">James Okafor</option>
-                  <option value="priya">Priya Nair</option>
-                  <option value="marcus">Marcus Webb</option>
-                  <option value="sofia">Sofia Reyes</option>
-                </select>
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                    <SelectValue placeholder="Select instructor..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="dr-aisha" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Dr. Aisha Mensah
+                    </SelectItem>
+                    <SelectItem value="james" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      James Okafor
+                    </SelectItem>
+                    <SelectItem value="priya" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Priya Nair
+                    </SelectItem>
+                    <SelectItem value="marcus" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Marcus Webb
+                    </SelectItem>
+                    <SelectItem value="sofia" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Sofia Reyes
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Date and Time */}
@@ -2606,19 +6774,34 @@ const AdminDashboard = () => {
                 <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                   Select Course *
                 </label>
-                <select
+                <Select
                   value={bulkEnrollForm.course}
-                  onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, course: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  onValueChange={(value) => setBulkEnrollForm({ ...bulkEnrollForm, course: value })}
                 >
-                  <option value="">Choose a course...</option>
-                  <option value="digital-transformation">Digital Transformation Fundamentals</option>
-                  <option value="ai-automation">AI & Automation in the Workplace</option>
-                  <option value="data-driven">Data-Driven Decision Making</option>
-                  <option value="leadership">Leadership in the Digital Age</option>
-                  <option value="agile">Agile Project Management</option>
-                  <option value="cybersecurity">Cybersecurity Essentials</option>
-                </select>
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                    <SelectValue placeholder="Choose a course..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="economy-40" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Mastering Economy 4.0
+                    </SelectItem>
+                    <SelectItem value="cognitive-org" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Decoding Digital Cognitive Organisations
+                    </SelectItem>
+                    <SelectItem value="business-platforms" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Building Powerful Digital Business Platforms
+                    </SelectItem>
+                    <SelectItem value="transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Navigating Digital Transformation 2.0
+                    </SelectItem>
+                    <SelectItem value="digital-workers" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Optimizing Digital Workers and Workspaces
+                    </SelectItem>
+                    <SelectItem value="digital-accelerators" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                      Leveraging Digital Accelerators for Growth
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Enrollment Method */}
@@ -2695,9 +6878,9 @@ const AdminDashboard = () => {
                       </p>
                     )}
                   </div>
-                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                    <p className="text-[12px] text-blue-900 font-medium mb-2">CSV Format Requirements:</p>
-                    <ul className="text-[12px] text-blue-800 space-y-1 ml-4 list-disc">
+                  <div className="mt-4 p-4 bg-[#fff0ed] rounded-lg">
+                    <p className="text-[12px] text-[#1e2348] font-medium mb-2">CSV Format Requirements:</p>
+                    <ul className="text-[12px] text-[#4B5563] space-y-1 ml-4 list-disc">
                       <li>First column: Email address (required)</li>
                       <li>Second column: Full name (optional)</li>
                       <li>Third column: Organization (optional)</li>
@@ -2981,19 +7164,34 @@ const AdminDashboard = () => {
                     <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                       Department *
                     </label>
-                    <select
+                    <Select
                       value={facultyForm.department}
-                      onChange={(e) => setFacultyForm({ ...facultyForm, department: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      onValueChange={(value) => setFacultyForm({ ...facultyForm, department: value })}
                     >
-                      <option value="">Select department...</option>
-                      <option value="digital-transformation">Digital Transformation</option>
-                      <option value="ai-technology">AI & Technology</option>
-                      <option value="leadership">Leadership & Management</option>
-                      <option value="data-analytics">Data & Analytics</option>
-                      <option value="cybersecurity">Cybersecurity</option>
-                      <option value="business-strategy">Business Strategy</option>
-                    </select>
+                      <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                        <SelectValue placeholder="Select department..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="digital-transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Digital Transformation
+                        </SelectItem>
+                        <SelectItem value="ai-technology" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          AI & Technology
+                        </SelectItem>
+                        <SelectItem value="leadership" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Leadership & Management
+                        </SelectItem>
+                        <SelectItem value="data-analytics" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Data & Analytics
+                        </SelectItem>
+                        <SelectItem value="cybersecurity" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Cybersecurity
+                        </SelectItem>
+                        <SelectItem value="business-strategy" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                          Business Strategy
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div>
@@ -3136,7 +7334,7 @@ const AdminDashboard = () => {
                     Assign to Courses
                   </label>
                   <div className="space-y-2">
-                    {['Digital Transformation Fundamentals', 'AI & Automation in the Workplace', 'Leadership in the Digital Age', 'Agile Project Management', 'Cybersecurity Essentials'].map((course) => (
+                    {['Mastering Economy 4.0', 'Decoding Digital Cognitive Organisations', 'Building Powerful Digital Business Platforms', 'Navigating Digital Transformation 2.0', 'Optimizing Digital Workers and Workspaces', 'Leveraging Digital Accelerators for Growth'].map((course) => (
                       <label key={course} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
                         <input
                           type="checkbox"
@@ -3408,8 +7606,8 @@ const AdminDashboard = () => {
                       </button>
                     ))}
                   </div>
-                  <div className="mt-3 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-[12px] text-blue-900">
+                  <div className="mt-3 p-3 bg-[#fff0ed] rounded-lg">
+                    <p className="text-[12px] text-[#1e2348]">
                       {createUserForm.role === 'learner' && 'Learners can enroll in courses, access content, and track their progress.'}
                       {createUserForm.role === 'instructor' && 'Instructors can create courses, manage content, and interact with learners.'}
                       {createUserForm.role === 'admin' && 'Admins have full access to all platform features and settings.'}
@@ -3616,12 +7814,7 @@ const AdminDashboard = () => {
                     </label>
                     <select
                       value={reviewContentForm.contentType}
-                      onChange={(e) =>
-                        setReviewContentForm({
-                          ...reviewContentForm,
-                          contentType: e.target.value as 'course' | 'lesson' | 'assessment' | 'resource',
-                        })
-                      }
+                      onChange={(e) => setReviewContentForm({ ...reviewContentForm, contentType: e.target.value as any })}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
                     >
                       <option value="course">Course</option>
@@ -3640,10 +7833,12 @@ const AdminDashboard = () => {
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
                     >
                       <option value="">Choose content...</option>
-                      <option value="dt-fundamentals">Digital Transformation Fundamentals</option>
-                      <option value="ai-automation">AI & Automation in the Workplace</option>
-                      <option value="data-driven">Data-Driven Decision Making</option>
-                      <option value="leadership">Leadership in the Digital Age</option>
+                      <option value="economy-40">Mastering Economy 4.0</option>
+                      <option value="cognitive-org">Decoding Digital Cognitive Organisations</option>
+                      <option value="business-platforms">Building Powerful Digital Business Platforms</option>
+                      <option value="transformation">Navigating Digital Transformation 2.0</option>
+                      <option value="digital-workers">Optimizing Digital Workers and Workspaces</option>
+                      <option value="digital-accelerators">Leveraging Digital Accelerators for Growth</option>
                     </select>
                   </div>
                 </div>
@@ -3914,6 +8109,191 @@ const AdminDashboard = () => {
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   Submit Review
                 </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Program Modal */}
+      {showCreateProgramModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Create New Learning Program</h2>
+              </div>
+              <button
+                onClick={() => setShowCreateProgramModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div className="bg-[#fff0ed] border border-[#ff6b4d]/20 rounded-xl p-4">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="w-5 h-5 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="text-[14px] font-semibold text-[#1e2348] mb-1">Program Builder</h3>
+                    <p className="text-[13px] text-[#4B5563]">
+                      Create comprehensive learning programs by combining multiple courses into structured pathways. 
+                      Define prerequisites, set milestones, and design certification requirements.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[14px] font-medium text-gray-700 mb-2">Program Name *</label>
+                <input
+                  type="text"
+                  placeholder="e.g., Digital Transformation Leadership Program"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[14px] font-medium text-gray-700 mb-2">Category *</label>
+                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent">
+                  <option>Select a category</option>
+                  <option>Digital Transformation</option>
+                  <option>Business Platform</option>
+                  <option>Digital Accelerators</option>
+                  <option>Digital Workers</option>
+                  <option>Digital Economy</option>
+                  <option>Cognitive Organization</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[14px] font-medium text-gray-700 mb-2">Description</label>
+                <textarea
+                  rows={4}
+                  placeholder="Describe the program objectives, target audience, and learning outcomes..."
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                />
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[14px] font-medium text-gray-700 mb-2">Duration (weeks)</label>
+                  <input
+                    type="number"
+                    placeholder="12"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[14px] font-medium text-gray-700 mb-2">Difficulty Level</label>
+                  <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent">
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Advanced</option>
+                    <option>Expert</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
+                <Button
+                  onClick={() => setShowCreateProgramModal(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowCreateProgramModal(false);
+                    toast({
+                      title: "Program Created",
+                      description: "New learning program has been created successfully.",
+                    });
+                  }}
+                  className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Program
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Faculty List Modal */}
+      {showFacultyListModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">All Faculty Members</h2>
+              </div>
+              <button
+                onClick={() => setShowFacultyListModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="bg-[#F5F6FA] rounded-xl p-8 text-center">
+                <Users className="w-12 h-12 text-[#ff6b4d] mx-auto mb-4" />
+                <h3 className="text-[18px] font-semibold text-[#1e2348] mb-2">Faculty Management</h3>
+                <p className="text-[14px] text-[#4B5563] mb-4">
+                  View and manage all faculty members, their courses, and performance metrics.
+                </p>
+                <Button
+                  onClick={() => {
+                    setShowFacultyListModal(false);
+                    setShowAddFacultyModal(true);
+                  }}
+                  className="bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                >
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Add New Faculty
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Performance Reports Modal */}
+      {showPerformanceReportsModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
+                  <BarChart2 className="w-5 h-5 text-[#ff6b4d]" />
+                </div>
+                <h2 className="text-[24px] leading-[32px] font-semibold">Faculty Performance Reports</h2>
+              </div>
+              <button
+                onClick={() => setShowPerformanceReportsModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="bg-[#F5F6FA] rounded-xl p-8 text-center">
+                <BarChart2 className="w-12 h-12 text-[#ff6b4d] mx-auto mb-4" />
+                <h3 className="text-[18px] font-semibold text-[#1e2348] mb-2">Performance Analytics</h3>
+                <p className="text-[14px] text-[#4B5563]">
+                  Comprehensive analytics and insights on faculty performance, student ratings, and course effectiveness.
+                </p>
               </div>
             </div>
           </div>

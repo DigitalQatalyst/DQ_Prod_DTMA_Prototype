@@ -6,8 +6,8 @@
 
 @layer base {
   :root {
-    /* Primary Brand: #2563EB - Bright Blue */
-    --primary: 217 91% 60%;
+    /* Primary Brand: #ff6b4d - Coral Orange */
+    --primary: 11 100% 65%;
     --primary-foreground: 0 0% 100%;
 
     /* Secondary Brand: #1E2348 - Dark Navy */
@@ -29,8 +29,8 @@
     --muted: 210 40% 98%;
     --muted-foreground: 210 10% 40%;
 
-    /* Accent uses primary blue */
-    --accent: 217 91% 60%;
+    /* Accent uses coral orange */
+    --accent: 11 100% 65%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -39,7 +39,7 @@
     /* Border: Light Gray */
     --border: 210 40% 96%;
     --input: 210 40% 96%;
-    --ring: 217 91% 60%;
+    --ring: 11 100% 65%;
 
     --radius: 0.5rem;
 
@@ -51,17 +51,17 @@
     --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.04);
     --shadow-md: 0 4px 12px hsl(0 0% 0% / 0.06);
     --shadow-lg: 0 12px 32px hsl(0 0% 0% / 0.1);
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.1);
+    --shadow-glow: 0 0 40px hsl(11 100% 65% / 0.1);
 
     /* Sidebar */
     --sidebar-background: 210 40% 98%;
     --sidebar-foreground: 30 13% 14%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary: 11 100% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 228 28% 20%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 210 40% 96%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-ring: 11 100% 65%;
   }
 
   .dark {
@@ -75,8 +75,8 @@
     --popover: 228 28% 18%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary bright blue */
-    --primary: 217 91% 60%;
+    /* Primary coral orange */
+    --primary: 11 100% 65%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 228 28% 25%;
@@ -85,7 +85,7 @@
     --muted: 228 28% 25%;
     --muted-foreground: 210 40% 70%;
 
-    --accent: 217 91% 60%;
+    --accent: 11 100% 65%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 45%;
@@ -93,7 +93,7 @@
 
     --border: 228 28% 25%;
     --input: 228 28% 25%;
-    --ring: 217 91% 60%;
+    --ring: 11 100% 65%;
 
     --charcoal: 228 28% 20%;
     --cream: 228 28% 25%;
@@ -101,16 +101,16 @@
     --shadow-sm: 0 1px 2px hsl(0 0% 0% / 0.3);
     --shadow-md: 0 4px 12px hsl(0 0% 0% / 0.4);
     --shadow-lg: 0 12px 32px hsl(0 0% 0% / 0.5);
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.15);
+    --shadow-glow: 0 0 40px hsl(11 100% 65% / 0.15);
 
     --sidebar-background: 228 28% 18%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary: 11 100% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 228 28% 25%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 228 28% 25%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-ring: 11 100% 65%;
   }
 }
 
@@ -208,12 +208,12 @@
 
   /* Select option hover styling */
   select option:hover {
-    background-color: #F9FAFB !important;
+    background-color: #fff0ed !important;
   }
 
   select option:checked {
-    background: linear-gradient(#2563EB, #2563EB);
-    background-color: #2563EB !important;
+    background: linear-gradient(#ff6b4d, #ff6b4d);
+    background-color: #ff6b4d !important;
     color: white;
   }
 }

@@ -37,11 +37,9 @@ import {
   FileText,
   Search,
   Bell,
-  MessageCircle,
 } from 'lucide-react';
 import { ProfileManagement } from '@/components/dashboard/ProfileManagement';
 import { ProgressTracking } from '@/components/dashboard/ProgressTracking';
-import { AssessmentsQuizzes } from '@/components/dashboard/AssessmentsQuizzes';
 import { AssignmentsCredentials } from '@/components/dashboard/AssignmentsCredentials';
 import { CertificatesBadges } from '@/components/dashboard/CertificatesBadges';
 import { CollaborationTools } from '@/components/dashboard/CollaborationTools';
@@ -229,17 +227,6 @@ const LearnerDashboard = () => {
               <span className="text-[16px] leading-[24px] font-normal">Microlearning Paths</span>
             </button>
             <button
-              onClick={() => setActiveTab('assessments')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                activeTab === 'assessments' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <FileText className="w-5 h-5" />
-              <span className="text-[16px] leading-[24px] font-normal">Assessments</span>
-            </button>
-            <button
               onClick={() => setActiveTab('assignments')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                 activeTab === 'assignments' 
@@ -365,7 +352,6 @@ const LearnerDashboard = () => {
               {activeTab === 'certificates' && 'Certificates & Badges'}
               {activeTab === 'profile' && 'Profile Settings'}
               {activeTab === 'progress' && 'Progress & Notes'}
-              {activeTab === 'assessments' && 'Assessments'}
               {activeTab === 'assignments' && 'Assignments & Capstones'}
               {activeTab === 'collaboration' && 'Discussions'}
               {activeTab === 'live' && 'Live Classes'}
@@ -385,14 +371,14 @@ const LearnerDashboard = () => {
             </div>
 
             {/* Notifications */}
-            <button className="relative p-2 hover:bg-accent rounded-lg transition-colors">
+            <button className="relative p-2 rounded-lg transition-colors">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-[#ff6b4d] rounded-full"></span>
             </button>
 
             {/* Browse Courses Button */}
             <Link to="/courses">
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
                 <BookOpen className="w-4 h-4" />
                 <span className="hidden sm:inline">Browse Courses</span>
               </Button>
@@ -427,12 +413,6 @@ const LearnerDashboard = () => {
                     </p>
                   </div>
                   <div className="flex gap-3">
-                    <Link to="/ai-study-buddy">
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="lg">
-                        <Bot className="w-5 h-5 mr-2" />
-                        AI Study Buddy
-                      </Button>
-                    </Link>
                     {inProgressCourses.length > 0 && (
                       <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
                         <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20" size="lg">
@@ -516,37 +496,43 @@ const LearnerDashboard = () => {
                   </div>
                 ) : (
                   <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {inProgressCourses.slice(0, 3).map((enrollment) => (
-                      <Link
-                        key={enrollment.id}
-                        to={`/courses/${enrollment.course_id}/learn`}
-                        className="group bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all"
-                      >
-                        <div className="relative">
-                          <img
-                            src={enrollment.course?.image_url || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9'}
-                            alt={enrollment.course?.title}
-                            className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                          <div className="absolute bottom-3 left-3 right-3">
-                            <Badge className="bg-white/20 text-white backdrop-blur-sm">
-                              {enrollment.progress || 0}% complete
-                            </Badge>
+                    {inProgressCourses.slice(0, 3).map((enrollment) => {
+                      // Find the actual course data to get the correct image
+                      const courseData = dtmaCourses.find(c => c.id === enrollment.course_id);
+                      const courseImage = courseData?.image || enrollment.course?.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop';
+                      
+                      return (
+                        <Link
+                          key={enrollment.id}
+                          to={`/courses/${enrollment.course_id}/learn`}
+                          className="group bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all"
+                        >
+                          <div className="relative">
+                            <img
+                              src={courseImage}
+                              alt={enrollment.course?.title}
+                              className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                            <div className="absolute bottom-3 left-3 right-3">
+                              <Badge className="bg-white/20 text-white backdrop-blur-sm">
+                                {enrollment.progress || 0}% complete
+                              </Badge>
+                            </div>
                           </div>
-                        </div>
-                        <div className="p-5">
-                          <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                            {enrollment.course?.title}
-                          </h4>
-                          <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                            <Clock className="w-4 h-4" />
-                            <span>{enrollment.course?.duration_hours || 0} hours</span>
+                          <div className="p-5">
+                            <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                              {enrollment.course?.title}
+                            </h4>
+                            <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
+                              <Clock className="w-4 h-4" />
+                              <span>{enrollment.course?.duration_hours || 0} hours</span>
+                            </div>
+                            <Progress value={enrollment.progress || 0} className="h-2" />
                           </div>
-                          <Progress value={enrollment.progress || 0} className="h-2" />
-                        </div>
-                      </Link>
-                    ))}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </section>
@@ -576,7 +562,7 @@ const LearnerDashboard = () => {
                           to={course.comingSoon ? '#' : `/courses/${course.id}`}
                           onClick={(e) => course.comingSoon && e.preventDefault()}
                           className={`group bg-card rounded-2xl overflow-hidden shadow-sm transition-all ${
-                            course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg'
+                            course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-[#ff6b4d]/20'
                           }`}
                         >
                           <div className="relative">
@@ -692,46 +678,52 @@ const LearnerDashboard = () => {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {inProgressCourses.map((enrollment) => (
-                        <div key={enrollment.id} className="bg-card rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-5">
-                          <img
-                            src={enrollment.course?.image_url || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9'}
-                            alt={enrollment.course?.title}
-                            className="w-full md:w-48 h-32 object-cover rounded-xl"
-                          />
-                          <div className="flex-1">
-                            <div className="flex items-start justify-between gap-4 mb-3">
-                              <div>
-                                <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
-                                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground line-clamp-2">
-                                  {enrollment.course?.short_description}
-                                </p>
+                      {inProgressCourses.map((enrollment) => {
+                        // Find the actual course data to get the correct image
+                        const courseData = dtmaCourses.find(c => c.id === enrollment.course_id);
+                        const courseImage = courseData?.image || enrollment.course?.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop';
+                        
+                        return (
+                          <div key={enrollment.id} className="bg-card rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-5">
+                            <img
+                              src={courseImage}
+                              alt={enrollment.course?.title}
+                              className="w-full md:w-48 h-32 object-cover rounded-xl"
+                            />
+                            <div className="flex-1">
+                              <div className="flex items-start justify-between gap-4 mb-3">
+                                <div>
+                                  <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
+                                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground line-clamp-2">
+                                    {enrollment.course?.short_description}
+                                  </p>
+                                </div>
+                                <Badge variant="secondary">{enrollment.course?.level}</Badge>
                               </div>
-                              <Badge variant="secondary">{enrollment.course?.level}</Badge>
-                            </div>
-                            <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
-                                {enrollment.course?.duration_hours || 0}h
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                Enrolled {formatDate(enrollment.enrolled_at)}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <Progress value={enrollment.progress || 0} className="flex-1 h-2" />
-                              <span className="text-[14px] leading-[20px] font-medium">{enrollment.progress || 0}%</span>
-                              <Link to={`/courses/${enrollment.course_id}/learn`}>
-                                <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="sm">
-                                  <PlayCircle className="w-4 h-4 mr-2" />
-                                  Continue
-                                </Button>
-                              </Link>
+                              <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-4 h-4" />
+                                  {enrollment.course?.duration_hours || 0}h
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="w-4 h-4" />
+                                  Enrolled {formatDate(enrollment.enrolled_at)}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                <Progress value={enrollment.progress || 0} className="flex-1 h-2" />
+                                <span className="text-[14px] leading-[20px] font-medium">{enrollment.progress || 0}%</span>
+                                <Link to={`/courses/${enrollment.course_id}/learn`}>
+                                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="sm">
+                                    <PlayCircle className="w-4 h-4 mr-2" />
+                                    Continue
+                                  </Button>
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </TabsContent>
@@ -745,41 +737,47 @@ const LearnerDashboard = () => {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {completedCourses.map((enrollment) => (
-                        <div key={enrollment.id} className="bg-card rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-5">
-                          <img
-                            src={enrollment.course?.image_url || 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9'}
-                            alt={enrollment.course?.title}
-                            className="w-full md:w-48 h-32 object-cover rounded-xl"
-                          />
-                          <div className="flex-1">
-                            <div className="flex items-start justify-between gap-4 mb-3">
-                              <div>
-                                <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
-                                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
-                                  Completed on {enrollment.completed_at ? formatDate(enrollment.completed_at) : 'N/A'}
-                                </p>
+                      {completedCourses.map((enrollment) => {
+                        // Find the actual course data to get the correct image
+                        const courseData = dtmaCourses.find(c => c.id === enrollment.course_id);
+                        const courseImage = courseData?.image || enrollment.course?.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop';
+                        
+                        return (
+                          <div key={enrollment.id} className="bg-card rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-5">
+                            <img
+                              src={courseImage}
+                              alt={enrollment.course?.title}
+                              className="w-full md:w-48 h-32 object-cover rounded-xl"
+                            />
+                            <div className="flex-1">
+                              <div className="flex items-start justify-between gap-4 mb-3">
+                                <div>
+                                  <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
+                                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
+                                    Completed on {enrollment.completed_at ? formatDate(enrollment.completed_at) : 'N/A'}
+                                  </p>
+                                </div>
+                                <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  Completed
+                                </Badge>
                               </div>
-                              <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
-                                <CheckCircle className="w-3 h-3 mr-1" />
-                                Completed
-                              </Badge>
-                            </div>
-                            <div className="flex items-center gap-3 mt-4">
-                              <Link to={`/courses/${enrollment.course_id}/learn`}>
-                                <Button variant="outline" size="sm" className="gap-2">
-                                  <PlayCircle className="w-4 h-4" />
-                                  Review Course
+                              <div className="flex items-center gap-3 mt-4">
+                                <Link to={`/courses/${enrollment.course_id}/learn`}>
+                                  <Button variant="outline" size="sm" className="gap-2">
+                                    <PlayCircle className="w-4 h-4" />
+                                    Review Course
+                                  </Button>
+                                </Link>
+                                <Button variant="ghost" size="sm" className="gap-2">
+                                  <Download className="w-4 h-4" />
+                                  Certificate
                                 </Button>
-                              </Link>
-                              <Button variant="ghost" size="sm" className="gap-2">
-                                <Download className="w-4 h-4" />
-                                Certificate
-                              </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </TabsContent>
@@ -865,11 +863,6 @@ const LearnerDashboard = () => {
           {/* Progress & Notes Tab */}
           {activeTab === 'progress' && (
             <ProgressTracking />
-          )}
-
-          {/* Assessments & Quizzes Tab */}
-          {activeTab === 'assessments' && (
-            <AssessmentsQuizzes />
           )}
 
           {/* Assignments & Credentials Tab */}

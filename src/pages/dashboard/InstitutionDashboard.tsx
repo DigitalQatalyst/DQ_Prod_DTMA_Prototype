@@ -280,7 +280,7 @@ const InstitutionDashboard = () => {
             <Link to="/" className="flex items-center gap-3">
               <img
                 src="/log.svg"
-                alt="BROWZ Academy"
+                alt="DTMA"
                 className="h-[28px] w-auto"
               />
             </Link>

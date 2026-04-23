@@ -371,7 +371,7 @@ export const GamificationFeatures = () => {
               ))}
             </div>
 
-            <Button variant="outline" className="w-full mt-4 text-[14px] leading-[20px] font-normal">
+            <Button variant="outline" className="w-full mt-4 text-[14px] leading-[20px] font-normal hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
               View Full Leaderboard
             </Button>
           </Card>

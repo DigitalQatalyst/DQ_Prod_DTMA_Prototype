@@ -147,22 +147,22 @@ export const AssignmentsCredentials = () => {
                     <Upload className="w-4 h-4 mr-2" />
                     Submit Assignment
                   </Button>
-                  <Button variant="outline" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                     View Details
                   </Button>
                 </>
               )}
               {assignment.status === 'submitted' && (
-                <Button variant="outline" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                   View Submission
                 </Button>
               )}
               {assignment.status === 'graded' && (
                 <>
-                  <Button variant="outline" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                     View Feedback
                   </Button>
-                  <Button variant="outline" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </Button>

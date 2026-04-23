@@ -168,10 +168,10 @@ const Courses = () => {
                 {filteredCourses.map((course) => (
                   <div
                     key={course.id}
-                    className={`flex-shrink-0 bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] transition-all ${
+                    className={`flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm transition-all ${
                       course.comingSoon 
                         ? 'opacity-75 cursor-not-allowed' 
-                        : 'hover:shadow-lg group cursor-pointer'
+                        : 'hover:shadow-lg hover:shadow-[#ff6b4d]/20 group cursor-pointer'
                     }`}
                   >
                     {course.comingSoon ? (

@@ -115,6 +115,7 @@ export const LearnerManagementTable = () => {
   const { toast } = useToast();
   const [learners] = useState<Learner[]>(mockLearners);
   const [searchQuery, setSearchQuery] = useState("");
+  const [courseFilter, setCourseFilter] = useState<string>("all");
   const [whatsappFilter, setWhatsappFilter] = useState<"all" | "opted-in" | "not-opted-in">("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "completed" | "inactive">("all");
   const [sortField, setSortField] = useState<SortField>("enrolledDate");
@@ -122,6 +123,12 @@ export const LearnerManagementTable = () => {
   const [selectedLearners, setSelectedLearners] = useState<Set<string>>(new Set());
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [messageContent, setMessageContent] = useState("");
+
+  // Get unique courses from learners
+  const uniqueCourses = useMemo(() => {
+    const courses = Array.from(new Set(learners.map(l => l.courseName)));
+    return courses.sort();
+  }, [learners]);
 
   // Filter and sort learners
   const filteredAndSortedLearners = useMemo(() => {
@@ -132,6 +139,9 @@ export const LearnerManagementTable = () => {
         learner.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         learner.courseName.toLowerCase().includes(searchQuery.toLowerCase());
 
+      // Course filter
+      const matchesCourse = courseFilter === "all" || learner.courseName === courseFilter;
+
       // WhatsApp filter
       const matchesWhatsApp =
         whatsappFilter === "all" ||
@@ -141,7 +151,7 @@ export const LearnerManagementTable = () => {
       // Status filter
       const matchesStatus = statusFilter === "all" || learner.status === statusFilter;
 
-      return matchesSearch && matchesWhatsApp && matchesStatus;
+      return matchesSearch && matchesCourse && matchesWhatsApp && matchesStatus;
     });
 
     // Sort
@@ -162,7 +172,7 @@ export const LearnerManagementTable = () => {
     });
 
     return filtered;
-  }, [learners, searchQuery, whatsappFilter, statusFilter, sortField, sortDirection]);
+  }, [learners, searchQuery, courseFilter, whatsappFilter, statusFilter, sortField, sortDirection]);
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -298,61 +308,77 @@ export const LearnerManagementTable = () => {
   return (
     <div className="space-y-6">
       {/* Header Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-4 border border-gray-200">
-          <div className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+          <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">
             {learners.length}
           </div>
-          <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">
+          <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">
             Total Learners
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-gray-200">
-          <div className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">
+        <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+          <div className="text-[36px] leading-[44px] font-bold text-emerald-600 mb-1">
             {learners.filter((l) => l.whatsappOptIn).length}
           </div>
-          <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">
+          <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">
             WhatsApp Opted In
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-gray-200">
-          <div className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">
+        <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+          <div className="text-[36px] leading-[44px] font-bold text-[#ff6b4d] mb-1">
             {learners.filter((l) => l.status === "active").length}
           </div>
-          <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">
+          <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">
             Active Learners
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-gray-200">
-          <div className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">
+        <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+          <div className="text-[36px] leading-[44px] font-bold text-blue-600 mb-1">
             {learners.filter((l) => l.status === "completed").length}
           </div>
-          <div className="text-[13px] leading-[18px] font-normal text-muted-foreground">
+          <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">
             Completed
           </div>
         </div>
       </div>
 
       {/* Filters and Actions */}
-      <div className="bg-white rounded-xl p-6 border border-gray-200">
+      <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
               <Input
                 placeholder="Search by name, email, or course..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 focus:ring-[#ff6b4d] focus:border-[#ff6b4d]"
               />
             </div>
           </div>
 
+          {/* Course Filter */}
+          <Select value={courseFilter} onValueChange={setCourseFilter}>
+            <SelectTrigger className="w-full lg:w-[250px] focus:ring-[#ff6b4d] focus:border-[#ff6b4d]">
+              <Filter className="w-4 h-4 mr-2 text-[#9CA3AF]" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Courses</SelectItem>
+              {uniqueCourses.map((course) => (
+                <SelectItem key={course} value={course}>
+                  {course}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           {/* WhatsApp Filter */}
           <Select value={whatsappFilter} onValueChange={(v: any) => setWhatsappFilter(v)}>
-            <SelectTrigger className="w-full lg:w-[200px]">
-              <Filter className="w-4 h-4 mr-2" />
+            <SelectTrigger className="w-full lg:w-[200px] focus:ring-[#ff6b4d] focus:border-[#ff6b4d]">
+              <Filter className="w-4 h-4 mr-2 text-[#9CA3AF]" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -364,7 +390,7 @@ export const LearnerManagementTable = () => {
 
           {/* Status Filter */}
           <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
-            <SelectTrigger className="w-full lg:w-[180px]">
+            <SelectTrigger className="w-full lg:w-[180px] focus:ring-[#ff6b4d] focus:border-[#ff6b4d]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -379,7 +405,7 @@ export const LearnerManagementTable = () => {
           <Button
             variant="outline"
             onClick={exportToCSV}
-            className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348]/5"
+            className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
           >
             <Download className="w-4 h-4 mr-2" />
             Export CSV
@@ -387,32 +413,41 @@ export const LearnerManagementTable = () => {
         </div>
 
         {/* Active Filters Display */}
-        {(searchQuery || whatsappFilter !== "all" || statusFilter !== "all") && (
+        {(searchQuery || courseFilter !== "all" || whatsappFilter !== "all" || statusFilter !== "all") && (
           <div className="flex items-center gap-2 mt-4 flex-wrap">
-            <span className="text-sm text-muted-foreground">Active filters:</span>
+            <span className="text-sm font-medium text-[#4B5563]">Active filters:</span>
             {searchQuery && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 bg-[#F5F6FA] text-[#1e2348] border border-[#E5E7EB]">
                 Search: {searchQuery}
                 <X
-                  className="w-3 h-3 cursor-pointer"
+                  className="w-3 h-3 cursor-pointer hover:text-[#ff6b4d]"
                   onClick={() => setSearchQuery("")}
                 />
               </Badge>
             )}
+            {courseFilter !== "all" && (
+              <Badge variant="secondary" className="gap-1 bg-[#F5F6FA] text-[#1e2348] border border-[#E5E7EB]">
+                Course: {courseFilter}
+                <X
+                  className="w-3 h-3 cursor-pointer hover:text-[#ff6b4d]"
+                  onClick={() => setCourseFilter("all")}
+                />
+              </Badge>
+            )}
             {whatsappFilter !== "all" && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 bg-[#F5F6FA] text-[#1e2348] border border-[#E5E7EB]">
                 WhatsApp: {whatsappFilter === "opted-in" ? "Opted In" : "Not Opted In"}
                 <X
-                  className="w-3 h-3 cursor-pointer"
+                  className="w-3 h-3 cursor-pointer hover:text-[#ff6b4d]"
                   onClick={() => setWhatsappFilter("all")}
                 />
               </Badge>
             )}
             {statusFilter !== "all" && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 bg-[#F5F6FA] text-[#1e2348] border border-[#E5E7EB]">
                 Status: {statusFilter}
                 <X
-                  className="w-3 h-3 cursor-pointer"
+                  className="w-3 h-3 cursor-pointer hover:text-[#ff6b4d]"
                   onClick={() => setStatusFilter("all")}
                 />
               </Badge>
@@ -423,13 +458,13 @@ export const LearnerManagementTable = () => {
 
       {/* Selection Actions */}
       {selectedLearners.size > 0 && (
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#fff0ed] to-[#ffe9e4] border border-[#ff6b4d]/20 rounded-2xl p-5 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-[#1e2348]">
+            <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">
               {selectedLearners.size} learner(s) selected
             </span>
             {selectedOptedInCount > 0 && (
-              <span className="text-sm text-muted-foreground">
+              <span className="text-[14px] leading-[20px] text-[#4B5563]">
                 ({selectedOptedInCount} opted in to WhatsApp)
               </span>
             )}
@@ -439,6 +474,7 @@ export const LearnerManagementTable = () => {
               variant="outline"
               size="sm"
               onClick={() => setSelectedLearners(new Set())}
+              className="border-[#E5E7EB] hover:bg-white hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
             >
               Clear Selection
             </Button>
@@ -446,7 +482,7 @@ export const LearnerManagementTable = () => {
               size="sm"
               onClick={() => setIsMessageModalOpen(true)}
               disabled={selectedOptedInCount === 0}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
             >
               <MessageSquare className="w-4 h-4 mr-2" />
               Send WhatsApp Message
@@ -456,12 +492,12 @@ export const LearnerManagementTable = () => {
       )}
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-2xl border border-[#E5E7EB] overflow-hidden shadow-md">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-gradient-to-r from-[#F5F6FA] to-[#E5E7EB] border-b border-[#E5E7EB]">
               <tr>
-                <th className="px-4 py-3 text-left">
+                <th className="px-6 py-4 text-left">
                   <input
                     type="checkbox"
                     checked={
@@ -469,11 +505,11 @@ export const LearnerManagementTable = () => {
                       filteredAndSortedLearners.length > 0
                     }
                     onChange={toggleSelectAll}
-                    className="w-4 h-4 rounded border-gray-300"
+                    className="w-4 h-4 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-[#ff6b4d]"
                   />
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-[12px] leading-[16px] font-medium text-[#1e2348] cursor-pointer hover:bg-gray-100"
+                  className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors"
                   onClick={() => handleSort("name")}
                 >
                   <div className="flex items-center">
@@ -481,14 +517,14 @@ export const LearnerManagementTable = () => {
                     {getSortIcon("name")}
                   </div>
                 </th>
-                <th className="px-4 py-3 text-left text-[12px] leading-[16px] font-medium text-[#1e2348]">
+                <th className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348]">
                   Email
                 </th>
-                <th className="px-4 py-3 text-left text-[12px] leading-[16px] font-medium text-[#1e2348]">
+                <th className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348]">
                   Course
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-[12px] leading-[16px] font-medium text-[#1e2348] cursor-pointer hover:bg-gray-100"
+                  className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors"
                   onClick={() => handleSort("enrolledDate")}
                 >
                   <div className="flex items-center">
@@ -497,7 +533,7 @@ export const LearnerManagementTable = () => {
                   </div>
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-[12px] leading-[16px] font-medium text-[#1e2348] cursor-pointer hover:bg-gray-100"
+                  className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors"
                   onClick={() => handleSort("progress")}
                 >
                   <div className="flex items-center">
@@ -505,14 +541,14 @@ export const LearnerManagementTable = () => {
                     {getSortIcon("progress")}
                   </div>
                 </th>
-                <th className="px-4 py-3 text-left text-[12px] leading-[16px] font-medium text-[#1e2348]">
+                <th className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348]">
                   Status
                 </th>
-                <th className="px-4 py-3 text-left text-[12px] leading-[16px] font-medium text-[#1e2348]">
+                <th className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348]">
                   WhatsApp
                 </th>
                 <th
-                  className="px-4 py-3 text-left text-[12px] leading-[16px] font-medium text-[#1e2348] cursor-pointer hover:bg-gray-100"
+                  className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors"
                   onClick={() => handleSort("lastActive")}
                 >
                   <div className="flex items-center">
@@ -522,15 +558,15 @@ export const LearnerManagementTable = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-[#E5E7EB]">
               {filteredAndSortedLearners.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center">
-                    <div className="text-muted-foreground">
-                      <p className="text-[14px] leading-[20px] font-medium mb-1">
+                  <td colSpan={9} className="px-6 py-12 text-center">
+                    <div className="text-[#4B5563]">
+                      <p className="text-[16px] leading-[24px] font-semibold mb-2 text-[#1e2348]">
                         No learners found
                       </p>
-                      <p className="text-[12px] leading-[16px]">
+                      <p className="text-[14px] leading-[20px]">
                         Try adjusting your filters or search query
                       </p>
                     </div>
@@ -540,67 +576,67 @@ export const LearnerManagementTable = () => {
                 filteredAndSortedLearners.map((learner) => (
                   <tr
                     key={learner.id}
-                    className="hover:bg-gray-50 transition-colors"
+                    className="hover:bg-[#F5F6FA] transition-colors"
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-6 py-4">
                       <input
                         type="checkbox"
                         checked={selectedLearners.has(learner.id)}
                         onChange={() => toggleLearnerSelection(learner.id)}
-                        className="w-4 h-4 rounded border-gray-300"
+                        className="w-4 h-4 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-[#ff6b4d]"
                       />
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="text-[14px] leading-[20px] font-medium text-[#1e2348]">
+                    <td className="px-6 py-4">
+                      <div className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">
                         {learner.name}
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="text-[13px] leading-[18px] text-muted-foreground">
+                    <td className="px-6 py-4">
+                      <div className="text-[14px] leading-[20px] text-[#4B5563]">
                         {learner.email}
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="text-[13px] leading-[18px] text-muted-foreground max-w-[200px] truncate">
+                    <td className="px-6 py-4">
+                      <div className="text-[14px] leading-[20px] text-[#4B5563] max-w-[200px] truncate">
                         {learner.courseName}
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="text-[13px] leading-[18px] text-muted-foreground">
+                    <td className="px-6 py-4">
+                      <div className="text-[14px] leading-[20px] text-[#4B5563]">
                         {new Date(learner.enrolledDate).toLocaleDateString()}
                       </div>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[80px]">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 bg-[#E5E7EB] rounded-full h-2.5 max-w-[100px]">
                           <div
-                            className="bg-[#ff6b4d] h-2 rounded-full"
+                            className="bg-gradient-to-r from-[#ff6b4d] to-[#e66045] h-2.5 rounded-full transition-all shadow-sm"
                             style={{ width: `${learner.progress}%` }}
                           />
                         </div>
-                        <span className="text-[12px] leading-[16px] text-muted-foreground">
+                        <span className="text-[13px] leading-[18px] font-semibold text-[#1e2348] min-w-[45px]">
                           {learner.progress}%
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-3">{getStatusBadge(learner.status)}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-6 py-4">{getStatusBadge(learner.status)}</td>
+                    <td className="px-6 py-4">
                       {learner.whatsappOptIn ? (
-                        <div className="flex items-center gap-1 text-green-600">
+                        <div className="flex items-center gap-1.5 text-emerald-600">
                           <CheckCircle className="w-4 h-4" />
-                          <span className="text-[12px] leading-[16px] font-medium">
+                          <span className="text-[13px] leading-[18px] font-semibold">
                             Opted In
                           </span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1 text-gray-400">
+                        <div className="flex items-center gap-1.5 text-[#9CA3AF]">
                           <XCircle className="w-4 h-4" />
-                          <span className="text-[12px] leading-[16px]">Not Opted In</span>
+                          <span className="text-[13px] leading-[18px]">Not Opted In</span>
                         </div>
                       )}
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="text-[13px] leading-[18px] text-muted-foreground">
+                    <td className="px-6 py-4">
+                      <div className="text-[14px] leading-[20px] text-[#4B5563]">
                         {new Date(learner.lastActive).toLocaleDateString()}
                       </div>
                     </td>
@@ -613,7 +649,7 @@ export const LearnerManagementTable = () => {
       </div>
 
       {/* Results Count */}
-      <div className="text-[13px] leading-[18px] text-muted-foreground text-center">
+      <div className="text-[14px] leading-[20px] text-[#4B5563] text-center font-medium">
         Showing {filteredAndSortedLearners.length} of {learners.length} learners
       </div>
 

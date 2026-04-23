@@ -35,6 +35,7 @@ interface CourseTutorAIProps {
   isQuiz?: boolean;
   isAssignment?: boolean;
   currentProgress?: number;
+  onClose?: () => void;
 }
 
 const quickActions = [
@@ -51,10 +52,11 @@ export const CourseTutorAI = ({
   lessonContent = '',
   isQuiz = false,
   isAssignment = false,
-  currentProgress = 0
+  currentProgress = 0,
+  onClose
 }: CourseTutorAIProps) => {
   const { profile } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -484,7 +486,10 @@ export const CourseTutorAI = ({
               <Minimize2 className="w-4 h-4 text-white" />
             </button>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                onClose?.();
+              }}
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"
             >
               <X className="w-4 h-4 text-white" />

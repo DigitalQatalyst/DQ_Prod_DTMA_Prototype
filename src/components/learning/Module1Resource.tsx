@@ -1,4 +1,4 @@
-import { BookOpen, ChevronRight, Volume2, VolumeX, Pause, Play, Mic, Save, X, MessageCircle, Send, Sparkles, FileText, Lightbulb, BookMarked } from "lucide-react";
+import { BookOpen, ChevronRight, Volume2, VolumeX, Pause, Play, Mic, Save, X, MessageCircle, Send, Sparkles, FileText, Lightbulb, BookMarked, Share2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,9 @@ export const Module1Resource = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [isAIThinking, setIsAIThinking] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  
+  // Share menu state
+  const [shareMenuOpen, setShareMenuOpen] = useState<string | null>(null);
 
   // Article text content for speech synthesis
   const articleText = `
@@ -208,6 +211,41 @@ export const Module1Resource = () => {
     setNotes(prev => prev.filter(note => note.id !== id));
   };
 
+  // Share note to social media
+  const handleShareNote = (note: Note, platform: string) => {
+    const noteContent = `"${note.highlightedText}"\n\n${note.noteText}\n\n#DigitalTransformation #DTMA #Learning`;
+    const encodedContent = encodeURIComponent(noteContent);
+    const encodedText = encodeURIComponent(note.noteText);
+    const encodedQuote = encodeURIComponent(note.highlightedText);
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodedContent}`;
+        break;
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodedContent}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodedContent}`;
+        break;
+      case 'whatsapp':
+        shareUrl = `https://wa.me/?text=${encodedContent}`;
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(noteContent);
+        alert('Note copied to clipboard!');
+        setShareMenuOpen(null);
+        return;
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+      setShareMenuOpen(null);
+    }
+  };
+
   // AI Assistant functions
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -216,6 +254,21 @@ export const Module1Resource = () => {
   useEffect(() => {
     scrollToBottom();
   }, [chatMessages]);
+
+  // Close share menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (shareMenuOpen) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.share-menu-container')) {
+          setShareMenuOpen(null);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [shareMenuOpen]);
 
   const simulateAIResponse = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase();
@@ -706,12 +759,66 @@ export const Module1Resource = () => {
                       <span className="text-gray-400 text-[11px]">
                         {new Date(note.timestamp).toLocaleString()}
                       </span>
-                      <button
-                        onClick={() => handleDeleteNote(note.id)}
-                        className="text-red-500 hover:text-red-700 text-[12px]"
-                      >
-                        Delete
-                      </button>
+                      <div className="flex items-center gap-2">
+                        {/* Share Button with Dropdown */}
+                        <div className="relative share-menu-container">
+                          <button
+                            onClick={() => setShareMenuOpen(shareMenuOpen === note.id ? null : note.id)}
+                            className="flex items-center gap-1 text-[#1e2348] hover:text-[#ff6b4d] text-[12px] transition-colors"
+                          >
+                            <Share2 className="w-3.5 h-3.5" />
+                            <span>Share</span>
+                          </button>
+                          
+                          {/* Share Dropdown Menu */}
+                          {shareMenuOpen === note.id && (
+                            <div className="absolute right-0 bottom-full mb-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                              <button
+                                onClick={() => handleShareNote(note, 'twitter')}
+                                className="w-full px-4 py-2 text-left text-[12px] hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <span className="text-[#1DA1F2]">𝕏</span>
+                                <span>Twitter</span>
+                              </button>
+                              <button
+                                onClick={() => handleShareNote(note, 'facebook')}
+                                className="w-full px-4 py-2 text-left text-[12px] hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <span className="text-[#1877F2]">f</span>
+                                <span>Facebook</span>
+                              </button>
+                              <button
+                                onClick={() => handleShareNote(note, 'linkedin')}
+                                className="w-full px-4 py-2 text-left text-[12px] hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <span className="text-[#0A66C2]">in</span>
+                                <span>LinkedIn</span>
+                              </button>
+                              <button
+                                onClick={() => handleShareNote(note, 'whatsapp')}
+                                className="w-full px-4 py-2 text-left text-[12px] hover:bg-gray-50 flex items-center gap-2"
+                              >
+                                <span className="text-[#25D366]">📱</span>
+                                <span>WhatsApp</span>
+                              </button>
+                              <button
+                                onClick={() => handleShareNote(note, 'copy')}
+                                className="w-full px-4 py-2 text-left text-[12px] hover:bg-gray-50 flex items-center gap-2 border-t border-gray-100"
+                              >
+                                <span>📋</span>
+                                <span>Copy</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <button
+                          onClick={() => handleDeleteNote(note.id)}
+                          className="text-red-500 hover:text-red-700 text-[12px]"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -723,16 +830,16 @@ export const Module1Resource = () => {
 
       {/* AI Reading Assistant */}
       {showAIAssistant && (
-        <div className="fixed right-0 top-0 h-full w-[450px] bg-white shadow-2xl z-40 border-l-2 border-[#ff6b4d] flex flex-col">
+        <div className="fixed right-0 top-16 bottom-0 w-[380px] sm:w-[420px] bg-white shadow-2xl z-40 border-l-2 border-[#ff6b4d] flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#ff6b4d] to-[#ff8c73] p-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
+          <div className="bg-gradient-to-r from-[#ff6b4d] to-[#ff8c73] p-3 flex items-center justify-between flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h3 className="text-white text-[18px] font-bold">AI Reading Tutor</h3>
-                <p className="text-white/80 text-[12px]">Ask me anything about this article</p>
+                <h3 className="text-white text-[16px] font-bold">AI Reading Tutor</h3>
+                <p className="text-white/80 text-[11px]">Ask me anything about this article</p>
               </div>
             </div>
             <button
@@ -744,33 +851,33 @@ export const Module1Resource = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="p-4 bg-[#ff6b4d]/5 border-b border-[#ff6b4d]/20">
-            <p className="text-[#4B5563] text-[12px] font-medium mb-2">Quick Actions:</p>
+          <div className="p-3 bg-[#ff6b4d]/5 border-b border-[#ff6b4d]/20 flex-shrink-0">
+            <p className="text-[#4B5563] text-[11px] font-medium mb-2">Quick Actions:</p>
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => handleQuickAction('summarize')}
-                className="flex items-center gap-2 bg-white hover:bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 text-[#1e2348] px-3 py-2 rounded-lg text-[12px] font-medium transition-colors"
+                className="flex items-center gap-2 bg-white hover:bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 text-[#1e2348] px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors"
               >
                 <FileText className="w-3 h-3" />
                 <span>Summarize</span>
               </button>
               <button
                 onClick={() => handleQuickAction('explain')}
-                className="flex items-center gap-2 bg-white hover:bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 text-[#1e2348] px-3 py-2 rounded-lg text-[12px] font-medium transition-colors"
+                className="flex items-center gap-2 bg-white hover:bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 text-[#1e2348] px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors"
               >
                 <Lightbulb className="w-3 h-3" />
                 <span>Explain DCO</span>
               </button>
               <button
                 onClick={() => handleQuickAction('notes')}
-                className="flex items-center gap-2 bg-white hover:bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 text-[#1e2348] px-3 py-2 rounded-lg text-[12px] font-medium transition-colors"
+                className="flex items-center gap-2 bg-white hover:bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 text-[#1e2348] px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors"
               >
                 <BookMarked className="w-3 h-3" />
                 <span>Generate Notes</span>
               </button>
               <button
                 onClick={() => handleQuickAction('references')}
-                className="flex items-center gap-2 bg-white hover:bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 text-[#1e2348] px-3 py-2 rounded-lg text-[12px] font-medium transition-colors"
+                className="flex items-center gap-2 bg-white hover:bg-[#ff6b4d]/10 border border-[#ff6b4d]/30 text-[#1e2348] px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors"
               >
                 <BookOpen className="w-3 h-3" />
                 <span>Key References</span>
@@ -779,37 +886,37 @@ export const Module1Resource = () => {
           </div>
 
           {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
             {chatMessages.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-[#ff6b4d]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MessageCircle className="w-8 h-8 text-[#ff6b4d]" />
+              <div className="text-center py-6">
+                <div className="w-12 h-12 bg-[#ff6b4d]/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <MessageCircle className="w-6 h-6 text-[#ff6b4d]" />
                 </div>
-                <h4 className="text-[#1e2348] text-[16px] font-bold mb-2">
+                <h4 className="text-[#1e2348] text-[14px] font-bold mb-2">
                   Welcome! I'm your AI Reading Tutor
                 </h4>
-                <p className="text-[#4B5563] text-[14px] mb-4">
+                <p className="text-[#4B5563] text-[12px] mb-2">
                   I can help you understand this article better by:
                 </p>
-                <ul className="text-left text-[#4B5563] text-[13px] space-y-2 max-w-xs mx-auto">
+                <ul className="text-left text-[#4B5563] text-[11px] space-y-1 max-w-xs mx-auto">
                   <li className="flex items-start gap-2">
-                    <span className="text-[#ff6b4d] mt-1">•</span>
+                    <span className="text-[#ff6b4d] mt-0.5">•</span>
                     <span>Summarizing sections or the entire article</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-[#ff6b4d] mt-1">•</span>
+                    <span className="text-[#ff6b4d] mt-0.5">•</span>
                     <span>Explaining complex concepts and terminology</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-[#ff6b4d] mt-1">•</span>
+                    <span className="text-[#ff6b4d] mt-0.5">•</span>
                     <span>Generating notes and key takeaways</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-[#ff6b4d] mt-1">•</span>
+                    <span className="text-[#ff6b4d] mt-0.5">•</span>
                     <span>Identifying important references and quotes</span>
                   </li>
                 </ul>
-                <p className="text-[#4B5563] text-[13px] mt-4">
+                <p className="text-[#4B5563] text-[11px] mt-2">
                   Try the quick actions above or ask me anything!
                 </p>
               </div>
@@ -860,7 +967,7 @@ export const Module1Resource = () => {
           </div>
 
           {/* Input Area */}
-          <div className="p-4 border-t border-gray-200 bg-gray-50">
+          <div className="p-3 border-t border-gray-200 bg-gray-50 flex-shrink-0">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -868,14 +975,14 @@ export const Module1Resource = () => {
                 onChange={(e) => setCurrentMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Ask me anything about this article..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-[14px] focus:border-[#ff6b4d] focus:outline-none"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-[13px] focus:border-[#ff6b4d] focus:outline-none"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!currentMessage.trim() || isAIThinking}
-                className="bg-[#ff6b4d] hover:bg-[#e66045] disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-2 rounded-lg transition-colors"
+                className="bg-[#ff6b4d] hover:bg-[#e66045] disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-2 rounded-lg transition-colors flex-shrink-0"
               >
-                <Send className="w-5 h-5" />
+                <Send className="w-4 h-4" />
               </button>
             </div>
           </div>

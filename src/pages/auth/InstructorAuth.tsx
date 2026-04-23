@@ -69,14 +69,13 @@ const InstructorAuth = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-[#1e2348]">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1974&auto=format&fit=crop"
             alt="Digital transformation"
             className="w-full h-full object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1e2348] via-[#1e2348]/95 to-[#1e2348]/80" />
         </div>
 
         <div className="relative z-10 flex flex-col justify-between p-12 text-white">
@@ -89,28 +88,30 @@ const InstructorAuth = () => {
           </Link>
 
           <div className="max-w-md">
-            <h2 className="text-[32px] leading-[40px] font-semibold mb-4 text-white">
-              Shape the Future of
-              <br />
-              Digital Transformation
+            <h2 className="text-[18px] leading-[28px] font-normal mb-4 text-white">
+              "Shape the Future of Digital Transformation. Join DTMA's community of expert instructors and drive digital transformation education forward."
             </h2>
-            <p className="text-[16px] leading-[24px] font-normal text-white/80">
-              Join DTMA's community of expert instructors. Create courses, inspire learners, and drive digital transformation education forward.
-            </p>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#ff6b4d]" />
+              <div>
+                <div className="text-[14px] leading-[20px] font-medium text-white">DTMA Instructor</div>
+                <div className="text-[12px] leading-[16px] font-normal text-white/70">Digital Transformation Expert</div>
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-12">
             <div>
-              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">Create</div>
-              <div className="text-[14px] leading-[20px] font-normal text-white/70">Courses</div>
+              <div className="text-[24px] leading-[32px] font-medium text-white">Create</div>
+              <div className="text-[12px] leading-[16px] font-normal text-white/70">Courses</div>
             </div>
             <div>
-              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">Inspire</div>
-              <div className="text-[14px] leading-[20px] font-normal text-white/70">Learners</div>
+              <div className="text-[24px] leading-[32px] font-medium text-white">Inspire</div>
+              <div className="text-[12px] leading-[16px] font-normal text-white/70">Learners</div>
             </div>
             <div>
-              <div className="text-[28px] leading-[36px] font-semibold text-[#ff6b4d]">Transform</div>
-              <div className="text-[14px] leading-[20px] font-normal text-white/70">Education</div>
+              <div className="text-[24px] leading-[32px] font-medium text-white">Transform</div>
+              <div className="text-[12px] leading-[16px] font-normal text-white/70">Education</div>
             </div>
           </div>
         </div>
@@ -132,17 +133,17 @@ const InstructorAuth = () => {
           <div className="w-full max-w-md mx-auto">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-[12px] leading-[16px] font-medium text-gray-600 hover:text-[#ff6b4d] transition-colors mb-12"
+              className="inline-flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground hover:text-[#ff6b4d] transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
-            <div className="mb-10 text-center">
-              <h1 className="text-[40px] leading-[48px] font-semibold text-[#1e2348] mb-3">
+            <div className="mb-8">
+              <h1 className="text-[32px] leading-[40px] font-semibold text-[#0B0C19] mb-2">
                 Instructor Sign In
               </h1>
-              <p className="text-[14px] leading-[20px] font-normal text-gray-600">
+              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
                 Access your instructor dashboard
               </p>
             </div>
@@ -197,7 +198,7 @@ const InstructorAuth = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium transition-colors mt-8"
+                className="w-full h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[16px] leading-[24px] font-normal"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -211,7 +212,7 @@ const InstructorAuth = () => {
               </Button>
             </form>
 
-            <p className="text-center text-[12px] leading-[16px] font-normal text-gray-600 mt-8">
+            <p className="text-center text-[14px] leading-[20px] font-normal text-muted-foreground mt-8">
               Don't have an account?{" "}
               <Link to="/instructor-application" className="text-[#ff6b4d] font-medium hover:underline">
                 Apply to become an instructor

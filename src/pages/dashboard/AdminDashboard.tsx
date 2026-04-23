@@ -8,11 +8,6 @@ import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalytics
 import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
 import { CommunicationSupportTab } from '@/components/admin/CommunicationSupportTab';
 import { CoursePreviewModal } from '@/components/admin/CoursePreviewModal';
-import AnalyticsPerformanceInsightsPanel from '@/components/admin/stage4/AnalyticsPerformanceInsightsPanel';
-import FinanceBillingGovernancePanel from '@/components/admin/stage4/FinanceBillingGovernancePanel';
-import OperationsSupportPanel from '@/components/admin/stage4/OperationsSupportPanel';
-import PartnerAccreditationReportingPanel from '@/components/admin/stage4/PartnerAccreditationReportingPanel';
-import RecordsCertificationGovernancePanel from '@/components/admin/stage4/RecordsCertificationGovernancePanel';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -100,7 +95,7 @@ import {
   Activity,
 } from 'lucide-react';
 
-type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'finance' | 'partner-reporting' | 'analytics-performance' | 'operations-support' | 'records-certification' | 'whatsapp-analytics' | 'ai-usage' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
+type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'whatsapp-analytics' | 'ai-usage' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 const MOCK_COURSES = [
@@ -1837,11 +1832,6 @@ const AdminDashboard = () => {
     { id: 'organizations' as AdminTab, label: 'Organizations', icon: Settings },
     { id: 'certification' as AdminTab, label: 'Certification', icon: Award },
     { id: 'commerce' as AdminTab, label: 'Commerce & Billing', icon: Settings },
-    { id: 'finance' as AdminTab, label: 'Finance & Billing', icon: BarChart2 },
-    { id: 'partner-reporting' as AdminTab, label: 'Partner & Reporting', icon: Globe },
-    { id: 'analytics-performance' as AdminTab, label: 'Analytics & Performance', icon: TrendingUp },
-    { id: 'operations-support' as AdminTab, label: 'Operations & Support', icon: Headphones },
-    { id: 'records-certification' as AdminTab, label: 'Records & Certification', icon: FileTextIcon },
     { id: 'system' as AdminTab, label: 'System Settings', icon: Settings },
     // AI Features Section
     { id: 'ai-assistant' as AdminTab, label: 'AI Operations Assistant', icon: Bot, section: 'ai' },
@@ -6138,12 +6128,6 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {/* Stage4 Panels */}
-          {activeTab === 'finance' && <FinanceBillingGovernancePanel />}
-          {activeTab === 'partner-reporting' && <PartnerAccreditationReportingPanel />}
-          {activeTab === 'analytics-performance' && <AnalyticsPerformanceInsightsPanel />}
-          {activeTab === 'operations-support' && <OperationsSupportPanel />}
-          {activeTab === 'records-certification' && <RecordsCertificationGovernancePanel />}
         </main>
       </div>
 

@@ -1057,19 +1057,19 @@ const CourseLearning = () => {
                     {/* AI Tutor */}
                     <button 
                       onClick={() => setShowAITutor(true)}
-                      className="group w-full relative bg-gradient-to-r from-green-50 to-teal-50 hover:from-green-100 hover:to-teal-100 rounded-xl p-4 text-left transition-all border border-green-200"
+                      className="group w-full relative bg-gradient-to-r from-[#fff0ed] to-[#ffe9e4] hover:from-[#ffe9e4] hover:to-[#ffd1c8] rounded-xl p-4 text-left transition-all border border-[#ffd1c8]"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center shrink-0 shadow-sm">
-                            <GraduationCap className="w-5 h-5 text-green-600" />
+                          <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-lg flex items-center justify-center shrink-0 shadow-sm">
+                            <GraduationCap className="w-5 h-5 text-[#ff6b4d]" />
                           </div>
                           <div>
                             <h4 className="text-[#1e2348] text-[16px] leading-[24px] font-semibold">AI Tutor</h4>
                             <p className="text-[#4B5563] text-[12px] leading-[16px] font-normal">Ask questions about the lesson</p>
                           </div>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-green-500/60 group-hover:text-green-500 transition-colors" />
+                        <ChevronRight className="w-5 h-5 text-[#ff6b4d]/60 group-hover:text-[#ff6b4d] transition-colors" />
                       </div>
                     </button>
                     
@@ -1083,16 +1083,19 @@ const CourseLearning = () => {
                     <button 
                       onClick={handleGenerateFlashcards}
                       disabled={generatingAI}
-                      className="group w-full relative bg-pink-50 hover:bg-pink-100 rounded-xl p-4 text-left transition-all disabled:opacity-50"
+                      className="group w-full relative bg-[#1e2348]/5 hover:bg-[#1e2348]/10 rounded-xl p-4 text-left transition-all disabled:opacity-50 border border-[#1e2348]/20"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center shrink-0">
-                            {generatingAI ? <Loader2 className="w-5 h-5 text-pink-600 animate-spin" /> : <FileText className="w-5 h-5 text-pink-600" />}
+                          <div className="w-10 h-10 bg-[#1e2348]/10 rounded-lg flex items-center justify-center shrink-0">
+                            {generatingAI ? <Loader2 className="w-5 h-5 text-[#1e2348] animate-spin" /> : <FileText className="w-5 h-5 text-[#1e2348]" />}
                           </div>
-                          <h4 className="text-pink-900 text-[16px] leading-[24px] font-normal">Flashcards</h4>
+                          <div>
+                            <h4 className="text-[#1e2348] text-[16px] leading-[24px] font-semibold">Flashcards</h4>
+                            <p className="text-[#4B5563] text-[12px] leading-[16px] font-normal">Study with AI-generated cards</p>
+                          </div>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-pink-400 group-hover:text-pink-600 transition-colors" />
+                        <ChevronRight className="w-5 h-5 text-[#1e2348]/60 group-hover:text-[#1e2348] transition-colors" />
                       </div>
                     </button>
 
@@ -1826,7 +1829,7 @@ const CourseLearning = () => {
                 <FileText className="w-4 h-4 text-[#ff6b4d]" />
                 <h2 className="text-white text-[18px] leading-[24px] font-semibold">AI Generated Flashcards</h2>
               </div>
-              <p className="text-white/70 text-[13px] leading-[18px] font-normal">
+              <p className="text-white/70 text-[13px] leading-[18px] font-normal text-center">
                 Click the card to reveal the answer
               </p>
             </div>

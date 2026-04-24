@@ -1,4 +1,4 @@
-import { BookOpen, ChevronRight, Volume2, VolumeX, Pause, Play, Mic, Save, X, MessageCircle, Send, Sparkles, FileText, Lightbulb, BookMarked, Share2 } from "lucide-react";
+import { BookOpen, ChevronRight, Volume2, VolumeX, Pause, Play, Mic, Save, X, MessageCircle, Send, Sparkles, FileText, Lightbulb, BookMarked, Share2, GraduationCap } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -923,27 +923,27 @@ export const Module1Resource = () => {
             ) : (
               <>
                 {chatMessages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div
-                      className={`max-w-[85%] rounded-lg p-3 ${
-                        msg.role === 'user'
-                          ? 'bg-[#1e2348] text-white'
-                          : 'bg-[#ff6b4d]/10 text-[#1e2348] border border-[#ff6b4d]/20'
-                      }`}
-                    >
-                      <p className="text-[14px] leading-[20px] whitespace-pre-line">
-                        {msg.content}
-                      </p>
-                      <span
-                        className={`text-[10px] mt-1 block ${
-                          msg.role === 'user' ? 'text-white/60' : 'text-[#4B5563]/60'
-                        }`}
-                      >
-                        {new Date(msg.timestamp).toLocaleTimeString()}
-                      </span>
+                  <div key={msg.id}>
+                    <div className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      {msg.role === 'assistant' && (
+                        <div className="w-8 h-8 shrink-0 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-full flex items-center justify-center">
+                          <GraduationCap className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                      <div className={`max-w-[80%] ${msg.role === 'user' ? 'order-first' : ''}`}>
+                        <div className={`rounded-2xl p-3 ${
+                          msg.role === 'user'
+                            ? 'bg-gradient-to-r from-[#ff6b4d] to-[#e66045] text-white'
+                            : 'bg-gradient-to-r from-[#fff0ed] to-[#ffe9e4] text-gray-800 border border-[#ffd1c8]'
+                        }`}>
+                          <p className="text-sm whitespace-pre-line">{msg.content}</p>
+                        </div>
+                        <span className={`text-[10px] mt-1 block ${
+                          msg.role === 'user' ? 'text-right text-gray-500' : 'text-left text-gray-500'
+                        }`}>
+                          {new Date(msg.timestamp).toLocaleTimeString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))}

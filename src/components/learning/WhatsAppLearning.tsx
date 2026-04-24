@@ -292,7 +292,7 @@ export function WhatsAppLearning({ courseTitle, lessonTitle }: WhatsAppLearningP
       {!isOpen ? (
         <button
           onClick={() => setIsOpen(true)}
-          className="group w-full relative bg-green-50 hover:bg-green-100 rounded-xl p-4 text-left transition-all"
+          className="group w-full relative bg-green-50 hover:bg-green-100 rounded-xl p-4 text-left transition-all border border-green-200"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

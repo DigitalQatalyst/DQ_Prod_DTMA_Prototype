@@ -450,10 +450,10 @@ export const CourseTutorAI = ({
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-br from-emerald-600 to-teal-600 text-white rounded-full shadow-2xl hover:shadow-emerald-500/20 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] text-white rounded-full shadow-2xl hover:shadow-[#ff6b4d]/20 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
       >
         <GraduationCap className="w-7 h-7 group-hover:scale-110 transition-transform" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full animate-pulse"></span>
+        <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#ff6b4d] rounded-full animate-pulse"></span>
       </button>
     );
   }
@@ -466,10 +466,10 @@ export const CourseTutorAI = ({
         isMinimized ? 'h-16' : 'h-[600px]'
       }`}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#ff6b4d] to-[#e66045] p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10 ring-2 ring-white">
-              <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-500 text-white">
+              <AvatarFallback className="bg-gradient-to-br from-[#ff6b4d] to-[#e66045] text-white">
                 <GraduationCap className="w-5 h-5" />
               </AvatarFallback>
             </Avatar>
@@ -487,8 +487,11 @@ export const CourseTutorAI = ({
             </button>
             <button
               onClick={() => {
-                setIsOpen(false);
-                onClose?.();
+                if (onClose) {
+                  onClose();
+                } else {
+                  setIsOpen(false);
+                }
               }}
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"
             >
@@ -500,12 +503,12 @@ export const CourseTutorAI = ({
         {!isMinimized && (
           <>
             {/* Quick Actions */}
-            <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 border-b grid grid-cols-2 gap-2">
+            <div className="p-4 bg-gradient-to-r from-[#fff0ed] to-[#ffe9e4] border-b grid grid-cols-2 gap-2">
               {quickActions.map((action) => (
                 <button
                   key={action.action}
                   onClick={() => handleQuickAction(action.action)}
-                  className="flex items-center gap-2 p-2 bg-white rounded-lg hover:shadow-md border border-transparent hover:border-emerald-200 transition-all text-sm"
+                  className="flex items-center gap-2 p-2 bg-white rounded-lg hover:shadow-md border border-transparent hover:border-[#ffd1c8] transition-all text-sm"
                 >
                   <action.icon className={`w-4 h-4 ${action.color}`} />
                   <span className="text-gray-700">{action.text}</span>
@@ -521,7 +524,7 @@ export const CourseTutorAI = ({
                     <div className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {message.type === 'tutor' && (
                         <Avatar className="w-8 h-8 shrink-0">
-                          <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-500 text-white">
+                          <AvatarFallback className="bg-gradient-to-br from-[#ff6b4d] to-[#e66045] text-white">
                             <GraduationCap className="w-4 h-4" />
                           </AvatarFallback>
                         </Avatar>
@@ -529,16 +532,16 @@ export const CourseTutorAI = ({
                       <div className={`max-w-[80%] ${message.type === 'user' ? 'order-first' : ''}`}>
                         <div className={`rounded-2xl p-3 ${
                           message.type === 'user'
-                            ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white'
-                            : 'bg-gradient-to-r from-emerald-50 to-teal-50 text-gray-800 border border-emerald-100'
+                            ? 'bg-gradient-to-r from-[#ff6b4d] to-[#e66045] text-white'
+                            : 'bg-gradient-to-r from-[#fff0ed] to-[#ffe9e4] text-gray-800 border border-[#ffd1c8]'
                         }`}>
                           <p className="text-sm whitespace-pre-line">{message.content}</p>
                         </div>
                         {message.resources && message.resources.length > 0 && (
                           <div className="mt-2 space-y-1">
                             {message.resources.map((resource, idx) => (
-                              <div key={idx} className="flex items-center gap-2 text-xs bg-white border border-emerald-200 rounded-lg p-2">
-                                <FileText className="w-3 h-3 text-emerald-600" />
+                              <div key={idx} className="flex items-center gap-2 text-xs bg-white border border-[#ffd1c8] rounded-lg p-2">
+                                <FileText className="w-3 h-3 text-[#ff6b4d]" />
                                 <span className="text-gray-700">{resource.title}</span>
                                 <span className="ml-auto text-gray-500">{resource.type}</span>
                               </div>
@@ -551,7 +554,7 @@ export const CourseTutorAI = ({
                               <button
                                 key={idx}
                                 onClick={() => handleSuggestionClick(suggestion)}
-                                className="text-xs px-3 py-1 bg-white border border-emerald-300 text-emerald-700 rounded-full hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-colors"
+                                className="text-xs px-3 py-1 bg-white border border-[#ffd1c8] text-[#ff6b4d] rounded-full hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d] transition-colors"
                               >
                                 {suggestion}
                               </button>
@@ -573,7 +576,7 @@ export const CourseTutorAI = ({
                   className={`p-2 rounded-lg transition-colors ${
                     isListening 
                       ? 'bg-red-100 text-red-600' 
-                      : 'bg-emerald-100 text-emerald-600 hover:bg-emerald-200'
+                      : 'bg-[#fff0ed] text-[#ff6b4d] hover:bg-[#ffe9e4]'
                   }`}
                 >
                   {isListening ? <Volume2 className="w-5 h-5 animate-pulse" /> : <Mic className="w-5 h-5" />}
@@ -585,12 +588,12 @@ export const CourseTutorAI = ({
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Ask your tutor..."
-                  className="flex-1 px-4 py-2 border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-[#ffd1c8] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim()}
-                  className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
+                  className="bg-gradient-to-r from-[#ff6b4d] to-[#e66045] hover:from-[#e66045] hover:to-[#cc563e] text-white"
                 >
                   <Send className="w-4 h-4" />
                 </Button>

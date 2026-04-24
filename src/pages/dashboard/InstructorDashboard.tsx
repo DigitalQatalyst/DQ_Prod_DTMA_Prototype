@@ -64,6 +64,7 @@ import {
   BookOpen,
   Plus,
   Users,
+  User,
   Edit,
   Eye,
   Send,
@@ -691,8 +692,8 @@ const InstructorDashboard = () => {
 
                 <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
-                      <Users className="w-8 h-8 text-white" />
+                    <div className="w-16 h-16 bg-[#ff6b4d]/10 rounded-2xl flex items-center justify-center">
+                      <Users className="w-8 h-8 text-[#ff6b4d]" />
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">0</div>
@@ -803,8 +804,8 @@ const CertificateBrandingSection = ({ profile }: any) => {
       {/* Basic Profile Information */}
       <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
-            <Settings className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 bg-[#ff6b4d]/10 rounded-2xl flex items-center justify-center">
+            <User className="w-8 h-8 text-[#ff6b4d]" />
           </div>
           <div>
             <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Public Instructor Profile</h3>
@@ -1302,8 +1303,8 @@ const CoursesSection = ({
         </div>
       ) : (
         <div className="bg-gradient-to-br from-white to-[#F5F6FA] rounded-2xl p-12 text-center border border-[#E5E7EB] shadow-md">
-          <div className="w-20 h-20 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <BookOpen className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 bg-[#ff6b4d]/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <BookOpen className="w-10 h-10 text-[#ff6b4d]" />
           </div>
           <h3 className="text-[20px] leading-[28px] font-semibold mb-2 text-[#1e2348]">No courses yet</h3>
           <p className="text-[15px] leading-[22px] font-normal text-[#4B5563] mb-6">Create your first course to start teaching.</p>

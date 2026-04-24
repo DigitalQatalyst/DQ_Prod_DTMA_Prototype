@@ -514,7 +514,10 @@ const CourseLearning = () => {
     );
   }
 
-  const totalLessons = courseData?.modules?.reduce((acc: number, m: any) => acc + (m.lessons?.length || 0), 0) || 0;
+  const totalLessons = courseData?.modules?.reduce((acc: number, m: any) => {
+    const nonQuizLessons = m.lessons?.filter((l: any) => !l.isQuiz && !l.isAssessment) || [];
+    return acc + nonQuizLessons.length;
+  }, 0) || 0;
   const completedLessons = Object.values(lessonProgress || {}).filter(Boolean).length;
   const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
@@ -579,6 +582,26 @@ const CourseLearning = () => {
                     <ChevronRight className={`w-5 h-5 text-gray-600 transition-transform ${isCourseContentCollapsed ? '' : 'rotate-180'}`} />
                   </button>
                 </div>
+
+                {/* Progress Bar */}
+                {!isCourseContentCollapsed && (
+                  <div className="mb-6 px-2">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">
+                        {Math.round(progressPercent)}% Complete
+                      </span>
+                      <span className="text-[11px] leading-[16px] font-medium text-[#4B5563]">
+                        {completedLessons}/{totalLessons} lessons
+                      </span>
+                    </div>
+                    <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#ff6b4d] to-[#ff8c73] rounded-full transition-all duration-1000 ease-out"
+                        style={{ width: `${progressPercent}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
                 {!isCourseContentCollapsed && (
                   <ScrollArea className="h-[600px]">
                   <div className="space-y-2">

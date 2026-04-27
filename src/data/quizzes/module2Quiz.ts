@@ -1,5 +1,5 @@
 // Module 2 Quiz: Perfect Life Transactions - The Cornerstone of Economy 4.0
-// 5 Questions for prototype demonstration
+// 10 Questions - Full Assessment
 
 import { QuizQuestion, Quiz } from './module1Quiz';
 
@@ -9,7 +9,7 @@ export const module2Quiz: Quiz = {
   title: 'Module 2 Assessment',
   description: 'Test your understanding of Perfect Life Transactions and their role in Economy 4.0',
   passingScore: 70,
-  timeLimit: 10, // 10 minutes
+  timeLimit: 15, // 15 minutes
   questions: [
     {
       id: 'q1',
@@ -80,6 +80,76 @@ export const module2Quiz: Quiz = {
       hint: 'Think about whether technology acts as a \'fix\' or an \'amplifier\' for the underlying process.',
       explanation: 'According to Bill Gates, when automation is applied to an inefficient operation, the inefficiency is magnified. Automation amplifies existing processes, so it\'s crucial to optimize operations before automating them.',
       lessonReference: 'Learning the key pillars of a perfect transaction'
+    },
+    {
+      id: 'q6',
+      question: 'Which enabler of Perfect Life Transactions is responsible for breaking down organizational silos and orchestrating data?',
+      options: [
+        'Zero-Trust Security Models',
+        'Blockchain Ledgers',
+        'Unified Digital Business Platforms (DBPs)',
+        'Market to Lead Analytics'
+      ],
+      correctAnswer: 2,
+      hint: 'This enabler serves as the \'heart\' or central hub of the transactional ecosystem.',
+      explanation: 'Unified Digital Business Platforms (DBPs) are responsible for breaking down organizational silos and orchestrating data, serving as the central hub that integrates various systems and processes.',
+      lessonReference: 'The Blueprint of Perfect Life\'s Transactions'
+    },
+    {
+      id: 'q7',
+      question: 'In the context of organizational readiness, why is Kotter\'s Change Management Model mentioned?',
+      options: [
+        'To provide a technical blueprint for cloud infrastructure.',
+        'To calculate the return on investment (ROI) for AI solutions.',
+        'To emphasize the need for strong leadership and a shared vision during transformation.',
+        'To design the user interface for mobile applications.'
+      ],
+      correctAnswer: 2,
+      hint: 'This model focuses on how people and executives navigate the transition into new ways of working.',
+      explanation: 'Kotter\'s Change Management Model is mentioned to emphasize the need for strong leadership and a shared vision during transformation, focusing on how people and executives navigate organizational change.',
+      lessonReference: 'The Blueprint of Perfect Life\'s Transactions'
+    },
+    {
+      id: 'q8',
+      question: 'What role does the Experience-Journey Model play in implementing transaction strategies?',
+      options: [
+        'It identifies critical touchpoints to strategically deploy AI-driven solutions.',
+        'It is used exclusively to track physical employee movements in a warehouse.',
+        'It serves as a legal framework for international trade compliance.',
+        'It acts as a manual for coding legacy system integrations.'
+      ],
+      correctAnswer: 0,
+      hint: 'Consider how a business knows where to place automation to best help the customer.',
+      explanation: 'The Experience-Journey Model identifies critical touchpoints to strategically deploy AI-driven solutions, helping businesses understand where automation and digital enhancements will have the most impact on customer experience.',
+      lessonReference: 'The Blueprint of Perfect Life\'s Transactions'
+    },
+    {
+      id: 'q9',
+      question: 'Why are cloud-based platforms essential for technology infrastructure in Economy 4.0?',
+      options: [
+        'They prevent organizations from having to align technology with business strategy.',
+        'They provide the scalability needed to handle high transaction volumes without performance loss.',
+        'They are the only way to store data in a non-digital format.',
+        'They eliminate the need for any cybersecurity measures.'
+      ],
+      correctAnswer: 1,
+      hint: 'Think about the ability of a system to grow or shrink its resources based on current user demand.',
+      explanation: 'Cloud-based platforms are essential because they provide the scalability needed to handle high transaction volumes without performance loss, allowing systems to dynamically adjust resources based on demand.',
+      lessonReference: 'The Blueprint of Perfect Life\'s Transactions'
+    },
+    {
+      id: 'q10',
+      question: 'How does blockchain technology enhance the Security pillar of digital transactions?',
+      options: [
+        'By automatically generating marketing emails for every purchase.',
+        'By speeding up the connection between the user\'s browser and the server.',
+        'By providing a decentralized and tamper-proof ledger for records.',
+        'By replacing the need for AI-driven fraud detection.'
+      ],
+      correctAnswer: 2,
+      hint: 'This technology creates a transparent record that is very difficult for unauthorized parties to change.',
+      explanation: 'Blockchain technology enhances the Security pillar by providing a decentralized and tamper-proof ledger for records, creating transparent and immutable transaction records that are extremely difficult to alter without authorization.',
+      lessonReference: 'The Blueprint of Perfect Life\'s Transactions'
     },
   ]
 };

@@ -1,5 +1,5 @@
 // Module 1 Quiz: The Rise of Economy 4.0
-// 5 Questions for prototype demonstration
+// 10 Questions - Full Assessment
 
 export interface QuizQuestion {
   id: string;
@@ -27,7 +27,7 @@ export const module1Quiz: Quiz = {
   title: 'Module 1 Assessment',
   description: 'Test your understanding of Economy 4.0 and Digital Cognitive Organizations',
   passingScore: 70,
-  timeLimit: 10, // 10 minutes
+  timeLimit: 15, // 15 minutes
   questions: [
     {
       id: 'q1',
@@ -97,6 +97,76 @@ export const module1Quiz: Quiz = {
       correctAnswer: 3,
       hint: 'Consider how a single digital foundation might affect how different parts of a company work together.',
       explanation: 'The primary role of a Unified Digital Business Platform is to integrate processes, data, and applications across the organization, enabling frictionless operations and seamless collaboration.',
+      lessonReference: 'Unveiling the Digital Cognitive Organization'
+    },
+    {
+      id: 'q6',
+      question: 'Why are Digital Cognitive Organizations better positioned to compete in Economy 4.0 than traditionally structured organizations?',
+      options: [
+        'They rely only on manual decision-making to preserve institutional memory',
+        'They combine data, automation, AI, and adaptive processes to respond quickly to change',
+        'They eliminate the need for customer feedback in strategic planning',
+        'They focus exclusively on physical infrastructure and legacy systems'
+      ],
+      correctAnswer: 1,
+      hint: 'Think about the capabilities that help organizations sense, decide, and act faster.',
+      explanation: 'Digital Cognitive Organizations are better positioned because they use data, automation, AI, and adaptive processes to sense change, make better decisions, and respond quickly in dynamic markets.',
+      lessonReference: 'Unveiling the Digital Cognitive Organization'
+    },
+    {
+      id: 'q7',
+      question: 'Which capability best reflects an organization becoming "cognitive" in the digital economy?',
+      options: [
+        'Using connected data and intelligent systems to learn and improve decisions over time',
+        'Maintaining separate departmental systems to preserve local control',
+        'Reducing digital interaction so customers depend on branch visits',
+        'Standardizing every customer journey without personalization'
+      ],
+      correctAnswer: 0,
+      hint: 'A cognitive organization does more than digitize existing work; it learns from information.',
+      explanation: 'A cognitive organization uses connected data and intelligent systems to learn from activity, improve decisions, and continuously adapt how work and customer experiences are delivered.',
+      lessonReference: 'Unveiling the Digital Cognitive Organization'
+    },
+    {
+      id: 'q8',
+      question: 'What is the strongest reason platform-centric models are important in Economy 4.0?',
+      options: [
+        'They make it unnecessary to collaborate with partners or customers',
+        'They allow value to be created through connected ecosystems, data flows, and scalable services',
+        'They are useful only for social media companies',
+        'They prevent organizations from using automation or AI'
+      ],
+      correctAnswer: 1,
+      hint: 'Consider how platforms connect participants and enable value beyond a single product.',
+      explanation: 'Platform-centric models are important because they connect ecosystems of users, partners, services, and data, allowing organizations to scale value creation beyond traditional product boundaries.',
+      lessonReference: 'Understanding features of Economy 4.0'
+    },
+    {
+      id: 'q9',
+      question: 'How does sustainability by design differ from treating sustainability as a separate compliance activity?',
+      options: [
+        'It embeds sustainability into products, processes, and decisions from the start',
+        'It delays sustainability decisions until after products are launched',
+        'It focuses only on publishing annual reports',
+        'It removes sustainability from business strategy'
+      ],
+      correctAnswer: 0,
+      hint: 'Think about whether sustainability is added later or built into how the organization works.',
+      explanation: 'Sustainability by design means environmental and social considerations are embedded into products, processes, operating models, and decisions from the beginning rather than handled as an afterthought.',
+      lessonReference: 'Understanding features of Economy 4.0'
+    },
+    {
+      id: 'q10',
+      question: 'What should leaders prioritize when moving from basic digital adoption toward a Digital Cognitive Organization?',
+      options: [
+        'Buying isolated tools without changing processes or governance',
+        'Connecting strategy, people, processes, data, and technology into one operating model',
+        'Keeping transformation limited to the IT department',
+        'Measuring progress only by the number of software licenses purchased'
+      ],
+      correctAnswer: 1,
+      hint: 'Digital transformation requires alignment across the full organization, not just technology purchases.',
+      explanation: 'Leaders should prioritize an integrated operating model that connects strategy, people, processes, data, and technology, because technology alone does not create a Digital Cognitive Organization.',
       lessonReference: 'Unveiling the Digital Cognitive Organization'
     },
   ]

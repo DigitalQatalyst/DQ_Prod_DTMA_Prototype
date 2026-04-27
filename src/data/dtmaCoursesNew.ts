@@ -4,10 +4,14 @@ export interface Lesson {
   id: string;
   title: string;
   duration: string; // e.g., "15 min"
-  type: 'video' | 'reading' | 'quiz' | 'assignment';
-  videoUrl?: string; // URL to video file
+  type: 'video' | 'reading' | 'quiz' | 'assignment' | 'infographic';
+  videoUrl?: string; // URL to video file or article URL for reading resources
+  imageUrl?: string; // URL to image file for infographic resources
   quizId?: string; // ID linking to quiz data
   isCompleted?: boolean;
+  resourceType?: 'whitepaper' | 'infographic' | 'pdf' | 'article' | 'case-study'; // Type of reading resource
+  isResourceGroup?: boolean; // Indicates this is a "Course Resources" group
+  resources?: Lesson[]; // Sub-resources for resource groups
 }
 
 export interface Module {
@@ -111,6 +115,15 @@ export const dtmaCoursesNew: Course[] = [
             duration: '5 min',
             type: 'reading',
             videoUrl: 'https://preview.shorthand.com/txIVdYFVuIZmVbdJ',
+            resourceType: 'whitepaper',
+          },
+          {
+            id: 'economy-m1-infographic',
+            title: 'Module 1 Infographic: Economy 4.0 Visual Guide',
+            duration: '3 min',
+            type: 'infographic',
+            imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+            resourceType: 'infographic',
           },
         ],
       },
@@ -162,6 +175,22 @@ export const dtmaCoursesNew: Course[] = [
             type: 'quiz',
             quizId: 'economy-module-2-quiz', // Links to the quiz data
           },
+          {
+            id: 'economy-m2-resource',
+            title: 'Module 2 Resource: Perfect Life Transactions Framework',
+            duration: '6 min',
+            type: 'reading',
+            videoUrl: 'https://preview.shorthand.com/txIVdYFVuIZmVbdJ',
+            resourceType: 'whitepaper',
+          },
+          {
+            id: 'economy-m2-infographic',
+            title: 'Module 2 Infographic: Transaction Pillars Visualization',
+            duration: '4 min',
+            type: 'infographic',
+            imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+            resourceType: 'infographic',
+          },
         ],
       },
       {
@@ -172,17 +201,17 @@ export const dtmaCoursesNew: Course[] = [
         lessons: [
           {
             id: 'economy-m3-l1',
-            title: 'Understanding features of Economy 4.0',
+            title: 'Understanding Success in Economy 4.0',
             duration: '6 min',
             type: 'video',
-            videoUrl: '/Understanding features of Economy 4.0.mp4',
+            videoUrl: '/Understanding Success in Economy 4.0 (2).mp4',
           },
           {
             id: 'economy-m3-l2',
-            title: 'Unveiling the Digital Cognitive Organization',
+            title: 'Unlocking Business Metrics for Success in Economy 4.0',
             duration: '6 min',
             type: 'video',
-            videoUrl: '/Unveiling the Digital Cognitive Organization.mp4',
+            videoUrl: '/Unlocking business metrics for success in economy 4.0.mp4',
           },
           {
             id: 'economy-m3-l3',
@@ -211,6 +240,22 @@ export const dtmaCoursesNew: Course[] = [
             duration: '30 min',
             type: 'quiz',
             quizId: 'economy-module-3-quiz',
+          },
+          {
+            id: 'economy-m3-resource',
+            title: 'Module 3 Resource: Success Metrics Deep Dive',
+            duration: '5 min',
+            type: 'reading',
+            videoUrl: 'https://preview.shorthand.com/txIVdYFVuIZmVbdJ',
+            resourceType: 'whitepaper',
+          },
+          {
+            id: 'economy-m3-infographic',
+            title: 'Module 3 Infographic: KPIs Dashboard',
+            duration: '3 min',
+            type: 'infographic',
+            imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+            resourceType: 'infographic',
           },
         ],
       },

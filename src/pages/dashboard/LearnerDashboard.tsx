@@ -234,8 +234,8 @@ const LearnerDashboard = () => {
                   : 'text-white/70 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <Award className="w-5 h-5" />
-              <span className="text-[16px] leading-[24px] font-normal">Assignments & Capstones</span>
+              <Award className="w-5 h-5 flex-shrink-0" />
+              <span className="text-[16px] leading-[24px] font-normal">Assignments</span>
             </button>
             <button
               onClick={() => setActiveTab('certificates')}
@@ -352,7 +352,7 @@ const LearnerDashboard = () => {
               {activeTab === 'certificates' && 'Certificates & Badges'}
               {activeTab === 'profile' && 'Profile Settings'}
               {activeTab === 'progress' && 'Progress & Notes'}
-              {activeTab === 'assignments' && 'Assignments & Capstones'}
+              {activeTab === 'assignments' && 'Assignments'}
               {activeTab === 'collaboration' && 'Discussions'}
               {activeTab === 'live' && 'Live Classes'}
               {activeTab === 'gamification' && 'Microlearning Paths'}

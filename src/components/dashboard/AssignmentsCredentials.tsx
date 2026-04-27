@@ -74,7 +74,7 @@ export const AssignmentsCredentials = () => {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold mb-2" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
-          Assignments & Capstones
+          Assignments
         </h2>
         <p className="text-muted-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
           Submit assignments, track your progress, and view feedback

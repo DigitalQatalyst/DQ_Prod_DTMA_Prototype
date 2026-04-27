@@ -1,5 +1,5 @@
 // Module 1 Quiz: The Rise of Economy 4.0
-// 5 Questions for prototype demonstration
+// 10 Questions - Full Assessment
 
 export interface QuizQuestion {
   id: string;
@@ -27,7 +27,7 @@ export const module1Quiz: Quiz = {
   title: 'Module 1 Assessment',
   description: 'Test your understanding of Economy 4.0 and Digital Cognitive Organizations',
   passingScore: 70,
-  timeLimit: 10, // 10 minutes
+  timeLimit: 15, // 15 minutes for 10 questions
   questions: [
     {
       id: 'q1',
@@ -98,6 +98,76 @@ export const module1Quiz: Quiz = {
       hint: 'Consider how a single digital foundation might affect how different parts of a company work together.',
       explanation: 'The primary role of a Unified Digital Business Platform is to integrate processes, data, and applications across the organization, enabling frictionless operations and seamless collaboration.',
       lessonReference: 'Unveiling the Digital Cognitive Organization'
+    },
+    {
+      id: 'q6',
+      question: 'In Economy 4.0, how is "Sustainability by Design" typically implemented?',
+      options: [
+        'By using technology to optimize resources and promote circular models',
+        'By adding environmental slogans to marketing materials',
+        'By manual monitoring of supply chain waste once per year',
+        'By focusing solely on profitability and ignoring environmental impact'
+      ],
+      correctAnswer: 0,
+      hint: 'Focus on the use of advanced tools to create more efficient and resource-friendly systems.',
+      explanation: 'This approach integrates sustainability into the core of the economy using tools to reduce waste and improve resource use.',
+      lessonReference: 'Understanding features of Economy 4.0'
+    },
+    {
+      id: 'q7',
+      question: 'Which characteristic of a DCO refers to the systematic collection and analysis of data regarding organizational structure and assets?',
+      options: [
+        'Perfect Life Transactions',
+        'Architectural Data Utilization',
+        'Transformation Leadership',
+        'Advanced Technology Adoption'
+      ],
+      correctAnswer: 1,
+      hint: 'Look for a term that suggests looking at the \'blueprint\' or design of the company.',
+      explanation: 'This involves analyzing data related to the organization\'s own setup and processes to drive strategic alignment.',
+      lessonReference: 'Core Features of Digital Cognitive Organizations'
+    },
+    {
+      id: 'q8',
+      question: 'What is the ultimate goal of "Perfect Life Transactions" in a Digital Cognitive Organization?',
+      options: [
+        'To track customer location at all times for marketing',
+        'To automate all customer service interactions so humans never have to intervene',
+        'To deliver seamless, error-free, and highly personalized customer experiences',
+        'To ensure every transaction is processed at the lowest possible cost'
+      ],
+      correctAnswer: 2,
+      hint: 'Think about the best possible outcome for a customer during a digital interaction.',
+      explanation: 'DCOs aim to remove friction and errors while maximizing the value delivered to the customer in every interaction.',
+      lessonReference: 'Core Features of Digital Cognitive Organizations'
+    },
+    {
+      id: 'q9',
+      question: 'Which type of leadership is emphasized as necessary for navigating the complex digital landscape of a DCO?',
+      options: [
+        'Technical Support Management',
+        'Transformation Leadership',
+        'Passive Stakeholder Management',
+        'Top-Down Authoritarian Leadership'
+      ],
+      correctAnswer: 1,
+      hint: 'Consider a term that implies actively changing and evolving the organization.',
+      explanation: 'This leadership style focuses on fostering a culture of innovation, digital agility, and empowerment.',
+      lessonReference: 'Core Features of Digital Cognitive Organizations'
+    },
+    {
+      id: 'q10',
+      question: 'According to Dr. Stephane Niango, what happens to organizations that fail to transform into cognitive organizations?',
+      options: [
+        'They will achieve steady, long-term growth',
+        'They will be protected by market fluctuations',
+        'They risk obsolescence in the new era',
+        'They will continue to operate with traditional efficiency'
+      ],
+      correctAnswer: 2,
+      hint: 'Focus on the negative consequence of remaining stuck in old business models.',
+      explanation: 'Dr. Niango states that in an era where only cognitive organizations thrive, those that don\'t transform will become outdated.',
+      lessonReference: 'Significance of Cognitive organization theory'
     },
   ]
 };

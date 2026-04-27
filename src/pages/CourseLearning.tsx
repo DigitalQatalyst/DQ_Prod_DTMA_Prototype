@@ -40,6 +40,10 @@ import {
   Clock,
   Mic,
   Copy,
+  Image,
+  BarChart3,
+  FolderOpen,
+  Folder,
 } from "lucide-react";
 import {
   Select,
@@ -51,6 +55,8 @@ import {
 import { CourseTutorAI } from "@/components/mentor/CourseTutorAI";
 import { WhatsAppLearning } from "@/components/learning/WhatsAppLearning";
 import { Module1Resource } from "@/components/learning/Module1Resource";
+import { Module2Resource } from "@/components/learning/Module2Resource";
+import { Module3Resource } from "@/components/learning/Module3Resource";
 import { Card } from "@/components/ui/card";
 import { getCourseById } from "@/data/dtmaCoursesNew";
 import { getQuizByModuleId } from "@/data/quizzes/quizLoader";
@@ -86,6 +92,7 @@ const CourseLearning = () => {
   const [isAIToolsCollapsed, setIsAIToolsCollapsed] = useState(false);
   const [isCourseContentCollapsed, setIsCourseContentCollapsed] = useState(false);
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
+  const [expandedResourceGroups, setExpandedResourceGroups] = useState<Set<string>>(new Set());
   const [showAITutor, setShowAITutor] = useState(false);
   
   // Personal Notes state
@@ -166,6 +173,19 @@ const CourseLearning = () => {
         newSet.delete(moduleId);
       } else {
         newSet.add(moduleId);
+      }
+      return newSet;
+    });
+  };
+
+  // Toggle resource group expansion
+  const toggleResourceGroup = (resourceGroupId: string) => {
+    setExpandedResourceGroups(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(resourceGroupId)) {
+        newSet.delete(resourceGroupId);
+      } else {
+        newSet.add(resourceGroupId);
       }
       return newSet;
     });
@@ -537,7 +557,53 @@ const CourseLearning = () => {
     if (lesson.isPractical) return <GraduationCap className="w-4 h-4" />;
     if (lesson.type === 'video') return <Video className="w-4 h-4" />;
     if (lesson.type === 'audio') return <Headphones className="w-4 h-4" />;
+    if (lesson.type === 'infographic') return <Image className="w-4 h-4" />;
+    if (lesson.type === 'reading') {
+      // Different icons for different resource types
+      switch (lesson.resourceType) {
+        case 'infographic':
+          return <Image className="w-4 h-4" />;
+        case 'pdf':
+          return <FileText className="w-4 h-4" />;
+        case 'case-study':
+          return <BarChart3 className="w-4 h-4" />;
+        case 'article':
+          return <BookOpen className="w-4 h-4" />;
+        case 'whitepaper':
+        default:
+          return <FileText className="w-4 h-4" />;
+      }
+    }
     return <BookOpen className="w-4 h-4" />;
+  };
+
+  const getResourceBadge = (lesson: any) => {
+    if (lesson.type === 'infographic') {
+      return (
+        <span className="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[10px] leading-[14px] font-semibold uppercase tracking-wide">
+          Infographic
+        </span>
+      );
+    }
+    
+    if (lesson.type !== 'reading' || !lesson.resourceType) return null;
+    
+    const badges: Record<string, { label: string; color: string; bgColor: string }> = {
+      'whitepaper': { label: 'White Paper', color: 'text-blue-700', bgColor: 'bg-blue-100' },
+      'infographic': { label: 'Infographic', color: 'text-purple-700', bgColor: 'bg-purple-100' },
+      'pdf': { label: 'PDF', color: 'text-red-700', bgColor: 'bg-red-100' },
+      'article': { label: 'Article', color: 'text-green-700', bgColor: 'bg-green-100' },
+      'case-study': { label: 'Case Study', color: 'text-orange-700', bgColor: 'bg-orange-100' },
+    };
+    
+    const badge = badges[lesson.resourceType];
+    if (!badge) return null;
+    
+    return (
+      <span className={`${badge.bgColor} ${badge.color} px-2 py-0.5 rounded text-[10px] leading-[14px] font-semibold uppercase tracking-wide`}>
+        {badge.label}
+      </span>
+    );
   };
 
   const currentModuleTitle = courseData.modules?.find((m: any) => 
@@ -635,6 +701,93 @@ const CourseLearning = () => {
                         {isModuleExpanded && (
                           <div className="space-y-1 ml-2">
                             {module.lessons?.map((lesson: any) => {
+                              // Handle Resource Group
+                              if (lesson.isResourceGroup && lesson.resources) {
+                                const isResourceGroupExpanded = expandedResourceGroups.has(lesson.id);
+                                
+                                return (
+                                  <div key={lesson.id} className="space-y-1">
+                                    {/* Resource Group Header */}
+                                    <button
+                                      onClick={() => toggleResourceGroup(lesson.id)}
+                                      className="w-full text-left p-3 rounded-lg transition-colors bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border border-amber-200"
+                                    >
+                                      <div className="flex items-start gap-3">
+                                        <div className="mt-1">
+                                          {isResourceGroupExpanded ? (
+                                            <FolderOpen className="w-4 h-4 text-amber-600" />
+                                          ) : (
+                                            <Folder className="w-4 h-4 text-amber-600" />
+                                          )}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center justify-between">
+                                            <p className="text-[14px] leading-[20px] font-semibold text-amber-900">
+                                              {lesson.title}
+                                            </p>
+                                            <ChevronDown className={`w-4 h-4 text-amber-600 transition-transform ${isResourceGroupExpanded ? 'rotate-180' : ''}`} />
+                                          </div>
+                                          <p className="text-muted-foreground text-[12px] leading-[16px] font-medium mt-1">
+                                            {lesson.resources.length} resources • {lesson.duration}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </button>
+                                    
+                                    {/* Sub-resources */}
+                                    {isResourceGroupExpanded && (
+                                      <div className="ml-6 space-y-1 mt-1">
+                                        {lesson.resources.map((resource: any) => {
+                                          const isActive = selectedLesson?.id === resource.id;
+                                          
+                                          return (
+                                            <button
+                                              key={resource.id}
+                                              onClick={() => setSelectedLesson(resource)}
+                                              className={`w-full text-left p-3 rounded-lg transition-colors ${
+                                                isActive
+                                                  ? 'bg-[#1e2348] text-white'
+                                                  : resource.type === 'infographic'
+                                                  ? 'bg-purple-50 hover:bg-purple-100 border border-purple-200'
+                                                  : resource.resourceType === 'whitepaper'
+                                                  ? 'bg-blue-50 hover:bg-blue-100 border border-blue-200'
+                                                  : 'hover:bg-[#1e2348]/15'
+                                              }`}
+                                            >
+                                              <div className="flex items-start gap-3">
+                                                <div className="mt-1">
+                                                  <div className={
+                                                    resource.type === 'infographic'
+                                                      ? 'text-purple-600'
+                                                      : resource.resourceType === 'whitepaper'
+                                                      ? 'text-blue-600'
+                                                      : ''
+                                                  }>
+                                                    {getLessonIcon(resource)}
+                                                  </div>
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                  <p className={`line-clamp-2 ${isActive ? 'text-white' : ''} text-[13px] leading-[18px] font-medium`}>
+                                                    {resource.title}
+                                                  </p>
+                                                  <div className="flex items-center gap-2 mt-1">
+                                                    <p className={`${isActive ? 'text-white/70' : 'text-muted-foreground'} text-[11px] leading-[16px] font-medium`}>
+                                                      {resource.duration}
+                                                    </p>
+                                                    {!isActive && getResourceBadge(resource)}
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              }
+                              
+                              // Handle Regular Lesson
                               const isCompleted = !lesson.isQuiz && !lesson.isAssignment && !lesson.isPractical && lessonProgress?.[lesson.id];
                               const isQuizPassed = lesson.isQuiz && passedModules.has(module.id);
                               const isActive = selectedLesson?.id === lesson.id;
@@ -652,6 +805,12 @@ const CourseLearning = () => {
                                       ? 'bg-green-50 hover:bg-green-100'
                                       : isLocked
                                       ? 'bg-gray-50 cursor-not-allowed opacity-50'
+                                      : lesson.type === 'infographic'
+                                      ? 'bg-purple-50 hover:bg-purple-100 border border-purple-200'
+                                      : lesson.type === 'reading' && lesson.resourceType === 'infographic'
+                                      ? 'bg-purple-50 hover:bg-purple-100 border border-purple-200'
+                                      : lesson.type === 'reading' && lesson.resourceType === 'whitepaper'
+                                      ? 'bg-blue-50 hover:bg-blue-100 border border-blue-200'
                                       : 'hover:bg-[#1e2348]/15'
                                   }`}
                                 >
@@ -662,16 +821,29 @@ const CourseLearning = () => {
                                       ) : isCompleted || isQuizPassed ? (
                                         <CheckCircle className="w-4 h-4 text-green-600" />
                                       ) : (
-                                        getLessonIcon(lesson)
+                                        <div className={
+                                          lesson.type === 'infographic'
+                                            ? 'text-purple-600'
+                                            : lesson.type === 'reading' && lesson.resourceType === 'infographic'
+                                            ? 'text-purple-600'
+                                            : lesson.type === 'reading' && lesson.resourceType === 'whitepaper'
+                                            ? 'text-blue-600'
+                                            : ''
+                                        }>
+                                          {getLessonIcon(lesson)}
+                                        </div>
                                       )}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                       <p className={`line-clamp-2 ${isActive ? 'text-white' : ''} text-[14px] leading-[20px] font-medium`}>
                                         {lesson.title}
                                       </p>
-                                      <p className={`mt-1 ${isActive ? 'text-white/70' : 'text-muted-foreground'} text-[12px] leading-[16px] font-medium`}>
-                                        {lesson.duration_minutes || 15} min • {lesson.type || 'video'}
-                                      </p>
+                                      <div className="flex items-center gap-2 mt-1">
+                                        <p className={`${isActive ? 'text-white/70' : 'text-muted-foreground'} text-[12px] leading-[16px] font-medium`}>
+                                          {lesson.duration_minutes || 15} min • {lesson.type || 'video'}
+                                        </p>
+                                        {!isActive && getResourceBadge(lesson)}
+                                      </div>
                                     </div>
                                   </div>
                                 </button>
@@ -689,13 +861,73 @@ const CourseLearning = () => {
             </div>
 
             {/* Main Player - MIDDLE - 6 columns (9 columns when quiz or reading resource is active) */}
-            <div className={`space-y-4 ${selectedLesson?.isQuiz || selectedLesson?.type === 'reading' ? 'lg:col-span-9' : 'lg:col-span-6'}`}>
+            <div className={`space-y-4 ${selectedLesson?.isQuiz || selectedLesson?.type === 'reading' || selectedLesson?.type === 'infographic' ? 'lg:col-span-9' : 'lg:col-span-6'}`}>
               {/* Only show video player for non-quiz/non-assignment lessons */}
               {!selectedLesson?.isQuiz && !selectedLesson?.isAssignment && !selectedLesson?.isPractical && (
                 <div className="overflow-hidden rounded-lg">
-                  {/* Reading Resource - Embedded Component */}
-                  {selectedLesson?.type === 'reading' && selectedLesson?.videoUrl ? (
-                    <Module1Resource />
+                  {/* Infographic Display - Full Image Viewer */}
+                  {selectedLesson?.type === 'infographic' && selectedLesson?.imageUrl ? (
+                    <Card className="p-0 overflow-hidden">
+                      {/* Header */}
+                      <div className="p-6 bg-gradient-to-br from-purple-50 to-purple-100 border-b-2 border-purple-200">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shrink-0 shadow-lg">
+                            <Image className="w-6 h-6 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-[11px] leading-[16px] font-bold uppercase tracking-wide">
+                                Infographic
+                              </span>
+                            </div>
+                            <h3 className="text-[#1e2348] text-[20px] leading-[28px] font-bold">
+                              {selectedLesson.title}
+                            </h3>
+                          </div>
+                          <Button
+                            onClick={() => window.open(selectedLesson.imageUrl, '_blank')}
+                            className="bg-purple-600 hover:bg-purple-700 text-white"
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Download
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {/* Image Display */}
+                      <div className="bg-gray-50 p-8">
+                        <div className="max-w-5xl mx-auto">
+                          <img
+                            src={selectedLesson.imageUrl}
+                            alt={selectedLesson.title}
+                            className="w-full h-auto rounded-lg shadow-2xl border-4 border-white"
+                          />
+                        </div>
+                      </div>
+                      
+                      {/* Info Footer */}
+                      <div className="p-6 bg-purple-50 border-t border-purple-200">
+                        <div className="flex items-center justify-between text-[14px] leading-[20px]">
+                          <div className="flex items-center gap-2 text-purple-700">
+                            <Image className="w-4 h-4" />
+                            <span className="font-medium">Visual Learning Resource</span>
+                          </div>
+                          <div className="text-gray-600">
+                            <span className="font-medium">{selectedLesson.duration}</span> estimated review time
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  ) : 
+                  /* Reading Resource - Embedded Component */
+                  selectedLesson?.type === 'reading' && selectedLesson?.videoUrl ? (
+                    selectedLesson.id === 'economy-m2-resource' ? (
+                      <Module2Resource />
+                    ) : selectedLesson.id === 'economy-m3-resource' ? (
+                      <Module3Resource />
+                    ) : (
+                      <Module1Resource />
+                    )
                   ) : (
                   /* Video/Content Area */
                   (selectedLesson?.video_url || selectedLesson?.videoUrl) ? (
@@ -1062,7 +1294,7 @@ const CourseLearning = () => {
             </div>
 
             {/* AI Learning Tools - RIGHT SIDE - 3 columns - Hidden during quizzes and reading resources */}
-            {!selectedLesson?.isQuiz && selectedLesson?.type !== 'reading' && (
+            {!selectedLesson?.isQuiz && selectedLesson?.type !== 'reading' && selectedLesson?.type !== 'infographic' && (
               <div className="lg:col-span-3">
                 <Card className="p-6 sticky top-24">
                   <div className="flex items-center justify-between mb-6">
@@ -1150,7 +1382,7 @@ const CourseLearning = () => {
       </main>
 
       {/* Course Tutor AI - Shows as modal when triggered from AI Tools */}
-      {showAITutor && !selectedLesson?.isQuiz && selectedLesson?.type !== 'reading' && (
+      {showAITutor && !selectedLesson?.isQuiz && selectedLesson?.type !== 'reading' && selectedLesson?.type !== 'infographic' && (
         <CourseTutorAI
           courseTitle={courseData.title || course?.title || "Course"}
           moduleTitle={currentModuleTitle}

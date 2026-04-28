@@ -59,7 +59,6 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
         'Digital Business Platforms',
         'All course materials & certificates',
         'Course Tutor AI support',
-        'WhatsApp Learning',
       ],
       badge: isInBasic ? 'Includes This Course' : null,
       buttonText: 'Subscribe to Basic',
@@ -80,9 +79,6 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
         'Digital Workers & Workspaces',
         'Digital Accelerators',
         'Priority support',
-        'All course materials & certificates',
-        'Course Tutor AI support',
-        'WhatsApp Learning',
       ],
       badge: 'Most Popular',
       buttonText: 'Subscribe to Premium',
@@ -94,27 +90,27 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 max-h-[80vh] overflow-y-auto">
       <div className="text-center">
-        <h3 className="text-2xl font-semibold mb-2">Choose Your Learning Path</h3>
-        <p className="text-muted-foreground">
-          Buy this course individually or subscribe for access to multiple courses
+        <h3 className="text-xl font-semibold mb-1">Choose Your Plan</h3>
+        <p className="text-sm text-muted-foreground">
+          Select how you'd like to access "Mastering Economy 4.0"
         </p>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-3">
         {plans.map((plan) => (
           <div
             key={plan.id}
-            className={`relative rounded-2xl border-2 p-6 transition-all ${
+            className={`relative rounded-xl border-2 p-4 transition-all ${
               plan.highlight
-                ? 'border-[#ff6b4d] bg-[#ff6b4d]/5 shadow-lg scale-105'
+                ? 'border-[#ff6b4d] bg-[#ff6b4d]/5 shadow-lg scale-[1.02]'
                 : 'border-border bg-card hover:border-[#ff6b4d]/50'
             }`}
           >
             {plan.badge && (
               <Badge
-                className={`absolute -top-3 left-1/2 -translate-x-1/2 ${
+                className={`absolute -top-2 left-1/2 -translate-x-1/2 text-xs px-2 py-0.5 ${
                   plan.highlight
                     ? 'bg-[#ff6b4d] text-white'
                     : 'bg-green-600 text-white'
@@ -125,32 +121,33 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
               </Badge>
             )}
 
-            <div className="text-center mb-6">
-              <h4 className="text-lg font-semibold mb-2">{plan.name}</h4>
-              <div className="flex items-baseline justify-center gap-1 mb-2">
-                <span className="text-3xl font-bold">${plan.price}</span>
-                <span className="text-muted-foreground">/{plan.period}</span>
+            <div className="text-center mb-4">
+              <h4 className="text-base font-semibold mb-1">{plan.name}</h4>
+              <div className="flex items-baseline justify-center gap-1 mb-1">
+                <span className="text-2xl font-bold">${plan.price}</span>
+                <span className="text-xs text-muted-foreground">/{plan.period}</span>
               </div>
-              <p className="text-sm text-muted-foreground">{plan.description}</p>
+              <p className="text-xs text-muted-foreground">{plan.description}</p>
               {plan.savings && (
-                <Badge variant="outline" className="mt-2 border-green-600 text-green-600">
+                <Badge variant="outline" className="mt-1 text-xs border-green-600 text-green-600">
                   {plan.savings}
                 </Badge>
               )}
             </div>
 
-            <ul className="space-y-3 mb-6">
+            <ul className="space-y-1.5 mb-4">
               {plan.features.map((feature, index) => (
-                <li key={index} className="flex items-start gap-2 text-sm">
-                  <Check className="w-4 h-4 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
-                  <span>{feature}</span>
+                <li key={index} className="flex items-start gap-2 text-xs">
+                  <Check className="w-3 h-3 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
+                  <span className="leading-tight">{feature}</span>
                 </li>
               ))}
             </ul>
 
             <Button
               variant={plan.buttonVariant}
-              className={`w-full ${
+              size="sm"
+              className={`w-full text-xs ${
                 plan.buttonVariant === 'hero'
                   ? 'bg-[#ff6b4d] hover:bg-[#e56045] text-white'
                   : plan.buttonVariant === 'outline'
@@ -166,9 +163,9 @@ export function SubscriptionPlans({ currentCoursePrice, onSelectPlan, currentCou
         ))}
       </div>
 
-      <div className="text-center text-sm text-muted-foreground">
+      <div className="text-center text-xs text-muted-foreground">
         <p>All plans include 30-day money-back guarantee</p>
-        <p className="mt-1">Cancel subscription anytime • No hidden fees</p>
+        <p className="mt-0.5">Cancel subscription anytime • No hidden fees</p>
       </div>
     </div>
   );

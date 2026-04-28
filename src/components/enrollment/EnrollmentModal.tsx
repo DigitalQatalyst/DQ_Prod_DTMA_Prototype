@@ -251,13 +251,6 @@ export function EnrollmentModal({
 
           {currentStep === 'pricing' && (
             <>
-              <DialogHeader>
-                <DialogTitle className="font-display text-xl">Choose Your Plan</DialogTitle>
-                <DialogDescription>
-                  Select how you'd like to access "{course.title}"
-                </DialogDescription>
-              </DialogHeader>
-
               <div className="py-4">
                 <SubscriptionPlans
                   currentCoursePrice={course.price}

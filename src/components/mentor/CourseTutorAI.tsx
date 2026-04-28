@@ -462,9 +462,24 @@ export const CourseTutorAI = ({
     <div className={`fixed bottom-6 right-6 z-40 transition-all duration-300 ${
       isMinimized ? 'w-80' : 'w-96'
     }`}>
-      <div className={`bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 ${
+      <div className={`bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 relative ${
         isMinimized ? 'h-16' : 'h-[600px]'
       }`}>
+        {/* Close Button - Absolutely Positioned */}
+        <button
+          onClick={() => {
+            if (onClose) {
+              onClose();
+            } else {
+              setIsOpen(false);
+            }
+          }}
+          className="absolute top-2 right-2 z-50 p-2 bg-white/90 hover:bg-white rounded-full shadow-lg transition-all hover:scale-110"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5 text-[#ff6b4d]" />
+        </button>
+        
         {/* Header */}
         <div className="bg-gradient-to-r from-[#ff6b4d] to-[#e66045] p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -481,29 +496,56 @@ export const CourseTutorAI = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsMinimized(!isMinimized)}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              aria-label="Minimize"
             >
               <Minimize2 className="w-4 h-4 text-white" />
-            </button>
-            <button
-              onClick={() => {
-                if (onClose) {
-                  onClose();
-                } else {
-                  setIsOpen(false);
-                }
-              }}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-            >
-              <X className="w-4 h-4 text-white" />
             </button>
           </div>
         </div>
 
         {!isMinimized && (
           <>
+            {/* Close Button Bar - Always Visible at Top */}
+            <div className="bg-gradient-to-r from-[#ff6b4d] to-[#e66045] px-4 py-3 flex items-center justify-between">
+              <h3 className="text-[16px] leading-[24px] font-semibold text-white">AI Course Tutor</h3>
+              <button
+                onClick={() => {
+                  if (onClose) {
+                    onClose();
+                  } else {
+                    setIsOpen(false);
+                  }
+                }}
+                className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+            </div>
+            
             {/* Quick Actions */}
-            <div className="p-4 bg-gradient-to-r from-[#fff0ed] to-[#ffe9e4] border-b grid grid-cols-2 gap-2">
+            <div className="p-4 bg-gradient-to-r from-[#fff0ed] to-[#ffe9e4] border-b">
+              {/* Close Button Row */}
+              <div className="flex justify-end mb-3">
+                <button
+                  onClick={() => {
+                    if (onClose) {
+                      onClose();
+                    } else {
+                      setIsOpen(false);
+                    }
+                  }}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-white border border-[#ff6b4d] text-[#ff6b4d] rounded-lg hover:bg-[#ff6b4d] hover:text-white transition-colors text-[14px] leading-[20px] font-medium"
+                  aria-label="Close"
+                >
+                  <X className="w-4 h-4" />
+                  Close
+                </button>
+              </div>
+              
+              {/* Action Buttons Grid */}
+              <div className="grid grid-cols-2 gap-2">
               {quickActions.map((action) => (
                 <button
                   key={action.action}
@@ -514,6 +556,7 @@ export const CourseTutorAI = ({
                   <span className="text-gray-700">{action.text}</span>
                 </button>
               ))}
+              </div>
             </div>
 
             {/* Messages */}

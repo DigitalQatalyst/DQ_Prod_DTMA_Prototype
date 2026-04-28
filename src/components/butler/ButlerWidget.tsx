@@ -106,12 +106,12 @@ export const ButlerWidget = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 w-16 h-16 bg-[#1e2348] rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-300 hover:scale-110 z-50 group"
+          className="fixed bottom-6 right-6 w-16 h-16 bg-[#ff6b4d] rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-300 hover:scale-110 z-50 group"
           aria-label="Open Butler AI Chat"
         >
           <Bot className="w-8 h-8 text-white" />
-          <div className="absolute inset-0 rounded-full bg-[#ff6b4d] opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#ff6b4d] rounded-full animate-pulse" />
+          <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+          <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#1e2348] rounded-full animate-pulse" />
         </button>
       )}
 

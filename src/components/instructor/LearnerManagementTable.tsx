@@ -494,10 +494,10 @@ export const LearnerManagementTable = () => {
       {/* Table */}
       <div className="bg-white rounded-2xl border border-[#E5E7EB] overflow-hidden shadow-md">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[800px]">
             <thead className="bg-gradient-to-r from-[#F5F6FA] to-[#E5E7EB] border-b border-[#E5E7EB]">
               <tr>
-                <th className="px-6 py-4 text-left">
+                <th className="px-4 py-4 text-left w-12">
                   <input
                     type="checkbox"
                     checked={
@@ -509,7 +509,7 @@ export const LearnerManagementTable = () => {
                   />
                 </th>
                 <th
-                  className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors"
+                  className="px-4 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors min-w-[160px]"
                   onClick={() => handleSort("name")}
                 >
                   <div className="flex items-center">
@@ -517,14 +517,14 @@ export const LearnerManagementTable = () => {
                     {getSortIcon("name")}
                   </div>
                 </th>
-                <th className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348]">
+                <th className="px-4 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] min-w-[200px]">
                   Email
                 </th>
-                <th className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348]">
+                <th className="px-4 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] min-w-[180px] hidden lg:table-cell">
                   Course
                 </th>
                 <th
-                  className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors"
+                  className="px-4 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors w-24 hidden md:table-cell"
                   onClick={() => handleSort("enrolledDate")}
                 >
                   <div className="flex items-center">
@@ -533,7 +533,7 @@ export const LearnerManagementTable = () => {
                   </div>
                 </th>
                 <th
-                  className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors"
+                  className="px-4 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors w-32"
                   onClick={() => handleSort("progress")}
                 >
                   <div className="flex items-center">
@@ -541,14 +541,14 @@ export const LearnerManagementTable = () => {
                     {getSortIcon("progress")}
                   </div>
                 </th>
-                <th className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348]">
+                <th className="px-4 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] w-24">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348]">
+                <th className="px-4 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] w-28 hidden sm:table-cell">
                   WhatsApp
                 </th>
                 <th
-                  className="px-6 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors"
+                  className="px-4 py-4 text-left text-[13px] leading-[18px] font-semibold text-[#1e2348] cursor-pointer hover:bg-[#fff0ed]/30 transition-colors w-24 hidden xl:table-cell"
                   onClick={() => handleSort("lastActive")}
                 >
                   <div className="flex items-center">
@@ -578,7 +578,7 @@ export const LearnerManagementTable = () => {
                     key={learner.id}
                     className="hover:bg-[#F5F6FA] transition-colors"
                   >
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <input
                         type="checkbox"
                         checked={selectedLearners.has(learner.id)}
@@ -586,56 +586,62 @@ export const LearnerManagementTable = () => {
                         className="w-4 h-4 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-[#ff6b4d]"
                       />
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">
+                    <td className="px-4 py-4">
+                      <div className="text-[15px] leading-[22px] font-semibold text-[#1e2348] truncate max-w-[140px]">
                         {learner.name}
                       </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-[14px] leading-[20px] text-[#4B5563]">
-                        {learner.email}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="text-[14px] leading-[20px] text-[#4B5563] max-w-[200px] truncate">
+                      <div className="text-[12px] leading-[16px] text-[#4B5563] lg:hidden truncate max-w-[140px]">
                         {learner.courseName}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
+                      <div className="text-[14px] leading-[20px] text-[#4B5563] truncate max-w-[180px]">
+                        {learner.email}
+                      </div>
+                      <div className="text-[12px] leading-[16px] text-[#4B5563] md:hidden">
+                        {new Date(learner.enrolledDate).toLocaleDateString()}
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 hidden lg:table-cell">
+                      <div className="text-[14px] leading-[20px] text-[#4B5563] truncate max-w-[160px]" title={learner.courseName}>
+                        {learner.courseName}
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 hidden md:table-cell">
                       <div className="text-[14px] leading-[20px] text-[#4B5563]">
                         {new Date(learner.enrolledDate).toLocaleDateString()}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 bg-[#E5E7EB] rounded-full h-2.5 max-w-[100px]">
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 bg-[#E5E7EB] rounded-full h-2 max-w-[80px]">
                           <div
-                            className="bg-gradient-to-r from-[#ff6b4d] to-[#e66045] h-2.5 rounded-full transition-all shadow-sm"
+                            className="bg-gradient-to-r from-[#ff6b4d] to-[#e66045] h-2 rounded-full transition-all shadow-sm"
                             style={{ width: `${learner.progress}%` }}
                           />
                         </div>
-                        <span className="text-[13px] leading-[18px] font-semibold text-[#1e2348] min-w-[45px]">
+                        <span className="text-[12px] leading-[16px] font-semibold text-[#1e2348] min-w-[35px]">
                           {learner.progress}%
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">{getStatusBadge(learner.status)}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">{getStatusBadge(learner.status)}</td>
+                    <td className="px-4 py-4 hidden sm:table-cell">
                       {learner.whatsappOptIn ? (
-                        <div className="flex items-center gap-1.5 text-emerald-600">
+                        <div className="flex items-center gap-1 text-emerald-600">
                           <CheckCircle className="w-4 h-4" />
-                          <span className="text-[13px] leading-[18px] font-semibold">
+                          <span className="text-[12px] leading-[16px] font-semibold">
                             Opted In
                           </span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1.5 text-[#9CA3AF]">
+                        <div className="flex items-center gap-1 text-[#9CA3AF]">
                           <XCircle className="w-4 h-4" />
-                          <span className="text-[13px] leading-[18px]">Not Opted In</span>
+                          <span className="text-[12px] leading-[16px]">Not Opted In</span>
                         </div>
                       )}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4 hidden xl:table-cell">
                       <div className="text-[14px] leading-[20px] text-[#4B5563]">
                         {new Date(learner.lastActive).toLocaleDateString()}
                       </div>

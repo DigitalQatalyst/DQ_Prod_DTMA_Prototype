@@ -213,41 +213,38 @@ const CourseBuilder = () => {
       <div className="flex-1 lg:ml-64">
         {/* Header */}
         <header className="sticky top-0 z-40 bg-white border-b border-[#E5E7EB] shadow-sm">
-          <div className="p-6 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={handleBack}
-                className="p-2 hover:bg-[#fff0ed] rounded-xl transition-colors"
-              >
-                <ChevronLeft className="w-6 h-6 text-[#1e2348]" />
-              </button>
-              <div>
-                <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">{course.title || "New Course"}</h1>
-                <p className="text-[13px] leading-[18px] font-normal text-[#4B5563]">
+          <div className="px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-4 ml-[30px]">
+              <div className="flex flex-col justify-center">
+                <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348] m-0">{course.title || "New Course"}</h1>
+                <p className="text-[13px] leading-[18px] font-normal text-[#4B5563] m-0">
                   {lastSaved ? `Last saved ${lastSaved.toLocaleTimeString()}` : "Not saved yet"}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <Button variant="outline" size="sm" onClick={handleBack} className="text-[14px] leading-[20px] font-medium hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]">
+                Back to Dashboard
+              </Button>
               <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]">
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
-              </Button>
-              <Button size="sm" onClick={handleSave} className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[14px] leading-[20px] font-medium shadow-sm">
-                <Save className="w-4 h-4 mr-2" />
-                Save
               </Button>
             </div>
           </div>
 
           {/* Progress Bar */}
-          <div className="px-6 pb-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[13px] leading-[18px] font-medium text-[#1e2348]">Progress</span>
-              <span className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{completedSteps} of {STEPS.length}</span>
+          {currentStep !== "submit" && (
+            <div className="px-6 lg:px-8 pb-6">
+              <div className="ml-[30px] mr-6 lg:mr-8">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[13px] leading-[18px] font-medium text-[#1e2348]">Progress</span>
+                  <span className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{completedSteps} of {STEPS.length}</span>
+                </div>
+                <Progress value={progressPercent} className="h-2 bg-[#E5E7EB]" />
+              </div>
             </div>
-            <Progress value={progressPercent} className="h-2 bg-[#E5E7EB]" />
-          </div>
+          )}
         </header>
 
         {/* Content */}

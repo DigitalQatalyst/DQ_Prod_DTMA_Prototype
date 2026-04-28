@@ -305,7 +305,7 @@ export const TransactAI = ({
         message,
         suggestions: ['More study tips', 'Learning resources', 'Join study group', 'Ask a question'],
         insights: [
-          { icon: Brain, text: 'Smart learning strategies', color: 'text-purple-600' },
+          { icon: Brain, text: 'Smart learning strategies', color: 'text-[#ff6b4d]' },
           { icon: Lightbulb, text: 'Proven techniques', color: 'text-amber-600' }
         ]
       };
@@ -373,7 +373,7 @@ export const TransactAI = ({
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 text-white rounded-full shadow-2xl hover:shadow-purple-500/20 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e56045] text-white rounded-full shadow-2xl hover:shadow-orange-500/20 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
       >
         <Brain className="w-7 h-7 group-hover:scale-110 transition-transform" />
         <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse"></span>
@@ -389,16 +389,16 @@ export const TransactAI = ({
         isMinimized ? 'h-16' : 'h-[600px]'
       }`}>
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#ff6b4d] to-[#e56045] p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10 ring-2 ring-white">
-              <AvatarFallback className="bg-gradient-to-br from-purple-500 to-indigo-500 text-white">
+              <AvatarFallback className="bg-gradient-to-br from-[#ff6b4d] to-[#e56045] text-white">
                 <Brain className="w-5 h-5" />
               </AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="font-semibold text-white">Transact AI</h3>
-              <p className="text-xs text-white/80">Your Personal Mentor</p>
+              <h3 className="text-[16px] leading-[24px] font-semibold text-white">Transact AI</h3>
+              <p className="text-[12px] leading-[16px] text-white/80">Your Personal Mentor</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -420,12 +420,12 @@ export const TransactAI = ({
         {!isMinimized && (
           <>
             {/* Quick Insights */}
-            <div className="p-4 bg-gradient-to-r from-purple-50 to-indigo-50 border-b grid grid-cols-2 gap-2">
+            <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 border-b grid grid-cols-2 gap-2">
               {quickInsights.map((insight) => (
                 <button
                   key={insight.action}
                   onClick={() => handleQuickInsight(insight.action)}
-                  className="flex items-center gap-2 p-2 bg-white rounded-lg hover:shadow-md border border-transparent hover:border-purple-200 transition-all text-sm"
+                  className="flex items-center gap-2 p-2 bg-white rounded-lg hover:shadow-md border border-transparent hover:border-orange-200 transition-all text-[14px] leading-[20px]"
                 >
                   <insight.icon className={`w-4 h-4 ${insight.color}`} />
                   <span className="text-gray-700">{insight.text}</span>
@@ -441,7 +441,7 @@ export const TransactAI = ({
                     <div className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {message.type === 'mentor' && (
                         <Avatar className="w-8 h-8 shrink-0">
-                          <AvatarFallback className="bg-gradient-to-br from-purple-500 to-indigo-500 text-white">
+                          <AvatarFallback className="bg-gradient-to-br from-[#ff6b4d] to-[#e56045] text-white">
                             <Brain className="w-4 h-4" />
                           </AvatarFallback>
                         </Avatar>
@@ -449,15 +449,15 @@ export const TransactAI = ({
                       <div className={`max-w-[80%] ${message.type === 'user' ? 'order-first' : ''}`}>
                         <div className={`rounded-2xl p-3 ${
                           message.type === 'user'
-                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
-                            : 'bg-gradient-to-r from-purple-50 to-indigo-50 text-gray-800 border border-purple-100'
+                            ? 'bg-gradient-to-r from-[#ff6b4d] to-[#e56045] text-white'
+                            : 'bg-gradient-to-r from-orange-50 to-red-50 text-gray-800 border border-orange-100'
                         }`}>
-                          <p className="text-sm whitespace-pre-line">{message.content}</p>
+                          <p className="text-[14px] leading-[20px]">{message.content}</p>
                         </div>
                         {message.insights && message.insights.length > 0 && (
                           <div className="mt-2 space-y-1">
                             {message.insights.map((insight, idx) => (
-                              <div key={idx} className="flex items-center gap-2 text-sm">
+                              <div key={idx} className="flex items-center gap-2 text-[12px] leading-[16px]">
                                 <insight.icon className={`w-4 h-4 ${insight.color}`} />
                                 <span className="text-gray-600">{insight.text}</span>
                               </div>
@@ -470,7 +470,7 @@ export const TransactAI = ({
                               <button
                                 key={idx}
                                 onClick={() => handleSuggestionClick(suggestion)}
-                                className="text-xs px-3 py-1 bg-white border border-purple-300 text-purple-700 rounded-full hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-colors"
+                                className="text-[12px] leading-[16px] px-3 py-1 bg-white border border-orange-300 text-[#ff6b4d] rounded-full hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d] transition-colors"
                               >
                                 {suggestion}
                               </button>
@@ -494,17 +494,17 @@ export const TransactAI = ({
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Ask your mentor..."
-                  className="flex-1 px-4 py-2 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-orange-200 rounded-lg text-[14px] leading-[20px] focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim()}
-                  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white"
+                  className="bg-gradient-to-r from-[#ff6b4d] to-[#e56045] hover:from-[#e56045] hover:to-[#d55540] text-white"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-xs text-gray-500 mt-2 text-center">
+              <p className="text-[12px] leading-[16px] text-gray-500 mt-2 text-center">
                 Personalized AI Mentor • Here for your success
               </p>
             </div>

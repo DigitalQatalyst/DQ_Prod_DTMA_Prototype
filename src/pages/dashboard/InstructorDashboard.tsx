@@ -499,8 +499,8 @@ const InstructorDashboard = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div className="bg-white rounded-2xl p-6 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-xl flex items-center justify-center shadow-sm">
-                      <Users className="w-7 h-7 text-white" />
+                    <div className="w-14 h-14 bg-[#fff0ed] rounded-xl flex items-center justify-center shadow-sm">
+                      <Users className="w-7 h-7 text-[#ff6b4d]" />
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold mb-1 text-[#1e2348]">{totalEnrollments}</div>
@@ -513,8 +513,8 @@ const InstructorDashboard = () => {
 
                 <div className="bg-white rounded-2xl p-6 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-xl flex items-center justify-center shadow-sm">
-                      <BookOpen className="w-7 h-7 text-white" />
+                    <div className="w-14 h-14 bg-[#e8eaf5] rounded-xl flex items-center justify-center shadow-sm">
+                      <BookOpen className="w-7 h-7 text-[#1e2348]" />
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold mb-1 text-[#1e2348]">{courses?.length || 0}</div>
@@ -526,8 +526,8 @@ const InstructorDashboard = () => {
 
                 <div className="bg-white rounded-2xl p-6 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-xl flex items-center justify-center shadow-sm">
-                      <Calendar className="w-7 h-7 text-white" />
+                    <div className="w-14 h-14 bg-[#fff0ed] rounded-xl flex items-center justify-center shadow-sm">
+                      <Calendar className="w-7 h-7 text-[#ff6b4d]" />
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold mb-1 text-[#1e2348]">0</div>
@@ -844,8 +844,8 @@ const CertificateBrandingSection = ({ profile }: any) => {
       {/* Certificate Branding Settings */}
       <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] space-y-8 shadow-md hover:shadow-lg transition-shadow">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
-            <Award className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 bg-[#e8eaf5] rounded-2xl flex items-center justify-center shadow-sm">
+            <Award className="w-8 h-8 text-[#1e2348]" />
           </div>
           <div>
             <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Certificate Branding</h3>
@@ -984,8 +984,8 @@ const CertificateBrandingSection = ({ profile }: any) => {
       {/* Certificate Preview */}
       <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-xl flex items-center justify-center shadow-sm">
-            <Eye className="w-6 h-6 text-white" />
+          <div className="w-12 h-12 bg-[#fff0ed] rounded-xl flex items-center justify-center shadow-sm">
+            <Eye className="w-6 h-6 text-[#ff6b4d]" />
           </div>
           <div>
             <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Certificate Preview</h3>

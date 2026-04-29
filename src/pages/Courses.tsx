@@ -181,21 +181,21 @@ const Courses = () => {
                           <img
                             src={course.image}
                             alt={course.title}
-                            className="w-full h-full object-cover opacity-40 saturate-0"
+                            className="w-full h-full object-cover"
                           />
                           <div className="absolute top-4 left-1/2 -translate-x-1/2">
-                            <div className="bg-white text-[#6B7280] text-[14px] leading-[20px] font-medium px-4 py-2 rounded-full shadow-md">
+                            <div className="bg-white text-[#1e2348] text-[14px] leading-[20px] font-medium px-4 py-2 rounded-full shadow-md">
                               Coming Soon
                             </div>
                           </div>
                         </div>
                         <div className="p-5">
-                          <h3 className="text-[20px] leading-[28px] font-medium text-[#4B5563] mb-2 line-clamp-2">
+                          <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-2 line-clamp-2">
                             {course.title}
                           </h3>
-                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#9CA3AF] mb-3">
+                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#4B5563] mb-3">
                             <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-[#D1D5DB] fill-[#D1D5DB]" />
+                              <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
                               <span className="font-medium">{course.rating}</span>
                               <span>({course.reviews})</span>
                             </div>
@@ -204,18 +204,15 @@ const Courses = () => {
                               <span>{course.duration}</span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[#9CA3AF] mb-3">
+                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[#4B5563] mb-3">
                             <BookOpen className="w-4 h-4" />
                             <span>Content in development</span>
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="flex items-baseline gap-2">
-                              <span className="text-[20px] leading-[28px] font-semibold text-[#9CA3AF]">${course.price}</span>
-                              <span className="text-[14px] leading-[20px] font-normal text-[#D1D5DB] line-through">${course.originalPrice}</span>
+                              <span className="text-[20px] leading-[28px] font-semibold text-[#0B0C19]">${course.price}</span>
+                              <span className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] line-through">${course.originalPrice}</span>
                             </div>
-                            <Badge className="bg-[#E5E7EB] text-[#9CA3AF] text-[12px] leading-[16px] font-medium border-0">
-                              Coming Soon
-                            </Badge>
                           </div>
                         </div>
                       </div>
@@ -281,10 +278,10 @@ const Courses = () => {
                           <img
                             src={course.image}
                             alt={course.title}
-                            className="w-full h-full object-cover opacity-40 saturate-0"
+                            className="w-full h-full object-cover"
                           />
                           <div className="absolute top-2 left-1/2 -translate-x-1/2">
-                            <div className="bg-white text-[#6B7280] text-[10px] leading-[14px] font-medium px-3 py-1.5 rounded-full shadow-md">
+                            <div className="bg-white text-[#1e2348] text-[10px] leading-[14px] font-medium px-3 py-1.5 rounded-full shadow-md">
                               Coming Soon
                             </div>
                           </div>
@@ -293,23 +290,23 @@ const Courses = () => {
                         <div className="flex-1 flex flex-col justify-between py-1">
                           <div>
                             <div className="flex items-center gap-2 mb-2">
-                              <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium capitalize text-[#9CA3AF]">
+                              <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium capitalize text-[#ff6b4d]">
                                 {course.category}
                               </Badge>
-                              <span className="text-[12px] leading-[16px] font-medium text-[#9CA3AF]">{course.level}</span>
+                              <span className="text-[12px] leading-[16px] font-medium text-[#4B5563]">{course.level}</span>
                             </div>
 
-                            <h3 className="text-[20px] leading-[28px] font-medium text-[#4B5563] mb-1">
+                            <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-1">
                               {course.title}
                             </h3>
-                            <p className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] mb-2">{course.description}</p>
-                            <p className="text-[14px] leading-[20px] font-normal text-[#9CA3AF]">by {course.instructor}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-2">{course.description}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">by {course.instructor}</p>
                           </div>
 
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-[#9CA3AF]">
+                            <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-[#4B5563]">
                               <div className="flex items-center gap-1.5">
-                                <Star className="w-4 h-4 fill-[#D1D5DB] text-[#D1D5DB]" />
+                                <Star className="w-4 h-4 fill-[#ff6b4d] text-[#ff6b4d]" />
                                 <span className="font-semibold">{course.rating}</span>
                                 <span>({course.reviews})</span>
                               </div>
@@ -324,11 +321,8 @@ const Courses = () => {
                             </div>
 
                             <div className="flex items-center gap-3">
-                              <span className="text-[14px] leading-[20px] font-normal text-[#D1D5DB] line-through">${course.originalPrice}</span>
-                              <span className="text-[20px] leading-[28px] font-semibold text-[#9CA3AF]">${course.price}</span>
-                              <Badge className="bg-[#E5E7EB] text-[#9CA3AF] text-[10px] leading-[14px] font-medium border-0 ml-2">
-                                Coming Soon
-                              </Badge>
+                              <span className="text-[14px] leading-[20px] font-normal text-[#9CA3AF] line-through">${course.originalPrice}</span>
+                              <span className="text-[20px] leading-[28px] font-semibold text-[#0B0C19]">${course.price}</span>
                             </div>
                           </div>
                         </div>

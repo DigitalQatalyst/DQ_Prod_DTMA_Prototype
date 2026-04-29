@@ -57,6 +57,7 @@ import { WhatsAppLearning } from "@/components/learning/WhatsAppLearning";
 import { Module1Resource } from "@/components/learning/Module1Resource";
 import { Module2Resource } from "@/components/learning/Module2Resource";
 import { Module3Resource } from "@/components/learning/Module3Resource";
+import { CourseModuleNavigator } from "@/components/learning/CourseModuleNavigator";
 import { Card } from "@/components/ui/card";
 import { getCourseById } from "@/data/dtmaCoursesNew";
 import { getQuizByModuleId } from "@/data/quizzes/quizLoader";
@@ -633,230 +634,19 @@ const CourseLearning = () => {
         {/* Content Area */}
         <div className="p-8">
           <div className="grid lg:grid-cols-12 gap-6">
-            {/* Course Outline - LEFT SIDE - 3 columns (collapses to minimal width) */}
+            {/* Course Module Navigator - LEFT SIDE - 3 columns (collapses to minimal width) */}
             <div className={`transition-all duration-300 ${isCourseContentCollapsed ? 'lg:col-span-1' : 'lg:col-span-3'}`}>
-              <Card className="p-4 relative">
-                <div className="flex items-center justify-between mb-4">
-                  {!isCourseContentCollapsed && (
-                    <h3 className="text-[#1e2348] text-[18px] leading-[26px] font-bold">Course Content</h3>
-                  )}
-                  <button
-                    onClick={() => setIsCourseContentCollapsed(!isCourseContentCollapsed)}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-auto"
-                    aria-label={isCourseContentCollapsed ? "Expand Course Content" : "Collapse Course Content"}
-                  >
-                    <ChevronRight className={`w-5 h-5 text-gray-600 transition-transform ${isCourseContentCollapsed ? '' : 'rotate-180'}`} />
-                  </button>
-                </div>
-
-                {/* Progress Bar */}
-                {!isCourseContentCollapsed && (
-                  <div className="mb-6 px-2">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">
-                        {Math.round(progressPercent)}% Complete
-                      </span>
-                      <span className="text-[11px] leading-[16px] font-medium text-[#4B5563]">
-                        {completedLessons}/{totalLessons} lessons
-                      </span>
-                    </div>
-                    <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#ff6b4d] to-[#ff8c73] rounded-full transition-all duration-1000 ease-out"
-                        style={{ width: `${progressPercent}%` }}
-                      />
-                    </div>
-                  </div>
-                )}
-                {!isCourseContentCollapsed && (
-                  <ScrollArea className="h-[600px]">
-                  <div className="space-y-2">
-                    {courseData.modules?.map((module: any) => {
-                      const moduleHasQuiz = module.lessons?.some((l: any) => l.isQuiz);
-                      const isModulePassed = moduleHasQuiz && passedModules.has(module.id);
-                      const isModuleExpanded = expandedModules.has(module.id);
-                      
-                      return (
-                      <div key={module.id} className="mb-4">
-                        {/* Module Header - Clickable */}
-                        <button
-                          onClick={() => toggleModuleExpansion(module.id)}
-                          className="w-full flex items-center gap-2 mb-2 px-2 py-2 hover:bg-gray-100 rounded-lg transition-colors"
-                        >
-                          {isModuleExpanded ? (
-                            <ChevronUp className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                          ) : (
-                            <ChevronDown className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                          )}
-                          <h4 className="text-[#1e2348] text-[15px] leading-[22px] font-bold flex-1 text-left">{module.title}</h4>
-                          {isModulePassed && (
-                            <div className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-0.5 rounded-full flex-shrink-0">
-                              <CheckCircle className="w-3 h-3" />
-                              <span className="text-[10px] leading-[14px] font-semibold">PASSED</span>
-                            </div>
-                          )}
-                        </button>
-                        
-                        {/* Module Lessons - Collapsible */}
-                        {isModuleExpanded && (
-                          <div className="space-y-1 ml-2">
-                            {module.lessons?.map((lesson: any) => {
-                              // Handle Resource Group
-                              if (lesson.isResourceGroup && lesson.resources) {
-                                const isResourceGroupExpanded = expandedResourceGroups.has(lesson.id);
-                                
-                                return (
-                                  <div key={lesson.id} className="space-y-1">
-                                    {/* Resource Group Header */}
-                                    <button
-                                      onClick={() => toggleResourceGroup(lesson.id)}
-                                      className="w-full text-left p-3 rounded-lg transition-colors bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border border-amber-200"
-                                    >
-                                      <div className="flex items-start gap-3">
-                                        <div className="mt-1">
-                                          {isResourceGroupExpanded ? (
-                                            <FolderOpen className="w-4 h-4 text-amber-600" />
-                                          ) : (
-                                            <Folder className="w-4 h-4 text-amber-600" />
-                                          )}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                          <div className="flex items-center justify-between">
-                                            <p className="text-[14px] leading-[20px] font-semibold text-amber-900">
-                                              {lesson.title}
-                                            </p>
-                                            <ChevronDown className={`w-4 h-4 text-amber-600 transition-transform ${isResourceGroupExpanded ? 'rotate-180' : ''}`} />
-                                          </div>
-                                          <p className="text-muted-foreground text-[12px] leading-[16px] font-medium mt-1">
-                                            {lesson.resources.length} resources • {lesson.duration}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </button>
-                                    
-                                    {/* Sub-resources */}
-                                    {isResourceGroupExpanded && (
-                                      <div className="ml-6 space-y-1 mt-1">
-                                        {lesson.resources.map((resource: any) => {
-                                          const isActive = selectedLesson?.id === resource.id;
-                                          
-                                          return (
-                                            <button
-                                              key={resource.id}
-                                              onClick={() => setSelectedLesson(resource)}
-                                              className={`w-full text-left p-3 rounded-lg transition-colors ${
-                                                isActive
-                                                  ? 'bg-[#1e2348] text-white'
-                                                  : resource.type === 'infographic'
-                                                  ? 'bg-purple-50 hover:bg-purple-100 border border-purple-200'
-                                                  : resource.resourceType === 'whitepaper'
-                                                  ? 'bg-blue-50 hover:bg-blue-100 border border-blue-200'
-                                                  : 'hover:bg-[#1e2348]/15'
-                                              }`}
-                                            >
-                                              <div className="flex items-start gap-3">
-                                                <div className="mt-1">
-                                                  <div className={
-                                                    resource.type === 'infographic'
-                                                      ? 'text-purple-600'
-                                                      : resource.resourceType === 'whitepaper'
-                                                      ? 'text-blue-600'
-                                                      : ''
-                                                  }>
-                                                    {getLessonIcon(resource)}
-                                                  </div>
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                  <p className={`line-clamp-2 ${isActive ? 'text-white' : ''} text-[13px] leading-[18px] font-medium`}>
-                                                    {resource.title}
-                                                  </p>
-                                                  <div className="flex items-center gap-2 mt-1">
-                                                    <p className={`${isActive ? 'text-white/70' : 'text-muted-foreground'} text-[11px] leading-[16px] font-medium`}>
-                                                      {resource.duration}
-                                                    </p>
-                                                    {!isActive && getResourceBadge(resource)}
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </button>
-                                          );
-                                        })}
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              }
-                              
-                              // Handle Regular Lesson
-                              const isCompleted = !lesson.isQuiz && !lesson.isAssignment && !lesson.isPractical && lessonProgress?.[lesson.id];
-                              const isQuizPassed = lesson.isQuiz && passedModules.has(module.id);
-                              const isActive = selectedLesson?.id === lesson.id;
-                              const isLocked = false; // You can add locking logic here
-
-                              return (
-                                <button
-                                  key={lesson.id}
-                                  onClick={() => setSelectedLesson(lesson)}
-                                  disabled={isLocked}
-                                  className={`w-full text-left p-3 rounded-lg transition-colors ${
-                                    isActive
-                                      ? 'bg-[#1e2348] text-white'
-                                      : isCompleted || isQuizPassed
-                                      ? 'bg-green-50 hover:bg-green-100'
-                                      : isLocked
-                                      ? 'bg-gray-50 cursor-not-allowed opacity-50'
-                                      : lesson.type === 'infographic'
-                                      ? 'bg-purple-50 hover:bg-purple-100 border border-purple-200'
-                                      : lesson.type === 'reading' && lesson.resourceType === 'infographic'
-                                      ? 'bg-purple-50 hover:bg-purple-100 border border-purple-200'
-                                      : lesson.type === 'reading' && lesson.resourceType === 'whitepaper'
-                                      ? 'bg-blue-50 hover:bg-blue-100 border border-blue-200'
-                                      : 'hover:bg-[#1e2348]/15'
-                                  }`}
-                                >
-                                  <div className="flex items-start gap-3">
-                                    <div className="mt-1">
-                                      {isLocked ? (
-                                        <Lock className="w-4 h-4 text-muted-foreground" />
-                                      ) : isCompleted || isQuizPassed ? (
-                                        <CheckCircle className="w-4 h-4 text-green-600" />
-                                      ) : (
-                                        <div className={
-                                          lesson.type === 'infographic'
-                                            ? 'text-purple-600'
-                                            : lesson.type === 'reading' && lesson.resourceType === 'infographic'
-                                            ? 'text-purple-600'
-                                            : lesson.type === 'reading' && lesson.resourceType === 'whitepaper'
-                                            ? 'text-blue-600'
-                                            : ''
-                                        }>
-                                          {getLessonIcon(lesson)}
-                                        </div>
-                                      )}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                      <p className={`line-clamp-2 ${isActive ? 'text-white' : ''} text-[14px] leading-[20px] font-medium`}>
-                                        {lesson.title}
-                                      </p>
-                                      <div className="flex items-center gap-2 mt-1">
-                                        <p className={`${isActive ? 'text-white/70' : 'text-muted-foreground'} text-[12px] leading-[16px] font-medium`}>
-                                          {lesson.duration_minutes || 15} min • {lesson.type || 'video'}
-                                        </p>
-                                        {!isActive && getResourceBadge(lesson)}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                      );
-                    })}
-                  </div>
-                </ScrollArea>
-                )}
+              <Card className="p-0 overflow-hidden rounded-lg flex flex-col h-full">
+                <CourseModuleNavigator
+                  modules={courseData.modules || []}
+                  selectedLessonId={selectedLesson?.id}
+                  onLessonSelect={setSelectedLesson}
+                  progressPercent={progressPercent}
+                  completedLessons={completedLessons}
+                  totalLessons={totalLessons}
+                  passedModules={passedModules}
+                  lessonProgress={lessonProgress}
+                />
               </Card>
             </div>
 

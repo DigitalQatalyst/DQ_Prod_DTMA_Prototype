@@ -99,13 +99,11 @@ export const CourseModuleNavigator = ({
   };
 
   const getModuleColor = (index: number) => {
-    const colors = [
-      { bg: "bg-amber-50", border: "border-amber-200", text: "text-amber-700" },
-      { bg: "bg-blue-50", border: "border-blue-200", text: "text-blue-700" },
-      { bg: "bg-purple-50", border: "border-purple-200", text: "text-purple-700" },
-      { bg: "bg-green-50", border: "border-green-200", text: "text-green-700" },
-    ];
-    return colors[index % colors.length];
+    return {
+      bg: "bg-[#FFF0ED]",
+      border: "border-2 border-[#FFD1C8]",
+      text: "text-[#99402E]",
+    };
   };
 
   return (
@@ -174,13 +172,15 @@ export const CourseModuleNavigator = ({
                   {/* Module Header */}
                   <button
                     onClick={() => toggleModuleExpansion(module.id)}
-                    className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors border ${moduleColor.bg} ${moduleColor.border} hover:opacity-80`}
+                    className={`w-full flex items-start gap-3 p-3 rounded-lg transition-colors border ${moduleColor.bg} ${moduleColor.border} hover:opacity-80`}
                   >
-                    {isExpanded ? (
-                      <ChevronUp className={`w-5 h-5 ${moduleColor.text} flex-shrink-0`} />
-                    ) : (
-                      <ChevronDown className={`w-5 h-5 ${moduleColor.text} flex-shrink-0`} />
-                    )}
+                    <div className="mt-0.5 flex-shrink-0">
+                      {isExpanded ? (
+                        <ChevronUp className={`w-5 h-5 ${moduleColor.text} flex-shrink-0`} />
+                      ) : (
+                        <ChevronDown className={`w-5 h-5 ${moduleColor.text} flex-shrink-0`} />
+                      )}
+                    </div>
 
                     <div className="flex-1 text-left">
                       <p className={`text-[12px] leading-[16px] font-semibold uppercase tracking-wide ${moduleColor.text}`}>

@@ -1642,19 +1642,16 @@ const CourseLearning = () => {
               </div>
               
               {/* Tabs */}
-              <div className="flex gap-2">
+              <div className="flex items-center gap-6 px-0 py-4">
                 <button
                   onClick={() => setNoteTakerTab('personal')}
-                  className={`flex-1 px-4 py-2.5 rounded-lg font-medium text-[14px] transition-all ${
+                  className={`pb-2 text-[16px] leading-[24px] font-semibold transition-colors ${
                     noteTakerTab === 'personal'
-                      ? 'bg-[#1e2348] text-white shadow-sm'
-                      : 'bg-white text-[#4B5563] hover:bg-gray-50 border border-gray-200'
+                      ? 'text-[#1e2348] border-b-2 border-[#ff6b4d]'
+                      : 'text-[#4B5563] hover:text-[#1e2348]'
                   }`}
                 >
-                  <div className="flex items-center justify-center gap-2">
-                    <BookOpen className="w-4 h-4" />
-                    <span>My Notes</span>
-                  </div>
+                  My Notes
                 </button>
                 <button
                   onClick={() => {
@@ -1664,20 +1661,20 @@ const CourseLearning = () => {
                     }
                   }}
                   disabled={generatingAI}
-                  className={`flex-1 px-4 py-2.5 rounded-lg font-medium text-[14px] transition-all disabled:opacity-50 ${
+                  className={`pb-2 text-[16px] leading-[24px] font-semibold transition-colors disabled:opacity-50 ${
                     noteTakerTab === 'ai'
-                      ? 'bg-[#1e2348] text-white shadow-sm'
-                      : 'bg-white text-[#4B5563] hover:bg-gray-50 border border-gray-200'
+                      ? 'text-[#1e2348] border-b-2 border-[#ff6b4d]'
+                      : 'text-[#4B5563] hover:text-[#1e2348]'
                   }`}
                 >
-                  <div className="flex items-center justify-center gap-2">
-                    {generatingAI ? (
+                  {generatingAI ? (
+                    <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <FileText className="w-4 h-4" />
-                    )}
-                    <span>AI Notes</span>
-                  </div>
+                      <span>AI Notes</span>
+                    </div>
+                  ) : (
+                    'AI Notes'
+                  )}
                 </button>
               </div>
             </div>

@@ -14,6 +14,7 @@ import {
   Award, 
   Clock, 
   ChevronRight,
+  ChevronLeft,
   GraduationCap,
   Loader2,
   PlayCircle,
@@ -60,6 +61,7 @@ const LearnerDashboard = () => {
   const { data: certificates, isLoading: certificatesLoading } = useCertificates();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   // Get onboarding data from localStorage
   const onboardingData = useMemo(() => {
@@ -537,7 +539,7 @@ const LearnerDashboard = () => {
                 )}
               </section>
 
-              {/* Recommended Courses */}
+              {/* Recommended Courses - Carousel */}
               {onboardingData && recommendedCourses.length > 0 && (
                 <section>
                   <div className="flex items-center justify-between mb-6">
@@ -555,62 +557,107 @@ const LearnerDashboard = () => {
                       <Loader2 className="w-6 h-6 animate-spin text-[#ff6b4d]" />
                     </div>
                   ) : (
-                    <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-                      {recommendedCourses.map((course) => (
-                        <Link
-                          key={course.id}
-                          to={course.comingSoon ? '#' : `/courses/${course.id}`}
-                          onClick={(e) => course.comingSoon && e.preventDefault()}
-                          className={`group bg-card rounded-2xl overflow-hidden shadow-sm transition-all ${
-                            course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-[#ff6b4d]/20'
-                          }`}
-                        >
-                          <div className="relative">
-                            <img
-                              src={course.image || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop'}
-                              alt={course.title}
-                              className={`w-full h-40 object-cover transition-transform duration-300 ${
-                                !course.comingSoon && 'group-hover:scale-105'
-                              }`}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                            {course.comingSoon && (
-                              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                <Badge className="bg-white text-gray-900 text-sm px-4 py-2">
-                                  Coming Soon
-                                </Badge>
-                              </div>
-                            )}
-                            {course.badge && !course.comingSoon && (
-                              <div className="absolute top-3 right-3">
-                                <Badge className="bg-[#ff6b4d] text-white capitalize">
-                                  {course.badge}
-                                </Badge>
-                              </div>
-                            )}
-                          </div>
-                          <div className="p-5">
-                            <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
-                              {course.title}
-                            </h4>
-                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4 line-clamp-2">
-                              {course.description}
-                            </p>
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground">
-                                <Clock className="w-4 h-4" />
-                                <span>{course.duration}</span>
-                              </div>
-                              <Badge 
-                                className={course.comingSoon ? 'bg-gray-200 text-gray-700' : ''}
-                                variant={course.comingSoon ? 'default' : 'secondary'}
+                    <div className="relative">
+                      {/* Carousel Container */}
+                      <div className="overflow-hidden">
+                        <div className="flex gap-6 transition-transform duration-300" style={{
+                          transform: `translateX(-${carouselIndex * (100 / 3)}%)`
+                        }}>
+                          {recommendedCourses.map((course) => (
+                            <div key={course.id} className="flex-shrink-0 w-1/3">
+                              <Link
+                                to={course.comingSoon ? '#' : `/courses/${course.id}`}
+                                onClick={(e) => course.comingSoon && e.preventDefault()}
+                                className={`group bg-card rounded-2xl overflow-hidden shadow-sm transition-all h-full flex flex-col ${
+                                  course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-[#ff6b4d]/20'
+                                }`}
                               >
-                                {course.comingSoon ? 'Coming Soon' : course.level}
-                              </Badge>
+                                <div className="relative">
+                                  <img
+                                    src={course.image || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop'}
+                                    alt={course.title}
+                                    className={`w-full h-40 object-cover transition-transform duration-300 ${
+                                      !course.comingSoon && 'group-hover:scale-105'
+                                    }`}
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                  {course.comingSoon && (
+                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                      <Badge className="bg-white text-gray-900 text-sm px-4 py-2">
+                                        Coming Soon
+                                      </Badge>
+                                    </div>
+                                  )}
+                                  {course.badge && !course.comingSoon && (
+                                    <div className="absolute top-3 right-3">
+                                      <Badge className="bg-[#ff6b4d] text-white capitalize">
+                                        {course.badge}
+                                      </Badge>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="p-5 flex-1 flex flex-col">
+                                  <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+                                    {course.title}
+                                  </h4>
+                                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4 line-clamp-2 flex-1">
+                                    {course.description}
+                                  </p>
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground">
+                                      <Clock className="w-4 h-4" />
+                                      <span>{course.duration}</span>
+                                    </div>
+                                    <Badge 
+                                      className={course.comingSoon ? 'bg-gray-200 text-gray-700' : ''}
+                                      variant={course.comingSoon ? 'default' : 'secondary'}
+                                    >
+                                      {course.comingSoon ? 'Coming Soon' : course.level}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </Link>
                             </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Navigation Buttons */}
+                      {recommendedCourses.length > 3 && (
+                        <div className="flex gap-2 mt-6 justify-center">
+                          <button
+                            onClick={() => setCarouselIndex(Math.max(0, carouselIndex - 1))}
+                            disabled={carouselIndex === 0}
+                            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Previous"
+                          >
+                            <ChevronLeft className="w-5 h-5 text-gray-700" />
+                          </button>
+                          
+                          {/* Dots Indicator */}
+                          <div className="flex gap-2 items-center px-4">
+                            {Array.from({ length: Math.ceil(recommendedCourses.length / 3) }).map((_, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => setCarouselIndex(idx)}
+                                className={`w-2 h-2 rounded-full transition-colors ${
+                                  idx === carouselIndex ? 'bg-[#ff6b4d]' : 'bg-gray-300'
+                                }`}
+                                aria-label={`Go to slide ${idx + 1}`}
+                              />
+                            ))}
                           </div>
-                        </Link>
-                      ))}
+
+                          <button
+                            onClick={() => setCarouselIndex(Math.min(Math.ceil(recommendedCourses.length / 3) - 1, carouselIndex + 1))}
+                            disabled={carouselIndex >= Math.ceil(recommendedCourses.length / 3) - 1}
+                            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Next"
+                          >
+                            <ChevronRight className="w-5 h-5 text-gray-700" />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </section>

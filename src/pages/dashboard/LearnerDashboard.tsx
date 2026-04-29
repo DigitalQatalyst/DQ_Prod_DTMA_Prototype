@@ -608,7 +608,7 @@ const LearnerDashboard = () => {
                                       <Clock className="w-4 h-4" />
                                       <span>{course.duration}</span>
                                     </div>
-                                    <Badge 
+                                    <Badge
                                       className={course.comingSoon ? 'bg-gray-200 text-gray-700' : ''}
                                       variant={course.comingSoon ? 'default' : 'secondary'}
                                     >

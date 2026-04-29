@@ -260,7 +260,10 @@ const CourseBuilder = () => {
 const CourseBasicsStep = ({ course }: any) => (
   <div className="w-full">
     <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm">
-      <h2 className="text-[24px] leading-[32px] font-semibold mb-6 text-[#1e2348]">Course Basics</h2>
+      <div className="flex items-start justify-between mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">Course Basics</h2>
+        <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 text-[12px] leading-[16px] font-semibold px-3 py-1">✓ Completed</Badge>
+      </div>
       <div className="space-y-6">
         <div>
           <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Course Title</label>
@@ -284,7 +287,6 @@ const CourseBasicsStep = ({ course }: any) => (
           <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Price</label>
           <p className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">${course.price}</p>
         </div>
-        <Badge className="w-fit bg-emerald-100 text-emerald-700 hover:bg-emerald-100 text-[12px] leading-[16px] font-semibold px-3 py-1">✓ Completed</Badge>
       </div>
     </div>
   </div>

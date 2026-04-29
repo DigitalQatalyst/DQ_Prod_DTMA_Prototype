@@ -100,9 +100,9 @@ export const CourseModuleNavigator = ({
 
   const getModuleColor = (index: number) => {
     return {
-      bg: "bg-[#FFF0ED]",
-      border: "border-2 border-[#FFD1C8]",
-      text: "text-[#99402E]",
+      bg: "bg-[#E9E9ED]",
+      border: "border-2 border-[#D0D0D8]",
+      text: "text-[#ff6b4d]",
     };
   };
 

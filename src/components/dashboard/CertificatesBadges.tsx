@@ -7,24 +7,16 @@ import {
   Share2,
   ExternalLink
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export const CertificatesBadges = () => {
-  const certificates = [
-    {
-      id: '1',
-      title: 'Introduction to Digital Economy & Economy 4.0',
-      issueDate: '2024-03-15',
-      certificateNumber: 'DTMA-2024-001234',
-      credentialUrl: 'https://credentials.dtma.ae/cert/001234'
-    },
-    {
-      id: '2',
-      title: 'Platform Economics & Network Effects',
-      issueDate: '2024-02-28',
-      certificateNumber: 'DTMA-2024-001189',
-      credentialUrl: 'https://credentials.dtma.ae/cert/001189'
-    },
-  ];
+  const [certificates, setCertificates] = useState<any[]>([]);
+
+  // Load certificates from localStorage on component mount
+  useEffect(() => {
+    const savedCerts = JSON.parse(localStorage.getItem('user_certificates') || '[]');
+    setCertificates(savedCerts);
+  }, []);
 
   const badges = [
     { id: '1', name: 'Fast Learner', icon: '⚡', description: 'Completed 5 courses in 30 days' },

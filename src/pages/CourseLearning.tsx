@@ -146,6 +146,27 @@ const CourseLearning = () => {
       const isLastModule = currentModuleId === 'economy-module-3' || newPassedModules.size === totalModules;
       
       if (isLastModule) {
+        // Save certificate to localStorage when course is completed
+        const newCertificate = {
+          id: `cert_${courseId}_${Date.now()}`,
+          courseId: courseId,
+          title: courseData?.title || course?.title || "Course",
+          issueDate: new Date().toISOString().split('T')[0],
+          certificateNumber: `DTMA-${Date.now().toString().slice(-8)}`,
+          credentialUrl: `https://credentials.dtma.ae/cert/${Date.now().toString().slice(-8)}`,
+          studentName: profile?.full_name || "Student",
+          completionDate: new Date().toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          })
+        };
+        
+        // Get existing certificates
+        const existingCerts = JSON.parse(localStorage.getItem('user_certificates') || '[]');
+        existingCerts.push(newCertificate);
+        localStorage.setItem('user_certificates', JSON.stringify(existingCerts));
+        
         // Show celebration animation first, then certificate
         setShowCelebration(true);
       } else {
@@ -1508,83 +1529,110 @@ const CourseLearning = () => {
                 <p className="text-gray-600 text-[18px] leading-[26px] font-normal">You've successfully completed the course and earned your certificate</p>
               </div>
 
-              {/* Executive Certificate Design - Landscape */}
-              <div className="relative bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348] rounded-2xl p-1 mb-8 shadow-xl">
-                <div className="bg-white rounded-xl p-8 relative overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
-                  {/* Decorative Corner Elements */}
-                  <div className="absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-[#ff6b4d] rounded-tl-xl opacity-30"></div>
-                  <div className="absolute top-0 right-0 w-24 h-24 border-t-4 border-r-4 border-[#ff6b4d] rounded-tr-xl opacity-30"></div>
-                  <div className="absolute bottom-0 left-0 w-24 h-24 border-b-4 border-l-4 border-[#ff6b4d] rounded-bl-xl opacity-30"></div>
-                  <div className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-[#ff6b4d] rounded-br-xl opacity-30"></div>
-                  
-                  {/* Subtle Background Pattern */}
-                  <div className="absolute inset-0 opacity-[0.02]" style={{
-                    backgroundImage: 'radial-gradient(circle at 2px 2px, #1e2348 1px, transparent 0)',
-                    backgroundSize: '32px 32px'
-                  }}></div>
+              {/* Executive Certificate Design - Premium Landscape */}
+              <div className="relative mb-8 shadow-2xl" style={{ aspectRatio: '16 / 9' }}>
+                {/* Outer Border Frame - Orange */}
+                <div className="absolute inset-0 border-8 border-[#ff6b4d] rounded-lg"></div>
+                
+                {/* Inner Border Frame - Navy */}
+                <div className="absolute inset-4 border-2 border-[#1e2348] rounded-md"></div>
+                
+                {/* Background with subtle gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-blue-50/20 rounded-lg"></div>
 
-                  <div className="relative h-full flex flex-col justify-between">
-                    {/* Header - Top */}
-                    <div className="flex items-center justify-between">
-                      {/* Left Side - DTMA Branding */}
-                      <div className="flex-1">
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                          <div className="h-1 w-8 bg-gradient-to-r from-[#1e2348] to-[#ff6b4d] rounded-full"></div>
-                          <Award className="w-5 h-5 text-[#ff6b4d]" />
-                          <div className="h-1 w-8 bg-gradient-to-l from-[#1e2348] to-[#ff6b4d] rounded-full"></div>
-                        </div>
-                        <h3 className="font-bold text-[#1e2348] text-[32px] leading-[40px] tracking-tight">DTMA</h3>
-                        <div className="text-[#1e2348] uppercase tracking-[0.2em] text-[10px] leading-[14px] font-semibold mt-1">Certificate of Completion</div>
+                {/* Left Accent Bar - Orange */}
+                <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#ff6b4d] to-[#ff8c73] rounded-l-lg"></div>
+
+                {/* Content Container */}
+                <div className="relative h-full flex items-center px-20 py-8">
+                  {/* Left Section - Badge & Branding */}
+                  <div className="flex-1 flex flex-col items-center justify-center">
+                    {/* Gold Badge with Navy Center */}
+                    <div className="relative w-24 h-24 mb-4">
+                      {/* Outer Gold Circle */}
+                      <div className="absolute inset-0 rounded-full border-4 border-yellow-500 shadow-lg"></div>
+                      {/* Inner Navy Circle */}
+                      <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[#1e2348] to-[#2a3058] flex items-center justify-center">
+                        <span className="text-yellow-400 font-bold text-lg">DT</span>
                       </div>
+                      {/* Decorative dots around badge */}
+                      <div className="absolute -top-2 -right-2 w-3 h-3 rounded-full bg-yellow-500"></div>
+                      <div className="absolute -bottom-2 -left-2 w-3 h-3 rounded-full bg-yellow-500"></div>
+                    </div>
+                    
+                    {/* DTMA Text */}
+                    <h3 className="font-bold text-[#1e2348] text-2xl tracking-widest mb-1">DTMA</h3>
+                    <div className="text-[#ff6b4d] uppercase tracking-[0.15em] text-xs font-bold">Academy</div>
+                  </div>
 
-                      {/* Center - Main Content */}
-                      <div className="flex-1 text-center space-y-3 px-8">
-                        <p className="text-gray-600 text-[13px] leading-[18px] font-normal">This is to certify that</p>
-                        
-                        {/* Student Name - Highlighted */}
-                        <div className="relative inline-block w-full">
-                          <div className="absolute inset-0 bg-gradient-to-r from-[#ff6b4d]/10 via-[#ff6b4d]/5 to-[#ff6b4d]/10 blur-xl"></div>
-                          <div className="relative text-[#1e2348] px-6 py-2 text-[24px] leading-[32px] font-bold border-b-2 border-[#1e2348]">
-                            {profile?.full_name || "Student Name"}
-                          </div>
-                        </div>
-
-                        <p className="text-gray-600 text-[13px] leading-[18px] font-normal">has successfully completed</p>
-                        
-                        {/* Course Title */}
-                        <div className="bg-gradient-to-r from-[#1e2348]/5 via-[#1e2348]/10 to-[#1e2348]/5 rounded-lg px-4 py-2">
-                          <div className="text-[#1e2348] text-[16px] leading-[24px] font-semibold">{course?.title || "Course Title"}</div>
-                        </div>
-
-                        {/* Date */}
-                        <p className="text-gray-500 text-[12px] leading-[16px] font-medium">
-                          {new Date().toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                          })}
-                        </p>
-                      </div>
-
-                      {/* Right Side - Certificate ID & Badge */}
-                      <div className="flex-1 flex flex-col items-center justify-between">
-                        <div className="text-center">
-                          <p className="text-gray-400 font-medium text-[10px] leading-[14px] mb-1">Certificate ID</p>
-                          <p className="text-[#1e2348] font-mono font-semibold text-[11px] leading-[16px]">DTMA-{Date.now().toString().slice(-8)}</p>
-                        </div>
-                        
-                        <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#1e2348] to-[#2a3058] text-white px-4 py-1.5 rounded-full text-[10px] leading-[14px] font-semibold">
-                          <CheckCircle className="w-3 h-3" />
-                          <span>VERIFIED</span>
-                        </div>
-                      </div>
+                  {/* Center Section - Main Content */}
+                  <div className="flex-1 text-center space-y-4 px-8">
+                    {/* Title */}
+                    <div className="space-y-1">
+                      <div className="text-[#1e2348] uppercase tracking-[0.2em] text-xs font-bold">Certificate of</div>
+                      <div className="text-[#ff6b4d] uppercase tracking-[0.2em] text-sm font-bold">Achievement</div>
                     </div>
 
-                    {/* Footer - Bottom */}
-                    <div className="text-center border-t border-gray-200 pt-3">
-                      <p className="text-gray-500 text-[11px] leading-[16px] font-medium">
-                        Issued by Digital Transformation Management Academy
-                      </p>
+                    {/* Divider */}
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="h-px w-8 bg-gradient-to-r from-transparent to-[#ff6b4d]"></div>
+                      <Award className="w-4 h-4 text-[#ff6b4d]" />
+                      <div className="h-px w-8 bg-gradient-to-l from-transparent to-[#ff6b4d]"></div>
+                    </div>
+
+                    {/* Certification Text */}
+                    <p className="text-gray-600 text-xs leading-relaxed">This is to certify that</p>
+                    
+                    {/* Student Name - Elegant Script Style */}
+                    <div className="py-2">
+                      <div className="text-[#ff6b4d] text-3xl font-serif italic font-bold">
+                        {profile?.full_name || "Student Name"}
+                      </div>
+                      <div className="h-0.5 w-32 bg-gradient-to-r from-transparent via-[#1e2348] to-transparent mx-auto mt-2"></div>
+                    </div>
+
+                    {/* Achievement Text */}
+                    <p className="text-gray-600 text-xs leading-relaxed">has successfully completed</p>
+                    
+                    {/* Course Title */}
+                    <div className="text-[#1e2348] font-semibold text-sm">
+                      {course?.title || "Course Title"}
+                    </div>
+
+                    {/* Date */}
+                    <p className="text-gray-500 text-xs">
+                      {new Date().toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}
+                    </p>
+                  </div>
+
+                  {/* Right Section - Signature & Details */}
+                  <div className="flex-1 flex flex-col items-center justify-between">
+                    {/* Signature Area */}
+                    <div className="text-center">
+                      <div className="h-12 flex items-end justify-center mb-1">
+                        <div className="text-[#1e2348] font-serif italic text-lg">Signed</div>
+                      </div>
+                      <div className="h-px w-20 bg-[#1e2348]"></div>
+                      <p className="text-[#1e2348] font-semibold text-xs mt-1">Director</p>
+                    </div>
+
+                    {/* KHDA Attested Badge */}
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="relative w-20 h-20">
+                        {/* Outer Gold Circle */}
+                        <div className="absolute inset-0 rounded-full border-3 border-yellow-500 shadow-lg"></div>
+                        {/* Inner Navy Circle */}
+                        <div className="absolute inset-1 rounded-full bg-gradient-to-br from-[#1e2348] to-[#2a3058] flex flex-col items-center justify-center">
+                          <span className="text-yellow-400 font-bold text-[10px] leading-[12px] text-center">KHDA</span>
+                          <span className="text-yellow-400 font-bold text-[8px] leading-[10px]">Attested</span>
+                        </div>
+                      </div>
+                      <p className="text-[#1e2348] font-semibold text-[9px] leading-[12px] text-center">Certificate ID</p>
+                      <p className="text-[#1e2348] font-mono font-bold text-[10px]">DTMA-{Date.now().toString().slice(-8)}</p>
                     </div>
                   </div>
                 </div>

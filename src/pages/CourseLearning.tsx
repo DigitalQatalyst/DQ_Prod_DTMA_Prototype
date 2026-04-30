@@ -960,26 +960,33 @@ const CourseLearning = () => {
 
                         {/* Answer Options */}
                         <div className="space-y-4 ml-[68px]">
-                          {quizQuestions[currentQuestionIndex].options.map((option: string, optIndex: number) => (
-                            <label
-                              key={optIndex}
-                              className={`flex items-center gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all ${
-                                quizAnswers[currentQuestionIndex] === optIndex
-                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/5 shadow-sm'
-                                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                              }`}
-                            >
-                              <input
-                                type="radio"
-                                name={`question-${currentQuestionIndex}`}
-                                value={optIndex}
-                                checked={quizAnswers[currentQuestionIndex] === optIndex}
-                                onChange={() => setQuizAnswers({ ...quizAnswers, [currentQuestionIndex]: optIndex })}
-                                className="w-5 h-5 text-[#ff6b4d]"
-                              />
-                              <span className="text-[#1e2348] text-[18px] leading-[26px] font-normal">{option}</span>
-                            </label>
-                          ))}
+                          {quizQuestions[currentQuestionIndex].options.map((option: string, optIndex: number) => {
+                            const isSelected = quizAnswers[currentQuestionIndex] === optIndex;
+                            const isCorrect = moduleQuiz?.questions[currentQuestionIndex]?.correctAnswer === optIndex;
+                            
+                            return (
+                              <label
+                                key={optIndex}
+                                className={`flex items-center gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all ${
+                                  isSelected
+                                    ? isCorrect
+                                      ? 'border-green-500 bg-green-50 shadow-sm'
+                                      : 'border-[#ff6b4d] bg-[#ff6b4d]/5 shadow-sm'
+                                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  name={`question-${currentQuestionIndex}`}
+                                  value={optIndex}
+                                  checked={isSelected}
+                                  onChange={() => setQuizAnswers({ ...quizAnswers, [currentQuestionIndex]: optIndex })}
+                                  className={`w-5 h-5 ${isSelected && isCorrect ? 'text-green-500' : 'text-[#ff6b4d]'}`}
+                                />
+                                <span className="text-[#1e2348] text-[18px] leading-[26px] font-normal">{option}</span>
+                              </label>
+                            );
+                          })}
                         </div>
 
                         {/* Navigation Buttons */}
@@ -1501,14 +1508,14 @@ const CourseLearning = () => {
                 <p className="text-gray-600 text-[18px] leading-[26px] font-normal">You've successfully completed the course and earned your certificate</p>
               </div>
 
-              {/* Executive Certificate Design */}
+              {/* Executive Certificate Design - Landscape */}
               <div className="relative bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348] rounded-2xl p-1 mb-8 shadow-xl">
-                <div className="bg-white rounded-xl p-12 relative overflow-hidden">
+                <div className="bg-white rounded-xl p-8 relative overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
                   {/* Decorative Corner Elements */}
-                  <div className="absolute top-0 left-0 w-32 h-32 border-t-4 border-l-4 border-[#ff6b4d] rounded-tl-xl opacity-30"></div>
-                  <div className="absolute top-0 right-0 w-32 h-32 border-t-4 border-r-4 border-[#ff6b4d] rounded-tr-xl opacity-30"></div>
-                  <div className="absolute bottom-0 left-0 w-32 h-32 border-b-4 border-l-4 border-[#ff6b4d] rounded-bl-xl opacity-30"></div>
-                  <div className="absolute bottom-0 right-0 w-32 h-32 border-b-4 border-r-4 border-[#ff6b4d] rounded-br-xl opacity-30"></div>
+                  <div className="absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-[#ff6b4d] rounded-tl-xl opacity-30"></div>
+                  <div className="absolute top-0 right-0 w-24 h-24 border-t-4 border-r-4 border-[#ff6b4d] rounded-tr-xl opacity-30"></div>
+                  <div className="absolute bottom-0 left-0 w-24 h-24 border-b-4 border-l-4 border-[#ff6b4d] rounded-bl-xl opacity-30"></div>
+                  <div className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-[#ff6b4d] rounded-br-xl opacity-30"></div>
                   
                   {/* Subtle Background Pattern */}
                   <div className="absolute inset-0 opacity-[0.02]" style={{
@@ -1516,79 +1523,68 @@ const CourseLearning = () => {
                     backgroundSize: '32px 32px'
                   }}></div>
 
-                  <div className="relative text-center space-y-6">
-                    {/* Header */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-center gap-3 mb-4">
-                        <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#ff6b4d]"></div>
-                        <Award className="w-8 h-8 text-[#ff6b4d]" />
-                        <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#ff6b4d]"></div>
-                      </div>
-                      <div className="text-[#1e2348] uppercase tracking-[0.3em] text-[13px] leading-[18px] font-semibold">Certificate of Completion</div>
-                    </div>
-
-                    {/* DTMA Branding */}
-                    <div className="py-4">
-                      <h3 className="font-bold text-[#1e2348] text-[48px] leading-[56px] tracking-tight mb-2">DTMA</h3>
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="h-1 w-12 bg-gradient-to-r from-[#1e2348] to-[#ff6b4d] rounded-full"></div>
-                        <GraduationCap className="w-5 h-5 text-[#ff6b4d]" />
-                        <div className="h-1 w-12 bg-gradient-to-l from-[#1e2348] to-[#ff6b4d] rounded-full"></div>
-                      </div>
-                    </div>
-
-                    {/* Certificate Body */}
-                    <div className="space-y-5 py-6">
-                      <p className="text-gray-600 text-[16px] leading-[24px] font-normal">This is to certify that</p>
-                      
-                      {/* Student Name - Highlighted */}
-                      <div className="relative inline-block">
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#ff6b4d]/10 via-[#ff6b4d]/5 to-[#ff6b4d]/10 blur-xl"></div>
-                        <div className="relative text-[#1e2348] px-16 py-4 text-[32px] leading-[40px] font-bold border-b-3 border-[#1e2348]">
-                          {profile?.full_name || "Student Name"}
+                  <div className="relative h-full flex flex-col justify-between">
+                    {/* Header - Top */}
+                    <div className="flex items-center justify-between">
+                      {/* Left Side - DTMA Branding */}
+                      <div className="flex-1">
+                        <div className="flex items-center justify-center gap-2 mb-2">
+                          <div className="h-1 w-8 bg-gradient-to-r from-[#1e2348] to-[#ff6b4d] rounded-full"></div>
+                          <Award className="w-5 h-5 text-[#ff6b4d]" />
+                          <div className="h-1 w-8 bg-gradient-to-l from-[#1e2348] to-[#ff6b4d] rounded-full"></div>
                         </div>
+                        <h3 className="font-bold text-[#1e2348] text-[32px] leading-[40px] tracking-tight">DTMA</h3>
+                        <div className="text-[#1e2348] uppercase tracking-[0.2em] text-[10px] leading-[14px] font-semibold mt-1">Certificate of Completion</div>
                       </div>
 
-                      <p className="text-gray-600 text-[16px] leading-[24px] font-normal">has successfully completed</p>
-                      
-                      {/* Course Title */}
-                      <div className="bg-gradient-to-r from-[#1e2348]/5 via-[#1e2348]/10 to-[#1e2348]/5 rounded-lg px-8 py-4 mx-auto max-w-2xl">
-                        <div className="text-[#1e2348] text-[24px] leading-[32px] font-semibold">{course?.title || "Course Title"}</div>
-                      </div>
+                      {/* Center - Main Content */}
+                      <div className="flex-1 text-center space-y-3 px-8">
+                        <p className="text-gray-600 text-[13px] leading-[18px] font-normal">This is to certify that</p>
+                        
+                        {/* Student Name - Highlighted */}
+                        <div className="relative inline-block w-full">
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#ff6b4d]/10 via-[#ff6b4d]/5 to-[#ff6b4d]/10 blur-xl"></div>
+                          <div className="relative text-[#1e2348] px-6 py-2 text-[24px] leading-[32px] font-bold border-b-2 border-[#1e2348]">
+                            {profile?.full_name || "Student Name"}
+                          </div>
+                        </div>
 
-                      {/* Date */}
-                      <div className="pt-4">
-                        <p className="text-gray-500 text-[15px] leading-[22px] font-medium">
-                          Completed on {new Date().toLocaleDateString('en-US', { 
+                        <p className="text-gray-600 text-[13px] leading-[18px] font-normal">has successfully completed</p>
+                        
+                        {/* Course Title */}
+                        <div className="bg-gradient-to-r from-[#1e2348]/5 via-[#1e2348]/10 to-[#1e2348]/5 rounded-lg px-4 py-2">
+                          <div className="text-[#1e2348] text-[16px] leading-[24px] font-semibold">{course?.title || "Course Title"}</div>
+                        </div>
+
+                        {/* Date */}
+                        <p className="text-gray-500 text-[12px] leading-[16px] font-medium">
+                          {new Date().toLocaleDateString('en-US', { 
                             year: 'numeric', 
                             month: 'long', 
                             day: 'numeric' 
                           })}
                         </p>
                       </div>
-                    </div>
 
-                    {/* Footer with Certificate ID */}
-                    <div className="pt-8 border-t border-gray-200">
-                      <div className="flex items-center justify-center gap-8 text-[13px] leading-[18px]">
+                      {/* Right Side - Certificate ID & Badge */}
+                      <div className="flex-1 flex flex-col items-center justify-between">
                         <div className="text-center">
-                          <p className="text-gray-400 font-medium mb-1">Certificate ID</p>
-                          <p className="text-[#1e2348] font-mono font-semibold">DTMA-{Date.now().toString().slice(-8)}</p>
+                          <p className="text-gray-400 font-medium text-[10px] leading-[14px] mb-1">Certificate ID</p>
+                          <p className="text-[#1e2348] font-mono font-semibold text-[11px] leading-[16px]">DTMA-{Date.now().toString().slice(-8)}</p>
                         </div>
-                        <div className="h-8 w-px bg-gray-300"></div>
-                        <div className="text-center">
-                          <p className="text-gray-400 font-medium mb-1">Issued By</p>
-                          <p className="text-[#1e2348] font-semibold">Digital Transformation Management Academy</p>
+                        
+                        <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#1e2348] to-[#2a3058] text-white px-4 py-1.5 rounded-full text-[10px] leading-[14px] font-semibold">
+                          <CheckCircle className="w-3 h-3" />
+                          <span>VERIFIED</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Verification Badge */}
-                    <div className="pt-6">
-                      <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#1e2348] to-[#2a3058] text-white px-6 py-2 rounded-full text-[12px] leading-[16px] font-semibold">
-                        <CheckCircle className="w-4 h-4" />
-                        <span>VERIFIED CREDENTIAL</span>
-                      </div>
+                    {/* Footer - Bottom */}
+                    <div className="text-center border-t border-gray-200 pt-3">
+                      <p className="text-gray-500 text-[11px] leading-[16px] font-medium">
+                        Issued by Digital Transformation Management Academy
+                      </p>
                     </div>
                   </div>
                 </div>

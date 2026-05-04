@@ -95,7 +95,7 @@ const Masterclasses = () => {
   const categories = [...new Set(masterclasses.map((m) => m.category))];
 
   const filteredAndSorted = useMemo(() => {
-    let filtered = masterclasses.filter((m) => {
+    const filtered = masterclasses.filter((m) => {
       if (locationFilter && m.location !== locationFilter) return false;
       if (categoryFilter && m.category !== categoryFilter) return false;
       return true;

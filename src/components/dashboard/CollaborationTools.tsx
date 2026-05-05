@@ -293,7 +293,7 @@ export const CollaborationTools = () => {
                         {msg.timestamp}
                       </span>
                     </div>
-                    <p className="bg-accent/50 p-3 rounded-lg" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    <p className="bg-white border border-gray-200 p-3 rounded-lg text-[#1e2348]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
                       {msg.message}
                     </p>
                   </div>

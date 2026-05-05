@@ -344,8 +344,8 @@ export const GamificationFeatures = () => {
                   key={user.rank}
                   className={`p-3 rounded-lg flex items-center gap-3 ${
                     user.isCurrentUser
-                      ? 'bg-[#ff6b4d]/10 border-2 border-[#ff6b4d]'
-                      : 'bg-accent/50'
+                      ? 'bg-white border-2 border-[#ff6b4d]'
+                      : 'bg-white border border-gray-200'
                   }`}
                 >
                   <div className={`w-8 h-8 flex items-center justify-center font-bold ${getRankColor(user.rank)}`}>
@@ -360,8 +360,8 @@ export const GamificationFeatures = () => {
                   </Avatar>
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-[14px] leading-[20px] font-medium truncate">{user.name}</p>
-                    <p className="text-[12px] leading-[16px] font-normal text-muted-foreground">{user.points} points</p>
+                    <p className="text-[14px] leading-[20px] font-medium truncate text-[#1e2348]">{user.name}</p>
+                    <p className="text-[12px] leading-[16px] font-normal text-gray-600">{user.points} points</p>
                   </div>
 
                   {user.rank <= 3 && (

@@ -42,7 +42,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[#1e2348] text-white">
+    <footer className="bg-[var(--dq-navy-950)] text-white">
       <div className="w-full">
         {/* Main Footer */}
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-16">
@@ -76,7 +76,7 @@ const Footer = () => {
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md bg-[#ff6b4d] hover:bg-[#e56045] flex items-center justify-center transition-colors"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] flex items-center justify-center transition-colors"
                   aria-label="Submit"
                 >
                   <ArrowRight className="w-4 h-4 text-white" />
@@ -156,7 +156,7 @@ const Footer = () => {
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
-                  <Award className="w-6 h-6 text-[#ff6b4d]" />
+                  <Award className="w-6 h-6 text-[var(--dq-orange-500)]" />
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-white">

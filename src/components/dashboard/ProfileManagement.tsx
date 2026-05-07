@@ -44,7 +44,7 @@ export const ProfileManagement = () => {
           </h3>
           <Button
             onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-            className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+            className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white"
             style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
           >
             {isEditing ? (
@@ -63,12 +63,12 @@ export const ProfileManagement = () => {
             <div className="relative">
               <Avatar className="w-24 h-24">
                 <AvatarImage src={profile?.avatar_url || undefined} />
-                <AvatarFallback className="bg-[#1e2348] text-white text-2xl">
+                <AvatarFallback className="bg-[var(--dq-navy-950)] text-white text-2xl">
                   {getInitials(profile?.full_name)}
                 </AvatarFallback>
               </Avatar>
               {isEditing && (
-                <button className="absolute bottom-0 right-0 w-8 h-8 bg-[#ff6b4d] rounded-full flex items-center justify-center text-white hover:bg-[#e56045]">
+                <button className="absolute bottom-0 right-0 w-8 h-8 bg-[var(--dq-orange-500)] rounded-full flex items-center justify-center text-white hover:bg-[var(--dq-orange-600)]">
                   <Camera className="w-4 h-4" />
                 </button>
               )}

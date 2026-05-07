@@ -74,10 +74,10 @@ const Testimonials = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
+      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-4">
+            <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[var(--dq-orange-500)] mb-4">
               Hear From Our Learners
             </p>
             <h1 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-white mb-6">
@@ -101,11 +101,11 @@ const Testimonials = () => {
               >
                 {/* Quote Icon */}
                 <div className="mb-6">
-                  <Quote className="w-8 h-8 text-[#ff6b4d]" />
+                  <Quote className="w-8 h-8 text-[var(--dq-orange-500)]" />
                 </div>
 
                 {/* Quote */}
-                <p className="text-[16px] leading-[24px] font-normal text-[#0B0C19] mb-6 flex-grow">
+                <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-navy-950)] mb-6 flex-grow">
                   "{testimonial.quote}"
                 </p>
 
@@ -119,13 +119,13 @@ const Testimonials = () => {
                     />
                   </div>
                   <div>
-                    <p className="text-[14px] leading-[20px] font-normal text-[#0B0C19]">
+                    <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-navy-950)]">
                       {testimonial.author}
                     </p>
-                    <p className="text-[12px] leading-[16px] font-medium text-[#4B5563]">
+                    <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-text-secondary)]">
                       {testimonial.role}
                     </p>
-                    <p className="text-[12px] leading-[16px] font-medium text-[#9CA3AF]">
+                    <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-text-disabled)]">
                       {testimonial.organization}
                     </p>
                   </div>
@@ -141,26 +141,26 @@ const Testimonials = () => {
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div>
-              <p className="text-[40px] leading-[48px] font-semibold text-[#ff6b4d] mb-2">
+              <p className="text-[40px] leading-[48px] font-semibold text-[var(--dq-orange-500)] mb-2">
                 1,200+
               </p>
-              <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
+              <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)]">
                 Professionals Trained
               </p>
             </div>
             <div>
-              <p className="text-[40px] leading-[48px] font-semibold text-[#ff6b4d] mb-2">
+              <p className="text-[40px] leading-[48px] font-semibold text-[var(--dq-orange-500)] mb-2">
                 95%
               </p>
-              <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
+              <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)]">
                 Satisfaction Rate
               </p>
             </div>
             <div>
-              <p className="text-[40px] leading-[48px] font-semibold text-[#ff6b4d] mb-2">
+              <p className="text-[40px] leading-[48px] font-semibold text-[var(--dq-orange-500)] mb-2">
                 40+
               </p>
-              <p className="text-[16px] leading-[24px] font-normal text-[#4B5563]">
+              <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)]">
                 Countries Represented
               </p>
             </div>

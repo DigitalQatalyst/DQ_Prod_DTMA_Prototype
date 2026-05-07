@@ -108,9 +108,9 @@ const MOCK_COURSES = [
 ];
 
 const STATUS_STYLES: Record<string, string> = {
-  published: 'bg-emerald-100 text-emerald-700',
-  draft:     'bg-amber-100 text-amber-700',
-  pending:   'bg-purple-100 text-purple-700',
+  published: 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]',
+  draft:     'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]',
+  pending:   'bg-[var(--dq-navy-100)] text-[var(--dq-navy-700)]',
 };
 
 const CATEGORIES = ['All Categories', 'Digital Economy', 'Digital Cognitive Organisation', 'Digital Business Platform', 'Digital Transformation', 'Digital Worker & Workspace', 'Digital Accelerators'];
@@ -130,13 +130,13 @@ const MOCK_USERS = [
 ];
 
 const ROLE_STYLES: Record<string, string> = {
-  admin: 'bg-purple-100 text-purple-700',
-  instructor: 'bg-[#fff0ed] text-[#ff6b4d]',
-  learner: 'bg-emerald-100 text-emerald-700',
+  admin: 'bg-[var(--dq-navy-100)] text-[var(--dq-navy-700)]',
+  instructor: 'bg-[var(--dq-orange-50)] text-[var(--dq-orange-500)]',
+  learner: 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]',
 };
 
 const STATUS_BADGE_STYLES: Record<string, string> = {
-  active: 'bg-emerald-100 text-emerald-700',
+  active: 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]',
   inactive: 'bg-gray-100 text-gray-700',
 };
 
@@ -215,15 +215,15 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
 
   return (
     <div className="space-y-8">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Course &amp; Content Management</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">Course &amp; Content Management</h1>
 
       {/* ── Section 1: Authoring & Publishing ── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Course Authoring &amp; Publishing</h2>
+          <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Course Authoring &amp; Publishing</h2>
           <Button 
             onClick={onNavigateToPending}
-            className="bg-[#ff6b4d] hover:bg-[#e56045] text-white gap-2"
+            className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white gap-2"
           >
             <Clock className="w-4 h-4" />
             View Pending Reviews
@@ -233,7 +233,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         {/* Summary stat pills */}
         <div className="flex flex-wrap gap-3 mb-5">
           {[
-            { label: 'Total Courses', value: MOCK_COURSES.length, color: 'bg-[#e9e9ed] text-[#1e2348]' },
+            { label: 'Total Courses', value: MOCK_COURSES.length, color: 'bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)]' },
             { label: 'Published',     value: published,            color: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
             { label: 'Draft',         value: drafts,               color: 'bg-amber-50 text-amber-700 border border-amber-200' },
             { label: 'Pending Review',value: pending,              color: 'bg-purple-50 text-purple-700 border border-purple-200' },
@@ -248,21 +248,21 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         {/* Search + filter bar */}
         <div className="flex flex-wrap gap-3 mb-5">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-disabled)]" />
             <input
               type="text"
               placeholder="Search courses or instructors…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+              className="w-full pl-9 pr-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
             />
           </div>
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-disabled)]" />
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+              className="pl-9 pr-8 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
             >
               <option value="all">All Statuses</option>
               <option value="published">Published</option>
@@ -271,11 +271,11 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
             </select>
           </div>
           <div className="relative">
-            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-disabled)]" />
             <select
               value={categoryFilter}
               onChange={e => setCategoryFilter(e.target.value)}
-              className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+              className="pl-9 pr-8 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
             >
               {CATEGORIES.map(cat => <option key={cat}>{cat}</option>)}
             </select>
@@ -283,10 +283,10 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
         </div>
 
         {/* Courses table */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-[var(--dq-surface-border-default)] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#1e2348]">
+              <thead className="bg-[var(--dq-navy-950)]">
                 <tr>
                   {['Course', 'Instructor', 'Category', 'Level', 'Status', 'Enrollments', 'Last Updated', 'Actions'].map(h => (
                     <th key={h} className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">{h}</th>
@@ -296,33 +296,33 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
               <tbody>
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-[14px] text-[#9CA3AF]">
+                    <td colSpan={8} className="text-center py-12 text-[14px] text-[var(--dq-text-disabled)]">
                       <BookOpen className="w-8 h-8 mx-auto mb-2 opacity-30" />
                       No courses match your filters.
                     </td>
                   </tr>
                 ) : filtered.map((course, idx) => (
-                  <tr key={course.id} className={`border-t border-[#E5E7EB] transition-colors hover:bg-[#F5F6FA] ${idx % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
+                  <tr key={course.id} className={`border-t border-[var(--dq-surface-border-default)] transition-colors hover:bg-[var(--dq-gray-50)] ${idx % 2 === 0 ? '' : 'bg-[var(--dq-gray-50)]/50'}`}>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-[14px] text-[#1e2348] max-w-[200px] truncate" title={course.title}>{course.title}</div>
+                      <div className="font-medium text-[14px] text-[var(--dq-navy-950)] max-w-[200px] truncate" title={course.title}>{course.title}</div>
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.instructor}</td>
-                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.category}</td>
+                    <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">{course.instructor}</td>
+                    <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">{course.category}</td>
                     <td className="px-4 py-3">
-                      <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-medium capitalize">{course.level}</span>
+                      <span className="text-[12px] px-2 py-0.5 rounded-full bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)] font-medium capitalize">{course.level}</span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${STATUS_STYLES[course.status]}`}>
                         {course.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[14px] font-medium text-[#1e2348]">{course.enrollments.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{course.lastUpdated}</td>
+                    <td className="px-4 py-3 text-[14px] font-medium text-[var(--dq-navy-950)]">{course.enrollments.toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">{course.lastUpdated}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <button 
                           onClick={() => handlePreviewCourse(course.id)}
-                          className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors" 
+                          className="p-1.5 rounded-lg hover:bg-[var(--dq-orange-50)] text-[var(--dq-navy-950)] hover:text-[var(--dq-orange-500)] transition-colors" 
                           title="Preview course"
                         >
                           <Eye className="w-4 h-4" />
@@ -330,7 +330,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <button 
-                              className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+                              className="p-1.5 rounded-lg hover:bg-[var(--dq-gray-50)] text-[var(--dq-text-secondary)] transition-colors"
                               title="More actions"
                             >
                               <MoreVertical className="w-4 h-4" />
@@ -374,31 +374,31 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
       {/* ── Section 2: Course Performance Analytics ── */}
       <section>
         <div className="mb-4">
-          <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Course Performance Analytics</h2>
-          <p className="text-[13px] text-[#4B5563] mt-0.5">Track engagement, completion rates, and learner feedback across all courses.</p>
+          <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Course Performance Analytics</h2>
+          <p className="text-[13px] text-[var(--dq-text-secondary)] mt-0.5">Track engagement, completion rates, and learner feedback across all courses.</p>
         </div>
 
         {/* KPI stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {[
-            { icon: BookOpen,   label: 'Total Courses',      value: MOCK_COURSES.length,               suffix: '',   color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+            { icon: BookOpen,   label: 'Total Courses',      value: MOCK_COURSES.length,               suffix: '',   color: 'text-[var(--dq-orange-500)]', bg: 'bg-[var(--dq-orange-50)]' },
             { icon: TrendingUp, label: 'Avg Completion Rate', value: avgCompletion,                     suffix: '%',  color: 'text-emerald-600', bg: 'bg-emerald-50' },
             { icon: Star,       label: 'Avg Course Rating',   value: avgRating,                         suffix: '★', color: 'text-amber-500',  bg: 'bg-amber-50' },
             { icon: Users,      label: 'Total Enrollments',   value: totalEnrollments.toLocaleString(), suffix: '',   color: 'text-purple-600',   bg: 'bg-purple-50' },
           ].map(card => (
-            <div key={card.label} className="bg-white rounded-2xl p-5 shadow-sm border border-[#E5E7EB]">
+            <div key={card.label} className="bg-white rounded-xl p-5 shadow-sm border border-[var(--dq-surface-border-default)]">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${card.bg}`}>
                 <card.icon className={`w-5 h-5 ${card.color}`} />
               </div>
-              <div className="text-[22px] font-bold text-[#1e2348]">{card.value}{card.suffix}</div>
-              <div className="text-[12px] text-[#4B5563] mt-0.5">{card.label}</div>
+              <div className="text-[22px] font-bold text-[var(--dq-navy-950)]">{card.value}{card.suffix}</div>
+              <div className="text-[12px] text-[var(--dq-text-secondary)] mt-0.5">{card.label}</div>
             </div>
           ))}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Top performing courses table */}
-          <div className="lg:col-span-2 bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+          <div className="lg:col-span-2 bg-card rounded-xl shadow-sm border border-border overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <h3 className="text-[16px] font-semibold text-foreground">Top Performing Courses</h3>
               <span className="text-[12px] text-muted-foreground">By Enrollments</span>
@@ -417,7 +417,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
                     <tr key={c.id} className="border-t border-border hover:bg-muted/20 transition-colors">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <span className="w-5 h-5 rounded-full bg-[#1e2348]/10 text-[#1e2348] text-[10px] font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+                          <span className="w-5 h-5 rounded-full bg-[var(--dq-navy-950)]/10 text-[var(--dq-navy-950)] text-[10px] font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
                           <span className="text-[13px] font-medium text-foreground max-w-[150px] truncate" title={c.title}>{c.title}</span>
                         </div>
                       </td>
@@ -445,7 +445,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
           </div>
 
           {/* Engagement panel */}
-          <div className="bg-card rounded-2xl shadow-sm border border-border">
+          <div className="bg-card rounded-xl shadow-sm border border-border">
             <div className="px-5 py-4 border-b border-border">
               <h3 className="text-[16px] font-semibold text-foreground">Engagement Snapshot</h3>
               <p className="text-[12px] text-muted-foreground mt-0.5">Platform-wide activity this month</p>
@@ -461,8 +461,8 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
               ].map(row => (
                 <div key={row.label} className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-[#ff6b4d]/10 flex items-center justify-center">
-                      <row.icon className="w-4 h-4 text-[#ff6b4d]" />
+                    <div className="w-8 h-8 rounded-lg bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                      <row.icon className="w-4 h-4 text-[var(--dq-orange-500)]" />
                     </div>
                     <span className="text-[13px] text-muted-foreground">{row.label}</span>
                   </div>
@@ -511,7 +511,7 @@ const MOCK_SUBMISSIONS = [
 
 const SCORE_DISTRIBUTION = [
   { range: '90–100', count: 48,  color: 'bg-emerald-500' },
-  { range: '80–89',  count: 112, color: 'bg-[#ff6b4d]'    },
+  { range: '80–89',  count: 112, color: 'bg-[var(--dq-orange-500)]'    },
   { range: '70–79',  count: 134, color: 'bg-amber-400'   },
   { range: '60–69',  count: 67,  color: 'bg-orange-400'  },
   { range: 'Below 60', count: 31, color: 'bg-red-400'    },
@@ -519,8 +519,8 @@ const SCORE_DISTRIBUTION = [
 const DIST_MAX = Math.max(...SCORE_DISTRIBUTION.map(d => d.count));
 
 const QUIZ_TYPE_STYLE: Record<string, string> = {
-  Quiz:       'bg-[#fff0ed] text-[#ff6b4d]',
-  Assignment: 'bg-purple-100 text-purple-700',
+  Quiz:       'bg-[var(--dq-orange-50)] text-[var(--dq-orange-500)]',
+  Assignment: 'bg-[var(--dq-navy-100)] text-[var(--dq-navy-700)]',
 };
 
 // ─── Mock scheduled sessions data ─────────────────────────────────────────────
@@ -614,7 +614,7 @@ const MOCK_SCHEDULED_SESSIONS = [
 const SESSION_TYPE_STYLE: Record<string, { bg: string; text: string; icon: string }> = {
   live: { bg: 'bg-red-100', text: 'text-red-700', icon: '🔴' },
   hybrid: { bg: 'bg-purple-100', text: 'text-purple-700', icon: '🔄' },
-  recorded: { bg: 'bg-[#fff0ed]', text: 'text-[#ff6b4d]', icon: '📹' },
+  recorded: { bg: 'bg-[var(--dq-orange-50)]', text: 'text-[var(--dq-orange-500)]', icon: '📹' },
 };
 
 const SESSION_STATUS_STYLE: Record<string, { bg: string; text: string }> = {
@@ -651,13 +651,13 @@ const AssessmentsTab = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Assessments &amp; Evaluation</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">Assessments &amp; Evaluation</h1>
 
       {/* Stat pills */}
       <div className="flex flex-wrap gap-3">
         {[
-          { label: 'Total Assessments',  value: MOCK_QUIZZES.length,                                    color: 'bg-[#e9e9ed] text-[#1e2348]'    },
-          { label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                       color: 'bg-[#fff0ed] text-[#ff6b4d] border border-[#ff6b4d]/30'          },
+          { label: 'Total Assessments',  value: MOCK_QUIZZES.length,                                    color: 'bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)]'    },
+          { label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                       color: 'bg-[var(--dq-orange-50)] text-[var(--dq-orange-500)] border border-[var(--dq-orange-500)]/30'          },
           { label: 'Avg Score',          value: `${avgScore}%`,                                          color: 'bg-amber-50 text-amber-700 border border-amber-200'        },
           { label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                       color: 'bg-emerald-50 text-emerald-700 border border-emerald-200'    },
           { label: 'Pending Grading',    value: MOCK_SUBMISSIONS.filter(s => !graded[s.id]).length,      color: 'bg-red-50 text-red-700 border border-red-200'            },
@@ -670,15 +670,15 @@ const AssessmentsTab = () => {
       </div>
 
       {/* Section tabs */}
-      <div className="flex gap-1 bg-[#F5F6FA] p-1 rounded-xl w-fit">
+      <div className="flex gap-1 bg-[var(--dq-gray-50)] p-1 rounded-xl w-fit">
         {sections.map(s => (
           <button
             key={s.id}
             onClick={() => setActiveSection(s.id)}
             className={`px-4 py-2 rounded-lg text-[13px] font-medium transition-colors ${
               activeSection === s.id
-                ? 'bg-white shadow-sm text-[#1e2348]'
-                : 'text-[#4B5563] hover:text-[#1e2348]'
+                ? 'bg-white shadow-sm text-[var(--dq-navy-950)]'
+                : 'text-[var(--dq-text-secondary)] hover:text-[var(--dq-navy-950)]'
             }`}
           >
             {s.label}
@@ -691,21 +691,21 @@ const AssessmentsTab = () => {
         <div className="space-y-5">
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-disabled)]" />
               <input
                 type="text"
                 placeholder="Search assessments or courses…"
                 value={quizSearch}
                 onChange={e => setQuizSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                className="w-full pl-9 pr-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
               />
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[var(--dq-surface-border-default)] shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-[#1e2348]">
+                <thead className="bg-[var(--dq-navy-950)]">
                   <tr>
                     {['Assessment', 'Course', 'Type', 'Questions', 'Submissions', 'Avg Score', 'Pass Rate', 'Status', 'Actions'].map(h => (
                       <th key={h} className="text-left px-4 py-3 text-[12px] font-medium text-white whitespace-nowrap">{h}</th>
@@ -715,34 +715,34 @@ const AssessmentsTab = () => {
                 <tbody>
                   {filteredQuizzes.length === 0 ? (
                     <tr>
-                      <td colSpan={9} className="text-center py-10 text-[14px] text-[#9CA3AF]">
+                      <td colSpan={9} className="text-center py-10 text-[14px] text-[var(--dq-text-disabled)]">
                         No assessments match your search.
                       </td>
                     </tr>
                   ) : filteredQuizzes.map((q, idx) => (
-                    <tr key={q.id} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] transition-colors ${idx % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
+                    <tr key={q.id} className={`border-t border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)] transition-colors ${idx % 2 === 0 ? '' : 'bg-[var(--dq-gray-50)]/50'}`}>
                       <td className="px-4 py-3">
-                        <div className="font-medium text-[13px] text-[#1e2348] max-w-[180px] truncate" title={q.title}>{q.title}</div>
+                        <div className="font-medium text-[13px] text-[var(--dq-navy-950)] max-w-[180px] truncate" title={q.title}>{q.title}</div>
                       </td>
-                      <td className="px-4 py-3 text-[12px] text-[#4B5563] max-w-[160px] truncate" title={q.course}>{q.course}</td>
+                      <td className="px-4 py-3 text-[12px] text-[var(--dq-text-secondary)] max-w-[160px] truncate" title={q.course}>{q.course}</td>
                       <td className="px-4 py-3">
                         <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold ${QUIZ_TYPE_STYLE[q.type]}`}>{q.type}</span>
                       </td>
-                      <td className="px-4 py-3 text-[13px] text-center text-[#1e2348]">{q.questions}</td>
-                      <td className="px-4 py-3 text-[13px] text-center font-medium text-[#1e2348]">{q.submissions.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-[13px] text-center text-[var(--dq-navy-950)]">{q.questions}</td>
+                      <td className="px-4 py-3 text-[13px] text-center font-medium text-[var(--dq-navy-950)]">{q.submissions.toLocaleString()}</td>
                       <td className="px-4 py-3">
                         {q.avgScore > 0 ? (
                           <div className="flex items-center gap-1.5">
-                            <div className="w-14 h-1.5 rounded-full bg-[#E5E7EB] overflow-hidden">
+                            <div className="w-14 h-1.5 rounded-full bg-[var(--dq-surface-border-default)] overflow-hidden">
                               <div className={`h-full rounded-full ${q.avgScore >= 75 ? 'bg-emerald-500' : q.avgScore >= 60 ? 'bg-amber-400' : 'bg-red-400'}`} style={{ width: `${q.avgScore}%` }} />
                             </div>
-                            <span className="text-[12px] text-[#4B5563]">{q.avgScore}%</span>
+                            <span className="text-[12px] text-[var(--dq-text-secondary)]">{q.avgScore}%</span>
                           </div>
-                        ) : <span className="text-[12px] text-[#9CA3AF]">—</span>}
+                        ) : <span className="text-[12px] text-[var(--dq-text-disabled)]">—</span>}
                       </td>
-                      <td className="px-4 py-3 text-[13px] text-center font-medium text-[#1e2348]">{q.passRate > 0 ? `${q.passRate}%` : '—'}</td>
+                      <td className="px-4 py-3 text-[13px] text-center font-medium text-[var(--dq-navy-950)]">{q.passRate > 0 ? `${q.passRate}%` : '—'}</td>
                       <td className="px-4 py-3">
-                        <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold capitalize ${q.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                        <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold capitalize ${q.status === 'active' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]' : 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]'}`}>
                           {q.status}
                         </span>
                       </td>
@@ -750,14 +750,14 @@ const AssessmentsTab = () => {
                         <div className="flex items-center gap-1">
                           <button 
                             onClick={() => setEditingAssessment(q)}
-                            className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors" 
+                            className="p-1.5 rounded-lg hover:bg-[var(--dq-orange-50)] text-[var(--dq-orange-500)] transition-colors" 
                             title="Edit"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
                           <button 
                             onClick={() => setViewingAssessment(q)}
-                            className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors" 
+                            className="p-1.5 rounded-lg hover:bg-[var(--dq-orange-50)] text-[var(--dq-navy-950)] hover:text-[var(--dq-orange-500)] transition-colors" 
                             title="View"
                           >
                             <Eye className="w-4 h-4" />
@@ -778,15 +778,15 @@ const AssessmentsTab = () => {
         <div className="space-y-4">
           <p className="text-[13px] text-muted-foreground">Review and grade open-ended learner submissions. Scores are out of 100.</p>
           {MOCK_SUBMISSIONS.map(sub => (
-            <div key={sub.id} className={`bg-card rounded-2xl border shadow-sm overflow-hidden transition-all ${graded[sub.id] ? 'border-emerald-200 opacity-70' : 'border-border'}`}>
+            <div key={sub.id} className={`bg-card rounded-xl border shadow-sm overflow-hidden transition-all ${graded[sub.id] ? 'border-emerald-200 opacity-70' : 'border-border'}`}>
               <div className="flex items-start justify-between gap-4 p-5">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="w-8 h-8 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center text-[#ff6b4d] font-bold text-[13px]">
+                    <div className="w-8 h-8 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center text-[var(--dq-orange-500)] font-bold text-[13px]">
                       {sub.learner.charAt(0)}
                     </div>
                     <span className="font-semibold text-[14px] text-foreground">{sub.learner}</span>
-                    {graded[sub.id] && <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-semibold">Graded</span>}
+                    {graded[sub.id] && <span className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] font-semibold">Graded</span>}
                   </div>
                   <p className="text-[13px] font-medium text-foreground">{sub.assessment}</p>
                   <p className="text-[12px] text-muted-foreground">{sub.course}</p>
@@ -807,7 +807,7 @@ const AssessmentsTab = () => {
                       placeholder="0–100"
                       value={scores[sub.id] || ''}
                       onChange={e => setScores(prev => ({ ...prev, [sub.id]: e.target.value }))}
-                      className="w-24 px-3 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                      className="w-24 px-3 py-2 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                     />
                   </div>
                   <div className="flex-1 min-w-[200px]">
@@ -817,7 +817,7 @@ const AssessmentsTab = () => {
                       rows={2}
                       value={feedbacks[sub.id] || ''}
                       onChange={e => setFeedbacks(prev => ({ ...prev, [sub.id]: e.target.value }))}
-                      className="w-full px-3 py-2 border border-border rounded-xl text-[13px] bg-background resize-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                      className="w-full px-3 py-2 border border-border rounded-xl text-[13px] bg-background resize-none focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                     />
                   </div>
                   <div className="flex items-end">
@@ -835,7 +835,7 @@ const AssessmentsTab = () => {
           ))}
           {MOCK_SUBMISSIONS.every(s => graded[s.id]) && (
             <div className="bg-card rounded-2xl p-10 text-center border border-border">
-              <CheckCircle className="w-10 h-10 text-[#ff6b4d] mx-auto mb-2" />
+              <CheckCircle className="w-10 h-10 text-[var(--dq-orange-500)] mx-auto mb-2" />
               <h3 className="font-semibold text-[16px]">All submissions graded!</h3>
               <p className="text-[13px] text-muted-foreground">No pending submissions.</p>
             </div>
@@ -875,7 +875,7 @@ const AssessmentsTab = () => {
                 {[...MOCK_QUIZZES].filter(q => q.avgScore > 0).sort((a, b) => b.avgScore - a.avgScore).slice(0, 3).map((q, i) => (
                   <div key={q.id} className="flex items-center justify-between py-1 border-b border-border last:border-0">
                     <div className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold flex items-center justify-center">{i + 1}</span>
+                      <span className="w-5 h-5 rounded-full bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] text-[10px] font-bold flex items-center justify-center">{i + 1}</span>
                       <span className="text-[13px] text-foreground truncate max-w-[200px]">{q.title}</span>
                     </div>
                     <span className="text-[13px] font-semibold text-emerald-600">{q.avgScore}%</span>
@@ -901,7 +901,7 @@ const AssessmentsTab = () => {
               { icon: Award,      label: 'Highest Avg Score',  value: `${Math.max(...activeQuizzes.map(q => q.avgScore))}%`, color: 'text-emerald-600', bg: 'bg-emerald-100' },
               { icon: TrendingUp, label: 'Highest Pass Rate',  value: `${Math.max(...activeQuizzes.map(q => q.passRate))}%`, color: 'text-purple-600',    bg: 'bg-purple-100'    },
               { icon: Target,     label: 'Avg Pass Rate',      value: `${avgPassRate}%`,                                     color: 'text-amber-600',   bg: 'bg-amber-100'   },
-              { icon: Users,      label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                     color: 'text-[#ff6b4d]',   bg: 'bg-[#ff6b4d]/10'},
+              { icon: Users,      label: 'Total Submissions',  value: totalSubmissions.toLocaleString(),                     color: 'text-[var(--dq-orange-500)]',   bg: 'bg-[var(--dq-orange-500)]/10'},
             ].map(card => (
               <div key={card.label} className="bg-card rounded-2xl p-5 border border-border shadow-sm">
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${card.bg}`}>
@@ -919,14 +919,14 @@ const AssessmentsTab = () => {
       {viewingAssessment && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between p-6 border-b border-[#E5E7EB]">
+            <div className="flex items-center justify-between p-6 border-b border-[var(--dq-surface-border-default)]">
               <div>
-                <h2 className="text-[20px] font-semibold text-[#1e2348]">{viewingAssessment.title}</h2>
-                <p className="text-[13px] text-[#4B5563] mt-1">{viewingAssessment.course}</p>
+                <h2 className="text-[20px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.title}</h2>
+                <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">{viewingAssessment.course}</p>
               </div>
               <button 
                 onClick={() => setViewingAssessment(null)}
-                className="p-2 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+                className="p-2 rounded-lg hover:bg-[var(--dq-gray-50)] text-[var(--dq-text-secondary)] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -935,50 +935,50 @@ const AssessmentsTab = () => {
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {/* Assessment Details */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#F5F6FA] rounded-xl p-4">
-                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Type</div>
-                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.type}</div>
+                <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
+                  <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Type</div>
+                  <div className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.type}</div>
                 </div>
-                <div className="bg-[#F5F6FA] rounded-xl p-4">
-                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Questions</div>
-                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.questions}</div>
+                <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
+                  <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Questions</div>
+                  <div className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.questions}</div>
                 </div>
-                <div className="bg-[#F5F6FA] rounded-xl p-4">
-                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Status</div>
-                  <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold capitalize inline-block ${viewingAssessment.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
+                <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
+                  <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Status</div>
+                  <span className={`text-[11px] px-2 py-0.5 rounded-full font-semibold capitalize inline-block ${viewingAssessment.status === 'active' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]' : 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]'}`}>
                     {viewingAssessment.status}
                   </span>
                 </div>
-                <div className="bg-[#F5F6FA] rounded-xl p-4">
-                  <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Submissions</div>
-                  <div className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.submissions.toLocaleString()}</div>
+                <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
+                  <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Submissions</div>
+                  <div className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.submissions.toLocaleString()}</div>
                 </div>
               </div>
 
               {/* Performance Metrics */}
               <div>
-                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-3">Performance Metrics</h3>
+                <h3 className="text-[15px] font-semibold text-[var(--dq-navy-950)] mb-3">Performance Metrics</h3>
                 <div className="space-y-3">
-                  <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[13px] text-[#4B5563]">Average Score</span>
-                      <span className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.avgScore}%</span>
+                      <span className="text-[13px] text-[var(--dq-text-secondary)]">Average Score</span>
+                      <span className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.avgScore}%</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
+                    <div className="w-full h-2 rounded-full bg-[var(--dq-surface-border-default)] overflow-hidden">
                       <div 
                         className={`h-full rounded-full ${viewingAssessment.avgScore >= 75 ? 'bg-emerald-500' : viewingAssessment.avgScore >= 60 ? 'bg-amber-400' : 'bg-red-400'}`} 
                         style={{ width: `${viewingAssessment.avgScore}%` }} 
                       />
                     </div>
                   </div>
-                  <div className="bg-[#F5F6FA] rounded-xl p-4">
+                  <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[13px] text-[#4B5563]">Pass Rate</span>
-                      <span className="text-[14px] font-semibold text-[#1e2348]">{viewingAssessment.passRate}%</span>
+                      <span className="text-[13px] text-[var(--dq-text-secondary)]">Pass Rate</span>
+                      <span className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.passRate}%</span>
                     </div>
-                    <div className="w-full h-2 rounded-full bg-[#E5E7EB] overflow-hidden">
+                    <div className="w-full h-2 rounded-full bg-[var(--dq-surface-border-default)] overflow-hidden">
                       <div 
-                        className="h-full rounded-full bg-[#ff6b4d]" 
+                        className="h-full rounded-full bg-[var(--dq-orange-500)]" 
                         style={{ width: `${viewingAssessment.passRate}%` }} 
                       />
                     </div>
@@ -988,22 +988,22 @@ const AssessmentsTab = () => {
 
               {/* Sample Questions Preview */}
               <div>
-                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-3">Sample Questions</h3>
+                <h3 className="text-[15px] font-semibold text-[var(--dq-navy-950)] mb-3">Sample Questions</h3>
                 <div className="space-y-3">
                   {[1, 2, 3].map(i => (
-                    <div key={i} className="bg-[#F5F6FA] rounded-xl p-4">
+                    <div key={i} className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                       <div className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1e2348] text-white text-[11px] font-bold flex items-center justify-center">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--dq-navy-950)] text-white text-[11px] font-bold flex items-center justify-center">
                           {i}
                         </span>
                         <div className="flex-1">
-                          <p className="text-[13px] text-[#1e2348]">
+                          <p className="text-[13px] text-[var(--dq-navy-950)]">
                             {viewingAssessment.type === 'Quiz' 
                               ? `Sample multiple choice question ${i} for ${viewingAssessment.title}`
                               : `Sample assignment question ${i} for ${viewingAssessment.title}`
                             }
                           </p>
-                          <p className="text-[11px] text-[#9CA3AF] mt-1">
+                          <p className="text-[11px] text-[var(--dq-text-disabled)] mt-1">
                             {viewingAssessment.type === 'Quiz' ? 'Multiple Choice' : 'Open-ended'}
                           </p>
                         </div>
@@ -1014,10 +1014,10 @@ const AssessmentsTab = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-[#E5E7EB]">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-[var(--dq-surface-border-default)]">
               <button 
                 onClick={() => setViewingAssessment(null)}
-                className="px-4 py-2 rounded-xl border border-[#E5E7EB] text-[#4B5563] hover:bg-[#F5F6FA] transition-colors text-[13px] font-medium"
+                className="px-4 py-2 rounded-xl border border-[var(--dq-surface-border-default)] text-[var(--dq-text-secondary)] hover:bg-[var(--dq-gray-50)] transition-colors text-[13px] font-medium"
               >
                 Close
               </button>
@@ -1026,7 +1026,7 @@ const AssessmentsTab = () => {
                   setEditingAssessment(viewingAssessment);
                   setViewingAssessment(null);
                 }}
-                className="px-4 py-2 rounded-xl bg-[#ff6b4d] hover:bg-[#e66045] text-white transition-colors text-[13px] font-medium"
+                className="px-4 py-2 rounded-xl bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white transition-colors text-[13px] font-medium"
               >
                 Edit Assessment
               </button>
@@ -1039,11 +1039,11 @@ const AssessmentsTab = () => {
       {editingAssessment && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between p-6 border-b border-[#E5E7EB]">
-              <h2 className="text-[20px] font-semibold text-[#1e2348]">Edit Assessment</h2>
+            <div className="flex items-center justify-between p-6 border-b border-[var(--dq-surface-border-default)]">
+              <h2 className="text-[20px] font-semibold text-[var(--dq-navy-950)]">Edit Assessment</h2>
               <button 
                 onClick={() => setEditingAssessment(null)}
-                className="p-2 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+                className="p-2 rounded-lg hover:bg-[var(--dq-gray-50)] text-[var(--dq-text-secondary)] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1052,52 +1052,52 @@ const AssessmentsTab = () => {
             <div className="flex-1 overflow-y-auto p-6 space-y-5">
               {/* Basic Information */}
               <div>
-                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Assessment Title</label>
+                <label className="block text-[13px] font-medium text-[var(--dq-navy-950)] mb-2">Assessment Title</label>
                 <input
                   type="text"
                   defaultValue={editingAssessment.title}
-                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  className="w-full px-4 py-2.5 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                   placeholder="Enter assessment title"
                 />
               </div>
 
               <div>
-                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Course</label>
+                <label className="block text-[13px] font-medium text-[var(--dq-navy-950)] mb-2">Course</label>
                 <input
                   type="text"
                   defaultValue={editingAssessment.course}
-                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  className="w-full px-4 py-2.5 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                   placeholder="Enter course name"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Type</label>
+                  <label className="block text-[13px] font-medium text-[var(--dq-navy-950)] mb-2">Type</label>
                   <select
                     defaultValue={editingAssessment.type}
-                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                    className="w-full px-4 py-2.5 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                   >
                     <option value="Quiz">Quiz</option>
                     <option value="Assignment">Assignment</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Number of Questions</label>
+                  <label className="block text-[13px] font-medium text-[var(--dq-navy-950)] mb-2">Number of Questions</label>
                   <input
                     type="number"
                     defaultValue={editingAssessment.questions}
                     min={1}
-                    className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                    className="w-full px-4 py-2.5 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[13px] font-medium text-[#1e2348] mb-2">Status</label>
+                <label className="block text-[13px] font-medium text-[var(--dq-navy-950)] mb-2">Status</label>
                 <select
                   defaultValue={editingAssessment.status}
-                  className="w-full px-4 py-2.5 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                  className="w-full px-4 py-2.5 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                 >
                   <option value="active">Active</option>
                   <option value="draft">Draft</option>
@@ -1105,25 +1105,25 @@ const AssessmentsTab = () => {
               </div>
 
               {/* Assessment Settings */}
-              <div className="border-t border-[#E5E7EB] pt-5">
-                <h3 className="text-[15px] font-semibold text-[#1e2348] mb-4">Assessment Settings</h3>
+              <div className="border-t border-[var(--dq-surface-border-default)] pt-5">
+                <h3 className="text-[15px] font-semibold text-[var(--dq-navy-950)] mb-4">Assessment Settings</h3>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl">
                     <div>
-                      <div className="text-[13px] font-medium text-[#1e2348]">Time Limit</div>
-                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Set a time limit for this assessment</div>
+                      <div className="text-[13px] font-medium text-[var(--dq-navy-950)]">Time Limit</div>
+                      <div className="text-[11px] text-[var(--dq-text-disabled)] mt-0.5">Set a time limit for this assessment</div>
                     </div>
                     <input
                       type="number"
                       placeholder="Minutes"
                       defaultValue={60}
-                      className="w-24 px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                      className="w-24 px-3 py-2 border border-[var(--dq-surface-border-default)] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                     />
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl">
                     <div>
-                      <div className="text-[13px] font-medium text-[#1e2348]">Passing Score</div>
-                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Minimum score required to pass</div>
+                      <div className="text-[13px] font-medium text-[var(--dq-navy-950)]">Passing Score</div>
+                      <div className="text-[11px] text-[var(--dq-text-disabled)] mt-0.5">Minimum score required to pass</div>
                     </div>
                     <input
                       type="number"
@@ -1131,53 +1131,53 @@ const AssessmentsTab = () => {
                       defaultValue={70}
                       min={0}
                       max={100}
-                      className="w-24 px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                      className="w-24 px-3 py-2 border border-[var(--dq-surface-border-default)] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                     />
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl">
                     <div>
-                      <div className="text-[13px] font-medium text-[#1e2348]">Allow Multiple Attempts</div>
-                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Let learners retake this assessment</div>
+                      <div className="text-[13px] font-medium text-[var(--dq-navy-950)]">Allow Multiple Attempts</div>
+                      <div className="text-[11px] text-[var(--dq-text-disabled)] mt-0.5">Let learners retake this assessment</div>
                     </div>
                     <input
                       type="checkbox"
                       defaultChecked
-                      className="w-5 h-5 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-2 focus:ring-[#ff6b4d]/40"
+                      className="w-5 h-5 rounded border-[var(--dq-surface-border-default)] text-[var(--dq-orange-500)] focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                     />
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl">
+                  <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl">
                     <div>
-                      <div className="text-[13px] font-medium text-[#1e2348]">Randomize Questions</div>
-                      <div className="text-[11px] text-[#9CA3AF] mt-0.5">Show questions in random order</div>
+                      <div className="text-[13px] font-medium text-[var(--dq-navy-950)]">Randomize Questions</div>
+                      <div className="text-[11px] text-[var(--dq-text-disabled)] mt-0.5">Show questions in random order</div>
                     </div>
                     <input
                       type="checkbox"
-                      className="w-5 h-5 rounded border-[#E5E7EB] text-[#ff6b4d] focus:ring-2 focus:ring-[#ff6b4d]/40"
+                      className="w-5 h-5 rounded border-[var(--dq-surface-border-default)] text-[var(--dq-orange-500)] focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Questions Management */}
-              <div className="border-t border-[#E5E7EB] pt-5">
+              <div className="border-t border-[var(--dq-surface-border-default)] pt-5">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[15px] font-semibold text-[#1e2348]">Questions</h3>
-                  <button className="px-3 py-1.5 rounded-lg bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[12px] font-medium transition-colors">
+                  <h3 className="text-[15px] font-semibold text-[var(--dq-navy-950)]">Questions</h3>
+                  <button className="px-3 py-1.5 rounded-lg bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white text-[12px] font-medium transition-colors">
                     + Add Question
                   </button>
                 </div>
                 <div className="space-y-3">
                   {[1, 2, 3].map(i => (
-                    <div key={i} className="bg-[#F5F6FA] rounded-xl p-4">
+                    <div key={i} className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                       <div className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#1e2348] text-white text-[11px] font-bold flex items-center justify-center">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--dq-navy-950)] text-white text-[11px] font-bold flex items-center justify-center">
                           {i}
                         </span>
                         <div className="flex-1">
                           <input
                             type="text"
                             defaultValue={`Question ${i} for ${editingAssessment.title}`}
-                            className="w-full px-3 py-2 border border-[#E5E7EB] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                            className="w-full px-3 py-2 border border-[var(--dq-surface-border-default)] rounded-lg text-[13px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                           />
                         </div>
                         <button className="p-1.5 rounded-lg hover:bg-white text-red-500 transition-colors">
@@ -1190,10 +1190,10 @@ const AssessmentsTab = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-[#E5E7EB]">
+            <div className="flex items-center justify-end gap-3 p-6 border-t border-[var(--dq-surface-border-default)]">
               <button 
                 onClick={() => setEditingAssessment(null)}
-                className="px-4 py-2 rounded-xl border border-[#E5E7EB] text-[#4B5563] hover:bg-[#F5F6FA] transition-colors text-[13px] font-medium"
+                className="px-4 py-2 rounded-xl border border-[var(--dq-surface-border-default)] text-[var(--dq-text-secondary)] hover:bg-[var(--dq-gray-50)] transition-colors text-[13px] font-medium"
               >
                 Cancel
               </button>
@@ -1202,7 +1202,7 @@ const AssessmentsTab = () => {
                   // Save logic would go here
                   setEditingAssessment(null);
                 }}
-                className="px-4 py-2 rounded-xl bg-[#ff6b4d] hover:bg-[#e66045] text-white transition-colors text-[13px] font-medium"
+                className="px-4 py-2 rounded-xl bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white transition-colors text-[13px] font-medium"
               >
                 Save Changes
               </button>
@@ -1373,15 +1373,15 @@ const PendingApprovalsTab = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Pending Course Approvals</h1>
+      <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">Pending Course Approvals</h1>
 
       {/* Stat pills */}
       <div className="flex flex-wrap gap-3">
         {[
-          { label: 'Awaiting Review',     value: MOCK_PENDING.length, color: 'bg-[#e9e9ed] text-[#1e2348] border border-[#dddee4]'       },
-          { label: 'Approved This Month', value: 12,                  color: 'bg-white text-green-700 border border-[#E5E7EB]'  },
-          { label: 'Rejected This Month', value: 2,                   color: 'bg-white text-red-700 border border-[#E5E7EB]'          },
-          { label: 'Changes Requested',   value: 1,                   color: 'bg-white text-amber-700 border border-[#E5E7EB]'      },
+          { label: 'Awaiting Review',     value: MOCK_PENDING.length, color: 'bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)] border border-[#dddee4]'       },
+          { label: 'Approved This Month', value: 12,                  color: 'bg-white text-green-700 border border-[var(--dq-surface-border-default)]'  },
+          { label: 'Rejected This Month', value: 2,                   color: 'bg-white text-red-700 border border-[var(--dq-surface-border-default)]'          },
+          { label: 'Changes Requested',   value: 1,                   color: 'bg-white text-amber-700 border border-[var(--dq-surface-border-default)]'      },
         ].map(p => (
           <div key={p.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${p.color}`}>
             <span className="font-bold text-[15px]">{p.value}</span>
@@ -1393,18 +1393,18 @@ const PendingApprovalsTab = () => {
       {/* Search + filter */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-disabled)]" />
           <input
             type="text"
             placeholder="Search by course or instructor…"
             value={pendingSearch}
             onChange={e => setPendingSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+            className="w-full pl-9 pr-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
           />
         </div>
         <Select value={pendingCategory} onValueChange={setPendingCategory}>
-          <SelectTrigger className="w-[200px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
-            <BookOpen className="w-4 h-4 mr-2 text-[#9CA3AF]" />
+          <SelectTrigger className="w-[200px] border-[var(--dq-surface-border-default)] focus:ring-[var(--dq-orange-500)]/40">
+            <BookOpen className="w-4 h-4 mr-2 text-[var(--dq-text-disabled)]" />
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -1412,7 +1412,7 @@ const PendingApprovalsTab = () => {
               <SelectItem 
                 key={cat} 
                 value={cat}
-                className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]"
+                className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]"
               >
                 {cat}
               </SelectItem>
@@ -1425,13 +1425,13 @@ const PendingApprovalsTab = () => {
         {/* Review cards */}
         <div className="lg:col-span-2 space-y-5">
           {filtered.length === 0 ? (
-            <div className="bg-white rounded-2xl p-12 text-center border border-[#E5E7EB]">
-              <CheckCircle className="w-12 h-12 text-[#ff6b4d] mx-auto mb-3" />
-              <h3 className="text-[18px] font-semibold mb-1 text-[#1e2348]">All caught up!</h3>
-              <p className="text-[14px] text-[#4B5563]">No courses match your filters.</p>
+            <div className="bg-white rounded-2xl p-12 text-center border border-[var(--dq-surface-border-default)]">
+              <CheckCircle className="w-12 h-12 text-[var(--dq-orange-500)] mx-auto mb-3" />
+              <h3 className="text-[18px] font-semibold mb-1 text-[var(--dq-navy-950)]">All caught up!</h3>
+              <p className="text-[14px] text-[var(--dq-text-secondary)]">No courses match your filters.</p>
             </div>
           ) : filtered.map(course => (
-            <div key={course.id} className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden">
+            <div key={course.id} className="bg-white rounded-2xl border border-[var(--dq-surface-border-default)] shadow-sm overflow-hidden">
               <div className="flex gap-4 p-5">
                 <img
                   src={course.thumbnail}
@@ -1440,32 +1440,32 @@ const PendingApprovalsTab = () => {
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-[16px] font-semibold text-[#1e2348] leading-tight">{course.title}</h3>
-                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-semibold whitespace-nowrap flex-shrink-0">
+                    <h3 className="text-[16px] font-semibold text-[var(--dq-navy-950)] leading-tight">{course.title}</h3>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)] font-semibold whitespace-nowrap flex-shrink-0">
                       Pending Review
                     </span>
                   </div>
-                  <p className="text-[13px] text-[#4B5563] mt-1">
-                    by <span className="font-medium text-[#1e2348]">{course.instructor}</span> · {course.email}
+                  <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">
+                    by <span className="font-medium text-[var(--dq-navy-950)]">{course.instructor}</span> · {course.email}
                   </p>
                   <div className="flex flex-wrap items-center gap-2 mt-2">
-                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#e9e9ed] text-[#1e2348] font-medium">{course.category}</span>
-                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[#F5F6FA] text-[#4B5563] capitalize">{course.level}</span>
-                    <span className="text-[12px] text-[#4B5563] flex items-center gap-1"><Clock className="w-3 h-3" />{course.duration}</span>
-                    <span className="text-[12px] text-[#4B5563]">{course.lessons} lessons</span>
-                    <span className="text-[13px] font-semibold text-[#ff6b4d]">${course.price}</span>
+                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)] font-medium">{course.category}</span>
+                    <span className="text-[12px] px-2 py-0.5 rounded-full bg-[var(--dq-gray-50)] text-[var(--dq-text-secondary)] capitalize">{course.level}</span>
+                    <span className="text-[12px] text-[var(--dq-text-secondary)] flex items-center gap-1"><Clock className="w-3 h-3" />{course.duration}</span>
+                    <span className="text-[12px] text-[var(--dq-text-secondary)]">{course.lessons} lessons</span>
+                    <span className="text-[13px] font-semibold text-[var(--dq-orange-500)]">${course.price}</span>
                   </div>
                 </div>
               </div>
 
               <div className="px-5 pb-4">
-                <p className="text-[13px] text-[#4B5563] leading-relaxed line-clamp-2">{course.description}</p>
-                <p className="text-[12px] text-[#9CA3AF] mt-2 flex items-center gap-1">
+                <p className="text-[13px] text-[var(--dq-text-secondary)] leading-relaxed line-clamp-2">{course.description}</p>
+                <p className="text-[12px] text-[var(--dq-text-disabled)] mt-2 flex items-center gap-1">
                   <Calendar className="w-3 h-3" /> Submitted: {course.submittedDate}
                 </p>
                 
                 {/* WhatsApp & AI Settings */}
-                <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[#E5E7EB]">
+                <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[var(--dq-surface-border-default)]">
                   {course.whatsappEnabled ? (
                     <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-green-50 border border-green-200">
                       <MessageSquare className="w-3.5 h-3.5 text-green-600" />
@@ -1481,9 +1481,9 @@ const PendingApprovalsTab = () => {
                   )}
                   
                   {course.aiTutorEnabled ? (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#fff0ed] border border-[#ffe9e4]">
-                      <Bot className="w-3.5 h-3.5 text-[#ff6b4d]" />
-                      <span className="text-[11px] font-medium text-[#ff6b4d]">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--dq-orange-50)] border border-[#ffe9e4]">
+                      <Bot className="w-3.5 h-3.5 text-[var(--dq-orange-500)]" />
+                      <span className="text-[11px] font-medium text-[var(--dq-orange-500)]">
                         AI Tutor: {course.aiTone.charAt(0).toUpperCase() + course.aiTone.slice(1)} tone
                       </span>
                     </div>
@@ -1496,13 +1496,13 @@ const PendingApprovalsTab = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 px-5 py-3 bg-[#F5F6FA] border-t border-[#E5E7EB]">
+              <div className="flex items-center gap-3 px-5 py-3 bg-[var(--dq-gray-50)] border-t border-[var(--dq-surface-border-default)]">
                 {confirmingId === course.id ? (
                   <>
-                    <span className="text-[13px] text-[#4B5563] flex-1">Confirm approval?</span>
+                    <span className="text-[13px] text-[var(--dq-text-secondary)] flex-1">Confirm approval?</span>
                     <button
                       onClick={() => setConfirmingId(null)}
-                      className="px-3 py-1.5 rounded-lg border border-[#E5E7EB] text-[13px] hover:bg-white transition-colors"
+                      className="px-3 py-1.5 rounded-lg border border-[var(--dq-surface-border-default)] text-[13px] hover:bg-white transition-colors"
                     >
                       Cancel
                     </button>
@@ -1521,7 +1521,7 @@ const PendingApprovalsTab = () => {
                     >
                       <CheckCircle className="w-3.5 h-3.5" /> Approve
                     </button>
-                    <button className="px-4 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 text-[13px] font-medium border border-amber-200 transition-colors flex items-center gap-1.5">
+                    <button className="px-4 py-1.5 rounded-lg bg-amber-50 hover:bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)] text-[13px] font-medium border border-amber-200 transition-colors flex items-center gap-1.5">
                       <MessageSquare className="w-3.5 h-3.5" /> Request Changes
                     </button>
                     <button className="px-4 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-[13px] font-medium border border-red-200 transition-colors flex items-center gap-1.5">
@@ -1529,7 +1529,7 @@ const PendingApprovalsTab = () => {
                     </button>
                     <button 
                       onClick={() => handlePreview(course)}
-                      className="ml-auto px-3 py-1.5 rounded-lg border border-[#E5E7EB] text-[13px] text-[#4B5563] hover:bg-[#fff0ed] hover:text-[#ff6b4d] transition-colors flex items-center gap-1.5"
+                      className="ml-auto px-3 py-1.5 rounded-lg border border-[var(--dq-surface-border-default)] text-[13px] text-[var(--dq-text-secondary)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] transition-colors flex items-center gap-1.5"
                     >
                       <Eye className="w-3.5 h-3.5" /> Preview
                     </button>
@@ -1541,10 +1541,10 @@ const PendingApprovalsTab = () => {
         </div>
 
         {/* Recent Activity sidebar */}
-        <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm h-fit">
-          <div className="px-5 py-4 border-b border-[#E5E7EB]">
-            <h3 className="text-[16px] font-semibold text-[#1e2348]">Recent Review Activity</h3>
-            <p className="text-[12px] text-[#4B5563] mt-0.5">Last 5 review decisions</p>
+        <div className="bg-white rounded-2xl border border-[var(--dq-surface-border-default)] shadow-sm h-fit">
+          <div className="px-5 py-4 border-b border-[var(--dq-surface-border-default)]">
+            <h3 className="text-[16px] font-semibold text-[var(--dq-navy-950)]">Recent Review Activity</h3>
+            <p className="text-[12px] text-[var(--dq-text-secondary)] mt-0.5">Last 5 review decisions</p>
           </div>
           <div className="p-5 space-y-4">
             {RECENT_ACTIVITY.map((item, i) => (
@@ -1555,17 +1555,17 @@ const PendingApprovalsTab = () => {
                   {item.action === 'changes requested' && <MessageSquare className={`w-3.5 h-3.5 ${item.color}`} />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#1e2348] truncate">{item.course}</p>
-                  <p className="text-[12px] text-[#4B5563]">
+                  <p className="text-[13px] font-medium text-[var(--dq-navy-950)] truncate">{item.course}</p>
+                  <p className="text-[12px] text-[var(--dq-text-secondary)]">
                     <span className={`font-medium capitalize ${item.color}`}>{item.action}</span> by {item.reviewer}
                   </p>
-                  <p className="text-[11px] text-[#9CA3AF] mt-0.5">{item.time}</p>
+                  <p className="text-[11px] text-[var(--dq-text-disabled)] mt-0.5">{item.time}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className="px-5 pb-5">
-            <button className="w-full py-2 text-[13px] text-[#ff6b4d] font-medium border border-[#ff6b4d]/30 rounded-xl hover:bg-[#fff0ed] transition-colors">
+            <button className="w-full py-2 text-[13px] text-[var(--dq-orange-500)] font-medium border border-[var(--dq-orange-500)]/30 rounded-xl hover:bg-[var(--dq-orange-50)] transition-colors">
               View Full History
             </button>
           </div>
@@ -1848,7 +1848,7 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#1e2348] to-[#2a3058] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[var(--dq-navy-950)] to-[#2a3058] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 border-b border-white/10">
@@ -1874,14 +1874,14 @@ const AdminDashboard = () => {
                 }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-[16px] leading-[24px] font-normal ${
                   activeTab === item.id
-                    ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20'
+                    ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20'
                     : 'text-white/70 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <item.icon className="w-5 h-5" />
                 <span className="flex-1">{item.label}</span>
                 {item.badge && item.badge > 0 && (
-                  <Badge className="bg-[#ff6b4d] text-white">{item.badge}</Badge>
+                  <Badge className="bg-[var(--dq-orange-500)] text-white">{item.badge}</Badge>
                 )}
               </button>
             ))}
@@ -1900,7 +1900,7 @@ const AdminDashboard = () => {
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-[16px] leading-[24px] font-normal ${
                     activeTab === item.id
-                      ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20'
+                      ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20'
                       : 'text-white/70 hover:bg-white/10 hover:text-white'
                   }`}
                 >
@@ -1914,7 +1914,7 @@ const AdminDashboard = () => {
           {/* User & Logout */}
           <div className="p-4 border-t border-white/10">
             <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="w-10 h-10 rounded-full bg-[#ff6b4d] flex items-center justify-center text-[14px] leading-[20px] font-medium">
+              <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] flex items-center justify-center text-[14px] leading-[20px] font-medium">
                 {profile?.full_name?.charAt(0) || 'A'}
               </div>
               <div className="flex-1 min-w-0">
@@ -1960,15 +1960,15 @@ const AdminDashboard = () => {
             <div className="space-y-8">
               {/* Header */}
               <div>
-                <h1 className="text-[32px] leading-[40px] font-semibold text-[#1e2348] mb-2">Platform Overview</h1>
-                <p className="text-[14px] leading-[20px] text-[#9CA3AF]">Monitor key metrics and platform performance at a glance</p>
+                <h1 className="text-[32px] leading-[40px] font-semibold text-[var(--dq-navy-950)] mb-2">Platform Overview</h1>
+                <p className="text-[14px] leading-[20px] text-[var(--dq-text-disabled)]">Monitor key metrics and platform performance at a glance</p>
               </div>
               
               {analyticsLoading ? (
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-[#E5E7EB] border-t-[#ff6b4d] rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-[14px] leading-[20px] font-normal text-[#9CA3AF]">Loading analytics...</p>
+                    <div className="w-12 h-12 border-4 border-[var(--dq-surface-border-default)] border-t-[var(--dq-orange-500)] rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-disabled)]">Loading analytics...</p>
                   </div>
                 </div>
               ) : (
@@ -1976,132 +1976,132 @@ const AdminDashboard = () => {
                   {/* Primary Stats Grid - Clean Executive Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {/* Total Users Card */}
-                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30 transition-all hover:shadow-lg group">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 bg-[#fff0ed] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
-                          <Users className="w-6 h-6 text-[#ff6b4d]" />
+                        <div className="w-12 h-12 bg-[var(--dq-orange-50)] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
+                          <Users className="w-6 h-6 text-[var(--dq-orange-500)]" />
                         </div>
                         <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
                           <ArrowUpRight className="w-3 h-3" />
                           <span>+12%</span>
                         </div>
                       </div>
-                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.totalUsers || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Users</div>
-                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Active platform members</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">{analytics?.totalUsers || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Total Users</div>
+                      <div className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">Active platform members</div>
                     </div>
 
                     {/* Published Courses Card */}
-                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30 transition-all hover:shadow-lg group">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 bg-[#e9e9ed] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
-                          <BookOpen className="w-6 h-6 text-[#1e2348]" />
+                        <div className="w-12 h-12 bg-[var(--dq-gray-100)] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
+                          <BookOpen className="w-6 h-6 text-[var(--dq-navy-950)]" />
                         </div>
                         <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
                           <ArrowUpRight className="w-3 h-3" />
                           <span>+8%</span>
                         </div>
                       </div>
-                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.publishedCourses || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Published Courses</div>
-                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Live learning content</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">{analytics?.publishedCourses || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Published Courses</div>
+                      <div className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">Live learning content</div>
                     </div>
 
                     {/* Enrollments Card */}
-                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30 transition-all hover:shadow-lg group">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 bg-[#fff0ed] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
-                          <TrendingUp className="w-6 h-6 text-[#ff6b4d]" />
+                        <div className="w-12 h-12 bg-[var(--dq-orange-50)] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
+                          <TrendingUp className="w-6 h-6 text-[var(--dq-orange-500)]" />
                         </div>
                         <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
                           <ArrowUpRight className="w-3 h-3" />
                           <span>+24%</span>
                         </div>
                       </div>
-                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.totalEnrollments || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Enrollments</div>
-                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Course registrations</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">{analytics?.totalEnrollments || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Total Enrollments</div>
+                      <div className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">Course registrations</div>
                     </div>
 
                     {/* Certificates Card */}
-                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] hover:border-[#ff6b4d]/30 transition-all hover:shadow-lg group">
+                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30 transition-all hover:shadow-lg group">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 bg-[#e9e9ed] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
-                          <Award className="w-6 h-6 text-[#1e2348]" />
+                        <div className="w-12 h-12 bg-[var(--dq-gray-100)] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
+                          <Award className="w-6 h-6 text-[var(--dq-navy-950)]" />
                         </div>
                         <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
                           <ArrowUpRight className="w-3 h-3" />
                           <span>+18%</span>
                         </div>
                       </div>
-                      <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">{analytics?.certificatesIssued || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Certificates Issued</div>
-                      <div className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">Completed achievements</div>
+                      <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">{analytics?.certificatesIssued || 0}</div>
+                      <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Certificates Issued</div>
+                      <div className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">Completed achievements</div>
                     </div>
                   </div>
 
                   {/* Secondary Metrics Row */}
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Users by Role */}
-                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)]">
                       <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Users by Role</h3>
-                        <div className="w-8 h-8 bg-[#F5F6FA] rounded-lg flex items-center justify-center">
-                          <Users2 className="w-4 h-4 text-[#4B5563]" />
+                        <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-navy-950)]">Users by Role</h3>
+                        <div className="w-8 h-8 bg-[var(--dq-gray-50)] rounded-lg flex items-center justify-center">
+                          <Users2 className="w-4 h-4 text-[var(--dq-text-secondary)]" />
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div className="flex items-center justify-between group">
                           <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-[#ff6b4d]"></div>
-                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Learners</span>
+                            <div className="w-2 h-2 rounded-full bg-[var(--dq-orange-500)]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Learners</span>
                           </div>
-                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.learner || 0}</span>
+                          <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">{analytics?.usersByRole.learner || 0}</span>
                         </div>
                         <div className="flex items-center justify-between group">
                           <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-[#1e2348]"></div>
-                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Instructors</span>
+                            <div className="w-2 h-2 rounded-full bg-[var(--dq-navy-950)]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Instructors</span>
                           </div>
-                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.instructor || 0}</span>
+                          <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">{analytics?.usersByRole.instructor || 0}</span>
                         </div>
                         <div className="flex items-center justify-between group">
                           <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-[#9CA3AF]"></div>
-                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Admins</span>
+                            <div className="w-2 h-2 rounded-full bg-[var(--dq-text-disabled)]"></div>
+                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Admins</span>
                           </div>
-                          <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.usersByRole.admin || 0}</span>
+                          <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">{analytics?.usersByRole.admin || 0}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Performance Metrics */}
-                    <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB]">
+                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)]">
                       <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Performance</h3>
-                        <div className="w-8 h-8 bg-[#F5F6FA] rounded-lg flex items-center justify-center">
-                          <BarChart2 className="w-4 h-4 text-[#4B5563]" />
+                        <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-navy-950)]">Performance</h3>
+                        <div className="w-8 h-8 bg-[var(--dq-gray-50)] rounded-lg flex items-center justify-center">
+                          <BarChart2 className="w-4 h-4 text-[var(--dq-text-secondary)]" />
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div>
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</span>
-                            <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">{analytics?.completionRate || 0}%</span>
+                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Completion Rate</span>
+                            <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">{analytics?.completionRate || 0}%</span>
                           </div>
-                          <div className="w-full h-2 bg-[#F5F6FA] rounded-full overflow-hidden">
+                          <div className="w-full h-2 bg-[var(--dq-gray-50)] rounded-full overflow-hidden">
                             <div 
-                              className="h-full bg-gradient-to-r from-[#ff6b4d] to-[#e66045] rounded-full transition-all duration-500"
+                              className="h-full bg-gradient-to-r from-[var(--dq-orange-500)] to-[#e66045] rounded-full transition-all duration-500"
                               style={{ width: `${analytics?.completionRate || 0}%` }}
                             ></div>
                           </div>
                         </div>
-                        <div className="pt-2 border-t border-[#E5E7EB]">
+                        <div className="pt-2 border-t border-[var(--dq-surface-border-default)]">
                           <div className="flex items-center justify-between">
-                            <span className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg. Course Rating</span>
+                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Avg. Course Rating</span>
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                              <span className="text-[18px] leading-[26px] font-bold text-[#1e2348]">4.7</span>
+                              <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">4.7</span>
                             </div>
                           </div>
                         </div>
@@ -2109,9 +2109,9 @@ const AdminDashboard = () => {
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 text-white">
+                    <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl p-6 text-white">
                       <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-[18px] leading-[26px] font-semibold">Quick Actions</h3>
+                        <h3 className="text-[18px] leading-[26px] font-semibold text-white">Quick Actions</h3>
                         <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
                           <Target className="w-4 h-4" />
                         </div>
@@ -2126,7 +2126,7 @@ const AdminDashboard = () => {
                             <span className="text-[14px] leading-[20px] font-medium">Pending Reviews</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[16px] leading-[24px] font-bold text-[#ff6b4d]">{analytics?.pendingReviews || 0}</span>
+                            <span className="text-[16px] leading-[24px] font-bold text-[var(--dq-orange-500)]">{analytics?.pendingReviews || 0}</span>
                             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                           </div>
                         </button>
@@ -2165,10 +2165,10 @@ const AdminDashboard = () => {
           {activeTab === 'users' && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">User Management</h1>
+                <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">User Management</h1>
                 <Button 
                   onClick={() => setShowCreateUserModal(true)}
-                  className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
+                  className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] text-white transition-colors"
                 >
                   <UserPlusIcon className="w-4 h-4 mr-2" />
                   Create User
@@ -2178,11 +2178,11 @@ const AdminDashboard = () => {
               {/* Stats */}
               <div className="flex flex-wrap gap-3 mb-5">
                 {[
-                  { label: 'Total Users', value: MOCK_USERS.length, color: 'bg-[#e9e9ed] text-[#1e2348] border border-[#dddee4]' },
-                  { label: 'Admins', value: MOCK_USERS.filter(u => u.role === 'admin').length, color: 'bg-white text-[#1e2348] border border-[#E5E7EB]' },
-                  { label: 'Instructors', value: MOCK_USERS.filter(u => u.role === 'instructor').length, color: 'bg-white text-[#1e2348] border border-[#E5E7EB]' },
-                  { label: 'Learners', value: MOCK_USERS.filter(u => u.role === 'learner').length, color: 'bg-white text-emerald-700 border border-[#E5E7EB]' },
-                  { label: 'Active', value: MOCK_USERS.filter(u => u.status === 'active').length, color: 'bg-white text-emerald-700 border border-[#E5E7EB]' },
+                  { label: 'Total Users', value: MOCK_USERS.length, color: 'bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)] border border-[#dddee4]' },
+                  { label: 'Admins', value: MOCK_USERS.filter(u => u.role === 'admin').length, color: 'bg-white text-[var(--dq-navy-950)] border border-[var(--dq-surface-border-default)]' },
+                  { label: 'Instructors', value: MOCK_USERS.filter(u => u.role === 'instructor').length, color: 'bg-white text-[var(--dq-navy-950)] border border-[var(--dq-surface-border-default)]' },
+                  { label: 'Learners', value: MOCK_USERS.filter(u => u.role === 'learner').length, color: 'bg-white text-emerald-700 border border-[var(--dq-surface-border-default)]' },
+                  { label: 'Active', value: MOCK_USERS.filter(u => u.status === 'active').length, color: 'bg-white text-emerald-700 border border-[var(--dq-surface-border-default)]' },
                 ].map(pill => (
                   <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
                     <span className="font-bold text-[15px]">{pill.value}</span>
@@ -2194,21 +2194,21 @@ const AdminDashboard = () => {
               {/* Search and Filters */}
               <div className="flex flex-wrap gap-3 mb-5">
                 <div className="relative flex-1 min-w-[200px]">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-disabled)]" />
                   <input
                     type="text"
                     placeholder="Search by name or email…"
                     value={userSearch}
                     onChange={e => setUserSearch(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    className="w-full pl-9 pr-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                   />
                 </div>
                 <div className="relative">
-                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-disabled)]" />
                   <select
                     value={userRoleFilter}
                     onChange={e => setUserRoleFilter(e.target.value)}
-                    className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    className="pl-9 pr-8 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                   >
                     <option value="all">All Roles</option>
                     <option value="admin">Admin</option>
@@ -2217,11 +2217,11 @@ const AdminDashboard = () => {
                   </select>
                 </div>
                 <div className="relative">
-                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+                  <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-disabled)]" />
                   <select
                     value={userStatusFilter}
                     onChange={e => setUserStatusFilter(e.target.value)}
-                    className="pl-9 pr-8 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40"
+                    className="pl-9 pr-8 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40"
                   >
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
@@ -2230,10 +2230,10 @@ const AdminDashboard = () => {
                 </div>
               </div>
               
-              <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
+              <div className="bg-white rounded-xl shadow-sm border border-[var(--dq-surface-border-default)] overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full" role="table" aria-label="User management table">
-                    <thead className="bg-[#1e2348]">
+                    <thead className="bg-[var(--dq-navy-950)]">
                       <tr>
                         <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">User</th>
                         <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">Email</th>
@@ -2247,22 +2247,22 @@ const AdminDashboard = () => {
                     <tbody>
                       {filteredUsers.length === 0 ? (
                         <tr>
-                          <td colSpan={7} className="text-center py-12 text-[14px] text-[#4B5563]">
+                          <td colSpan={7} className="text-center py-12 text-[14px] text-[var(--dq-text-secondary)]">
                             <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
                             No users match your filters.
                           </td>
                         </tr>
                       ) : filteredUsers.map((user, idx) => (
-                        <tr key={user.id} className={`border-t border-[#E5E7EB] transition-colors hover:bg-[#F5F6FA] ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F5F6FA]'}`}>
+                        <tr key={user.id} className={`border-t border-[var(--dq-surface-border-default)] transition-colors hover:bg-[var(--dq-gray-50)] ${idx % 2 === 0 ? 'bg-white' : 'bg-[var(--dq-gray-50)]'}`}>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-[#fff0ed] flex items-center justify-center text-[14px] font-medium text-[#ff6b4d]">
+                              <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-50)] flex items-center justify-center text-[14px] font-medium text-[var(--dq-orange-500)]">
                                 {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
                               </div>
-                              <span className="text-[14px] font-medium text-[#1e2348]">{user.full_name}</span>
+                              <span className="text-[14px] font-medium text-[var(--dq-navy-950)]">{user.full_name}</span>
                             </div>
                           </td>
-                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{user.email}</td>
+                          <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)]">{user.email}</td>
                           <td className="px-4 py-3">
                             <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${ROLE_STYLES[user.role]}`}>
                               {user.role}
@@ -2273,24 +2273,24 @@ const AdminDashboard = () => {
                               {user.status}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">
+                          <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">
                             {new Date(user.created_at).toLocaleDateString()}
                           </td>
-                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">
+                          <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">
                             {new Date(user.lastLogin).toLocaleDateString()}
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-1">
                               <button 
                                 onClick={() => handleEditUser(user.id)}
-                                className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors" 
+                                className="p-1.5 rounded-lg hover:bg-[var(--dq-orange-50)] text-[var(--dq-orange-500)] transition-colors" 
                                 title="Edit user"
                               >
                                 <Edit className="w-4 h-4" />
                               </button>
                               <button 
                                 onClick={() => handleViewUser(user.id)}
-                                className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors" 
+                                className="p-1.5 rounded-lg hover:bg-[var(--dq-gray-50)] text-[var(--dq-text-secondary)] transition-colors" 
                                 title="View user details"
                               >
                                 <Eye className="w-4 h-4" />
@@ -2298,7 +2298,7 @@ const AdminDashboard = () => {
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <button 
-                                    className="p-1.5 rounded-lg hover:bg-[#F5F6FA] text-[#4B5563] transition-colors"
+                                    className="p-1.5 rounded-lg hover:bg-[var(--dq-gray-50)] text-[var(--dq-text-secondary)] transition-colors"
                                     title="More actions"
                                   >
                                     <MoreVertical className="w-4 h-4" />
@@ -2382,45 +2382,45 @@ const AdminDashboard = () => {
           {/* Training Delivery Tab */}
           {activeTab === 'scheduling' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Training Delivery & Scheduling</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[var(--dq-navy-950)]">Training Delivery & Scheduling</h1>
               <div className="grid gap-6">
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[#1e2348]">Class Setup & Cohort Scheduling</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
+                  <h3 className="text-[20px] leading-[28px] font-medium mb-3 text-[var(--dq-navy-950)]">Class Setup & Cohort Scheduling</h3>
+                  <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-4">
                     Schedule live classes, manage cohorts, and track attendance.
                   </p>
                   <Button 
                     onClick={() => setShowScheduleModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors"
+                    className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] text-white transition-colors"
                   >
                     Schedule Class
                   </Button>
                 </div>
                 
                 {/* Training Calendar Section */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-[20px] leading-[28px] font-medium text-[#1e2348]">Training Calendar</h3>
+                    <h3 className="text-[20px] leading-[28px] font-medium text-[var(--dq-navy-950)]">Training Calendar</h3>
                     <div className="flex items-center gap-3">
                       <Select defaultValue="all">
-                        <SelectTrigger className="w-[180px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
+                        <SelectTrigger className="w-[180px] border-[var(--dq-surface-border-default)] focus:ring-[var(--dq-orange-500)]/40">
                           <SelectValue placeholder="Filter by type" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">All Sessions</SelectItem>
-                          <SelectItem value="live" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Live Only</SelectItem>
-                          <SelectItem value="hybrid" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Hybrid Only</SelectItem>
-                          <SelectItem value="recorded" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Recorded Only</SelectItem>
+                          <SelectItem value="all" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">All Sessions</SelectItem>
+                          <SelectItem value="live" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">Live Only</SelectItem>
+                          <SelectItem value="hybrid" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">Hybrid Only</SelectItem>
+                          <SelectItem value="recorded" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">Recorded Only</SelectItem>
                         </SelectContent>
                       </Select>
                       <Select defaultValue="upcoming">
-                        <SelectTrigger className="w-[180px] border-[#E5E7EB] focus:ring-[#ff6b4d]/40">
+                        <SelectTrigger className="w-[180px] border-[var(--dq-surface-border-default)] focus:ring-[var(--dq-orange-500)]/40">
                           <SelectValue placeholder="Filter by status" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">All Status</SelectItem>
-                          <SelectItem value="upcoming" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Upcoming</SelectItem>
-                          <SelectItem value="completed" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">Completed</SelectItem>
+                          <SelectItem value="all" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">All Status</SelectItem>
+                          <SelectItem value="upcoming" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">Upcoming</SelectItem>
+                          <SelectItem value="completed" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">Completed</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -2428,25 +2428,25 @@ const AdminDashboard = () => {
 
                   {/* Stats Row */}
                   <div className="grid grid-cols-4 gap-4 mb-6">
-                    <div className="bg-[#F5F6FA] rounded-xl p-4">
-                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Total Sessions</div>
-                      <div className="text-[24px] font-bold text-[#1e2348]">{MOCK_SCHEDULED_SESSIONS.length}</div>
+                    <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
+                      <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Total Sessions</div>
+                      <div className="text-[24px] font-bold text-[var(--dq-navy-950)]">{MOCK_SCHEDULED_SESSIONS.length}</div>
                     </div>
-                    <div className="bg-[#fff0ed] rounded-xl p-4">
-                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Upcoming</div>
-                      <div className="text-[24px] font-bold text-[#ff6b4d]">
+                    <div className="bg-[var(--dq-orange-50)] rounded-xl p-4">
+                      <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Upcoming</div>
+                      <div className="text-[24px] font-bold text-[var(--dq-orange-500)]">
                         {MOCK_SCHEDULED_SESSIONS.filter(s => s.status === 'upcoming').length}
                       </div>
                     </div>
-                    <div className="bg-[#F5F6FA] rounded-xl p-4">
-                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Total Enrolled</div>
-                      <div className="text-[24px] font-bold text-[#1e2348]">
+                    <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
+                      <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Total Enrolled</div>
+                      <div className="text-[24px] font-bold text-[var(--dq-navy-950)]">
                         {MOCK_SCHEDULED_SESSIONS.reduce((sum, s) => sum + s.enrolled, 0)}
                       </div>
                     </div>
-                    <div className="bg-[#F5F6FA] rounded-xl p-4">
-                      <div className="text-[11px] text-[#9CA3AF] uppercase tracking-wide mb-1">Avg Capacity</div>
-                      <div className="text-[24px] font-bold text-[#1e2348]">
+                    <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
+                      <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Avg Capacity</div>
+                      <div className="text-[24px] font-bold text-[var(--dq-navy-950)]">
                         {Math.round((MOCK_SCHEDULED_SESSIONS.reduce((sum, s) => sum + (s.enrolled / s.capacity * 100), 0) / MOCK_SCHEDULED_SESSIONS.length))}%
                       </div>
                     </div>
@@ -2457,12 +2457,12 @@ const AdminDashboard = () => {
                     {MOCK_SCHEDULED_SESSIONS.map((session) => (
                       <div 
                         key={session.id} 
-                        className="border border-[#E5E7EB] rounded-xl p-4 hover:border-[#ff6b4d]/30 hover:bg-[#fff0ed]/20 transition-all"
+                        className="border border-[var(--dq-surface-border-default)] rounded-xl p-4 hover:border-[var(--dq-orange-500)]/30 hover:bg-[var(--dq-orange-50)]/20 transition-all"
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <h4 className="text-[15px] font-semibold text-[#1e2348]">{session.title}</h4>
+                              <h4 className="text-[15px] font-semibold text-[var(--dq-navy-950)]">{session.title}</h4>
                               <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${SESSION_TYPE_STYLE[session.type].bg} ${SESSION_TYPE_STYLE[session.type].text}`}>
                                 {SESSION_TYPE_STYLE[session.type].icon} {session.type}
                               </span>
@@ -2470,8 +2470,8 @@ const AdminDashboard = () => {
                                 {session.status}
                               </span>
                             </div>
-                            <p className="text-[13px] text-[#4B5563] mb-2">{session.course}</p>
-                            <div className="flex items-center gap-4 text-[12px] text-[#9CA3AF]">
+                            <p className="text-[13px] text-[var(--dq-text-secondary)] mb-2">{session.course}</p>
+                            <div className="flex items-center gap-4 text-[12px] text-[var(--dq-text-disabled)]">
                               <div className="flex items-center gap-1">
                                 <Calendar className="w-3.5 h-3.5" />
                                 <span>{new Date(session.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
@@ -2489,14 +2489,14 @@ const AdminDashboard = () => {
                           
                           <div className="flex flex-col items-end gap-2">
                             <div className="text-right">
-                              <div className="text-[13px] font-semibold text-[#1e2348]">
+                              <div className="text-[13px] font-semibold text-[var(--dq-navy-950)]">
                                 {session.enrolled}/{session.capacity}
                               </div>
-                              <div className="text-[11px] text-[#9CA3AF]">enrolled</div>
+                              <div className="text-[11px] text-[var(--dq-text-disabled)]">enrolled</div>
                             </div>
-                            <div className="w-24 h-1.5 rounded-full bg-[#E5E7EB] overflow-hidden">
+                            <div className="w-24 h-1.5 rounded-full bg-[var(--dq-surface-border-default)] overflow-hidden">
                               <div 
-                                className="h-full rounded-full bg-[#ff6b4d]" 
+                                className="h-full rounded-full bg-[var(--dq-orange-500)]" 
                                 style={{ width: `${(session.enrolled / session.capacity) * 100}%` }} 
                               />
                             </div>
@@ -2504,19 +2504,19 @@ const AdminDashboard = () => {
                               {session.status === 'upcoming' && (
                                 <>
                                   <button 
-                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#ff6b4d] transition-colors"
+                                    className="p-1.5 rounded-lg hover:bg-[var(--dq-orange-50)] text-[var(--dq-orange-500)] transition-colors"
                                     title="Edit Session"
                                   >
                                     <Edit className="w-4 h-4" />
                                   </button>
                                   <button 
-                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                    className="p-1.5 rounded-lg hover:bg-[var(--dq-orange-50)] text-[var(--dq-navy-950)] hover:text-[var(--dq-orange-500)] transition-colors"
                                     title="View Details"
                                   >
                                     <Eye className="w-4 h-4" />
                                   </button>
                                   <button 
-                                    className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                    className="p-1.5 rounded-lg hover:bg-[var(--dq-orange-50)] text-[var(--dq-navy-950)] hover:text-[var(--dq-orange-500)] transition-colors"
                                     title="Copy Meeting Link"
                                   >
                                     <LinkIcon className="w-4 h-4" />
@@ -2525,7 +2525,7 @@ const AdminDashboard = () => {
                               )}
                               {session.status === 'completed' && (
                                 <button 
-                                  className="p-1.5 rounded-lg hover:bg-[#fff0ed] text-[#1e2348] hover:text-[#ff6b4d] transition-colors"
+                                  className="p-1.5 rounded-lg hover:bg-[var(--dq-orange-50)] text-[var(--dq-navy-950)] hover:text-[var(--dq-orange-500)] transition-colors"
                                   title="View Recording"
                                 >
                                   <Eye className="w-4 h-4" />
@@ -2546,60 +2546,60 @@ const AdminDashboard = () => {
           {activeTab === 'enrollment' && (
             <div className="space-y-8">
               <div>
-                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Student & Enrollment Management</h1>
-                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage enrollments, track capacity, and oversee student operations</p>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[var(--dq-navy-950)]">Student & Enrollment Management</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-secondary)]">Manage enrollments, track capacity, and oversee student operations</p>
               </div>
 
               {/* Statistics Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
                       <Users className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">1,247</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Total Enrolled</div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">1,247</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Total Enrolled</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <TrendingUp className="w-4 h-4" />
                     <span>+18% this month</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
                       <Clock className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">23</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Pending Approval</div>
-                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">23</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Pending Approval</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-secondary)] font-medium">
                     <span>Requires action</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
                       <BookOpen className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">42</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Courses</div>
-                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">42</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Active Courses</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-secondary)] font-medium">
                     <span>With enrollments</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
                       <CheckCircle className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">89%</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">89%</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Completion Rate</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <TrendingUp className="w-4 h-4" />
                     <span>+5% vs last month</span>
@@ -2608,21 +2608,21 @@ const AdminDashboard = () => {
               </div>
 
               {/* Enrollment Dashboard */}
-              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
                     <Users className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Enrollment Dashboard</h3>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Manage student enrollments, approvals, and bulk operations</p>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Enrollment Dashboard</h3>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Manage student enrollments, approvals, and bulk operations</p>
                   </div>
                 </div>
                 
                 <div className="grid md:grid-cols-2 gap-4">
                   <Button 
                     onClick={() => setShowBulkEnrollModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm h-auto py-4"
+                    className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white shadow-sm h-auto py-4"
                   >
                     <Upload className="w-5 h-5 mr-2" />
                     <div className="text-left">
@@ -2633,7 +2633,7 @@ const AdminDashboard = () => {
                   
                   <Button 
                     variant="outline"
-                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                    className="border-[var(--dq-surface-border-default)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] shadow-sm h-auto py-4"
                   >
                     <FileText className="w-5 h-5 mr-2" />
                     <div className="text-left">
@@ -2645,28 +2645,28 @@ const AdminDashboard = () => {
               </div>
 
               {/* Seat Management - Enhanced */}
-              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
                     <Building2 className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Seat Management</h3>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Track available seats and manage course capacity across all programs</p>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Seat Management</h3>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Track available seats and manage course capacity across all programs</p>
                   </div>
                 </div>
 
                 {/* Capacity Overview */}
                 <div className="grid md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-gradient-to-br from-[#F5F6FA] to-[#E5E7EB] rounded-xl p-6 border border-[#E5E7EB]">
+                  <div className="bg-gradient-to-br from-[var(--dq-gray-50)] to-[var(--dq-surface-border-default)] rounded-xl p-6 border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">Total Capacity</div>
+                      <div className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)]">Total Capacity</div>
                       <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                        <Users className="w-5 h-5 text-[#1e2348]" />
+                        <Users className="w-5 h-5 text-[var(--dq-navy-950)]" />
                       </div>
                     </div>
-                    <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-1">2,500</div>
-                    <div className="text-[13px] leading-[18px] text-[#4B5563]">Seats across all courses</div>
+                    <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-navy-950)] mb-1">2,500</div>
+                    <div className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">Seats across all courses</div>
                   </div>
 
                   <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
@@ -2695,8 +2695,8 @@ const AdminDashboard = () => {
                 {/* Course-wise Seat Breakdown */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Course Capacity Breakdown</h4>
-                    <Button variant="outline" size="sm" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <h4 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-navy-950)]">Course Capacity Breakdown</h4>
+                    <Button variant="outline" size="sm" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                       <Settings className="w-4 h-4 mr-2" />
                       Manage Capacity
                     </Button>
@@ -2713,11 +2713,11 @@ const AdminDashboard = () => {
                     const available = course.total - course.occupied;
                     
                     return (
-                      <div key={index} className="bg-gradient-to-r from-white to-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-all">
+                      <div key={index} className="bg-gradient-to-r from-white to-[var(--dq-gray-50)] rounded-xl p-6 border border-[var(--dq-surface-border-default)] hover:shadow-md transition-all">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex-1">
-                            <h5 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-1">{course.name}</h5>
-                            <div className="flex items-center gap-4 text-[13px] leading-[18px] text-[#4B5563]">
+                            <h5 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-1">{course.name}</h5>
+                            <div className="flex items-center gap-4 text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">
                               <span className="flex items-center gap-1">
                                 <Users className="w-4 h-4" />
                                 {course.occupied} enrolled
@@ -2734,8 +2734,8 @@ const AdminDashboard = () => {
                           </div>
                           <div className={`px-3 py-1 rounded-full text-[12px] font-semibold ${
                             course.status === 'healthy' 
-                              ? 'bg-emerald-100 text-emerald-700' 
-                              : 'bg-amber-100 text-amber-700'
+                              ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]' 
+                              : 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]'
                           }`}>
                             {percentage}% Full
                           </div>
@@ -2743,7 +2743,7 @@ const AdminDashboard = () => {
                         
                         {/* Progress Bar */}
                         <div className="relative">
-                          <div className="w-full bg-[#E5E7EB] rounded-full h-3 overflow-hidden">
+                          <div className="w-full bg-[var(--dq-surface-border-default)] rounded-full h-3 overflow-hidden">
                             <div 
                               className={`h-full rounded-full transition-all ${
                                 course.status === 'healthy'
@@ -2753,7 +2753,7 @@ const AdminDashboard = () => {
                               style={{ width: `${percentage}%` }}
                             />
                           </div>
-                          <div className="flex justify-between mt-2 text-[12px] text-[#4B5563]">
+                          <div className="flex justify-between mt-2 text-[12px] text-[var(--dq-text-secondary)]">
                             <span>0</span>
                             <span>{course.total}</span>
                           </div>
@@ -2764,17 +2764,17 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Quick Actions */}
-                <div className="mt-8 pt-6 border-t border-[#E5E7EB]">
+                <div className="mt-8 pt-6 border-t border-[var(--dq-surface-border-default)]">
                   <div className="grid md:grid-cols-3 gap-4">
-                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <Button variant="outline" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Seats
                     </Button>
-                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <Button variant="outline" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                       <Download className="w-4 h-4 mr-2" />
                       Export Report
                     </Button>
-                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <Button variant="outline" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                       <AlertCircle className="w-4 h-4 mr-2" />
                       View Alerts
                     </Button>
@@ -2788,61 +2788,61 @@ const AdminDashboard = () => {
           {activeTab === 'faculty' && (
             <div className="space-y-8">
               <div>
-                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Faculty & Program Operations</h1>
-                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage faculty members, assignments, and learning programs</p>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[var(--dq-navy-950)]">Faculty & Program Operations</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-secondary)]">Manage faculty members, assignments, and learning programs</p>
               </div>
 
               {/* Statistics Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
                       <GraduationCap className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">87</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Faculty</div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">87</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Active Faculty</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <TrendingUp className="w-4 h-4" />
                     <span>+12 this quarter</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
                       <BookOpen className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">24</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Learning Programs</div>
-                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">24</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Learning Programs</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-secondary)] font-medium">
                     <span>Across 6 categories</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
                       <Star className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">4.8</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg Faculty Rating</div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">4.8</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Avg Faculty Rating</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-amber-600 font-medium">
                     <Star className="w-4 h-4 fill-amber-600" />
                     <span>Based on 2,341 reviews</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
                       <Target className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">156</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Assignments</div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">156</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Active Assignments</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <CheckCircle className="w-4 h-4" />
                     <span>92% completion rate</span>
@@ -2851,21 +2851,21 @@ const AdminDashboard = () => {
               </div>
 
               {/* Faculty Dashboard */}
-              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
                     <GraduationCap className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Faculty Dashboard</h3>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Manage faculty members, assignments, and performance tracking</p>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Faculty Dashboard</h3>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Manage faculty members, assignments, and performance tracking</p>
                   </div>
                 </div>
                 
                 <div className="grid md:grid-cols-3 gap-4">
                   <Button 
                     onClick={() => setShowAddFacultyModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm h-auto py-4"
+                    className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white shadow-sm h-auto py-4"
                   >
                     <UserPlus className="w-5 h-5 mr-2" />
                     <div className="text-left">
@@ -2877,7 +2877,7 @@ const AdminDashboard = () => {
                   <Button 
                     onClick={() => setFacultySubTab('faculty-list')}
                     variant="outline"
-                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                    className="border-[var(--dq-surface-border-default)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] shadow-sm h-auto py-4"
                   >
                     <Users className="w-5 h-5 mr-2" />
                     <div className="text-left">
@@ -2889,7 +2889,7 @@ const AdminDashboard = () => {
                   <Button 
                     onClick={() => setFacultySubTab('performance')}
                     variant="outline"
-                    className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] shadow-sm h-auto py-4"
+                    className="border-[var(--dq-surface-border-default)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] shadow-sm h-auto py-4"
                   >
                     <BarChart2 className="w-5 h-5 mr-2" />
                     <div className="text-left">
@@ -2901,28 +2901,28 @@ const AdminDashboard = () => {
               </div>
 
               {/* Program Builder - Enhanced */}
-              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
                     <BookOpen className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Program Builder</h3>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">Create and manage comprehensive learning programs and curriculum pathways</p>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Program Builder</h3>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Create and manage comprehensive learning programs and curriculum pathways</p>
                   </div>
                 </div>
 
                 {/* Program Overview */}
                 <div className="grid md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-gradient-to-br from-[#F5F6FA] to-[#E5E7EB] rounded-xl p-6 border border-[#E5E7EB]">
+                  <div className="bg-gradient-to-br from-[var(--dq-gray-50)] to-[var(--dq-surface-border-default)] rounded-xl p-6 border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">Total Programs</div>
+                      <div className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)]">Total Programs</div>
                       <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                        <BookOpen className="w-5 h-5 text-[#1e2348]" />
+                        <BookOpen className="w-5 h-5 text-[var(--dq-navy-950)]" />
                       </div>
                     </div>
-                    <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-1">24</div>
-                    <div className="text-[13px] leading-[18px] text-[#4B5563]">Active learning programs</div>
+                    <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-navy-950)] mb-1">24</div>
+                    <div className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">Active learning programs</div>
                   </div>
 
                   <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
@@ -2951,12 +2951,12 @@ const AdminDashboard = () => {
                 {/* Program Categories */}
                 <div className="space-y-4 mb-8">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-[18px] leading-[26px] font-semibold text-[#1e2348]">Program Categories</h4>
+                    <h4 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-navy-950)]">Program Categories</h4>
                     <Button 
                       onClick={() => setShowCreateProgramModal(true)}
                       variant="outline" 
                       size="sm" 
-                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                      className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Create New Program
@@ -3035,8 +3035,8 @@ const AdminDashboard = () => {
                               <Icon className="w-7 h-7 text-white" />
                             </div>
                             <div className="flex-1">
-                              <h5 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{category.name}</h5>
-                              <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#4B5563]">
+                              <h5 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2">{category.name}</h5>
+                              <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">
                                 <span className="flex items-center gap-1.5">
                                   <BookOpen className="w-4 h-4" />
                                   {category.programs} programs
@@ -3063,7 +3063,7 @@ const AdminDashboard = () => {
                               }}
                               variant="outline" 
                               size="sm" 
-                              className="border-[#E5E7EB] hover:bg-white hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                              className="border-[var(--dq-surface-border-default)] hover:bg-white hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                             >
                               <Eye className="w-4 h-4 mr-1" />
                               View
@@ -3077,7 +3077,7 @@ const AdminDashboard = () => {
                               }}
                               variant="outline" 
                               size="sm" 
-                              className="border-[#E5E7EB] hover:bg-white hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                              className="border-[var(--dq-surface-border-default)] hover:bg-white hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                             >
                               <Edit className="w-4 h-4 mr-1" />
                               Edit
@@ -3090,8 +3090,8 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Program Builder Features */}
-                <div className="bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5 rounded-xl p-6 border border-[#ff6b4d]/20 mb-6">
-                  <h4 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-4">Program Builder Features</h4>
+                <div className="bg-gradient-to-r from-[var(--dq-navy-950)]/5 to-[var(--dq-orange-500)]/5 rounded-xl p-6 border border-[var(--dq-orange-500)]/20 mb-6">
+                  <h4 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-4">Program Builder Features</h4>
                   <div className="grid md:grid-cols-2 gap-4">
                     {[
                       { icon: Target, title: 'Learning Pathways', desc: 'Create structured learning journeys' },
@@ -3103,13 +3103,13 @@ const AdminDashboard = () => {
                     ].map((feature, index) => {
                       const Icon = feature.icon;
                       return (
-                        <div key={index} className="flex items-start gap-3 bg-white rounded-lg p-4 border border-[#E5E7EB]">
-                          <div className="w-10 h-10 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div key={index} className="flex items-start gap-3 bg-white rounded-lg p-4 border border-[var(--dq-surface-border-default)]">
+                          <div className="w-10 h-10 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-lg flex items-center justify-center flex-shrink-0">
                             <Icon className="w-5 h-5 text-white" />
                           </div>
                           <div>
-                            <div className="text-[14px] leading-[20px] font-semibold text-[#1e2348]">{feature.title}</div>
-                            <div className="text-[12px] leading-[18px] text-[#4B5563] mt-1">{feature.desc}</div>
+                            <div className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)]">{feature.title}</div>
+                            <div className="text-[12px] leading-[18px] text-[var(--dq-text-secondary)] mt-1">{feature.desc}</div>
                           </div>
                         </div>
                       );
@@ -3118,11 +3118,11 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Quick Actions */}
-                <div className="pt-6 border-t border-[#E5E7EB]">
+                <div className="pt-6 border-t border-[var(--dq-surface-border-default)]">
                   <div className="grid md:grid-cols-4 gap-4">
                     <Button 
                       onClick={() => setShowCreateProgramModal(true)}
-                      className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                      className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white shadow-sm"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       New Program
@@ -3135,7 +3135,7 @@ const AdminDashboard = () => {
                         });
                       }}
                       variant="outline" 
-                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                      className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                     >
                       <Copy className="w-4 h-4 mr-2" />
                       Duplicate Program
@@ -3148,7 +3148,7 @@ const AdminDashboard = () => {
                         });
                       }}
                       variant="outline" 
-                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                      className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Export Programs
@@ -3161,7 +3161,7 @@ const AdminDashboard = () => {
                         });
                       }}
                       variant="outline" 
-                      className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                      className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                     >
                       <Settings className="w-4 h-4 mr-2" />
                       Settings
@@ -3178,7 +3178,7 @@ const AdminDashboard = () => {
           {/* Governance Tab */}
           {activeTab === 'governance' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Content Governance & Compliance</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[var(--dq-navy-950)]">Content Governance & Compliance</h1>
               
               {/* Statistics */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -3188,35 +3188,35 @@ const AdminDashboard = () => {
                   { icon: ShieldIcon, label: 'Compliance Score', value: '94%', color: 'text-purple-600', bg: 'bg-purple-50' },
                   { icon: AlertTriangle, label: 'Issues Found', value: '12', color: 'text-red-600', bg: 'bg-red-50' },
                 ].map(stat => (
-                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div key={stat.label} className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                     <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
                       <stat.icon className={`w-7 h-7 ${stat.color}`} />
                     </div>
-                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
-                    <div className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{stat.label}</div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[var(--dq-navy-950)]">{stat.value}</div>
+                    <div className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-secondary)]">{stat.label}</div>
                   </div>
                 ))}
               </div>
 
               {/* Governance Sub-Tabs */}
               <Tabs value={governanceSubTab} onValueChange={(value: any) => setGovernanceSubTab(value)} className="w-full">
-                <TabsList className="bg-white border border-[#E5E7EB] p-1 rounded-xl mb-6">
-                  <TabsTrigger value="overview" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                <TabsList className="bg-white border border-[var(--dq-surface-border-default)] p-1 rounded-xl mb-6">
+                  <TabsTrigger value="overview" className="data-[state=active]:bg-[var(--dq-orange-500)] data-[state=active]:text-white">
                     Overview
                   </TabsTrigger>
-                  <TabsTrigger value="workflow" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                  <TabsTrigger value="workflow" className="data-[state=active]:bg-[var(--dq-orange-500)] data-[state=active]:text-white">
                     Workflow
                   </TabsTrigger>
-                  <TabsTrigger value="reporting" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                  <TabsTrigger value="reporting" className="data-[state=active]:bg-[var(--dq-orange-500)] data-[state=active]:text-white">
                     Reporting
                   </TabsTrigger>
-                  <TabsTrigger value="scanning" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                  <TabsTrigger value="scanning" className="data-[state=active]:bg-[var(--dq-orange-500)] data-[state=active]:text-white">
                     Scanning
                   </TabsTrigger>
-                  <TabsTrigger value="policies" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                  <TabsTrigger value="policies" className="data-[state=active]:bg-[var(--dq-orange-500)] data-[state=active]:text-white">
                     Policies
                   </TabsTrigger>
-                  <TabsTrigger value="activity" className="data-[state=active]:bg-[#ff6b4d] data-[state=active]:text-white">
+                  <TabsTrigger value="activity" className="data-[state=active]:bg-[var(--dq-orange-500)] data-[state=active]:text-white">
                     Activity
                   </TabsTrigger>
                 </TabsList>
@@ -3225,31 +3225,31 @@ const AdminDashboard = () => {
                 <TabsContent value="overview" className="mt-0">
                   <div className="grid lg:grid-cols-2 gap-6">
                 {/* Content CMS & Moderation */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-3 mb-5">
-                    <div className="w-14 h-14 rounded-xl bg-[#fff0ed] flex items-center justify-center flex-shrink-0">
-                      <FileText className="w-7 h-7 text-[#ff6b4d]" />
+                    <div className="w-14 h-14 rounded-xl bg-[var(--dq-orange-50)] flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-7 h-7 text-[var(--dq-orange-500)]" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Content CMS & Moderation</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[var(--dq-navy-950)]">Content CMS & Moderation</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Review and moderate course content for quality and compliance. Ensure all materials meet institutional standards.
                       </p>
                     </div>
                   </div>
                   <div className="space-y-3 mb-5">
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Pending Reviews</span>
-                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">28 items</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Pending Reviews</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)]">28 items</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Avg Review Time</span>
-                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">2.4 days</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Avg Review Time</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)]">2.4 days</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => setShowReviewContentModal(true)}
-                    className="w-full bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                    className="w-full bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white shadow-sm"
                   >
                     <FileText className="w-4 h-4 mr-2" />
                     Review Content
@@ -3257,30 +3257,30 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Accessibility Standards */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-3 mb-5">
                     <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
                       <Eye className="w-7 h-7 text-purple-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Accessibility Standards</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[var(--dq-navy-950)]">Accessibility Standards</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Ensure all content meets WCAG 2.1 AA accessibility requirements for inclusive learning.
                       </p>
                     </div>
                   </div>
                   <div className="space-y-3 mb-5">
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-5 h-5 text-emerald-600" />
-                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">WCAG 2.1 AA Compliant</span>
+                        <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">WCAG 2.1 AA Compliant</span>
                       </div>
                       <span className="text-[15px] leading-[22px] font-semibold text-emerald-600">89%</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
                       <div className="flex items-center gap-2">
                         <AlertTriangle className="w-5 h-5 text-amber-600" />
-                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Issues to Fix</span>
+                        <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Issues to Fix</span>
                       </div>
                       <span className="text-[15px] leading-[22px] font-semibold text-amber-600">34</span>
                     </div>
@@ -3288,7 +3288,7 @@ const AdminDashboard = () => {
                   <Button 
                     onClick={() => toast({ title: "Accessibility Audit", description: "Running accessibility audit..." })}
                     variant="outline"
-                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    className="w-full border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     Run Accessibility Audit
@@ -3296,32 +3296,32 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Copyright & IP Protection */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-3 mb-5">
                     <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
                       <ShieldIcon className="w-7 h-7 text-purple-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Copyright & IP Protection</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[var(--dq-navy-950)]">Copyright & IP Protection</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Monitor and protect intellectual property. Detect plagiarism and unauthorized content usage.
                       </p>
                     </div>
                   </div>
                   <div className="space-y-3 mb-5">
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Content Scanned</span>
-                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">1,247 items</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Content Scanned</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)]">1,247 items</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Violations Detected</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Violations Detected</span>
                       <span className="text-[15px] leading-[22px] font-semibold text-red-600">3</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Plagiarism Check", description: "Scanning content for plagiarism..." })}
                     variant="outline"
-                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    className="w-full border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                   >
                     <ShieldIcon className="w-4 h-4 mr-2" />
                     Run Plagiarism Check
@@ -3329,35 +3329,35 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Data Privacy & GDPR */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-3 mb-5">
                     <div className="w-14 h-14 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
                       <Lock className="w-7 h-7 text-green-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Data Privacy & GDPR</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[var(--dq-navy-950)]">Data Privacy & GDPR</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Ensure compliance with GDPR, FERPA, and other data protection regulations.
                       </p>
                     </div>
                   </div>
                   <div className="space-y-3 mb-5">
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-5 h-5 text-emerald-600" />
-                        <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">GDPR Compliant</span>
+                        <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">GDPR Compliant</span>
                       </div>
                       <span className="text-[15px] leading-[22px] font-semibold text-emerald-600">Yes</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Data Requests</span>
-                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">7 pending</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Data Requests</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)]">7 pending</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Privacy Audit", description: "Reviewing data privacy compliance..." })}
                     variant="outline"
-                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    className="w-full border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                   >
                     <Lock className="w-4 h-4 mr-2" />
                     View Privacy Dashboard
@@ -3365,32 +3365,32 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Quality Assurance */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-3 mb-5">
                     <div className="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
                       <Star className="w-7 h-7 text-amber-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Quality Assurance</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[var(--dq-navy-950)]">Quality Assurance</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Monitor content quality metrics and learner feedback to maintain high standards.
                       </p>
                     </div>
                   </div>
                   <div className="space-y-3 mb-5">
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Avg Quality Score</span>
-                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">4.6/5.0</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Avg Quality Score</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)]">4.6/5.0</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Courses Audited</span>
-                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">156/180</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Courses Audited</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)]">156/180</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Quality Report", description: "Generating quality assurance report..." })}
                     variant="outline"
-                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    className="w-full border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                   >
                     <Star className="w-4 h-4 mr-2" />
                     View Quality Reports
@@ -3398,32 +3398,32 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Version Control & Audit Trail */}
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-3 mb-5">
                     <div className="w-14 h-14 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
                       <Clock className="w-7 h-7 text-indigo-600" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[#1e2348]">Version Control & Audit Trail</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h3 className="text-[18px] leading-[24px] font-semibold mb-2 text-[var(--dq-navy-950)]">Version Control & Audit Trail</h3>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Track all content changes and maintain comprehensive audit logs for compliance.
                       </p>
                     </div>
                   </div>
                   <div className="space-y-3 mb-5">
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Content Versions</span>
-                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">2,847</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Content Versions</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)]">2,847</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
-                      <span className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Recent Changes</span>
-                      <span className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">142 today</span>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
+                      <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">Recent Changes</span>
+                      <span className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)]">142 today</span>
                     </div>
                   </div>
                   <Button 
                     onClick={() => toast({ title: "Audit Trail", description: "Loading audit trail..." })}
                     variant="outline"
-                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    className="w-full border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                   >
                     <Clock className="w-4 h-4 mr-2" />
                     View Audit Trail
@@ -3435,15 +3435,15 @@ const AdminDashboard = () => {
                 {/* Workflow Tab */}
                 <TabsContent value="workflow" className="mt-0">
                   {/* Content Workflow Management */}
-                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-6">
                       <div>
-                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Content Workflow Management</h2>
-                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Content Workflow Management</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                           Configure approval workflows and content lifecycle stages
                         </p>
                       </div>
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                         <Plus className="w-4 h-4 mr-2" />
                         Create Workflow
                       </Button>
@@ -3454,8 +3454,8 @@ const AdminDashboard = () => {
                         { 
                           stage: 'Draft', 
                           count: 45, 
-                          color: 'bg-[#F5F6FA]', 
-                          textColor: 'text-[#4B5563]',
+                          color: 'bg-[var(--dq-gray-50)]', 
+                          textColor: 'text-[var(--dq-text-secondary)]',
                           icon: FileText 
                         },
                         { 
@@ -3473,17 +3473,17 @@ const AdminDashboard = () => {
                           icon: CheckCircle 
                         },
                       ].map((workflow) => (
-                        <div key={workflow.stage} className={`${workflow.color} rounded-xl p-6 border border-[#E5E7EB]`}>
+                        <div key={workflow.stage} className={`${workflow.color} rounded-xl p-6 border border-[var(--dq-surface-border-default)]`}>
                           <div className="flex items-center gap-3 mb-4">
                             <workflow.icon className={`w-6 h-6 ${workflow.textColor}`} />
-                            <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{workflow.stage}</h3>
+                            <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)]">{workflow.stage}</h3>
                           </div>
-                          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348] mb-2">{workflow.count}</div>
-                          <p className="text-[13px] leading-[18px] font-normal text-[#4B5563]">Content items</p>
+                          <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-navy-950)] mb-2">{workflow.count}</div>
+                          <p className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-secondary)]">Content items</p>
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="mt-4 w-full hover:bg-white/50 hover:text-[#ff6b4d]"
+                            className="mt-4 w-full hover:bg-white/50 hover:text-[var(--dq-orange-500)]"
                           >
                             View Details →
                           </Button>
@@ -3496,17 +3496,17 @@ const AdminDashboard = () => {
                 {/* Reporting Tab */}
                 <TabsContent value="reporting" className="mt-0">
                   {/* Compliance Reporting */}
-                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-6">
                       <div>
-                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Compliance Reporting</h2>
-                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Compliance Reporting</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                           Generate and export compliance reports for audits and regulatory requirements
                         </p>
                       </div>
                       <Button 
                         variant="outline"
-                        className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                        className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                       >
                         <Download className="w-4 h-4 mr-2" />
                         Export Report
@@ -3520,14 +3520,14 @@ const AdminDashboard = () => {
                         { label: 'Copyright Clear', value: '97%', status: 'good', icon: ShieldIcon },
                         { label: 'Quality Score', value: '4.6/5', status: 'excellent', icon: Star },
                       ].map((metric) => (
-                        <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                        <div key={metric.label} className="bg-[var(--dq-gray-50)] rounded-xl p-5 border border-[var(--dq-surface-border-default)]">
                           <div className="flex items-center gap-2 mb-3">
-                            <metric.icon className="w-5 h-5 text-[#4B5563]" />
-                            <span className="text-[13px] leading-[18px] font-medium text-[#4B5563]">{metric.label}</span>
+                            <metric.icon className="w-5 h-5 text-[var(--dq-text-secondary)]" />
+                            <span className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-secondary)]">{metric.label}</span>
                           </div>
-                          <div className="text-[24px] leading-[32px] font-bold text-[#1e2348]">{metric.value}</div>
+                          <div className="text-[24px] leading-[32px] font-bold text-[var(--dq-navy-950)]">{metric.value}</div>
                           <div className={`inline-flex items-center gap-1 mt-2 px-2 py-1 rounded-lg text-[11px] font-semibold ${
-                            metric.status === 'excellent' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                            metric.status === 'excellent' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]' : 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]'
                           }`}>
                             {metric.status === 'excellent' ? '✓ Excellent' : '⚠ Needs Attention'}
                           </div>
@@ -3540,15 +3540,15 @@ const AdminDashboard = () => {
                 {/* Scanning Tab */}
                 <TabsContent value="scanning" className="mt-0">
                   {/* Automated Content Scanning */}
-                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-6">
                       <div>
-                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Automated Content Scanning</h2>
-                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Automated Content Scanning</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                           Configure automated scans for accessibility, plagiarism, and quality checks
                         </p>
                       </div>
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                         <Settings className="w-4 h-4 mr-2" />
                         Configure Scans
                       </Button>
@@ -3585,14 +3585,14 @@ const AdminDashboard = () => {
                           issues: 8 
                         },
                       ].map((scan) => (
-                        <div key={scan.name} className="flex items-center justify-between p-5 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:bg-[#e9e9ed] transition-colors">
+                        <div key={scan.name} className="flex items-center justify-between p-5 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-100)] transition-colors">
                           <div className="flex items-center gap-4 flex-1">
-                            <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center border border-[#E5E7EB]">
-                              <Settings className="w-6 h-6 text-[#ff6b4d]" />
+                            <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center border border-[var(--dq-surface-border-default)]">
+                              <Settings className="w-6 h-6 text-[var(--dq-orange-500)]" />
                             </div>
                             <div className="flex-1">
-                              <h3 className="text-[15px] leading-[22px] font-semibold text-[#1e2348] mb-1">{scan.name}</h3>
-                              <div className="flex items-center gap-4 text-[13px] leading-[18px] text-[#4B5563]">
+                              <h3 className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)] mb-1">{scan.name}</h3>
+                              <div className="flex items-center gap-4 text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">
                                 <span>Schedule: {scan.schedule}</span>
                                 <span>•</span>
                                 <span>Last run: {scan.lastRun}</span>
@@ -3601,8 +3601,8 @@ const AdminDashboard = () => {
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="text-right">
-                              <div className="text-[18px] leading-[24px] font-bold text-[#1e2348]">{scan.issues}</div>
-                              <div className="text-[12px] leading-[16px] text-[#4B5563]">Issues</div>
+                              <div className="text-[18px] leading-[24px] font-bold text-[var(--dq-navy-950)]">{scan.issues}</div>
+                              <div className="text-[12px] leading-[16px] text-[var(--dq-text-secondary)]">Issues</div>
                             </div>
                             <div className="flex items-center gap-2">
                               <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
@@ -3611,7 +3611,7 @@ const AdminDashboard = () => {
                             <Button 
                               variant="ghost" 
                               size="sm"
-                              className="hover:bg-white hover:text-[#ff6b4d]"
+                              className="hover:bg-white hover:text-[var(--dq-orange-500)]"
                             >
                               <Settings className="w-4 h-4" />
                             </Button>
@@ -3625,15 +3625,15 @@ const AdminDashboard = () => {
                 {/* Policies Tab */}
                 <TabsContent value="policies" className="mt-0">
                   {/* Policy & Standards Management */}
-                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                  <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-6">
                       <div>
-                        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Policy & Standards Management</h2>
-                        <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                        <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Policy & Standards Management</h2>
+                        <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                           Define and enforce content policies, guidelines, and institutional standards
                         </p>
                       </div>
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                      <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                         <Plus className="w-4 h-4 mr-2" />
                         Add Policy
                       </Button>
@@ -3674,20 +3674,20 @@ const AdminDashboard = () => {
                           color: 'bg-green-50'
                         },
                       ].map((policy) => (
-                        <div key={policy.title} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                        <div key={policy.title} className="bg-[var(--dq-gray-50)] rounded-xl p-6 border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                           <div className="flex items-start gap-4 mb-4">
                             <div className={`w-14 h-14 rounded-xl ${policy.color} flex items-center justify-center flex-shrink-0`}>
-                              <policy.icon className="w-7 h-7 text-[#1e2348]" />
+                              <policy.icon className="w-7 h-7 text-[var(--dq-navy-950)]" />
                             </div>
                             <div className="flex-1">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{policy.title}</h3>
-                              <p className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{policy.description}</p>
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2">{policy.title}</h3>
+                              <p className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-secondary)]">{policy.description}</p>
                             </div>
                           </div>
-                          <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB]">
+                          <div className="flex items-center justify-between pt-4 border-t border-[var(--dq-surface-border-default)]">
                             <div className="flex items-center gap-4">
-                              <div className="text-[13px] leading-[18px] text-[#4B5563]">
-                                <span className="font-semibold text-[#1e2348]">{policy.rules}</span> rules
+                              <div className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">
+                                <span className="font-semibold text-[var(--dq-navy-950)]">{policy.rules}</span> rules
                               </div>
                               <div className="flex items-center gap-2">
                                 <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
@@ -3697,7 +3697,7 @@ const AdminDashboard = () => {
                             <Button 
                               variant="ghost" 
                               size="sm"
-                              className="hover:bg-white hover:text-[#ff6b4d]"
+                              className="hover:bg-white hover:text-[var(--dq-orange-500)]"
                             >
                               Edit Policy →
                             </Button>
@@ -3713,8 +3713,8 @@ const AdminDashboard = () => {
                   {/* Recent Activity & Alerts */}
                   <div className="grid lg:grid-cols-2 gap-6">
                     {/* Recent Activity */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-5">Recent Activity</h2>
+                    <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)] mb-5">Recent Activity</h2>
                       <div className="space-y-4">
                         {[
                           { action: 'Content approved', item: 'Digital Marketing 101', time: '5 minutes ago', type: 'success' },
@@ -3723,32 +3723,32 @@ const AdminDashboard = () => {
                           { action: 'Quality review completed', item: 'Data Science Course', time: '2 hours ago', type: 'success' },
                           { action: 'Content updated', item: 'Machine Learning', time: '3 hours ago', type: 'info' },
                         ].map((activity, index) => (
-                          <div key={index} className="flex items-start gap-3 p-4 bg-[#F5F6FA] rounded-xl hover:bg-[#e9e9ed] transition-colors">
+                          <div key={index} className="flex items-start gap-3 p-4 bg-[var(--dq-gray-50)] rounded-xl hover:bg-[var(--dq-gray-100)] transition-colors">
                             <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${
                               activity.type === 'success' ? 'bg-emerald-500' :
                               activity.type === 'warning' ? 'bg-amber-500' :
-                              activity.type === 'error' ? 'bg-red-500' : 'bg-[#ff6b4d]'
+                              activity.type === 'error' ? 'bg-red-500' : 'bg-[var(--dq-orange-500)]'
                             }`}></div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-[14px] leading-[20px] font-medium text-[#1e2348]">{activity.action}</p>
-                              <p className="text-[13px] leading-[18px] text-[#4B5563] truncate">{activity.item}</p>
-                              <p className="text-[12px] leading-[16px] text-[#9CA3AF] mt-1">{activity.time}</p>
+                              <p className="text-[14px] leading-[20px] font-medium text-[var(--dq-navy-950)]">{activity.action}</p>
+                              <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] truncate">{activity.item}</p>
+                              <p className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">{activity.time}</p>
                             </div>
                           </div>
                         ))}
                       </div>
                       <Button 
                         variant="ghost" 
-                        className="w-full mt-4 hover:bg-[#F5F6FA] hover:text-[#ff6b4d]"
+                        className="w-full mt-4 hover:bg-[var(--dq-gray-50)] hover:text-[var(--dq-orange-500)]"
                       >
                         View All Activity →
                       </Button>
                     </div>
 
                     {/* Compliance Alerts */}
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                    <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                       <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Compliance Alerts</h2>
+                        <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Compliance Alerts</h2>
                         <Badge className="bg-red-100 text-red-700 hover:bg-red-100">12 Active</Badge>
                       </div>
                       <div className="space-y-4">
@@ -3799,11 +3799,11 @@ const AdminDashboard = () => {
                                 </span>
                               </div>
                             </div>
-                            <h3 className="text-[14px] leading-[20px] font-semibold text-[#1e2348] mb-1">{alert.title}</h3>
-                            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">{alert.course}</p>
+                            <h3 className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)] mb-1">{alert.title}</h3>
+                            <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mb-3">{alert.course}</p>
                             <Button 
                               size="sm"
-                              className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[12px] h-8"
+                              className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white text-[12px] h-8"
                             >
                               {alert.action} →
                             </Button>
@@ -3820,37 +3820,37 @@ const AdminDashboard = () => {
           {/* Organizations Tab */}
           {activeTab === 'organizations' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">Organization & Integration Management</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[var(--dq-navy-950)]">Organization & Integration Management</h1>
               
               {/* Statistics */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 {[
-                  { icon: Building2, label: 'Active Organizations', value: '24', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                  { icon: Building2, label: 'Active Organizations', value: '24', color: 'text-[var(--dq-orange-500)]', bg: 'bg-[var(--dq-orange-50)]' },
                   { icon: Users2, label: 'Total Users', value: '1,847', color: 'text-emerald-600', bg: 'bg-emerald-50' },
                   { icon: Globe, label: 'Active Integrations', value: '12', color: 'text-purple-600', bg: 'bg-purple-50' },
                   { icon: TrendingUp, label: 'API Calls Today', value: '45.2K', color: 'text-amber-600', bg: 'bg-amber-50' },
                 ].map(stat => (
-                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div key={stat.label} className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                     <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
                       <stat.icon className={`w-7 h-7 ${stat.color}`} />
                     </div>
-                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
-                    <div className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{stat.label}</div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[var(--dq-navy-950)]">{stat.value}</div>
+                    <div className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-secondary)]">{stat.label}</div>
                   </div>
                 ))}
               </div>
 
               <div className="space-y-8">
                 {/* Organization Management */}
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Organization Management</h2>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Organization Management</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Manage organizational accounts, multi-tenant access, and hierarchies
                       </p>
                     </div>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Organization
                     </Button>
@@ -3896,40 +3896,40 @@ const AdminDashboard = () => {
                         renewal: 'May 2026'
                       },
                     ].map((org, index) => (
-                      <div key={index} className="flex items-center justify-between p-6 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                      <div key={index} className="flex items-center justify-between p-6 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                         <div className="flex items-center gap-4 flex-1">
-                          <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center border border-[#E5E7EB]">
-                            <Building2 className="w-8 h-8 text-[#ff6b4d]" />
+                          <div className="w-16 h-16 rounded-xl bg-white flex items-center justify-center border border-[var(--dq-surface-border-default)]">
+                            <Building2 className="w-8 h-8 text-[var(--dq-orange-500)]" />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{org.name}</h3>
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)]">{org.name}</h3>
                               <Badge className={`${
-                                org.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                                org.status === 'active' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]' : 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]'
                               }`}>
                                 {org.status === 'active' ? 'Active' : 'Trial'}
                               </Badge>
-                              <Badge variant="outline" className="border-[#E5E7EB]">{org.type}</Badge>
+                              <Badge variant="outline" className="border-[var(--dq-surface-border-default)]">{org.type}</Badge>
                             </div>
-                            <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#4B5563]">
-                              <span><span className="font-semibold text-[#1e2348]">{org.users}</span> users</span>
+                            <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">
+                              <span><span className="font-semibold text-[var(--dq-navy-950)]">{org.users}</span> users</span>
                               <span>•</span>
-                              <span><span className="font-semibold text-[#1e2348]">{org.courses}</span> courses</span>
+                              <span><span className="font-semibold text-[var(--dq-navy-950)]">{org.courses}</span> courses</span>
                               <span>•</span>
-                              <span>Plan: <span className="font-semibold text-[#1e2348]">{org.plan}</span></span>
+                              <span>Plan: <span className="font-semibold text-[var(--dq-navy-950)]">{org.plan}</span></span>
                               <span>•</span>
                               <span>Renewal: {org.renewal}</span>
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Button variant="outline" size="sm" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                          <Button variant="outline" size="sm" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                             <Settings className="w-4 h-4 mr-2" />
                             Manage
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                              <Button variant="ghost" size="sm" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </DropdownMenuTrigger>
@@ -3948,15 +3948,15 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* External Integrations */}
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">External Integrations</h2>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">External Integrations</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Configure integrations with external systems, LMS platforms, and APIs
                       </p>
                     </div>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Integration
                     </Button>
@@ -3970,8 +3970,8 @@ const AdminDashboard = () => {
                         status: 'connected',
                         lastSync: '2 hours ago',
                         icon: BookOpen,
-                        color: 'bg-[#fff0ed]',
-                        iconColor: 'text-[#ff6b4d]'
+                        color: 'bg-[var(--dq-orange-50)]',
+                        iconColor: 'text-[var(--dq-orange-500)]'
                       },
                       {
                         name: 'Zoom',
@@ -4019,14 +4019,14 @@ const AdminDashboard = () => {
                         iconColor: 'text-pink-600'
                       },
                     ].map((integration, index) => (
-                      <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                      <div key={index} className="bg-[var(--dq-gray-50)] rounded-xl p-6 border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                         <div className="flex items-start gap-4 mb-4">
                           <div className={`w-14 h-14 rounded-xl ${integration.color} flex items-center justify-center flex-shrink-0`}>
                             <integration.icon className={`w-7 h-7 ${integration.iconColor}`} />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348]">{integration.name}</h3>
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)]">{integration.name}</h3>
                               <div className={`flex items-center gap-1 ${
                                 integration.status === 'connected' ? 'text-emerald-600' : 'text-amber-600'
                               }`}>
@@ -4036,15 +4036,15 @@ const AdminDashboard = () => {
                                 <span className="text-[12px] leading-[16px] font-medium capitalize">{integration.status}</span>
                               </div>
                             </div>
-                            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-1">{integration.type}</p>
-                            <p className="text-[12px] leading-[16px] text-[#9CA3AF]">Last sync: {integration.lastSync}</p>
+                            <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mb-1">{integration.type}</p>
+                            <p className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)]">Last sync: {integration.lastSync}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 pt-4 border-t border-[#E5E7EB]">
+                        <div className="flex items-center gap-2 pt-4 border-t border-[var(--dq-surface-border-default)]">
                           <Button 
                             variant="outline" 
                             size="sm"
-                            className="flex-1 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                            className="flex-1 border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                           >
                             <Settings className="w-4 h-4 mr-2" />
                             Configure
@@ -4052,7 +4052,7 @@ const AdminDashboard = () => {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            className="hover:bg-white hover:text-[#ff6b4d]"
+                            className="hover:bg-white hover:text-[var(--dq-orange-500)]"
                           >
                             Test
                           </Button>
@@ -4063,15 +4063,15 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* API Management */}
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">API Management</h2>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">API Management</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Manage API keys, webhooks, and developer access
                       </p>
                     </div>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                       <Plus className="w-4 h-4 mr-2" />
                       Generate API Key
                     </Button>
@@ -4083,12 +4083,12 @@ const AdminDashboard = () => {
                       { label: 'Webhooks', value: '12', icon: Send },
                       { label: 'Rate Limit', value: '10K/hr', icon: TrendingUp },
                     ].map((metric) => (
-                      <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                      <div key={metric.label} className="bg-[var(--dq-gray-50)] rounded-xl p-5 border border-[var(--dq-surface-border-default)]">
                         <div className="flex items-center gap-2 mb-3">
-                          <metric.icon className="w-5 h-5 text-[#4B5563]" />
-                          <span className="text-[13px] leading-[18px] font-medium text-[#4B5563]">{metric.label}</span>
+                          <metric.icon className="w-5 h-5 text-[var(--dq-text-secondary)]" />
+                          <span className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-secondary)]">{metric.label}</span>
                         </div>
-                        <div className="text-[28px] leading-[36px] font-bold text-[#1e2348]">{metric.value}</div>
+                        <div className="text-[28px] leading-[36px] font-bold text-[var(--dq-navy-950)]">{metric.value}</div>
                       </div>
                     ))}
                   </div>
@@ -4100,14 +4100,14 @@ const AdminDashboard = () => {
                       { name: 'Development API Key', created: 'Feb 20, 2026', lastUsed: '1 day ago', status: 'active' },
                       { name: 'Testing API Key', created: 'Mar 10, 2026', lastUsed: 'Never', status: 'inactive' },
                     ].map((key, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB]">
+                      <div key={index} className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)]">
                         <div className="flex items-center gap-4 flex-1">
-                          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
-                            <LinkIcon className="w-5 h-5 text-[#ff6b4d]" />
+                          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-[var(--dq-surface-border-default)]">
+                            <LinkIcon className="w-5 h-5 text-[var(--dq-orange-500)]" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="text-[14px] leading-[20px] font-semibold text-[#1e2348] mb-1">{key.name}</h3>
-                            <div className="flex items-center gap-4 text-[12px] leading-[16px] text-[#4B5563]">
+                            <h3 className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)] mb-1">{key.name}</h3>
+                            <div className="flex items-center gap-4 text-[12px] leading-[16px] text-[var(--dq-text-secondary)]">
                               <span>Created: {key.created}</span>
                               <span>•</span>
                               <span>Last used: {key.lastUsed}</span>
@@ -4116,14 +4116,14 @@ const AdminDashboard = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge className={`${
-                            key.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-[#F5F6FA] text-[#9CA3AF]'
+                            key.status === 'active' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]' : 'bg-[var(--dq-gray-50)] text-[var(--dq-text-disabled)]'
                           }`}>
                             {key.status}
                           </Badge>
-                          <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                          <Button variant="ghost" size="sm" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">
                             <Copy className="w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                          <Button variant="ghost" size="sm" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">
                             <Settings className="w-4 h-4" />
                           </Button>
                         </div>
@@ -4133,15 +4133,15 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* SSO Configuration */}
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Single Sign-On (SSO)</h2>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+                      <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Single Sign-On (SSO)</h2>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)]">
                         Configure SAML, OAuth, and other SSO providers for seamless authentication
                       </p>
                     </div>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                       <Plus className="w-4 h-4 mr-2" />
                       Add SSO Provider
                     </Button>
@@ -4153,25 +4153,25 @@ const AdminDashboard = () => {
                       { provider: 'Microsoft Azure AD', type: 'SAML 2.0', users: 320, status: 'active' },
                       { provider: 'Okta', type: 'SAML 2.0', users: 180, status: 'active' },
                     ].map((sso, index) => (
-                      <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB]">
+                      <div key={index} className="bg-[var(--dq-gray-50)] rounded-xl p-6 border border-[var(--dq-surface-border-default)]">
                         <div className="flex items-center gap-2 mb-4">
-                          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
-                            <ShieldIcon className="w-5 h-5 text-[#ff6b4d]" />
+                          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border border-[var(--dq-surface-border-default)]">
+                            <ShieldIcon className="w-5 h-5 text-[var(--dq-orange-500)]" />
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
                             <span className="text-[12px] leading-[16px] font-medium text-emerald-600">Active</span>
                           </div>
                         </div>
-                        <h3 className="text-[15px] leading-[22px] font-semibold text-[#1e2348] mb-1">{sso.provider}</h3>
-                        <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">{sso.type}</p>
-                        <div className="text-[12px] leading-[16px] text-[#4B5563]">
-                          <span className="font-semibold text-[#1e2348]">{sso.users}</span> users authenticated
+                        <h3 className="text-[15px] leading-[22px] font-semibold text-[var(--dq-navy-950)] mb-1">{sso.provider}</h3>
+                        <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mb-3">{sso.type}</p>
+                        <div className="text-[12px] leading-[16px] text-[var(--dq-text-secondary)]">
+                          <span className="font-semibold text-[var(--dq-navy-950)]">{sso.users}</span> users authenticated
                         </div>
                         <Button 
                           variant="outline" 
                           size="sm"
-                          className="w-full mt-4 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                          className="w-full mt-4 border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                         >
                           Configure
                         </Button>
@@ -4187,61 +4187,61 @@ const AdminDashboard = () => {
           {activeTab === 'certification' && (
             <div className="space-y-8">
               <div>
-                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[#1e2348]">Certification & Customer Success</h1>
-                <p className="text-[15px] leading-[22px] font-normal text-[#4B5563]">Manage certificates, badges, and learner achievements</p>
+                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[var(--dq-navy-950)]">Certification & Customer Success</h1>
+                <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-secondary)]">Manage certificates, badges, and learner achievements</p>
               </div>
 
               {/* Statistics Overview */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                    <div className="w-14 h-14 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
                       <Award className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">2,847</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Certificates Issued</div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">2,847</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Certificates Issued</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <TrendingUp className="w-4 h-4" />
                     <span>+234 this month</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
                       <TrendingUp className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">78%</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Completion Rate</div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">78%</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Completion Rate</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <ArrowUpRight className="w-4 h-4" />
                     <span>+5% from last month</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-sm">
                       <Users className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">1,234</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Active Learners</div>
-                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[#4B5563] font-medium">
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">1,234</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Active Learners</div>
+                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-secondary)] font-medium">
                     <span>Pursuing certifications</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-6 border border-[#E5E7EB] shadow-md hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
                       <Star className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[#1e2348] mb-1">4.7★</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[#4B5563]">Avg Satisfaction</div>
+                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">4.7★</div>
+                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Avg Satisfaction</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-amber-600 font-medium">
                     <Star className="w-4 h-4 fill-amber-600" />
                     <span>Based on 1,847 reviews</span>
@@ -4250,20 +4250,20 @@ const AdminDashboard = () => {
               </div>
 
               {/* Certificate Template Management */}
-              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
                     <Award className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Certificate Template Management</h2>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                    <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Certificate Template Management</h2>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                       Design and manage certificate templates for courses and achievements
                     </p>
                   </div>
                   <Button 
                     onClick={() => setShowCreateTemplateModal(true)}
-                    className="bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                    className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white shadow-sm"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Create Template
@@ -4280,7 +4280,7 @@ const AdminDashboard = () => {
                       issued: 1847,
                       status: 'active',
                       preview: '📜',
-                      gradient: 'from-[#ff6b4d]/10 to-[#ff6b4d]/5'
+                      gradient: 'from-[var(--dq-orange-500)]/10 to-[var(--dq-orange-500)]/5'
                     },
                     { 
                       name: 'Professional Achievement Badge', 
@@ -4328,30 +4328,30 @@ const AdminDashboard = () => {
                       gradient: 'from-pink-50 to-pink-100/50'
                     },
                   ].map((template, index) => (
-                    <div key={index} className={`bg-gradient-to-br ${template.gradient} rounded-xl p-6 border border-[#E5E7EB] hover:shadow-md transition-all cursor-pointer`}>
+                    <div key={index} className={`bg-gradient-to-br ${template.gradient} rounded-xl p-6 border border-[var(--dq-surface-border-default)] hover:shadow-md transition-all cursor-pointer`}>
                       <div className="flex items-start justify-between mb-4">
                         <div className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl">
                           {template.preview}
                         </div>
                         <Badge className={`${
-                          template.status === 'active' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-amber-100 text-amber-700 border-amber-200'
+                          template.status === 'active' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] border-emerald-200' : 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)] border-amber-200'
                         } border`}>
                           {template.status}
                         </Badge>
                       </div>
-                      <h3 className="text-[16px] leading-[24px] font-semibold text-[#1e2348] mb-2">{template.name}</h3>
+                      <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2">{template.name}</h3>
                       <div className="flex items-center gap-2 mb-4">
-                        <Badge variant="outline" className="border-[#E5E7EB] text-[#4B5563] bg-white">{template.type}</Badge>
+                        <Badge variant="outline" className="border-[var(--dq-surface-border-default)] text-[var(--dq-text-secondary)] bg-white">{template.type}</Badge>
                       </div>
-                      <div className="flex items-center justify-between text-[13px] text-[#4B5563] mb-4">
-                        <span><span className="font-semibold text-[#1e2348]">{template.courses}</span> courses</span>
-                        <span><span className="font-semibold text-[#1e2348]">{template.issued}</span> issued</span>
+                      <div className="flex items-center justify-between text-[13px] text-[var(--dq-text-secondary)] mb-4">
+                        <span><span className="font-semibold text-[var(--dq-navy-950)]">{template.courses}</span> courses</span>
+                        <span><span className="font-semibold text-[var(--dq-navy-950)]">{template.issued}</span> issued</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          className="flex-1 border-[#E5E7EB] bg-white hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                          className="flex-1 border-[var(--dq-surface-border-default)] bg-white hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                           onClick={() => {
                             setPreviewTemplate(template);
                             toast({
@@ -4366,7 +4366,7 @@ const AdminDashboard = () => {
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="bg-white hover:bg-[#fff0ed] hover:text-[#ff6b4d]"
+                          className="bg-white hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]"
                           onClick={() => {
                             setEditingTemplate(template);
                             toast({
@@ -4385,14 +4385,14 @@ const AdminDashboard = () => {
 
               {/* Certificate Issuance & Verification */}
               <div className="grid lg:grid-cols-2 gap-6">
-                <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                   <div className="flex items-start gap-3 mb-6">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center flex-shrink-0 shadow-sm">
                       <CheckCircle className="w-7 h-7 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Certificate Issuance</h2>
-                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)] mb-2">Certificate Issuance</h2>
+                      <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                         Automated and manual certificate generation and distribution
                       </p>
                     </div>
@@ -4405,18 +4405,18 @@ const AdminDashboard = () => {
                       { label: 'Email Delivery', value: 'Enabled', status: 'active' },
                       { label: 'Blockchain Verification', value: 'Enabled', status: 'active' },
                     ].map((setting, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:bg-[#E5E7EB] transition-colors">
-                        <span className="text-[14px] font-medium text-[#1e2348]">{setting.label}</span>
+                      <div key={index} className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-surface-border-default)] transition-colors">
+                        <span className="text-[14px] font-medium text-[var(--dq-navy-950)]">{setting.label}</span>
                         <div className="flex items-center gap-3">
                           <Badge className={`${
-                            setting.status === 'active' ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-600 border-gray-200'
+                            setting.status === 'active' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] border-emerald-200' : 'bg-gray-100 text-gray-600 border-gray-200'
                           } border`}>
                             {setting.value}
                           </Badge>
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="hover:bg-white hover:text-[#ff6b4d]"
+                            className="hover:bg-white hover:text-[var(--dq-orange-500)]"
                             onClick={() => {
                               toast({
                                 title: "Settings",
@@ -4433,21 +4433,21 @@ const AdminDashboard = () => {
 
                   <Button 
                     onClick={() => setShowIssuanceRulesModal(true)}
-                    className="w-full mt-6 bg-[#ff6b4d] hover:bg-[#e66045] text-white shadow-sm"
+                    className="w-full mt-6 bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white shadow-sm"
                   >
                     <Settings className="w-4 h-4 mr-2" />
                     Configure Issuance Rules
                   </Button>
                 </div>
 
-                <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                   <div className="flex items-start gap-3 mb-6">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-sm">
                       <Shield className="w-7 h-7 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Certificate Verification</h2>
-                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)] mb-2">Certificate Verification</h2>
+                      <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                         Verify authenticity of issued certificates
                       </p>
                     </div>
@@ -4476,13 +4476,13 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] text-center">
-                        <div className="text-[24px] font-bold text-[#1e2348] mb-1">2,847</div>
-                        <div className="text-[12px] text-[#4B5563]">Verified Today</div>
+                      <div className="p-4 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] text-center">
+                        <div className="text-[24px] font-bold text-[var(--dq-navy-950)] mb-1">2,847</div>
+                        <div className="text-[12px] text-[var(--dq-text-secondary)]">Verified Today</div>
                       </div>
-                      <div className="p-4 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] text-center">
-                        <div className="text-[24px] font-bold text-[#1e2348] mb-1">99.8%</div>
-                        <div className="text-[12px] text-[#4B5563]">Success Rate</div>
+                      <div className="p-4 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] text-center">
+                        <div className="text-[24px] font-bold text-[var(--dq-navy-950)] mb-1">99.8%</div>
+                        <div className="text-[12px] text-[var(--dq-text-secondary)]">Success Rate</div>
                       </div>
                     </div>
                   </div>
@@ -4490,7 +4490,7 @@ const AdminDashboard = () => {
                   <Button 
                     onClick={() => setShowVerifyCertificateModal(true)}
                     variant="outline"
-                    className="w-full border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]"
+                    className="w-full border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]"
                   >
                     <Shield className="w-4 h-4 mr-2" />
                     Verify Certificate
@@ -4499,18 +4499,18 @@ const AdminDashboard = () => {
               </div>
 
               {/* Customer Success Tracking */}
-              <div className="bg-white rounded-2xl p-8 shadow-md border border-[#E5E7EB] hover:shadow-lg transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
                     <TrendingUp className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Customer Success Tracking</h2>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                    <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Customer Success Tracking</h2>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                       Monitor learner success metrics, engagement, and satisfaction
                     </p>
                   </div>
-                  <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                  <Button variant="outline" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                     <Download className="w-4 h-4 mr-2" />
                     Export Report
                   </Button>
@@ -4524,12 +4524,12 @@ const AdminDashboard = () => {
                     { icon: TrendingUp, label: 'Career Advancement', value: '67%', trend: '+12%', up: true },
                     { icon: Star, label: 'NPS Score', value: '72', trend: '+8', up: true },
                   ].map((metric) => (
-                    <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-5 border border-[#E5E7EB]">
+                    <div key={metric.label} className="bg-[var(--dq-gray-50)] rounded-xl p-5 border border-[var(--dq-surface-border-default)]">
                       <div className="flex items-center gap-2 mb-3">
-                        <metric.icon className="w-5 h-5 text-[#4B5563]" />
-                        <span className="text-[12px] font-medium text-[#4B5563]">{metric.label}</span>
+                        <metric.icon className="w-5 h-5 text-[var(--dq-text-secondary)]" />
+                        <span className="text-[12px] font-medium text-[var(--dq-text-secondary)]">{metric.label}</span>
                       </div>
-                      <div className="text-[24px] font-bold text-[#1e2348] mb-1">{metric.value}</div>
+                      <div className="text-[24px] font-bold text-[var(--dq-navy-950)] mb-1">{metric.value}</div>
                       <div className={`text-[12px] font-medium ${metric.up ? 'text-emerald-600' : 'text-red-600'}`}>
                         {metric.trend}
                       </div>
@@ -4539,19 +4539,19 @@ const AdminDashboard = () => {
 
                 {/* Learner Journey Stages */}
                 <div className="mb-8">
-                  <h3 className="text-[18px] leading-[24px] font-semibold text-[#1e2348] mb-4">Learner Journey Stages</h3>
+                  <h3 className="text-[18px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-4">Learner Journey Stages</h3>
                   <div className="grid md:grid-cols-5 gap-4">
                     {[
                       { stage: 'Onboarding', count: 234, color: 'bg-purple-500' },
-                      { stage: 'Active Learning', count: 892, color: 'bg-[#ff6b4d]' },
+                      { stage: 'Active Learning', count: 892, color: 'bg-[var(--dq-orange-500)]' },
                       { stage: 'Near Completion', count: 156, color: 'bg-amber-500' },
                       { stage: 'Completed', count: 1847, color: 'bg-emerald-500' },
                       { stage: 'At Risk', count: 67, color: 'bg-red-500' },
                     ].map((stage) => (
-                      <div key={stage.stage} className="bg-white rounded-xl p-5 border-2 border-[#E5E7EB] hover:shadow-md transition-shadow">
+                      <div key={stage.stage} className="bg-white rounded-xl p-5 border-2 border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                         <div className={`w-3 h-3 rounded-full ${stage.color} mb-3`}></div>
-                        <div className="text-[28px] font-bold text-[#1e2348] mb-1">{stage.count}</div>
-                        <div className="text-[13px] text-[#4B5563]">{stage.stage}</div>
+                        <div className="text-[28px] font-bold text-[var(--dq-navy-950)] mb-1">{stage.count}</div>
+                        <div className="text-[13px] text-[var(--dq-text-secondary)]">{stage.stage}</div>
                       </div>
                     ))}
                   </div>
@@ -4559,7 +4559,7 @@ const AdminDashboard = () => {
 
                 {/* Recent Success Stories */}
                 <div>
-                  <h3 className="text-[18px] leading-[24px] font-semibold text-[#1e2348] mb-4">Recent Success Stories</h3>
+                  <h3 className="text-[18px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-4">Recent Success Stories</h3>
                   <div className="space-y-3">
                     {[
                       { 
@@ -4584,20 +4584,20 @@ const AdminDashboard = () => {
                         rating: 4
                       },
                     ].map((story, index) => (
-                      <div key={index} className="flex items-start gap-4 p-5 bg-[#F5F6FA] rounded-xl border border-[#E5E7EB] hover:shadow-md transition-shadow">
-                        <div className="w-12 h-12 rounded-full bg-[#ff6b4d] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                      <div key={index} className="flex items-start gap-4 p-5 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
+                        <div className="w-12 h-12 rounded-full bg-[var(--dq-orange-500)] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                           {story.learner.charAt(0)}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-start justify-between mb-2">
                             <div>
-                              <h4 className="text-[15px] font-semibold text-[#1e2348]">{story.learner}</h4>
-                              <p className="text-[13px] text-[#4B5563]">{story.achievement}</p>
+                              <h4 className="text-[15px] font-semibold text-[var(--dq-navy-950)]">{story.learner}</h4>
+                              <p className="text-[13px] text-[var(--dq-text-secondary)]">{story.achievement}</p>
                             </div>
-                            <span className="text-[12px] text-[#9CA3AF]">{story.date}</span>
+                            <span className="text-[12px] text-[var(--dq-text-disabled)]">{story.date}</span>
                           </div>
                           <div className="flex items-center gap-2 mb-2">
-                            <Badge className="bg-emerald-100 text-emerald-700">
+                            <Badge className="bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]">
                               <TrendingUp className="w-3 h-3 mr-1" />
                               {story.outcome}
                             </Badge>
@@ -4615,15 +4615,15 @@ const AdminDashboard = () => {
               </div>
 
               {/* Badge & Micro-Credentials */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+              <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Digital Badges & Micro-Credentials</h2>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Digital Badges & Micro-Credentials</h2>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                       Manage stackable credentials and achievement badges
                     </p>
                   </div>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white" onClick={() => setShowCreateBadgeModal(true)}>
+                  <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white" onClick={() => setShowCreateBadgeModal(true)}>
                     <Plus className="w-4 h-4 mr-2" />
                     Create Badge
                   </Button>
@@ -4634,13 +4634,13 @@ const AdminDashboard = () => {
                     { name: 'AI Mastery', earned: 234, icon: '🤖', color: 'bg-purple-50' },
                     { name: 'Leadership Excellence', earned: 189, icon: '👑', color: 'bg-amber-50' },
                     { name: 'Innovation Champion', earned: 156, icon: '💡', color: 'bg-emerald-50' },
-                    { name: 'Digital Pioneer', earned: 298, icon: '🚀', color: 'bg-[#fff0ed]' },
+                    { name: 'Digital Pioneer', earned: 298, icon: '🚀', color: 'bg-[var(--dq-orange-50)]' },
                   ].map((badge, index) => (
-                    <div key={index} className={`${badge.color} rounded-xl p-6 border border-[#E5E7EB] text-center hover:shadow-md transition-shadow`}>
+                    <div key={index} className={`${badge.color} rounded-xl p-6 border border-[var(--dq-surface-border-default)] text-center hover:shadow-md transition-shadow`}>
                       <div className="text-5xl mb-3">{badge.icon}</div>
-                      <h3 className="text-[15px] font-semibold text-[#1e2348] mb-2">{badge.name}</h3>
-                      <div className="text-[13px] text-[#4B5563]">
-                        <span className="font-bold text-[#1e2348]">{badge.earned}</span> earned
+                      <h3 className="text-[15px] font-semibold text-[var(--dq-navy-950)] mb-2">{badge.name}</h3>
+                      <div className="text-[13px] text-[var(--dq-text-secondary)]">
+                        <span className="font-bold text-[var(--dq-navy-950)]">{badge.earned}</span> earned
                       </div>
                     </div>
                   ))}
@@ -4651,26 +4651,26 @@ const AdminDashboard = () => {
               {showCreateTemplateModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                   <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
-                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Create Certificate Template</h2>
-                      <button onClick={() => setShowCreateTemplateModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
-                        <X className="w-5 h-5 text-[#4B5563]" />
+                    <div className="sticky top-0 bg-white border-b border-[var(--dq-surface-border-default)] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[var(--dq-navy-950)]">Create Certificate Template</h2>
+                      <button onClick={() => setShowCreateTemplateModal(false)} className="p-2 hover:bg-[var(--dq-gray-50)] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[var(--dq-text-secondary)]" />
                       </button>
                     </div>
                     <div className="p-6 space-y-6">
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Template Name</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Template Name</label>
                         <input
                           type="text"
                           value={certificateTemplateForm.name}
                           onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, name: e.target.value })}
-                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                           placeholder="e.g., Professional Certificate"
                         />
                       </div>
                       
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Template Type</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Template Type</label>
                         <div className="grid grid-cols-3 gap-3">
                           {['course', 'badge', 'specialization', 'micro', 'executive', 'team'].map((type) => (
                             <button
@@ -4678,8 +4678,8 @@ const AdminDashboard = () => {
                               onClick={() => setCertificateTemplateForm({ ...certificateTemplateForm, type: type as any })}
                               className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
                                 certificateTemplateForm.type === type
-                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
-                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                                  ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
+                                  : 'border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30'
                               }`}
                             >
                               {type}
@@ -4689,22 +4689,22 @@ const AdminDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Description</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Description</label>
                         <textarea
                           value={certificateTemplateForm.description}
                           onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, description: e.target.value })}
-                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[100px]"
+                          className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)] min-h-[100px]"
                           placeholder="Describe the certificate template..."
                         />
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Orientation</label>
+                          <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Orientation</label>
                           <select
                             value={certificateTemplateForm.orientation}
                             onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, orientation: e.target.value as any })}
-                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                            className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                           >
                             <option value="landscape">Landscape</option>
                             <option value="portrait">Portrait</option>
@@ -4712,11 +4712,11 @@ const AdminDashboard = () => {
                         </div>
 
                         <div>
-                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Border Style</label>
+                          <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Border Style</label>
                           <select
                             value={certificateTemplateForm.borderStyle}
                             onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, borderStyle: e.target.value as any })}
-                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                            className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                           >
                             <option value="classic">Classic</option>
                             <option value="modern">Modern</option>
@@ -4727,7 +4727,7 @@ const AdminDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-3">Include Elements</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-3">Include Elements</label>
                         <div className="space-y-3">
                           {[
                             { key: 'includeQRCode', label: 'QR Code for Verification' },
@@ -4735,29 +4735,29 @@ const AdminDashboard = () => {
                             { key: 'includeDate', label: 'Issue Date' },
                             { key: 'includeCredentialID', label: 'Credential ID' },
                           ].map((element) => (
-                            <label key={element.key} className="flex items-center gap-3 p-3 bg-[#F5F6FA] rounded-lg cursor-pointer hover:bg-[#E5E7EB] transition-colors">
+                            <label key={element.key} className="flex items-center gap-3 p-3 bg-[var(--dq-gray-50)] rounded-lg cursor-pointer hover:bg-[var(--dq-surface-border-default)] transition-colors">
                               <input
                                 type="checkbox"
                                 checked={certificateTemplateForm[element.key as keyof typeof certificateTemplateForm] as boolean}
                                 onChange={(e) => setCertificateTemplateForm({ ...certificateTemplateForm, [element.key]: e.target.checked })}
-                                className="w-5 h-5 text-[#ff6b4d] rounded focus:ring-[#ff6b4d]"
+                                className="w-5 h-5 text-[var(--dq-orange-500)] rounded focus:ring-[var(--dq-orange-500)]"
                               />
-                              <span className="text-[14px] text-[#1e2348]">{element.label}</span>
+                              <span className="text-[14px] text-[var(--dq-navy-950)]">{element.label}</span>
                             </label>
                           ))}
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                      <div className="flex items-center gap-3 pt-4 border-t border-[var(--dq-surface-border-default)]">
                         <Button
                           variant="outline"
-                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          className="flex-1 border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)]"
                           onClick={() => setShowCreateTemplateModal(false)}
                         >
                           Cancel
                         </Button>
                         <Button
-                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          className="flex-1 bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white"
                           onClick={() => {
                             toast({ title: "Template Created", description: `"${certificateTemplateForm.name}" has been created successfully.` });
                             setShowCreateTemplateModal(false);
@@ -4787,26 +4787,26 @@ const AdminDashboard = () => {
               {showCreateBadgeModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                   <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
-                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Create Digital Badge</h2>
-                      <button onClick={() => setShowCreateBadgeModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
-                        <X className="w-5 h-5 text-[#4B5563]" />
+                    <div className="sticky top-0 bg-white border-b border-[var(--dq-surface-border-default)] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[var(--dq-navy-950)]">Create Digital Badge</h2>
+                      <button onClick={() => setShowCreateBadgeModal(false)} className="p-2 hover:bg-[var(--dq-gray-50)] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[var(--dq-text-secondary)]" />
                       </button>
                     </div>
                     <div className="p-6 space-y-6">
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Badge Name</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Badge Name</label>
                         <input
                           type="text"
                           value={badgeForm.name}
                           onChange={(e) => setBadgeForm({ ...badgeForm, name: e.target.value })}
-                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                           placeholder="e.g., AI Mastery"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Badge Icon</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Badge Icon</label>
                         <div className="grid grid-cols-6 gap-3">
                           {['🏆', '⭐', '🎓', '💡', '🚀', '👑', '🤖', '💪', '🎯', '🔥', '✨', '🌟'].map((emoji) => (
                             <button
@@ -4814,8 +4814,8 @@ const AdminDashboard = () => {
                               onClick={() => setBadgeForm({ ...badgeForm, icon: emoji })}
                               className={`text-3xl p-4 rounded-lg border-2 transition-all ${
                                 badgeForm.icon === emoji
-                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10'
-                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                                  ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10'
+                                  : 'border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30'
                               }`}
                             >
                               {emoji}
@@ -4825,7 +4825,7 @@ const AdminDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Category</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Category</label>
                         <div className="grid grid-cols-2 gap-3">
                           {['achievement', 'skill', 'milestone', 'special'].map((category) => (
                             <button
@@ -4833,8 +4833,8 @@ const AdminDashboard = () => {
                               onClick={() => setBadgeForm({ ...badgeForm, category: category as any })}
                               className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
                                 badgeForm.category === category
-                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
-                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                                  ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
+                                  : 'border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30'
                               }`}
                             >
                               {category}
@@ -4844,56 +4844,56 @@ const AdminDashboard = () => {
                       </div>
 
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Description</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Description</label>
                         <textarea
                           value={badgeForm.description}
                           onChange={(e) => setBadgeForm({ ...badgeForm, description: e.target.value })}
-                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[80px]"
+                          className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)] min-h-[80px]"
                           placeholder="Describe what this badge represents..."
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Earning Criteria</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Earning Criteria</label>
                         <textarea
                           value={badgeForm.criteria}
                           onChange={(e) => setBadgeForm({ ...badgeForm, criteria: e.target.value })}
-                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d] min-h-[80px]"
+                          className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)] min-h-[80px]"
                           placeholder="What must learners do to earn this badge?"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Points Value</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Points Value</label>
                         <input
                           type="number"
                           value={badgeForm.points}
                           onChange={(e) => setBadgeForm({ ...badgeForm, points: parseInt(e.target.value) })}
-                          className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                          className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                           min="0"
                         />
                       </div>
 
-                      <label className="flex items-center gap-3 p-3 bg-[#F5F6FA] rounded-lg cursor-pointer hover:bg-[#E5E7EB] transition-colors">
+                      <label className="flex items-center gap-3 p-3 bg-[var(--dq-gray-50)] rounded-lg cursor-pointer hover:bg-[var(--dq-surface-border-default)] transition-colors">
                         <input
                           type="checkbox"
                           checked={badgeForm.stackable}
                           onChange={(e) => setBadgeForm({ ...badgeForm, stackable: e.target.checked })}
-                          className="w-5 h-5 text-[#ff6b4d] rounded focus:ring-[#ff6b4d]"
+                          className="w-5 h-5 text-[var(--dq-orange-500)] rounded focus:ring-[var(--dq-orange-500)]"
                         />
-                        <span className="text-[14px] text-[#1e2348]">Stackable (can be earned multiple times)</span>
+                        <span className="text-[14px] text-[var(--dq-navy-950)]">Stackable (can be earned multiple times)</span>
                       </label>
 
-                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                      <div className="flex items-center gap-3 pt-4 border-t border-[var(--dq-surface-border-default)]">
                         <Button
                           variant="outline"
-                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          className="flex-1 border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)]"
                           onClick={() => setShowCreateBadgeModal(false)}
                         >
                           Cancel
                         </Button>
                         <Button
-                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          className="flex-1 bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white"
                           onClick={() => {
                             toast({ title: "Badge Created", description: `"${badgeForm.name}" badge has been created successfully.` });
                             setShowCreateBadgeModal(false);
@@ -4920,15 +4920,15 @@ const AdminDashboard = () => {
               {showVerifyCertificateModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                   <div className="bg-white rounded-2xl max-w-lg w-full">
-                    <div className="border-b border-[#E5E7EB] p-6 flex items-center justify-between">
-                      <h2 className="text-[24px] font-semibold text-[#1e2348]">Verify Certificate</h2>
-                      <button onClick={() => setShowVerifyCertificateModal(false)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
-                        <X className="w-5 h-5 text-[#4B5563]" />
+                    <div className="border-b border-[var(--dq-surface-border-default)] p-6 flex items-center justify-between">
+                      <h2 className="text-[24px] font-semibold text-[var(--dq-navy-950)]">Verify Certificate</h2>
+                      <button onClick={() => setShowVerifyCertificateModal(false)} className="p-2 hover:bg-[var(--dq-gray-50)] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[var(--dq-text-secondary)]" />
                       </button>
                     </div>
                     <div className="p-6 space-y-6">
                       <div>
-                        <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Verification Method</label>
+                        <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Verification Method</label>
                         <div className="grid grid-cols-3 gap-3 mb-4">
                           {[
                             { value: 'id', label: 'Certificate ID', icon: '🔢' },
@@ -4940,8 +4940,8 @@ const AdminDashboard = () => {
                               onClick={() => setVerifyCertificateForm({ ...verifyCertificateForm, verificationMethod: method.value as any })}
                               className={`flex flex-col items-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
                                 verifyCertificateForm.verificationMethod === method.value
-                                  ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
-                                  : 'border-[#E5E7EB] hover:border-[#ff6b4d]/30'
+                                  ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
+                                  : 'border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30'
                               }`}
                             >
                               <span className="text-2xl">{method.icon}</span>
@@ -4953,12 +4953,12 @@ const AdminDashboard = () => {
 
                       {verifyCertificateForm.verificationMethod === 'id' && (
                         <div>
-                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Certificate ID</label>
+                          <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Certificate ID</label>
                           <input
                             type="text"
                             value={verifyCertificateForm.certificateID}
                             onChange={(e) => setVerifyCertificateForm({ ...verifyCertificateForm, certificateID: e.target.value })}
-                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                            className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                             placeholder="Enter certificate ID..."
                           />
                         </div>
@@ -4966,10 +4966,10 @@ const AdminDashboard = () => {
 
                       {verifyCertificateForm.verificationMethod === 'qr' && (
                         <div className="text-center py-8">
-                          <div className="w-48 h-48 mx-auto bg-[#F5F6FA] rounded-xl flex items-center justify-center border-2 border-dashed border-[#E5E7EB]">
+                          <div className="w-48 h-48 mx-auto bg-[var(--dq-gray-50)] rounded-xl flex items-center justify-center border-2 border-dashed border-[var(--dq-surface-border-default)]">
                             <div className="text-center">
-                              <Upload className="w-12 h-12 mx-auto mb-2 text-[#9CA3AF]" />
-                              <p className="text-[14px] text-[#4B5563]">Scan or upload QR code</p>
+                              <Upload className="w-12 h-12 mx-auto mb-2 text-[var(--dq-text-disabled)]" />
+                              <p className="text-[14px] text-[var(--dq-text-secondary)]">Scan or upload QR code</p>
                             </div>
                           </div>
                         </div>
@@ -4977,25 +4977,25 @@ const AdminDashboard = () => {
 
                       {verifyCertificateForm.verificationMethod === 'blockchain' && (
                         <div>
-                          <label className="block text-[14px] font-medium text-[#1e2348] mb-2">Blockchain Transaction Hash</label>
+                          <label className="block text-[14px] font-medium text-[var(--dq-navy-950)] mb-2">Blockchain Transaction Hash</label>
                           <input
                             type="text"
-                            className="w-full px-4 py-2 border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]"
+                            className="w-full px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]"
                             placeholder="Enter transaction hash..."
                           />
                         </div>
                       )}
 
-                      <div className="flex items-center gap-3 pt-4 border-t border-[#E5E7EB]">
+                      <div className="flex items-center gap-3 pt-4 border-t border-[var(--dq-surface-border-default)]">
                         <Button
                           variant="outline"
-                          className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]"
+                          className="flex-1 border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)]"
                           onClick={() => setShowVerifyCertificateModal(false)}
                         >
                           Cancel
                         </Button>
                         <Button
-                          className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                          className="flex-1 bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white"
                           onClick={() => {
                             toast({ 
                               title: "Certificate Verified", 
@@ -5016,18 +5016,18 @@ const AdminDashboard = () => {
               {previewTemplate && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                   <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                    <div className="sticky top-0 bg-white border-b border-[#E5E7EB] p-6 flex items-center justify-between">
+                    <div className="sticky top-0 bg-white border-b border-[var(--dq-surface-border-default)] p-6 flex items-center justify-between">
                       <div>
-                        <h2 className="text-[24px] font-semibold text-[#1e2348]">{previewTemplate.name}</h2>
-                        <p className="text-[14px] text-[#4B5563]">Template Preview</p>
+                        <h2 className="text-[24px] font-semibold text-[var(--dq-navy-950)]">{previewTemplate.name}</h2>
+                        <p className="text-[14px] text-[var(--dq-text-secondary)]">Template Preview</p>
                       </div>
-                      <button onClick={() => setPreviewTemplate(null)} className="p-2 hover:bg-[#F5F6FA] rounded-lg transition-colors">
-                        <X className="w-5 h-5 text-[#4B5563]" />
+                      <button onClick={() => setPreviewTemplate(null)} className="p-2 hover:bg-[var(--dq-gray-50)] rounded-lg transition-colors">
+                        <X className="w-5 h-5 text-[var(--dq-text-secondary)]" />
                       </button>
                     </div>
                     <div className="p-8">
                       {/* Certificate Preview matching learner/instructor dashboard design */}
-                      <div className="aspect-[16/11] bg-gradient-to-r from-[#1e2348] via-[#2a3058] to-[#ff6b4d] rounded-xl overflow-hidden shadow-2xl border-4 border-white">
+                      <div className="aspect-[16/11] bg-gradient-to-r from-[var(--dq-navy-950)] via-[#2a3058] to-[var(--dq-orange-500)] rounded-xl overflow-hidden shadow-2xl border-4 border-white">
                         <div className="h-full flex flex-col items-center justify-center text-white p-12 relative">
                           {/* Decorative corner elements */}
                           <div className="absolute top-6 left-6 w-16 h-16 border-t-4 border-l-4 border-white/30 rounded-tl-xl"></div>
@@ -5071,14 +5071,14 @@ const AdminDashboard = () => {
                       
                       {/* Action buttons */}
                       <div className="mt-6 flex items-center gap-3">
-                        <Button variant="outline" className="flex-1 border-[#E5E7EB] hover:bg-[#F5F6FA]" onClick={() => setPreviewTemplate(null)}>
+                        <Button variant="outline" className="flex-1 border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)]" onClick={() => setPreviewTemplate(null)}>
                           Close
                         </Button>
-                        <Button className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                        <Button className="flex-1 bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                           <Download className="w-4 h-4 mr-2" />
                           Download Sample
                         </Button>
-                        <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                        <Button variant="outline" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                           <Share2 className="w-4 h-4 mr-2" />
                           Share
                         </Button>
@@ -5093,23 +5093,23 @@ const AdminDashboard = () => {
           {/* Commerce Tab */}
           {activeTab === 'commerce' && (
             <div className="space-y-8">
-              <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">Commerce & Billing Operations</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">Commerce & Billing Operations</h1>
 
               {/* Revenue Overview Statistics */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                  { icon: DollarSign, label: 'Total Revenue', value: '$284,750', trend: '+18%', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                  { icon: DollarSign, label: 'Total Revenue', value: '$284,750', trend: '+18%', color: 'text-[var(--dq-orange-500)]', bg: 'bg-[var(--dq-orange-50)]' },
                   { icon: TrendingUp, label: 'Monthly Recurring', value: '$42,890', trend: '+12%', color: 'text-emerald-600', bg: 'bg-emerald-50' },
                   { icon: Users, label: 'Paying Customers', value: '1,847', trend: '+24%', color: 'text-purple-600', bg: 'bg-purple-50' },
                   { icon: Award, label: 'Avg Order Value', value: '$154', trend: '+8%', color: 'text-amber-500', bg: 'bg-amber-50' },
                 ].map(stat => (
-                  <div key={stat.label} className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] hover:shadow-md transition-shadow">
+                  <div key={stat.label} className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
                     <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${stat.bg}`}>
                       <stat.icon className={`w-7 h-7 ${stat.color}`} />
                     </div>
-                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[#1e2348]">{stat.value}</div>
+                    <div className="text-[32px] leading-[40px] font-semibold mb-1 text-[var(--dq-navy-950)]">{stat.value}</div>
                     <div className="flex items-center justify-between">
-                      <div className="text-[13px] leading-[18px] text-[#4B5563]">{stat.label}</div>
+                      <div className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">{stat.label}</div>
                       <div className="text-[12px] font-medium text-emerald-600">{stat.trend}</div>
                     </div>
                   </div>
@@ -5117,15 +5117,15 @@ const AdminDashboard = () => {
               </div>
 
               {/* Course Pricing & Plans */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+              <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Course Pricing & Plans</h2>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Course Pricing & Plans</h2>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                       Manage course pricing, discount codes, and subscription plans
                     </p>
                   </div>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                  <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                     <Plus className="w-4 h-4 mr-2" />
                     Add Pricing Plan
                   </Button>
@@ -5162,37 +5162,37 @@ const AdminDashboard = () => {
                       status: 'active'
                     },
                   ].map((plan, index) => (
-                    <div key={index} className="bg-[#F5F6FA] rounded-xl p-6 border-2 border-[#E5E7EB] hover:border-[#ff6b4d] hover:shadow-md transition-all">
+                    <div key={index} className="bg-[var(--dq-gray-50)] rounded-xl p-6 border-2 border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)] hover:shadow-md transition-all">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h3 className="text-[18px] font-semibold text-[#1e2348] mb-1">{plan.name}</h3>
+                          <h3 className="text-[18px] font-semibold text-[var(--dq-navy-950)] mb-1">{plan.name}</h3>
                           <div className="flex items-baseline gap-1">
-                            <span className="text-[32px] font-bold text-[#ff6b4d]">{plan.price}</span>
-                            <span className="text-[14px] text-[#4B5563]">{plan.period}</span>
+                            <span className="text-[32px] font-bold text-[var(--dq-orange-500)]">{plan.price}</span>
+                            <span className="text-[14px] text-[var(--dq-text-secondary)]">{plan.period}</span>
                           </div>
                         </div>
-                        <Badge className="bg-emerald-100 text-emerald-700">{plan.status}</Badge>
+                        <Badge className="bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]">{plan.status}</Badge>
                       </div>
                       <div className="space-y-3 mb-4">
                         <div className="flex items-center justify-between text-[13px]">
-                          <span className="text-[#4B5563]">Courses</span>
-                          <span className="font-semibold text-[#1e2348]">{plan.courses}</span>
+                          <span className="text-[var(--dq-text-secondary)]">Courses</span>
+                          <span className="font-semibold text-[var(--dq-navy-950)]">{plan.courses}</span>
                         </div>
                         <div className="flex items-center justify-between text-[13px]">
-                          <span className="text-[#4B5563]">Total Sales</span>
-                          <span className="font-semibold text-[#1e2348]">{plan.sales}</span>
+                          <span className="text-[var(--dq-text-secondary)]">Total Sales</span>
+                          <span className="font-semibold text-[var(--dq-navy-950)]">{plan.sales}</span>
                         </div>
                         <div className="flex items-center justify-between text-[13px]">
-                          <span className="text-[#4B5563]">Revenue</span>
-                          <span className="font-semibold text-[#1e2348]">{plan.revenue}</span>
+                          <span className="text-[var(--dq-text-secondary)]">Revenue</span>
+                          <span className="font-semibold text-[var(--dq-navy-950)]">{plan.revenue}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm" className="flex-1 border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                        <Button variant="outline" size="sm" className="flex-1 border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                           <Edit className="w-4 h-4 mr-2" />
                           Edit
                         </Button>
-                        <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                        <Button variant="ghost" size="sm" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">
                           <MoreVertical className="w-4 h-4" />
                         </Button>
                       </div>
@@ -5201,10 +5201,10 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Discount Codes */}
-                <div className="border-t border-[#E5E7EB] pt-6">
+                <div className="border-t border-[var(--dq-surface-border-default)] pt-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-[18px] font-semibold text-[#1e2348]">Active Discount Codes</h3>
-                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <h3 className="text-[18px] font-semibold text-[var(--dq-navy-950)]">Active Discount Codes</h3>
+                    <Button variant="outline" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                       <Plus className="w-4 h-4 mr-2" />
                       Create Code
                     </Button>
@@ -5216,19 +5216,19 @@ const AdminDashboard = () => {
                       { code: 'EARLYBIRD', discount: '$25', uses: 156, limit: 200, expires: '2026-05-15' },
                       { code: 'STUDENT15', discount: '15%', uses: 412, limit: 1000, expires: '2026-12-31' },
                     ].map((code, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-white rounded-lg border border-[#E5E7EB]">
+                      <div key={index} className="flex items-center justify-between p-4 bg-white rounded-lg border border-[var(--dq-surface-border-default)]">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <span className="font-mono font-bold text-[16px] text-[#1e2348]">{code.code}</span>
-                            <Badge className="bg-[#fff0ed] text-[#ff6b4d]">{code.discount} off</Badge>
+                            <span className="font-mono font-bold text-[16px] text-[var(--dq-navy-950)]">{code.code}</span>
+                            <Badge className="bg-[var(--dq-orange-50)] text-[var(--dq-orange-500)]">{code.discount} off</Badge>
                           </div>
-                          <div className="flex items-center gap-4 text-[12px] text-[#4B5563]">
+                          <div className="flex items-center gap-4 text-[12px] text-[var(--dq-text-secondary)]">
                             <span>{code.uses}/{code.limit} uses</span>
                             <span>•</span>
                             <span>Expires {code.expires}</span>
                           </div>
                         </div>
-                        <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                        <Button variant="ghost" size="sm" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
@@ -5239,14 +5239,14 @@ const AdminDashboard = () => {
 
               {/* Payment & Refunds */}
               <div className="grid lg:grid-cols-2 gap-6">
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-start gap-3 mb-6">
                     <div className="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
                       <CheckCircle className="w-7 h-7 text-emerald-600" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Payment Processing</h2>
-                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)] mb-2">Payment Processing</h2>
+                      <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                         Monitor payment transactions and success rates
                       </p>
                     </div>
@@ -5257,17 +5257,17 @@ const AdminDashboard = () => {
                       { label: 'Successful', value: '2,847', color: 'text-emerald-600', bg: 'bg-emerald-50' },
                       { label: 'Pending', value: '23', color: 'text-amber-600', bg: 'bg-amber-50' },
                       { label: 'Failed', value: '12', color: 'text-red-600', bg: 'bg-red-50' },
-                      { label: 'Success Rate', value: '99.6%', color: 'text-[#ff6b4d]', bg: 'bg-[#fff0ed]' },
+                      { label: 'Success Rate', value: '99.6%', color: 'text-[var(--dq-orange-500)]', bg: 'bg-[var(--dq-orange-50)]' },
                     ].map((metric) => (
-                      <div key={metric.label} className={`${metric.bg} rounded-lg p-4 border border-[#E5E7EB]`}>
+                      <div key={metric.label} className={`${metric.bg} rounded-lg p-4 border border-[var(--dq-surface-border-default)]`}>
                         <div className={`text-[24px] font-bold ${metric.color} mb-1`}>{metric.value}</div>
-                        <div className="text-[12px] text-[#4B5563]">{metric.label}</div>
+                        <div className="text-[12px] text-[var(--dq-text-secondary)]">{metric.label}</div>
                       </div>
                     ))}
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="text-[16px] font-semibold text-[#1e2348]">Payment Methods</h3>
+                    <h3 className="text-[16px] font-semibold text-[var(--dq-navy-950)]">Payment Methods</h3>
                     {[
                       { method: 'Credit/Debit Cards', percentage: 68, icon: '💳' },
                       { method: 'PayPal', percentage: 22, icon: '🅿️' },
@@ -5277,11 +5277,11 @@ const AdminDashboard = () => {
                         <span className="text-2xl">{pm.icon}</span>
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-[14px] font-medium text-[#1e2348]">{pm.method}</span>
-                            <span className="text-[13px] font-semibold text-[#4B5563]">{pm.percentage}%</span>
+                            <span className="text-[14px] font-medium text-[var(--dq-navy-950)]">{pm.method}</span>
+                            <span className="text-[13px] font-semibold text-[var(--dq-text-secondary)]">{pm.percentage}%</span>
                           </div>
-                          <div className="w-full h-2 bg-[#F5F6FA] rounded-full overflow-hidden">
-                            <div className="h-full bg-[#ff6b4d] rounded-full" style={{ width: `${pm.percentage}%` }}></div>
+                          <div className="w-full h-2 bg-[var(--dq-gray-50)] rounded-full overflow-hidden">
+                            <div className="h-full bg-[var(--dq-orange-500)] rounded-full" style={{ width: `${pm.percentage}%` }}></div>
                           </div>
                         </div>
                       </div>
@@ -5289,14 +5289,14 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-start gap-3 mb-6">
                     <div className="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
                       <ArrowUpRight className="w-7 h-7 text-amber-600" />
                     </div>
                     <div className="flex-1">
-                      <h2 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-2">Refunds & Disputes</h2>
-                      <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                      <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)] mb-2">Refunds & Disputes</h2>
+                      <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                         Manage refund requests and payment disputes
                       </p>
                     </div>
@@ -5309,31 +5309,31 @@ const AdminDashboard = () => {
                       { label: 'Total Refunded', value: '$12,450' },
                       { label: 'Refund Rate', value: '4.2%' },
                     ].map((metric) => (
-                      <div key={metric.label} className="bg-[#F5F6FA] rounded-lg p-4 border border-[#E5E7EB]">
-                        <div className="text-[20px] font-bold text-[#1e2348] mb-1">{metric.value}</div>
-                        <div className="text-[12px] text-[#4B5563]">{metric.label}</div>
+                      <div key={metric.label} className="bg-[var(--dq-gray-50)] rounded-lg p-4 border border-[var(--dq-surface-border-default)]">
+                        <div className="text-[20px] font-bold text-[var(--dq-navy-950)] mb-1">{metric.value}</div>
+                        <div className="text-[12px] text-[var(--dq-text-secondary)]">{metric.label}</div>
                       </div>
                     ))}
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="text-[16px] font-semibold text-[#1e2348] mb-3">Recent Refund Requests</h3>
+                    <h3 className="text-[16px] font-semibold text-[var(--dq-navy-950)] mb-3">Recent Refund Requests</h3>
                     {[
                       { user: 'John Smith', course: 'Digital Economy', amount: '$99', date: '2 hours ago', status: 'pending' },
                       { user: 'Sarah Lee', course: 'Platform Economics', amount: '$99', date: '5 hours ago', status: 'pending' },
                       { user: 'Mike Chen', course: 'Digital Transformation', amount: '$99', date: '1 day ago', status: 'approved' },
                     ].map((refund, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 bg-[#F5F6FA] rounded-lg border border-[#E5E7EB]">
+                      <div key={index} className="flex items-center justify-between p-3 bg-[var(--dq-gray-50)] rounded-lg border border-[var(--dq-surface-border-default)]">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[14px] font-medium text-[#1e2348]">{refund.user}</span>
+                            <span className="text-[14px] font-medium text-[var(--dq-navy-950)]">{refund.user}</span>
                             <Badge className={`${
-                              refund.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'
+                              refund.status === 'pending' ? 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]' : 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]'
                             }`}>
                               {refund.status}
                             </Badge>
                           </div>
-                          <div className="text-[12px] text-[#4B5563]">
+                          <div className="text-[12px] text-[var(--dq-text-secondary)]">
                             {refund.course} • {refund.amount} • {refund.date}
                           </div>
                         </div>
@@ -5352,20 +5352,20 @@ const AdminDashboard = () => {
               </div>
 
               {/* Transaction History */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+              <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Transaction History</h2>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Transaction History</h2>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                       View and manage all payment transactions
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#F5F6FA]">
+                    <Button variant="outline" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)]">
                       <Filter className="w-4 h-4 mr-2" />
                       Filter
                     </Button>
-                    <Button variant="outline" className="border-[#E5E7EB] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <Button variant="outline" className="border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                       <Download className="w-4 h-4 mr-2" />
                       Export
                     </Button>
@@ -5374,7 +5374,7 @@ const AdminDashboard = () => {
 
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-[#1e2348]">
+                    <thead className="bg-[var(--dq-navy-950)]">
                       <tr>
                         {['Transaction ID', 'Customer', 'Course/Plan', 'Amount', 'Payment Method', 'Status', 'Date', 'Actions'].map(h => (
                           <th key={h} className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">{h}</th>
@@ -5389,26 +5389,26 @@ const AdminDashboard = () => {
                         { id: 'TXN-2024-5844', customer: 'John Smith', item: 'Platform Economics', amount: '$99', method: 'Bank Transfer', status: 'completed', date: '2026-04-17 11:30' },
                         { id: 'TXN-2024-5843', customer: 'Fatima Hassan', item: 'Digital Transformation', amount: '$99', method: 'Credit Card', status: 'failed', date: '2026-04-17 10:15' },
                       ].map((txn, index) => (
-                        <tr key={index} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] ${index % 2 === 0 ? '' : 'bg-[#F5F6FA]/50'}`}>
+                        <tr key={index} className={`border-t border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)] ${index % 2 === 0 ? '' : 'bg-[var(--dq-gray-50)]/50'}`}>
                           <td className="px-4 py-3">
-                            <span className="font-mono text-[13px] text-[#1e2348]">{txn.id}</span>
+                            <span className="font-mono text-[13px] text-[var(--dq-navy-950)]">{txn.id}</span>
                           </td>
-                          <td className="px-4 py-3 text-[14px] font-medium text-[#1e2348]">{txn.customer}</td>
-                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{txn.item}</td>
-                          <td className="px-4 py-3 text-[14px] font-semibold text-[#1e2348]">{txn.amount}</td>
-                          <td className="px-4 py-3 text-[13px] text-[#4B5563]">{txn.method}</td>
+                          <td className="px-4 py-3 text-[14px] font-medium text-[var(--dq-navy-950)]">{txn.customer}</td>
+                          <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)]">{txn.item}</td>
+                          <td className="px-4 py-3 text-[14px] font-semibold text-[var(--dq-navy-950)]">{txn.amount}</td>
+                          <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)]">{txn.method}</td>
                           <td className="px-4 py-3">
                             <Badge className={`${
-                              txn.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
-                              txn.status === 'pending' ? 'bg-amber-100 text-amber-700' :
+                              txn.status === 'completed' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]' :
+                              txn.status === 'pending' ? 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]' :
                               'bg-red-100 text-red-700'
                             }`}>
                               {txn.status}
                             </Badge>
                           </td>
-                          <td className="px-4 py-3 text-[13px] text-[#4B5563] whitespace-nowrap">{txn.date}</td>
+                          <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">{txn.date}</td>
                           <td className="px-4 py-3">
-                            <Button variant="ghost" size="sm" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
+                            <Button variant="ghost" size="sm" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">
                               <Eye className="w-4 h-4" />
                             </Button>
                           </td>
@@ -5420,15 +5420,15 @@ const AdminDashboard = () => {
               </div>
 
               {/* Revenue Analytics */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E5E7EB]">
+              <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348] mb-2">Revenue Analytics</h2>
-                    <p className="text-[14px] leading-[20px] text-[#4B5563]">
+                    <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-navy-950)] mb-2">Revenue Analytics</h2>
+                    <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                       Track revenue trends and performance metrics
                     </p>
                   </div>
-                  <select className="px-4 py-2 border border-[#E5E7EB] rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 focus:border-[#ff6b4d]">
+                  <select className="px-4 py-2 border border-[var(--dq-surface-border-default)] rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]/40 focus:border-[var(--dq-orange-500)]">
                     <option>Last 7 days</option>
                     <option>Last 30 days</option>
                     <option>Last 90 days</option>
@@ -5442,14 +5442,14 @@ const AdminDashboard = () => {
                     { label: 'Subscriptions', value: '$89,640', change: '+22%', icon: Users },
                     { label: 'Certifications', value: '$38,220', change: '+8%', icon: Award },
                   ].map((metric) => (
-                    <div key={metric.label} className="bg-[#F5F6FA] rounded-xl p-6 border border-[#E5E7EB]">
+                    <div key={metric.label} className="bg-[var(--dq-gray-50)] rounded-xl p-6 border border-[var(--dq-surface-border-default)]">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center border border-[#E5E7EB]">
-                          <metric.icon className="w-6 h-6 text-[#ff6b4d]" />
+                        <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center border border-[var(--dq-surface-border-default)]">
+                          <metric.icon className="w-6 h-6 text-[var(--dq-orange-500)]" />
                         </div>
                         <div>
-                          <div className="text-[12px] text-[#4B5563] mb-1">{metric.label}</div>
-                          <div className="text-[24px] font-bold text-[#1e2348]">{metric.value}</div>
+                          <div className="text-[12px] text-[var(--dq-text-secondary)] mb-1">{metric.label}</div>
+                          <div className="text-[24px] font-bold text-[var(--dq-navy-950)]">{metric.value}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -5466,52 +5466,52 @@ const AdminDashboard = () => {
           {/* System Settings Tab */}
           {activeTab === 'system' && (
             <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[#1e2348]">User, Roles & System Administration</h1>
+              <h1 className="text-[28px] leading-[36px] font-semibold mb-6 text-[var(--dq-navy-950)]">User, Roles & System Administration</h1>
               
               {/* Statistics Overview */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-2">
-                    <Shield className="w-8 h-8 text-[#ff6b4d]" />
+                    <Shield className="w-8 h-8 text-[var(--dq-orange-500)]" />
                     <span className="text-[13px] text-[#10B981] font-medium">Active</span>
                   </div>
-                  <p className="text-[32px] font-bold text-[#1e2348]">8</p>
-                  <p className="text-[14px] text-[#4B5563]">User Roles</p>
+                  <p className="text-[32px] font-bold text-[var(--dq-navy-950)]">8</p>
+                  <p className="text-[14px] text-[var(--dq-text-secondary)]">User Roles</p>
                 </div>
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-2">
-                    <Activity className="w-8 h-8 text-[#ff6b4d]" />
+                    <Activity className="w-8 h-8 text-[var(--dq-orange-500)]" />
                     <span className="text-[13px] text-[#10B981] font-medium">+8%</span>
                   </div>
-                  <p className="text-[32px] font-bold text-[#1e2348]">1,234</p>
-                  <p className="text-[14px] text-[#4B5563]">Active Sessions</p>
+                  <p className="text-[32px] font-bold text-[var(--dq-navy-950)]">1,234</p>
+                  <p className="text-[14px] text-[var(--dq-text-secondary)]">Active Sessions</p>
                 </div>
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-2">
-                    <FileText className="w-8 h-8 text-[#ff6b4d]" />
-                    <span className="text-[13px] text-[#4B5563] font-medium">Last 24h</span>
+                    <FileText className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <span className="text-[13px] text-[var(--dq-text-secondary)] font-medium">Last 24h</span>
                   </div>
-                  <p className="text-[32px] font-bold text-[#1e2348]">3,456</p>
-                  <p className="text-[14px] text-[#4B5563]">Audit Events</p>
+                  <p className="text-[32px] font-bold text-[var(--dq-navy-950)]">3,456</p>
+                  <p className="text-[14px] text-[var(--dq-text-secondary)]">Audit Events</p>
                 </div>
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+                <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center justify-between mb-2">
-                    <Lock className="w-8 h-8 text-[#ff6b4d]" />
+                    <Lock className="w-8 h-8 text-[var(--dq-orange-500)]" />
                     <span className="text-[13px] text-emerald-600 font-medium">Secure</span>
                   </div>
-                  <p className="text-[32px] font-bold text-[#1e2348]">99.9%</p>
-                  <p className="text-[14px] text-[#4B5563]">System Uptime</p>
+                  <p className="text-[32px] font-bold text-[var(--dq-navy-950)]">99.9%</p>
+                  <p className="text-[14px] text-[var(--dq-text-secondary)]">System Uptime</p>
                 </div>
               </div>
 
               {/* Roles & Permissions */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] mb-6">
+              <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] mb-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Roles & Permissions</h3>
-                    <p className="text-[14px] text-[#4B5563] mt-1">Define and manage user roles with granular permissions</p>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Roles & Permissions</h3>
+                    <p className="text-[14px] text-[var(--dq-text-secondary)] mt-1">Define and manage user roles with granular permissions</p>
                   </div>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e66045] text-white">
+                  <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
                     <Plus className="w-4 h-4 mr-2" />
                     Create Role
                   </Button>
@@ -5520,26 +5520,26 @@ const AdminDashboard = () => {
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
                     { name: 'Super Admin', users: 3, permissions: 'Full Access', color: 'bg-red-100 text-red-700' },
-                    { name: 'Admin', users: 12, permissions: '45 Permissions', color: 'bg-[#fff0ed] text-[#ff6b4d]' },
+                    { name: 'Admin', users: 12, permissions: '45 Permissions', color: 'bg-[var(--dq-orange-50)] text-[var(--dq-orange-500)]' },
                     { name: 'Instructor', users: 156, permissions: '28 Permissions', color: 'bg-blue-100 text-blue-700' },
-                    { name: 'Content Manager', users: 8, permissions: '22 Permissions', color: 'bg-purple-100 text-purple-700' },
+                    { name: 'Content Manager', users: 8, permissions: '22 Permissions', color: 'bg-[var(--dq-navy-100)] text-[var(--dq-navy-700)]' },
                     { name: 'Learner', users: 2654, permissions: '12 Permissions', color: 'bg-green-100 text-green-700' },
                     { name: 'Guest', users: 14, permissions: '5 Permissions', color: 'bg-gray-100 text-gray-600' },
-                    { name: 'Support Staff', users: 6, permissions: '18 Permissions', color: 'bg-amber-100 text-amber-700' },
+                    { name: 'Support Staff', users: 6, permissions: '18 Permissions', color: 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]' },
                     { name: 'Auditor', users: 2, permissions: 'Read Only', color: 'bg-indigo-100 text-indigo-700' },
                   ].map((role, index) => (
-                    <div key={index} className="bg-[#F5F6FA] rounded-xl p-4 hover:shadow-md transition-shadow">
+                    <div key={index} className="bg-[var(--dq-gray-50)] rounded-xl p-4 hover:shadow-md transition-shadow">
                       <div className="flex items-center justify-between mb-3">
-                        <Shield className="w-6 h-6 text-[#ff6b4d]" />
-                        <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                        <Shield className="w-6 h-6 text-[var(--dq-orange-500)]" />
+                        <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                           <Edit className="w-4 h-4" />
                         </Button>
                       </div>
-                      <h4 className="text-[16px] font-semibold text-[#1e2348] mb-2">{role.name}</h4>
-                      <p className="text-[13px] text-[#4B5563] mb-3">{role.permissions}</p>
+                      <h4 className="text-[16px] font-semibold text-[var(--dq-navy-950)] mb-2">{role.name}</h4>
+                      <p className="text-[13px] text-[var(--dq-text-secondary)] mb-3">{role.permissions}</p>
                       <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-[#9CA3AF]" />
-                        <span className="text-[13px] text-[#4B5563]">{role.users} users</span>
+                        <Users className="w-4 h-4 text-[var(--dq-text-disabled)]" />
+                        <span className="text-[13px] text-[var(--dq-text-secondary)]">{role.users} users</span>
                       </div>
                     </div>
                   ))}
@@ -5547,89 +5547,89 @@ const AdminDashboard = () => {
               </div>
 
               {/* System Settings */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB] mb-6">
-                <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348] mb-6">System Settings</h3>
+              <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] mb-6">
+                <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)] mb-6">System Settings</h3>
                 
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* General Settings */}
                   <div className="space-y-4">
-                    <h4 className="text-[16px] font-semibold text-[#1e2348] mb-4">General Settings</h4>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                    <h4 className="text-[16px] font-semibold text-[var(--dq-navy-950)] mb-4">General Settings</h4>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1e2348]">Platform Name</p>
-                        <p className="text-[13px] text-[#4B5563]">DTMA Learning Platform</p>
+                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Platform Name</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)]">DTMA Learning Platform</p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                      <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                         <Edit className="w-4 h-4" />
                       </Button>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1e2348]">Time Zone</p>
-                        <p className="text-[13px] text-[#4B5563]">UTC+04:00 (Dubai)</p>
+                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Time Zone</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)]">UTC+04:00 (Dubai)</p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                      <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                         <Edit className="w-4 h-4" />
                       </Button>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1e2348]">Default Language</p>
-                        <p className="text-[13px] text-[#4B5563]">English (US)</p>
+                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Default Language</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)]">English (US)</p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                      <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                         <Edit className="w-4 h-4" />
                       </Button>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1e2348]">Maintenance Mode</p>
-                        <p className="text-[13px] text-[#4B5563]">Disabled</p>
+                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Maintenance Mode</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)]">Disabled</p>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" className="sr-only peer" />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                       </label>
                     </div>
                   </div>
 
                   {/* Security Settings */}
                   <div className="space-y-4">
-                    <h4 className="text-[16px] font-semibold text-[#1e2348] mb-4">Security Settings</h4>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                    <h4 className="text-[16px] font-semibold text-[var(--dq-navy-950)] mb-4">Security Settings</h4>
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1e2348]">Two-Factor Authentication</p>
-                        <p className="text-[13px] text-[#4B5563]">Required for admins</p>
+                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Two-Factor Authentication</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)]">Required for admins</p>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" className="sr-only peer" defaultChecked />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                       </label>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1e2348]">Session Timeout</p>
-                        <p className="text-[13px] text-[#4B5563]">30 minutes of inactivity</p>
+                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Session Timeout</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)]">30 minutes of inactivity</p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                      <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                         <Edit className="w-4 h-4" />
                       </Button>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1e2348]">Password Policy</p>
-                        <p className="text-[13px] text-[#4B5563]">Strong (12+ chars, mixed)</p>
+                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Password Policy</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)]">Strong (12+ chars, mixed)</p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                      <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                         <Edit className="w-4 h-4" />
                       </Button>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-[#F5F6FA] rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1e2348]">IP Whitelist</p>
-                        <p className="text-[13px] text-[#4B5563]">8 addresses configured</p>
+                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">IP Whitelist</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)]">8 addresses configured</p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                      <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                         <Settings className="w-4 h-4" />
                       </Button>
                     </div>
@@ -5638,18 +5638,18 @@ const AdminDashboard = () => {
               </div>
 
               {/* Audit Logs */}
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+              <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Audit Logs</h3>
-                    <p className="text-[14px] text-[#4B5563] mt-1">Track all system activities and user actions</p>
+                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Audit Logs</h3>
+                    <p className="text-[14px] text-[var(--dq-text-secondary)] mt-1">Track all system activities and user actions</p>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <Button variant="outline" className="border-[var(--dq-surface-border-default)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                       <Filter className="w-4 h-4 mr-2" />
                       Filter
                     </Button>
-                    <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                    <Button variant="outline" className="border-[var(--dq-surface-border-default)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                       <Download className="w-4 h-4 mr-2" />
                       Export
                     </Button>
@@ -5665,7 +5665,7 @@ const AdminDashboard = () => {
                     { action: 'User Suspended', user: 'Admin', details: 'Suspended user account: john.doe@example.com', time: '3 hours ago', type: 'error' },
                     { action: 'Settings Changed', user: 'Sarah Johnson', details: 'Updated system timezone settings', time: '5 hours ago', type: 'info' },
                   ].map((log, index) => (
-                    <div key={index} className="flex items-start gap-4 p-4 bg-[#F5F6FA] rounded-lg hover:bg-[#fff0ed] transition-colors">
+                    <div key={index} className="flex items-start gap-4 p-4 bg-[var(--dq-gray-50)] rounded-lg hover:bg-[var(--dq-orange-50)] transition-colors">
                       <div className={`w-2 h-2 rounded-full mt-2 ${
                         log.type === 'success' ? 'bg-emerald-500' :
                         log.type === 'warning' ? 'bg-amber-500' :
@@ -5674,13 +5674,13 @@ const AdminDashboard = () => {
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
-                          <p className="text-[14px] font-semibold text-[#1e2348]">{log.action}</p>
-                          <span className="text-[13px] text-[#4B5563]">{log.time}</span>
+                          <p className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{log.action}</p>
+                          <span className="text-[13px] text-[var(--dq-text-secondary)]">{log.time}</span>
                         </div>
-                        <p className="text-[13px] text-[#4B5563] mb-1">{log.details}</p>
-                        <p className="text-[12px] text-[#9CA3AF]">By: {log.user}</p>
+                        <p className="text-[13px] text-[var(--dq-text-secondary)] mb-1">{log.details}</p>
+                        <p className="text-[12px] text-[var(--dq-text-disabled)]">By: {log.user}</p>
                       </div>
-                      <Button variant="ghost" size="sm" className="text-[#1e2348] hover:bg-white hover:text-[#ff6b4d]">
+                      <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                         <Eye className="w-4 h-4" />
                       </Button>
                     </div>
@@ -5688,7 +5688,7 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="mt-6 flex items-center justify-center">
-                  <Button variant="outline" className="border-[#E5E7EB] text-[#1e2348] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d]">
+                  <Button variant="outline" className="border-[var(--dq-surface-border-default)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)]">
                     Load More Logs
                   </Button>
                 </div>
@@ -5701,43 +5701,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Operations Assistant</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <Bot className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">Your AI Assistant</h3>
+                    <Bot className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Your AI Assistant</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80 mb-4">
                     A general-purpose assistant to support daily operational work.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Platform Activity Summary</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Get AI-generated summaries of platform activity and key metrics.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Generate Summary</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Generate Summary</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Operational Reports</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Create comprehensive reports with AI assistance.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Create Report</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Create Report</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Next-Best Actions</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI suggests priority actions for admins and faculty.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Suggestions</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Suggestions</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Draft Responses</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Generate draft responses to learner queries.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Draft Response</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Draft Response</Button>
                   </div>
                 </div>
               </div>
@@ -5749,43 +5749,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Faculty Support Mode</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <Sparkles className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">Transact AI - Faculty Mode</h3>
+                    <Sparkles className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Transact AI - Faculty Mode</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80">
                     Extended AI support for faculty to mentor and support learners effectively.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Learner Progress Summaries</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       View AI-generated summaries of individual learner progress.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Summaries</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Summaries</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Mentoring Suggestions</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Get AI-powered mentoring strategies for each learner.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Get Suggestions</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Get Suggestions</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Struggling Learner Guidance</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Receive guidance on how to support struggling learners.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Guidance</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Guidance</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Intervention Recommendations</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI recommends timely interventions and outreach actions.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Recommendations</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Recommendations</Button>
                   </div>
                 </div>
               </div>
@@ -5797,43 +5797,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Content Authoring & Drafting</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <FileText className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">AI-Powered Course Creation</h3>
+                    <FileText className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">AI-Powered Course Creation</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80">
                     Accelerate course development with AI assistance while keeping humans in control.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Draft Lesson Outlines</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Generate structured lesson outlines based on learning objectives.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Create Outline</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Create Outline</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Generate Examples & Exercises</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Create relevant examples and practice exercises automatically.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Generate Content</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Generate Content</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Propose Learning Objectives</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI suggests clear, measurable learning objectives.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Get Objectives</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Get Objectives</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Content Improvement Suggestions</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Get AI recommendations to enhance existing content.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Analyze Content</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Analyze Content</Button>
                   </div>
                 </div>
               </div>
@@ -5845,43 +5845,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Assessment Tools</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <Brain className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">Intelligent Assessment Creation & Grading</h3>
+                    <Brain className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Intelligent Assessment Creation & Grading</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80">
                     Streamline quiz creation and grading with AI assistance.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">AI Quiz Generator</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Create quizzes from lesson content with varied difficulty levels.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Generate Quiz</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Generate Quiz</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Question Variations</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI suggests question variations and difficulty adjustments.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Create Variations</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Create Variations</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">AI Grading Helper</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Assist in grading open-ended responses with AI analysis.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Start Grading</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Start Grading</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Rubric Matching</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI highlights key points and suggests provisional scores.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Analyze Responses</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Analyze Responses</Button>
                   </div>
                 </div>
               </div>
@@ -5893,43 +5893,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Cohort Risk & Training Needs Intelligence</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <AlertTriangle className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">Predictive Learner Analytics</h3>
+                    <AlertTriangle className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Predictive Learner Analytics</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80">
                     Identify at-risk learners and skill gaps across cohorts.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Cohort Risk Alerts</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Detect learners falling behind and disengagement patterns.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Alerts</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Alerts</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Early Intervention</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI recommends timely interventions for struggling learners.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Get Recommendations</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Get Recommendations</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Training Needs Analysis</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Analyze performance data to identify common skill gaps.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Analyze Cohorts</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Analyze Cohorts</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Course Planning Insights</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Feed insights into future course planning and development.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Insights</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Insights</Button>
                   </div>
                 </div>
               </div>
@@ -5941,43 +5941,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Feedback & Sentiment Analysis</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <MessageSquare className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">Qualitative Feedback at Scale</h3>
+                    <MessageSquare className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Qualitative Feedback at Scale</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80">
                     Analyze course reviews, ratings, and feedback automatically.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Sentiment Trends</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Track sentiment trends across courses and time periods.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Trends</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Trends</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Recurring Complaints</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Identify common issues and pain points from feedback.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Analyze Feedback</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Analyze Feedback</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Improvement Opportunities</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI highlights areas for course and platform improvement.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Get Recommendations</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Get Recommendations</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Support Ticket Analysis</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Analyze support tickets for patterns and insights.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Analyze Tickets</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Analyze Tickets</Button>
                   </div>
                 </div>
               </div>
@@ -5989,43 +5989,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Discussion Moderation</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <Shield className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">Safe Learning Environments</h3>
+                    <Shield className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Safe Learning Environments</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80">
                     Maintain productive and respectful discussion forums with AI.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Content Detection</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Detect inappropriate or off-topic content automatically.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Flagged Content</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Flagged Content</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Moderator Review Queue</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Flag posts for human moderator review and action.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Review Queue</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Review Queue</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Suggested Responses</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI suggests automated or drafted moderator responses.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Suggestions</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Suggestions</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Moderation Analytics</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Track moderation metrics and community health.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Analytics</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Analytics</Button>
                   </div>
                 </div>
               </div>
@@ -6037,43 +6037,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Support Triage</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <Headphones className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">Optimized Support Operations</h3>
+                    <Headphones className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Optimized Support Operations</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80">
                     Streamline support with intelligent request classification and routing.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Request Classification</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Automatically classify incoming support requests by type.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">View Requests</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Requests</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Suggested Replies</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       AI generates draft responses for common support issues.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Generate Replies</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Generate Replies</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Smart Routing</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Route issues to the correct team or faculty member.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Configure Routing</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Configure Routing</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Priority Detection</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Identify and prioritize urgent learner problems.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">View Urgent Issues</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Urgent Issues</Button>
                   </div>
                 </div>
               </div>
@@ -6085,43 +6085,43 @@ const AdminDashboard = () => {
             <div>
               <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI-Assisted Localization</h1>
               <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[#1e2348] to-[#2a3058] rounded-2xl p-6 shadow-sm text-white">
+                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
                   <div className="flex items-center gap-3 mb-4">
-                    <Globe className="w-8 h-8 text-[#ff6b4d]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium">Global Program Delivery</h3>
+                    <Globe className="w-8 h-8 text-[var(--dq-orange-500)]" />
+                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Global Program Delivery</h3>
                   </div>
                   <p className="text-[14px] leading-[20px] font-normal text-white/80">
                     Support multilingual delivery of DTMA programs worldwide.
                   </p>
                 </div>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Content Translation</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Translate course content while maintaining accuracy.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Translate Content</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Translate Content</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Cultural Adaptation</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Suggest culturally appropriate phrasing and examples.
                     </p>
-                    <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Get Suggestions</Button>
+                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Get Suggestions</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Multilingual Support</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Assist with multilingual support responses.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Translate Response</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Translate Response</Button>
                   </div>
-                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                  <div className="bg-card rounded-xl p-6 shadow-sm">
                     <h3 className="text-[20px] leading-[28px] font-medium mb-4">Consistency Management</h3>
                     <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
                       Maintain consistency across localized versions.
                     </p>
-                    <Button variant="outline" className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white">Check Consistency</Button>
+                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Check Consistency</Button>
                   </div>
                 </div>
               </div>
@@ -6136,8 +6136,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <Bell className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <Bell className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">Create Announcement</h2>
               </div>
@@ -6160,7 +6160,7 @@ const AdminDashboard = () => {
                   value={announcementForm.title}
                   onChange={(e) => setAnnouncementForm({ ...announcementForm, title: e.target.value })}
                   placeholder="Enter announcement title"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                 />
               </div>
 
@@ -6174,7 +6174,7 @@ const AdminDashboard = () => {
                   onChange={(e) => setAnnouncementForm({ ...announcementForm, message: e.target.value })}
                   placeholder="Enter your announcement message"
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none"
                 />
               </div>
 
@@ -6190,7 +6190,7 @@ const AdminDashboard = () => {
                       onClick={() => setAnnouncementForm({ ...announcementForm, priority })}
                       className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
                         announcementForm.priority === priority
-                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                           : 'border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -6225,7 +6225,7 @@ const AdminDashboard = () => {
                         }}
                         className={`flex items-center gap-3 px-4 py-3 rounded-lg border-2 text-[14px] font-medium transition-all ${
                           isSelected
-                            ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                            ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                             : 'border-gray-200 text-gray-600 hover:border-gray-300'
                         }`}
                       >
@@ -6261,7 +6261,7 @@ const AdminDashboard = () => {
                         }}
                         className={`flex items-center gap-2 px-4 py-3 rounded-lg border-2 text-[14px] font-medium transition-all ${
                           isSelected
-                            ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                            ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                             : 'border-gray-200 text-gray-600 hover:border-gray-300'
                         }`}
                       >
@@ -6285,7 +6285,7 @@ const AdminDashboard = () => {
                       type="datetime-local"
                       value={announcementForm.scheduledDate}
                       onChange={(e) => setAnnouncementForm({ ...announcementForm, scheduledDate: e.target.value })}
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -6299,7 +6299,7 @@ const AdminDashboard = () => {
                       type="datetime-local"
                       value={announcementForm.expiryDate}
                       onChange={(e) => setAnnouncementForm({ ...announcementForm, expiryDate: e.target.value })}
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -6313,7 +6313,7 @@ const AdminDashboard = () => {
                     <div className={`w-2 h-2 rounded-full mt-2 ${
                       announcementForm.priority === 'urgent' ? 'bg-red-500' :
                       announcementForm.priority === 'high' ? 'bg-orange-500' :
-                      announcementForm.priority === 'normal' ? 'bg-[#ff6b4d]' :
+                      announcementForm.priority === 'normal' ? 'bg-[var(--dq-orange-500)]' :
                       'bg-gray-400'
                     }`} />
                     <div className="flex-1">
@@ -6341,7 +6341,7 @@ const AdminDashboard = () => {
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white"
                   onClick={() => {
                     toast({
                       title: 'Draft Saved',
@@ -6352,7 +6352,7 @@ const AdminDashboard = () => {
                   Save as Draft
                 </Button>
                 <Button
-                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white"
                   onClick={() => {
                     toast({
                       title: 'Announcement Sent',
@@ -6385,8 +6385,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <GraduationCap className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <GraduationCap className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">Schedule Class</h2>
               </div>
@@ -6408,26 +6408,26 @@ const AdminDashboard = () => {
                   value={scheduleForm.course}
                   onValueChange={(value) => setScheduleForm({ ...scheduleForm, course: value })}
                 >
-                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]">
                     <SelectValue placeholder="Choose a course..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="economy-40" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="economy-40" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Mastering Economy 4.0
                     </SelectItem>
-                    <SelectItem value="cognitive-org" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="cognitive-org" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Decoding Digital Cognitive Organisations
                     </SelectItem>
-                    <SelectItem value="business-platforms" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="business-platforms" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Building Powerful Digital Business Platforms
                     </SelectItem>
-                    <SelectItem value="transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="transformation" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Navigating Digital Transformation 2.0
                     </SelectItem>
-                    <SelectItem value="digital-workers" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="digital-workers" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Optimizing Digital Workers and Workspaces
                     </SelectItem>
-                    <SelectItem value="digital-accelerators" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="digital-accelerators" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Leveraging Digital Accelerators for Growth
                     </SelectItem>
                   </SelectContent>
@@ -6446,7 +6446,7 @@ const AdminDashboard = () => {
                       onClick={() => setScheduleForm({ ...scheduleForm, sessionType: type })}
                       className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
                         scheduleForm.sessionType === type
-                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                           : 'border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -6469,7 +6469,7 @@ const AdminDashboard = () => {
                   value={scheduleForm.title}
                   onChange={(e) => setScheduleForm({ ...scheduleForm, title: e.target.value })}
                   placeholder="e.g., Week 1: Introduction to Digital Transformation"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                 />
               </div>
 
@@ -6482,23 +6482,23 @@ const AdminDashboard = () => {
                   value={scheduleForm.instructor}
                   onValueChange={(value) => setScheduleForm({ ...scheduleForm, instructor: value })}
                 >
-                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]">
                     <SelectValue placeholder="Select instructor..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="dr-aisha" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="dr-aisha" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Dr. Aisha Mensah
                     </SelectItem>
-                    <SelectItem value="james" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="james" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       James Okafor
                     </SelectItem>
-                    <SelectItem value="priya" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="priya" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Priya Nair
                     </SelectItem>
-                    <SelectItem value="marcus" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="marcus" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Marcus Webb
                     </SelectItem>
-                    <SelectItem value="sofia" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="sofia" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Sofia Reyes
                     </SelectItem>
                   </SelectContent>
@@ -6517,7 +6517,7 @@ const AdminDashboard = () => {
                       type="date"
                       value={scheduleForm.date}
                       onChange={(e) => setScheduleForm({ ...scheduleForm, date: e.target.value })}
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -6531,7 +6531,7 @@ const AdminDashboard = () => {
                       type="time"
                       value={scheduleForm.startTime}
                       onChange={(e) => setScheduleForm({ ...scheduleForm, startTime: e.target.value })}
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -6545,7 +6545,7 @@ const AdminDashboard = () => {
                       type="time"
                       value={scheduleForm.endTime}
                       onChange={(e) => setScheduleForm({ ...scheduleForm, endTime: e.target.value })}
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -6559,7 +6559,7 @@ const AdminDashboard = () => {
                 <select
                   value={scheduleForm.timezone}
                   onChange={(e) => setScheduleForm({ ...scheduleForm, timezone: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                 >
                   <option value="UTC">UTC (Coordinated Universal Time)</option>
                   <option value="EST">EST (Eastern Standard Time)</option>
@@ -6584,7 +6584,7 @@ const AdminDashboard = () => {
                       value={scheduleForm.location}
                       onChange={(e) => setScheduleForm({ ...scheduleForm, location: e.target.value })}
                       placeholder="e.g., Room 301, Building A"
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -6599,7 +6599,7 @@ const AdminDashboard = () => {
                       value={scheduleForm.meetingLink}
                       onChange={(e) => setScheduleForm({ ...scheduleForm, meetingLink: e.target.value })}
                       placeholder="https://zoom.us/j/..."
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -6617,7 +6617,7 @@ const AdminDashboard = () => {
                     onChange={(e) => setScheduleForm({ ...scheduleForm, capacity: e.target.value })}
                     placeholder="e.g., 30"
                     min="1"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                   />
                 </div>
                 <div>
@@ -6629,7 +6629,7 @@ const AdminDashboard = () => {
                     value={scheduleForm.cohortName}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, cohortName: e.target.value })}
                     placeholder="e.g., Spring 2026 Cohort"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                   />
                 </div>
               </div>
@@ -6644,7 +6644,7 @@ const AdminDashboard = () => {
                   onChange={(e) => setScheduleForm({ ...scheduleForm, description: e.target.value })}
                   placeholder="Provide additional details about this session..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none"
                 />
               </div>
 
@@ -6653,7 +6653,7 @@ const AdminDashboard = () => {
                 <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">Session Preview</h3>
                 <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
                   <div className="flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4 text-[#ff6b4d]" />
+                    <GraduationCap className="w-4 h-4 text-[var(--dq-orange-500)]" />
                     <span className="text-[16px] font-semibold text-gray-900">
                       {scheduleForm.title || 'Session Title'}
                     </span>
@@ -6667,7 +6667,7 @@ const AdminDashboard = () => {
                       <Clock className="w-4 h-4" />
                       {scheduleForm.startTime || 'Start'} - {scheduleForm.endTime || 'End'}
                     </span>
-                    <span className="capitalize px-2 py-1 rounded bg-[#ff6b4d]/10 text-[#ff6b4d] text-[12px] font-medium">
+                    <span className="capitalize px-2 py-1 rounded bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)] text-[12px] font-medium">
                       {scheduleForm.sessionType}
                     </span>
                   </div>
@@ -6687,7 +6687,7 @@ const AdminDashboard = () => {
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white"
                   onClick={() => {
                     toast({
                       title: 'Draft Saved',
@@ -6698,7 +6698,7 @@ const AdminDashboard = () => {
                   Save as Draft
                 </Button>
                 <Button
-                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white"
                   onClick={() => {
                     toast({
                       title: 'Class Scheduled',
@@ -6738,8 +6738,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <UserPlusIcon className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <UserPlusIcon className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">Bulk Enrollment</h2>
               </div>
@@ -6761,26 +6761,26 @@ const AdminDashboard = () => {
                   value={bulkEnrollForm.course}
                   onValueChange={(value) => setBulkEnrollForm({ ...bulkEnrollForm, course: value })}
                 >
-                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                  <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]">
                     <SelectValue placeholder="Choose a course..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="economy-40" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="economy-40" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Mastering Economy 4.0
                     </SelectItem>
-                    <SelectItem value="cognitive-org" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="cognitive-org" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Decoding Digital Cognitive Organisations
                     </SelectItem>
-                    <SelectItem value="business-platforms" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="business-platforms" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Building Powerful Digital Business Platforms
                     </SelectItem>
-                    <SelectItem value="transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="transformation" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Navigating Digital Transformation 2.0
                     </SelectItem>
-                    <SelectItem value="digital-workers" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="digital-workers" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Optimizing Digital Workers and Workspaces
                     </SelectItem>
-                    <SelectItem value="digital-accelerators" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                    <SelectItem value="digital-accelerators" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                       Leveraging Digital Accelerators for Growth
                     </SelectItem>
                   </SelectContent>
@@ -6799,7 +6799,7 @@ const AdminDashboard = () => {
                       onClick={() => setBulkEnrollForm({ ...bulkEnrollForm, enrollmentMethod: method })}
                       className={`flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
                         bulkEnrollForm.enrollmentMethod === method
-                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                           : 'border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -6823,7 +6823,7 @@ const AdminDashboard = () => {
                     onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, emails: e.target.value })}
                     placeholder="Enter email addresses (one per line)&#10;example1@company.com&#10;example2@company.com&#10;example3@company.com"
                     rows={8}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none font-mono text-[14px]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none font-mono text-[14px]"
                   />
                   <p className="text-[12px] text-gray-500 mt-2">
                     {bulkEnrollForm.emails.split('\n').filter(e => e.trim()).length} email(s) entered
@@ -6837,7 +6837,7 @@ const AdminDashboard = () => {
                   <label className="block text-[14px] leading-[20px] font-medium text-gray-700 mb-2">
                     Upload CSV File *
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#ff6b4d] transition-colors">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[var(--dq-orange-500)] transition-colors">
                     <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-[14px] text-gray-600 mb-2">
                       Drag and drop your CSV file here, or click to browse
@@ -6856,19 +6856,19 @@ const AdminDashboard = () => {
                       Choose File
                     </label>
                     {bulkEnrollForm.csvFile && (
-                      <p className="text-[14px] text-[#ff6b4d] mt-3 font-medium">
+                      <p className="text-[14px] text-[var(--dq-orange-500)] mt-3 font-medium">
                         Selected: {bulkEnrollForm.csvFile.name}
                       </p>
                     )}
                   </div>
-                  <div className="mt-4 p-4 bg-[#fff0ed] rounded-lg">
-                    <p className="text-[12px] text-[#1e2348] font-medium mb-2">CSV Format Requirements:</p>
-                    <ul className="text-[12px] text-[#4B5563] space-y-1 ml-4 list-disc">
+                  <div className="mt-4 p-4 bg-[var(--dq-orange-50)] rounded-lg">
+                    <p className="text-[12px] text-[var(--dq-navy-950)] font-medium mb-2">CSV Format Requirements:</p>
+                    <ul className="text-[12px] text-[var(--dq-text-secondary)] space-y-1 ml-4 list-disc">
                       <li>First column: Email address (required)</li>
                       <li>Second column: Full name (optional)</li>
                       <li>Third column: Organization (optional)</li>
                     </ul>
-                    <button className="mt-3 text-[12px] text-[#ff6b4d] font-medium hover:underline flex items-center gap-1">
+                    <button className="mt-3 text-[12px] text-[var(--dq-orange-500)] font-medium hover:underline flex items-center gap-1">
                       <Download className="w-3 h-3" />
                       Download sample CSV template
                     </button>
@@ -6887,7 +6887,7 @@ const AdminDashboard = () => {
                     onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, emailDomains: e.target.value })}
                     placeholder="Enter email domains (one per line)&#10;@company.com&#10;@organization.org&#10;@university.edu"
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none font-mono text-[14px]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none font-mono text-[14px]"
                   />
                   <p className="text-[12px] text-gray-500 mt-2">
                     Anyone with these email domains can self-enroll in the course
@@ -6907,7 +6907,7 @@ const AdminDashboard = () => {
                       onClick={() => setBulkEnrollForm({ ...bulkEnrollForm, enrollmentType: type })}
                       className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
                         bulkEnrollForm.enrollmentType === type
-                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                           : 'border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -6929,7 +6929,7 @@ const AdminDashboard = () => {
                       onClick={() => setBulkEnrollForm({ ...bulkEnrollForm, accessDuration: days })}
                       className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium transition-all ${
                         bulkEnrollForm.accessDuration === days
-                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                           : 'border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -6946,7 +6946,7 @@ const AdminDashboard = () => {
                     type="checkbox"
                     checked={bulkEnrollForm.sendWelcomeEmail}
                     onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, sendWelcomeEmail: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                    className="w-5 h-5 rounded border-gray-300 text-[var(--dq-orange-500)] focus:ring-[var(--dq-orange-500)]"
                   />
                   <div>
                     <span className="text-[14px] font-medium text-gray-700">Send welcome email to learners</span>
@@ -6958,7 +6958,7 @@ const AdminDashboard = () => {
                     type="checkbox"
                     checked={bulkEnrollForm.notifyInstructors}
                     onChange={(e) => setBulkEnrollForm({ ...bulkEnrollForm, notifyInstructors: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                    className="w-5 h-5 rounded border-gray-300 text-[var(--dq-orange-500)] focus:ring-[var(--dq-orange-500)]"
                   />
                   <div>
                     <span className="text-[14px] font-medium text-gray-700">Notify course instructors</span>
@@ -7015,7 +7015,7 @@ const AdminDashboard = () => {
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white"
                   onClick={() => {
                     toast({
                       title: 'Preview Generated',
@@ -7026,7 +7026,7 @@ const AdminDashboard = () => {
                   Preview
                 </Button>
                 <Button
-                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white"
                   onClick={() => {
                     const count = bulkEnrollForm.enrollmentMethod === 'manual' 
                       ? bulkEnrollForm.emails.split('\n').filter(e => e.trim()).length 
@@ -7064,8 +7064,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <GraduationCap className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <GraduationCap className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">Add Faculty Member</h2>
               </div>
@@ -7091,7 +7091,7 @@ const AdminDashboard = () => {
                       value={facultyForm.fullName}
                       onChange={(e) => setFacultyForm({ ...facultyForm, fullName: e.target.value })}
                       placeholder="e.g., Dr. Sarah Johnson"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                   <div>
@@ -7105,7 +7105,7 @@ const AdminDashboard = () => {
                         value={facultyForm.email}
                         onChange={(e) => setFacultyForm({ ...facultyForm, email: e.target.value })}
                         placeholder="sarah.johnson@university.edu"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7120,7 +7120,7 @@ const AdminDashboard = () => {
                         value={facultyForm.phone}
                         onChange={(e) => setFacultyForm({ ...facultyForm, phone: e.target.value })}
                         placeholder="+1 (555) 123-4567"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7133,7 +7133,7 @@ const AdminDashboard = () => {
                       value={facultyForm.title}
                       onChange={(e) => setFacultyForm({ ...facultyForm, title: e.target.value })}
                       placeholder="e.g., Senior Lecturer"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -7151,26 +7151,26 @@ const AdminDashboard = () => {
                       value={facultyForm.department}
                       onValueChange={(value) => setFacultyForm({ ...facultyForm, department: value })}
                     >
-                      <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]">
+                      <SelectTrigger className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]">
                         <SelectValue placeholder="Select department..." />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="digital-transformation" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                        <SelectItem value="digital-transformation" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                           Digital Transformation
                         </SelectItem>
-                        <SelectItem value="ai-technology" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                        <SelectItem value="ai-technology" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                           AI & Technology
                         </SelectItem>
-                        <SelectItem value="leadership" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                        <SelectItem value="leadership" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                           Leadership & Management
                         </SelectItem>
-                        <SelectItem value="data-analytics" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                        <SelectItem value="data-analytics" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                           Data & Analytics
                         </SelectItem>
-                        <SelectItem value="cybersecurity" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                        <SelectItem value="cybersecurity" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                           Cybersecurity
                         </SelectItem>
-                        <SelectItem value="business-strategy" className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] focus:bg-[#fff0ed] focus:text-[#ff6b4d]">
+                        <SelectItem value="business-strategy" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] focus:bg-[var(--dq-orange-50)] focus:text-[var(--dq-orange-500)]">
                           Business Strategy
                         </SelectItem>
                       </SelectContent>
@@ -7193,7 +7193,7 @@ const AdminDashboard = () => {
                                 : facultyForm.specialization.filter(s => s !== spec);
                               setFacultyForm({ ...facultyForm, specialization: newSpec });
                             }}
-                            className="w-4 h-4 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                            className="w-4 h-4 rounded border-gray-300 text-[var(--dq-orange-500)] focus:ring-[var(--dq-orange-500)]"
                           />
                           <span className="text-[14px] text-gray-700">{spec}</span>
                         </label>
@@ -7210,7 +7210,7 @@ const AdminDashboard = () => {
                       onChange={(e) => setFacultyForm({ ...facultyForm, bio: e.target.value })}
                       placeholder="Brief professional biography..."
                       rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none"
                     />
                   </div>
 
@@ -7224,7 +7224,7 @@ const AdminDashboard = () => {
                         onChange={(e) => setFacultyForm({ ...facultyForm, qualifications: e.target.value })}
                         placeholder="e.g., PhD in Computer Science, MBA"
                         rows={3}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none"
                       />
                     </div>
                     <div>
@@ -7236,7 +7236,7 @@ const AdminDashboard = () => {
                         value={facultyForm.experience}
                         onChange={(e) => setFacultyForm({ ...facultyForm, experience: e.target.value })}
                         placeholder="e.g., 15+ years"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7258,7 +7258,7 @@ const AdminDashboard = () => {
                         value={facultyForm.linkedIn}
                         onChange={(e) => setFacultyForm({ ...facultyForm, linkedIn: e.target.value })}
                         placeholder="https://linkedin.com/in/..."
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7273,7 +7273,7 @@ const AdminDashboard = () => {
                         value={facultyForm.website}
                         onChange={(e) => setFacultyForm({ ...facultyForm, website: e.target.value })}
                         placeholder="https://..."
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7283,7 +7283,7 @@ const AdminDashboard = () => {
               {/* Profile Photo */}
               <div>
                 <h3 className="text-[18px] leading-[28px] font-semibold text-gray-900 mb-4">Profile Photo</h3>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#ff6b4d] transition-colors">
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[var(--dq-orange-500)] transition-colors">
                   <Image className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                   <p className="text-[14px] text-gray-600 mb-2">
                     Upload faculty profile photo
@@ -7302,7 +7302,7 @@ const AdminDashboard = () => {
                     Choose Photo
                   </label>
                   {facultyForm.profilePhoto && (
-                    <p className="text-[14px] text-[#ff6b4d] mt-3 font-medium">
+                    <p className="text-[14px] text-[var(--dq-orange-500)] mt-3 font-medium">
                       Selected: {facultyForm.profilePhoto.name}
                     </p>
                   )}
@@ -7328,7 +7328,7 @@ const AdminDashboard = () => {
                               : facultyForm.courses.filter(c => c !== course);
                             setFacultyForm({ ...facultyForm, courses: newCourses });
                           }}
-                          className="w-4 h-4 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                          className="w-4 h-4 rounded border-gray-300 text-[var(--dq-orange-500)] focus:ring-[var(--dq-orange-500)]"
                         />
                         <span className="text-[14px] text-gray-700">{course}</span>
                       </label>
@@ -7352,7 +7352,7 @@ const AdminDashboard = () => {
                           onClick={() => setFacultyForm({ ...facultyForm, availability: type })}
                           className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
                             facultyForm.availability === type
-                              ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                              ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                               : 'border-gray-200 text-gray-600 hover:border-gray-300'
                           }`}
                         >
@@ -7371,7 +7371,7 @@ const AdminDashboard = () => {
                         type="date"
                         value={facultyForm.startDate}
                         onChange={(e) => setFacultyForm({ ...facultyForm, startDate: e.target.value })}
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7383,7 +7383,7 @@ const AdminDashboard = () => {
                 <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">Faculty Summary</h3>
                 <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
                   <div className="flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4 text-[#ff6b4d]" />
+                    <GraduationCap className="w-4 h-4 text-[var(--dq-orange-500)]" />
                     <span className="text-[16px] font-semibold text-gray-900">
                       {facultyForm.fullName || 'Faculty Name'}
                     </span>
@@ -7409,7 +7409,7 @@ const AdminDashboard = () => {
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white"
                   onClick={() => {
                     toast({
                       title: 'Draft Saved',
@@ -7420,7 +7420,7 @@ const AdminDashboard = () => {
                   Save as Draft
                 </Button>
                 <Button
-                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white"
                   onClick={() => {
                     toast({
                       title: 'Faculty Added',
@@ -7461,8 +7461,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <UserPlusIcon className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <UserPlusIcon className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">Create New User</h2>
               </div>
@@ -7488,7 +7488,7 @@ const AdminDashboard = () => {
                       value={createUserForm.fullName}
                       onChange={(e) => setCreateUserForm({ ...createUserForm, fullName: e.target.value })}
                       placeholder="e.g., John Smith"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
 
@@ -7503,7 +7503,7 @@ const AdminDashboard = () => {
                         value={createUserForm.email}
                         onChange={(e) => setCreateUserForm({ ...createUserForm, email: e.target.value })}
                         placeholder="john.smith@company.com"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7519,7 +7519,7 @@ const AdminDashboard = () => {
                         value={createUserForm.phone}
                         onChange={(e) => setCreateUserForm({ ...createUserForm, phone: e.target.value })}
                         placeholder="+1 (555) 123-4567"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7541,7 +7541,7 @@ const AdminDashboard = () => {
                         value={createUserForm.password}
                         onChange={(e) => setCreateUserForm({ ...createUserForm, password: e.target.value })}
                         placeholder="••••••••"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                     <p className="text-[12px] text-gray-500 mt-1">Minimum 8 characters</p>
@@ -7557,7 +7557,7 @@ const AdminDashboard = () => {
                         value={createUserForm.confirmPassword}
                         onChange={(e) => setCreateUserForm({ ...createUserForm, confirmPassword: e.target.value })}
                         placeholder="••••••••"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7578,7 +7578,7 @@ const AdminDashboard = () => {
                         onClick={() => setCreateUserForm({ ...createUserForm, role })}
                         className={`flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
                           createUserForm.role === role
-                            ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                            ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                             : 'border-gray-200 text-gray-600 hover:border-gray-300'
                         }`}
                       >
@@ -7589,8 +7589,8 @@ const AdminDashboard = () => {
                       </button>
                     ))}
                   </div>
-                  <div className="mt-3 p-3 bg-[#fff0ed] rounded-lg">
-                    <p className="text-[12px] text-[#1e2348]">
+                  <div className="mt-3 p-3 bg-[var(--dq-orange-50)] rounded-lg">
+                    <p className="text-[12px] text-[var(--dq-navy-950)]">
                       {createUserForm.role === 'learner' && 'Learners can enroll in courses, access content, and track their progress.'}
                       {createUserForm.role === 'instructor' && 'Instructors can create courses, manage content, and interact with learners.'}
                       {createUserForm.role === 'admin' && 'Admins have full access to all platform features and settings.'}
@@ -7614,7 +7614,7 @@ const AdminDashboard = () => {
                         value={createUserForm.organization}
                         onChange={(e) => setCreateUserForm({ ...createUserForm, organization: e.target.value })}
                         placeholder="e.g., Acme Corporation"
-                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                        className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                       />
                     </div>
                   </div>
@@ -7627,7 +7627,7 @@ const AdminDashboard = () => {
                       value={createUserForm.department}
                       onChange={(e) => setCreateUserForm({ ...createUserForm, department: e.target.value })}
                       placeholder="e.g., IT Department"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     />
                   </div>
                 </div>
@@ -7647,7 +7647,7 @@ const AdminDashboard = () => {
                         onClick={() => setCreateUserForm({ ...createUserForm, status })}
                         className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
                           createUserForm.status === status
-                            ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                            ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                             : 'border-gray-200 text-gray-600 hover:border-gray-300'
                         }`}
                       >
@@ -7665,7 +7665,7 @@ const AdminDashboard = () => {
                     type="checkbox"
                     checked={createUserForm.sendWelcomeEmail}
                     onChange={(e) => setCreateUserForm({ ...createUserForm, sendWelcomeEmail: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                    className="w-5 h-5 rounded border-gray-300 text-[var(--dq-orange-500)] focus:ring-[var(--dq-orange-500)]"
                   />
                   <div>
                     <span className="text-[14px] font-medium text-gray-700">Send welcome email</span>
@@ -7677,7 +7677,7 @@ const AdminDashboard = () => {
                     type="checkbox"
                     checked={createUserForm.requirePasswordChange}
                     onChange={(e) => setCreateUserForm({ ...createUserForm, requirePasswordChange: e.target.checked })}
-                    className="w-5 h-5 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                    className="w-5 h-5 rounded border-gray-300 text-[var(--dq-orange-500)] focus:ring-[var(--dq-orange-500)]"
                   />
                   <div>
                     <span className="text-[14px] font-medium text-gray-700">Require password change on first login</span>
@@ -7691,7 +7691,7 @@ const AdminDashboard = () => {
                 <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">User Summary</h3>
                 <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
                   <div className="flex items-center gap-2">
-                    <UserPlusIcon className="w-4 h-4 text-[#ff6b4d]" />
+                    <UserPlusIcon className="w-4 h-4 text-[var(--dq-orange-500)]" />
                     <span className="text-[16px] font-semibold text-gray-900">
                       {createUserForm.fullName || 'User Name'}
                     </span>
@@ -7717,7 +7717,7 @@ const AdminDashboard = () => {
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white"
                   onClick={() => {
                     toast({
                       title: 'Draft Saved',
@@ -7728,7 +7728,7 @@ const AdminDashboard = () => {
                   Save as Draft
                 </Button>
                 <Button
-                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white"
                   onClick={() => {
                     if (createUserForm.password !== createUserForm.confirmPassword) {
                       toast({
@@ -7773,8 +7773,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <FileTextIcon className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <FileTextIcon className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">Content Review</h2>
               </div>
@@ -7798,7 +7798,7 @@ const AdminDashboard = () => {
                     <select
                       value={reviewContentForm.contentType}
                       onChange={(e) => setReviewContentForm({ ...reviewContentForm, contentType: e.target.value as any })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     >
                       <option value="course">Course</option>
                       <option value="lesson">Lesson</option>
@@ -7813,7 +7813,7 @@ const AdminDashboard = () => {
                     <select
                       value={reviewContentForm.contentId}
                       onChange={(e) => setReviewContentForm({ ...reviewContentForm, contentId: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px]"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px]"
                     >
                       <option value="">Choose content...</option>
                       <option value="economy-40">Mastering Economy 4.0</option>
@@ -7837,7 +7837,7 @@ const AdminDashboard = () => {
                       onClick={() => setReviewContentForm({ ...reviewContentForm, reviewType: type })}
                       className={`flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
                         reviewContentForm.reviewType === type
-                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                           : 'border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -7866,10 +7866,10 @@ const AdminDashboard = () => {
                       onChange={(e) => setReviewContentForm({ ...reviewContentForm, qualityScore: parseInt(e.target.value) })}
                       className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                       style={{
-                        background: `linear-gradient(to right, #ff6b4d 0%, #ff6b4d ${reviewContentForm.qualityScore}%, #e5e7eb ${reviewContentForm.qualityScore}%, #e5e7eb 100%)`
+                        background: `linear-gradient(to right, var(--dq-orange-500) 0%, var(--dq-orange-500) ${reviewContentForm.qualityScore}%, var(--dq-surface-border-default) ${reviewContentForm.qualityScore}%, var(--dq-surface-border-default) 100%)`
                       }}
                     />
-                    <span className="text-[24px] font-semibold text-[#ff6b4d] w-16 text-right">
+                    <span className="text-[24px] font-semibold text-[var(--dq-orange-500)] w-16 text-right">
                       {reviewContentForm.qualityScore}
                     </span>
                   </div>
@@ -7898,7 +7898,7 @@ const AdminDashboard = () => {
                               : reviewContentForm.complianceChecks.filter(c => c !== check);
                             setReviewContentForm({ ...reviewContentForm, complianceChecks: newChecks });
                           }}
-                          className="w-4 h-4 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                          className="w-4 h-4 rounded border-gray-300 text-[var(--dq-orange-500)] focus:ring-[var(--dq-orange-500)]"
                         />
                         <span className="text-[14px] text-gray-700">{check}</span>
                       </label>
@@ -7925,7 +7925,7 @@ const AdminDashboard = () => {
                               : reviewContentForm.accessibilityIssues.filter(i => i !== issue);
                             setReviewContentForm({ ...reviewContentForm, accessibilityIssues: newIssues });
                           }}
-                          className="w-4 h-4 rounded border-gray-300 text-[#ff6b4d] focus:ring-[#ff6b4d]"
+                          className="w-4 h-4 rounded border-gray-300 text-[var(--dq-orange-500)] focus:ring-[var(--dq-orange-500)]"
                         />
                         <span className="text-[14px] text-gray-700">{issue}</span>
                       </label>
@@ -7944,7 +7944,7 @@ const AdminDashboard = () => {
                       onClick={() => setReviewContentForm({ ...reviewContentForm, reviewStatus: status })}
                       className={`flex flex-col items-center justify-center gap-2 px-4 py-4 rounded-lg border-2 text-[14px] font-medium transition-all ${
                         reviewContentForm.reviewStatus === status
-                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                           : 'border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -7970,7 +7970,7 @@ const AdminDashboard = () => {
                       onClick={() => setReviewContentForm({ ...reviewContentForm, priority })}
                       className={`px-4 py-3 rounded-lg border-2 text-[14px] font-medium capitalize transition-all ${
                         reviewContentForm.priority === priority
-                          ? 'border-[#ff6b4d] bg-[#ff6b4d]/10 text-[#ff6b4d]'
+                          ? 'border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/10 text-[var(--dq-orange-500)]'
                           : 'border-gray-200 text-gray-600 hover:border-gray-300'
                       }`}
                     >
@@ -7990,7 +7990,7 @@ const AdminDashboard = () => {
                   onChange={(e) => setReviewContentForm({ ...reviewContentForm, reviewNotes: e.target.value })}
                   placeholder="Document your review findings..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none"
                 />
               </div>
 
@@ -8004,7 +8004,7 @@ const AdminDashboard = () => {
                   onChange={(e) => setReviewContentForm({ ...reviewContentForm, recommendations: e.target.value })}
                   placeholder="Provide specific recommendations..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none"
                 />
               </div>
 
@@ -8018,7 +8018,7 @@ const AdminDashboard = () => {
                   onChange={(e) => setReviewContentForm({ ...reviewContentForm, reviewerComments: e.target.value })}
                   placeholder="Add comments for the content creator..."
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent text-[16px] resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent text-[16px] resize-none"
                 />
               </div>
 
@@ -8027,7 +8027,7 @@ const AdminDashboard = () => {
                 <h3 className="text-[14px] leading-[20px] font-medium text-gray-700 mb-3">Review Summary</h3>
                 <div className="bg-white rounded-lg p-4 border border-gray-200 space-y-2">
                   <div className="flex items-center gap-2">
-                    <FileTextIcon className="w-4 h-4 text-[#ff6b4d]" />
+                    <FileTextIcon className="w-4 h-4 text-[var(--dq-orange-500)]" />
                     <span className="text-[16px] font-semibold text-gray-900 capitalize">
                       {reviewContentForm.contentType} Review
                     </span>
@@ -8056,7 +8056,7 @@ const AdminDashboard = () => {
               <div className="flex gap-3">
                 <Button
                   variant="outline"
-                  className="border-[#1e2348] text-[#1e2348] hover:bg-[#1e2348] hover:text-white"
+                  className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white"
                   onClick={() => {
                     toast({
                       title: 'Draft Saved',
@@ -8067,7 +8067,7 @@ const AdminDashboard = () => {
                   Save as Draft
                 </Button>
                 <Button
-                  className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+                  className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white"
                   onClick={() => {
                     toast({
                       title: 'Review Submitted',
@@ -8104,8 +8104,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">Create New Learning Program</h2>
               </div>
@@ -8118,12 +8118,12 @@ const AdminDashboard = () => {
             </div>
 
             <div className="p-6 space-y-6">
-              <div className="bg-[#fff0ed] border border-[#ff6b4d]/20 rounded-xl p-4">
+              <div className="bg-[var(--dq-orange-50)] border border-[var(--dq-orange-500)]/20 rounded-xl p-4">
                 <div className="flex items-start gap-3">
-                  <Sparkles className="w-5 h-5 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
+                  <Sparkles className="w-5 h-5 text-[var(--dq-orange-500)] flex-shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="text-[14px] font-semibold text-[#1e2348] mb-1">Program Builder</h3>
-                    <p className="text-[13px] text-[#4B5563]">
+                    <h3 className="text-[14px] font-semibold text-[var(--dq-navy-950)] mb-1">Program Builder</h3>
+                    <p className="text-[13px] text-[var(--dq-text-secondary)]">
                       Create comprehensive learning programs by combining multiple courses into structured pathways. 
                       Define prerequisites, set milestones, and design certification requirements.
                     </p>
@@ -8136,13 +8136,13 @@ const AdminDashboard = () => {
                 <input
                   type="text"
                   placeholder="e.g., Digital Transformation Leadership Program"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent"
                 />
               </div>
 
               <div>
                 <label className="block text-[14px] font-medium text-gray-700 mb-2">Category *</label>
-                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent">
+                <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent">
                   <option>Select a category</option>
                   <option>Digital Transformation</option>
                   <option>Business Platform</option>
@@ -8158,7 +8158,7 @@ const AdminDashboard = () => {
                 <textarea
                   rows={4}
                   placeholder="Describe the program objectives, target audience, and learning outcomes..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent"
                 />
               </div>
 
@@ -8168,12 +8168,12 @@ const AdminDashboard = () => {
                   <input
                     type="number"
                     placeholder="12"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-[14px] font-medium text-gray-700 mb-2">Difficulty Level</label>
-                  <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent">
+                  <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--dq-orange-500)] focus:border-transparent">
                     <option>Beginner</option>
                     <option>Intermediate</option>
                     <option>Advanced</option>
@@ -8198,7 +8198,7 @@ const AdminDashboard = () => {
                       description: "New learning program has been created successfully.",
                     });
                   }}
-                  className="flex-1 bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                  className="flex-1 bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Create Program
@@ -8215,8 +8215,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">All Faculty Members</h2>
               </div>
@@ -8229,10 +8229,10 @@ const AdminDashboard = () => {
             </div>
 
             <div className="p-6">
-              <div className="bg-[#F5F6FA] rounded-xl p-8 text-center">
-                <Users className="w-12 h-12 text-[#ff6b4d] mx-auto mb-4" />
-                <h3 className="text-[18px] font-semibold text-[#1e2348] mb-2">Faculty Management</h3>
-                <p className="text-[14px] text-[#4B5563] mb-4">
+              <div className="bg-[var(--dq-gray-50)] rounded-xl p-8 text-center">
+                <Users className="w-12 h-12 text-[var(--dq-orange-500)] mx-auto mb-4" />
+                <h3 className="text-[18px] font-semibold text-[var(--dq-navy-950)] mb-2">Faculty Management</h3>
+                <p className="text-[14px] text-[var(--dq-text-secondary)] mb-4">
                   View and manage all faculty members, their courses, and performance metrics.
                 </p>
                 <Button
@@ -8240,7 +8240,7 @@ const AdminDashboard = () => {
                     setShowFacultyListModal(false);
                     setShowAddFacultyModal(true);
                   }}
-                  className="bg-[#ff6b4d] hover:bg-[#e66045] text-white"
+                  className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white"
                 >
                   <UserPlus className="w-4 h-4 mr-2" />
                   Add New Faculty
@@ -8257,8 +8257,8 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#ff6b4d]/10 flex items-center justify-center">
-                  <BarChart2 className="w-5 h-5 text-[#ff6b4d]" />
+                <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
+                  <BarChart2 className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
                 <h2 className="text-[24px] leading-[32px] font-semibold">Faculty Performance Reports</h2>
               </div>
@@ -8271,10 +8271,10 @@ const AdminDashboard = () => {
             </div>
 
             <div className="p-6">
-              <div className="bg-[#F5F6FA] rounded-xl p-8 text-center">
-                <BarChart2 className="w-12 h-12 text-[#ff6b4d] mx-auto mb-4" />
-                <h3 className="text-[18px] font-semibold text-[#1e2348] mb-2">Performance Analytics</h3>
-                <p className="text-[14px] text-[#4B5563]">
+              <div className="bg-[var(--dq-gray-50)] rounded-xl p-8 text-center">
+                <BarChart2 className="w-12 h-12 text-[var(--dq-orange-500)] mx-auto mb-4" />
+                <h3 className="text-[18px] font-semibold text-[var(--dq-navy-950)] mb-2">Performance Analytics</h3>
+                <p className="text-[14px] text-[var(--dq-text-secondary)]">
                   Comprehensive analytics and insights on faculty performance, student ratings, and course effectiveness.
                 </p>
               </div>
@@ -8287,3 +8287,6 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
+
+

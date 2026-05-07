@@ -1,0 +1,389 @@
+/* DQ Design System Tokens - Global CSS Variables */
+/* Version: 1.2.0 | Last Updated: 2026-05-07 */
+
+:root {
+  /* ─── PRIMARY BRAND COLORS ─── */
+  --dq-navy-950: #030f35;
+  --dq-navy-900: #050e4a;
+  --dq-navy-800: #0a1a6e;
+  --dq-navy-700: #0d2199;
+  --dq-navy-600: #1130bb;
+  --dq-navy-500: #1e45d4;
+  --dq-navy-400: #4468e3;
+  --dq-navy-300: #7a97ee;
+  --dq-navy-200: #b5c5f7;
+  --dq-navy-100: #e8edfb;
+  --dq-navy-50: #f3f5fd;
+
+  --dq-orange-950: #6e1a06;
+  --dq-orange-900: #a6270d;
+  --dq-orange-800: #c93515;
+  --dq-orange-700: #e04020;
+  --dq-orange-600: #f24c2a;
+  --dq-orange-500: #fb5535;
+  --dq-orange-400: #fc7256;
+  --dq-orange-300: #fd9478;
+  --dq-orange-200: #feb9a7;
+  --dq-orange-100: #fde5df;
+  --dq-orange-50: #fff5f2;
+
+  /* ─── NEUTRAL SCALE (Cool-leaning) ─── */
+  --dq-gray-950: #09090f;
+  --dq-gray-900: #111118;
+  --dq-gray-800: #1e1e2d;
+  --dq-gray-700: #2e2e42;
+  --dq-gray-600: #454560;
+  --dq-gray-500: #5f607f;
+  --dq-gray-400: #8385a1;
+  --dq-gray-300: #b0b2c8;
+  --dq-gray-200: #d8d9e6;
+  --dq-gray-100: #eeeff6;
+  --dq-gray-50: #f6f6fb;
+
+  /* ─── SEMANTIC COLORS ─── */
+  --dq-success: #16a34a;
+  --dq-success-surface: #dcfce7;
+  --dq-success-text: #15803d;
+
+  --dq-warning: #d97706;
+  --dq-warning-surface: #fef3c7;
+  --dq-warning-text: #b45309;
+
+  --dq-error: #dc2626;
+  --dq-error-surface: #fee2e2;
+  --dq-error-text: #b91c1c;
+
+  --dq-info: #2563eb;
+  --dq-info-surface: #dbeafe;
+  --dq-info-text: #1d4ed8;
+
+  /* ─── SURFACES ─── */
+  --dq-surface-background: #ffffff;
+  --dq-surface-1: #f6f6fb;
+  --dq-surface-2: #ffffff;
+  --dq-surface-navy: #030f35;
+  --dq-surface-border-subtle: #eeeff6;
+  --dq-surface-border-default: #d8d9e6;
+  --dq-surface-border-strong: #b0b2c8;
+
+  /* ─── TEXT HIERARCHY ─── */
+  --dq-text-primary: #111118;
+  --dq-text-secondary: #2e2e42;
+  --dq-text-tertiary: #5f607f;
+  --dq-text-disabled: #8385a1;
+  --dq-text-on-dark: #ffffff;
+  --dq-text-on-dark-secondary: #b5c5f7;
+  --dq-text-on-dark-tertiary: #7a97ee;
+
+  /* ─── TYPOGRAPHY ─── */
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, "SF Mono", monospace;
+
+  /* Font weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* ─── BORDER RADIUS ─── */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+
+  /* ─── SHADOWS ─── */
+  --shadow-sm: 0 1px 2px rgba(3, 15, 53, 0.05), 0 1px 3px rgba(3, 15, 53, 0.08);
+  --shadow-md: 0 4px 6px rgba(3, 15, 53, 0.07), 0 2px 4px rgba(3, 15, 53, 0.06);
+  --shadow-lg: 0 10px 15px rgba(3, 15, 53, 0.10), 0 4px 6px rgba(3, 15, 53, 0.07);
+  --shadow-xl: 0 20px 25px rgba(3, 15, 53, 0.15), 0 10px 10px rgba(3, 15, 53, 0.04);
+  --shadow-2xl: 0 25px 50px rgba(3, 15, 53, 0.25);
+  --shadow-inner: inset 0 2px 4px rgba(3, 15, 53, 0.08);
+
+  /* Focus rings */
+  --focus-ring-orange: 0 0 0 3px rgba(251, 85, 53, 0.30);
+  --focus-ring-navy: 0 0 0 3px rgba(3, 15, 53, 0.18);
+  --focus-ring-error: 0 0 0 3px rgba(220, 38, 38, 0.20);
+
+  /* ─── SPACING (8px base grid) ─── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-30: 120px;
+  --space-40: 160px;
+
+  /* ─── Z-INDEX ─── */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+
+  /* ─── MOTION ─── */
+  --motion-fast: 150ms;
+  --motion-base: 250ms;
+  --motion-slow: 400ms;
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* ─── DARK MODE ─── */
+.dark {
+  --dq-surface-background: #030f35;
+  --dq-surface-1: #060e44;
+  --dq-surface-2: #0a1a6e;
+  --dq-surface-border-subtle: rgba(255, 255, 255, 0.06);
+  --dq-surface-border-default: rgba(255, 255, 255, 0.12);
+  --dq-surface-border-strong: rgba(255, 255, 255, 0.22);
+
+  --dq-text-primary: #ffffff;
+  --dq-text-secondary: #b5c5f7;
+  --dq-text-tertiary: #7a97ee;
+  --dq-text-disabled: #4468e3;
+}
+
+/* ─── GLOBAL TYPOGRAPHY ─── */
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--dq-surface-background);
+  color: var(--dq-text-primary);
+  font-size: 16px;
+  line-height: 1.65;
+  font-weight: var(--font-weight-normal);
+}
+
+/* ─── HEADING STYLES ─── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-bold);
+  color: var(--dq-text-primary);
+  margin: 0;
+}
+
+/* Dark surface headings */
+.bg-\[var\(--dq-navy-950\)\] h1,
+.bg-\[var\(--dq-navy-950\)\] h2,
+.bg-\[var\(--dq-navy-950\)\] h3,
+.bg-\[var\(--dq-navy-950\)\] h4,
+.bg-\[var\(--dq-navy-950\)\] h5,
+.bg-\[var\(--dq-navy-950\)\] h6,
+.bg-navy h1,
+.bg-navy h2,
+.bg-navy h3,
+.bg-navy h4,
+.bg-navy h5,
+.bg-navy h6 {
+  color: var(--dq-text-on-dark);
+}
+
+h1 {
+  font-size: 36px;
+  line-height: 1.15;
+  letter-spacing: -0.54px;
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 1.20;
+  letter-spacing: -0.30px;
+  font-weight: var(--font-weight-semibold);
+}
+
+h3 {
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: -0.24px;
+  font-weight: var(--font-weight-semibold);
+}
+
+h4 {
+  font-size: 20px;
+  line-height: 1.30;
+  letter-spacing: -0.20px;
+  font-weight: var(--font-weight-semibold);
+}
+
+h5 {
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: 0;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ─── BODY TEXT ─── */
+p {
+  margin: 0;
+  color: var(--dq-text-secondary);
+}
+
+/* Dark surface paragraphs */
+.bg-\[var\(--dq-navy-950\)\] p,
+.bg-navy p {
+  color: var(--dq-text-on-dark-secondary);
+}
+
+small {
+  font-size: 14px;
+  line-height: 1.60;
+  color: var(--dq-text-tertiary);
+}
+
+/* Dark surface small text */
+.bg-\[var\(--dq-navy-950\)\] small,
+.bg-navy small {
+  color: var(--dq-text-on-dark-tertiary);
+}
+
+/* ─── CODE ─── */
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.65;
+  letter-spacing: -0.32px;
+}
+
+/* ─── LINKS ─── */
+a {
+  color: var(--dq-navy-600);
+  text-decoration: none;
+  transition: color var(--motion-base) var(--ease-out);
+}
+
+a:hover {
+  color: var(--dq-navy-950);
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: var(--focus-ring-navy);
+  border-radius: var(--radius-sm);
+}
+
+/* ─── BUTTONS (Base) ─── */
+button {
+  font-family: var(--font-sans);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-lg);
+  transition: all var(--motion-base) var(--ease-out);
+  cursor: pointer;
+  border: none;
+}
+
+button:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* ─── INPUTS (Base) ─── */
+input, textarea, select {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--dq-surface-border-default);
+  padding: 10px 16px;
+  transition: all var(--motion-base) var(--ease-out);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--dq-orange-500);
+  box-shadow: var(--focus-ring-orange);
+}
+
+input:disabled, textarea:disabled, select:disabled {
+  background-color: var(--dq-surface-1);
+  color: var(--dq-text-disabled);
+  cursor: not-allowed;
+}
+
+/* ─── CARDS (Base) ─── */
+.card {
+  background-color: var(--dq-surface-2);
+  border: 1px solid var(--dq-surface-border-default);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--motion-base) var(--ease-out);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* ─── UTILITY CLASSES ─── */
+.text-primary {
+  color: var(--dq-text-primary);
+}
+
+.text-secondary {
+  color: var(--dq-text-secondary);
+}
+
+.text-tertiary {
+  color: var(--dq-text-tertiary);
+}
+
+.text-muted {
+  color: var(--dq-text-disabled);
+}
+
+.bg-navy {
+  background-color: var(--dq-navy-950);
+  color: var(--dq-text-on-dark);
+}
+
+.bg-orange {
+  background-color: var(--dq-orange-500);
+  color: white;
+}
+
+.border-default {
+  border-color: var(--dq-surface-border-default);
+}
+
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+.rounded-lg {
+  border-radius: var(--radius-lg);
+}
+
+.rounded-xl {
+  border-radius: var(--radius-xl);
+}

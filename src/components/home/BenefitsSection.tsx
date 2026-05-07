@@ -30,13 +30,13 @@ const BenefitsSection = () => {
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Section Intro */}
         <div className="text-center mb-16">
-          <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
+          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
             The DTMA Advantage
           </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+          <h2 className="text-3xl md:text-4xl font-semibold text-[var(--dq-navy-950)] mb-6">
             Ready for the Digital Economy?
           </h2>
-          <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base text-[var(--dq-text-secondary)] max-w-3xl mx-auto leading-relaxed">
             Learn what it takes to become a Digital Cognitive Organization and succeed in Economy 4.0.
           </p>
         </div>
@@ -48,34 +48,34 @@ const BenefitsSection = () => {
             return (
               <div 
                 key={index}
-                className="flex flex-col items-start p-6 bg-[#F5F6FA] rounded-2xl hover:shadow-lg transition-shadow duration-300"
+                className="flex flex-col items-start p-6 bg-white border border-[var(--dq-surface-border-default)] rounded-xl hover:shadow-md transition-all duration-300"
               >
                 {/* Icon */}
-                <div className="w-12 h-12 bg-[#ff6b4d]/20 rounded-xl flex items-center justify-center mb-5">
-                  <Icon className="w-6 h-6 text-[#ff6b4d]" />
+                <div className="w-12 h-12 bg-[var(--dq-navy-950)]/5 rounded-xl flex items-center justify-center mb-5">
+                  <Icon className="w-6 h-6 text-[var(--dq-navy-950)]" />
                 </div>
 
                 {/* Heading */}
-                <h3 className="text-lg font-semibold text-[#0B0C19] mb-4">
+                <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-4">
                   {benefit.title}
                 </h3>
 
                 {/* Description */}
-                <p className="text-sm text-[#4B5563] leading-relaxed mb-4 flex-grow">
+                <p className="text-sm text-[var(--dq-text-secondary)] leading-relaxed mb-4 flex-grow">
                   {benefit.description}
                 </p>
 
                 {/* Credential Note (if exists) */}
                 {benefit.credential && (
-                  <p className="text-xs text-[#4B5563] italic mb-4 p-3 bg-white rounded-lg border border-[#E5E7EB]">
-                    {benefit.credential}
+                  <p className="text-xs text-[var(--dq-text-secondary)] italic mb-4 p-3 bg-white rounded-lg border border-[var(--dq-surface-border-default)]">
+                    {(benefit as any).credential}
                   </p>
                 )}
 
                 {/* CTA */}
                 <a 
                   href={benefit.link}
-                  className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-sm transition-colors inline-flex items-center gap-2 mt-2"
+                  className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-medium text-sm transition-colors inline-flex items-center gap-2 mt-2"
                 >
                   {benefit.cta}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

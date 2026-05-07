@@ -83,7 +83,7 @@ const ExploreCategoriesSection = () => {
                       ? "text-white shadow-md border-0"
                       : "bg-white text-foreground border border-border/50 hover:bg-muted/50"
                   }`}
-                  style={isSelected ? { backgroundColor: '#1E234899' } : {}}
+                  style={isSelected ? { backgroundColor: 'var(--dq-navy-950)' } : {}}
                 >
                   <Icon className="w-4 h-4" />
                   <span className="text-sm font-medium">{category.title}</span>

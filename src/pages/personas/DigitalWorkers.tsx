@@ -26,7 +26,7 @@ const DigitalWorkers = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
+      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#ff6b4d]/10 border border-[#ff6b4d]/20 mb-6">
@@ -47,10 +47,10 @@ const DigitalWorkers = () => {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-6 text-center">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-6 text-center">
               Your Challenge
             </h2>
-            <p className="text-[16px] leading-[24px] font-normal text-[#4B5563] mb-8 text-center">
+            <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)] mb-8 text-center">
               The workplace is evolving rapidly. Digital workers need to understand how modern organizations operate, how to work alongside AI systems, and how to remain valuable contributors in an increasingly automated environment.
             </p>
           </div>
@@ -61,7 +61,7 @@ const DigitalWorkers = () => {
       <section className="py-16 lg:py-24 bg-[#F5F6FA]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-12 text-center">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-12 text-center">
               What You'll Gain
             </h2>
             
@@ -69,10 +69,10 @@ const DigitalWorkers = () => {
               {benefits.map((benefit, index) => (
                 <div 
                   key={index}
-                  className="flex items-start gap-4 p-6 rounded-xl bg-white border border-[#E5E7EB]"
+                  className="flex items-start gap-4 p-6 rounded-xl bg-white border border-[var(--dq-surface-border-default)]"
                 >
-                  <CheckCircle2 className="w-6 h-6 text-[#ff6b4d] flex-shrink-0 mt-1" />
-                  <p className="text-[16px] leading-[24px] font-normal text-[#0B0C19]">{benefit}</p>
+                  <CheckCircle2 className="w-6 h-6 text-[var(--dq-orange-500)] flex-shrink-0 mt-1" />
+                  <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-navy-950)]">{benefit}</p>
                 </div>
               ))}
             </div>
@@ -84,7 +84,7 @@ const DigitalWorkers = () => {
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-12 text-center">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-12 text-center">
               Recommended Learning Path
             </h2>
             
@@ -92,12 +92,12 @@ const DigitalWorkers = () => {
               {courses.map((course, index) => (
                 <div 
                   key={index}
-                  className="flex items-center gap-4 p-6 rounded-xl bg-[#F5F6FA] border border-[#E5E7EB]"
+                  className="flex items-center gap-4 p-6 rounded-xl bg-[#F5F6FA] border border-[var(--dq-surface-border-default)]"
                 >
-                  <div className="w-10 h-10 rounded-full bg-[#ff6b4d] text-white flex items-center justify-center text-[16px] leading-[24px] font-medium flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] text-white flex items-center justify-center text-[16px] leading-[24px] font-medium flex-shrink-0">
                     {index + 1}
                   </div>
-                  <p className="text-[16px] leading-[24px] font-medium text-[#0B0C19]">{course}</p>
+                  <p className="text-[16px] leading-[24px] font-medium text-[var(--dq-navy-950)]">{course}</p>
                 </div>
               ))}
             </div>
@@ -106,7 +106,7 @@ const DigitalWorkers = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-[#1e2348] via-[#1e2348] via-60% to-[#ff6b4d]">
+      <section className="py-16 bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-950)] via-60% to-[var(--dq-orange-500)]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-[28px] leading-[36px] font-semibold text-white mb-6">
@@ -119,7 +119,7 @@ const DigitalWorkers = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/courses">
                 <Button 
-                  className="px-8 py-6 bg-[#ff6b4d] hover:bg-[#e56045] text-white border-transparent text-[16px] leading-[24px] font-normal gap-2"
+                  className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white border-transparent text-[16px] leading-[24px] font-normal gap-2"
                 >
                   <BookOpen className="w-4 h-4" />
                   Explore Courses
@@ -127,7 +127,7 @@ const DigitalWorkers = () => {
               </Link>
               <Link to="/">
                 <Button 
-                  className="px-8 py-6 bg-transparent border-white text-white hover:bg-white hover:text-[#ff6b4d] text-[16px] leading-[24px] font-normal"
+                  className="px-8 py-6 bg-transparent border-white text-white hover:bg-white hover:text-[var(--dq-orange-500)] text-[16px] leading-[24px] font-normal"
                   style={{ borderWidth: '1.5px' }}
                 >
                   Back to Home

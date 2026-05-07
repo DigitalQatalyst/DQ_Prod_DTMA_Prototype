@@ -64,7 +64,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#1e2348]/20 backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--dq-navy-950)]/20 backdrop-blur-md">
       <nav className="w-full relative">
         <div className="flex items-center w-full px-8 md:px-12 lg:px-16 py-3 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
           {/* Left: Logo Area */}
@@ -114,7 +114,7 @@ const Navbar = () => {
                           {/* Course 1: Economy 4.0 */}
                           <Link to="/courses/course-economy-40" className="group">
                             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Mastering Economy 4.0</h3>
+                              <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Mastering Economy 4.0</h3>
                               <p className="text-sm text-muted-foreground">Master the fundamentals of the digital economy and Economy 4.0</p>
                             </div>
                           </Link>
@@ -122,7 +122,7 @@ const Navbar = () => {
                           {/* Course 2: Cognitive Organisations */}
                           <Link to="/courses/course-cognitive-org" className="group">
                             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Decoding Digital Cognitive Organisations</h3>
+                              <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Decoding Digital Cognitive Organisations</h3>
                               <p className="text-sm text-muted-foreground">Transform your organization into an intelligent, learning entity</p>
                             </div>
                           </Link>
@@ -130,7 +130,7 @@ const Navbar = () => {
                           {/* Course 3: Business Platforms */}
                           <Link to="/courses/course-business-platforms" className="group">
                             <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Building Powerful Digital Business Platforms</h3>
+                              <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Building Powerful Digital Business Platforms</h3>
                               <p className="text-sm text-muted-foreground">Master the architecture and design of scalable digital platforms</p>
                             </div>
                           </Link>
@@ -141,7 +141,7 @@ const Navbar = () => {
                           {/* Course 4: Digital Transformation */}
                           <Link to="/courses/course-transformation" className="group">
                             <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Navigating Digital Transformation 2.0</h3>
+                              <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Navigating Digital Transformation 2.0</h3>
                               <p className="text-sm text-muted-foreground">Lead successful digital transformation initiatives</p>
                             </div>
                           </Link>

@@ -7,34 +7,34 @@ const CredentialsSection = () => {
       tier: "Tier 1",
       name: "Course Certificate",
       description: "Complete any single DTMA course with quizzes and assessments. Earn a KHDA-attested certificate for that specific dimension.",
-      color: "#ff6b4d", // DTMA Orange
+      color: "var(--dq-orange-500)",
     },
     {
       tier: "Tier 2",
       name: "Foundation Credential",
       description: "Complete all seven courses, including foundational and 6XD dimensions, to demonstrate full mastery of the Digital Cognitive Organization framework.",
-      color: "#ff6b4d", // DTMA Orange
+      color: "var(--dq-orange-500)",
     },
     {
       tier: "Tier 3",
       name: "Practitioner Credential",
       description: "Complete core courses and specialized electives to demonstrate ability to design, execute, and deliver measurable transformation outcomes.",
-      color: "#ff6b4d", // DTMA Orange
+      color: "var(--dq-orange-500)",
     },
     {
       tier: "Tier 4",
       name: "Expert Credential",
       description: "Master the 6XD framework through core courses, electives, and advanced assessments, earning the highest certification for transformation leaders.",
-      color: "#ff6b4d", // DTMA Orange
+      color: "var(--dq-orange-500)",
     },
   ];
 
   return (
-    <section className="py-16 bg-[#1e2348]">
+    <section className="py-16 bg-[var(--dq-navy-950)]">
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <p className="text-[12px] leading-[16px] font-medium text-[#ff6b4d] uppercase tracking-wide mb-4">
+          <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
             Accreditation & Credentials
           </p>
           <h2 className="text-[28px] leading-[36px] md:text-[32px] md:leading-[40px] font-semibold text-white mb-6">
@@ -47,36 +47,39 @@ const CredentialsSection = () => {
 
         {/* Credential Tiers - Horizontal Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {credentialTiers.map((credential, index) => (
-            <div key={index}>
-              {/* Icon */}
-              <div className="flex mb-4">
-                <div 
-                  className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10"
-                >
-                  <Award className="w-8 h-8" style={{ color: credential.color }} />
+          {credentialTiers.map((credential, index) => {
+            const colorVar = credential.color.replace('var(', '').replace(')', '');
+            return (
+              <div key={index}>
+                {/* Icon */}
+                <div className="flex mb-4">
+                  <div 
+                    className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10"
+                  >
+                    <Award className="w-8 h-8" style={{ color: `var(${colorVar})` }} />
+                  </div>
                 </div>
+
+                {/* Tier Badge */}
+                <p 
+                  className="text-[12px] leading-[16px] font-medium uppercase tracking-wide mb-2"
+                  style={{ color: `var(${colorVar})` }}
+                >
+                  {credential.tier}
+                </p>
+
+                {/* Credential Name */}
+                <h3 className="text-[20px] leading-[28px] font-medium text-white mb-3">
+                  {credential.name}
+                </h3>
+
+                {/* Description */}
+                <p className="text-[14px] leading-[20px] font-normal text-white/70">
+                  {credential.description}
+                </p>
               </div>
-
-              {/* Tier Badge */}
-              <p 
-                className="text-[12px] leading-[16px] font-medium uppercase tracking-wide mb-2"
-                style={{ color: credential.color }}
-              >
-                {credential.tier}
-              </p>
-
-              {/* Credential Name */}
-              <h3 className="text-[20px] leading-[28px] font-medium text-white mb-3">
-                {credential.name}
-              </h3>
-
-              {/* Description */}
-              <p className="text-[14px] leading-[20px] font-normal text-white/70">
-                {credential.description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

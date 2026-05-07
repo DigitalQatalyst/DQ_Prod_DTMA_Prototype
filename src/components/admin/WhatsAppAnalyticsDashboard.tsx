@@ -122,14 +122,14 @@ export const WhatsAppAnalyticsDashboard = () => {
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Course Performance */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
-          <div className="px-6 py-5 border-b border-[#E5E7EB]">
-            <h3 className="text-[18px] font-semibold text-[#1e2348]">WhatsApp Performance by Course</h3>
-            <p className="text-[13px] text-[#4B5563] mt-1">Opt-in rates and engagement metrics</p>
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-[var(--dq-surface-border-default)] overflow-hidden">
+          <div className="px-6 py-5 border-b border-[var(--dq-surface-border-default)]">
+            <h3 className="text-[18px] font-semibold text-[var(--dq-text-primary)]">WhatsApp Performance by Course</h3>
+            <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Opt-in rates and engagement metrics</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#1e2348]">
+              <thead className="bg-[var(--dq-navy-950)]">
                 <tr>
                   <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Course</th>
                   <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Opted In</th>
@@ -140,13 +140,13 @@ export const WhatsAppAnalyticsDashboard = () => {
               </thead>
               <tbody>
                 {MOCK_COURSE_STATS.map((course, idx) => (
-                  <tr key={course.id} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F5F6FA]'}`}>
+                  <tr key={course.id} className={`border-t border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[var(--dq-gray-50)]'}`}>
                     <td className="px-4 py-3">
-                      <div className="text-[13px] font-medium text-[#1e2348] max-w-[200px] truncate" title={course.courseName}>
+                      <div className="text-[13px] font-medium text-[var(--dq-text-primary)] max-w-[200px] truncate" title={course.courseName}>
                         {course.courseName}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-[#4B5563]">
+                    <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)]">
                       {course.optedIn} / {course.total}
                     </td>
                     <td className="px-4 py-3">

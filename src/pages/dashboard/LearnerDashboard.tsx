@@ -171,15 +171,15 @@ const LearnerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E9EBF8] flex">
+    <div className="min-h-screen bg-[var(--dq-gray-50)] flex">
       {/* Sidebar */}
       <aside
         className={`${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 fixed lg:sticky top-0 left-0 z-50 w-72 h-screen bg-gradient-to-b from-[#1e2348] to-[#2a3058] border-r border-[#2a3058] transition-transform duration-200 flex flex-col`}
+        } lg:translate-x-0 fixed lg:sticky top-0 left-0 z-50 w-72 h-screen bg-[var(--dq-navy-950)] border-r border-[var(--dq-surface-border-default)] transition-transform duration-200 flex flex-col`}
       >
         {/* Logo */}
-        <div className="p-6 border-b border-[#2a3058]">
+        <div className="p-6 border-b border-[var(--dq-surface-border-default)]">
           <Link to="/" className="flex items-center gap-3">
             <img
               src="/dtma-logo.png"
@@ -194,10 +194,10 @@ const LearnerDashboard = () => {
           <nav className="space-y-2">
             <button
               onClick={() => setActiveTab('overview')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === 'overview' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                  : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
               }`}
             >
               <Home className="w-5 h-5" />
@@ -205,24 +205,24 @@ const LearnerDashboard = () => {
             </button>
             <button
               onClick={() => setActiveTab('courses')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === 'courses' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                  : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
               }`}
             >
               <BookOpen className="w-5 h-5" />
               <span className="text-[16px] leading-[24px] font-normal">My Courses</span>
               {inProgressCourses.length > 0 && (
-                <Badge className="ml-auto bg-[#ff6b4d] text-white">{inProgressCourses.length}</Badge>
+                <Badge className="ml-auto bg-[var(--dq-orange-500)] text-white">{inProgressCourses.length}</Badge>
               )}
             </button>
             <button
               onClick={() => setActiveTab('gamification')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === 'gamification' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                  : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
               }`}
             >
               <Zap className="w-5 h-5" />
@@ -230,10 +230,10 @@ const LearnerDashboard = () => {
             </button>
             <button
               onClick={() => setActiveTab('assignments')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === 'assignments' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                  : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
               }`}
             >
               <Award className="w-5 h-5 flex-shrink-0" />
@@ -241,24 +241,24 @@ const LearnerDashboard = () => {
             </button>
             <button
               onClick={() => setActiveTab('certificates')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === 'certificates' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                  : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
               }`}
             >
               <Trophy className="w-5 h-5" />
               <span className="text-[16px] leading-[24px] font-normal">Certificates & Badges</span>
               {certificates && certificates.length > 0 && (
-                <Badge className="ml-auto bg-[#ff6b4d] text-white">{certificates.length}</Badge>
+                <Badge className="ml-auto bg-[var(--dq-orange-500)] text-white">{certificates.length}</Badge>
               )}
             </button>
             <button
               onClick={() => setActiveTab('collaboration')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === 'collaboration' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                  : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
               }`}
             >
               <MessageSquare className="w-5 h-5" />
@@ -266,10 +266,10 @@ const LearnerDashboard = () => {
             </button>
             <button
               onClick={() => setActiveTab('live')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 activeTab === 'live' 
-                  ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                  : 'text-white/70 hover:bg-white/10 hover:text-white'
+                  ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                  : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
               }`}
             >
               <Video className="w-5 h-5" />
@@ -279,10 +279,10 @@ const LearnerDashboard = () => {
             <div className="pt-4 mt-4 border-t border-white/10">
               <button
                 onClick={() => setActiveTab('progress')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   activeTab === 'progress' 
-                    ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                    : 'text-white/70 hover:bg-white/10 hover:text-white'
+                    ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                    : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <TrendingUp className="w-5 h-5" />
@@ -290,10 +290,10 @@ const LearnerDashboard = () => {
               </button>
               <button
                 onClick={() => setActiveTab('profile')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   activeTab === 'profile' 
-                    ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20' 
-                    : 'text-white/70 hover:bg-white/10 hover:text-white'
+                    ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20' 
+                    : 'text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <User className="w-5 h-5" />
@@ -305,10 +305,10 @@ const LearnerDashboard = () => {
 
         {/* User Section */}
         <div className="p-4 border-t border-white/10">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
-            <Avatar className="w-10 h-10 ring-2 ring-[#ff6b4d]">
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+            <Avatar className="w-10 h-10 ring-2 ring-[var(--dq-orange-500)]">
               <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-[#ff6b4d] text-white">
+              <AvatarFallback className="bg-[var(--dq-orange-500)] text-white">
                 {getInitials(profile?.full_name)}
               </AvatarFallback>
             </Avatar>
@@ -375,21 +375,21 @@ const LearnerDashboard = () => {
             {/* Notifications */}
             <button className="relative p-2 rounded-lg transition-colors">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-[#ff6b4d] rounded-full"></span>
+              <span className="absolute top-1 right-1 w-2 h-2 bg-[var(--dq-orange-500)] rounded-full"></span>
             </button>
 
             {/* Browse Courses Button */}
             <Link to="/courses">
-              <Button variant="outline" size="sm" className="gap-2 hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
+              <Button variant="outline" size="sm" className="gap-2 hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">
                 <BookOpen className="w-4 h-4" />
                 <span className="hidden sm:inline">Browse Courses</span>
               </Button>
             </Link>
 
             {/* User Avatar - Mobile */}
-            <Avatar className="w-8 h-8 lg:hidden ring-2 ring-[#ff6b4d]">
+            <Avatar className="w-8 h-8 lg:hidden ring-2 ring-[var(--dq-orange-500)]">
               <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-[#1e2348] text-white text-xs">
+              <AvatarFallback className="bg-[var(--dq-navy-950)] text-white text-xs">
                 {getInitials(profile?.full_name)}
               </AvatarFallback>
             </Avatar>
@@ -402,13 +402,13 @@ const LearnerDashboard = () => {
           {activeTab === 'overview' && (
             <div className="space-y-8">
               {/* Welcome Section */}
-              <div className="bg-gradient-to-r from-[#1e2348] to-[#2a3058] rounded-2xl p-6 lg:p-8 text-white">
+              <div className="bg-[var(--dq-navy-950)] rounded-xl p-6 lg:p-8 text-white">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div>
                     <h2 className="text-[28px] leading-[36px] lg:text-[32px] lg:leading-[40px] font-semibold mb-2">
                       Welcome back, {profile?.full_name?.split(' ')[0] || 'Learner'}! 👋
                     </h2>
-                    <p className="text-[16px] leading-[24px] font-normal text-white/80">
+                    <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-on-dark-secondary)]">
                       {inProgressCourses.length > 0 
                         ? `You have ${inProgressCourses.length} course${inProgressCourses.length > 1 ? 's' : ''} in progress. Keep going!`
                         : 'Start your digital transformation journey today!'}
@@ -429,41 +429,41 @@ const LearnerDashboard = () => {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                <div className="bg-card rounded-2xl p-5 shadow-sm">
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#1e2348]/10 rounded-xl flex items-center justify-center">
-                      <BookOpen className="w-5 h-5 text-[#1e2348]" />
+                    <div className="w-10 h-10 bg-[var(--dq-navy-50)] rounded-lg flex items-center justify-center">
+                      <BookOpen className="w-5 h-5 text-[var(--dq-navy-950)]" />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-medium text-foreground">{inProgressCourses.length}</div>
-                  <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">In Progress</div>
+                  <div className="text-[24px] leading-[32px] font-medium text-[var(--dq-text-primary)]">{inProgressCourses.length}</div>
+                  <div className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">In Progress</div>
                 </div>
-                <div className="bg-card rounded-2xl p-5 shadow-sm">
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center">
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                    <div className="w-10 h-10 bg-[var(--dq-success-surface)] rounded-lg flex items-center justify-center">
+                      <CheckCircle className="w-5 h-5 text-[var(--dq-success)]" />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-medium text-foreground">{completedCourses.length}</div>
-                  <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Completed</div>
+                  <div className="text-[24px] leading-[32px] font-medium text-[var(--dq-text-primary)]">{completedCourses.length}</div>
+                  <div className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">Completed</div>
                 </div>
-                <div className="bg-card rounded-2xl p-5 shadow-sm">
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center">
-                      <Award className="w-5 h-5 text-amber-500" />
+                    <div className="w-10 h-10 bg-[var(--dq-orange-50)] rounded-lg flex items-center justify-center">
+                      <Award className="w-5 h-5 text-[var(--dq-orange-500)]" />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-medium text-foreground">{certificates?.length || 0}</div>
-                  <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Certificates</div>
+                  <div className="text-[24px] leading-[32px] font-medium text-[var(--dq-text-primary)]">{certificates?.length || 0}</div>
+                  <div className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">Certificates</div>
                 </div>
-                <div className="bg-card rounded-2xl p-5 shadow-sm">
+                <div className="bg-white rounded-xl p-5 shadow-sm border border-[var(--dq-surface-border-default)]">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center">
-                      <Target className="w-5 h-5 text-[#ff6b4d]" />
+                    <div className="w-10 h-10 bg-[var(--dq-navy-50)] rounded-lg flex items-center justify-center">
+                      <Target className="w-5 h-5 text-[var(--dq-navy-950)]" />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-medium text-foreground">{totalProgress}%</div>
-                  <div className="text-[14px] leading-[20px] font-normal text-muted-foreground">Avg. Progress</div>
+                  <div className="text-[24px] leading-[32px] font-medium text-[var(--dq-text-primary)]">{totalProgress}%</div>
+                  <div className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">Avg. Progress</div>
                 </div>
               </div>
 
@@ -474,7 +474,7 @@ const LearnerDashboard = () => {
                   {inProgressCourses.length > 0 && (
                     <button 
                       onClick={() => setActiveTab('courses')}
-                      className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] hover:underline flex items-center gap-1"
+                      className="text-[14px] leading-[20px] font-normal text-[var(--dq-orange-500)] hover:underline flex items-center gap-1"
                     >
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
@@ -486,14 +486,14 @@ const LearnerDashboard = () => {
                     <Loader2 className="w-6 h-6 animate-spin text-primary" />
                   </div>
                 ) : inProgressCourses.length === 0 ? (
-                  <div className="bg-card rounded-2xl p-8 text-center">
-                    <div className="w-16 h-16 bg-[#1e2348]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <BookOpen className="w-8 h-8 text-[#1e2348]" />
+                  <div className="bg-white rounded-xl p-8 text-center border border-[var(--dq-surface-border-default)]">
+                    <div className="w-16 h-16 bg-[var(--dq-navy-50)] rounded-xl flex items-center justify-center mx-auto mb-4">
+                      <BookOpen className="w-8 h-8 text-[var(--dq-navy-950)]" />
                     </div>
                     <h3 className="text-[20px] leading-[28px] font-medium mb-2">No courses yet</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-6">Start your learning journey by exploring our digital transformation courses</p>
+                    <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-6">Start your learning journey by exploring our digital transformation courses</p>
                     <Link to="/courses">
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Explore Courses</Button>
+                      <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white">Explore Courses</Button>
                     </Link>
                   </div>
                 ) : (
@@ -507,7 +507,7 @@ const LearnerDashboard = () => {
                         <Link
                           key={enrollment.id}
                           to={`/courses/${enrollment.course_id}/learn`}
-                          className="group bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all"
+                          className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[var(--dq-surface-border-default)]"
                         >
                           <div className="relative">
                             <img
@@ -523,10 +523,10 @@ const LearnerDashboard = () => {
                             </div>
                           </div>
                           <div className="p-5">
-                            <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                            <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
                               {enrollment.course?.title}
                             </h4>
-                            <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
+                            <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-4">
                               <Clock className="w-4 h-4" />
                               <span>{enrollment.course?.duration_hours || 0} hours</span>
                             </div>
@@ -544,17 +544,17 @@ const LearnerDashboard = () => {
                 <section>
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-[#ff6b4d]" />
+                      <Sparkles className="w-5 h-5 text-[var(--dq-orange-500)]" />
                       <h3 className="text-[20px] leading-[28px] font-medium text-foreground">Recommended for You</h3>
                     </div>
-                    <Link to="/courses" className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] hover:underline flex items-center gap-1">
+                    <Link to="/courses" className="text-[14px] leading-[20px] font-normal text-[var(--dq-orange-500)] hover:underline flex items-center gap-1">
                       View all <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>
 
                   {recommendedCourses.length === 0 ? (
                     <div className="flex items-center justify-center py-12">
-                      <Loader2 className="w-6 h-6 animate-spin text-[#ff6b4d]" />
+                      <Loader2 className="w-6 h-6 animate-spin text-[var(--dq-orange-500)]" />
                     </div>
                   ) : (
                     <div className="relative">
@@ -568,8 +568,8 @@ const LearnerDashboard = () => {
                               <Link
                                 to={course.comingSoon ? '#' : `/courses/${course.id}`}
                                 onClick={(e) => course.comingSoon && e.preventDefault()}
-                                className={`group bg-card rounded-2xl overflow-hidden shadow-sm transition-all h-full flex flex-col ${
-                                  course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-[#ff6b4d]/20'
+                                className={`group bg-white rounded-xl overflow-hidden shadow-sm transition-all h-full flex flex-col border border-[var(--dq-surface-border-default)] ${
+                                  course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-md hover:shadow-[var(--dq-orange-500)]/20'
                                 }`}
                               >
                                 <div className="relative">
@@ -590,26 +590,26 @@ const LearnerDashboard = () => {
                                   )}
                                   {course.badge && !course.comingSoon && (
                                     <div className="absolute top-3 right-3">
-                                      <Badge className="bg-[#ff6b4d] text-white capitalize">
+                                      <Badge className="bg-[var(--dq-orange-500)] text-white capitalize">
                                         {course.badge}
                                       </Badge>
                                     </div>
                                   )}
                                 </div>
                                 <div className="p-5 flex-1 flex flex-col">
-                                  <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+                                  <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
                                     {course.title}
                                   </h4>
-                                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4 line-clamp-2 flex-1">
+                                  <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-4 line-clamp-2 flex-1">
                                     {course.description}
                                   </p>
                                   <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground">
+                                    <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">
                                       <Clock className="w-4 h-4" />
                                       <span>{course.duration}</span>
                                     </div>
                                     <Badge
-                                      className={course.comingSoon ? 'bg-gray-200 text-gray-700' : ''}
+                                      className={course.comingSoon ? 'bg-[var(--dq-gray-100)] text-[var(--dq-text-tertiary)]' : ''}
                                       variant={course.comingSoon ? 'default' : 'secondary'}
                                     >
                                       {course.comingSoon ? 'Coming Soon' : course.level}
@@ -628,10 +628,10 @@ const LearnerDashboard = () => {
                           <button
                             onClick={() => setCarouselIndex(Math.max(0, carouselIndex - 1))}
                             disabled={carouselIndex === 0}
-                            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="p-2 rounded-lg bg-[var(--dq-gray-100)] hover:bg-[var(--dq-gray-200)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             aria-label="Previous"
                           >
-                            <ChevronLeft className="w-5 h-5 text-gray-700" />
+                            <ChevronLeft className="w-5 h-5 text-[var(--dq-text-primary)]" />
                           </button>
                           
                           {/* Dots Indicator */}
@@ -641,7 +641,7 @@ const LearnerDashboard = () => {
                                 key={idx}
                                 onClick={() => setCarouselIndex(idx)}
                                 className={`w-2 h-2 rounded-full transition-colors ${
-                                  idx === carouselIndex ? 'bg-[#ff6b4d]' : 'bg-gray-300'
+                                  idx === carouselIndex ? 'bg-[var(--dq-orange-500)]' : 'bg-[var(--dq-gray-300)]'
                                 }`}
                                 aria-label={`Go to slide ${idx + 1}`}
                               />
@@ -651,10 +651,10 @@ const LearnerDashboard = () => {
                           <button
                             onClick={() => setCarouselIndex(Math.min(Math.ceil(recommendedCourses.length / 3) - 1, carouselIndex + 1))}
                             disabled={carouselIndex >= Math.ceil(recommendedCourses.length / 3) - 1}
-                            className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="p-2 rounded-lg bg-[var(--dq-gray-100)] hover:bg-[var(--dq-gray-200)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             aria-label="Next"
                           >
-                            <ChevronRight className="w-5 h-5 text-gray-700" />
+                            <ChevronRight className="w-5 h-5 text-[var(--dq-text-primary)]" />
                           </button>
                         </div>
                       )}
@@ -670,20 +670,20 @@ const LearnerDashboard = () => {
                     <h3 className="text-[20px] leading-[28px] font-medium text-foreground">Recent Certificates</h3>
                     <button 
                       onClick={() => setActiveTab('certificates')}
-                      className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] hover:underline flex items-center gap-1"
+                      className="text-[14px] leading-[20px] font-normal text-[var(--dq-orange-500)] hover:underline flex items-center gap-1"
                     >
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     {certificates.slice(0, 2).map((cert: any) => (
-                      <div key={cert.id} className="bg-card rounded-2xl p-5 shadow-sm flex items-center gap-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shrink-0">
+                      <div key={cert.id} className="bg-white rounded-xl p-5 shadow-sm flex items-center gap-4 border border-[var(--dq-surface-border-default)]">
+                        <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center shrink-0">
                           <Trophy className="w-7 h-7 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-[16px] leading-[24px] font-medium truncate">{cert.course?.title}</h4>
-                          <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
+                          <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">
                             Issued {formatDate(cert.issued_at)}
                           </p>
                         </div>
@@ -715,12 +715,12 @@ const LearnerDashboard = () => {
 
                 <TabsContent value="in-progress">
                   {inProgressCourses.length === 0 ? (
-                    <div className="bg-card rounded-2xl p-12 text-center">
-                      <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <div className="bg-white rounded-xl p-12 text-center border border-[var(--dq-surface-border-default)]">
+                      <BookOpen className="w-12 h-12 text-[var(--dq-text-tertiary)] mx-auto mb-4" />
                       <h3 className="text-[20px] leading-[28px] font-medium mb-2">No courses in progress</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-6">Enroll in a course to start learning</p>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-6">Enroll in a course to start learning</p>
                       <Link to="/courses">
-                        <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Browse Courses</Button>
+                        <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white">Browse Courses</Button>
                       </Link>
                     </div>
                   ) : (
@@ -731,23 +731,23 @@ const LearnerDashboard = () => {
                         const courseImage = courseData?.image || enrollment.course?.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop';
                         
                         return (
-                          <div key={enrollment.id} className="bg-card rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-5">
+                          <div key={enrollment.id} className="bg-white rounded-xl p-5 shadow-sm flex flex-col md:flex-row gap-5 border border-[var(--dq-surface-border-default)]">
                             <img
                               src={courseImage}
                               alt={enrollment.course?.title}
-                              className="w-full md:w-48 h-32 object-cover rounded-xl"
+                              className="w-full md:w-48 h-32 object-cover rounded-lg"
                             />
                             <div className="flex-1">
                               <div className="flex items-start justify-between gap-4 mb-3">
                                 <div>
                                   <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
-                                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground line-clamp-2">
+                                  <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] line-clamp-2">
                                     {enrollment.course?.short_description}
                                   </p>
                                 </div>
                                 <Badge variant="secondary">{enrollment.course?.level}</Badge>
                               </div>
-                              <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
+                              <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-4">
                                 <span className="flex items-center gap-1">
                                   <Clock className="w-4 h-4" />
                                   {enrollment.course?.duration_hours || 0}h
@@ -761,7 +761,7 @@ const LearnerDashboard = () => {
                                 <Progress value={enrollment.progress || 0} className="flex-1 h-2" />
                                 <span className="text-[14px] leading-[20px] font-medium">{enrollment.progress || 0}%</span>
                                 <Link to={`/courses/${enrollment.course_id}/learn`}>
-                                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" size="sm">
+                                  <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white" size="sm">
                                     <PlayCircle className="w-4 h-4 mr-2" />
                                     Continue
                                   </Button>
@@ -777,10 +777,10 @@ const LearnerDashboard = () => {
 
                 <TabsContent value="completed">
                   {completedCourses.length === 0 ? (
-                    <div className="bg-card rounded-2xl p-12 text-center">
-                      <GraduationCap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <div className="bg-white rounded-xl p-12 text-center border border-[var(--dq-surface-border-default)]">
+                      <GraduationCap className="w-12 h-12 text-[var(--dq-text-tertiary)] mx-auto mb-4" />
                       <h3 className="text-[20px] leading-[28px] font-medium mb-2">No completed courses yet</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Complete your first course to earn a certificate!</p>
+                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">Complete your first course to earn a certificate!</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -790,21 +790,21 @@ const LearnerDashboard = () => {
                         const courseImage = courseData?.image || enrollment.course?.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop';
                         
                         return (
-                          <div key={enrollment.id} className="bg-card rounded-2xl p-5 shadow-sm flex flex-col md:flex-row gap-5">
+                          <div key={enrollment.id} className="bg-white rounded-xl p-5 shadow-sm flex flex-col md:flex-row gap-5 border border-[var(--dq-surface-border-default)]">
                             <img
                               src={courseImage}
                               alt={enrollment.course?.title}
-                              className="w-full md:w-48 h-32 object-cover rounded-xl"
+                              className="w-full md:w-48 h-32 object-cover rounded-lg"
                             />
                             <div className="flex-1">
                               <div className="flex items-start justify-between gap-4 mb-3">
                                 <div>
                                   <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
-                                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
+                                  <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">
                                     Completed on {enrollment.completed_at ? formatDate(enrollment.completed_at) : 'N/A'}
                                   </p>
                                 </div>
-                                <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+                                <Badge className="bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] border-[var(--dq-success)]/20">
                                   <CheckCircle className="w-3 h-3 mr-1" />
                                   Completed
                                 </Badge>
@@ -840,31 +840,31 @@ const LearnerDashboard = () => {
                   <Loader2 className="w-6 h-6 animate-spin text-primary" />
                 </div>
               ) : !certificates || certificates.length === 0 ? (
-                <div className="bg-card rounded-2xl p-12 text-center">
-                  <div className="w-20 h-20 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <Trophy className="w-10 h-10 text-amber-500" />
+                <div className="bg-white rounded-xl p-12 text-center border border-[var(--dq-surface-border-default)]">
+                  <div className="w-20 h-20 bg-[var(--dq-orange-50)] rounded-xl flex items-center justify-center mx-auto mb-6">
+                    <Trophy className="w-10 h-10 text-[var(--dq-orange-500)]" />
                   </div>
                   <h3 className="text-[20px] leading-[28px] font-medium mb-2">No certificates yet</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-6 max-w-md mx-auto">
+                  <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-6 max-w-md mx-auto">
                     Complete a course to earn your first certificate. Certificates showcase your achievements and newly acquired skills.
                   </p>
                   {inProgressCourses.length > 0 ? (
                     <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Continue Learning</Button>
+                      <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white">Continue Learning</Button>
                     </Link>
                   ) : (
                     <Link to="/courses">
-                      <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">Explore Courses</Button>
+                      <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white">Explore Courses</Button>
                     </Link>
                   )}
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-6">
                   {certificates.map((cert: any) => (
-                    <div key={cert.id} className="bg-card rounded-2xl overflow-hidden shadow-sm">
+                    <div key={cert.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-[var(--dq-surface-border-default)]">
                       <div className="bg-gradient-to-r from-amber-500 to-amber-600 p-6 text-white">
                         <div className="flex items-center gap-4">
-                          <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                          <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
                             <Award className="w-8 h-8" />
                           </div>
                           <div>
@@ -876,16 +876,16 @@ const LearnerDashboard = () => {
                       <div className="p-6">
                         <div className="grid grid-cols-2 gap-4 mb-6">
                           <div>
-                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-1">Issue Date</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-1">Issue Date</p>
                             <p className="text-[16px] leading-[24px] font-normal">{formatDate(cert.issued_at)}</p>
                           </div>
                           <div>
-                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-1">Certificate ID</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-1">Certificate ID</p>
                             <p className="text-[14px] leading-[20px] font-normal font-mono">{cert.certificate_number}</p>
                           </div>
                         </div>
                         <div className="flex gap-3">
-                          <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white flex-1">
+                          <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white flex-1">
                             <Download className="w-4 h-4 mr-2" />
                             Download
                           </Button>

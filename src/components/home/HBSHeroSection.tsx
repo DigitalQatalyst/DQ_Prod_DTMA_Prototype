@@ -13,26 +13,17 @@ const HBSHeroSection = () => {
   }, []);
 
   return (
-    <section className="relative w-full text-white pt-24 pb-16 px-4 md:px-8 lg:px-12 min-h-screen flex flex-col justify-end overflow-hidden font-sans">
-      {/* Video Background */}
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source src="/hero vid (2).mp4" type="video/mp4" />
-      </video>
-
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1e2348] via-[#1e2348] via-70% to-[#ff6b4d] opacity-90 z-0"></div>
+    <section className="relative w-full text-white pt-24 pb-16 px-4 md:px-8 lg:px-12 min-h-screen flex flex-col justify-end overflow-hidden font-sans bg-[var(--dq-navy-950)]">
+      {/* Subtle background texture (optional, very subtle) */}
+      <div className="absolute inset-0 opacity-5 z-0" style={{
+        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(251, 85, 53, 0.3) 1px, transparent 1px)',
+        backgroundSize: '50px 50px'
+      }}></div>
 
       {/* Container */}
       <div className="max-w-[1600px] mx-auto w-full relative z-10 flex flex-col items-center text-center pt-[120px] pb-24 px-8 md:px-12 lg:px-16">
         {/* Academy Label */}
-        <p className="text-[12px] leading-[16px] font-medium text-[#ff6b4d] mb-6 tracking-wide uppercase">
+        <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-orange-500)] mb-6 tracking-wide uppercase">
           Digital Transformation Management Academy
         </p>
         
@@ -46,25 +37,25 @@ const HBSHeroSection = () => {
           We equip leaders and digital teams with the skills to thrive in Economy 4.0 and build Digital Cognitive Organizations.
         </p>
 
-        {/* AI-Powered Search Bar */}
-        <div className="w-full max-w-3xl mx-auto mb-10">
-          <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-6 py-4 shadow-lg hover:bg-white/15 transition-all">
-            <MessageSquare className="w-5 h-5 text-[#ff6b4d] flex-shrink-0" />
+        {/* AI-Powered Command Bar */}
+        <div className="w-full max-w-2xl mx-auto mb-10">
+          <div className="flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/12 rounded-2xl px-5 py-3 shadow-md hover:bg-white/8 transition-all focus-within:border-[rgba(251,85,53,0.45)] focus-within:ring-2 focus-within:ring-[rgba(251,85,53,0.20)]">
+            <MessageSquare className="w-5 h-5 text-[var(--dq-orange-500)] flex-shrink-0" />
             <input
               type="text"
               placeholder="Ask AI: What course should I take? What is 6XD? How do I get started?"
-              className="flex-1 bg-transparent text-white placeholder-white/60 outline-none text-[16px] leading-[24px] font-normal"
+              className="flex-1 bg-transparent text-white placeholder-[rgba(181,197,247,0.70)] outline-none border-none ring-0 text-[16px] leading-[24px] font-normal"
             />
-            <div className="flex items-center gap-2 px-4 py-2 bg-[#ff6b4d] hover:bg-[#e56045] rounded-lg transition-colors cursor-pointer">
+            <button className="flex items-center gap-2 px-5 py-2 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] rounded-lg transition-colors cursor-pointer flex-shrink-0">
               <span className="text-[14px] leading-[20px] font-medium text-white">Ask AI</span>
               <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-            </div>
+            </button>
           </div>
         </div>
 
         {/* Call to Actions */}
         <div className="flex items-center justify-center gap-4">
-          <Button variant="hero" size="lg" className="px-8 py-6 bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid transparent' }}>
+          <Button variant="hero" size="lg" className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid transparent' }}>
             Start Now
           </Button>
           <Link to="/courses">

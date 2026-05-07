@@ -26,7 +26,7 @@ const HowCoursebayHelpsSection = () => {
   ];
 
   return (
-    <section style={{ backgroundColor: '#1E2348' }} className="py-20 px-4 sm:px-6 lg:px-8">
+    <section style={{ backgroundColor: 'var(--dq-navy-950)' }} className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto px-0 lg:px-16">
         {/* Header */}
         <div className="mb-16">

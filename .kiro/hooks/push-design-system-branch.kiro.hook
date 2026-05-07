@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Push Design System Changes to GitHub",
+  "description": "Create feature branch 'apply-design-system' and push all DQ Design System changes to GitHub",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "git checkout -b apply-design-system && git add . && git commit -m \"Apply DQ Design System: Complete implementation with color tokens, typography, spacing, and custom ribbon icons\" && git push -u origin apply-design-system"
+  }
+}

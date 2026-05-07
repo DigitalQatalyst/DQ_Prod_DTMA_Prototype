@@ -264,7 +264,7 @@ export const CommunicationSupportTab = () => {
 
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-[#1e2348]">
+                <thead className="bg-[var(--dq-navy-950)]">
                   <tr>
                     {['Ticket ID', 'Subject', 'Learner', 'Status', 'Priority', 'Category', 'Created', 'Assigned To', 'Actions'].map(h => (
                       <th key={h} className="text-left px-4 py-3 text-[12px] leading-[16px] font-medium text-white whitespace-nowrap">{h}</th>
@@ -401,12 +401,12 @@ export const CommunicationSupportTab = () => {
 
                 <div className="flex gap-3 justify-end">
                   <div className="flex-1 max-w-[70%]">
-                    <div className="bg-[#ff6b4d] text-white rounded-lg p-3 mb-1 ml-auto">
+                    <div className="bg-[var(--dq-orange-500)] text-white rounded-lg p-3 mb-1 ml-auto">
                       <p className="text-[14px] leading-[20px] font-normal">Hi Amara! You can reset your password by clicking on "Forgot Password" on the login page. You'll receive a reset link via email.</p>
                     </div>
                     <p className="text-[10px] leading-[14px] font-medium text-muted-foreground text-right">Today at 15:32</p>
                   </div>
-                  <div className="w-8 h-8 bg-[#1e2348] rounded-full flex items-center justify-center text-white text-[12px] leading-[16px] font-medium">
+                  <div className="w-8 h-8 bg-[var(--dq-navy-950)] rounded-full flex items-center justify-center text-white text-[12px] leading-[16px] font-medium">
                     AD
                   </div>
                 </div>

@@ -102,36 +102,36 @@ const Navbar = () => {
                   
                   {/* Full Screen Overlay Dropdown */}
                   {isExploreOpen && (
-                    <div className="fixed left-0 right-0 top-[80px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 80px)', borderColor: '#EEEDE9' }}>
+                    <div className="fixed left-0 right-0 top-[80px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 80px)', borderColor: 'var(--dq-navy-100)' }}>
                       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
                         <div className="mb-8">
-                          <h2 className="text-2xl font-semibold text-[#1e2348] mb-2">6XD Framework Courses</h2>
-                          <p className="text-sm text-muted-foreground">Master the six dimensions of digital transformation</p>
+                          <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-2">6XD Framework Courses</h2>
+                          <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the six dimensions of digital transformation</p>
                         </div>
                         
                         {/* First Row - 3 Courses */}
                         <div className="grid grid-cols-3 gap-8 mb-8">
                           {/* Course 1: Economy 4.0 */}
                           <Link to="/courses/course-economy-40" className="group">
-                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Mastering Economy 4.0</h3>
-                              <p className="text-sm text-muted-foreground">Master the fundamentals of the digital economy and Economy 4.0</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Mastering Economy 4.0</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the fundamentals of the digital economy and Economy 4.0</p>
                             </div>
                           </Link>
 
                           {/* Course 2: Cognitive Organisations */}
                           <Link to="/courses/course-cognitive-org" className="group">
-                            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Decoding Digital Cognitive Organisations</h3>
-                              <p className="text-sm text-muted-foreground">Transform your organization into an intelligent, learning entity</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Decoding Digital Cognitive Organisations</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Transform your organization into an intelligent, learning entity</p>
                             </div>
                           </Link>
 
                           {/* Course 3: Business Platforms */}
                           <Link to="/courses/course-business-platforms" className="group">
-                            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Building Powerful Digital Business Platforms</h3>
-                              <p className="text-sm text-muted-foreground">Master the architecture and design of scalable digital platforms</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Building Powerful Digital Business Platforms</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the architecture and design of scalable digital platforms</p>
                             </div>
                           </Link>
                         </div>
@@ -140,32 +140,32 @@ const Navbar = () => {
                         <div className="grid grid-cols-3 gap-8">
                           {/* Course 4: Digital Transformation */}
                           <Link to="/courses/course-transformation" className="group">
-                            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Navigating Digital Transformation 2.0</h3>
-                              <p className="text-sm text-muted-foreground">Lead successful digital transformation initiatives</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Navigating Digital Transformation 2.0</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Lead successful digital transformation initiatives</p>
                             </div>
                           </Link>
 
                           {/* Course 5: Digital Workers */}
                           <Link to="/courses/course-digital-workers" className="group">
-                            <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Optimizing Digital Workers and Workspaces</h3>
-                              <p className="text-sm text-muted-foreground">Master tools and practices for modern digital work</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Optimizing Digital Workers and Workspaces</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master tools and practices for modern digital work</p>
                             </div>
                           </Link>
 
                           {/* Course 6: Digital Accelerators */}
                           <Link to="/courses/course-digital-accelerators" className="group">
-                            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Leveraging Digital Accelerators for Growth</h3>
-                              <p className="text-sm text-muted-foreground">Harness AI, blockchain, IoT, and automation</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Leveraging Digital Accelerators for Growth</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Harness AI, blockchain, IoT, and automation</p>
                             </div>
                           </Link>
                         </div>
 
                         {/* View All Link */}
                         <div className="mt-8 text-center">
-                          <Link to="/courses" className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-sm transition-colors inline-flex items-center gap-2">
+                          <Link to="/courses" className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold text-[14px] leading-[20px] transition-colors inline-flex items-center gap-2">
                             View All Courses
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

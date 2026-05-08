@@ -29,9 +29,9 @@ const OrganizationalLeaders = () => {
       <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#9333ea]/10 border border-[#9333ea]/20 mb-6">
-              <TrendingUp className="w-4 h-4 text-[#9333ea]" />
-              <span className="text-[12px] leading-[16px] font-medium text-[#9333ea]">Organizational Leaders</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--dq-orange-500)]/10 border border-[var(--dq-orange-500)]/20 mb-6">
+              <TrendingUp className="w-4 h-4 text-[var(--dq-orange-500)]" />
+              <span className="text-[12px] leading-[16px] font-semibold text-[var(--dq-orange-500)]">Organizational Leaders</span>
             </div>
             <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
               Lead in the New Economy
@@ -61,7 +61,7 @@ const OrganizationalLeaders = () => {
       <section className="py-16 lg:py-24 bg-[#F5F6FA]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-[28px] leading-[36px] font-semibold text-[#0B0C19] mb-12 text-center">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-12 text-center">
               What You'll Gain
             </h2>
             
@@ -69,9 +69,9 @@ const OrganizationalLeaders = () => {
               {benefits.map((benefit, index) => (
                 <div 
                   key={index}
-                  className="flex items-start gap-4 p-6 rounded-xl bg-white border border-[var(--dq-surface-border-default)]"
+                  className="flex items-start gap-4 p-6 rounded-[12px] bg-white border border-[var(--dq-navy-100)]"
                 >
-                  <CheckCircle2 className="w-6 h-6 text-[#9333ea] flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="w-6 h-6 text-[var(--dq-orange-500)] flex-shrink-0 mt-1" />
                   <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-navy-950)]">{benefit}</p>
                 </div>
               ))}
@@ -92,9 +92,9 @@ const OrganizationalLeaders = () => {
               {courses.map((course, index) => (
                 <div 
                   key={index}
-                  className="flex items-center gap-4 p-6 rounded-xl bg-[#F5F6FA] border border-[var(--dq-surface-border-default)]"
+                  className="flex items-center gap-4 p-6 rounded-[12px] bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)]"
                 >
-                  <div className="w-10 h-10 rounded-full bg-[#9333ea] text-white flex items-center justify-center text-[16px] leading-[24px] font-medium flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] text-white flex items-center justify-center text-[16px] leading-[24px] font-semibold flex-shrink-0">
                     {index + 1}
                   </div>
                   <p className="text-[16px] leading-[24px] font-medium text-[var(--dq-navy-950)]">{course}</p>
@@ -119,7 +119,7 @@ const OrganizationalLeaders = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/courses">
                 <Button 
-                  className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white border-transparent text-[16px] leading-[24px] font-normal gap-2"
+                  className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white border-transparent text-[16px] leading-[24px] font-normal gap-2"
                 >
                   <BookOpen className="w-4 h-4" />
                   Explore Courses

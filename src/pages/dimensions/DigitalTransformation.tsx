@@ -13,14 +13,14 @@ const DigitalTransformation = () => {
       <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="h-1 w-24 rounded-full bg-[#16a34a] mx-auto mb-6"></div>
+            <div className="h-1 w-24 rounded-full bg-[var(--dq-success)] mx-auto mb-6"></div>
             <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
               Digital Transformation 2.0 (DT2.0)
             </h1>
-            <p className="text-[20px] leading-[28px] font-medium text-[#16a34a] mb-6">
+            <p className="text-[20px] leading-[28px] font-medium text-[var(--dq-success)] mb-6">
               How to design and deploy the target?
             </p>
-            <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
+            <p className="text-[18px] leading-[28px] font-normal text-[var(--dq-text-on-dark-secondary)] max-w-3xl mx-auto">
               Traditional transformation approaches are no longer enough for today's demands. Acquire methodologies to architect target states and deploy transformation at scale.
             </p>
           </div>

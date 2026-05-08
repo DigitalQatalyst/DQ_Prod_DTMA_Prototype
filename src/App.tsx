@@ -41,6 +41,11 @@ import DigitalAccelerators from "./pages/dimensions/DigitalAccelerators";
 import Faculty from "./pages/Faculty";
 import FacultyDetail from "./pages/FacultyDetail";
 import AIStudyBuddyPage from "./pages/AIStudyBuddyPage";
+import Blog from "./pages/Blog";
+import Accreditation from "./pages/Accreditation";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Help from "./pages/Help";
 
 const queryClient = new QueryClient();
 
@@ -138,6 +143,11 @@ const AppRoutes = () => (
       <Route path="/faculty" element={<Faculty />} />
       <Route path="/faculty" element={<Faculty />} />
       <Route path="/faculty/:id" element={<FacultyDetail />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/accreditation" element={<Accreditation />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/help" element={<Help />} />
       <Route path="/instructor-application" element={<InstructorApplication />} />
       <Route path="/learner-onboarding" element={<ProtectedRoute><LearnerOnboarding /></ProtectedRoute>} />
       <Route path="/masterclasses/:id" element={<MasterclassDetail />} />

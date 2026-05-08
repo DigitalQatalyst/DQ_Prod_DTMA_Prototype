@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, TrendingUp, Brain, Layers, Zap, Users, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -8,42 +8,42 @@ const SixXDSection = () => {
       title: "Digital Economy (DE)",
       subtitle: "Why should organisations change?",
       description: "The digital economy is redrawing industries, value chains, and competitive dynamics. Gain clarity to read these shifts and position your organisation for Economy 4.0.",
-      color: "var(--dq-navy-700)",
+      icon: TrendingUp,
       link: "/dimensions/digital-economy",
     },
     {
       title: "Digital Cognitive Organisation (DCO)",
       subtitle: "Where are organisations headed?",
       description: "The future organisation is intelligent, adaptive, and data-driven. Assess your organisation's cognitive maturity and chart a path toward AI-powered agility.",
-      color: "var(--dq-navy-600)",
+      icon: Brain,
       link: "/dimensions/digital-cognitive-organisation",
     },
     {
       title: "Digital Business Platform (DBP)",
       subtitle: "What unifies and orchestrates value?",
       description: "Every transformation needs an engine for business functions and enterprise integration. Build the expertise to evaluate, design, and orchestrate digital platforms.",
-      color: "var(--dq-navy-500)",
+      icon: Layers,
       link: "/dimensions/digital-business-platform",
     },
     {
       title: "Digital Transformation 2.0 (DT2.0)",
       subtitle: "How to design and deploy the target?",
       description: "Traditional transformation approaches are no longer enough for today's demands. Acquire methodologies to architect target states and deploy transformation at scale.",
-      color: "var(--dq-navy-950)",
+      icon: Zap,
       link: "/dimensions/digital-transformation",
     },
     {
       title: "Digital Worker & Workspace (DW/WS)",
       subtitle: "Who are the orchestrators?",
       description: "Technology alone doesn't transform organisations — people do. Redesign workforce models and cultivate the environments where transformation happens.",
-      color: "var(--dq-orange-500)",
+      icon: Users,
       link: "/dimensions/digital-worker-workspace",
     },
     {
       title: "Digital Accelerators (DA)",
       subtitle: "When will you get there?",
       description: "Speed and precision separate successful transformations from stalled ones. Master the tools and methodologies that compress timescales and turn strategy into reality.",
-      color: "var(--dq-navy-800)",
+      icon: Rocket,
       link: "/dimensions/digital-accelerators",
     },
   ];
@@ -72,11 +72,13 @@ const SixXDSection = () => {
               to={dimension.link}
               className="bg-white rounded-xl p-6 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
             >
-              {/* Color Bar */}
-              <div
-                className="h-1 w-16 rounded-full mb-6"
-                style={{ backgroundColor: `var(${dimension.color.replace('var(', '').replace(')', '')})` }}
-              ></div>
+              {/* Icon */}
+              <div className="mb-6">
+                <dimension.icon 
+                  className="w-8 h-8 text-[var(--dq-navy-950)]" 
+                  strokeWidth={1.5}
+                />
+              </div>
 
               {/* Title */}
               <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2">
@@ -89,7 +91,7 @@ const SixXDSection = () => {
               </p>
 
               {/* Description */}
-              <p className="text-sm text-[var(--dq-text-secondary)] leading-relaxed mb-6 flex-grow">
+              <p className="text-sm text-[var(--dq-text-secondary)] leading-relaxed mb-6 flex-grow max-w-xs">
                 {dimension.description}
               </p>
 

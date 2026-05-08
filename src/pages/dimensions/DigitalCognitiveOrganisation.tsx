@@ -13,14 +13,14 @@ const DigitalCognitiveOrganisation = () => {
       <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="h-1 w-24 rounded-full bg-[#4f46e5] mx-auto mb-6"></div>
+            <div className="h-1 w-24 rounded-full bg-[var(--dq-navy-300)] mx-auto mb-6"></div>
             <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
               Digital Cognitive Organisation (DCO)
             </h1>
-            <p className="text-[20px] leading-[28px] font-medium text-[#4f46e5] mb-6">
+            <p className="text-[20px] leading-[28px] font-medium text-[var(--dq-navy-300)] mb-6">
               Where are organisations headed?
             </p>
-            <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
+            <p className="text-[18px] leading-[28px] font-normal text-[var(--dq-text-on-dark-secondary)] max-w-3xl mx-auto">
               The future organisation is intelligent, adaptive, and data-driven. Assess your organisation's cognitive maturity and chart a path toward AI-powered agility.
             </p>
           </div>

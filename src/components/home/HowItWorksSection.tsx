@@ -1,4 +1,4 @@
-import { ArrowRight, Users, Zap, TrendingUp } from "lucide-react";
+import { ArrowRight, Users, Zap, Crown } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const HowItWorksSection = () => {
@@ -20,7 +20,7 @@ const HowItWorksSection = () => {
       color: "var(--dq-orange-500)",
     },
     {
-      icon: TrendingUp,
+      icon: Crown,
       title: "Organizational Leaders",
       heading: "Lead in the New Economy",
       description: "Understand what it takes to transition your organization into a Digital Cognitive Organization. Develop the strategic vision to lead confidently through Economy 4.0 and beyond.",
@@ -56,11 +56,8 @@ const HowItWorksSection = () => {
                 className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] hover:shadow-md transition-all duration-300 flex flex-col"
               >
                 {/* Icon */}
-                <div 
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-6"
-                  style={{ backgroundColor: `var(${colorVar})`, opacity: 0.1 }}
-                >
-                  <Icon className="w-7 h-7" style={{ color: `var(${colorVar})` }} />
+                <div className="mb-6">
+                  <Icon className="w-7 h-7 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                 </div>
 
                 {/* Persona Title */}

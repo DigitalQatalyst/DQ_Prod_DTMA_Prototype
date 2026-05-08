@@ -102,35 +102,34 @@ const FacultySection = () => {
           </p>
         </div>
 
-        {/* Faculty Type Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex gap-8 relative">
-            {/* Background line for all tabs */}
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--dq-surface-border-default)]"></div>
-            
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-3 text-base font-medium transition-all duration-200 relative ${
-                  activeTab === tab.id
-                    ? "text-[var(--dq-navy-950)]"
-                    : "text-[var(--dq-text-disabled)] hover:text-[var(--dq-navy-950)]"
-                }`}
-              >
-                {tab.label}
-                {activeTab === tab.id && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--dq-orange-500)] z-10"></span>
-                )}
-              </button>
-            ))}
+        {/* Faculty Type Tabs & Cards Container */}
+        <div className="max-w-5xl mx-auto">
+          {/* Faculty Type Tabs - Left Aligned */}
+          <div className="mb-12">
+            <div className="flex gap-8 relative border-b border-[var(--dq-navy-100)]">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-0 py-4 text-[14px] leading-[20px] font-medium transition-all duration-200 relative ${
+                    activeTab === tab.id
+                      ? "text-[var(--dq-navy-950)]"
+                      : "text-[var(--dq-text-secondary)] hover:text-[var(--dq-navy-950)]"
+                  }`}
+                >
+                  {tab.label}
+                  {activeTab === tab.id && (
+                    <span className="absolute bottom-0 left-0 right-0 h-1 bg-[var(--dq-orange-500)]"></span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Human Faculty */}
-        {activeTab === "human" && (
-          <div className="mt-16 mb-20">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {/* Human Faculty */}
+          {activeTab === "human" && (
+            <div className="mt-16 mb-20">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {humanFaculty.map((faculty) => (
               <div
                 key={faculty.name}
@@ -179,7 +178,7 @@ const FacultySection = () => {
         {/* AI Faculty */}
         {activeTab === "ai" && (
           <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {aiExperts.map((expert) => (
               <div
                 key={expert.dimension}
@@ -216,6 +215,7 @@ const FacultySection = () => {
           </div>
         </div>
         )}
+        </div>
 
         {/* CTA */}
         <div className="text-center mt-12">

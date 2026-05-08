@@ -102,14 +102,14 @@ export const CertificatesBadges = () => {
       </div>
 
       {/* Accreditation & Credentials Section */}
-      <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-8 text-white">
+      <div className="bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)] rounded-xl p-8 text-white">
         <div className="text-center mb-8">
-          <p className="text-[12px] leading-[16px] font-medium text-white/60 uppercase tracking-widest mb-2">
+          <p className="text-[12px] leading-[16px] font-semibold text-[var(--dq-orange-500)] uppercase tracking-widest mb-2">
             Accreditation & Credentials
           </p>
-          <h2 className="text-[36px] leading-[44px] font-bold mb-4">KHDA Accredited</h2>
-          <p className="text-[16px] leading-[24px] text-white/80 max-w-2xl mx-auto">
-            All credentials are attested by KHDA — Dubai's official education quality authority. Recognized across the UAE and internationally
+          <h2 className="text-[36px] leading-[44px] font-semibold mb-4 text-white">KHDA Accredited</h2>
+          <p className="text-[16px] leading-[24px] text-[var(--dq-text-on-dark-secondary)] max-w-lg mx-auto">
+            All credentials are KHDA-attested and recognized across the UAE and internationally.
           </p>
         </div>
 
@@ -118,14 +118,14 @@ export const CertificatesBadges = () => {
             const IconComponent = tier.icon;
             return (
               <div key={idx} className="text-center">
-                <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                  <IconComponent color="#fb5535" />
+                <div className="w-16 h-16 bg-[var(--dq-navy-950)]/30 rounded-xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-[var(--dq-navy-700)]">
+                  <IconComponent color="var(--dq-orange-500)" />
                 </div>
-                <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-orange-500)] uppercase tracking-widest mb-2">
+                <p className="text-[12px] leading-[16px] font-semibold text-[var(--dq-orange-500)] uppercase tracking-widest mb-2">
                   {tier.tier}
                 </p>
-                <h3 className="text-[18px] leading-[26px] font-semibold mb-3">{tier.title}</h3>
-                <p className="text-[14px] leading-[20px] text-white/70">{tier.description}</p>
+                <h3 className="text-[18px] leading-[26px] font-semibold mb-3 text-white">{tier.title}</h3>
+                <p className="text-[14px] leading-[20px] text-[var(--dq-text-on-dark-secondary)]">{tier.description}</p>
               </div>
             );
           })}

@@ -40,8 +40,8 @@ const CredentialsSection = () => {
           <h2 className="text-[28px] leading-[36px] md:text-[32px] md:leading-[40px] font-semibold text-white mb-6">
             KHDA Accredited
           </h2>
-          <p className="text-[16px] leading-[24px] font-normal text-white/80 max-w-3xl mx-auto">
-            All credentials are attested by KHDA — Dubai's official education quality authority. Recognized across the UAE and internationally.
+          <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-on-dark-secondary)] max-w-lg mx-auto whitespace-nowrap">
+            All credentials are KHDA-attested and recognized across the UAE and internationally.
           </p>
         </div>
 

@@ -14,7 +14,7 @@ const StartNowSection = () => {
             Get the Skills to Thrive in the Digital Economy
           </h2>
           <p className="text-base text-white/80 max-w-3xl mx-auto leading-relaxed">
-            The digital economy demands new skills—DTMA delivers them through the 6XD framework and hybrid HI + AI faculty.
+            DTMA equips talent for the digital economy through the 6XD framework and HI + AI learning.
           </p>
         </div>
 

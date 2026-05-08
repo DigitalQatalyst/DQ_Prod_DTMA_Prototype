@@ -200,6 +200,14 @@ const Navbar = () => {
                           <li><Link to="/personas/transformation-specialists" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Transformation Specialists</Link></li>
                         </ul>
                       </div>
+                      <div className="px-6 py-2 border-t border-[#EEEDE9] mt-2">
+                        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-3">Resources</h3>
+                        <ul className="space-y-3">
+                          <li><Link to="/blog" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Blog & Insights</Link></li>
+                          <li><Link to="/help" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Help Center</Link></li>
+                          <li><Link to="/accreditation" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Accreditation</Link></li>
+                        </ul>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -303,6 +311,83 @@ const Navbar = () => {
                     >
                       In-Person Trainings
                     </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* For You Dropdown Mobile */}
+              <div>
+                <button
+                  onClick={() => setIsForYouOpen(!isForYouOpen)}
+                  className="text-base font-medium py-2 transition-colors text-muted-foreground hover:text-primary flex items-center gap-2 w-full"
+                >
+                  For You
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isForYouOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isForYouOpen && (
+                  <div className="pl-4 space-y-3 mt-3 border-l-2 border-primary/30">
+                    <Link
+                      to="/personas/digital-workers"
+                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                      onClick={() => {
+                        setIsOpen(false);
+                        setIsForYouOpen(false);
+                      }}
+                    >
+                      Digital Workers
+                    </Link>
+                    <Link
+                      to="/personas/organizational-leaders"
+                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                      onClick={() => {
+                        setIsOpen(false);
+                        setIsForYouOpen(false);
+                      }}
+                    >
+                      Organizational Leaders
+                    </Link>
+                    <Link
+                      to="/personas/transformation-specialists"
+                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                      onClick={() => {
+                        setIsOpen(false);
+                        setIsForYouOpen(false);
+                      }}
+                    >
+                      Transformation Specialists
+                    </Link>
+                    <div className="border-t border-primary/30 pt-3 mt-3">
+                      <Link
+                        to="/blog"
+                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                        onClick={() => {
+                          setIsOpen(false);
+                          setIsForYouOpen(false);
+                        }}
+                      >
+                        Blog & Insights
+                      </Link>
+                      <Link
+                        to="/help"
+                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                        onClick={() => {
+                          setIsOpen(false);
+                          setIsForYouOpen(false);
+                        }}
+                      >
+                        Help Center
+                      </Link>
+                      <Link
+                        to="/accreditation"
+                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                        onClick={() => {
+                          setIsOpen(false);
+                          setIsForYouOpen(false);
+                        }}
+                      >
+                        Accreditation
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>

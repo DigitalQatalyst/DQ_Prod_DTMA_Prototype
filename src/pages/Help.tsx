@@ -1,6 +1,7 @@
 import { ChevronDown, Search, MessageCircle, Mail, Phone } from "lucide-react";
 import { useState } from "react";
-import PublicPageLayout from "@/components/layout/PublicPageLayout";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
 const Help = () => {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
@@ -63,124 +64,132 @@ const Help = () => {
   ];
 
   return (
-    <PublicPageLayout>
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)]">
-        <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[var(--dq-orange-500)] mb-4">
-              Support & Resources
-            </p>
-            <h1 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-white mb-6">
-              Help Center
-            </h1>
-            <p className="text-[16px] leading-[24px] font-normal text-white/90 max-w-3xl mx-auto">
-              Find answers to common questions and get support
-            </p>
+    <div className="min-h-screen bg-background">
+      <div className="bg-[var(--dq-navy-950)]">
+        <Navbar />
+        
+        {/* Hero Section */}
+        <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
+            <div className="max-w-4xl mx-auto text-center">
+              <p className="text-[12px] leading-[16px] font-semibold uppercase tracking-wide text-[var(--dq-orange-500)] mb-6">
+                Support & Resources
+              </p>
+              <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
+                Help Center
+              </h1>
+              <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
+                Find answers to common questions and get support
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      {/* FAQ Section */}
-      <section className="py-16 lg:py-24 bg-white">
-        <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-          <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Frequently Asked Questions</h2>
+      <main>
+        {/* FAQ Section */}
+        <section className="py-16 lg:py-24 bg-white">
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
+            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Frequently Asked Questions</h2>
 
-          <div className="max-w-3xl space-y-4">
-            {faqs.map((faq) => (
-              <div
-                key={faq.id}
-                className="border border-[var(--dq-navy-100)] rounded-[12px] overflow-hidden hover:shadow-md transition-shadow"
-              >
-                <button
-                  onClick={() => setExpandedFaq(expandedFaq === faq.id ? null : faq.id)}
-                  className="w-full px-6 py-4 flex items-center justify-between bg-[var(--dq-navy-50)] hover:bg-[var(--dq-navy-100)] transition-colors"
-                >
-                  <span className="text-left font-semibold text-[var(--dq-navy-950)]">
-                    {faq.question}
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-[var(--dq-orange-500)] transition-transform ${
-                      expandedFaq === faq.id ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                {expandedFaq === faq.id && (
-                  <div className="px-6 py-4 bg-white border-t border-[var(--dq-navy-100)]">
-                    <p className="text-[var(--dq-navy-600)] leading-relaxed">{faq.answer}</p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Methods */}
-      <section className="py-16 lg:py-24 bg-[var(--dq-navy-50)]">
-        <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-          <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Get in Touch</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {contactMethods.map((method, index) => {
-              const Icon = method.icon;
-              return (
+            <div className="max-w-3xl space-y-4">
+              {faqs.map((faq) => (
                 <div
-                  key={index}
-                  className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-8 text-center hover:shadow-lg transition-shadow"
+                  key={faq.id}
+                  className="border border-[var(--dq-navy-100)] rounded-[12px] overflow-hidden hover:shadow-md transition-shadow"
                 >
-                  <div className="w-12 h-12 bg-[var(--dq-orange-500)] rounded-[8px] flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-2">
-                    {method.title}
-                  </h3>
-                  <p className="text-sm text-[var(--dq-navy-600)] mb-4">
-                    {method.description}
-                  </p>
-                  <p className="text-sm font-semibold text-[var(--dq-orange-500)] mb-2">
-                    {method.contact}
-                  </p>
-                  <p className="text-xs text-[var(--dq-navy-500)]">
-                    {method.responseTime}
-                  </p>
+                  <button
+                    onClick={() => setExpandedFaq(expandedFaq === faq.id ? null : faq.id)}
+                    className="w-full px-6 py-4 flex items-center justify-between bg-[var(--dq-navy-50)] hover:bg-[var(--dq-navy-100)] transition-colors"
+                  >
+                    <span className="text-left font-semibold text-[var(--dq-navy-950)]">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className={`w-5 h-5 text-[var(--dq-orange-500)] transition-transform ${
+                        expandedFaq === faq.id ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {expandedFaq === faq.id && (
+                    <div className="px-6 py-4 bg-white border-t border-[var(--dq-navy-100)]">
+                      <p className="text-[var(--dq-navy-600)] leading-relaxed">{faq.answer}</p>
+                    </div>
+                  )}
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Additional Resources */}
-      <section className="py-16 lg:py-24 bg-white">
-        <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-          <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Additional Resources</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)] rounded-[12px] p-8">
-              <h3 className="text-xl font-bold text-[var(--dq-navy-950)] mb-4">Documentation</h3>
-              <p className="text-[var(--dq-navy-600)] mb-4">
-                Access comprehensive guides and documentation for all our courses and features.
-              </p>
-              <button className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold transition-colors">
-                View Documentation →
-              </button>
-            </div>
-
-            <div className="bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)] rounded-[12px] p-8">
-              <h3 className="text-xl font-bold text-[var(--dq-navy-950)] mb-4">Video Tutorials</h3>
-              <p className="text-[var(--dq-navy-600)] mb-4">
-                Watch step-by-step video tutorials to learn how to use our platform effectively.
-              </p>
-              <button className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold transition-colors">
-                Watch Tutorials →
-              </button>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
-    </PublicPageLayout>
+        </section>
+
+        {/* Contact Methods */}
+        <section className="py-16 lg:py-24 bg-[var(--dq-navy-50)]">
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
+            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Get in Touch</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {contactMethods.map((method, index) => {
+                const Icon = method.icon;
+                return (
+                  <div
+                    key={index}
+                    className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-8 text-center hover:shadow-lg transition-shadow"
+                  >
+                    <div className="w-12 h-12 bg-[var(--dq-orange-500)] rounded-[8px] flex items-center justify-center mx-auto mb-4">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-2">
+                      {method.title}
+                    </h3>
+                    <p className="text-sm text-[var(--dq-navy-600)] mb-4">
+                      {method.description}
+                    </p>
+                    <p className="text-sm font-semibold text-[var(--dq-orange-500)] mb-2">
+                      {method.contact}
+                    </p>
+                    <p className="text-xs text-[var(--dq-navy-500)]">
+                      {method.responseTime}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Additional Resources */}
+        <section className="py-16 lg:py-24 bg-white">
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
+            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Additional Resources</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)] rounded-[12px] p-8">
+                <h3 className="text-xl font-bold text-[var(--dq-navy-950)] mb-4">Documentation</h3>
+                <p className="text-[var(--dq-navy-600)] mb-4">
+                  Access comprehensive guides and documentation for all our courses and features.
+                </p>
+                <button className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold transition-colors">
+                  View Documentation →
+                </button>
+              </div>
+
+              <div className="bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)] rounded-[12px] p-8">
+                <h3 className="text-xl font-bold text-[var(--dq-navy-950)] mb-4">Video Tutorials</h3>
+                <p className="text-[var(--dq-navy-600)] mb-4">
+                  Watch step-by-step video tutorials to learn how to use our platform effectively.
+                </p>
+                <button className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold transition-colors">
+                  Watch Tutorials →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
   );
 };
 

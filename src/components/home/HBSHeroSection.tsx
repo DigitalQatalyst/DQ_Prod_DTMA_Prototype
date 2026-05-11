@@ -14,8 +14,23 @@ const HBSHeroSection = () => {
 
   return (
     <section className="relative w-full text-white pt-24 pb-16 px-4 md:px-8 lg:px-12 min-h-screen flex flex-col justify-end overflow-hidden font-sans bg-[var(--dq-navy-950)]">
+      {/* Background Video */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/hero video.mp4" type="video/mp4" />
+      </video>
+
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 z-[1] opacity-90" style={{ backgroundColor: '#030F35' }}></div>
+
       {/* Subtle background texture (optional, very subtle) */}
-      <div className="absolute inset-0 opacity-5 z-0" style={{
+      <div className="absolute inset-0 opacity-5 z-[2]" style={{
         backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(251, 85, 53, 0.3) 1px, transparent 1px)',
         backgroundSize: '50px 50px'
       }}></div>
@@ -39,12 +54,12 @@ const HBSHeroSection = () => {
 
         {/* AI-Powered Command Bar */}
         <div className="w-full max-w-2xl mx-auto mb-10">
-          <div className="flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/12 rounded-2xl px-5 py-3 shadow-md hover:bg-white/8 transition-all focus-within:border-[rgba(251,85,53,0.45)] focus-within:ring-2 focus-within:ring-[rgba(251,85,53,0.20)]">
-            <MessageSquare className="w-5 h-5 text-[var(--dq-orange-500)] flex-shrink-0" />
+          <div className="flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/40 rounded-2xl px-5 py-3 shadow-md hover:bg-white/8 transition-all focus-within:border-[rgba(181,197,247,0.45)] focus-within:ring-2 focus-within:ring-[rgba(181,197,247,0.20)]">
+            <MessageSquare className="w-5 h-5 text-white/40 flex-shrink-0" />
             <input
               type="text"
               placeholder="Ask AI: What course should I take? What is 6XD? How do I get started?"
-              className="flex-1 bg-transparent text-white placeholder-[rgba(181,197,247,0.70)] outline-none border-none ring-0 text-[16px] leading-[24px] font-normal"
+              className="flex-1 bg-transparent text-white placeholder-white/40 outline-none border-none ring-0 text-[16px] leading-[24px] font-normal"
             />
             <button className="flex items-center gap-2 px-5 py-2 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] rounded-lg transition-colors cursor-pointer flex-shrink-0">
               <span className="text-[14px] leading-[20px] font-medium text-white">Ask AI</span>
@@ -61,11 +76,6 @@ const HBSHeroSection = () => {
           <Link to="/courses">
             <Button variant="hero" size="lg" className="px-8 py-6 bg-transparent hover:bg-white/10 text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid white' }}>
               Explore Courses
-            </Button>
-          </Link>
-          <Link to="/6xd">
-            <Button variant="hero" size="lg" className="px-8 py-6 bg-transparent hover:bg-white/10 text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid white' }}>
-              Find Your Path
             </Button>
           </Link>
         </div>

@@ -182,7 +182,7 @@ export const ButlerAI = () => {
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-[#1e2348] to-[#2a3058] text-white rounded-full shadow-2xl hover:shadow-[#ff6b4d]/20 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
       >
-        <MessageCircle className="w-7 h-7 group-hover:scale-110 transition-transform" />
+        <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
         <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#ff6b4d] rounded-full animate-pulse"></span>
       </button>
     );

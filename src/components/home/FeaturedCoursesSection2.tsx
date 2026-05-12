@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Star, Clock, Award } from "lucide-react";
+import { Star, Clock, Award, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/Badge";
 import { dtmaCoursesNew } from "@/data/dtmaCoursesNew";
@@ -122,14 +122,15 @@ const FeaturedCoursesSection2 = () => {
 
         {/* Sub-section CTA */}
         <div className="flex justify-center">
-          <Link
-            to="/courses"
-            className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold text-[14px] leading-[20px] transition-colors inline-flex items-center gap-2"
-          >
-            See More
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+          <Link to="/courses">
+            <Button
+              variant="outline"
+              className="px-8 py-6 border-[var(--dq-orange-500)] text-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-500)] hover:text-white transition-all text-base gap-2"
+              style={{ borderWidth: '1.5px' }}
+            >
+              See More
+              <ArrowRight className="w-4 h-4" />
+            </Button>
           </Link>
         </div>
       </div>

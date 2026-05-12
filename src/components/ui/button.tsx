@@ -20,6 +20,7 @@ const buttonVariants = cva(
         luxury: "bg-charcoal text-background font-semibold hover:bg-charcoal/90 shadow-luxury",
         elegant: "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground font-medium",
         soft: "bg-secondary text-primary hover:bg-secondary/80 font-medium",
+        "secondary-light": "bg-white text-[var(--dq-navy-950)] hover:bg-gray-100 font-medium",
       },
       size: {
         default: "h-10 px-4 py-2",

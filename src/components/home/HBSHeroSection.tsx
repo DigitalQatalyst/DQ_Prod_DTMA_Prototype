@@ -2,9 +2,11 @@ import { MessageSquare, Pause } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const HBSHeroSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (videoRef.current) {
@@ -36,24 +38,24 @@ const HBSHeroSection = () => {
       }}></div>
 
       {/* Container */}
-      <div className="max-w-[1600px] mx-auto w-full relative z-10 flex flex-col items-center text-center pt-[120px] pb-24 px-8 md:px-12 lg:px-16">
+      <div className="max-w-[1600px] mx-auto w-full relative z-10 flex flex-col items-center justify-center text-center pt-[120px] pb-24 px-8 md:px-12 lg:px-16">
         {/* Academy Label */}
         <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-orange-500)] mb-6 tracking-wide uppercase">
           Digital Transformation Management Academy
         </p>
         
         {/* Main Headline */}
-        <h1 className="text-[40px] leading-[48px] font-semibold tracking-tight mb-6 max-w-4xl mx-auto">
+        <h1 className="text-[40px] leading-[48px] font-semibold tracking-tight mb-6 max-w-4xl">
           Every Skill to Succeed in the Digital Economy
         </h1>
         
         {/* Paragraph */}
-        <p className="text-[18px] leading-[28px] font-normal max-w-3xl mx-auto text-white/90 mb-10">
+        <p className="text-[18px] leading-[28px] font-normal max-w-3xl text-white/90 mb-10">
           We equip leaders and digital teams with the skills to thrive in Economy 4.0 and build Digital Cognitive Organizations.
         </p>
 
         {/* AI-Powered Command Bar */}
-        <div className="w-full max-w-2xl mx-auto mb-10">
+        <div className="w-full max-w-2xl mb-10">
           <div className="flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/40 rounded-2xl px-5 py-3 shadow-md hover:bg-white/8 transition-all focus-within:border-[rgba(181,197,247,0.45)] focus-within:ring-2 focus-within:ring-[rgba(181,197,247,0.20)]">
             <MessageSquare className="w-5 h-5 text-white/40 flex-shrink-0" />
             <input
@@ -70,11 +72,15 @@ const HBSHeroSection = () => {
 
         {/* Call to Actions */}
         <div className="flex items-center justify-center gap-4">
-          <Button variant="hero" size="lg" className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid transparent' }}>
-            Start Now
-          </Button>
+          {!user && (
+            <Link to="/auth?mode=signup">
+              <Button variant="hero" size="lg" className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid transparent' }}>
+                Start Now
+              </Button>
+            </Link>
+          )}
           <Link to="/courses">
-            <Button variant="hero" size="lg" className="px-8 py-6 bg-transparent hover:bg-white/10 text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid white' }}>
+            <Button variant="secondary-light" size="lg" className="px-8 py-6 text-[16px] leading-[24px] font-normal">
               Explore Courses
             </Button>
           </Link>

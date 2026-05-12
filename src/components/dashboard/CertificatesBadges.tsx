@@ -90,15 +90,15 @@ export const CertificatesBadges = () => {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Button className="flex-1 text-white" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500, backgroundColor: 'var(--dq-orange-500)' }}>
+                    <Button className="flex-1" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
                       <Download className="w-4 h-4 mr-2" />
                       Download
                     </Button>
-                    <Button variant="outline" className="hover:text-white" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500, borderColor: 'var(--dq-surface-border-default)', color: 'var(--dq-text-primary)' }}>
+                    <Button variant="secondary" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
                       <Share2 className="w-4 h-4 mr-2" />
                       Share
                     </Button>
-                    <Button variant="outline" size="icon" style={{ borderColor: 'var(--dq-surface-border-default)', color: 'var(--dq-text-primary)' }}>
+                    <Button variant="ghost" size="icon">
                       <ExternalLink className="w-4 h-4" />
                     </Button>
                   </div>

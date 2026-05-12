@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { BookOpen, CheckCircle2, TrendingUp } from "lucide-react";
+import { BookOpen, CheckCircle2 } from "lucide-react";
 
 const OrganizationalLeaders = () => {
   const benefits = [
@@ -26,19 +26,26 @@ const OrganizationalLeaders = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)]">
+      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-[var(--dq-navy-950)]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--dq-orange-500)]/10 border border-[var(--dq-orange-500)]/20 mb-6">
-              <TrendingUp className="w-4 h-4 text-[var(--dq-orange-500)]" />
-              <span className="text-[12px] leading-[16px] font-semibold text-[var(--dq-orange-500)]">Organizational Leaders</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6">
+              <span className="text-[12px] leading-[16px] font-medium text-[var(--dq-text-on-dark-secondary)]">Organizational Leaders</span>
             </div>
             <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
               Lead in the New Economy
             </h1>
-            <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
+            <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto mb-8">
               Understand what it takes to transition your organization into a Digital Cognitive Organization. Develop the strategic vision to lead confidently through Economy 4.0 and beyond.
             </p>
+            <Link to="/courses">
+              <Button 
+                className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white border-transparent text-[16px] leading-[24px] font-normal gap-2"
+              >
+                <BookOpen className="w-4 h-4" />
+                Explore Courses
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -46,11 +53,11 @@ const OrganizationalLeaders = () => {
       {/* Challenge Section */}
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-6 text-center">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-6">
               Your Challenge
             </h2>
-            <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)] mb-8 text-center">
+            <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)] mb-8 max-w-2xl mx-auto">
               The digital economy is reshaping industries and competitive dynamics. As an organizational leader, you need to understand these shifts, develop a clear strategic vision, and guide your organization through transformation with confidence and clarity.
             </p>
           </div>
@@ -94,7 +101,7 @@ const OrganizationalLeaders = () => {
                   key={index}
                   className="flex items-center gap-4 p-6 rounded-[12px] bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)]"
                 >
-                  <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] text-white flex items-center justify-center text-[16px] leading-[24px] font-semibold flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center text-[16px] leading-[24px] font-semibold flex-shrink-0">
                     {index + 1}
                   </div>
                   <p className="text-[16px] leading-[24px] font-medium text-[var(--dq-navy-950)]">{course}</p>
@@ -106,7 +113,7 @@ const OrganizationalLeaders = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-950)] via-60% to-[var(--dq-orange-500)]">
+      <section className="py-16 bg-[var(--dq-navy-950)]">
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-[28px] leading-[36px] font-semibold text-white mb-6">

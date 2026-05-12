@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEnrollments, useCertificates } from '@/hooks/useCourses';
 import { dtmaCoursesNew as dtmaCourses } from '@/data/dtmaCoursesNew';
@@ -14,7 +14,6 @@ import {
   Award, 
   Clock, 
   ChevronRight,
-  ChevronLeft,
   GraduationCap,
   Loader2,
   PlayCircle,
@@ -29,13 +28,11 @@ import {
   Calendar,
   CheckCircle,
   ExternalLink,
-  Bot,
   Sparkles,
   Video,
   TrendingUp,
   MessageSquare,
   Zap,
-  FileText,
   Search,
   Bell,
 } from 'lucide-react';
@@ -62,6 +59,7 @@ const LearnerDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   // Get onboarding data from localStorage
   const onboardingData = useMemo(() => {
@@ -171,15 +169,15 @@ const LearnerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--dq-gray-50)] flex">
+    <div className="w-screen h-screen bg-[var(--dq-gray-50)] flex overflow-hidden">
       {/* Sidebar */}
       <aside
         className={`${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 fixed lg:sticky top-0 left-0 z-50 w-72 h-screen bg-[var(--dq-navy-950)] border-r border-[var(--dq-surface-border-default)] transition-transform duration-200 flex flex-col`}
+        } lg:translate-x-0 fixed lg:sticky top-0 left-0 z-50 w-72 h-screen bg-[var(--dq-navy-950)] transition-transform duration-200 flex flex-col`}
       >
         {/* Logo */}
-        <div className="p-6 border-b border-[var(--dq-surface-border-default)]">
+        <div className="p-6">
           <Link to="/" className="flex items-center gap-3">
             <img
               src="/dtma-logo.png"
@@ -276,7 +274,7 @@ const LearnerDashboard = () => {
               <span className="text-[16px] leading-[24px] font-normal">Live Classes</span>
             </button>
             
-            <div className="pt-4 mt-4 border-t border-white/10">
+            <div className="pt-4 mt-4">
               <button
                 onClick={() => setActiveTab('progress')}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
@@ -337,96 +335,69 @@ const LearnerDashboard = () => {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 min-h-screen">
+      <main className="flex-1 h-full overflow-y-auto bg-[var(--dq-navy-950)]">
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-card/80 backdrop-blur-sm border-b border-border px-4 lg:px-8 h-16 flex items-center justify-between gap-4">
-          <button 
-            className="lg:hidden p-2 -ml-2"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-          >
-            {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+        <header className="sticky top-0 z-30 bg-[var(--dq-navy-950)] border-b border-[var(--dq-navy-800)] px-4 lg:px-8 py-6 flex flex-col justify-start gap-0">
+          {activeTab === 'overview' && (
+            <>
+              <div className="flex items-center justify-between gap-4 lg:items-center">
+                <button 
+                  className="lg:hidden p-2 -ml-2"
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                >
+                  {sidebarOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+                </button>
 
-          <div className="hidden lg:block">
-            <h1 className="text-[20px] leading-[28px] font-medium text-foreground">
-              {activeTab === 'overview' && 'Dashboard'}
-              {activeTab === 'courses' && 'My Courses'}
-              {activeTab === 'certificates' && 'Certificates & Badges'}
-              {activeTab === 'profile' && 'Profile Settings'}
-              {activeTab === 'progress' && 'Progress & Notes'}
-              {activeTab === 'assignments' && 'Assignments'}
-              {activeTab === 'collaboration' && 'Discussions'}
-              {activeTab === 'live' && 'Live Classes'}
-              {activeTab === 'gamification' && 'Microlearning Paths'}
-            </h1>
-          </div>
+                <div className="flex-1">
+                  <h2 className="text-[28px] leading-[36px] lg:text-[32px] lg:leading-[40px] font-semibold mb-2 text-white">
+                    Welcome back, {profile?.full_name?.split(' ')[0] || 'Learner'}! 👋
+                  </h2>
+                  <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-on-dark-secondary)]">
+                    {inProgressCourses.length > 0 
+                      ? `You have ${inProgressCourses.length} course${inProgressCourses.length > 1 ? 's' : ''} in progress. Keep going!`
+                      : 'Start your learning journey today!'}
+                  </p>
+                </div>
 
-          <div className="flex items-center gap-3 flex-1 lg:flex-initial justify-end">
-            {/* Search Bar */}
-            <div className="hidden md:flex items-center gap-2 bg-white rounded-lg px-3 py-2 w-64 border border-border">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search courses..."
-                className="bg-transparent border-none outline-none text-[14px] leading-[20px] font-normal w-full"
-              />
-            </div>
+                {/* Browse Courses Button - Only show if no enrolled courses */}
+                {inProgressCourses.length === 0 && (
+                  <Link to="/courses" className="flex-shrink-0">
+                    <Button variant="outline" size="sm" className="gap-2 hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)] text-[var(--dq-orange-500)] border-[var(--dq-orange-500)]">
+                      <BookOpen className="w-4 h-4" />
+                      <span className="hidden sm:inline">Browse Courses</span>
+                    </Button>
+                  </Link>
+                )}
 
-            {/* Notifications */}
-            <button className="relative p-2 rounded-lg transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-[var(--dq-orange-500)] rounded-full"></span>
-            </button>
+                {/* User Avatar - Mobile */}
+                <Avatar className="w-8 h-8 lg:hidden ring-2 ring-[var(--dq-orange-500)] flex-shrink-0">
+                  <AvatarImage src={profile?.avatar_url || undefined} />
+                  <AvatarFallback className="bg-[var(--dq-navy-950)] text-white text-xs">
+                    {getInitials(profile?.full_name)}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
 
-            {/* Browse Courses Button */}
-            <Link to="/courses">
-              <Button variant="outline" size="sm" className="gap-2 hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">
-                <BookOpen className="w-4 h-4" />
-                <span className="hidden sm:inline">Browse Courses</span>
-              </Button>
-            </Link>
-
-            {/* User Avatar - Mobile */}
-            <Avatar className="w-8 h-8 lg:hidden ring-2 ring-[var(--dq-orange-500)]">
-              <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-[var(--dq-navy-950)] text-white text-xs">
-                {getInitials(profile?.full_name)}
-              </AvatarFallback>
-            </Avatar>
-          </div>
+              {/* Continue Learning Button */}
+              {inProgressCourses.length > 0 && (
+                <div className="flex gap-3 mt-4">
+                  <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
+                    <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20" size="lg">
+                      <PlayCircle className="w-5 h-5 mr-2" />
+                      Continue Learning
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </>
+          )}
         </header>
 
         {/* Content */}
-        <div className="p-4 lg:p-8">
+        <div className="p-4 lg:p-8 bg-white">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div className="space-y-8">
-              {/* Welcome Section */}
-              <div className="bg-[var(--dq-navy-950)] rounded-xl p-6 lg:p-8 text-white">
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                  <div>
-                    <h2 className="text-[28px] leading-[36px] lg:text-[32px] lg:leading-[40px] font-semibold mb-2">
-                      Welcome back, {profile?.full_name?.split(' ')[0] || 'Learner'}! 👋
-                    </h2>
-                    <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-on-dark-secondary)]">
-                      {inProgressCourses.length > 0 
-                        ? `You have ${inProgressCourses.length} course${inProgressCourses.length > 1 ? 's' : ''} in progress. Keep going!`
-                        : 'Start your digital transformation journey today!'}
-                    </p>
-                  </div>
-                  <div className="flex gap-3">
-                    {inProgressCourses.length > 0 && (
-                      <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
-                        <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20" size="lg">
-                          <PlayCircle className="w-5 h-5 mr-2" />
-                          Continue Learning
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
-
               {/* Stats Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                 <div className="bg-white rounded-xl p-5 shadow-sm border border-[var(--dq-surface-border-default)]">
@@ -558,106 +529,88 @@ const LearnerDashboard = () => {
                     </div>
                   ) : (
                     <div className="relative">
-                      {/* Carousel Container */}
-                      <div className="overflow-hidden">
-                        <div className="flex gap-6 transition-transform duration-300" style={{
-                          transform: `translateX(-${carouselIndex * (100 / 3)}%)`
-                        }}>
-                          {recommendedCourses.map((course) => (
-                            <div key={course.id} className="flex-shrink-0 w-1/3">
-                              <Link
-                                to={course.comingSoon ? '#' : `/courses/${course.id}`}
-                                onClick={(e) => course.comingSoon && e.preventDefault()}
-                                className={`group bg-white rounded-xl overflow-hidden shadow-sm transition-all h-full flex flex-col border border-[var(--dq-surface-border-default)] ${
-                                  course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-md hover:shadow-[var(--dq-orange-500)]/20'
-                                }`}
-                              >
-                                <div className="relative">
-                                  <img
-                                    src={course.image || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop'}
-                                    alt={course.title}
-                                    className={`w-full h-40 object-cover transition-transform duration-300 ${
-                                      !course.comingSoon && 'group-hover:scale-105'
-                                    }`}
-                                  />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                  {course.comingSoon && (
-                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                      <Badge className="bg-white text-gray-900 text-sm px-4 py-2">
-                                        Coming Soon
-                                      </Badge>
-                                    </div>
-                                  )}
-                                  {course.badge && !course.comingSoon && (
-                                    <div className="absolute top-3 right-3">
-                                      <Badge className="bg-[var(--dq-orange-500)] text-white capitalize">
-                                        {course.badge}
-                                      </Badge>
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="p-5 flex-1 flex flex-col">
-                                  <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
-                                    {course.title}
-                                  </h4>
-                                  <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-4 line-clamp-2 flex-1">
-                                    {course.description}
-                                  </p>
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">
-                                      <Clock className="w-4 h-4" />
-                                      <span>{course.duration}</span>
-                                    </div>
-                                    <Badge
-                                      className={course.comingSoon ? 'bg-[var(--dq-gray-100)] text-[var(--dq-text-tertiary)]' : ''}
-                                      variant={course.comingSoon ? 'default' : 'secondary'}
-                                    >
-                                      {course.comingSoon ? 'Coming Soon' : course.level}
-                                    </Badge>
-                                  </div>
-                                </div>
-                              </Link>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Navigation Buttons */}
-                      {recommendedCourses.length > 3 && (
-                        <div className="flex gap-2 mt-6 justify-center">
-                          <button
-                            onClick={() => setCarouselIndex(Math.max(0, carouselIndex - 1))}
-                            disabled={carouselIndex === 0}
-                            className="p-2 rounded-lg bg-[var(--dq-gray-100)] hover:bg-[var(--dq-gray-200)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                            aria-label="Previous"
+                      <div 
+                        ref={carouselRef}
+                        className="flex gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory"
+                      >
+                        {recommendedCourses.map((course, index) => (
+                          <Link
+                            key={course.id}
+                            to={course.comingSoon ? '#' : `/courses/${course.id}`}
+                            onClick={(e) => course.comingSoon && e.preventDefault()}
+                            className={`group bg-white rounded-xl overflow-hidden shadow-sm transition-all h-full flex flex-col border border-[var(--dq-surface-border-default)] flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] snap-start ${
+                              course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-md hover:shadow-[var(--dq-orange-500)]/20'
+                            }`}
                           >
-                            <ChevronLeft className="w-5 h-5 text-[var(--dq-text-primary)]" />
-                          </button>
-                          
-                          {/* Dots Indicator */}
-                          <div className="flex gap-2 items-center px-4">
-                            {Array.from({ length: Math.ceil(recommendedCourses.length / 3) }).map((_, idx) => (
-                              <button
-                                key={idx}
-                                onClick={() => setCarouselIndex(idx)}
-                                className={`w-2 h-2 rounded-full transition-colors ${
-                                  idx === carouselIndex ? 'bg-[var(--dq-orange-500)]' : 'bg-[var(--dq-gray-300)]'
+                            <div className="relative">
+                              <img
+                                src={course.image || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop'}
+                                alt={course.title}
+                                className={`w-full h-40 object-cover transition-transform duration-300 ${
+                                  !course.comingSoon && 'group-hover:scale-105'
                                 }`}
-                                aria-label={`Go to slide ${idx + 1}`}
                               />
-                            ))}
-                          </div>
-
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                              {course.comingSoon && (
+                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                  <Badge className="bg-white text-gray-900 text-sm px-4 py-2">
+                                    Coming Soon
+                                  </Badge>
+                                </div>
+                              )}
+                              {course.badge && !course.comingSoon && (
+                                <div className="absolute top-3 right-3">
+                                  <Badge className="bg-[var(--dq-orange-500)] text-white capitalize">
+                                    {course.badge}
+                                  </Badge>
+                                </div>
+                              )}
+                            </div>
+                            <div className="p-5 flex-1 flex flex-col">
+                              <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
+                                {course.title}
+                              </h4>
+                              <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-4 line-clamp-2 flex-1">
+                                {course.description}
+                              </p>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">
+                                  <Clock className="w-4 h-4" />
+                                  <span>{course.duration}</span>
+                                </div>
+                                <Badge
+                                  className={course.comingSoon ? 'bg-[var(--dq-gray-100)] text-[var(--dq-text-tertiary)]' : ''}
+                                  variant={course.comingSoon ? 'default' : 'secondary'}
+                                >
+                                  {course.comingSoon ? 'Coming Soon' : course.level}
+                                </Badge>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                      
+                      {/* Carousel Dots */}
+                      <div className="flex justify-center gap-2 mt-6">
+                        {Array.from({ length: Math.ceil(recommendedCourses.length / 3) }).map((_, index) => (
                           <button
-                            onClick={() => setCarouselIndex(Math.min(Math.ceil(recommendedCourses.length / 3) - 1, carouselIndex + 1))}
-                            disabled={carouselIndex >= Math.ceil(recommendedCourses.length / 3) - 1}
-                            className="p-2 rounded-lg bg-[var(--dq-gray-100)] hover:bg-[var(--dq-gray-200)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                            aria-label="Next"
-                          >
-                            <ChevronRight className="w-5 h-5 text-[var(--dq-text-primary)]" />
-                          </button>
-                        </div>
-                      )}
+                            key={index}
+                            onClick={() => {
+                              setCarouselIndex(index);
+                              if (carouselRef.current) {
+                                const cardWidth = carouselRef.current.offsetWidth / 3;
+                                carouselRef.current.scrollLeft = index * cardWidth * 3;
+                              }
+                            }}
+                            className={`w-2 h-2 rounded-full transition-all ${
+                              carouselIndex === index 
+                                ? 'bg-[var(--dq-orange-500)] w-8' 
+                                : 'bg-[var(--dq-navy-200)] hover:bg-[var(--dq-navy-300)]'
+                            }`}
+                            aria-label={`Go to carousel page ${index + 1}`}
+                          />
+                        ))}
+                      </div>
                     </div>
                   )}
                 </section>

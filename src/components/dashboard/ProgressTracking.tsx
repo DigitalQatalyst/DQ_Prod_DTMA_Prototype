@@ -113,7 +113,7 @@ export const ProgressTracking = () => {
         {/* Weekly Activity */}
         <Card className="p-6 border border-border">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="font-semibold flex items-center gap-2" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+            <h3 className="font-semibold flex items-center gap-2 !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
               <BarChart3 className="w-5 h-5 text-[#ff6b4d]" />
               Weekly Activity
             </h3>
@@ -146,7 +146,7 @@ export const ProgressTracking = () => {
 
         {/* Course Progress */}
         <Card className="p-6 border border-border">
-          <h3 className="font-semibold mb-6 flex items-center gap-2" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+          <h3 className="font-semibold mb-6 flex items-center gap-2 !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
             <BookOpen className="w-5 h-5 text-[#ff6b4d]" />
             Course Progress
           </h3>
@@ -212,7 +212,7 @@ export const ProgressTracking = () => {
             {notes.map((note) => (
               <div key={note.id} className="p-4 bg-white rounded-lg border border-border">
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-medium text-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                  <h4 className="font-medium text-foreground !text-[#1e2348]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
                     {note.lessonTitle}
                   </h4>
                   <span className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
@@ -233,7 +233,7 @@ export const ProgressTracking = () => {
                   <TrendingUp className="w-5 h-5 text-[#ff6b4d]" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+                  <h4 className="font-medium text-foreground !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
                     Strong Performance
                   </h4>
                   <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
@@ -249,7 +249,7 @@ export const ProgressTracking = () => {
                   <Calendar className="w-5 h-5 text-amber-500" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+                  <h4 className="font-medium text-foreground !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
                     Consistent Learner
                   </h4>
                   <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>

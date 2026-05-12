@@ -385,8 +385,8 @@ export const TransactAI = ({
     <div className={`fixed bottom-6 right-6 z-40 transition-all duration-300 ${
       isMinimized ? 'w-80' : 'w-96'
     }`}>
-      <div className={`bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 ${
-        isMinimized ? 'h-16' : 'h-[600px]'
+      <div className={`bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 flex flex-col ${
+        isMinimized ? 'h-16' : 'h-[calc(100vh-120px)]'
       }`}>
         {/* Header */}
         <div className="bg-gradient-to-r from-[#ff6b4d] to-[#e56045] p-4 flex items-center justify-between">
@@ -434,7 +434,7 @@ export const TransactAI = ({
             </div>
 
             {/* Messages */}
-            <ScrollArea className="h-[380px] p-4" ref={scrollRef}>
+            <ScrollArea className="flex-1 p-4" ref={scrollRef}>
               <div className="space-y-4">
                 {messages.map((message) => (
                   <div key={message.id}>

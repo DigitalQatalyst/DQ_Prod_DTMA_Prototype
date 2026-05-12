@@ -39,7 +39,7 @@ export const ProfileManagement = () => {
     <div className="space-y-6">
       <Card className="p-6 border border-border">
         <div className="flex items-start justify-between mb-6">
-          <h3 className="font-semibold" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+          <h3 className="font-semibold !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
             Profile Information
           </h3>
           <Button
@@ -179,7 +179,7 @@ export const ProfileManagement = () => {
       </Card>
 
       <Card className="p-6 border border-border">
-        <h3 className="font-semibold mb-4" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+        <h3 className="font-semibold mb-4 !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
           Account Settings
         </h3>
         <div className="space-y-4">

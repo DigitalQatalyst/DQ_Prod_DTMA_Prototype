@@ -284,8 +284,8 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
 
         {/* Courses table */}
         <div className="bg-white rounded-xl shadow-sm border border-[var(--dq-surface-border-default)] overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="w-full">
+            <table className="w-full table-fixed">
               <thead className="bg-[var(--dq-navy-950)]">
                 <tr>
                   {['Course', 'Instructor', 'Category', 'Level', 'Status', 'Enrollments', 'Last Updated', 'Actions'].map(h => (
@@ -403,8 +403,8 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
               <h3 className="text-[16px] font-semibold text-foreground">Top Performing Courses</h3>
               <span className="text-[12px] text-muted-foreground">By Enrollments</span>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className="w-full">
+              <table className="w-full table-fixed">
                 <thead className="bg-muted/40">
                   <tr>
                     {['Course', 'Instructor', 'Enrolled', 'Completion', 'Rating', 'Revenue'].map(h => (
@@ -703,8 +703,8 @@ const AssessmentsTab = () => {
           </div>
 
           <div className="bg-white rounded-2xl border border-[var(--dq-surface-border-default)] shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
+            <div className="w-full">
+              <table className="w-full table-fixed">
                 <thead className="bg-[var(--dq-navy-950)]">
                   <tr>
                     {['Assessment', 'Course', 'Type', 'Questions', 'Submissions', 'Avg Score', 'Pass Rate', 'Status', 'Actions'].map(h => (
@@ -2231,8 +2231,8 @@ const AdminDashboard = () => {
               </div>
               
               <div className="bg-white rounded-xl shadow-sm border border-[var(--dq-surface-border-default)] overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full" role="table" aria-label="User management table">
+                <div className="w-full">
+                  <table className="w-full table-fixed" role="table" aria-label="User management table">
                     <thead className="bg-[var(--dq-navy-950)]">
                       <tr>
                         <th scope="col" className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">User</th>
@@ -5372,8 +5372,8 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full">
+                <div className="w-full">
+                  <table className="w-full table-fixed">
                     <thead className="bg-[var(--dq-navy-950)]">
                       <tr>
                         {['Transaction ID', 'Customer', 'Course/Plan', 'Amount', 'Payment Method', 'Status', 'Date', 'Actions'].map(h => (

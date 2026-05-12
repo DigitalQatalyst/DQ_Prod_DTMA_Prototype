@@ -288,9 +288,14 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
             <table className="w-full table-fixed">
               <thead className="bg-[var(--dq-navy-950)]">
                 <tr>
-                  {['Course', 'Instructor', 'Category', 'Level', 'Status', 'Enrollments', 'Last Updated', 'Actions'].map(h => (
-                    <th key={h} className="text-left px-4 py-3 text-[13px] font-medium text-white whitespace-nowrap">{h}</th>
-                  ))}
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white w-[20%]">Course</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white w-[15%]">Instructor</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white w-[18%]">Category</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white w-[10%]">Level</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white w-[10%]">Status</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white w-[12%]">Enrollments</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white w-[12%]">Last Updated</th>
+                  <th className="text-left px-4 py-3 text-[13px] font-medium text-white w-[3%]">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -303,22 +308,22 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
                   </tr>
                 ) : filtered.map((course, idx) => (
                   <tr key={course.id} className={`border-t border-[var(--dq-surface-border-default)] transition-colors hover:bg-[var(--dq-gray-50)] ${idx % 2 === 0 ? '' : 'bg-[var(--dq-gray-50)]/50'}`}>
-                    <td className="px-4 py-3">
-                      <div className="font-medium text-[14px] text-[var(--dq-navy-950)] max-w-[200px] truncate" title={course.title}>{course.title}</div>
+                    <td className="px-4 py-3 w-[20%]">
+                      <div className="font-medium text-[14px] text-[var(--dq-navy-950)] truncate" title={course.title}>{course.title}</div>
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">{course.instructor}</td>
-                    <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">{course.category}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 w-[15%] text-[13px] text-[var(--dq-text-secondary)] truncate">{course.instructor}</td>
+                    <td className="px-4 py-3 w-[18%] text-[13px] text-[var(--dq-text-secondary)] truncate">{course.category}</td>
+                    <td className="px-4 py-3 w-[10%]">
                       <span className="text-[12px] px-2 py-0.5 rounded-full bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)] font-medium capitalize">{course.level}</span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 w-[10%]">
                       <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${STATUS_STYLES[course.status]}`}>
                         {course.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[14px] font-medium text-[var(--dq-navy-950)]">{course.enrollments.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)] whitespace-nowrap">{course.lastUpdated}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 w-[12%] text-[14px] font-medium text-[var(--dq-navy-950)]">{course.enrollments.toLocaleString()}</td>
+                    <td className="px-4 py-3 w-[12%] text-[13px] text-[var(--dq-text-secondary)]">{course.lastUpdated}</td>
+                    <td className="px-4 py-3 w-[3%]">
                       <div className="flex items-center gap-1">
                         <button 
                           onClick={() => handlePreviewCourse(course.id)}

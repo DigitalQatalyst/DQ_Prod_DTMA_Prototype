@@ -69,7 +69,7 @@ const Courses = () => {
         {/* Header */}
         <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-2xl">
+            <div className="max-w-2xl mx-auto text-center">
               <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[var(--dq-orange-500)] mb-4">
                 Course Marketplace
               </p>
@@ -77,7 +77,7 @@ const Courses = () => {
                 Explore Our Courses
               </h1>
               <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-on-dark-secondary)]">
-                Discover expert-led courses designed to help you thrive in the digital economy. Master the 6XD framework and build the skills for Economy 4.0.
+                Master the 6XD framework with expert-led courses built for the digital economy.
               </p>
             </div>
           </div>

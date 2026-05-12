@@ -128,7 +128,7 @@ export const CollaborationTools = () => {
       {/* Q&A Tab */}
       <TabsContent value="qna" className="space-y-4">
         <Card className="p-6 border border-border">
-          <h3 className="font-semibold mb-4" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+          <h3 className="font-semibold mb-4 !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
             Ask a Question
           </h3>
           <Textarea
@@ -172,7 +172,7 @@ export const CollaborationTools = () => {
                           </Badge>
                         )}
                       </div>
-                      <h4 className="font-medium" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+                      <h4 className="font-medium !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
                         {thread.question}
                       </h4>
                     </div>
@@ -236,7 +236,7 @@ export const CollaborationTools = () => {
                       {topic.category}
                     </Badge>
                   </div>
-                  <h4 className="font-semibold mb-2 hover:text-[#ff6b4d]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+                  <h4 className="font-semibold mb-2 hover:text-[#ff6b4d] !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
                     {topic.title}
                   </h4>
                   <div className="flex items-center gap-4 text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
@@ -262,7 +262,7 @@ export const CollaborationTools = () => {
       <TabsContent value="chat">
         <Card className="h-[600px] flex flex-col border border-border">
           <div className="p-4 border-b">
-            <h3 className="font-semibold" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+            <h3 className="font-semibold !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
               Digital Transformation Cohort - March 2024
             </h3>
             <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>

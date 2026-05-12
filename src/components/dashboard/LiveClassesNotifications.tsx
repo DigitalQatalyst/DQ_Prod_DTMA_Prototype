@@ -171,7 +171,7 @@ export const LiveClassesNotifications = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-semibold mb-1" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+                        <h3 className="font-semibold mb-1 !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
                           {classItem.title}
                         </h3>
                         <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
@@ -225,7 +225,7 @@ export const LiveClassesNotifications = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-semibold mb-1" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+                        <h3 className="font-semibold mb-1 !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
                           {classItem.title}
                         </h3>
                         <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
@@ -271,7 +271,7 @@ export const LiveClassesNotifications = () => {
       <div>
         <Card className="p-4 border border-border">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold flex items-center gap-2" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
+            <h3 className="font-semibold flex items-center gap-2 !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
               <Bell className="w-5 h-5 text-[#ff6b4d]" />
               Notifications
             </h3>
@@ -299,7 +299,7 @@ export const LiveClassesNotifications = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2 mb-1">
-                          <h4 className="font-medium text-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+                          <h4 className="font-medium text-foreground !text-[#1e2348]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
                             {notification.title}
                           </h4>
                           {!notification.read && (

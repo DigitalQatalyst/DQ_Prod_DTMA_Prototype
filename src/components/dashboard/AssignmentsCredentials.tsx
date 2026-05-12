@@ -73,7 +73,7 @@ export const AssignmentsCredentials = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold mb-2" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
+        <h2 className="text-2xl font-semibold mb-2 !text-[#1e2348]" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
           Assignments
         </h2>
         <p className="text-muted-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
@@ -89,7 +89,7 @@ export const AssignmentsCredentials = () => {
                 <div className="flex items-start gap-3 mb-2">
                   <FileText className="w-5 h-5 text-[#ff6b4d] mt-1" />
                   <div>
-                    <h3 className="font-semibold" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
+                    <h3 className="font-semibold !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
                       {assignment.title}
                     </h3>
                     <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>

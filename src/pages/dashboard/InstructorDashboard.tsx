@@ -1000,14 +1000,14 @@ const CertificateBrandingSection = ({ profile }: any) => {
                 {certificateSettings.logoPreview ? (
                   <img src={certificateSettings.logoPreview} alt="Logo" className="h-16 w-auto" />
                 ) : (
-                  <Award className="w-10 h-10" />
+                  <Award className="w-10 h-10 text-white" />
                 )}
               </div>
               <div className="text-left">
-                <p className="text-white/80 text-[12px] leading-[16px] font-semibold mb-1 uppercase tracking-wide">
+                <p className="text-white text-[12px] leading-[16px] font-semibold mb-1 uppercase tracking-wide">
                   KHDA-Attested Certificate
                 </p>
-                <h3 className="font-semibold text-[18px] leading-[24px]">
+                <h3 className="font-semibold text-[18px] leading-[24px] text-white">
                   {certificateSettings.issuingEntityName || "Issuing Entity"}
                 </h3>
               </div>

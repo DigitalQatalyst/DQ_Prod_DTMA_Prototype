@@ -34,6 +34,7 @@ const CredentialsSection = () => {
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-16">
+          <img src="/KHDA.png" alt="KHDA" className="h-16 w-auto mx-auto mb-4" />
           <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
             Accreditation & Credentials
           </p>

@@ -67,6 +67,7 @@ const Accreditation = () => {
         <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
             <div className="max-w-4xl mx-auto text-center">
+              <img src="/KHDA.png" alt="KHDA" className="h-16 w-auto mx-auto mb-6" />
               <p className="text-[12px] leading-[16px] font-semibold uppercase tracking-wide text-[var(--dq-orange-500)] mb-6">
                 Credentials & Recognition
               </p>
@@ -95,7 +96,11 @@ const Accreditation = () => {
                     className="bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)] rounded-[12px] p-8 hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-start gap-4">
-                      <Icon className="w-6 h-6 text-[var(--dq-orange-500)] flex-shrink-0 mt-1" strokeWidth={1.5} />
+                      {index === 0 ? (
+                        <img src="/KHDA.png" alt="KHDA" className="h-6 w-auto flex-shrink-0 mt-1" />
+                      ) : (
+                        <Icon className="w-6 h-6 text-[var(--dq-orange-500)] flex-shrink-0 mt-1" strokeWidth={1.5} />
+                      )}
                       <div>
                         <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-2">
                           {acc.title}

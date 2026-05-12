@@ -3,7 +3,6 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { 
-  Award, 
   Target, 
   CheckCircle2,
   Lightbulb,
@@ -73,8 +72,8 @@ const About = () => {
             {/* Why DTMA Cards */}
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               <div className="p-8 rounded-[12px] bg-white border border-[var(--dq-navy-100)]">
-                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)] flex items-center justify-center mb-6">
-                  <Target className="w-6 h-6 text-white" strokeWidth={1.5} />
+                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)]/30 flex items-center justify-center mb-6">
+                  <Target className="w-6 h-6 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                 </div>
                 <h3 style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-3">6XD Framework</h3>
                 <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">
@@ -83,8 +82,8 @@ const About = () => {
               </div>
               
               <div className="p-8 rounded-[12px] bg-white border border-[var(--dq-navy-100)]">
-                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)] flex items-center justify-center mb-6">
-                  <Lightbulb className="w-6 h-6 text-white" strokeWidth={1.5} />
+                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)]/30 flex items-center justify-center mb-6">
+                  <Lightbulb className="w-6 h-6 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                 </div>
                 <h3 style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-3">Hybrid HI + AI Faculty</h3>
                 <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">
@@ -93,8 +92,8 @@ const About = () => {
               </div>
               
               <div className="p-8 rounded-[12px] bg-white border border-[var(--dq-navy-100)]">
-                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)] flex items-center justify-center mb-6">
-                  <Zap className="w-6 h-6 text-white" strokeWidth={1.5} />
+                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)]/30 flex items-center justify-center mb-6">
+                  <Zap className="w-6 h-6 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                 </div>
                 <h3 style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-3">Bite-Sized Learning</h3>
                 <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">
@@ -119,7 +118,7 @@ const About = () => {
             
             <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--dq-orange-500)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
+                <div className="w-16 h-16 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
                   1
                 </div>
                 <h3 style={{ fontSize: '18px', lineHeight: '26px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-2">Discovery</h3>
@@ -127,7 +126,7 @@ const About = () => {
               </div>
               
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--dq-orange-500)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
+                <div className="w-16 h-16 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
                   2
                 </div>
                 <h3 style={{ fontSize: '18px', lineHeight: '26px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-2">Core Courses</h3>
@@ -135,7 +134,7 @@ const About = () => {
               </div>
               
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--dq-orange-500)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
+                <div className="w-16 h-16 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
                   3
                 </div>
                 <h3 style={{ fontSize: '18px', lineHeight: '26px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-2">Electives</h3>
@@ -143,7 +142,7 @@ const About = () => {
               </div>
               
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--dq-orange-500)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
+                <div className="w-16 h-16 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
                   4
                 </div>
                 <h3 style={{ fontSize: '18px', lineHeight: '26px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-2">Certification</h3>
@@ -183,9 +182,7 @@ const About = () => {
         <section className="py-16 lg:py-24 bg-white">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
             <div className="max-w-4xl mx-auto text-center">
-              <div className="w-20 h-20 bg-[var(--dq-orange-500)] rounded-[12px] flex items-center justify-center mx-auto mb-6">
-                <Award className="w-10 h-10 text-white" strokeWidth={1.5} />
-              </div>
+              <img src="/KHDA.png" alt="KHDA" className="h-20 w-auto mx-auto mb-6" />
               <h2 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-4">
                 KHDA-Attested Credentials
               </h2>

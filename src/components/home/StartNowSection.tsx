@@ -1,4 +1,4 @@
-import { ArrowRight, Award } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const StartNowSection = () => {
@@ -18,26 +18,25 @@ const StartNowSection = () => {
           </p>
         </div>
 
-        {/* Credential Reinforcement */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 my-10 max-w-3xl mx-auto border border-white/20">
-          <div className="flex items-center justify-center gap-4 text-center">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-              <Award className="w-6 h-6 text-white" />
-            </div>
-            <p className="text-sm text-white/90 leading-relaxed">
-              All DTMA courses award KHDA-attested, internationally recognized credentials.
-            </p>
-          </div>
-        </div>
-
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
           <Button
             className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white border-transparent text-base gap-2"
           >
             Begin Your Journey
             <ArrowRight className="w-4 h-4" />
           </Button>
+        </div>
+
+        {/* Credential Reinforcement */}
+        <div className="max-w-3xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
+            <img src="/KHDA.png" alt="KHDA" className="h-14 w-auto flex-shrink-0" />
+            <div className="h-12 w-px bg-white/20 hidden sm:block"></div>
+            <p className="text-sm text-white/80 leading-relaxed text-center sm:text-left">
+              All DTMA courses award KHDA-attested, internationally recognized credentials.
+            </p>
+          </div>
         </div>
       </div>
     </section>

@@ -2903,9 +2903,7 @@ const AdminDashboard = () => {
               {/* Program Builder - Enhanced */}
               <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
-                    <BookOpen className="w-8 h-8 text-white" />
-                  </div>
+                  <BookOpen className="w-8 h-8 text-[var(--dq-navy-950)]" strokeWidth={1.5} />
                   <div>
                     <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Program Builder</h3>
                     <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Create and manage comprehensive learning programs and curriculum pathways</p>
@@ -2917,9 +2915,7 @@ const AdminDashboard = () => {
                   <div className="bg-gradient-to-br from-[var(--dq-gray-50)] to-[var(--dq-surface-border-default)] rounded-xl p-6 border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-4">
                       <div className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)]">Total Programs</div>
-                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                        <BookOpen className="w-5 h-5 text-[var(--dq-navy-950)]" />
-                      </div>
+                      <BookOpen className="w-5 h-5 text-[var(--dq-navy-950)]" strokeWidth={1.5} />
                     </div>
                     <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-navy-950)] mb-1">24</div>
                     <div className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">Active learning programs</div>
@@ -2928,9 +2924,7 @@ const AdminDashboard = () => {
                   <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
                     <div className="flex items-center justify-between mb-4">
                       <div className="text-[14px] leading-[20px] font-semibold text-emerald-900">Published</div>
-                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                        <CheckCircle className="w-5 h-5 text-emerald-600" />
-                      </div>
+                      <CheckCircle className="w-5 h-5 text-emerald-600" strokeWidth={1.5} />
                     </div>
                     <div className="text-[32px] leading-[40px] font-bold text-emerald-900 mb-1">18</div>
                     <div className="text-[13px] leading-[18px] text-emerald-700">Live and enrolling</div>
@@ -2939,9 +2933,7 @@ const AdminDashboard = () => {
                   <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-6 border border-amber-200">
                     <div className="flex items-center justify-between mb-4">
                       <div className="text-[14px] leading-[20px] font-semibold text-amber-900">In Development</div>
-                      <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-                        <Clock className="w-5 h-5 text-amber-600" />
-                      </div>
+                      <Clock className="w-5 h-5 text-amber-600" strokeWidth={1.5} />
                     </div>
                     <div className="text-[32px] leading-[40px] font-bold text-amber-900 mb-1">6</div>
                     <div className="text-[13px] leading-[18px] text-amber-700">Being created</div>
@@ -2971,7 +2963,7 @@ const AdminDashboard = () => {
                       courses: 24, 
                       students: 487,
                       icon: Sparkles,
-                      color: 'from-purple-400 to-purple-600',
+                      color: 'text-purple-600',
                       bgColor: 'from-purple-50 to-purple-100',
                       borderColor: 'border-purple-200'
                     },
@@ -2981,7 +2973,7 @@ const AdminDashboard = () => {
                       courses: 18, 
                       students: 356,
                       icon: Building2,
-                      color: 'from-blue-400 to-blue-600',
+                      color: 'text-blue-600',
                       bgColor: 'from-blue-50 to-blue-100',
                       borderColor: 'border-blue-200'
                     },
@@ -2991,7 +2983,7 @@ const AdminDashboard = () => {
                       courses: 22, 
                       students: 412,
                       icon: TrendingUp,
-                      color: 'from-emerald-400 to-emerald-600',
+                      color: 'text-emerald-600',
                       bgColor: 'from-emerald-50 to-emerald-100',
                       borderColor: 'border-emerald-200'
                     },
@@ -3001,7 +2993,7 @@ const AdminDashboard = () => {
                       courses: 16, 
                       students: 298,
                       icon: Users,
-                      color: 'from-orange-400 to-orange-600',
+                      color: 'text-[var(--dq-orange-500)]',
                       bgColor: 'from-orange-50 to-orange-100',
                       borderColor: 'border-orange-200'
                     },
@@ -3011,7 +3003,7 @@ const AdminDashboard = () => {
                       courses: 14, 
                       students: 234,
                       icon: DollarSign,
-                      color: 'from-green-400 to-green-600',
+                      color: 'text-green-600',
                       bgColor: 'from-green-50 to-green-100',
                       borderColor: 'border-green-200'
                     },
@@ -3021,7 +3013,7 @@ const AdminDashboard = () => {
                       courses: 10, 
                       students: 178,
                       icon: Brain,
-                      color: 'from-pink-400 to-pink-600',
+                      color: 'text-pink-600',
                       bgColor: 'from-pink-50 to-pink-100',
                       borderColor: 'border-pink-200'
                     },
@@ -3031,9 +3023,7 @@ const AdminDashboard = () => {
                       <div key={index} className={`bg-gradient-to-r ${category.bgColor} rounded-xl p-6 border ${category.borderColor} hover:shadow-md transition-all`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4 flex-1">
-                            <div className={`w-14 h-14 bg-gradient-to-br ${category.color} rounded-xl flex items-center justify-center shadow-sm`}>
-                              <Icon className="w-7 h-7 text-white" />
-                            </div>
+                            <Icon className={`w-7 h-7 ${category.color}`} strokeWidth={1.5} />
                             <div className="flex-1">
                               <h5 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2">{category.name}</h5>
                               <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[var(--dq-text-secondary)]">
@@ -3104,9 +3094,7 @@ const AdminDashboard = () => {
                       const Icon = feature.icon;
                       return (
                         <div key={index} className="flex items-start gap-3 bg-white rounded-lg p-4 border border-[var(--dq-surface-border-default)]">
-                          <div className="w-10 h-10 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-lg flex items-center justify-center flex-shrink-0">
-                            <Icon className="w-5 h-5 text-white" />
-                          </div>
+                          <Icon className="w-5 h-5 text-[var(--dq-orange-500)] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                           <div>
                             <div className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)]">{feature.title}</div>
                             <div className="text-[12px] leading-[18px] text-[var(--dq-text-secondary)] mt-1">{feature.desc}</div>

@@ -2559,22 +2559,22 @@ const AdminDashboard = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
-                      <Users className="w-7 h-7 text-white" />
+                    <div className="w-14 h-14 bg-[var(--dq-orange-500)]/30 rounded-2xl flex items-center justify-center">
+                      <Users className="w-7 h-7 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">1,247</div>
                   <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Total Enrolled</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
-                    <TrendingUp className="w-4 h-4" />
+                    <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
                     <span>+18% this month</span>
                   </div>
                 </div>
 
                 <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-sm">
-                      <Clock className="w-7 h-7 text-white" />
+                    <div className="w-14 h-14 bg-amber-500/30 rounded-2xl flex items-center justify-center">
+                      <Clock className="w-7 h-7 text-amber-600" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">23</div>
@@ -2586,8 +2586,8 @@ const AdminDashboard = () => {
 
                 <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl flex items-center justify-center shadow-sm">
-                      <BookOpen className="w-7 h-7 text-white" />
+                    <div className="w-14 h-14 bg-[var(--dq-navy-950)]/30 rounded-2xl flex items-center justify-center">
+                      <BookOpen className="w-7 h-7 text-[var(--dq-navy-950)]" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">42</div>
@@ -2599,14 +2599,14 @@ const AdminDashboard = () => {
 
                 <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] shadow-md hover:shadow-lg transition-shadow">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-sm">
-                      <CheckCircle className="w-7 h-7 text-white" />
+                    <div className="w-14 h-14 bg-emerald-500/30 rounded-2xl flex items-center justify-center">
+                      <CheckCircle className="w-7 h-7 text-emerald-600" strokeWidth={1.5} />
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">89%</div>
                   <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Completion Rate</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
-                    <TrendingUp className="w-4 h-4" />
+                    <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
                     <span>+5% vs last month</span>
                   </div>
                 </div>
@@ -2615,8 +2615,8 @@ const AdminDashboard = () => {
               {/* Enrollment Dashboard */}
               <div className="bg-white rounded-2xl p-8 shadow-md border border-[var(--dq-surface-border-default)] hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[var(--dq-orange-500)] to-[#e66045] rounded-2xl flex items-center justify-center shadow-sm">
-                    <Users className="w-8 h-8 text-white" />
+                  <div className="w-16 h-16 bg-[var(--dq-orange-500)]/30 rounded-2xl flex items-center justify-center">
+                    <Users className="w-8 h-8 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                   </div>
                   <div>
                     <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Enrollment Dashboard</h3>

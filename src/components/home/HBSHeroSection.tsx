@@ -1,3 +1,4 @@
+import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -20,6 +21,22 @@ const HBSHeroSection = () => {
         <p className="text-[18px] leading-[28px] font-normal max-w-3xl mx-auto text-white/90 mb-10">
           We equip leaders and digital teams with the skills to thrive in Economy 4.0 and build Digital Cognitive Organizations.
         </p>
+
+        {/* AI-Powered Command Bar */}
+        <div className="w-full max-w-2xl mx-auto mb-10">
+          <div className="flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/40 rounded-2xl px-5 py-3 shadow-md hover:bg-white/8 transition-all focus-within:border-[rgba(181,197,247,0.45)] focus-within:ring-2 focus-within:ring-[rgba(181,197,247,0.20)]">
+            <MessageSquare className="w-5 h-5 text-white/40 flex-shrink-0" />
+            <input
+              type="text"
+              placeholder="Ask AI: What course should I take? What is 6XD? How do I get started?"
+              className="flex-1 bg-transparent text-white placeholder-white/40 outline-none border-none ring-0 text-[16px] leading-[24px] font-normal"
+            />
+            <button className="flex items-center gap-2 px-5 py-2 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] rounded-lg transition-colors cursor-pointer flex-shrink-0">
+              <span className="text-[14px] leading-[20px] font-medium text-white">Ask AI</span>
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            </button>
+          </div>
+        </div>
 
         {/* Call to Actions */}
         <div className="flex items-center justify-center gap-4">

@@ -190,28 +190,28 @@ const Courses = () => {
                           </div>
                         </div>
                         <div className="p-5">
-                          <h3 className="text-[20px] leading-[28px] font-medium text-[var(--dq-text-primary)] mb-2 line-clamp-2">
+                          <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)] mb-3 line-clamp-2">
                             {course.title}
                           </h3>
-                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-3">
+                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-4">
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 text-[var(--dq-orange-500)] fill-[var(--dq-orange-500)]" />
-                              <span className="font-medium">{course.rating}</span>
-                              <span>({course.reviews})</span>
+                              <span className="font-semibold text-[var(--dq-text-primary)]">{course.rating}</span>
+                              <span className="text-[var(--dq-text-tertiary)]">({course.reviews})</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Clock className="w-4 h-4" />
                               <span>{course.duration}</span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[var(--dq-text-tertiary)] mb-3">
+                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[var(--dq-text-tertiary)] mb-4">
                             <BookOpen className="w-4 h-4" />
                             <span>Content in development</span>
                           </div>
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between pt-3 border-t border-[var(--dq-surface-border-default)]">
                             <div className="flex items-baseline gap-2">
-                              <span className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
-                              <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
+                              <span className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
+                              <span className="text-[12px] leading-[16px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
                             </div>
                           </div>
                         </div>
@@ -227,30 +227,30 @@ const Courses = () => {
                           />
                         </div>
                         <div className="p-5">
-                          <h3 className="text-[20px] leading-[28px] font-medium text-[var(--dq-text-primary)] mb-2 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
+                          <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)] mb-3 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
                             {course.title}
                           </h3>
-                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-3">
+                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-4">
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 text-[var(--dq-orange-500)] fill-[var(--dq-orange-500)]" />
-                              <span className="font-medium">{course.rating}</span>
-                              <span className="text-[var(--dq-text-disabled)]">({course.reviews})</span>
+                              <span className="font-semibold text-[var(--dq-text-primary)]">{course.rating}</span>
+                              <span className="text-[var(--dq-text-tertiary)]">({course.reviews})</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Clock className="w-4 h-4" />
                               <span>{course.duration}</span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[var(--dq-text-tertiary)] mb-3">
+                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[var(--dq-text-tertiary)] mb-4">
                             <BookOpen className="w-4 h-4" />
                             <span>{course.modules.length} modules • {course.totalLessons} lessons</span>
                           </div>
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between pt-3 border-t border-[var(--dq-surface-border-default)]">
                             <div className="flex items-baseline gap-2">
-                              <span className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
-                              <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
+                              <span className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
+                              <span className="text-[12px] leading-[16px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
                             </div>
-                            <Badge variant="outline" className="text-[12px] leading-[16px] font-medium border-[var(--dq-surface-border-default)]">
+                            <Badge variant="outline" className="text-[11px] leading-[14px] font-semibold border-[var(--dq-surface-border-default)]">
                               {course.level}
                             </Badge>
                           </div>
@@ -289,25 +289,25 @@ const Courses = () => {
 
                         <div className="flex-1 flex flex-col justify-between py-1">
                           <div>
-                            <div className="flex items-center gap-2 mb-2">
-                              <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium capitalize text-[var(--dq-orange-500)]">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Badge variant="secondary" className="text-[11px] leading-[14px] font-semibold capitalize text-[var(--dq-orange-500)]">
                                 {course.category}
                               </Badge>
-                              <span className="text-[12px] leading-[16px] font-medium text-[var(--dq-text-tertiary)]">{course.level}</span>
+                              <span className="text-[11px] leading-[14px] font-semibold text-[var(--dq-text-tertiary)]">{course.level}</span>
                             </div>
 
-                            <h3 className="text-[20px] leading-[28px] font-medium text-[var(--dq-text-primary)] mb-1">
+                            <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)] mb-2">
                               {course.title}
                             </h3>
-                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-2">{course.description}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-2">{course.description}</p>
                             <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">by {course.instructor}</p>
                           </div>
 
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">
+                          <div className="flex items-center justify-between pt-3 border-t border-[var(--dq-surface-border-default)]">
+                            <div className="flex items-center gap-6 text-[13px] leading-[18px] font-normal text-[var(--dq-text-tertiary)]">
                               <div className="flex items-center gap-1.5">
                                 <Star className="w-4 h-4 fill-[var(--dq-orange-500)] text-[var(--dq-orange-500)]" />
-                                <span className="font-semibold">{course.rating}</span>
+                                <span className="font-semibold text-[var(--dq-text-primary)]">{course.rating}</span>
                                 <span>({course.reviews})</span>
                               </div>
                               <div className="flex items-center gap-1">
@@ -321,8 +321,8 @@ const Courses = () => {
                             </div>
 
                             <div className="flex items-center gap-3">
-                              <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
-                              <span className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
+                              <span className="text-[12px] leading-[16px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
+                              <span className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
                             </div>
                           </div>
                         </div>
@@ -345,22 +345,22 @@ const Courses = () => {
 
                         <div className="flex-1 flex flex-col justify-between py-1">
                           <div>
-                            <div className="flex items-center gap-2 mb-2">
-                              <Badge variant="secondary" className="text-[12px] leading-[16px] font-medium capitalize">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Badge variant="secondary" className="text-[11px] leading-[14px] font-semibold capitalize">
                                 {course.category}
                               </Badge>
-                              <span className="text-[12px] leading-[16px] font-medium text-muted-foreground">{course.level}</span>
+                              <span className="text-[11px] leading-[14px] font-semibold text-[var(--dq-text-tertiary)]">{course.level}</span>
                             </div>
 
-                            <h3 className="text-[20px] leading-[28px] font-medium text-foreground mb-1 group-hover:text-primary transition-colors">
+                            <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
                               {course.title}
                             </h3>
-                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-2">{course.description}</p>
-                            <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">by {course.instructor}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-2">{course.description}</p>
+                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">by {course.instructor}</p>
                           </div>
 
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-6 text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">
+                          <div className="flex items-center justify-between pt-3 border-t border-[var(--dq-surface-border-default)]">
+                            <div className="flex items-center gap-6 text-[13px] leading-[18px] font-normal text-[var(--dq-text-tertiary)]">
                               <div className="flex items-center gap-1.5">
                                 <Star className="w-4 h-4 fill-[var(--dq-orange-500)] text-[var(--dq-orange-500)]" />
                                 <span className="font-semibold text-[var(--dq-text-primary)]">{course.rating}</span>
@@ -377,8 +377,8 @@ const Courses = () => {
                             </div>
 
                             <div className="flex items-center gap-3">
-                              <span className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
-                              <span className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
+                              <span className="text-[12px] leading-[16px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
+                              <span className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
                               <ChevronRight className="w-5 h-5 text-[var(--dq-text-tertiary)] group-hover:text-[var(--dq-orange-500)] group-hover:translate-x-1 transition-all" />
                             </div>
                           </div>

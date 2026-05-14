@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import "@/styles/dq-design-tokens.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
@@ -22,7 +23,6 @@ import LearnerDashboard from "./pages/dashboard/LearnerDashboard";
 import InstructorDashboard from "./pages/dashboard/InstructorDashboard";
 import InstitutionDashboard from "./pages/dashboard/InstitutionDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
-import SMSDashboard from "./pages/dashboard/SMSDashboard";
 import Masterclasses from "./pages/Masterclasses";
 import MasterclassDetail from "./pages/MasterclassDetail";
 import MasterclassBooking from "./pages/MasterclassBooking";
@@ -47,6 +47,8 @@ import Accreditation from "./pages/Accreditation";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Help from "./pages/Help";
+
+const SuperAdminDashboard = lazy(() => import("./pages/dashboard/SuperAdminDashboard"));
 
 const queryClient = new QueryClient();
 
@@ -156,7 +158,7 @@ const AppRoutes = () => (
       <Route path="/courses/:courseId/builder" element={<ProtectedRoute><CourseBuilder /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardRouter /></ProtectedRoute>} />
       <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/sms-admin" element={<SMSDashboard />} />
+      <Route path="/super-admin-dashboard" element={<Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}><SuperAdminDashboard /></Suspense>} />
       <Route path="/ai-study-buddy" element={<ProtectedRoute><AIStudyBuddyPage /></ProtectedRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />

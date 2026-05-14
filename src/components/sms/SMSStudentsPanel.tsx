@@ -1,8 +1,217 @@
+import { useState } from "react";
+import { Info, Search } from "lucide-react";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+interface StudentRecord {
+  id: string;
+  name: string;
+  email: string;
+  enrolled: number;
+  completed: number;
+  lastActiveDaysAgo: number;
+  accessStatus: "active" | "payment-failed" | "expired" | "cancelled" | "refunded" | "free";
+  accessExpiresInDays?: number; // subscription students only
+}
+
+// ── Mock data ─────────────────────────────────────────────────────────────────
+
+const studentRecords: StudentRecord[] = [
+  { id: "S-001", name: "Amina Osei",   email: "amina@example.com",  enrolled: 3, completed: 2, lastActiveDaysAgo: 1,  accessStatus: "active"         },
+  { id: "S-002", name: "Noah Mensah",  email: "noah@example.com",   enrolled: 2, completed: 2, lastActiveDaysAgo: 2,  accessStatus: "active", accessExpiresInDays: 6 },
+  { id: "S-003", name: "Irene Mwangi", email: "irene@example.com",  enrolled: 1, completed: 0, lastActiveDaysAgo: 21, accessStatus: "payment-failed" },
+  { id: "S-004", name: "Kwame Asante", email: "kwame@example.com",  enrolled: 4, completed: 3, lastActiveDaysAgo: 4,  accessStatus: "expired"        },
+  { id: "S-005", name: "Sofia Reyes",  email: "sofia@example.com",  enrolled: 2, completed: 1, lastActiveDaysAgo: 16, accessStatus: "active"         },
+];
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+const Tip = ({ text }: { text: string }) => (
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Info className="inline h-3.5 w-3.5 text-slate-400 cursor-default ml-1 shrink-0" />
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-[220px] text-xs">{text}</TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
+
+function accessBadge(s: string) {
+  if (s === "active")         return "border-emerald-200 bg-emerald-50 text-emerald-700";
+  if (s === "payment-failed") return "border-rose-300 bg-rose-100 text-rose-800";
+  if (s === "expired")        return "border-amber-200 bg-amber-50 text-amber-800";
+  if (s === "cancelled")      return "border-slate-200 bg-slate-50 text-slate-600";
+  if (s === "refunded")       return "border-sky-200 bg-sky-50 text-sky-700";
+  return "border-slate-200 bg-slate-50 text-slate-600";
+}
+
+function accessLabel(s: string) {
+  const map: Record<string, string> = {
+    "active": "Active", "payment-failed": "Payment Failed",
+    "expired": "Expired", "cancelled": "Cancelled", "refunded": "Refunded", "free": "Free",
+  };
+  return map[s] ?? s;
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
 export default function SMSStudentsPanel() {
+  const { toast } = useToast();
+  const [search, setSearch] = useState("");
+  const [notifiedStudents, setNotifiedStudents] = useState<Set<string>>(new Set());
+
+  const filtered = studentRecords.filter((s) =>
+    s.name.toLowerCase().includes(search.toLowerCase()) ||
+    s.email.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const approveAction = (id: string, student: string) => {
+    setPendingActions((cur) => cur.filter((a) => a.id !== id));
+    toast({ title: "Approved", description: `Action for ${student} has been approved.` });
+  };
+
+  const accessLost    = studentRecords.filter((s) => s.accessStatus === "payment-failed" || s.accessStatus === "expired").length;
+  const inactive14d   = studentRecords.filter((s) => s.accessStatus === "active" && s.lastActiveDaysAgo >= 14).length;
+  const needsAttention = accessLost + inactive14d;
+
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Students</h2>
-      <p className="text-gray-600">Student Management</p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div>
+        <h2 className="text-[28px] leading-[36px] font-semibold">Students</h2>
+        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
+          Progress, access status, and engagement for all enrolled students.
+        </p>
+      </div>
+
+      {/* KPI cards */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
+          <div className="text-[24px] leading-[32px] font-medium">{studentRecords.length}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Total Students</div>
+        </div>
+        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", inactive14d > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
+          <div className={cn("text-[24px] leading-[32px] font-medium", inactive14d > 0 && "text-amber-700")}>{inactive14d}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            Inactive 14d+
+            <Tip text="Students with active access who haven't logged in or engaged with any course in the last 14 days." />
+          </div>
+        </div>
+        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", needsAttention > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
+          <div className={cn("text-[24px] leading-[32px] font-medium", needsAttention > 0 && "text-rose-700")}>{needsAttention}</div>
+          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            Needs Attention
+            <Tip text="Students with lost access (payment failed or expired) plus students inactive for 14+ days." />
+          </div>
+          {accessLost > 0 && <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600">{accessLost} lost access</div>}
+        </div>
+      </div>
+
+      {/* Student table */}
+      <Card className="border-slate-200/80 shadow-sm">
+        <CardHeader>
+          <CardTitle>All Students</CardTitle>
+          <CardDescription>Progress, last activity, and access status per student.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="relative max-w-sm">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name or email" className="pl-9" />
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-slate-200">
+            <Table>
+              <TableHeader><TableRow className="bg-slate-50">
+                <TableHead>Student</TableHead>
+                <TableHead><span className="flex items-center gap-1">Progress Status<Tip text="Overall progress across all enrolled courses. On Track = ≥66% complete and active. At Risk = below 66% or inactive 14d+. Stalled = no activity and low completion." /></span></TableHead>
+                <TableHead>
+                  <span className="flex items-center gap-1">
+                    Last Active <Tip text="Days since the student last logged in and engaged with course content. Amber if over 14 days." />
+                  </span>
+                </TableHead>
+                <TableHead>Access</TableHead>
+                <TableHead>
+                  <span className="flex items-center gap-1">
+                    Access Expires
+                    <Tip text="For subscription students: when their current subscription period ends. Blank for one-time purchases." />
+                  </span>
+                </TableHead>
+                <TableHead className="text-right">Action</TableHead>
+              </TableRow></TableHeader>
+              <TableBody>
+                {filtered.map((s) => {
+                  const pct = s.enrolled > 0 ? Math.round((s.completed / s.enrolled) * 100) : 0;
+                  const lostAccess = s.accessStatus === "payment-failed" || s.accessStatus === "expired";
+                  const inactive   = s.accessStatus === "active" && s.lastActiveDaysAgo >= 14;
+                  const needsAction = lostAccess || inactive;
+                  // Progress status: derived from completion + inactivity
+                  const progressStatus =
+                    lostAccess                              ? { label: "No Access",  cls: "border-rose-200 bg-rose-50 text-rose-700"     } :
+                    pct >= 66 && !inactive                  ? { label: "On Track",   cls: "border-emerald-200 bg-emerald-50 text-emerald-700" } :
+                    inactive || (pct < 66 && pct > 0)       ? { label: "At Risk",    cls: "border-amber-200 bg-amber-50 text-amber-800"   } :
+                                                              { label: "Stalled",    cls: "border-rose-200 bg-rose-50 text-rose-700"     };
+                  return (
+                    <TableRow key={s.id} className={lostAccess ? "bg-rose-50/40" : inactive ? "bg-amber-50/30" : ""}>
+                      <TableCell>
+                        <div className="font-medium text-slate-900">{s.name}</div>
+                        <div className="text-xs text-slate-500">{s.email}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-0.5">
+                          <Badge className={`border text-xs font-semibold w-fit ${progressStatus.cls}`}>{progressStatus.label}</Badge>
+                          <span className="text-xs text-slate-400">{s.completed}/{s.enrolled} courses</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className={cn("text-sm", s.lastActiveDaysAgo > 14 ? "text-amber-700 font-medium" : "text-slate-600")}>
+                          {s.lastActiveDaysAgo === 0 ? "Today" : s.lastActiveDaysAgo === 1 ? "Yesterday" : `${s.lastActiveDaysAgo}d ago`}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={`border text-xs font-semibold ${accessBadge(s.accessStatus)}`}>{accessLabel(s.accessStatus)}</Badge>
+                      </TableCell>
+                      <TableCell className="text-sm">
+                        {s.accessExpiresInDays !== undefined
+                          ? s.accessExpiresInDays <= 7
+                            ? <span className="text-amber-700 font-medium">In {s.accessExpiresInDays}d</span>
+                            : <span className="text-slate-500">In {s.accessExpiresInDays}d</span>
+                          : <span className="text-slate-400">—</span>}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {needsAction && (
+                          <Button
+                            size="sm" variant="outline" className="text-xs h-7"
+                            disabled={notifiedStudents.has(s.id)}
+                            onClick={() => {
+                              setNotifiedStudents((prev) => new Set(prev).add(s.id));
+                              toast({
+                                title: lostAccess ? "Support team notified" : "Reminder sent",
+                                description: lostAccess
+                                  ? `Student support has been alerted about ${s.name}'s access issue.`
+                                  : `${s.name} has been sent a re-engagement reminder.`,
+                              });
+                            }}
+                          >
+                            {notifiedStudents.has(s.id) ? "Done" : lostAccess ? "Notify Support" : "Send Reminder"}
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

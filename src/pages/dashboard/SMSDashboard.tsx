@@ -45,48 +45,48 @@ export default function SMSDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-white flex">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#1e2348] to-[#2a3058] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[var(--dq-navy-950)] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="p-6 border-b border-white/10">
+          <div className="px-6 py-5 border-b border-white/10">
             <Link to="/" className="flex items-center gap-3">
-              <img src="/dtma-logo.png" alt="DTMA" className="h-[40px] w-auto brightness-0 invert" />
+              <img src="/dtma-logo.png" alt="DTMA" className="h-10 w-auto brightness-0 invert" />
             </Link>
           </div>
 
           {/* Nav */}
-          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+          <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => { setActiveTab(item.id); setSidebarOpen(false); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-[16px] leading-[24px] font-normal ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all duration-200 text-sm font-medium ${
                   activeTab === item.id
-                    ? 'bg-[#ff6b4d] text-white shadow-lg shadow-[#ff6b4d]/20'
+                    ? 'bg-[var(--dq-orange-500)] text-white shadow-md shadow-[var(--dq-orange-500)]/30'
                     : 'text-white/70 hover:bg-white/10 hover:text-white'
                 }`}
               >
-                <item.icon className="w-5 h-5" />
-                <span className="flex-1">{item.label}</span>
+                <item.icon className="w-5 h-5 flex-shrink-0" />
+                <span className="flex-1 text-left">{item.label}</span>
               </button>
             ))}
           </nav>
 
           {/* User footer */}
-          <div className="p-4 border-t border-white/10">
+          <div className="px-3 py-4 border-t border-white/10">
             <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="w-10 h-10 rounded-full bg-[#ff6b4d] flex items-center justify-center text-[14px] leading-[20px] font-medium">
+              <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] flex items-center justify-center text-xs font-semibold flex-shrink-0">
                 SM
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-[14px] leading-[20px] font-medium truncate">Academy Manager</div>
-                <div className="text-[12px] leading-[16px] font-normal text-white/60">AMS Portal</div>
+                <div className="text-sm font-semibold truncate">Academy Manager</div>
+                <div className="text-xs text-white/60">AMS Portal</div>
               </div>
             </div>
             <Link to="/admin">
-              <Button variant="ghost" className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10">
+              <Button variant="ghost" className="w-full justify-start text-xs text-white/70 hover:text-white hover:bg-white/10 h-9">
                 <LogOut className="w-4 h-4 mr-2" />
                 Log Out
               </Button>
@@ -98,24 +98,24 @@ export default function SMSDashboard() {
       {/* Main content */}
       <div className="flex-1 lg:ml-64">
         {/* Mobile header */}
-        <header className="lg:hidden sticky top-0 z-40 bg-background border-b border-border p-4 flex items-center justify-between">
-          <button onClick={() => setSidebarOpen(true)} className="p-2 hover:bg-accent rounded-lg">
-            <Menu className="w-6 h-6" />
+        <header className="lg:hidden sticky top-0 z-40 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+          <button onClick={() => setSidebarOpen(true)} className="p-2 hover:bg-gray-100 rounded-lg">
+            <Menu className="w-6 h-6 text-gray-900" />
           </button>
-          <span className="font-semibold">Academy Management</span>
+          <span className="font-semibold text-gray-900">Academy Management</span>
           <div className="w-10" />
         </header>
 
         {/* Mobile overlay */}
         {sidebarOpen && (
-          <div className="fixed inset-0 z-40 bg-foreground/50 lg:hidden" onClick={() => setSidebarOpen(false)}>
-            <button className="absolute top-4 right-4 p-2 bg-background rounded-full" onClick={() => setSidebarOpen(false)}>
-              <X className="w-6 h-6" />
+          <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)}>
+            <button className="absolute top-4 right-4 p-2 bg-white rounded-lg" onClick={() => setSidebarOpen(false)}>
+              <X className="w-6 h-6 text-gray-900" />
             </button>
           </div>
         )}
 
-        <main className="p-6 lg:p-8">
+        <main className="bg-gray-50 min-h-screen px-6 py-8 lg:px-8">
           {activeTab === 'overview' && <SMSOverviewPanel onNavigate={setActiveTab} />}
           {activeTab === 'courses' && <SMSCoursesPanel />}
           {activeTab === 'faculty' && <SMSFacultyPanel />}

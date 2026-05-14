@@ -5,6 +5,24 @@ import { Link } from "react-router-dom";
 const HBSHeroSection = () => {
   return (
     <section className="relative w-full text-white pt-24 pb-16 px-4 md:px-8 lg:px-12 min-h-screen flex flex-col justify-center overflow-hidden font-sans bg-[var(--dq-navy-950)]">
+      {/* Background Video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover opacity-30"
+        style={{ playbackRate: 0.5 }}
+        onLoadedMetadata={(e) => {
+          (e.target as HTMLVideoElement).playbackRate = 0.5;
+        }}
+      >
+        <source src="/Hero video.mp4" type="video/mp4" />
+      </video>
+
+      {/* Overlay */}
+      <div className="absolute inset-0 z-5" style={{ backgroundColor: 'rgba(3, 15, 53, 0.8)' }} />
+
       {/* Container */}
       <div className="max-w-[1600px] mx-auto w-full relative z-10 flex flex-col items-center text-center pt-20 pb-24 px-8 md:px-12 lg:px-16">
         {/* Academy Label */}

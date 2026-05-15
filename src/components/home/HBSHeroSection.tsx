@@ -62,7 +62,7 @@ const HBSHeroSection = () => {
             Start Now
           </Button>
           <Link to="/courses">
-            <Button variant="hero" size="lg" className="px-8 py-6 bg-transparent hover:bg-white/10 text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid white' }}>
+            <Button variant="hero" size="lg" className="px-8 py-6 bg-white hover:bg-gray-100 text-[var(--dq-navy-950)] text-[16px] leading-[24px] font-normal font-semibold" style={{ border: '1.5px solid transparent' }}>
               Explore Courses
             </Button>
           </Link>

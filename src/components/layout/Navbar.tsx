@@ -83,9 +83,6 @@ const Navbar = () => {
           <div className="flex items-center justify-between flex-grow">
             {/* Navigation Links */}
             <div className="hidden md:flex items-center gap-8">
-                <Link to="/" className="text-sm font-medium transition-colors duration-200 text-white hover:text-white">
-                  Home
-                </Link>
                 
                 {/* Explore Dropdown */}
                 <div className="relative" ref={exploreRef}>

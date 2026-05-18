@@ -110,8 +110,6 @@ const FeaturedCoursesSection2 = () => {
                     {course.level}
                   </span>
                 </div>
-                {/* KHDA Badge */}
-                <img src="/KHDA.png" alt="KHDA Attested" className="h-8 w-auto" />
               </div>
             </Link>
           ))}

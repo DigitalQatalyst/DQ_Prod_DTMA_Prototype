@@ -1,35 +1,31 @@
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Sparkles, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const HBSHeroSection = () => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSendMessage = () => {
+    if (inputValue.trim()) {
+      // Handle message sending
+      setInputValue("");
+    }
+  };
+
   return (
     <section className="relative w-full text-white pt-24 pb-16 px-4 md:px-8 lg:px-12 min-h-screen flex flex-col justify-center overflow-hidden font-sans bg-[var(--dq-navy-950)]">
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover opacity-30"
-        style={{ playbackRate: 0.5 }}
-        onLoadedMetadata={(e) => {
-          (e.target as HTMLVideoElement).playbackRate = 0.5;
-        }}
-      >
-        <source src="/Hero video.mp4" type="video/mp4" />
-      </video>
-
-      {/* Overlay */}
-      <div className="absolute inset-0 z-5" style={{ backgroundColor: 'rgba(3, 15, 53, 0.8)' }} />
+      {/* Squared Mesh Background */}
+      <div className="absolute inset-0 z-0" style={{
+        backgroundImage: `
+          linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.0075) 25%, rgba(255, 255, 255, 0.0075) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.0075) 75%, rgba(255, 255, 255, 0.0075) 76%, transparent 77%, transparent),
+          linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.0075) 25%, rgba(255, 255, 255, 0.0075) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.0075) 75%, rgba(255, 255, 255, 0.0075) 76%, transparent 77%, transparent)
+        `,
+        backgroundSize: '50px 50px'
+      }} />
 
       {/* Container */}
       <div className="max-w-[1600px] mx-auto w-full relative z-10 flex flex-col items-center text-center pt-20 pb-24 px-8 md:px-12 lg:px-16">
-        {/* Academy Label */}
-        <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-orange-500)] mb-6 tracking-wide uppercase">
-          Digital Transformation Management Academy
-        </p>
-
         {/* Main Headline */}
         <h1 className="text-[40px] leading-[48px] font-semibold tracking-tight mb-6 max-w-4xl mx-auto">
           Every Skill to Succeed in the Digital Economy
@@ -42,16 +38,22 @@ const HBSHeroSection = () => {
 
         {/* AI-Powered Command Bar */}
         <div className="w-full max-w-2xl mx-auto mb-10">
-          <div className="flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/40 rounded-2xl px-5 py-3 shadow-md hover:bg-white/8 transition-all focus-within:border-[rgba(181,197,247,0.45)] focus-within:ring-2 focus-within:ring-[rgba(181,197,247,0.20)]">
-            <MessageSquare className="w-5 h-5 text-white/40 flex-shrink-0" />
+          <div className="flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/40 rounded-3xl px-5 py-3 shadow-md hover:bg-white/8 transition-all focus-within:border-[rgba(181,197,247,0.45)] focus-within:ring-2 focus-within:ring-[rgba(181,197,247,0.20)]">
+            <Sparkles className="w-5 h-5 text-[var(--dq-orange-500)] flex-shrink-0" />
             <input
               type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
               placeholder="Ask AI: What course should I take? What is 6XD? How do I get started?"
               className="flex-1 bg-transparent text-white placeholder-white/40 outline-none border-none ring-0 text-[16px] leading-[24px] font-normal"
             />
-            <button className="flex items-center gap-2 px-5 py-2 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] rounded-lg transition-colors cursor-pointer flex-shrink-0">
-              <span className="text-[14px] leading-[20px] font-medium text-white">Ask AI</span>
-              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            <button 
+              onClick={handleSendMessage}
+              disabled={!inputValue.trim()}
+              className="flex items-center justify-center w-10 h-10 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] disabled:opacity-50 disabled:cursor-not-allowed rounded-full transition-colors cursor-pointer flex-shrink-0"
+            >
+              <Send className="w-4 h-4 text-white" />
             </button>
           </div>
         </div>
@@ -68,6 +70,12 @@ const HBSHeroSection = () => {
           </Link>
         </div>
       </div>
+
+      {/* Pulsing Butler AI Button */}
+      <button className="absolute bottom-8 right-8 z-20 w-16 h-16 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white rounded-full shadow-2xl hover:shadow-[var(--dq-orange-500)]/30 hover:scale-110 transition-all duration-300 flex items-center justify-center group">
+        <Sparkles className="w-6 h-6 group-hover:scale-110 transition-transform" />
+        <span className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full animate-pulse"></span>
+      </button>
     </section>
   );
 };

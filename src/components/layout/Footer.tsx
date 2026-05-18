@@ -45,6 +45,9 @@ const Footer = () => {
   return (
     <footer className="bg-[var(--dq-navy-950)] text-white">
       <div className="w-full">
+        {/* Top Border Line */}
+        <div className="bg-white/10" style={{ height: '0.8px' }}></div>
+        
         {/* Main Footer */}
         <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -154,7 +157,7 @@ const Footer = () => {
         <div className="border-t border-white/10">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-6">
             {/* Accreditation Strip */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
                   <Award className="w-6 h-6 text-[var(--dq-orange-500)]" />

@@ -132,7 +132,7 @@ export const LearnerManagementTable = () => {
 
   // Filter and sort learners
   const filteredAndSortedLearners = useMemo(() => {
-    let filtered = learners.filter((learner) => {
+    const filtered = learners.filter((learner) => {
       // Search filter
       const matchesSearch =
         learner.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

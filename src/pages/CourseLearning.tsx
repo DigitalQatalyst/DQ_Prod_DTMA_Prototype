@@ -155,18 +155,18 @@ const CourseLearning = () => {
           certificateNumber: `DTMA-${Date.now().toString().slice(-8)}`,
           credentialUrl: `https://credentials.dtma.ae/cert/${Date.now().toString().slice(-8)}`,
           studentName: profile?.full_name || "Student",
-          completionDate: new Date().toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
+          completionDate: new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
           })
         };
-        
+
         // Get existing certificates
         const existingCerts = JSON.parse(localStorage.getItem('user_certificates') || '[]');
         existingCerts.push(newCertificate);
         localStorage.setItem('user_certificates', JSON.stringify(existingCerts));
-        
+
         // Show celebration animation first, then certificate
         setShowCelebration(true);
       } else {
@@ -1601,10 +1601,10 @@ const CourseLearning = () => {
 
                     {/* Date */}
                     <p className="text-gray-500 text-xs">
-                      {new Date().toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
+                      {new Date().toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
                       })}
                     </p>
                   </div>

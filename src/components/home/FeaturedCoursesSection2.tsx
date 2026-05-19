@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Star, Clock, Award } from "lucide-react";
+import { Star, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/Badge";
 import { dtmaCoursesNew } from "@/data/dtmaCoursesNew";
@@ -34,40 +34,37 @@ const FeaturedCoursesSection2 = () => {
   ];
 
   return (
-    <section className="py-16 bg-[#F5F6FA]">
+    <section className="py-16 lg:py-24 bg-white">
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
+          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
             Courses for You
           </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-6">
+          <h2 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-[var(--dq-navy-950)] mb-6">
             Find the Right Course for You
           </h2>
-          <p className="text-base text-[#4B5563] max-w-3xl mx-auto leading-relaxed">
+          <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)] max-w-3xl mx-auto">
             Role-focused 6XD courses for every stage of your digital transformation journey.
           </p>
         </div>
 
-        {/* Persona Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex gap-8 relative">
-            {/* Background line for all tabs */}
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#E5E7EB]"></div>
-            
+        {/* Persona Tabs - Left Aligned */}
+        <div className="mb-12">
+          <div className="flex gap-8 relative border-b border-[var(--dq-navy-100)]">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-3 text-base font-medium transition-all duration-200 relative ${
+                className={`px-0 py-4 text-[14px] leading-[20px] font-medium transition-all duration-200 relative ${
                   activeTab === tab.id
-                    ? "text-[#0B0C19]"
-                    : "text-[#9CA3AF] hover:text-[#0B0C19]"
+                    ? "text-[var(--dq-navy-950)]"
+                    : "text-[var(--dq-text-secondary)] hover:text-[var(--dq-navy-950)]"
                 }`}
               >
                 {tab.label}
                 {activeTab === tab.id && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ff6b4d] z-10"></span>
+                  <span className="absolute bottom-0 left-0 right-0 h-1 bg-[var(--dq-orange-500)]"></span>
                 )}
               </button>
             ))}
@@ -75,12 +72,12 @@ const FeaturedCoursesSection2 = () => {
         </div>
 
         {/* Course Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {coursesByPersona[activeTab].map((course) => (
             <Link
               key={course.id}
               to={`/courses/${course.id}`}
-              className="bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] hover:shadow-lg transition-all group"
+              className="bg-white rounded-[12px] overflow-hidden border border-[var(--dq-navy-100)] hover:shadow-lg transition-all group"
             >
               <div className="relative aspect-video overflow-hidden">
                 <img
@@ -89,34 +86,29 @@ const FeaturedCoursesSection2 = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <div className="p-5">
-                <h3 className="text-lg font-semibold text-[#0B0C19] mb-2 line-clamp-2 group-hover:text-[#ff6b4d] transition-colors">
+              <div className="p-6">
+                <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-navy-950)] mb-3 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
                   {course.title}
                 </h3>
-                <div className="flex items-center gap-4 text-sm text-[#4B5563] mb-3">
+                <div className="flex items-center gap-4 text-[12px] leading-[16px] text-[var(--dq-text-secondary)] mb-4">
                   <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
+                    <Star className="w-4 h-4 text-[var(--dq-orange-500)] fill-[var(--dq-orange-500)]" />
                     <span className="font-medium">{course.rating}</span>
-                    <span className="text-[#9CA3AF]">({course.reviews})</span>
+                    <span className="text-[var(--dq-text-tertiary)]">({course.reviews})</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
                     <span>{course.duration}</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-4 pb-4 border-b border-[var(--dq-navy-100)]">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-bold text-[#0B0C19]">${course.price}</span>
-                    <span className="text-sm text-[#9CA3AF] line-through">${course.originalPrice}</span>
+                    <span className="text-[20px] leading-[28px] font-bold text-[var(--dq-navy-950)]">${course.price}</span>
+                    <span className="text-[12px] leading-[16px] text-[var(--dq-navy-400)] line-through">${course.originalPrice}</span>
                   </div>
-                  <Badge variant="outline" className="text-xs border-[#E5E7EB]">
+                  <span className="text-[12px] leading-[16px] font-medium text-[var(--dq-text-secondary)] bg-[var(--dq-navy-50)] px-3 py-1 rounded-[6px]">
                     {course.level}
-                  </Badge>
-                </div>
-                {/* KHDA Badge - Moved below price */}
-                <div className="flex items-center gap-1 px-3 py-1.5 bg-green-600 rounded-full w-fit">
-                  <Award className="w-3 h-3 text-white" />
-                  <span className="text-[12px] leading-[16px] font-medium text-white">KHDA Attested</span>
+                  </span>
                 </div>
               </div>
             </Link>
@@ -125,14 +117,15 @@ const FeaturedCoursesSection2 = () => {
 
         {/* Sub-section CTA */}
         <div className="flex justify-center">
-          <Link
-            to="/courses"
-            className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-base transition-colors inline-flex items-center gap-2"
-          >
-            See More
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+          <Link to="/courses">
+            <Button
+              variant="outline"
+              className="px-8 py-6 border-[var(--dq-orange-500)] text-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-500)] hover:text-white transition-all text-base gap-2"
+              style={{ borderWidth: '1.5px' }}
+            >
+              See More
+              <ArrowRight className="w-4 h-4" />
+            </Button>
           </Link>
         </div>
       </div>

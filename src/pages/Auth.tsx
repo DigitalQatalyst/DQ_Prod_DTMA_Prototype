@@ -133,7 +133,7 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex h-screen">
       {/* Left Panel - Image */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
         <div className="absolute inset-0">

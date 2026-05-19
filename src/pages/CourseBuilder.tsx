@@ -146,9 +146,9 @@ const CourseBuilder = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA] flex">
+    <div className="min-h-screen bg-[var(--dq-gray-50)] flex">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#1e2348] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[var(--dq-navy-950)] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
         <div className="flex flex-col h-full">
           <div className="p-6 border-b border-white/10">
             <Link to="/" className="flex items-center gap-3">
@@ -170,14 +170,14 @@ const CourseBuilder = () => {
                 <button
                   key={step.id}
                   onClick={() => setCurrentStep(step.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-left text-[14px] leading-[20px] font-medium ${
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left text-[14px] leading-[20px] font-medium ${
                     currentStep === step.id
-                      ? "bg-[#ff6b4d] text-white shadow-lg"
-                      : "text-white/80 hover:bg-white/10 hover:text-white"
+                      ? "bg-[var(--dq-orange-500)] text-white shadow-md"
+                      : "text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   {isCompleted ? (
-                    <CheckCircle className="w-5 h-5 flex-shrink-0 text-emerald-400" />
+                    <CheckCircle className="w-5 h-5 flex-shrink-0 text-[var(--dq-success)]" />
                   ) : (
                     <Circle className="w-5 h-5 flex-shrink-0" />
                   )}
@@ -189,7 +189,7 @@ const CourseBuilder = () => {
 
           <div className="p-4 border-t border-white/10">
             <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="w-10 h-10 rounded-full bg-[#ff6b4d] flex items-center justify-center text-[14px] leading-[20px] font-semibold text-white">
+              <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] flex items-center justify-center text-[14px] leading-[20px] font-semibold text-white">
                 {profile?.full_name?.charAt(0) || 'I'}
               </div>
               <div className="flex-1 min-w-0">
@@ -212,21 +212,21 @@ const CourseBuilder = () => {
       {/* Main Content */}
       <div className="flex-1 lg:ml-64">
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-white border-b border-[#E5E7EB] shadow-sm">
+        <header className="sticky top-0 z-40 bg-white border-b border-[var(--dq-surface-border-default)] shadow-sm">
           <div className="px-6 lg:px-8 py-4 flex items-center justify-between">
             <div className="flex items-center gap-4 ml-[30px]">
               <div className="flex flex-col justify-center">
-                <h1 className="text-[28px] leading-[36px] font-semibold text-[#1e2348] m-0">{course.title || "New Course"}</h1>
-                <p className="text-[13px] leading-[18px] font-normal text-[#4B5563] m-0">
+                <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-text-primary)] m-0">{course.title || "New Course"}</h1>
+                <p className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-secondary)] m-0">
                   {lastSaved ? `Last saved ${lastSaved.toLocaleTimeString()}` : "Not saved yet"}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={handleBack} className="text-[14px] leading-[20px] font-medium hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]">
+              <Button variant="outline" size="sm" onClick={handleBack} className="text-[14px] leading-[20px] font-medium hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)]">
                 Back to Dashboard
               </Button>
-              <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]">
+              <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)]">
                 <Eye className="w-4 h-4 mr-2" />
                 Preview
               </Button>
@@ -238,10 +238,10 @@ const CourseBuilder = () => {
             <div className="px-6 lg:px-8 pb-6">
               <div className="ml-[30px] mr-6 lg:mr-8">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[13px] leading-[18px] font-medium text-[#1e2348]">Progress</span>
-                  <span className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{completedSteps} of {STEPS.length}</span>
+                  <span className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-primary)]">Progress</span>
+                  <span className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-secondary)]">{completedSteps} of {STEPS.length}</span>
                 </div>
-                <Progress value={progressPercent} className="h-2 bg-[#E5E7EB]" />
+                <Progress value={progressPercent} className="h-2 bg-[var(--dq-surface-border-default)]" />
               </div>
             </div>
           )}
@@ -259,33 +259,33 @@ const CourseBuilder = () => {
 // Step Components
 const CourseBasicsStep = ({ course }: any) => (
   <div className="w-full">
-    <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm">
+    <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm">
       <div className="flex items-start justify-between mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">Course Basics</h2>
-        <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 text-[12px] leading-[16px] font-semibold px-3 py-1">✓ Completed</Badge>
+        <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-text-primary)]">Course Basics</h2>
+        <Badge className="bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] hover:bg-[var(--dq-success-surface)] text-[12px] leading-[16px] font-semibold px-3 py-1">✓ Completed</Badge>
       </div>
       <div className="space-y-6">
         <div>
-          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Course Title</label>
-          <p className="text-[18px] leading-[28px] font-semibold text-[#1e2348]">{course.title}</p>
+          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Course Title</label>
+          <p className="text-[18px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">{course.title}</p>
         </div>
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Category</label>
-            <p className="text-[15px] leading-[22px] font-medium capitalize text-[#1e2348]">{course.category}</p>
+            <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Category</label>
+            <p className="text-[15px] leading-[22px] font-medium capitalize text-[var(--dq-text-primary)]">{course.category}</p>
           </div>
           <div>
-            <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Level</label>
-            <p className="text-[15px] leading-[22px] font-medium capitalize text-[#1e2348]">{course.level}</p>
+            <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Level</label>
+            <p className="text-[15px] leading-[22px] font-medium capitalize text-[var(--dq-text-primary)]">{course.level}</p>
           </div>
         </div>
         <div>
-          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Description</label>
-          <p className="text-[14px] leading-[22px] font-normal text-[#4B5563]">{course.description || "No description provided"}</p>
+          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Description</label>
+          <p className="text-[14px] leading-[22px] font-normal text-[var(--dq-text-secondary)]">{course.description || "No description provided"}</p>
         </div>
         <div>
-          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[#4B5563] uppercase tracking-wide">Price</label>
-          <p className="text-[15px] leading-[22px] font-semibold text-[#1e2348]">${course.price}</p>
+          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Price</label>
+          <p className="text-[15px] leading-[22px] font-semibold text-[var(--dq-text-primary)]">${course.price}</p>
         </div>
       </div>
     </div>
@@ -693,58 +693,58 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
+      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Curriculum</h2>
-            <p className="text-[14px] leading-[20px] text-[#4B5563]">Add modules and lessons to your course.</p>
+            <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Curriculum</h2>
+            <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Add modules and lessons to your course.</p>
           </div>
-          <Button onClick={addSection} className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[14px] leading-[20px] font-medium shadow-sm" size="sm">
+          <Button onClick={addSection} className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white text-[14px] leading-[20px] font-medium shadow-sm" size="sm">
             <Plus className="w-4 h-4 mr-2" />
             Add Module
           </Button>
         </div>
 
         {!hasValidCurriculum && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <div className="bg-[var(--dq-error-surface)] border border-[var(--dq-error)] rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-[var(--dq-error)] flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-[14px] leading-[20px] font-semibold text-red-900">Curriculum requirements not met</p>
-              <p className="text-[13px] leading-[18px] text-red-800 mt-1">Add at least 1 section with at least 1 lesson to proceed.</p>
+              <p className="text-[14px] leading-[20px] font-semibold text-[var(--dq-error-text)]">Curriculum requirements not met</p>
+              <p className="text-[13px] leading-[18px] text-[var(--dq-error-text)] mt-1">Add at least 1 section with at least 1 lesson to proceed.</p>
             </div>
           </div>
         )}
 
         {sections.length === 0 ? (
-          <div className="text-center py-16 bg-[#F5F6FA] rounded-xl">
-            <FileText className="w-12 h-12 text-[#9CA3AF] mx-auto mb-3" />
-            <p className="text-[#4B5563] mb-4">No sections yet. Create your first section to get started.</p>
+          <div className="text-center py-16 bg-[var(--dq-gray-50)] rounded-lg">
+            <FileText className="w-12 h-12 text-[var(--dq-gray-400)] mx-auto mb-3" />
+            <p className="text-[var(--dq-text-secondary)] mb-4">No sections yet. Create your first section to get started.</p>
           </div>
         ) : (
           <div className="space-y-4">
             {sections.map((section) => (
               <div 
                 key={section.id} 
-                className="border border-[#E5E7EB] rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
+                className="border border-[var(--dq-surface-border-default)] rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
                 draggable
                 onDragStart={(e) => handleSectionDragStart(e, section.id)}
                 onDragOver={handleSectionDragOver}
                 onDrop={(e) => handleSectionDrop(e, section.id)}
               >
-                <div className="bg-[#F5F6FA] p-4 flex items-center justify-between cursor-move hover:bg-[#e9e9ed] transition-colors" onClick={() => toggleSection(section.id)}>
+                <div className="bg-[var(--dq-gray-50)] p-4 flex items-center justify-between cursor-move hover:bg-[var(--dq-gray-100)] transition-colors" onClick={() => toggleSection(section.id)}>
                   <div className="flex items-center gap-3 flex-1">
-                    <GripVertical className="w-5 h-5 text-[#9CA3AF] cursor-grab active:cursor-grabbing" />
-                    <ChevronLeft className={`w-5 h-5 text-[#1e2348] transition-transform ${expandedSections.has(section.id) ? 'rotate-90' : ''}`} />
+                    <GripVertical className="w-5 h-5 text-[var(--dq-gray-400)] cursor-grab active:cursor-grabbing" />
+                    <ChevronLeft className={`w-5 h-5 text-[var(--dq-text-primary)] transition-transform ${expandedSections.has(section.id) ? 'rotate-90' : ''}`} />
                     <Input
                       value={section.title}
                       onChange={(e) => updateSectionTitle(section.id, e.target.value)}
                       onClick={(e) => e.stopPropagation()}
-                      className="bg-transparent border-0 font-semibold text-[15px] leading-[22px] text-[#1e2348] p-0 h-auto focus-visible:ring-0"
+                      className="bg-transparent border-0 font-semibold text-[15px] leading-[22px] text-[var(--dq-text-primary)] p-0 h-auto focus-visible:ring-0"
                       placeholder="Section title"
                     />
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[13px] leading-[18px] text-[#4B5563] font-medium">{section.lessons?.length || 0} lessons</span>
+                    <span className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] font-medium">{section.lessons?.length || 0} lessons</span>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -752,7 +752,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                         e.stopPropagation();
                         deleteSection(section.id);
                       }}
-                      className="hover:bg-red-50 hover:text-red-600"
+                      className="hover:bg-[var(--dq-error-surface)] hover:text-[var(--dq-error)]"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -760,11 +760,11 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                 </div>
 
                 {expandedSections.has(section.id) && (
-                  <div className="p-5 space-y-4 border-t border-[#E5E7EB] bg-white">
+                  <div className="p-5 space-y-4 border-t border-[var(--dq-surface-border-default)] bg-white">
                     {section.lessons?.map((lesson: any) => (
                       <div 
                         key={lesson.id} 
-                        className="border border-[#E5E7EB] rounded-xl p-5 bg-white hover:border-[#ff6b4d]/30 hover:shadow-sm transition-all"
+                        className="border border-[var(--dq-surface-border-default)] rounded-lg p-5 bg-white hover:border-[var(--dq-orange-500)]/30 hover:shadow-sm transition-all"
                         draggable
                         onDragStart={(e) => handleLessonDragStart(e, section.id, lesson.id)}
                         onDragOver={handleLessonDragOver}
@@ -772,11 +772,11 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                       >
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3 flex-1">
-                            <GripVertical className="w-4 h-4 text-[#9CA3AF] cursor-grab active:cursor-grabbing flex-shrink-0" />
+                            <GripVertical className="w-4 h-4 text-[var(--dq-gray-400)] cursor-grab active:cursor-grabbing flex-shrink-0" />
                             <Input
                               value={lesson.title}
                               onChange={(e) => updateLessonTitle(section.id, lesson.id, e.target.value)}
-                              className="bg-transparent border-0 font-semibold text-[14px] leading-[20px] text-[#1e2348] p-0 h-auto flex-1 focus-visible:ring-0"
+                              className="bg-transparent border-0 font-semibold text-[14px] leading-[20px] text-[var(--dq-text-primary)] p-0 h-auto flex-1 focus-visible:ring-0"
                               placeholder="Lesson title"
                             />
                           </div>
@@ -784,7 +784,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="ghost"
                             size="sm"
                             onClick={() => deleteLesson(section.id, lesson.id)}
-                            className="hover:bg-red-50 hover:text-red-600"
+                            className="hover:bg-[var(--dq-error-surface)] hover:text-[var(--dq-error)]"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
@@ -793,14 +793,14 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                         {lesson.resources && lesson.resources.length > 0 && (
                           <div className="space-y-2 mb-3">
                             {lesson.resources.map((resource: any) => (
-                              <div key={resource.id} className="flex items-center justify-between bg-muted/50 p-2 rounded text-sm">
+                              <div key={resource.id} className="flex items-center justify-between bg-[var(--dq-gray-50)] p-2 rounded text-sm">
                                 <div className="flex items-center gap-2 flex-1 min-w-0">
                                   {resource.type === 'video' && <Video className="w-4 h-4 flex-shrink-0" />}
                                   {resource.type === 'pdf' && <FileText className="w-4 h-4 flex-shrink-0" />}
                                   {resource.type === 'download' && <Download className="w-4 h-4 flex-shrink-0" />}
                                   <span className="truncate">{resource.name}</span>
                                   {resource.size && (
-                                    <span className="text-xs text-muted-foreground flex-shrink-0">
+                                    <span className="text-xs text-[var(--dq-text-tertiary)] flex-shrink-0">
                                       ({(resource.size / 1024 / 1024).toFixed(2)} MB)
                                     </span>
                                   )}
@@ -822,7 +822,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'video')}
-                            className="text-[12px] leading-[16px] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]"
+                            className="text-[12px] leading-[16px] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)]"
                           >
                             <Video className="w-3 h-3 mr-1" />
                             Upload Video
@@ -831,7 +831,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'pdf')}
-                            className="text-[12px] leading-[16px] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]"
+                            className="text-[12px] leading-[16px] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)]"
                           >
                             <FileText className="w-3 h-3 mr-1" />
                             Upload PDF
@@ -840,7 +840,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant="outline"
                             size="sm"
                             onClick={() => triggerFileUpload(section.id, lesson.id, 'download')}
-                            className="text-[12px] leading-[16px] hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]"
+                            className="text-[12px] leading-[16px] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)]"
                           >
                             <Upload className="w-3 h-3 mr-1" />
                             Upload Resource
@@ -849,7 +849,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             variant={lesson.quiz?.enabled ? "default" : "outline"}
                             size="sm"
                             onClick={() => lesson.quiz?.enabled ? toggleQuiz(lesson.id) : enableLessonQuiz(section.id, lesson.id)}
-                            className={`text-[12px] leading-[16px] ${lesson.quiz?.enabled ? 'bg-[#ff6b4d] hover:bg-[#e66045]' : 'hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB]'}`}
+                            className={`text-[12px] leading-[16px] ${lesson.quiz?.enabled ? 'bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)]' : 'hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)]'}`}
                           >
                             <HelpCircle className="w-3 h-3 mr-1" />
                             {lesson.quiz?.enabled ? `Quiz (${lesson.quiz.questions?.length || 0})` : 'Add Quiz'}
@@ -886,7 +886,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                     onChange={(e) => updateQuizSettings(section.id, lesson.id, { required: e.target.checked })}
                                     className="sr-only peer"
                                   />
-                                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                                  <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                                 </label>
                               </div>
 
@@ -906,20 +906,20 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                             {/* Quiz Questions */}
                             <div className="space-y-3">
                               {/* AI Butler Quiz Helper */}
-                              <div className="bg-gradient-to-r from-[#1e2348]/5 to-[#ff6b4d]/5 border border-[#ff6b4d]/20 rounded-lg p-3 mb-4">
+                              <div className="bg-gradient-to-r from-[var(--dq-text-primary)]/5 to-[var(--dq-orange-500)]/5 border border-[var(--dq-orange-500)]/20 rounded-lg p-3 mb-4">
                                 <div className="flex items-start gap-3">
-                                  <div className="w-8 h-8 rounded-full bg-[#ff6b4d] flex items-center justify-center flex-shrink-0">
+                                  <div className="w-8 h-8 rounded-full bg-[var(--dq-orange-500)] flex items-center justify-center flex-shrink-0">
                                     <Bot className="w-4 h-4 text-white" />
                                   </div>
                                   <div className="flex-1">
-                                    <h5 className="text-xs font-semibold text-[#1e2348] mb-1">AI Quiz Generator</h5>
+                                    <h5 className="text-xs font-semibold text-[var(--dq-text-primary)] mb-1">AI Quiz Generator</h5>
                                     <p className="text-xs text-muted-foreground mb-2">
                                       Need help creating quiz questions? Butler AI can generate questions based on your lesson content.
                                     </p>
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      className="text-xs h-7 border-[#ff6b4d] text-[#ff6b4d] hover:bg-[#ff6b4d] hover:text-white"
+                                      className="text-xs h-7 border-[var(--dq-orange-500)] text-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-500)] hover:text-white"
                                       onClick={() => {
                                         // This would open a modal or sidebar with AI assistance
                                         alert('AI Quiz Generator: This feature will help you generate quiz questions based on your lesson content. Coming soon!');
@@ -1008,7 +1008,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                   {/* Hint Field */}
                                   <div className="mt-3 pt-3 border-t border-border">
                                     <label className="flex items-center gap-1 text-xs font-medium mb-1">
-                                      <HelpCircle className="w-3 h-3 text-[#ff6b4d]" />
+                                      <HelpCircle className="w-3 h-3 text-[var(--dq-orange-500)]" />
                                       Hint (Optional)
                                     </label>
                                     <Textarea
@@ -1029,7 +1029,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => addQuizQuestion(section.id, lesson.id)}
-                                className="w-full text-xs hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
+                                className="w-full text-xs hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]"
                               >
                                 <Plus className="w-3 h-3 mr-1" />
                                 Add Question
@@ -1043,7 +1043,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                           {/* AI Tutor Toggle */}
                           <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
                             <div className="flex items-center gap-2">
-                              <Bot className="w-4 h-4 text-[#ff6b4d]" />
+                              <Bot className="w-4 h-4 text-[var(--dq-orange-500)]" />
                               <div>
                                 <label className="text-xs font-medium">Enable AI Tutor for this lesson</label>
                                 <p className="text-xs text-muted-foreground">AI Q&A, summaries, and voice responses</p>
@@ -1068,7 +1068,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                 }}
                                 className="sr-only peer"
                               />
-                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                             </label>
                           </div>
 
@@ -1098,7 +1098,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                                   }}
                                   className="sr-only peer"
                                 />
-                                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
+                                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-600"></div>
                               </label>
                             </div>
 
@@ -1139,7 +1139,7 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
                       variant="outline"
                       size="sm"
                       onClick={() => addLesson(section.id)}
-                      className="w-full hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB] text-[13px] leading-[18px] font-medium"
+                      className="w-full hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)] text-[13px] leading-[18px] font-medium"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Lesson
@@ -1153,8 +1153,8 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[#fff0ed] hover:text-[#ff6b4d] hover:border-[#ff6b4d] border-[#E5E7EB] text-[14px] leading-[20px] font-medium">Save as Draft</Button>
-        <Button disabled={!hasValidCurriculum} onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e66045] text-white text-[14px] leading-[20px] font-medium shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)] text-[14px] leading-[20px] font-medium">Save as Draft</Button>
+        <Button disabled={!hasValidCurriculum} onClick={onContinue} className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white text-[14px] leading-[20px] font-medium shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -1236,9 +1236,9 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Course Media</h2>
-        <p className="text-[14px] leading-[20px] text-[#4B5563] mb-6">Upload course thumbnail, promo video, and define learning objectives.</p>
+      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Course Media</h2>
+        <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)] mb-6">Upload course thumbnail, promo video, and define learning objectives.</p>
 
         {!hasThumbnail && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
@@ -1253,13 +1253,13 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
         <div className="space-y-6">
           {/* Course Thumbnail */}
           <div>
-            <label className="block text-[14px] leading-[20px] font-semibold mb-2 text-[#1e2348]">
+            <label className="block text-[14px] leading-[20px] font-semibold mb-2 text-[var(--dq-text-primary)]">
               Course Thumbnail <span className="text-red-600">*</span>
             </label>
-            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">Recommended size: 1280x720px (16:9 ratio)</p>
+            <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mb-3">Recommended size: 1280x720px (16:9 ratio)</p>
             {thumbnailPreview ? (
               <div className="relative w-full max-w-md">
-                <img src={thumbnailPreview} alt="Thumbnail preview" className="w-full rounded-xl border border-[#E5E7EB] shadow-sm" />
+                <img src={thumbnailPreview} alt="Thumbnail preview" className="w-full rounded-xl border border-[var(--dq-surface-border-default)] shadow-sm" />
                 <Button
                   variant="destructive"
                   size="sm"
@@ -1273,7 +1273,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                 </Button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-[#E5E7EB] rounded-xl p-8 text-center hover:border-[#ff6b4d] hover:bg-[#fff0ed]/30 transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-[var(--dq-surface-border-default)] rounded-xl p-8 text-center hover:border-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-50)]/30 transition-colors cursor-pointer">
                 <input
                   type="file"
                   accept="image/*"
@@ -1282,9 +1282,9 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                   id="thumbnail-upload"
                 />
                 <label htmlFor="thumbnail-upload" className="cursor-pointer">
-                  <Upload className="w-8 h-8 mx-auto mb-2 text-[#9CA3AF]" />
-                  <p className="text-[14px] leading-[20px] font-medium text-[#1e2348]">Click to upload thumbnail</p>
-                  <p className="text-[13px] leading-[18px] text-[#4B5563] mt-1">PNG, JPG up to 10MB</p>
+                  <Upload className="w-8 h-8 mx-auto mb-2 text-[var(--dq-gray-400)]" />
+                  <p className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-primary)]">Click to upload thumbnail</p>
+                  <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mt-1">PNG, JPG up to 10MB</p>
                 </label>
               </div>
             )}
@@ -1292,11 +1292,11 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
 
           {/* Promo Video */}
           <div>
-            <label className="block text-[14px] leading-[20px] font-semibold mb-2 text-[#1e2348]">Promo Video (Optional)</label>
-            <p className="text-[13px] leading-[18px] text-[#4B5563] mb-3">A short video introducing your course</p>
+            <label className="block text-[14px] leading-[20px] font-semibold mb-2 text-[var(--dq-text-primary)]">Promo Video (Optional)</label>
+            <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mb-3">A short video introducing your course</p>
             {promoVideoPreview ? (
               <div className="relative w-full max-w-md">
-                <video src={promoVideoPreview} controls className="w-full rounded-xl border border-[#E5E7EB] shadow-sm" />
+                <video src={promoVideoPreview} controls className="w-full rounded-xl border border-[var(--dq-surface-border-default)] shadow-sm" />
                 <Button
                   variant="destructive"
                   size="sm"
@@ -1310,7 +1310,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                 </Button>
               </div>
             ) : (
-              <div className="border-2 border-dashed border-[#E5E7EB] rounded-xl p-8 text-center hover:border-[#ff6b4d] hover:bg-[#fff0ed]/30 transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-[var(--dq-surface-border-default)] rounded-xl p-8 text-center hover:border-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-50)]/30 transition-colors cursor-pointer">
                 <input
                   type="file"
                   accept="video/*"
@@ -1351,7 +1351,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                   )}
                 </div>
               ))}
-              <Button variant="outline" size="sm" onClick={addObjective} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
+              <Button variant="outline" size="sm" onClick={addObjective} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Objective
               </Button>
@@ -1382,7 +1382,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
                   )}
                 </div>
               ))}
-              <Button variant="outline" size="sm" onClick={addOutcome} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
+              <Button variant="outline" size="sm" onClick={addOutcome} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Outcome
               </Button>
@@ -1408,8 +1408,8 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
-        <Button disabled={!hasThumbnail} onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
+        <Button disabled={!hasThumbnail} onClick={onContinue} className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -1501,8 +1501,8 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Final Assessment</h2>
+      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Final Assessment</h2>
         <p className="text-sm text-muted-foreground mb-6">Configure quizzes, assignments, and evaluation methods.</p>
 
         {assessmentRequired && (
@@ -1529,7 +1529,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                 onChange={(e) => setCertificationEnabled(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
             </label>
           </div>
 
@@ -1544,15 +1544,15 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                 onClick={() => setAssessmentType("quiz")}
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   assessmentType === "quiz"
-                    ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
-                    : "border-border hover:border-[#ff6b4d]/50"
+                    ? "border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/5"
+                    : "border-border hover:border-[var(--dq-orange-500)]/50"
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                    assessmentType === "quiz" ? "border-[#ff6b4d]" : "border-muted-foreground"
+                    assessmentType === "quiz" ? "border-[var(--dq-orange-500)]" : "border-muted-foreground"
                   }`}>
-                    {assessmentType === "quiz" && <div className="w-3 h-3 rounded-full bg-[#ff6b4d]" />}
+                    {assessmentType === "quiz" && <div className="w-3 h-3 rounded-full bg-[var(--dq-orange-500)]" />}
                   </div>
                   <div>
                     <p className="font-medium text-sm">Quiz</p>
@@ -1565,15 +1565,15 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                 onClick={() => setAssessmentType("assignment")}
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   assessmentType === "assignment"
-                    ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
-                    : "border-border hover:border-[#ff6b4d]/50"
+                    ? "border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/5"
+                    : "border-border hover:border-[var(--dq-orange-500)]/50"
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                    assessmentType === "assignment" ? "border-[#ff6b4d]" : "border-muted-foreground"
+                    assessmentType === "assignment" ? "border-[var(--dq-orange-500)]" : "border-muted-foreground"
                   }`}>
-                    {assessmentType === "assignment" && <div className="w-3 h-3 rounded-full bg-[#ff6b4d]" />}
+                    {assessmentType === "assignment" && <div className="w-3 h-3 rounded-full bg-[var(--dq-orange-500)]" />}
                   </div>
                   <div>
                     <p className="font-medium text-sm">Assignment Upload</p>
@@ -1586,15 +1586,15 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                 onClick={() => setAssessmentType("practical")}
                 className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   assessmentType === "practical"
-                    ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
-                    : "border-border hover:border-[#ff6b4d]/50"
+                    ? "border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/5"
+                    : "border-border hover:border-[var(--dq-orange-500)]/50"
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                    assessmentType === "practical" ? "border-[#ff6b4d]" : "border-muted-foreground"
+                    assessmentType === "practical" ? "border-[var(--dq-orange-500)]" : "border-muted-foreground"
                   }`}>
-                    {assessmentType === "practical" && <div className="w-3 h-3 rounded-full bg-[#ff6b4d]" />}
+                    {assessmentType === "practical" && <div className="w-3 h-3 rounded-full bg-[var(--dq-orange-500)]" />}
                   </div>
                   <div>
                     <p className="font-medium text-sm">Practical Evaluation</p>
@@ -1608,15 +1608,15 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                   onClick={() => setAssessmentType("none")}
                   className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                     assessmentType === "none"
-                      ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
-                      : "border-border hover:border-[#ff6b4d]/50"
+                      ? "border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/5"
+                      : "border-border hover:border-[var(--dq-orange-500)]/50"
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                      assessmentType === "none" ? "border-[#ff6b4d]" : "border-muted-foreground"
+                      assessmentType === "none" ? "border-[var(--dq-orange-500)]" : "border-muted-foreground"
                     }`}>
-                      {assessmentType === "none" && <div className="w-3 h-3 rounded-full bg-[#ff6b4d]" />}
+                      {assessmentType === "none" && <div className="w-3 h-3 rounded-full bg-[var(--dq-orange-500)]" />}
                     </div>
                     <div>
                       <p className="font-medium text-sm">No Assessment</p>
@@ -1662,7 +1662,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                       onChange={(e) => setRetakesAllowed(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                   </label>
                 </div>
 
@@ -1698,7 +1698,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                       onChange={(e) => setAutoGrading(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                   </label>
                 </div>
               )}
@@ -1819,7 +1819,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                     correctAnswer: undefined,
                     points: 1
                   }])}
-                  className="w-full hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
+                  className="w-full hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Question
@@ -1844,14 +1844,14 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                       onChange={(e) => setWhatsappPracticeEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                   </label>
                 </div>
 
                 {/* AI Assessment Assistance */}
                 <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Bot className="w-5 h-5 text-[#ff6b4d]" />
+                    <Bot className="w-5 h-5 text-[var(--dq-orange-500)]" />
                     <div>
                       <label className="text-sm font-medium">Enable AI Assessment Assistance</label>
                       <p className="text-xs text-muted-foreground">AI helps explain answers and provide feedback</p>
@@ -1864,7 +1864,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                       onChange={(e) => setAiAssessmentEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                   </label>
                 </div>
               </div>
@@ -1973,7 +1973,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                         onChange={(e) => setEnableDeadline(e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                     </label>
                   </div>
 
@@ -2006,7 +2006,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                         <select
                           value={timezone}
                           onChange={(e) => setTimezone(e.target.value)}
-                          className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]"
+                          className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]"
                         >
                           <option value="America/New_York">Eastern Time (ET)</option>
                           <option value="America/Chicago">Central Time (CT)</option>
@@ -2037,7 +2037,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                               onChange={(e) => setAllowLateSubmissions(e.target.checked)}
                               className="sr-only peer"
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                           </label>
                         </div>
 
@@ -2056,7 +2056,7 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
                               <select
                                 value={lateWindowUnit}
                                 onChange={(e) => setLateWindowUnit(e.target.value)}
-                                className="px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]"
+                                className="px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)]"
                               >
                                 <option value="hours">Hours</option>
                                 <option value="days">Days</option>
@@ -2120,11 +2120,11 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
         <Button 
           disabled={assessmentRequired || (assessmentType !== "none" && !hasValidContent)} 
           onClick={onContinue}
-          className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Continue to Next Step
         </Button>
@@ -2167,8 +2167,8 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Eligibility & Certification</h2>
+      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Eligibility & Certification</h2>
         <p className="text-sm text-muted-foreground mb-6">Configure certification rules and completion requirements.</p>
 
         <div className="space-y-6">
@@ -2185,7 +2185,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                 onChange={(e) => setCertificationEnabled(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
             </label>
           </div>
 
@@ -2204,7 +2204,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                         type="checkbox"
                         checked={requireWatchAll}
                         onChange={(e) => setRequireWatchAll(e.target.checked)}
-                        className="w-4 h-4 text-[#ff6b4d] bg-gray-100 border-gray-300 rounded focus:ring-[#ff6b4d] focus:ring-2"
+                        className="w-4 h-4 text-[var(--dq-orange-500)] bg-gray-100 border-gray-300 rounded focus:ring-[var(--dq-orange-500)] focus:ring-2"
                       />
                       <div>
                         <label className="text-sm font-medium">Watch 100% of content</label>
@@ -2220,7 +2220,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                         type="checkbox"
                         checked={requirePassAssessment}
                         onChange={(e) => setRequirePassAssessment(e.target.checked)}
-                        className="w-4 h-4 text-[#ff6b4d] bg-gray-100 border-gray-300 rounded focus:ring-[#ff6b4d] focus:ring-2"
+                        className="w-4 h-4 text-[var(--dq-orange-500)] bg-gray-100 border-gray-300 rounded focus:ring-[var(--dq-orange-500)] focus:ring-2"
                       />
                       <div>
                         <label className="text-sm font-medium">Pass assessment</label>
@@ -2236,7 +2236,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                         type="checkbox"
                         checked={requireSubmitAssignment}
                         onChange={(e) => setRequireSubmitAssignment(e.target.checked)}
-                        className="w-4 h-4 text-[#ff6b4d] bg-gray-100 border-gray-300 rounded focus:ring-[#ff6b4d] focus:ring-2"
+                        className="w-4 h-4 text-[var(--dq-orange-500)] bg-gray-100 border-gray-300 rounded focus:ring-[var(--dq-orange-500)] focus:ring-2"
                       />
                       <div>
                         <label className="text-sm font-medium">Submit assignment</label>
@@ -2277,7 +2277,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                     variant="outline"
                     size="sm"
                     onClick={() => setShowCertificatePreview(!showCertificatePreview)}
-                    className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]"
+                    className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]"
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     {showCertificatePreview ? "Hide" : "Show"} Preview
@@ -2287,7 +2287,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                 {showCertificatePreview && (
                   <div className="border-2 border-border rounded-lg overflow-hidden bg-white">
                     {/* Certificate Header with Gradient */}
-                    <div className="bg-gradient-to-r from-[#1e2348] to-[#2a3058] p-8 text-white">
+                    <div className="bg-gradient-to-r from-[var(--dq-text-primary)] to-[#2a3058] p-8 text-white">
                       <div className="flex items-center gap-4 mb-4">
                         <div className="w-20 h-20 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                           {certificateBranding.logo ? (
@@ -2318,7 +2318,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                           This is to certify that
                         </p>
                         
-                        <div className="text-2xl font-semibold text-[#1e2348] border-b-2 border-[#ff6b4d] inline-block px-8 pb-2">
+                        <div className="text-2xl font-semibold text-[var(--dq-text-primary)] border-b-2 border-[var(--dq-orange-500)] inline-block px-8 pb-2">
                           [Student Name]
                         </div>
                         
@@ -2326,7 +2326,7 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                           has successfully completed
                         </p>
                         
-                        <div className="text-xl font-semibold text-[#1e2348]" style={{ fontSize: '18px', lineHeight: '24px' }}>
+                        <div className="text-xl font-semibold text-[var(--dq-text-primary)]" style={{ fontSize: '18px', lineHeight: '24px' }}>
                           {course?.title || "Course Title"}
                         </div>
 
@@ -2357,10 +2357,10 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
                               <img src={certificateBranding.signature} alt="Signature" className="h-16 w-auto mx-auto mb-2" />
                             ) : (
                               <div className="h-16 flex items-center justify-center mb-2">
-                                <div className="border-t-2 border-[#1e2348] w-32"></div>
+                                <div className="border-t-2 border-[var(--dq-text-primary)] w-32"></div>
                               </div>
                             )}
-                            <p className="text-xs font-medium text-[#1e2348]" style={{ fontSize: '12px', lineHeight: '16px' }}>
+                            <p className="text-xs font-medium text-[var(--dq-text-primary)]" style={{ fontSize: '12px', lineHeight: '16px' }}>
                               {certificateBranding.signatoryName || "Instructor Signature"}
                             </p>
                             <p className="text-xs text-muted-foreground" style={{ fontSize: '11px', lineHeight: '14px' }}>
@@ -2410,8 +2410,8 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
-        <Button onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
+        <Button onClick={onContinue} className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -2485,8 +2485,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Pricing & Settings</h2>
+      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Pricing & Settings</h2>
         <p className="text-sm text-muted-foreground mb-6">Edit pricing, discounts, and course settings.</p>
 
         <div className="space-y-6">
@@ -2522,7 +2522,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                   onChange={(e) => setHasDiscount(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
               </label>
             </div>
 
@@ -2535,8 +2535,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                       onClick={() => setDiscountType("percentage")}
                       className={`flex-1 p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                         discountType === "percentage"
-                          ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
-                          : "border-border hover:border-[#ff6b4d]/50"
+                          ? "border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/5"
+                          : "border-border hover:border-[var(--dq-orange-500)]/50"
                       }`}
                     >
                       Percentage (%)
@@ -2545,8 +2545,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                       onClick={() => setDiscountType("fixed")}
                       className={`flex-1 p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                         discountType === "fixed"
-                          ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
-                          : "border-border hover:border-[#ff6b4d]/50"
+                          ? "border-[var(--dq-orange-500)] bg-[var(--dq-orange-500)]/5"
+                          : "border-border hover:border-[var(--dq-orange-500)]/50"
                       }`}
                     >
                       Fixed Amount ($)
@@ -2598,7 +2598,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                   onChange={(e) => setHasEnrollmentCap(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
               </label>
             </div>
 
@@ -2630,7 +2630,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
               <button
                 type="button"
                 onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-                className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] flex items-center justify-between text-left"
+                className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-[var(--dq-orange-500)] flex items-center justify-between text-left"
               >
                 <span>{language}</span>
                 <ChevronDown className={`w-4 h-4 transition-transform ${isLanguageDropdownOpen ? 'rotate-180' : ''}`} />
@@ -2656,8 +2656,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                         }}
                         className={`w-full px-3 py-2 text-left transition-colors ${
                           language === lang
-                            ? 'bg-[#ff6b4d] text-white'
-                            : 'hover:bg-[#FFE9E4] text-[#1e2348]'
+                            ? 'bg-[var(--dq-orange-500)] text-white'
+                            : 'hover:bg-[#FFE9E4] text-[var(--dq-text-primary)]'
                         }`}
                       >
                         {lang}
@@ -2690,7 +2690,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                     onChange={(e) => setWhatsappLearningEnabled(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
                 </label>
               </div>
 
@@ -2788,7 +2788,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
           {/* AI Learning Settings */}
           <div className="border border-border rounded-lg p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Bot className="w-5 h-5 text-[#ff6b4d]" />
+              <Bot className="w-5 h-5 text-[var(--dq-orange-500)]" />
               <h3 className="text-lg font-semibold">AI Learning Settings</h3>
             </div>
             
@@ -2806,7 +2806,7 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                     onChange={(e) => setAiTutorEnabled(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#ff6b4d]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#ff6b4d]"></div>
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--dq-orange-500)]/20 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--dq-orange-500)]"></div>
                 </label>
               </div>
 
@@ -2820,8 +2820,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                         onClick={() => setAiTone("friendly")}
                         className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                           aiTone === "friendly"
-                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
-                            : "border-border hover:border-[#ff6b4d]/50"
+                            ? "border-[var(--dq-orange-500)] bg-orange-50 text-[var(--dq-orange-500)]"
+                            : "border-border hover:border-[var(--dq-orange-500)]/50"
                         }`}
                       >
                         Friendly
@@ -2830,8 +2830,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                         onClick={() => setAiTone("professional")}
                         className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                           aiTone === "professional"
-                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
-                            : "border-border hover:border-[#ff6b4d]/50"
+                            ? "border-[var(--dq-orange-500)] bg-orange-50 text-[var(--dq-orange-500)]"
+                            : "border-border hover:border-[var(--dq-orange-500)]/50"
                         }`}
                       >
                         Professional
@@ -2840,8 +2840,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                         onClick={() => setAiTone("encouraging")}
                         className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                           aiTone === "encouraging"
-                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
-                            : "border-border hover:border-[#ff6b4d]/50"
+                            ? "border-[var(--dq-orange-500)] bg-orange-50 text-[var(--dq-orange-500)]"
+                            : "border-border hover:border-[var(--dq-orange-500)]/50"
                         }`}
                       >
                         Encouraging
@@ -2857,8 +2857,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                         onClick={() => setAiResponseStyle("short")}
                         className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                           aiResponseStyle === "short"
-                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
-                            : "border-border hover:border-[#ff6b4d]/50"
+                            ? "border-[var(--dq-orange-500)] bg-orange-50 text-[var(--dq-orange-500)]"
+                            : "border-border hover:border-[var(--dq-orange-500)]/50"
                         }`}
                       >
                         Short
@@ -2867,8 +2867,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
                         onClick={() => setAiResponseStyle("detailed")}
                         className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
                           aiResponseStyle === "detailed"
-                            ? "border-[#ff6b4d] bg-orange-50 text-[#ff6b4d]"
-                            : "border-border hover:border-[#ff6b4d]/50"
+                            ? "border-[var(--dq-orange-500)] bg-orange-50 text-[var(--dq-orange-500)]"
+                            : "border-border hover:border-[var(--dq-orange-500)]/50"
                         }`}
                       >
                         Detailed
@@ -2894,8 +2894,8 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
-        <Button onClick={onContinue} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
+        <Button onClick={onContinue} className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
       </div>
     </div>
   );
@@ -3011,8 +3011,8 @@ const SubmitStep = ({ course, onSave }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-2xl p-8 border border-[#E5E7EB] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[#1e2348]">Submit for Review</h2>
+      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
+        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Submit for Review</h2>
         <p className="text-sm text-muted-foreground mb-6">Review your course and submit for admin approval.</p>
 
         {/* Progress Bar */}
@@ -3081,23 +3081,23 @@ const SubmitStep = ({ course, onSave }: any) => {
           <h3 className="text-sm font-semibold mb-3">What happens after submission?</h3>
           <div className="space-y-2 text-sm text-muted-foreground">
             <div className="flex items-start gap-2">
-              <span className="text-[#ff6b4d] mt-0.5">•</span>
+              <span className="text-[var(--dq-orange-500)] mt-0.5">•</span>
               <span>Course status changes to "Pending Review"</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-[#ff6b4d] mt-0.5">•</span>
+              <span className="text-[var(--dq-orange-500)] mt-0.5">•</span>
               <span>Curriculum, assessments, and certification settings are locked</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-[#ff6b4d] mt-0.5">•</span>
+              <span className="text-[var(--dq-orange-500)] mt-0.5">•</span>
               <span>Minor metadata edits (title, description, price) remain available</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-[#ff6b4d] mt-0.5">•</span>
+              <span className="text-[var(--dq-orange-500)] mt-0.5">•</span>
               <span>Admin will review and either approve or request changes</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="text-[#ff6b4d] mt-0.5">•</span>
+              <span className="text-[var(--dq-orange-500)] mt-0.5">•</span>
               <span>You'll receive a notification when the review is complete</span>
             </div>
           </div>
@@ -3105,11 +3105,11 @@ const SubmitStep = ({ course, onSave }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">Save as Draft</Button>
+        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
         <Button 
           onClick={handleSubmit}
           disabled={!isValid || isSubmitting}
-          className="bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? "Submitting..." : "Submit for Review"}
         </Button>
@@ -3120,3 +3120,4 @@ const SubmitStep = ({ course, onSave }: any) => {
 
 
 export default CourseBuilder;
+

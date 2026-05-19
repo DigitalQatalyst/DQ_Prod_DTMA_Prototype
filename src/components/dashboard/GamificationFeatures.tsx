@@ -206,7 +206,7 @@ export const GamificationFeatures = () => {
         <div className="lg:col-span-2 space-y-6">
           <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-[20px] leading-[28px] font-medium flex items-center gap-2">
+              <h3 className="text-[20px] leading-[28px] font-medium flex items-center gap-2 !text-[#1e2348]">
                 <Target className="w-6 h-6 text-[#ff6b4d]" />
                 Daily Challenges
               </h3>
@@ -239,7 +239,7 @@ export const GamificationFeatures = () => {
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h4 className="text-[16px] leading-[24px] font-normal">{challenge.title}</h4>
+                            <h4 className="text-[16px] leading-[24px] font-normal !text-[#1e2348]">{challenge.title}</h4>
                             <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">{challenge.description}</p>
                           </div>
                           <Badge className="bg-[#ff6b4d] text-white text-[12px] leading-[16px] font-medium">
@@ -273,7 +273,7 @@ export const GamificationFeatures = () => {
 
           {/* Microlearning Paths */}
           <Card className="p-6">
-            <h3 className="text-[20px] leading-[28px] font-medium mb-6 flex items-center gap-2">
+            <h3 className="text-[20px] leading-[28px] font-medium mb-6 flex items-center gap-2 !text-[#1e2348]">
               <Zap className="w-6 h-6 text-[#ff6b4d]" />
               Microlearning Paths
             </h3>
@@ -283,21 +283,21 @@ export const GamificationFeatures = () => {
                 <div
                   key={path.id}
                   className={`p-4 rounded-lg border ${
-                    path.locked ? 'border-border bg-gray-50 opacity-60' : 'border-border bg-card'
+                    path.locked ? 'border-border bg-gray-50' : 'border-border bg-card'
                   }`}
                 >
                   <div className="flex items-start gap-4">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                       path.locked
-                        ? 'bg-gray-200 text-gray-500'
+                        ? 'bg-gray-300 text-gray-700'
                         : 'bg-gradient-to-br from-[#1e2348] to-[#ff6b4d] text-white'
                     }`}>
                       {path.locked ? <Lock className="w-5 h-5" /> : <Zap className="w-5 h-5" />}
                     </div>
 
                     <div className="flex-1">
-                      <h4 className="text-[16px] leading-[24px] font-normal mb-1">{path.title}</h4>
-                      <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-3">{path.description}</p>
+                      <h4 className={`text-[16px] leading-[24px] font-normal mb-1 ${path.locked ? 'text-gray-700' : '!text-[#1e2348]'}`}>{path.title}</h4>
+                      <p className={`text-[14px] leading-[20px] font-normal mb-3 ${path.locked ? 'text-gray-600' : 'text-muted-foreground'}`}>{path.description}</p>
 
                       {!path.locked && (
                         <>
@@ -318,7 +318,7 @@ export const GamificationFeatures = () => {
                       )}
 
                       {path.locked && (
-                        <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">
+                        <p className="text-[14px] leading-[20px] font-normal text-gray-600">
                           Complete previous paths to unlock
                         </p>
                       )}
@@ -333,7 +333,7 @@ export const GamificationFeatures = () => {
         {/* Leaderboard & Achievements */}
         <div className="space-y-6">
           <Card className="p-6">
-            <h3 className="text-[20px] leading-[28px] font-medium mb-6 flex items-center gap-2">
+            <h3 className="text-[20px] leading-[28px] font-medium mb-6 flex items-center gap-2 !text-[#1e2348]">
               <Trophy className="w-6 h-6 text-[#ff6b4d]" />
               Leaderboard
             </h3>
@@ -344,8 +344,8 @@ export const GamificationFeatures = () => {
                   key={user.rank}
                   className={`p-3 rounded-lg flex items-center gap-3 ${
                     user.isCurrentUser
-                      ? 'bg-[#ff6b4d]/10 border-2 border-[#ff6b4d]'
-                      : 'bg-accent/50'
+                      ? 'bg-white border-2 border-[#ff6b4d]'
+                      : 'bg-white border border-gray-200'
                   }`}
                 >
                   <div className={`w-8 h-8 flex items-center justify-center font-bold ${getRankColor(user.rank)}`}>
@@ -360,8 +360,8 @@ export const GamificationFeatures = () => {
                   </Avatar>
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-[14px] leading-[20px] font-medium truncate">{user.name}</p>
-                    <p className="text-[12px] leading-[16px] font-normal text-muted-foreground">{user.points} points</p>
+                    <p className="text-[14px] leading-[20px] font-medium truncate text-[#1e2348]">{user.name}</p>
+                    <p className="text-[12px] leading-[16px] font-normal text-gray-600">{user.points} points</p>
                   </div>
 
                   {user.rank <= 3 && (
@@ -378,7 +378,7 @@ export const GamificationFeatures = () => {
 
           {/* Achievement Levels */}
           <Card className="p-6">
-            <h3 className="text-[20px] leading-[28px] font-medium mb-6">Achievement Level</h3>
+            <h3 className="text-[20px] leading-[28px] font-medium mb-6 !text-[#1e2348]">Achievement Level</h3>
 
             <div className="space-y-4">
               {achievements.map((achievement, index) => (
@@ -394,14 +394,14 @@ export const GamificationFeatures = () => {
                       {achievement.unlocked ? (
                         <Award className="w-5 h-5" />
                       ) : (
-                        <Lock className="w-5 h-5 text-gray-500" />
+                        <Lock className="w-5 h-5 text-gray-700" />
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className={`text-[16px] leading-[24px] font-normal ${achievement.unlocked ? 'text-white' : 'text-gray-600'}`}>
+                      <p className={`text-[16px] leading-[24px] font-normal ${achievement.unlocked ? 'text-white' : 'text-gray-900'}`}>
                         {achievement.level}
                       </p>
-                      <p className={`text-[14px] leading-[20px] font-normal ${achievement.unlocked ? 'text-white/80' : 'text-gray-500'}`}>
+                      <p className={`text-[14px] leading-[20px] font-normal ${achievement.unlocked ? 'text-white/80' : 'text-gray-700'}`}>
                         {achievement.points} points
                       </p>
                     </div>

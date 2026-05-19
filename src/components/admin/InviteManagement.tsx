@@ -215,10 +215,10 @@ export function InviteManagement() {
           <Loader2 className="w-8 h-8 animate-spin text-[#9CA3AF]" />
         </div>
       ) : invites && invites.length > 0 ? (
-        <div className="border border-[#E5E7EB] rounded-xl overflow-hidden bg-white">
+        <div className="border border-[var(--dq-surface-border-default)] rounded-xl overflow-hidden bg-white">
           <Table>
             <TableHeader>
-              <TableRow className="bg-[#1e2348] hover:bg-[#1e2348]">
+              <TableRow className="bg-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)]">
                 <TableHead className="text-white">Role</TableHead>
                 <TableHead className="text-white">Email Restriction</TableHead>
                 <TableHead className="text-white">Status</TableHead>
@@ -230,7 +230,7 @@ export function InviteManagement() {
             </TableHeader>
             <TableBody>
               {invites.map((invite, idx) => (
-                <TableRow key={invite.id} className={`${idx % 2 === 0 ? 'bg-white' : 'bg-[#F5F6FA]'} hover:bg-[#F5F6FA]`}>
+                <TableRow key={invite.id} className={`${idx % 2 === 0 ? 'bg-white' : 'bg-[var(--dq-gray-50)]'} hover:bg-[var(--dq-gray-50)]`}>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       {invite.role === 'admin' ? (

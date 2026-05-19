@@ -1,192 +1,307 @@
+import { Linkedin, Mail, Award } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/Badge";
-import { Input } from "@/components/ui/input";
-import { Star, Users, BookOpen, Search, Sparkles, User as UserIcon } from "lucide-react";
-import { dtmaFaculty } from "@/data/dtmaFaculty";
 
 const Faculty = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedType, setSelectedType] = useState<"all" | "human" | "ai">("all");
+  const [activeFilter, setActiveFilter] = useState<"all" | "human" | "ai">("all");
 
-  const filteredFaculty = dtmaFaculty.filter((faculty) => {
-    const matchesSearch = faculty.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      faculty.specialization.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = selectedType === "all" || faculty.type === selectedType;
-    return matchesSearch && matchesType;
-  });
+  const humanFaculty = [
+    {
+      name: "Dr. Ahmed Al-Mansouri",
+      title: "Director of Digital Transformation",
+      expertise: "Digital Strategy, Organizational Change",
+      bio: "20+ years of experience leading digital transformation initiatives across Fortune 500 companies.",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+      type: "human",
+    },
+    {
+      name: "Sarah Johnson",
+      title: "Senior Instructor - Digital Innovation",
+      expertise: "Innovation Management, Technology Strategy",
+      bio: "Former CTO with expertise in building high-performing digital teams and innovation ecosystems.",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=300&fit=crop",
+      type: "human",
+    },
+    {
+      name: "Prof. Rajesh Kumar",
+      title: "Faculty - Business Transformation",
+      expertise: "Business Models, Customer Experience",
+      bio: "Academic researcher and practitioner focused on digital business model innovation.",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=300&fit=crop",
+      type: "human",
+    },
+    {
+      name: "Lisa Chen",
+      title: "Instructor - Digital Workforce Development",
+      expertise: "Talent Development, Organizational Culture",
+      bio: "HR transformation specialist helping organizations build digital-ready workforces.",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=300&fit=crop",
+      type: "human",
+    },
+    {
+      name: "Michael O'Brien",
+      title: "Senior Instructor - Technology & Operations",
+      expertise: "Cloud Architecture, Digital Operations",
+      bio: "Technology leader with deep expertise in cloud transformation and operational excellence.",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+      type: "human",
+    },
+    {
+      name: "Dr. Fatima Al-Zahra",
+      title: "Faculty - Customer Experience",
+      expertise: "Customer Journey, Digital Marketing",
+      bio: "Customer experience strategist helping organizations deliver exceptional digital experiences.",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=300&fit=crop",
+      type: "human",
+    },
+  ];
+
+  const aiFaculty = [
+    {
+      name: "Eco",
+      title: "Digital Economy Strategist",
+      expertise: "Economy 4.0 Dynamics, Industry Disruption, Competitive Positioning",
+      bio: "Your go-to AI for understanding Economy 4.0 dynamics, analyzing industry disruption, crafting competitive positioning strategies, and innovating digital business models to thrive in the digital economy.",
+      image: "/ai-leadership.png",
+      type: "ai",
+      dimension: "Digital Economy",
+    },
+    {
+      name: "Cognito",
+      title: "Cognitive Organization Architect",
+      expertise: "Intelligent Organizations, Data-Driven Decisions, Cognitive Maturity",
+      bio: "Your go-to AI for designing intelligent organizations, implementing data-driven decision systems, assessing cognitive maturity, and building AI-powered operational agility.",
+      image: "/ai-operations.png",
+      type: "ai",
+      dimension: "Digital Cognitive Organisation",
+    },
+    {
+      name: "Nexus",
+      title: "Platform Architecture Expert",
+      expertise: "Digital Platforms, Enterprise Integration, API Ecosystems",
+      bio: "Your go-to AI for designing digital business platforms, orchestrating enterprise integrations, managing API ecosystems, and building scalable digital infrastructure.",
+      image: "/ai-technology.png",
+      type: "ai",
+      dimension: "Digital Business Platform",
+    },
+    {
+      name: "Transform",
+      title: "Transformation Strategist",
+      expertise: "Target State Design, Transformation Roadmaps, Change Execution",
+      bio: "Your go-to AI for architecting target states, roadmapping transformation journeys, executing change methodologies, and delivering scaled transformation frameworks.",
+      image: "/ai-culture.png",
+      type: "ai",
+      dimension: "Digital Transformation 2.0",
+    },
+    {
+      name: "Catalyst",
+      title: "Workforce Transformation Specialist",
+      expertise: "Digital Skills, Hybrid Work Models, Organizational Culture",
+      bio: "Your go-to AI for transforming workforces, developing digital skills, designing hybrid work models, and building transformation-ready organizational cultures.",
+      image: "/ai-innovation.png",
+      type: "ai",
+      dimension: "Digital Worker & Workspace",
+    },
+    {
+      name: "Velocity",
+      title: "Acceleration Expert",
+      expertise: "Rapid Delivery, Agile Frameworks, Time-Compression Strategies",
+      bio: "Your go-to AI for rapid delivery methodologies, transformation acceleration tools, agile execution frameworks, and time-compression strategies to speed up your transformation.",
+      image: "/ai-trust.png",
+      type: "ai",
+      dimension: "Digital Accelerators",
+    },
+  ];
+
+  const allFaculty = [...humanFaculty, ...aiFaculty];
+  const displayedFaculty = activeFilter === "all" ? allFaculty : activeFilter === "human" ? humanFaculty : aiFaculty;
 
   return (
-    <div className="min-h-screen">
-      {/* Navy Background for Navbar and Hero */}
-      <div className="bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
+    <div className="min-h-screen bg-background">
+      <div className="bg-[var(--dq-navy-950)]">
         <Navbar />
         
-        {/* Header */}
+        {/* Hero Section */}
         <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-2xl">
-              <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[#ff6b4d] mb-4">
-                Meet Your Trainers
+            <div className="max-w-4xl mx-auto text-center">
+              <p className="text-[12px] leading-[16px] font-semibold uppercase tracking-wide text-[var(--dq-orange-500)] mb-6">
+                Meet Our Team
               </p>
-              <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-4">
-                Learn from Hybrid HI + AI Faculty
+              <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
+                Our Faculty
               </h1>
-              <p className="text-[16px] leading-[24px] font-normal text-white/80">
-                DTMA's faculty combines three expert human instructors with AI-powered specialists — one for each digital dimension. Together, they deliver a learning experience that blends real-world insight with deep, always-available expertise.
+              <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
+                Learn from industry experts and AI-powered specialists with decades of combined experience in digital transformation.
               </p>
             </div>
           </div>
         </section>
       </div>
 
-      <main className="pb-20">
-        {/* Filters */}
-        <section className="py-8 border-b border-[#E5E7EB] bg-white sticky top-20 z-40">
+      <main>
+        {/* Faculty Filter Tabs */}
+        <section className="py-8 bg-white border-b border-[var(--dq-navy-100)]">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
-              <div className="flex flex-wrap gap-4 flex-1">
-                {/* Search */}
-                <div className="relative flex-1 min-w-[200px] max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
-                  <Input
-                    placeholder="Search faculty..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 border-[#E5E7EB] text-[14px] leading-[20px] font-normal"
-                  />
-                </div>
-              </div>
-
-              {/* Type Toggle */}
-              <div className="flex items-center gap-2 border border-[#E5E7EB] rounded-lg p-1">
-                <Button
-                  variant={selectedType === "all" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setSelectedType("all")}
-                  className={`text-[16px] leading-[24px] font-normal ${selectedType === "all" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}`}
-                >
-                  All Faculty
-                </Button>
-                <Button
-                  variant={selectedType === "human" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setSelectedType("human")}
-                  className={`text-[16px] leading-[24px] font-normal ${selectedType === "human" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}`}
-                >
-                  <UserIcon className="w-4 h-4 mr-1" />
-                  Human
-                </Button>
-                <Button
-                  variant={selectedType === "ai" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setSelectedType("ai")}
-                  className={`text-[16px] leading-[24px] font-normal ${selectedType === "ai" ? "bg-[#181C3A] hover:bg-[#181C3A]/90 text-white" : ""}`}
-                >
-                  <Sparkles className="w-4 h-4 mr-1" />
-                  AI
-                </Button>
-              </div>
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={() => setActiveFilter("all")}
+                className={`px-6 py-2 font-semibold rounded-[8px] transition-colors ${
+                  activeFilter === "all"
+                    ? "bg-[var(--dq-orange-500)] text-white"
+                    : "bg-[var(--dq-navy-50)] text-[var(--dq-text-secondary)] hover:bg-[var(--dq-navy-100)]"
+                }`}
+              >
+                All Faculty
+              </button>
+              <button
+                onClick={() => setActiveFilter("human")}
+                className={`px-6 py-2 font-semibold rounded-[8px] transition-colors ${
+                  activeFilter === "human"
+                    ? "bg-[var(--dq-orange-500)] text-white"
+                    : "bg-[var(--dq-navy-50)] text-[var(--dq-text-secondary)] hover:bg-[var(--dq-navy-100)]"
+                }`}
+              >
+                Human Faculty
+              </button>
+              <button
+                onClick={() => setActiveFilter("ai")}
+                className={`px-6 py-2 font-semibold rounded-[8px] transition-colors ${
+                  activeFilter === "ai"
+                    ? "bg-[var(--dq-orange-500)] text-white"
+                    : "bg-[var(--dq-navy-50)] text-[var(--dq-text-secondary)] hover:bg-[var(--dq-navy-100)]"
+                }`}
+              >
+                AI Faculty
+              </button>
             </div>
           </div>
         </section>
 
         {/* Faculty Grid */}
-        <section className="py-12 bg-[#F5F6FA]">
+        <section className="py-16 lg:py-24 bg-white">
           <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="mb-8">
-              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
-                Showing <span className="font-medium text-[#0B0C19]">{filteredFaculty.length}</span> faculty members
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredFaculty.map((faculty) => (
-                <Link
-                  key={faculty.id}
-                  to={`/faculty/${faculty.id}`}
-                  className="group bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] hover:shadow-lg transition-all"
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {displayedFaculty.map((member, index) => (
+                <div
+                  key={index}
+                  className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] overflow-hidden hover:shadow-lg transition-shadow"
                 >
-                  {/* Image */}
-                  <div className="relative aspect-square overflow-hidden">
-                    <img
-                      src={faculty.image}
-                      alt={faculty.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  {/* Avatar */}
+                  <div className="w-full h-56 overflow-hidden bg-[var(--dq-navy-100)]">
+                    <img 
+                      src={member.image} 
+                      alt={member.name}
+                      className="w-full h-full object-cover object-center"
                     />
-                    <Badge className={`absolute top-3 left-3 ${faculty.type === 'ai' ? 'bg-purple-600' : 'bg-[#ff6b4d]'} text-white`}>
-                      {faculty.type === 'ai' ? (
-                        <><Sparkles className="w-3 h-3 mr-1" /> AI Faculty</>
-                      ) : (
-                        <><UserIcon className="w-3 h-3 mr-1" /> Human Faculty</>
-                      )}
-                    </Badge>
                   </div>
 
                   {/* Content */}
-                  <div className="p-5">
-                    <h3 className="text-[20px] leading-[28px] font-medium text-[#0B0C19] mb-1 group-hover:text-[#ff6b4d] transition-colors">
-                      {faculty.name}
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-1">
+                      {member.name}
                     </h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] mb-2">{faculty.title}</p>
-                    <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4 line-clamp-2">{faculty.specialization}</p>
+                    <p className="text-sm font-semibold text-[var(--dq-orange-500)] mb-3">
+                      {member.title}
+                    </p>
 
-                    {/* Expertise Tags */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {faculty.expertise.slice(0, 2).map((skill, index) => (
-                        <Badge key={index} variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
-                          {skill}
-                        </Badge>
-                      ))}
-                      {faculty.expertise.length > 2 && (
-                        <Badge variant="outline" className="text-[12px] leading-[16px] font-medium border-[#E5E7EB]">
-                          +{faculty.expertise.length - 2}
-                        </Badge>
-                      )}
+                    {member.type === "ai" && (
+                      <p className="text-xs font-semibold text-[var(--dq-navy-600)] uppercase tracking-wide mb-3">
+                        {(member as any).dimension}
+                      </p>
+                    )}
+
+                    <div className="mb-4 pb-4 border-b border-[var(--dq-navy-100)]">
+                      <p className="text-xs font-semibold text-[var(--dq-navy-600)] uppercase tracking-wide mb-2">
+                        Expertise
+                      </p>
+                      <p className="text-sm text-[var(--dq-navy-600)]">
+                        {member.expertise}
+                      </p>
                     </div>
 
-                    {/* Stats */}
-                    <div className="flex items-center justify-between text-[14px] leading-[20px] font-normal text-[#4B5563] pt-4 border-t border-[#E5E7EB]">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
-                        <span className="font-medium">{faculty.rating}</span>
+                    <p className="text-sm text-[var(--dq-navy-600)] mb-6 line-clamp-3">
+                      {member.bio}
+                    </p>
+
+                    {/* Social Links - Only for Human Faculty */}
+                    {member.type === "human" && (
+                      <div className="flex gap-3">
+                        <button className="flex-1 px-3 py-2 bg-[var(--dq-navy-50)] hover:bg-[var(--dq-navy-100)] rounded-[6px] flex items-center justify-center gap-2 transition-colors">
+                          <Linkedin className="w-4 h-4 text-[var(--dq-orange-500)]" />
+                          <span className="text-xs font-semibold text-[var(--dq-navy-950)]">Profile</span>
+                        </button>
+                        <button className="flex-1 px-3 py-2 bg-[var(--dq-navy-50)] hover:bg-[var(--dq-navy-100)] rounded-[6px] flex items-center justify-center gap-2 transition-colors">
+                          <Mail className="w-4 h-4 text-[var(--dq-orange-500)]" />
+                          <span className="text-xs font-semibold text-[var(--dq-navy-950)]">Contact</span>
+                        </button>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        <span>{(faculty.students / 1000).toFixed(1)}K</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <BookOpen className="w-4 h-4" />
-                        <span>{faculty.coursesCount}</span>
-                      </div>
-                    </div>
+                    )}
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
+          </div>
+        </section>
 
-            {filteredFaculty.length === 0 && (
-              <div className="text-center py-20">
-                <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-6">
-                  <Search className="w-8 h-8 text-muted-foreground" />
+        {/* Credentials Section */}
+        <section className="py-16 lg:py-24 bg-[var(--dq-navy-50)]">
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
+            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Faculty Credentials</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-8 text-center">
+                <div className="w-12 h-12 bg-[var(--dq-orange-500)] rounded-[8px] flex items-center justify-center mx-auto mb-4">
+                  <Award className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-[20px] leading-[28px] font-medium text-foreground mb-2">No faculty found</h3>
-                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-6">Try adjusting your search criteria</p>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSearchQuery("");
-                    setSelectedType("all");
-                  }}
-                  className="text-[16px] leading-[24px] font-normal"
-                >
-                  Clear Filters
-                </Button>
+                <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-2">
+                  Industry Experts
+                </h3>
+                <p className="text-[var(--dq-navy-600)]">
+                  All faculty members bring real-world experience from leading organizations.
+                </p>
               </div>
-            )}
+
+              <div className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-8 text-center">
+                <div className="w-12 h-12 bg-[var(--dq-orange-500)] rounded-[8px] flex items-center justify-center mx-auto mb-4">
+                  <Award className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-2">
+                  Advanced Degrees
+                </h3>
+                <p className="text-[var(--dq-navy-600)]">
+                  Many hold advanced degrees from prestigious universities worldwide.
+                </p>
+              </div>
+
+              <div className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-8 text-center">
+                <div className="w-12 h-12 bg-[var(--dq-orange-500)] rounded-[8px] flex items-center justify-center mx-auto mb-4">
+                  <Award className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-2">
+                  Thought Leaders
+                </h3>
+                <p className="text-[var(--dq-navy-600)]">
+                  Published authors and speakers at international conferences.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16 lg:py-24 bg-white">
+          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 text-center">
+            <h2 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-[var(--dq-navy-950)] mb-4">
+              Learn from the Best
+            </h2>
+            <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)] mb-8 max-w-2xl mx-auto">
+              Enroll in our courses and gain insights from industry leaders and AI specialists who are shaping the future of digital transformation.
+            </p>
+            <button className="px-8 py-3 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white font-semibold rounded-[8px] transition-colors">
+              Explore Courses
+            </button>
           </div>
         </section>
       </main>

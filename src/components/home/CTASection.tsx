@@ -10,7 +10,7 @@ const CTASection = () => {
   ];
 
   return (
-    <section className="py-20 relative overflow-hidden" style={{ backgroundColor: '#1E2348' }}>
+    <section className="py-20 relative overflow-hidden" style={{ backgroundColor: 'var(--dq-navy-950)' }}>
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
         <div className="max-w-2xl">
           <h2 className="text-4xl md:text-5xl font-semibold text-white mb-6">

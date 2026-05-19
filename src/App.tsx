@@ -1,3 +1,5 @@
+import { lazy, Suspense } from 'react';
+import "@/styles/dq-design-tokens.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,6 +23,7 @@ import LearnerDashboard from "./pages/dashboard/LearnerDashboard";
 import InstructorDashboard from "./pages/dashboard/InstructorDashboard";
 import InstitutionDashboard from "./pages/dashboard/InstitutionDashboard";
 import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import SMSDashboard from "./pages/dashboard/SMSDashboard";
 import Masterclasses from "./pages/Masterclasses";
 import MasterclassDetail from "./pages/MasterclassDetail";
 import MasterclassBooking from "./pages/MasterclassBooking";
@@ -40,6 +43,13 @@ import DigitalAccelerators from "./pages/dimensions/DigitalAccelerators";
 import Faculty from "./pages/Faculty";
 import FacultyDetail from "./pages/FacultyDetail";
 import AIStudyBuddyPage from "./pages/AIStudyBuddyPage";
+import Blog from "./pages/Blog";
+import Accreditation from "./pages/Accreditation";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Help from "./pages/Help";
+
+const SuperAdminDashboard = lazy(() => import("./pages/dashboard/SuperAdminDashboard"));
 
 const queryClient = new QueryClient();
 
@@ -137,6 +147,11 @@ const AppRoutes = () => (
       <Route path="/faculty" element={<Faculty />} />
       <Route path="/faculty" element={<Faculty />} />
       <Route path="/faculty/:id" element={<FacultyDetail />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/accreditation" element={<Accreditation />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/help" element={<Help />} />
       <Route path="/instructor-application" element={<InstructorApplication />} />
       <Route path="/learner-onboarding" element={<ProtectedRoute><LearnerOnboarding /></ProtectedRoute>} />
       <Route path="/masterclasses/:id" element={<MasterclassDetail />} />
@@ -144,6 +159,7 @@ const AppRoutes = () => (
       <Route path="/courses/:courseId/builder" element={<ProtectedRoute><CourseBuilder /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardRouter /></ProtectedRoute>} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/sms-admin" element={<SMSDashboard />} />
       <Route path="/ai-study-buddy" element={<ProtectedRoute><AIStudyBuddyPage /></ProtectedRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />

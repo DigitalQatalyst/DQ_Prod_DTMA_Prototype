@@ -76,9 +76,7 @@ export const WhatsAppAnalyticsDashboard = () => {
       {/* Key Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-          <div className="w-12 h-12 rounded-xl bg-[#fff0ed] flex items-center justify-center mb-3">
-            <Users className="w-6 h-6 text-[#ff6b4d]" />
-          </div>
+          <Users className="w-6 h-6 text-[#ff6b4d] mb-3" strokeWidth={1.5} />
           <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_ANALYTICS.optedInLearners.toLocaleString()}</div>
           <div className="text-[13px] text-[#4B5563] mt-1">WhatsApp Opted In</div>
           <div className="text-[12px] text-[#ff6b4d] font-medium mt-2">
@@ -87,9 +85,7 @@ export const WhatsAppAnalyticsDashboard = () => {
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-          <div className="w-12 h-12 rounded-xl bg-[#e9e9ed] flex items-center justify-center mb-3">
-            <Send className="w-6 h-6 text-[#1e2348]" />
-          </div>
+          <Send className="w-6 h-6 text-[#1e2348] mb-3" strokeWidth={1.5} />
           <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_ANALYTICS.messagesSent.toLocaleString()}</div>
           <div className="text-[13px] text-[#4B5563] mt-1">Messages Sent</div>
           <div className="text-[12px] text-[#1e2348] font-medium mt-2">
@@ -98,9 +94,7 @@ export const WhatsAppAnalyticsDashboard = () => {
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-          <div className="w-12 h-12 rounded-xl bg-[#fff0ed] flex items-center justify-center mb-3">
-            <Eye className="w-6 h-6 text-[#ff6b4d]" />
-          </div>
+          <Eye className="w-6 h-6 text-[#ff6b4d] mb-3" strokeWidth={1.5} />
           <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_ANALYTICS.readRate}%</div>
           <div className="text-[13px] text-[#4B5563] mt-1">Read Rate</div>
           <div className="text-[12px] text-[#ff6b4d] font-medium mt-2">
@@ -109,9 +103,7 @@ export const WhatsAppAnalyticsDashboard = () => {
         </div>
 
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
-          <div className="w-12 h-12 rounded-xl bg-[#e9e9ed] flex items-center justify-center mb-3">
-            <MessageCircle className="w-6 h-6 text-[#1e2348]" />
-          </div>
+          <MessageCircle className="w-6 h-6 text-[#1e2348] mb-3" strokeWidth={1.5} />
           <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_ANALYTICS.responseRate}%</div>
           <div className="text-[13px] text-[#4B5563] mt-1">Response Rate</div>
           <div className="text-[12px] text-[#1e2348] font-medium mt-2">
@@ -122,14 +114,14 @@ export const WhatsAppAnalyticsDashboard = () => {
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Course Performance */}
-        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
-          <div className="px-6 py-5 border-b border-[#E5E7EB]">
-            <h3 className="text-[18px] font-semibold text-[#1e2348]">WhatsApp Performance by Course</h3>
-            <p className="text-[13px] text-[#4B5563] mt-1">Opt-in rates and engagement metrics</p>
+        <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-[var(--dq-surface-border-default)] overflow-hidden">
+          <div className="px-6 py-5 border-b border-[var(--dq-surface-border-default)]">
+            <h3 className="text-[18px] font-semibold text-[var(--dq-text-primary)]">WhatsApp Performance by Course</h3>
+            <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Opt-in rates and engagement metrics</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#1e2348]">
+              <thead className="bg-[var(--dq-navy-950)]">
                 <tr>
                   <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Course</th>
                   <th className="text-left px-4 py-3 text-[13px] font-medium text-white">Opted In</th>
@@ -140,13 +132,13 @@ export const WhatsAppAnalyticsDashboard = () => {
               </thead>
               <tbody>
                 {MOCK_COURSE_STATS.map((course, idx) => (
-                  <tr key={course.id} className={`border-t border-[#E5E7EB] hover:bg-[#F5F6FA] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[#F5F6FA]'}`}>
+                  <tr key={course.id} className={`border-t border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[var(--dq-gray-50)]'}`}>
                     <td className="px-4 py-3">
-                      <div className="text-[13px] font-medium text-[#1e2348] max-w-[200px] truncate" title={course.courseName}>
+                      <div className="text-[13px] font-medium text-[var(--dq-text-primary)] max-w-[200px] truncate" title={course.courseName}>
                         {course.courseName}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-[#4B5563]">
+                    <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)]">
                       {course.optedIn} / {course.total}
                     </td>
                     <td className="px-4 py-3">
@@ -215,9 +207,7 @@ export const WhatsAppAnalyticsDashboard = () => {
               {MOCK_TRENDS.map((trend) => (
                 <div key={trend.month} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-green-100 flex items-center justify-center">
-                      <TrendingUp className="w-4 h-4 text-green-600" />
-                    </div>
+                    <TrendingUp className="w-4 h-4 text-green-600" strokeWidth={1.5} />
                     <span className="text-[13px] text-[#4B5563] font-medium">{trend.month}</span>
                   </div>
                   <div className="text-right">
@@ -236,21 +226,21 @@ export const WhatsAppAnalyticsDashboard = () => {
         <h3 className="text-[18px] font-semibold text-[#1e2348] mb-5">System Health</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex items-center gap-3 p-4 rounded-xl bg-green-50 border border-green-200">
-            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" strokeWidth={1.5} />
             <div>
               <div className="text-[14px] font-semibold text-green-900">WhatsApp API Connected</div>
               <div className="text-[12px] text-green-700 mt-0.5">All systems operational</div>
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-xl bg-[#e9e9ed] border border-[#dddee4]">
-            <Clock className="w-5 h-5 text-[#1e2348] flex-shrink-0" />
+            <Clock className="w-5 h-5 text-[#1e2348] flex-shrink-0" strokeWidth={1.5} />
             <div>
               <div className="text-[14px] font-semibold text-[#1e2348]">Avg Delivery Time</div>
               <div className="text-[12px] text-[#4B5563] mt-0.5">1.2 seconds</div>
             </div>
           </div>
           <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200">
-            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" strokeWidth={1.5} />
             <div>
               <div className="text-[14px] font-semibold text-amber-900">Rate Limit Status</div>
               <div className="text-[12px] text-amber-700 mt-0.5">78% capacity used</div>

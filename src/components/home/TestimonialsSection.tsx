@@ -62,7 +62,7 @@ const TestimonialsSection = () => {
       <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
         {/* Header */}
         <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-[#ff6b4d] uppercase tracking-wide mb-4">
+          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
             Hear From Our Learners
           </p>
         </div>
@@ -72,7 +72,7 @@ const TestimonialsSection = () => {
           {/* Navigation Buttons */}
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center text-[#4B5563] hover:text-[#ff6b4d] z-10"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center text-[var(--dq-text-secondary)] hover:text-[var(--dq-orange-500)] z-10"
             aria-label="Previous testimonial"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -80,7 +80,7 @@ const TestimonialsSection = () => {
 
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center text-[#4B5563] hover:text-[#ff6b4d] z-10"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center text-[var(--dq-text-secondary)] hover:text-[var(--dq-orange-500)] z-10"
             aria-label="Next testimonial"
           >
             <ChevronRight className="w-5 h-5" />
@@ -90,7 +90,7 @@ const TestimonialsSection = () => {
           <div className="text-center">
             {/* Avatar */}
             <div className="flex justify-center mb-8">
-              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#F5F6FA] shadow-md">
+              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[var(--dq-gray-50)] shadow-md">
                 <img
                   src={testimonials[currentIndex].image}
                   alt={testimonials[currentIndex].author}
@@ -101,17 +101,17 @@ const TestimonialsSection = () => {
 
             {/* Quote */}
             <div className="mb-8">
-              <p className="text-xl md:text-2xl font-medium text-[#0B0C19] leading-relaxed">
+              <p className="text-xl md:text-2xl font-medium text-[var(--dq-navy-950)] leading-relaxed">
                 "{testimonials[currentIndex].quote}"
               </p>
             </div>
 
             {/* Author Info */}
             <div className="mb-8">
-              <p className="text-base text-[#4B5563]">
+              <p className="text-base text-[var(--dq-text-secondary)]">
                 — {testimonials[currentIndex].author}, {testimonials[currentIndex].role}
               </p>
-              <p className="text-sm text-[#9CA3AF] mt-1">
+              <p className="text-sm text-[var(--dq-text-disabled)] mt-1">
                 {testimonials[currentIndex].organization}
               </p>
             </div>
@@ -120,7 +120,7 @@ const TestimonialsSection = () => {
             <div className="mb-8">
               <Link
                 to="/testimonials"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#ff6b4d] hover:bg-[#e56045] text-white rounded-lg font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white rounded-lg font-medium transition-colors"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -138,8 +138,8 @@ const TestimonialsSection = () => {
                   onClick={() => goToSlide(index)}
                   className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                     index === currentIndex 
-                      ? 'bg-[#ff6b4d] w-8' 
-                      : 'bg-[#E5E7EB] hover:bg-[#9CA3AF]'
+                      ? 'bg-[var(--dq-orange-500)] w-8' 
+                      : 'bg-[var(--dq-surface-border-subtle)] hover:bg-[var(--dq-text-disabled)]'
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />

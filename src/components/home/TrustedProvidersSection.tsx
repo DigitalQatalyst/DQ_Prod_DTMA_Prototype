@@ -46,7 +46,7 @@ const TrustedProvidersSection = () => {
                 <div 
                   className="absolute inset-0 rounded-lg"
                   style={{
-                    backgroundColor: '#1E2348',
+                    backgroundColor: 'var(--dq-navy-950)',
                     opacity: 0.08,
                     transform: 'translate(8px, 8px)',
                     zIndex: 0,

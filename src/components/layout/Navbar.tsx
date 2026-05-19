@@ -64,7 +64,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#1e2348]/20 backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--dq-navy-950)]/20 backdrop-blur-md">
       <nav className="w-full relative">
         <div className="flex items-center w-full px-8 md:px-12 lg:px-16 py-3 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
           {/* Left: Logo Area */}
@@ -83,9 +83,6 @@ const Navbar = () => {
           <div className="flex items-center justify-between flex-grow">
             {/* Navigation Links */}
             <div className="hidden md:flex items-center gap-8">
-                <Link to="/" className="text-sm font-medium transition-colors duration-200 text-white hover:text-white">
-                  Home
-                </Link>
                 
                 {/* Explore Dropdown */}
                 <div className="relative" ref={exploreRef}>
@@ -102,36 +99,36 @@ const Navbar = () => {
                   
                   {/* Full Screen Overlay Dropdown */}
                   {isExploreOpen && (
-                    <div className="fixed left-0 right-0 top-[80px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 80px)', borderColor: '#EEEDE9' }}>
+                    <div className="fixed left-0 right-0 top-[80px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 80px)', borderColor: 'var(--dq-navy-100)' }}>
                       <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
                         <div className="mb-8">
-                          <h2 className="text-2xl font-semibold text-[#1e2348] mb-2">6XD Framework Courses</h2>
-                          <p className="text-sm text-muted-foreground">Master the six dimensions of digital transformation</p>
+                          <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-2">6XD Framework Courses</h2>
+                          <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the six dimensions of digital transformation</p>
                         </div>
                         
                         {/* First Row - 3 Courses */}
                         <div className="grid grid-cols-3 gap-8 mb-8">
                           {/* Course 1: Economy 4.0 */}
                           <Link to="/courses/course-economy-40" className="group">
-                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Mastering Economy 4.0</h3>
-                              <p className="text-sm text-muted-foreground">Master the fundamentals of the digital economy and Economy 4.0</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Mastering Economy 4.0</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the fundamentals of the digital economy and Economy 4.0</p>
                             </div>
                           </Link>
 
                           {/* Course 2: Cognitive Organisations */}
                           <Link to="/courses/course-cognitive-org" className="group">
-                            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Decoding Digital Cognitive Organisations</h3>
-                              <p className="text-sm text-muted-foreground">Transform your organization into an intelligent, learning entity</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Decoding Digital Cognitive Organisations</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Transform your organization into an intelligent, learning entity</p>
                             </div>
                           </Link>
 
                           {/* Course 3: Business Platforms */}
                           <Link to="/courses/course-business-platforms" className="group">
-                            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Building Powerful Digital Business Platforms</h3>
-                              <p className="text-sm text-muted-foreground">Master the architecture and design of scalable digital platforms</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Building Powerful Digital Business Platforms</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the architecture and design of scalable digital platforms</p>
                             </div>
                           </Link>
                         </div>
@@ -140,32 +137,32 @@ const Navbar = () => {
                         <div className="grid grid-cols-3 gap-8">
                           {/* Course 4: Digital Transformation */}
                           <Link to="/courses/course-transformation" className="group">
-                            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Navigating Digital Transformation 2.0</h3>
-                              <p className="text-sm text-muted-foreground">Lead successful digital transformation initiatives</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Navigating Digital Transformation 2.0</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Lead successful digital transformation initiatives</p>
                             </div>
                           </Link>
 
                           {/* Course 5: Digital Workers */}
                           <Link to="/courses/course-digital-workers" className="group">
-                            <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Optimizing Digital Workers and Workspaces</h3>
-                              <p className="text-sm text-muted-foreground">Master tools and practices for modern digital work</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Optimizing Digital Workers and Workspaces</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master tools and practices for modern digital work</p>
                             </div>
                           </Link>
 
                           {/* Course 6: Digital Accelerators */}
                           <Link to="/courses/course-digital-accelerators" className="group">
-                            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 hover:shadow-lg transition-all">
-                              <h3 className="text-lg font-semibold text-[#1e2348] mb-2 group-hover:text-[#ff6b4d] transition-colors">Leveraging Digital Accelerators for Growth</h3>
-                              <p className="text-sm text-muted-foreground">Harness AI, blockchain, IoT, and automation</p>
+                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
+                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Leveraging Digital Accelerators for Growth</h3>
+                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Harness AI, blockchain, IoT, and automation</p>
                             </div>
                           </Link>
                         </div>
 
                         {/* View All Link */}
                         <div className="mt-8 text-center">
-                          <Link to="/courses" className="text-[#ff6b4d] hover:text-[#e56045] font-medium text-sm transition-colors inline-flex items-center gap-2">
+                          <Link to="/courses" className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold text-[14px] leading-[20px] transition-colors inline-flex items-center gap-2">
                             View All Courses
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -198,6 +195,14 @@ const Navbar = () => {
                           <li><Link to="/personas/digital-workers" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Digital Workers</Link></li>
                           <li><Link to="/personas/organizational-leaders" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Organizational Leaders</Link></li>
                           <li><Link to="/personas/transformation-specialists" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Transformation Specialists</Link></li>
+                        </ul>
+                      </div>
+                      <div className="px-6 py-2 border-t border-[#EEEDE9] mt-2">
+                        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-3">Resources</h3>
+                        <ul className="space-y-3">
+                          <li><Link to="/blog" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Blog & Insights</Link></li>
+                          <li><Link to="/help" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Help Center</Link></li>
+                          <li><Link to="/accreditation" className="text-sm text-muted-foreground hover:text-[#ff6b4d] transition-colors">Accreditation</Link></li>
                         </ul>
                       </div>
                     </div>
@@ -303,6 +308,83 @@ const Navbar = () => {
                     >
                       In-Person Trainings
                     </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* For You Dropdown Mobile */}
+              <div>
+                <button
+                  onClick={() => setIsForYouOpen(!isForYouOpen)}
+                  className="text-base font-medium py-2 transition-colors text-muted-foreground hover:text-primary flex items-center gap-2 w-full"
+                >
+                  For You
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isForYouOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isForYouOpen && (
+                  <div className="pl-4 space-y-3 mt-3 border-l-2 border-primary/30">
+                    <Link
+                      to="/personas/digital-workers"
+                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                      onClick={() => {
+                        setIsOpen(false);
+                        setIsForYouOpen(false);
+                      }}
+                    >
+                      Digital Workers
+                    </Link>
+                    <Link
+                      to="/personas/organizational-leaders"
+                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                      onClick={() => {
+                        setIsOpen(false);
+                        setIsForYouOpen(false);
+                      }}
+                    >
+                      Organizational Leaders
+                    </Link>
+                    <Link
+                      to="/personas/transformation-specialists"
+                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                      onClick={() => {
+                        setIsOpen(false);
+                        setIsForYouOpen(false);
+                      }}
+                    >
+                      Transformation Specialists
+                    </Link>
+                    <div className="border-t border-primary/30 pt-3 mt-3">
+                      <Link
+                        to="/blog"
+                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                        onClick={() => {
+                          setIsOpen(false);
+                          setIsForYouOpen(false);
+                        }}
+                      >
+                        Blog & Insights
+                      </Link>
+                      <Link
+                        to="/help"
+                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                        onClick={() => {
+                          setIsOpen(false);
+                          setIsForYouOpen(false);
+                        }}
+                      >
+                        Help Center
+                      </Link>
+                      <Link
+                        to="/accreditation"
+                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
+                        onClick={() => {
+                          setIsOpen(false);
+                          setIsForYouOpen(false);
+                        }}
+                      >
+                        Accreditation
+                      </Link>
+                    </div>
                   </div>
                 )}
               </div>

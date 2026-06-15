@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Star, Clock, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/Badge";
 import { dtmaCoursesNew } from "@/data/dtmaCoursesNew";
+
+const stats = [
+  { value: "31+", label: "Courses available" },
+  { value: "6", label: "6XD dimensions covered" },
+  { value: "3", label: "Learner personas" },
+  { value: "KHDA", label: "Attested credentials" },
+];
 
 const FeaturedCoursesSection2 = () => {
   const [activeTab, setActiveTab] = useState("leaders");
 
-  // Map courses to personas
-  const coursesByPersona = {
+  const coursesByPersona: Record<string, any[]> = {
     leaders: [
       dtmaCoursesNew.find(c => c.id === "course-economy-40"),
       dtmaCoursesNew.find(c => c.id === "course-transformation"),
@@ -34,102 +38,107 @@ const FeaturedCoursesSection2 = () => {
   ];
 
   return (
-    <section className="py-16 lg:py-24 bg-white">
-      <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
-            Courses for You
-          </p>
-          <h2 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-[var(--dq-navy-950)] mb-6">
-            Find the Right Course for You
-          </h2>
-          <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)] max-w-3xl mx-auto">
-            Role-focused 6XD courses for every stage of your digital transformation journey.
-          </p>
+    <>
+      {/* Stats bar */}
+      <section className="py-14 bg-white border-y border-[#e8e8ec]">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((s, i) => (
+              <div key={i} className="flex flex-col border-l-2 border-[#ff4500] pl-4">
+                <span className="text-[32px] font-bold text-[#0a0f1e] leading-none mb-1">{s.value}</span>
+                <span className="text-[13px] text-[#6b6b7b]">{s.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
+      </section>
 
-        {/* Persona Tabs - Left Aligned */}
-        <div className="mb-12">
-          <div className="flex gap-8 relative border-b border-[var(--dq-navy-100)]">
+      {/* Courses section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <div className="flex items-end justify-between mb-10 flex-wrap gap-6">
+            <div>
+              <p className="text-xs font-semibold text-[#ff4500] uppercase tracking-widest mb-3">
+                Courses for you
+              </p>
+              <h2 className="text-[32px] md:text-[42px] font-bold text-[#0a0f1e] leading-[1.1]">
+                Find the right course<br />for your role.
+              </h2>
+            </div>
+            <Link
+              to="/courses"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#ff4500] hover:text-[#cc3700] transition-colors"
+            >
+              View all courses <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex gap-6 border-b border-[#e8e8ec] mb-10">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-0 py-4 text-[14px] leading-[20px] font-medium transition-all duration-200 relative ${
+                className={`pb-3 text-[14px] font-medium transition-all relative ${
                   activeTab === tab.id
-                    ? "text-[var(--dq-navy-950)]"
-                    : "text-[var(--dq-text-secondary)] hover:text-[var(--dq-navy-950)]"
+                    ? "text-[#0a0f1e]"
+                    : "text-[#9a9aaa] hover:text-[#0a0f1e]"
                 }`}
               >
                 {tab.label}
                 {activeTab === tab.id && (
-                  <span className="absolute bottom-0 left-0 right-0 h-1 bg-[var(--dq-orange-500)]"></span>
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#ff4500]" />
                 )}
               </button>
             ))}
           </div>
-        </div>
 
-        {/* Course Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {coursesByPersona[activeTab].map((course) => (
-            <Link
-              key={course.id}
-              to={`/courses/${course.id}`}
-              className="bg-white rounded-[12px] overflow-hidden border border-[var(--dq-navy-100)] hover:shadow-lg transition-all group"
-            >
-              <div className="relative aspect-video overflow-hidden">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-navy-950)] mb-3 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
-                  {course.title}
-                </h3>
-                <div className="flex items-center gap-4 text-[12px] leading-[16px] text-[var(--dq-text-secondary)] mb-4">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-[var(--dq-orange-500)] fill-[var(--dq-orange-500)]" />
-                    <span className="font-medium">{course.rating}</span>
-                    <span className="text-[var(--dq-text-tertiary)]">({course.reviews})</span>
+          {/* Course Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {coursesByPersona[activeTab].map((course) => (
+              <Link
+                key={course.id}
+                to={`/courses/${course.id}`}
+                className="group rounded-xl overflow-hidden border border-[#e8e8ec] hover:shadow-md transition-all"
+              >
+                <div className="aspect-video overflow-hidden bg-[#f5f4f0]">
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-[16px] font-semibold text-[#0a0f1e] mb-3 line-clamp-2 group-hover:text-[#ff4500] transition-colors">
+                    {course.title}
+                  </h3>
+                  <div className="flex items-center gap-4 text-[12px] text-[#9a9aaa] mb-4">
+                    <div className="flex items-center gap-1">
+                      <Star className="w-3.5 h-3.5 text-[#ff4500] fill-[#ff4500]" />
+                      <span className="font-medium text-[#0a0f1e]">{course.rating}</span>
+                      <span>({course.reviews})</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{course.duration}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{course.duration}</span>
+                  <div className="flex items-center justify-between pt-4 border-t border-[#e8e8ec]">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-[18px] font-bold text-[#0a0f1e]">${course.price}</span>
+                      <span className="text-[12px] text-[#9a9aaa] line-through">${course.originalPrice}</span>
+                    </div>
+                    <span className="text-[11px] font-medium text-[#6b6b7b] bg-[#f5f4f0] px-3 py-1 rounded-full">
+                      {course.level}
+                    </span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between mb-4 pb-4 border-b border-[var(--dq-navy-100)]">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-[20px] leading-[28px] font-bold text-[var(--dq-navy-950)]">${course.price}</span>
-                    <span className="text-[12px] leading-[16px] text-[var(--dq-navy-400)] line-through">${course.originalPrice}</span>
-                  </div>
-                  <span className="text-[12px] leading-[16px] font-medium text-[var(--dq-text-secondary)] bg-[var(--dq-navy-50)] px-3 py-1 rounded-[6px]">
-                    {course.level}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
-
-        {/* Sub-section CTA */}
-        <div className="flex justify-center">
-          <Link to="/courses">
-            <Button
-              variant="outline"
-              className="px-8 py-6 border-[var(--dq-orange-500)] text-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-500)] hover:text-white transition-all text-base gap-2"
-              style={{ borderWidth: '1.5px' }}
-            >
-              See More
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </Link>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

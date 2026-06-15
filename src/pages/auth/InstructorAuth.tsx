@@ -14,14 +14,9 @@ const InstructorAuth = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
 
-  // If user is logged in and signing in, redirect to dashboard
   if (user && !authLoading) {
-    // Redirect to dashboard instead of showing it directly
     navigate("/dashboard");
     return null;
   }
@@ -29,30 +24,16 @@ const InstructorAuth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
       const { error } = await signIn(formData.email, formData.password);
-
       if (error) {
-        toast({
-          title: "Sign in failed",
-          description: "Invalid credentials. Please try again.",
-          variant: "destructive",
-        });
+        toast({ title: "Sign in failed", description: "Invalid credentials. Please try again.", variant: "destructive" });
       } else {
-        toast({
-          title: "Signed in!",
-          description: "Welcome back to the Instructor Hub.",
-        });
-        // Redirect to dashboard after signin
+        toast({ title: "Signed in!", description: "Welcome back to the Instructor Hub." });
         navigate("/dashboard");
       }
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      });
+    } catch {
+      toast({ title: "Error", description: "An unexpected error occurred. Please try again.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
@@ -60,128 +41,96 @@ const InstructorAuth = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-charcoal">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <Loader2 className="w-8 h-8 animate-spin text-[#ff4500]" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1974&auto=format&fit=crop"
-            alt="Digital transformation"
-            className="w-full h-full object-cover opacity-20"
-          />
+    <div className="min-h-screen flex h-screen font-sans">
+
+      {/* ── Left Panel ── */}
+      <div className="hidden lg:flex lg:w-[45%] flex-col justify-between bg-[#050d1e] p-12 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(ellipse 70% 50% at 20% 80%, rgba(255, 69, 0, 0.15) 0%, transparent 60%)' }} />
+
+        <Link to="/" className="relative z-10">
+          <img src="/log.svg" alt="DTMA" className="h-[28px] w-auto" />
+        </Link>
+
+        <div className="relative z-10 max-w-sm">
+          <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-6">Instructor Hub</p>
+          <blockquote className="text-[22px] leading-[1.4] font-bold text-white mb-6">
+            "Shape the future of digital transformation. Join DTMA's community of expert instructors."
+          </blockquote>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-[#ff4500] flex items-center justify-center text-white text-[13px] font-bold flex-shrink-0">DI</div>
+            <div>
+              <div className="text-[14px] font-semibold text-white">DTMA Instructor</div>
+              <div className="text-[12px] text-white/50">Digital Transformation Expert</div>
+            </div>
+          </div>
         </div>
 
-        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/dtma-logo.png"
-              alt="DTMA"
-              className="h-[50px] w-auto"
-            />
-          </Link>
-
-          <div className="max-w-md">
-            <h2 className="text-[18px] leading-[28px] font-normal mb-4 text-white">
-              "Shape the Future of Digital Transformation. Join DTMA's community of expert instructors and drive digital transformation education forward."
-            </h2>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#ff6b4d]" />
-              <div>
-                <div className="text-[14px] leading-[20px] font-medium text-white">DTMA Instructor</div>
-                <div className="text-[12px] leading-[16px] font-normal text-white/70">Digital Transformation Expert</div>
-              </div>
+        <div className="relative z-10 flex gap-10 border-t border-white/10 pt-8">
+          {[{ value: "Create", label: "Courses" }, { value: "Inspire", label: "Learners" }, { value: "Transform", label: "Education" }].map((s) => (
+            <div key={s.label}>
+              <div className="text-[22px] font-bold text-white">{s.value}</div>
+              <div className="text-[12px] text-white/50">{s.label}</div>
             </div>
-          </div>
-
-          <div className="flex gap-12">
-            <div>
-              <div className="text-[24px] leading-[32px] font-medium text-white">Create</div>
-              <div className="text-[12px] leading-[16px] font-normal text-white/70">Courses</div>
-            </div>
-            <div>
-              <div className="text-[24px] leading-[32px] font-medium text-white">Inspire</div>
-              <div className="text-[12px] leading-[16px] font-normal text-white/70">Learners</div>
-            </div>
-            <div>
-              <div className="text-[24px] leading-[32px] font-medium text-white">Transform</div>
-              <div className="text-[12px] leading-[16px] font-normal text-white/70">Education</div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* Right Panel - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col bg-white">
-        <div className="lg:hidden p-6 border-b border-gray-200">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/dtma-logo.png"
-              alt="DTMA"
-              className="h-[40px] w-auto"
-            />
-          </Link>
+      {/* ── Right Panel ── */}
+      <div className="w-full lg:w-[55%] flex flex-col bg-white">
+        <div className="lg:hidden p-6 border-b border-[#e8e8ec]">
+          <Link to="/"><img src="/log.svg" alt="DTMA" className="h-[26px] w-auto" /></Link>
         </div>
 
-        <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
-          <div className="w-full max-w-md mx-auto">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground hover:text-[#ff6b4d] transition-colors mb-8"
-            >
+        <div className="flex-1 flex items-center justify-center px-8 py-12 lg:px-16">
+          <div className="w-full max-w-[400px]">
+
+            <Link to="/" className="inline-flex items-center gap-2 text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors mb-10">
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
             <div className="mb-8">
-              <h1 className="text-[32px] leading-[40px] font-semibold text-[#0B0C19] mb-2">
-                Instructor Sign In
-              </h1>
-              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
-                Access your instructor dashboard
-              </p>
+              <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">Instructor access</p>
+              <h1 className="text-[36px] leading-[1.1] font-bold text-[#0a0f1e] mb-2">Sign in to DTMA</h1>
+              <p className="text-[15px] text-[#9a9aaa]">Access your instructor dashboard</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-[12px] leading-[16px] font-medium text-[#1e2348]">
-                  Email Address
-                </Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-[13px] font-medium text-[#0a0f1e]">Email Address</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9a9aaa]" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your instructor email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-11 h-12 text-[14px] leading-[20px] bg-white border-gray-300 text-[#1e2348] placeholder:text-gray-400 focus:border-[#ff6b4d] focus:ring-[#ff6b4d] transition-all"
+                    className="pl-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
                     required
                     disabled={isSubmitting}
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-[12px] leading-[16px] font-medium text-[#1e2348]">
-                  Password
-                </Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="password" className="text-[13px] font-medium text-[#0a0f1e]">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9a9aaa]" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-11 pr-11 h-12 text-[14px] leading-[20px] bg-white border-gray-300 text-[#1e2348] placeholder:text-gray-400 focus:border-[#ff6b4d] focus:ring-[#ff6b4d] transition-all"
+                    className="pl-10 pr-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
                     required
                     minLength={6}
                     disabled={isSubmitting}
@@ -189,32 +138,25 @@ const InstructorAuth = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1e2348] transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[16px] leading-[24px] font-normal"
+                className="w-full h-11 bg-[#ff4500] hover:bg-[#cc3700] text-white text-[14px] font-semibold rounded-full transition-colors mt-2"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  "Sign In"
-                )}
+                {isSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Signing in...</> : "Sign In"}
               </Button>
             </form>
 
-            <p className="text-center text-[14px] leading-[20px] font-normal text-muted-foreground mt-8">
+            <p className="text-center text-[13px] text-[#9a9aaa] mt-8">
               Don't have an account?{" "}
-              <Link to="/instructor-application" className="text-[#ff6b4d] font-medium hover:underline">
+              <Link to="/instructor-application" className="text-[#ff4500] font-semibold hover:text-[#cc3700] transition-colors">
                 Apply to become an instructor
               </Link>
             </p>

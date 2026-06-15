@@ -1,19 +1,12 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import HBSHeroSection from "@/components/home/HBSHeroSection";
-import ExploreCategoriesSection from "@/components/home/ExploreCategoriesSection";
-import TrustedProvidersSection from "@/components/home/TrustedProvidersSection";
-import HowCoursebayHelpsSection from "@/components/home/HowCoursebayHelpsSection";
-import TestimonialsSection from "@/components/home/TestimonialsSection";
 import BenefitsSection from "@/components/home/BenefitsSection";
 import FeaturedCoursesSection2 from "@/components/home/FeaturedCoursesSection2";
 import SixXDSection from "@/components/home/SixXDSection";
-import CTASection from "@/components/home/CTASection";
 import FacultySection from "@/components/home/FacultySection";
-import CredentialsSection from "@/components/home/CredentialsSection";
-import HowItWorksSection from "@/components/home/HowItWorksSection";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
 import StartNowSection from "@/components/home/StartNowSection";
-import { ButlerAI } from "@/components/butler/ButlerAI";
 import { WhatsAppFloatingButton } from "@/components/contact/WhatsAppFloatingButton";
 
 const Index = () => {
@@ -21,18 +14,22 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <main>
+        {/* 1. Hero - light background, left-aligned */}
         <HBSHeroSection />
-        <TestimonialsSection />
+        {/* 2. Problem statement - dark */}
         <BenefitsSection />
+        {/* 3. Stats + Courses - white */}
         <FeaturedCoursesSection2 />
+        {/* 4. 6XD Framework - white then dark */}
         <SixXDSection />
+        {/* 5. Faculty - white */}
         <FacultySection />
-        <CredentialsSection />
-        <HowItWorksSection />
+        {/* 6. Testimonials - light */}
+        <TestimonialsSection />
+        {/* 7. Final CTA - dark with glow */}
         <StartNowSection />
       </main>
       <Footer />
-      <ButlerAI />
       <WhatsAppFloatingButton />
     </div>
   );

@@ -53,58 +53,53 @@ const Courses = () => {
 
   const getBadgeVariant = (badge: string | null) => {
     switch (badge) {
-      case "Bestseller": return "bg-[var(--dq-navy-950)] text-white";
-      case "New": return "bg-white text-[var(--dq-text-primary)]";
-      case "Popular": return "bg-[var(--dq-gray-100)] text-[var(--dq-text-primary)]";
+      case "Bestseller": return "bg-[#0a0f1e] text-white";
+      case "New": return "bg-white text-[#0a0f1e]";
+      case "Popular": return "bg-[#f5f4f0] text-[#0a0f1e]";
       default: return "";
     }
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Navy Background for Navbar and Hero */}
-      <div className="bg-[var(--dq-navy-950)]">
-        <Navbar />
-        
-        {/* Header */}
-        <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-2xl mx-auto text-center">
-              <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[var(--dq-orange-500)] mb-4">
-                Course Marketplace
-              </p>
-              <h1 className="text-[32px] leading-[40px] font-semibold text-white mb-4">
-                Explore Our Courses
-              </h1>
-              <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-on-dark-secondary)]">
-                Master the 6XD framework with expert-led courses built for the digital economy.
-              </p>
-            </div>
-          </div>
-        </section>
-      </div>
+    <div className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* Hero Section */}
+      <section className="bg-[#f5f4f0] pt-28 pb-20">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">
+            Browse Courses
+          </p>
+          <h1 className="text-[52px] md:text-[68px] leading-[1.05] font-bold text-[#0a0f1e] mb-6 max-w-2xl">
+            Explore Our <span className="text-[#ff4500]">Courses</span>
+          </h1>
+          <p className="text-[17px] text-[#4a4a5a] max-w-xl">
+            Master the 6XD framework with expert-led courses built for the digital economy.
+          </p>
+        </div>
+      </section>
 
       <main className="pb-20">
 
         {/* Filters */}
-        <section className="py-8 border-b border-[var(--dq-surface-border-default)] bg-white sticky top-20 z-40">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
+        <section className="py-6 border-b border-[#e8e8ec] bg-white sticky top-20 z-40">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
               <div className="flex flex-wrap gap-4 flex-1">
                 {/* Search */}
                 <div className="relative flex-1 min-w-[200px] max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--dq-text-tertiary)]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6b7b]" />
                   <Input
                     placeholder="Search courses or instructors..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 border-[var(--dq-surface-border-default)]"
+                    className="pl-10 border-[#e8e8ec] rounded-full"
                   />
                 </div>
 
                 {/* Category Filter */}
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[180px] border-[#e8e8ec] rounded-full">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -118,7 +113,7 @@ const Courses = () => {
 
                 {/* Level Filter */}
                 <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                  <SelectTrigger className="w-[150px]">
+                  <SelectTrigger className="w-[150px] border-[#e8e8ec] rounded-full">
                     <SelectValue placeholder="Level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -132,12 +127,12 @@ const Courses = () => {
               </div>
 
               {/* View Toggle */}
-              <div className="flex items-center gap-2 border border-[var(--dq-surface-border-default)] rounded-lg p-1">
+              <div className="flex items-center gap-1 border border-[#e8e8ec] rounded-xl p-1">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("grid")}
-                  className={viewMode === "grid" ? "bg-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)]/90 text-white" : ""}
+                  className={viewMode === "grid" ? "bg-[#0a0f1e] hover:bg-[#0a0f1e]/90 text-white rounded-lg" : "rounded-lg"}
                 >
                   <Grid3X3 className="w-4 h-4" />
                 </Button>
@@ -145,7 +140,7 @@ const Courses = () => {
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("list")}
-                  className={viewMode === "list" ? "bg-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)]/90 text-white" : ""}
+                  className={viewMode === "list" ? "bg-[#0a0f1e] hover:bg-[#0a0f1e]/90 text-white rounded-lg" : "rounded-lg"}
                 >
                   <List className="w-4 h-4" />
                 </Button>
@@ -155,11 +150,11 @@ const Courses = () => {
         </section>
 
         {/* Results */}
-        <section className="py-12 bg-[var(--dq-gray-50)]">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
+        <section className="py-12 bg-[#f5f4f0]">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
             <div className="mb-8">
-              <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">
-                Showing <span className="font-semibold text-[var(--dq-text-primary)]">{filteredCourses.length}</span> courses
+              <p className="text-[14px] text-[#6b6b7b]">
+                Showing <span className="font-semibold text-[#0a0f1e]">{filteredCourses.length}</span> courses
               </p>
             </div>
 
@@ -168,9 +163,9 @@ const Courses = () => {
                 {filteredCourses.map((course) => (
                   <div
                     key={course.id}
-                    className={`flex-shrink-0 bg-white border border-[var(--dq-surface-border-default)] rounded-xl overflow-hidden shadow-sm transition-all ${
-                      course.comingSoon 
-                        ? 'opacity-75 cursor-not-allowed' 
+                    className={`flex-shrink-0 bg-white border border-[#e8e8ec] rounded-xl overflow-hidden transition-all ${
+                      course.comingSoon
+                        ? 'opacity-75 cursor-not-allowed'
                         : 'hover:shadow-md hover:-translate-y-0.5 group cursor-pointer'
                     }`}
                   >
@@ -184,34 +179,34 @@ const Courses = () => {
                             className="w-full h-full object-cover"
                           />
                           <div className="absolute top-4 left-1/2 -translate-x-1/2">
-                            <div className="bg-white text-[var(--dq-navy-950)] text-[14px] leading-[20px] font-medium px-4 py-2 rounded-full shadow-md">
+                            <div className="bg-white text-[#0a0f1e] text-[14px] leading-[20px] font-medium px-4 py-2 rounded-full shadow-md">
                               Coming Soon
                             </div>
                           </div>
                         </div>
                         <div className="p-5">
-                          <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)] mb-3 line-clamp-2">
+                          <h3 className="text-[20px] leading-[28px] font-semibold text-[#0a0f1e] mb-3 line-clamp-2">
                             {course.title}
                           </h3>
-                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-4">
+                          <div className="flex items-center gap-4 text-[14px] leading-[20px] text-[#6b6b7b] mb-4">
                             <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-[var(--dq-orange-500)] fill-[var(--dq-orange-500)]" />
-                              <span className="font-semibold text-[var(--dq-text-primary)]">{course.rating}</span>
-                              <span className="text-[var(--dq-text-tertiary)]">({course.reviews})</span>
+                              <Star className="w-4 h-4 text-[#ff4500] fill-[#ff4500]" />
+                              <span className="font-semibold text-[#0a0f1e]">{course.rating}</span>
+                              <span className="text-[#6b6b7b]">({course.reviews})</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Clock className="w-4 h-4" />
                               <span>{course.duration}</span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[var(--dq-text-tertiary)] mb-4">
+                          <div className="flex items-center gap-2 text-[12px] leading-[16px] text-[#6b6b7b] mb-4">
                             <BookOpen className="w-4 h-4" />
                             <span>Content in development</span>
                           </div>
-                          <div className="flex items-center justify-between pt-3 border-t border-[var(--dq-surface-border-default)]">
+                          <div className="flex items-center justify-between pt-3 border-t border-[#e8e8ec]">
                             <div className="flex items-baseline gap-2">
-                              <span className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
-                              <span className="text-[12px] leading-[16px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
+                              <span className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e]">${course.price}</span>
+                              <span className="text-[12px] leading-[16px] text-[#b0b0b8] line-through">${course.originalPrice}</span>
                             </div>
                           </div>
                         </div>
@@ -227,30 +222,30 @@ const Courses = () => {
                           />
                         </div>
                         <div className="p-5">
-                          <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)] mb-3 line-clamp-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
+                          <h3 className="text-[20px] leading-[28px] font-semibold text-[#0a0f1e] mb-3 line-clamp-2 group-hover:text-[#ff4500] transition-colors">
                             {course.title}
                           </h3>
-                          <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-4">
+                          <div className="flex items-center gap-4 text-[14px] leading-[20px] text-[#6b6b7b] mb-4">
                             <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-[var(--dq-orange-500)] fill-[var(--dq-orange-500)]" />
-                              <span className="font-semibold text-[var(--dq-text-primary)]">{course.rating}</span>
-                              <span className="text-[var(--dq-text-tertiary)]">({course.reviews})</span>
+                              <Star className="w-4 h-4 text-[#ff4500] fill-[#ff4500]" />
+                              <span className="font-semibold text-[#0a0f1e]">{course.rating}</span>
+                              <span className="text-[#6b6b7b]">({course.reviews})</span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Clock className="w-4 h-4" />
                               <span>{course.duration}</span>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 text-[12px] leading-[16px] font-normal text-[var(--dq-text-tertiary)] mb-4">
+                          <div className="flex items-center gap-2 text-[12px] leading-[16px] text-[#6b6b7b] mb-4">
                             <BookOpen className="w-4 h-4" />
                             <span>{course.modules.length} modules • {course.totalLessons} lessons</span>
                           </div>
-                          <div className="flex items-center justify-between pt-3 border-t border-[var(--dq-surface-border-default)]">
+                          <div className="flex items-center justify-between pt-3 border-t border-[#e8e8ec]">
                             <div className="flex items-baseline gap-2">
-                              <span className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
-                              <span className="text-[12px] leading-[16px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
+                              <span className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e]">${course.price}</span>
+                              <span className="text-[12px] leading-[16px] text-[#b0b0b8] line-through">${course.originalPrice}</span>
                             </div>
-                            <Badge variant="outline" className="text-[11px] leading-[14px] font-semibold border-[var(--dq-surface-border-default)]">
+                            <Badge variant="outline" className="text-[11px] leading-[14px] font-semibold border-[#e8e8ec]">
                               {course.level}
                             </Badge>
                           </div>
@@ -265,9 +260,9 @@ const Courses = () => {
                 {filteredCourses.map((course) => (
                   <div
                     key={course.id}
-                    className={`flex gap-6 bg-white border border-[var(--dq-surface-border-default)] rounded-xl overflow-hidden shadow-sm p-4 transition-all duration-500 ${
-                      course.comingSoon 
-                        ? 'opacity-75 cursor-not-allowed' 
+                    className={`flex gap-6 bg-white border border-[#e8e8ec] rounded-xl overflow-hidden p-4 transition-all duration-500 ${
+                      course.comingSoon
+                        ? 'opacity-75 cursor-not-allowed'
                         : 'group hover:shadow-md hover:-translate-y-0.5 cursor-pointer'
                     }`}
                   >
@@ -281,7 +276,7 @@ const Courses = () => {
                             className="w-full h-full object-cover"
                           />
                           <div className="absolute top-2 left-1/2 -translate-x-1/2">
-                            <div className="bg-white text-[var(--dq-navy-950)] text-[10px] leading-[14px] font-medium px-3 py-1.5 rounded-full shadow-md">
+                            <div className="bg-white text-[#0a0f1e] text-[10px] leading-[14px] font-medium px-3 py-1.5 rounded-full shadow-md">
                               Coming Soon
                             </div>
                           </div>
@@ -290,24 +285,24 @@ const Courses = () => {
                         <div className="flex-1 flex flex-col justify-between py-1">
                           <div>
                             <div className="flex items-center gap-2 mb-3">
-                              <Badge variant="secondary" className="text-[11px] leading-[14px] font-semibold capitalize text-[var(--dq-orange-500)]">
+                              <Badge variant="secondary" className="text-[11px] leading-[14px] font-semibold capitalize text-[#ff4500]">
                                 {course.category}
                               </Badge>
-                              <span className="text-[11px] leading-[14px] font-semibold text-[var(--dq-text-tertiary)]">{course.level}</span>
+                              <span className="text-[11px] leading-[14px] font-semibold text-[#6b6b7b]">{course.level}</span>
                             </div>
 
-                            <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)] mb-2">
+                            <h3 className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e] mb-2">
                               {course.title}
                             </h3>
-                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-2">{course.description}</p>
-                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">by {course.instructor}</p>
+                            <p className="text-[14px] leading-[20px] text-[#4a4a5a] mb-2">{course.description}</p>
+                            <p className="text-[14px] leading-[20px] text-[#6b6b7b]">by {course.instructor}</p>
                           </div>
 
-                          <div className="flex items-center justify-between pt-3 border-t border-[var(--dq-surface-border-default)]">
-                            <div className="flex items-center gap-6 text-[13px] leading-[18px] font-normal text-[var(--dq-text-tertiary)]">
+                          <div className="flex items-center justify-between pt-3 border-t border-[#e8e8ec]">
+                            <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#6b6b7b]">
                               <div className="flex items-center gap-1.5">
-                                <Star className="w-4 h-4 fill-[var(--dq-orange-500)] text-[var(--dq-orange-500)]" />
-                                <span className="font-semibold text-[var(--dq-text-primary)]">{course.rating}</span>
+                                <Star className="w-4 h-4 fill-[#ff4500] text-[#ff4500]" />
+                                <span className="font-semibold text-[#0a0f1e]">{course.rating}</span>
                                 <span>({course.reviews})</span>
                               </div>
                               <div className="flex items-center gap-1">
@@ -321,8 +316,8 @@ const Courses = () => {
                             </div>
 
                             <div className="flex items-center gap-3">
-                              <span className="text-[12px] leading-[16px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
-                              <span className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
+                              <span className="text-[12px] leading-[16px] text-[#b0b0b8] line-through">${course.originalPrice}</span>
+                              <span className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e]">${course.price}</span>
                             </div>
                           </div>
                         </div>
@@ -349,21 +344,21 @@ const Courses = () => {
                               <Badge variant="secondary" className="text-[11px] leading-[14px] font-semibold capitalize">
                                 {course.category}
                               </Badge>
-                              <span className="text-[11px] leading-[14px] font-semibold text-[var(--dq-text-tertiary)]">{course.level}</span>
+                              <span className="text-[11px] leading-[14px] font-semibold text-[#6b6b7b]">{course.level}</span>
                             </div>
 
-                            <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">
+                            <h3 className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e] mb-2 group-hover:text-[#ff4500] transition-colors">
                               {course.title}
                             </h3>
-                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-secondary)] mb-2">{course.description}</p>
-                            <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">by {course.instructor}</p>
+                            <p className="text-[14px] leading-[20px] text-[#4a4a5a] mb-2">{course.description}</p>
+                            <p className="text-[14px] leading-[20px] text-[#6b6b7b]">by {course.instructor}</p>
                           </div>
 
-                          <div className="flex items-center justify-between pt-3 border-t border-[var(--dq-surface-border-default)]">
-                            <div className="flex items-center gap-6 text-[13px] leading-[18px] font-normal text-[var(--dq-text-tertiary)]">
+                          <div className="flex items-center justify-between pt-3 border-t border-[#e8e8ec]">
+                            <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#6b6b7b]">
                               <div className="flex items-center gap-1.5">
-                                <Star className="w-4 h-4 fill-[var(--dq-orange-500)] text-[var(--dq-orange-500)]" />
-                                <span className="font-semibold text-[var(--dq-text-primary)]">{course.rating}</span>
+                                <Star className="w-4 h-4 fill-[#ff4500] text-[#ff4500]" />
+                                <span className="font-semibold text-[#0a0f1e]">{course.rating}</span>
                                 <span>({course.reviews})</span>
                               </div>
                               <div className="flex items-center gap-1">
@@ -377,9 +372,9 @@ const Courses = () => {
                             </div>
 
                             <div className="flex items-center gap-3">
-                              <span className="text-[12px] leading-[16px] font-normal text-[var(--dq-text-disabled)] line-through">${course.originalPrice}</span>
-                              <span className="text-[18px] leading-[26px] font-semibold text-[var(--dq-text-primary)]">${course.price}</span>
-                              <ChevronRight className="w-5 h-5 text-[var(--dq-text-tertiary)] group-hover:text-[var(--dq-orange-500)] group-hover:translate-x-1 transition-all" />
+                              <span className="text-[12px] leading-[16px] text-[#b0b0b8] line-through">${course.originalPrice}</span>
+                              <span className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e]">${course.price}</span>
+                              <ChevronRight className="w-5 h-5 text-[#6b6b7b] group-hover:text-[#ff4500] group-hover:translate-x-1 transition-all" />
                             </div>
                           </div>
                         </div>
@@ -392,13 +387,14 @@ const Courses = () => {
 
             {filteredCourses.length === 0 && (
               <div className="text-center py-20">
-                <div className="w-20 h-20 rounded-full bg-[var(--dq-gray-100)] flex items-center justify-center mx-auto mb-6">
-                  <Search className="w-8 h-8 text-[var(--dq-text-tertiary)]" />
+                <div className="w-20 h-20 rounded-full bg-[#f5f4f0] flex items-center justify-center mx-auto mb-6">
+                  <Search className="w-8 h-8 text-[#6b6b7b]" />
                 </div>
-                <h3 className="text-[24px] leading-[32px] font-medium text-[var(--dq-text-primary)] mb-2">No courses found</h3>
-                <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-tertiary)] mb-6">Try adjusting your search or filter criteria</p>
+                <h3 className="text-[24px] leading-[32px] font-medium text-[#0a0f1e] mb-2">No courses found</h3>
+                <p className="text-[16px] leading-[24px] text-[#6b6b7b] mb-6">Try adjusting your search or filter criteria</p>
                 <Button
                   variant="outline"
+                  className="rounded-full border-[#e8e8ec]"
                   onClick={() => {
                     setSearchQuery("");
                     setSelectedCategory("all");

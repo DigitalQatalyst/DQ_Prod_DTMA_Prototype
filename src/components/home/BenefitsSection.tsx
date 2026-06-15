@@ -1,91 +1,55 @@
-import { AlertTriangle, Layers, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const BenefitsSection = () => {
-  const benefits = [
+  const problems = [
     {
-      icon: AlertTriangle,
-      title: "A 75% Digital Transformation Failure Rate",
-      description: "75% of digital transformation initiatives fail — not from poor strategy, but capability gaps. DTMA addresses the root causes: execution, culture, and alignment. Build the competencies that turn transformation ambition into measurable results.",
-      cta: "Understand Why",
-      link: "#",
+      icon: "📋",
+      title: "Trained, never applied",
+      description: "Courses delivered without connection to live transformation projects or real execution contexts.",
     },
     {
-      icon: Layers,
-      title: "The 4x Parts of a DBP",
-      description: "The Digital Business Platform integrates technology, data, experience, and operations into one engine. Leading organizations use it to gain a decisive edge in Economy 4.0. Discover the four-part framework behind their competitive dominance.",
-      cta: "What Is It?",
-      link: "#",
+      icon: "🧩",
+      title: "Learning without a framework",
+      description: "Skills taught in isolation — no structured methodology to connect strategy, technology, and people.",
     },
     {
-      icon: Eye,
-      title: "The 6X Digital Perspectives (6XD)",
-      description: "Six critical dimensions define how a Digital Cognitive Organization operates. These perspectives give you a structured lens to understand digital transformation holistically. Master them to build and thrive within the future of Economy 4.0.",
-      cta: "Upskill Now",
-      link: "#",
+      icon: "🔄",
+      title: "No continuity",
+      description: "One-off training events treated as disconnected interventions, with no capability-building system.",
     },
   ];
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-        {/* Section Intro */}
-        <div className="text-center mb-16">
-          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
-            The DTMA Advantage
-          </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-[var(--dq-navy-950)] mb-6">
-            Ready for the Digital Economy?
-          </h2>
-          <p className="text-base text-[var(--dq-text-secondary)] max-w-3xl mx-auto leading-relaxed">
-            Learn what it takes to become a Digital Cognitive Organization and succeed in Economy 4.0.
-          </p>
+    <section className="py-20 bg-[#050d1e]">
+      <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+        {/* Eyebrow */}
+        <p className="text-xs font-semibold text-[#ff4500] uppercase tracking-widest mb-5">
+          Why DTMA exists
+        </p>
+
+        {/* Headline */}
+        <h2 className="text-[40px] md:text-[52px] leading-[1.1] font-bold text-white mb-4 max-w-3xl">
+          75% of digital transformation initiatives fail to deliver.
+        </h2>
+        <p className="text-[16px] text-white/50 mb-14 max-w-lg">
+          The root cause isn't strategy. It's a capability gap. The fix is structured learning.
+        </p>
+
+        {/* Problem Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14">
+          {problems.map((p, i) => (
+            <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/8 transition-colors">
+              <div className="text-2xl mb-4">{p.icon}</div>
+              <h3 className="text-base font-semibold text-white mb-2">{p.title}</h3>
+              <p className="text-sm text-white/50 leading-relaxed">{p.description}</p>
+            </div>
+          ))}
         </div>
 
-        {/* Benefits Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {benefits.map((benefit, index) => {
-            const Icon = benefit.icon;
-            return (
-              <div 
-                key={index}
-                className="flex flex-col items-start p-6 bg-white border border-[var(--dq-surface-border-default)] rounded-xl hover:shadow-md transition-all duration-300"
-              >
-                {/* Icon */}
-                <div className="w-12 h-12 bg-[var(--dq-navy-950)]/5 rounded-xl flex items-center justify-center mb-5">
-                  <Icon className="w-6 h-6 text-[var(--dq-navy-950)]" />
-                </div>
-
-                {/* Heading */}
-                <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-4">
-                  {benefit.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm text-[var(--dq-text-secondary)] leading-relaxed mb-4 flex-grow">
-                  {benefit.description}
-                </p>
-
-                {/* Credential Note (if exists) */}
-                {benefit.credential && (
-                  <p className="text-xs text-[var(--dq-text-secondary)] italic mb-4 p-3 bg-white rounded-lg border border-[var(--dq-surface-border-default)]">
-                    {(benefit as any).credential}
-                  </p>
-                )}
-
-                {/* CTA */}
-                <a 
-                  href={benefit.link}
-                  className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-medium text-sm transition-colors inline-flex items-center gap-2 mt-2"
-                >
-                  {benefit.cta}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
-              </div>
-            );
-          })}
-        </div>
+        {/* Bottom note */}
+        <p className="text-sm text-white/40 text-center max-w-xl mx-auto">
+          DTMA was founded to close this gap — with a methodology that treats digital capability building as a structured, continuous system.
+        </p>
       </div>
     </section>
   );

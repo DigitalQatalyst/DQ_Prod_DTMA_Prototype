@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
 import { 
   Target, 
   CheckCircle2,
@@ -18,85 +17,79 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-[var(--dq-navy-950)]">
-        <Navbar />
-        
-        {/* Hero Section */}
-        <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-4xl mx-auto text-center">
-              <p className="text-[12px] leading-[16px] font-semibold uppercase tracking-wide text-[var(--dq-orange-500)] mb-6">
-                About DTMA
-              </p>
-              <h1 style={{ fontSize: '43px', lineHeight: '56px', fontWeight: 700 }} className="text-white mb-6">
-                Closing the Capability Gap in Digital Transformation
-              </h1>
-              
-              <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-on-dark-secondary)] max-w-3xl mx-auto">
-                DTMA equips leaders, specialists, and digital workers with the skills to thrive in Economy 4.0 and build Digital Cognitive Organizations.
-              </p>
-            </div>
-          </div>
-        </section>
-      </div>
+    <div className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* Hero Section */}
+      <section className="bg-[#f5f4f0] pt-28 pb-20 px-8 md:px-12 lg:px-16">
+        <div className="max-w-[1200px] mx-auto">
+          <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-4">
+            About DTMA
+          </p>
+          <h1 className="text-[52px] md:text-[68px] leading-[1.05] font-bold tracking-tight text-[#0a0f1e] mb-5 max-w-3xl">
+            Closing the <span className="text-[#ff4500]">Capability Gap</span> in Digital Transformation
+          </h1>
+          <p className="text-[17px] leading-[1.6] text-[#4a4a5a] max-w-2xl">
+            DTMA equips leaders, specialists, and digital workers with the skills to thrive in Economy 4.0 and build Digital Cognitive Organizations.
+          </p>
+        </div>
+      </section>
 
       <main>
         {/* Introduction Section */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="text-center mb-12">
-              <p className="text-[12px] leading-[16px] font-semibold uppercase tracking-wide text-[var(--dq-orange-500)] mb-4">A Modern Digital Academy</p>
-              <h2 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-6">
-                For the New Economy
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <div className="mb-3">
+              <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-4">A Modern Digital Academy</p>
+              <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold tracking-tight text-[#0a0f1e] mb-6">
+                For the <span className="text-[#ff4500]">New Economy</span>
               </h2>
-              
-              <div className="max-w-3xl mx-auto">
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">
-                  DTMA is built to close the capability gaps that keep digital transformation efforts from succeeding. We serve organizational leaders, transformation specialists, and digital workers through structured learning, guided discovery, and the 6 Dimensions of Digital (6XD) framework.
-                </p>
-              </div>
+            </div>
+            <div className="max-w-3xl">
+              <p className="text-[17px] leading-[1.6] text-[#4a4a5a]">
+                DTMA is built to close the capability gaps that keep digital transformation efforts from succeeding. We serve organizational leaders, transformation specialists, and digital workers through structured learning, guided discovery, and the 6 Dimensions of Digital (6XD) framework.
+              </p>
             </div>
           </div>
         </section>
 
         {/* Why DTMA Section */}
-        <section className="py-16 lg:py-24 bg-[var(--dq-navy-50)]">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="text-center mb-12">
-              <h2 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-[var(--dq-navy-950)]">
-                Why DTMA?
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <div className="mb-12">
+              <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold tracking-tight text-[#0a0f1e]">
+                Why <span className="text-[#ff4500]">DTMA?</span>
               </h2>
             </div>
-            
+
             {/* Why DTMA Cards */}
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <div className="p-8 rounded-[12px] bg-white border border-[var(--dq-navy-100)]">
-                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)]/30 flex items-center justify-center mb-6">
-                  <Target className="w-6 h-6 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all">
+                <div className="w-12 h-12 rounded-lg bg-[#ff4500]/10 flex items-center justify-center mb-5">
+                  <Target className="w-6 h-6 text-[#ff4500]" strokeWidth={1.5} />
                 </div>
-                <h3 style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-3">6XD Framework</h3>
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">
+                <h3 className="text-[18px] font-bold text-[#0a0f1e] mb-3">6XD Framework</h3>
+                <p className="text-[15px] leading-[1.6] text-[#4a4a5a]">
                   Our learning is organized around the 6 Dimensions of Digital, turning each perspective into structured courses and clear entry points for every persona.
                 </p>
               </div>
-              
-              <div className="p-8 rounded-[12px] bg-white border border-[var(--dq-navy-100)]">
-                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)]/30 flex items-center justify-center mb-6">
-                  <Lightbulb className="w-6 h-6 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
+
+              <div className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all">
+                <div className="w-12 h-12 rounded-lg bg-[#ff4500]/10 flex items-center justify-center mb-5">
+                  <Lightbulb className="w-6 h-6 text-[#ff4500]" strokeWidth={1.5} />
                 </div>
-                <h3 style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-3">Hybrid HI + AI Faculty</h3>
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">
+                <h3 className="text-[18px] font-bold text-[#0a0f1e] mb-3">Hybrid HI + AI Faculty</h3>
+                <p className="text-[15px] leading-[1.6] text-[#4a4a5a]">
                   Learn from both human intelligence and artificial intelligence, combining expert instruction with AI-powered guidance throughout your journey.
                 </p>
               </div>
-              
-              <div className="p-8 rounded-[12px] bg-white border border-[var(--dq-navy-100)]">
-                <div className="w-12 h-12 rounded-[8px] bg-[var(--dq-orange-500)]/30 flex items-center justify-center mb-6">
-                  <Zap className="w-6 h-6 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
+
+              <div className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all">
+                <div className="w-12 h-12 rounded-lg bg-[#ff4500]/10 flex items-center justify-center mb-5">
+                  <Zap className="w-6 h-6 text-[#ff4500]" strokeWidth={1.5} />
                 </div>
-                <h3 style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-3">Bite-Sized Learning</h3>
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">
+                <h3 className="text-[18px] font-bold text-[#0a0f1e] mb-3">Bite-Sized Learning</h3>
+                <p className="text-[15px] leading-[1.6] text-[#4a4a5a]">
                   Podcast-style microlearning that fits your schedule. Always-available content designed for busy professionals navigating digital transformation.
                 </p>
               </div>
@@ -105,73 +98,73 @@ const About = () => {
         </section>
 
         {/* Learning Journey Section */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="text-center mb-12">
-              <h2 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-4">
-                Your Learning Journey
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <div className="mb-12">
+              <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold tracking-tight text-[#0a0f1e] mb-4">
+                Your Learning <span className="text-[#ff4500]">Journey</span>
               </h2>
-              <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)] max-w-2xl mx-auto">
+              <p className="text-[17px] leading-[1.6] text-[#4a4a5a] max-w-2xl">
                 From discovery to certification, DTMA guides you through a structured path aligned with your role and goals.
               </p>
             </div>
-            
-            <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
+
+            <div className="grid md:grid-cols-4 gap-6">
+              <div>
+                <div className="w-14 h-14 rounded-full bg-[#0a0f1e] text-white flex items-center justify-center mb-4 text-[18px] font-bold">
                   1
                 </div>
-                <h3 style={{ fontSize: '18px', lineHeight: '26px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-2">Discovery</h3>
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">Explore the 6XD framework and find your entry point</p>
+                <h3 className="text-[16px] font-bold text-[#0a0f1e] mb-2">Discovery</h3>
+                <p className="text-[14px] leading-[1.6] text-[#4a4a5a]">Explore the 6XD framework and find your entry point</p>
               </div>
-              
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
+
+              <div>
+                <div className="w-14 h-14 rounded-full bg-[#0a0f1e] text-white flex items-center justify-center mb-4 text-[18px] font-bold">
                   2
                 </div>
-                <h3 style={{ fontSize: '18px', lineHeight: '26px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-2">Core Courses</h3>
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">Complete 7 core 6XD-aligned courses</p>
+                <h3 className="text-[16px] font-bold text-[#0a0f1e] mb-2">Core Courses</h3>
+                <p className="text-[14px] leading-[1.6] text-[#4a4a5a]">Complete 7 core 6XD-aligned courses</p>
               </div>
-              
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
+
+              <div>
+                <div className="w-14 h-14 rounded-full bg-[#0a0f1e] text-white flex items-center justify-center mb-4 text-[18px] font-bold">
                   3
                 </div>
-                <h3 style={{ fontSize: '18px', lineHeight: '26px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-2">Electives</h3>
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">Deepen expertise with specialized courses</p>
+                <h3 className="text-[16px] font-bold text-[#0a0f1e] mb-2">Electives</h3>
+                <p className="text-[14px] leading-[1.6] text-[#4a4a5a]">Deepen expertise with specialized courses</p>
               </div>
-              
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-[var(--dq-navy-950)] text-white flex items-center justify-center mx-auto mb-4 text-[20px] leading-[28px] font-semibold">
+
+              <div>
+                <div className="w-14 h-14 rounded-full bg-[#0a0f1e] text-white flex items-center justify-center mb-4 text-[18px] font-bold">
                   4
                 </div>
-                <h3 style={{ fontSize: '18px', lineHeight: '26px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-2">Certification</h3>
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">Earn KHDA-attested credentials</p>
+                <h3 className="text-[16px] font-bold text-[#0a0f1e] mb-2">Certification</h3>
+                <p className="text-[14px] leading-[1.6] text-[#4a4a5a]">Earn KHDA-attested credentials</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Target Audience Section */}
-        <section className="py-16 lg:py-24 bg-[var(--dq-navy-50)]">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="text-center mb-12">
-              <p className="text-[12px] leading-[16px] font-semibold uppercase tracking-wide text-[var(--dq-orange-500)] mb-6">
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <div className="mb-12">
+              <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-4">
                 Who We Serve
               </p>
-              <h2 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-[var(--dq-navy-950)]">
-                Built for Three Core Audiences
+              <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold tracking-tight text-[#0a0f1e]">
+                Built for Three <span className="text-[#ff4500]">Core Audiences</span>
               </h2>
             </div>
-            
-            <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+
+            <div className="grid md:grid-cols-2 gap-4 max-w-3xl">
               {targetAudience.map((audience, index) => (
-                <div 
+                <div
                   key={index}
-                  className="flex items-center gap-4 p-6 rounded-[12px] bg-white border border-[var(--dq-navy-100)]"
+                  className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all flex items-center gap-4"
                 >
-                  <CheckCircle2 className="w-6 h-6 text-[var(--dq-orange-500)] flex-shrink-0" strokeWidth={1.5} />
-                  <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-navy-950)]">{audience}</p>
+                  <CheckCircle2 className="w-5 h-5 text-[#ff4500] flex-shrink-0" strokeWidth={1.5} />
+                  <p className="text-[15px] leading-[1.6] text-[#0a0f1e]">{audience}</p>
                 </div>
               ))}
             </div>
@@ -179,14 +172,14 @@ const About = () => {
         </section>
 
         {/* Accreditation Section */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-4xl mx-auto text-center">
-              <img src="/KHDA.png" alt="KHDA" className="h-20 w-auto mx-auto mb-6" />
-              <h2 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-[var(--dq-navy-950)] mb-4">
-                KHDA-Attested Credentials
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <div className="max-w-2xl">
+              <img src="/KHDA.png" alt="KHDA" className="h-16 w-auto mb-6" />
+              <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold tracking-tight text-[#0a0f1e] mb-4">
+                KHDA-Attested <span className="text-[#ff4500]">Credentials</span>
               </h2>
-              <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-secondary)]">
+              <p className="text-[17px] leading-[1.6] text-[#4a4a5a]">
                 All DTMA courses award credentials recognized across the UAE and internationally, backed by the Knowledge and Human Development Authority (KHDA) in Dubai.
               </p>
             </div>
@@ -194,28 +187,32 @@ const About = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 lg:py-24 bg-[var(--dq-navy-950)]">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-white mb-6">
-                Ready to Close Your Capability Gap?
-              </h2>
-              <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-[var(--dq-text-on-dark-secondary)] mb-8">
-                Join leaders, specialists, and digital workers building the skills to thrive in Economy 4.0.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/courses">
-                  <Button className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white text-[16px] leading-[24px] font-normal">
-                    Explore Courses
-                  </Button>
-                </Link>
-                <Link to="/">
-                  <Button className="px-8 py-6 bg-transparent border-white text-white hover:bg-white hover:text-[var(--dq-navy-950)] text-[16px] leading-[24px] font-normal" style={{ borderWidth: '1.5px' }}>
-                    Learn More
-                  </Button>
-                </Link>
-              </div>
+        <section className="py-20 bg-[#050d1e] relative overflow-hidden">
+          <div
+            className="absolute inset-0"
+            style={{ backgroundImage: 'radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255, 69, 0, 0.2) 0%, transparent 70%)' }}
+          />
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16 text-center relative z-10">
+            <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-4">Get Started</p>
+            <h2 className="text-[40px] md:text-[52px] leading-[1.1] font-bold text-white mb-4 max-w-2xl mx-auto">
+              Ready to Close Your Capability Gap?
+            </h2>
+            <p className="text-[16px] text-white/50 mb-8">
+              Join leaders, specialists, and digital workers building the skills to thrive in Economy 4.0.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/courses"
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#ff4500] hover:bg-[#cc3700] text-white text-sm font-semibold rounded-full transition-colors"
+              >
+                Explore Courses
+              </Link>
+              <Link
+                to="/"
+                className="inline-flex items-center gap-2 px-7 py-3.5 border border-white/30 text-white text-sm font-semibold rounded-full hover:bg-white/10 transition-colors"
+              >
+                Learn More
+              </Link>
             </div>
           </div>
         </section>

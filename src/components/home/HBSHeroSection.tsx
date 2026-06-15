@@ -1,81 +1,64 @@
-import { MessageSquare, Sparkles, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
 const HBSHeroSection = () => {
-  const [inputValue, setInputValue] = useState("");
-
-  const handleSendMessage = () => {
-    if (inputValue.trim()) {
-      // Handle message sending
-      setInputValue("");
-    }
-  };
-
   return (
-    <section className="relative w-full text-white pt-24 pb-16 px-4 md:px-8 lg:px-12 min-h-screen flex flex-col justify-center overflow-hidden font-sans bg-[var(--dq-navy-950)]">
-      {/* Squared Mesh Background */}
-      <div className="absolute inset-0 z-0" style={{
-        backgroundImage: `
-          linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.0075) 25%, rgba(255, 255, 255, 0.0075) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.0075) 75%, rgba(255, 255, 255, 0.0075) 76%, transparent 77%, transparent),
-          linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.0075) 25%, rgba(255, 255, 255, 0.0075) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.0075) 75%, rgba(255, 255, 255, 0.0075) 76%, transparent 77%, transparent)
-        `,
-        backgroundSize: '50px 50px'
-      }} />
+    <section className="relative w-full bg-[#f5f4f0] pt-28 pb-16 px-8 md:px-12 lg:px-16 overflow-hidden font-sans">
+      {/* Subtle background texture */}
+      <div className="absolute inset-0 z-0 opacity-30"
+        style={{
+          backgroundImage: 'radial-gradient(ellipse 80% 60% at 70% 40%, rgba(255, 107, 77, 0.08) 0%, transparent 70%)',
+        }}
+      />
 
-      {/* Container */}
-      <div className="max-w-[1600px] mx-auto w-full relative z-10 flex flex-col items-center text-center pt-20 pb-24 px-8 md:px-12 lg:px-16">
-        {/* Main Headline */}
-        <h1 className="text-[40px] leading-[48px] font-semibold tracking-tight mb-6 max-w-4xl mx-auto">
-          Every Skill to Succeed in the Digital Economy
-        </h1>
-
-        {/* Paragraph */}
-        <p className="text-[18px] leading-[28px] font-normal max-w-3xl mx-auto text-white/90 mb-10">
-          We equip leaders and digital teams with the skills to thrive in Economy 4.0 and build Digital Cognitive Organizations.
+      <div className="max-w-[1200px] mx-auto relative z-10">
+        {/* Eyebrow */}
+        <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-4">
+          Digital Transformation Management Academy
         </p>
 
-        {/* AI-Powered Command Bar */}
-        <div className="w-full max-w-2xl mx-auto mb-10">
-          <div className="flex items-center gap-3 bg-white/6 backdrop-blur-md border border-white/40 rounded-3xl px-5 py-3 shadow-md hover:bg-white/8 transition-all focus-within:border-[rgba(181,197,247,0.45)] focus-within:ring-2 focus-within:ring-[rgba(181,197,247,0.20)]">
-            <Sparkles className="w-5 h-5 text-[var(--dq-orange-500)] flex-shrink-0" />
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Ask AI: What course should I take? What is 6XD? How do I get started?"
-              className="flex-1 bg-transparent text-white placeholder-white/40 outline-none border-none ring-0 text-[16px] leading-[24px] font-normal"
-            />
-            <button 
-              onClick={handleSendMessage}
-              disabled={!inputValue.trim()}
-              className="flex items-center justify-center w-10 h-10 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] disabled:opacity-50 disabled:cursor-not-allowed rounded-full transition-colors cursor-pointer flex-shrink-0"
-            >
-              <Send className="w-4 h-4 text-white" />
-            </button>
-          </div>
-        </div>
+        {/* Headline */}
+        <h1 className="text-[52px] md:text-[68px] leading-[1.05] font-bold tracking-tight text-[#0a0f1e] mb-5 max-w-3xl">
+          Every Skill to Succeed in the{" "}
+          <span className="text-[#ff4500]">Digital Economy.</span>
+        </h1>
 
-        {/* Call to Actions */}
-        <div className="flex items-center justify-center gap-4">
-          <Button variant="hero" size="lg" className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white text-[16px] leading-[24px] font-normal" style={{ border: '1.5px solid transparent' }}>
-            Start Now
-          </Button>
-          <Link to="/courses">
-            <Button variant="hero" size="lg" className="px-8 py-6 bg-white hover:bg-gray-100 text-[var(--dq-navy-950)] text-[16px] leading-[24px] font-normal font-semibold" style={{ border: '1.5px solid transparent' }}>
-              Explore Courses
-            </Button>
+        {/* Subtext */}
+        <p className="text-[17px] leading-[1.6] text-[#4a4a5a] max-w-2xl mb-8">
+          We equip leaders and digital teams with the skills to thrive in Economy 4.0.
+        </p>
+
+        {/* CTAs */}
+        <div className="flex items-center gap-4 flex-wrap">
+          <Link
+            to="/auth"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#0a0f1e] hover:bg-[#1a1f3e] text-white text-sm font-semibold rounded-full transition-colors"
+          >
+            Get Started Now
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link
+            to="/courses"
+            className="inline-flex items-center gap-2 px-6 py-3 text-[#0a0f1e] text-sm font-semibold hover:text-[#ff4500] transition-colors"
+          >
+            Explore Courses
           </Link>
         </div>
-      </div>
 
-      {/* Pulsing Butler AI Button */}
-      <button className="absolute bottom-8 right-8 z-20 w-16 h-16 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white rounded-full shadow-2xl hover:shadow-[var(--dq-orange-500)]/30 hover:scale-110 transition-all duration-300 flex items-center justify-center group">
-        <Sparkles className="w-6 h-6 group-hover:scale-110 transition-transform" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full animate-pulse"></span>
-      </button>
+        {/* Trust strip - auto-scrolling marquee */}
+        <div className="mt-12 pt-8 border-t border-[#0a0f1e]/10">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-[#9a9aaa] mb-4">
+            Trusted by leading organisations
+          </p>
+          <div className="overflow-hidden">
+            <div className="flex gap-12 animate-marquee whitespace-nowrap">
+              {["ADIB", "QOB", "QNB", "Saudi Investment Bank", "UAE Ministry of Finance", "GITEX", "Abu Dhabi Digital Authority", "ADIB", "QOB", "QNB", "Saudi Investment Bank", "UAE Ministry of Finance", "GITEX", "Abu Dhabi Digital Authority"].map((org, i) => (
+                <span key={i} className="text-[13px] font-medium text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors cursor-default flex-shrink-0">{org}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

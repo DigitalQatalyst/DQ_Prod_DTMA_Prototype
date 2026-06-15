@@ -64,25 +64,21 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--dq-navy-950)]/20 backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#e8e8ec]">
       <nav className="w-full relative">
-        <div className="flex items-center w-full px-8 md:px-12 lg:px-16 py-3 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
-          {/* Left: Logo Area */}
-          <div className="flex items-center flex-shrink-0 gap-6">
-            <Link to="/" className="flex items-center gap-3 group">
+        <div className="flex items-center justify-between w-full px-6 md:px-10 lg:px-16 py-2.5" style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          {/* Left: Logo + Nav links grouped together */}
+          <div className="flex items-center gap-8">
+            <Link to="/" className="flex items-center gap-2 flex-shrink-0 group">
               <img
-                src="/dtma-logo.png"
+                src="/log.svg"
                 alt="DTMA"
-                className="h-[40px] w-auto transition-transform duration-300 group-hover:scale-105"
+                className="h-[26px] w-auto transition-transform duration-300 group-hover:scale-105"
               />
             </Link>
-            <div className="h-[40px] w-[1px] bg-white/20"></div>
-          </div>
 
-          {/* Right: Single Row with Nav Links and Auth */}
-          <div className="flex items-center justify-between flex-grow">
-            {/* Navigation Links */}
-            <div className="hidden md:flex items-center gap-8">
+            {/* Nav Links — right next to logo */}
+            <div className="hidden md:flex items-center gap-5">
                 
                 {/* Explore Dropdown */}
                 <div className="relative" ref={exploreRef}>
@@ -91,7 +87,7 @@ const Navbar = () => {
                       setIsExploreOpen(!isExploreOpen);
                       setIsForYouOpen(false);
                     }}
-                    className="text-sm font-medium transition-colors duration-200 hover:text-white text-white/90 flex items-center gap-1"
+                    className="text-sm font-medium transition-colors duration-200 hover:text-[#ff4500] text-[#0a0f1e] flex items-center gap-1"
                   >
                     Explore Courses
                     <ChevronDown className={`w-4 h-4 transition-transform ${isExploreOpen ? 'rotate-180' : ''}`} />
@@ -99,75 +95,49 @@ const Navbar = () => {
                   
                   {/* Full Screen Overlay Dropdown */}
                   {isExploreOpen && (
-                    <div className="fixed left-0 right-0 top-[80px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 80px)', borderColor: 'var(--dq-navy-100)' }}>
-                      <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
-                        <div className="mb-8">
-                          <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-2">6XD Framework Courses</h2>
-                          <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the six dimensions of digital transformation</p>
-                        </div>
-                        
-                        {/* First Row - 3 Courses */}
-                        <div className="grid grid-cols-3 gap-8 mb-8">
-                          {/* Course 1: Economy 4.0 */}
-                          <Link to="/courses/course-economy-40" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Mastering Economy 4.0</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the fundamentals of the digital economy and Economy 4.0</p>
-                            </div>
-                          </Link>
-
-                          {/* Course 2: Cognitive Organisations */}
-                          <Link to="/courses/course-cognitive-org" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Decoding Digital Cognitive Organisations</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Transform your organization into an intelligent, learning entity</p>
-                            </div>
-                          </Link>
-
-                          {/* Course 3: Business Platforms */}
-                          <Link to="/courses/course-business-platforms" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Building Powerful Digital Business Platforms</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the architecture and design of scalable digital platforms</p>
-                            </div>
-                          </Link>
-                        </div>
-
-                        {/* Second Row - 3 Courses */}
-                        <div className="grid grid-cols-3 gap-8">
-                          {/* Course 4: Digital Transformation */}
-                          <Link to="/courses/course-transformation" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Navigating Digital Transformation 2.0</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Lead successful digital transformation initiatives</p>
-                            </div>
-                          </Link>
-
-                          {/* Course 5: Digital Workers */}
-                          <Link to="/courses/course-digital-workers" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Optimizing Digital Workers and Workspaces</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master tools and practices for modern digital work</p>
-                            </div>
-                          </Link>
-
-                          {/* Course 6: Digital Accelerators */}
-                          <Link to="/courses/course-digital-accelerators" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Leveraging Digital Accelerators for Growth</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Harness AI, blockchain, IoT, and automation</p>
-                            </div>
-                          </Link>
-                        </div>
-
-                        {/* View All Link */}
-                        <div className="mt-8 text-center">
-                          <Link to="/courses" className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold text-[14px] leading-[20px] transition-colors inline-flex items-center gap-2">
+                    <div className="fixed left-0 right-0 top-[48px] z-[9999] bg-white border-t border-[#e8e8ec] shadow-lg pointer-events-none">
+                      <div className="max-w-[1400px] mx-auto px-8 lg:px-16 py-10 pointer-events-auto">
+                        {/* Header */}
+                        <div className="flex items-end justify-between mb-8 border-b border-[#e8e8ec] pb-6">
+                          <div>
+                            <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-2">6XD Framework</p>
+                            <h2 className="text-[28px] font-bold text-[#0a0f1e]">Explore Courses</h2>
+                          </div>
+                          <Link
+                            to="/courses"
+                            className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#ff4500] hover:text-[#cc3700] transition-colors"
+                            onClick={() => setIsExploreOpen(false)}
+                          >
                             View All Courses
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
                           </Link>
+                        </div>
+
+                        {/* Course grid */}
+                        <div className="grid grid-cols-3 gap-x-10 gap-y-6">
+                          {[
+                            { num: "01", to: "/courses/course-economy-40", title: "Mastering Economy 4.0", desc: "Master the fundamentals of the digital economy and Economy 4.0" },
+                            { num: "02", to: "/courses/course-cognitive-org", title: "Decoding Digital Cognitive Organisations", desc: "Transform your organization into an intelligent, learning entity" },
+                            { num: "03", to: "/courses/course-business-platforms", title: "Building Powerful Digital Business Platforms", desc: "Master the architecture and design of scalable digital platforms" },
+                            { num: "04", to: "/courses/course-transformation", title: "Navigating Digital Transformation 2.0", desc: "Lead successful digital transformation initiatives" },
+                            { num: "05", to: "/courses/course-digital-workers", title: "Optimizing Digital Workers and Workspaces", desc: "Master tools and practices for modern digital work" },
+                            { num: "06", to: "/courses/course-digital-accelerators", title: "Leveraging Digital Accelerators for Growth", desc: "Harness AI, blockchain, IoT, and automation" },
+                          ].map((course) => (
+                            <Link
+                              key={course.num}
+                              to={course.to}
+                              className="group flex gap-4 items-start py-2 hover:bg-[#f5f4f0] rounded-xl px-3 transition-colors"
+                              onClick={() => setIsExploreOpen(false)}
+                            >
+                              <span className="text-[22px] font-bold text-[#e8e8ec] leading-none mt-0.5 flex-shrink-0 w-8">{course.num}</span>
+                              <div>
+                                <h3 className="text-[14px] font-semibold text-[#0a0f1e] mb-1 group-hover:text-[#ff4500] transition-colors leading-snug">{course.title}</h3>
+                                <p className="text-[13px] text-[#9a9aaa] leading-relaxed">{course.desc}</p>
+                              </div>
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -181,7 +151,7 @@ const Navbar = () => {
                       setIsForYouOpen(!isForYouOpen);
                       setIsExploreOpen(false);
                     }}
-                    className="text-sm font-medium transition-colors duration-200 hover:text-white text-white/90 flex items-center gap-1"
+                    className="text-sm font-medium transition-colors duration-200 hover:text-[#ff4500] text-[#0a0f1e] flex items-center gap-1"
                   >
                     For You
                     <ChevronDown className={`w-4 h-4 transition-transform ${isForYouOpen ? 'rotate-180' : ''}`} />
@@ -221,22 +191,23 @@ const Navbar = () => {
                   </Link>
                 ))}
               </div>
+            </div>
 
-            {/* Auth / Right Side Actions */}
-            <div className="hidden md:flex items-center gap-6">
+          {/* Right: Auth */}
+          <div className="hidden md:flex items-center gap-3">
               {!loading && user ? (
                 <>
                   <Link to="/dashboard">
-                    <Button variant="ghost" size="sm" className="gap-2 text-white hover:text-white/80 hover:bg-white/10">
+                    <Button variant="ghost" size="sm" className="gap-2 text-[#0a0f1e] hover:text-[#ff4500] hover:bg-[#f5f4f0]">
                       <LayoutDashboard className="w-4 h-4" />
                       Dashboard
                     </Button>
                   </Link>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#1e2348] flex items-center justify-center text-xs font-semibold text-white">
+                    <div className="w-8 h-8 rounded-full bg-[#0a0f1e] flex items-center justify-center text-xs font-semibold text-white">
                       {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                     </div>
-                    <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white/80 hover:bg-white/10">
+                    <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-[#0a0f1e] hover:text-[#ff4500] hover:bg-[#f5f4f0]">
                       <LogOut className="w-4 h-4" />
                     </Button>
                   </div>
@@ -245,7 +216,7 @@ const Navbar = () => {
                 <>
                   <button 
                     onClick={handleSignIn}
-                    className="text-sm font-semibold transition-colors duration-200 hover:text-white text-white/90"
+                    className="text-[13px] font-medium px-4 py-1.5 border-2 border-[#0a0f1e] rounded-full hover:bg-[#0a0f1e] hover:text-white text-[#0a0f1e] transition-colors"
                   >
                     Log In
                   </button>
@@ -253,7 +224,7 @@ const Navbar = () => {
                     variant="hero" 
                     size="sm" 
                     onClick={handleSignIn}
-                    className="px-6 bg-[#ff6b4d] hover:bg-[#e56045] text-white border-transparent"
+                    className="px-4 py-1.5 bg-[#ff4500] hover:bg-[#cc3700] text-white border-transparent rounded-full text-[13px] font-medium h-auto"
                   >
                     Get Started
                   </Button>
@@ -264,13 +235,12 @@ const Navbar = () => {
             {/* Mobile Toggle */}
             <div className="md:hidden flex items-center gap-4">
               <button
-                className="p-1 rounded-lg hover:bg-white/10 transition-colors text-white"
+                className="p-1 rounded-lg hover:bg-[#f5f4f0] transition-colors text-[#0a0f1e]"
                 onClick={() => setIsOpen(!isOpen)}
               >
                 {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
             </div>
-          </div>
         </div>
 
         {/* Mobile Menu */}

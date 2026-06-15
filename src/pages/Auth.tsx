@@ -6,16 +6,16 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { GraduationCap, Eye, EyeOff, ArrowLeft, Mail, Lock, User, Loader2 } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft, Mail, Lock, User, Loader2 } from "lucide-react";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user, signIn, signUp, loading: authLoading } = useAuth();
-  
+
   const redirectPath = searchParams.get("redirect");
-  
+
   const [mode, setMode] = useState<"login" | "signup">(
     searchParams.get("mode") === "signup" ? "signup" : "login"
   );
@@ -32,93 +32,50 @@ const Auth = () => {
 
   useEffect(() => {
     const modeParam = searchParams.get("mode");
-    if (modeParam === "signup") {
-      setMode("signup");
-    } else {
-      setMode("login");
-    }
+    if (modeParam === "signup") setMode("signup");
+    else setMode("login");
   }, [searchParams]);
 
-  // Redirect if already logged in AND there's a redirect path
   useEffect(() => {
-    if (user && !authLoading && redirectPath) {
-      navigate(redirectPath);
-    }
+    if (user && !authLoading && redirectPath) navigate(redirectPath);
   }, [user, authLoading, redirectPath, navigate]);
 
-  // Redirect to onboarding if new signup, otherwise to dashboard
   useEffect(() => {
-    if (user && !authLoading && isNewSignup) {
-      navigate("/learner-onboarding");
-    } else if (user && !authLoading && !redirectPath && !isNewSignup) {
-      navigate("/dashboard");
-    }
+    if (user && !authLoading && isNewSignup) navigate("/learner-onboarding");
+    else if (user && !authLoading && !redirectPath && !isNewSignup) navigate("/dashboard");
   }, [user, authLoading, isNewSignup, redirectPath, navigate]);
 
-  // Show loading or form, don't show dashboard directly
-  if (user && !authLoading && !redirectPath && !isNewSignup) {
-    return null; // Will redirect via useEffect
-  }
+  if (user && !authLoading && !redirectPath && !isNewSignup) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
       if (mode === "signup") {
         if (!formData.agreeTerms) {
-          toast({
-            title: "Terms required",
-            description: "Please agree to the Terms of Service and Privacy Policy",
-            variant: "destructive",
-          });
+          toast({ title: "Terms required", description: "Please agree to the Terms of Service and Privacy Policy", variant: "destructive" });
           setIsSubmitting(false);
           return;
         }
-
         const { error } = await signUp(formData.email, formData.password, formData.name, "learner");
-        
         if (error) {
           let message = error.message;
-          if (error.message.includes('already registered')) {
-            message = 'This email is already registered. Please sign in instead.';
-          }
-          toast({
-            title: "Sign up failed",
-            description: message,
-            variant: "destructive",
-          });
+          if (error.message.includes("already registered")) message = "This email is already registered. Please sign in instead.";
+          toast({ title: "Sign up failed", description: message, variant: "destructive" });
         } else {
-          toast({
-            title: "Account created!",
-            description: "Welcome to DTMA. Setting up your profile...",
-          });
+          toast({ title: "Account created!", description: "Welcome to DTMA. Setting up your profile..." });
           setIsNewSignup(true);
-          // Redirect will happen via useEffect
         }
       } else {
         const { error } = await signIn(formData.email, formData.password);
-        
         if (error) {
-          toast({
-            title: "Sign in failed",
-            description: "Invalid email or password. Please try again.",
-            variant: "destructive",
-          });
+          toast({ title: "Sign in failed", description: "Invalid email or password. Please try again.", variant: "destructive" });
         } else {
-          toast({
-            title: "Welcome back!",
-            description: "You've successfully signed in.",
-          });
-          // Redirect will happen via useEffect
+          toast({ title: "Welcome back!", description: "You've successfully signed in." });
         }
       }
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      });
+    } catch {
+      toast({ title: "Error", description: "An unexpected error occurred. Please try again.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
@@ -126,109 +83,94 @@ const Auth = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <Loader2 className="w-8 h-8 animate-spin text-[#ff4500]" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex h-screen">
-      {/* Left Panel - Image */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348]">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1974&auto=format&fit=crop"
-            alt="Digital transformation"
-            className="w-full h-full object-cover opacity-20"
-          />
+    <div className="min-h-screen flex h-screen font-sans">
+
+      {/* ── Left Panel ── */}
+      <div className="hidden lg:flex lg:w-[45%] flex-col justify-between bg-[#050d1e] p-12 relative overflow-hidden">
+        {/* Subtle radial glow */}
+        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(ellipse 70% 50% at 20% 80%, rgba(255, 69, 0, 0.15) 0%, transparent 60%)' }} />
+
+        {/* Logo */}
+        <Link to="/" className="relative z-10">
+          <img src="/log.svg" alt="DTMA" className="h-[28px] w-auto" />
+        </Link>
+
+        {/* Quote */}
+        <div className="relative z-10 max-w-sm">
+          <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-6">Student testimonial</p>
+          <blockquote className="text-[22px] leading-[1.4] font-bold text-white mb-6">
+            "DTMA transformed how we approach digital innovation. The 6XD framework gave us the clarity and tools to lead our industry."
+          </blockquote>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-[#ff4500] flex items-center justify-center text-white text-[13px] font-bold flex-shrink-0">SC</div>
+            <div>
+              <div className="text-[14px] font-semibold text-white">Sarah Chen</div>
+              <div className="text-[12px] text-white/50">Digital Transformation Leader</div>
+            </div>
+          </div>
         </div>
 
-        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/dtma-logo.png"
-              alt="DTMA"
-              className="h-[50px] w-auto"
-            />
-          </Link>
-
-          <div className="max-w-md">
-            <blockquote className="text-[18px] leading-[28px] font-normal mb-4 text-white">
-              "DTMA transformed how we approach digital innovation. The 6XD framework gave us the clarity and tools to lead our industry."
-            </blockquote>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#ff6b4d]" />
-              <div>
-                <div className="text-[14px] leading-[20px] font-medium text-white">Sarah Chen</div>
-                <div className="text-[12px] leading-[16px] font-normal text-white/70">Digital Transformation Leader</div>
-              </div>
+        {/* Stats */}
+        <div className="relative z-10 flex gap-10 border-t border-white/10 pt-8">
+          {[{ value: "15K+", label: "Learners" }, { value: "31+", label: "Courses" }, { value: "4.8", label: "Rating" }].map((s) => (
+            <div key={s.label}>
+              <div className="text-[26px] font-bold text-white">{s.value}</div>
+              <div className="text-[12px] text-white/50">{s.label}</div>
             </div>
-          </div>
-
-          <div className="flex gap-12">
-            <div>
-              <div className="text-[24px] leading-[32px] font-medium text-white">15K+</div>
-              <div className="text-[12px] leading-[16px] font-normal text-white/70">Learners</div>
-            </div>
-            <div>
-              <div className="text-[24px] leading-[32px] font-medium text-white">31+</div>
-              <div className="text-[12px] leading-[16px] font-normal text-white/70">Courses</div>
-            </div>
-            <div>
-              <div className="text-[24px] leading-[32px] font-medium text-white">4.8</div>
-              <div className="text-[12px] leading-[16px] font-normal text-white/70">Rating</div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* Right Panel - Form */}
-      <div className="w-full lg:w-1/2 flex flex-col">
-        <div className="lg:hidden p-6 border-b border-border">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/dtma-logo.png"
-              alt="DTMA"
-              className="h-[40px] w-auto"
-            />
-          </Link>
+      {/* ── Right Panel ── */}
+      <div className="w-full lg:w-[55%] flex flex-col bg-white">
+        {/* Mobile logo */}
+        <div className="lg:hidden p-6 border-b border-[#e8e8ec]">
+          <Link to="/"><img src="/log.svg" alt="DTMA" className="h-[26px] w-auto" /></Link>
         </div>
 
-        <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
-          <div className="w-full max-w-md">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-[14px] leading-[20px] font-normal text-muted-foreground hover:text-[#ff6b4d] transition-colors mb-8"
-            >
+        <div className="flex-1 flex items-center justify-center px-8 py-12 lg:px-16">
+          <div className="w-full max-w-[400px]">
+
+            {/* Back link */}
+            <Link to="/" className="inline-flex items-center gap-2 text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors mb-10">
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
+            {/* Heading */}
             <div className="mb-8">
-              <h1 className="text-[32px] leading-[40px] font-semibold text-[#0B0C19] mb-2">
-                {mode === "login" ? "Welcome back" : "Create your account"}
+              <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">
+                {mode === "login" ? "Welcome back" : "Get started"}
+              </p>
+              <h1 className="text-[36px] leading-[1.1] font-bold text-[#0a0f1e] mb-2">
+                {mode === "login" ? "Sign in to DTMA" : "Create your account"}
               </h1>
-              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
-                {mode === "login"
-                  ? "Enter your credentials to access your account"
-                  : "Start your digital transformation journey today"}
+              <p className="text-[15px] text-[#9a9aaa]">
+                {mode === "login" ? "Enter your credentials to access your account" : "Start your digital transformation journey today"}
               </p>
             </div>
 
+            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
               {mode === "signup" && (
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
+                <div className="space-y-1.5">
+                  <Label htmlFor="name" className="text-[13px] font-medium text-[#0a0f1e]">Full Name</Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9a9aaa]" />
                     <Input
                       id="name"
                       type="text"
                       placeholder="Enter your full name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="pl-11 h-12"
+                      className="pl-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
                       required
                       disabled={isSubmitting}
                     />
@@ -236,34 +178,34 @@ const Auth = () => {
                 </div>
               )}
 
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-[13px] font-medium text-[#0a0f1e]">Email Address</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9a9aaa]" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-11 h-12"
+                    className="pl-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
                     required
                     disabled={isSubmitting}
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="password" className="text-[13px] font-medium text-[#0a0f1e]">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9a9aaa]" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder={mode === "login" ? "Enter your password" : "Create a password (min 6 characters)"}
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-11 pr-11 h-12"
+                    className="pl-10 pr-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
                     required
                     minLength={6}
                     disabled={isSubmitting}
@@ -271,9 +213,9 @@ const Auth = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors"
                   >
-                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -284,15 +226,11 @@ const Auth = () => {
                     <Checkbox
                       id="remember"
                       checked={formData.rememberMe}
-                      onCheckedChange={(checked) =>
-                        setFormData({ ...formData, rememberMe: checked as boolean })
-                      }
+                      onCheckedChange={(checked) => setFormData({ ...formData, rememberMe: checked as boolean })}
                     />
-                    <Label htmlFor="remember" className="text-[14px] leading-[20px] font-normal cursor-pointer">
-                      Remember me
-                    </Label>
+                    <Label htmlFor="remember" className="text-[13px] text-[#4a4a5a] cursor-pointer">Remember me</Label>
                   </div>
-                  <Link to="/forgot-password" className="text-[14px] leading-[20px] font-normal text-[#ff6b4d] hover:underline">
+                  <Link to="/forgot-password" className="text-[13px] font-medium text-[#ff4500] hover:text-[#cc3700] transition-colors">
                     Forgot password?
                   </Link>
                 </div>
@@ -301,63 +239,37 @@ const Auth = () => {
                   <Checkbox
                     id="terms"
                     checked={formData.agreeTerms}
-                    onCheckedChange={(checked) =>
-                      setFormData({ ...formData, agreeTerms: checked as boolean })
-                    }
-                    className="mt-1"
+                    onCheckedChange={(checked) => setFormData({ ...formData, agreeTerms: checked as boolean })}
+                    className="mt-0.5"
                   />
-                  <Label htmlFor="terms" className="text-[14px] leading-[20px] font-normal cursor-pointer">
+                  <Label htmlFor="terms" className="text-[13px] text-[#4a4a5a] cursor-pointer leading-relaxed">
                     I agree to the{" "}
-                    <Link to="/terms" className="text-[#ff6b4d] hover:underline">
-                      Terms of Service
-                    </Link>{" "}
-                    and{" "}
-                    <Link to="/privacy" className="text-[#ff6b4d] hover:underline">
-                      Privacy Policy
-                    </Link>
+                    <Link to="/terms" className="text-[#ff4500] hover:text-[#cc3700] font-medium">Terms of Service</Link>
+                    {" "}and{" "}
+                    <Link to="/privacy" className="text-[#ff4500] hover:text-[#cc3700] font-medium">Privacy Policy</Link>
                   </Label>
                 </div>
               )}
 
-              <Button 
-                type="submit" 
-                className="w-full h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white text-[16px] leading-[24px] font-normal" 
+              <Button
+                type="submit"
+                className="w-full h-11 bg-[#ff4500] hover:bg-[#cc3700] text-white text-[14px] font-semibold rounded-full transition-colors mt-2"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    {mode === "login" ? "Signing in..." : "Creating account..."}
-                  </>
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" />{mode === "login" ? "Signing in..." : "Creating account..."}</>
                 ) : (
                   mode === "login" ? "Sign In" : "Create Account"
                 )}
               </Button>
             </form>
 
-            <p className="text-center text-[14px] leading-[20px] font-normal text-muted-foreground mt-8">
+            {/* Switch mode */}
+            <p className="text-center text-[13px] text-[#9a9aaa] mt-8">
               {mode === "login" ? (
-                <>
-                  Don't have an account?{" "}
-                  <button
-                    type="button"
-                    onClick={() => setMode("signup")}
-                    className="text-[#ff6b4d] font-medium hover:underline"
-                  >
-                    Sign up
-                  </button>
-                </>
+                <>Don't have an account?{" "}<button type="button" onClick={() => setMode("signup")} className="text-[#ff4500] font-semibold hover:text-[#cc3700] transition-colors">Sign up</button></>
               ) : (
-                <>
-                  Already have an account?{" "}
-                  <button
-                    type="button"
-                    onClick={() => setMode("login")}
-                    className="text-[#ff6b4d] font-medium hover:underline"
-                  >
-                    Sign in
-                  </button>
-                </>
+                <>Already have an account?{" "}<button type="button" onClick={() => setMode("login")} className="text-[#ff4500] font-semibold hover:text-[#cc3700] transition-colors">Sign in</button></>
               )}
             </p>
           </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
+import DTMALogo from "@/components/layout/DTMALogo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -277,13 +278,7 @@ const InstitutionDashboard = () => {
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#F5F1ED] text-gray-600 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
         <div className="flex flex-col h-full">
           <div className="p-4 border-b border-gray-200">
-            <Link to="/" className="flex items-center gap-3">
-              <img
-                src="/log.svg"
-                alt="DTMA"
-                className="h-[28px] w-auto"
-              />
-            </Link>
+            <DTMALogo />
           </div>
 
           <RoleSwitcher currentRole="instructor" />

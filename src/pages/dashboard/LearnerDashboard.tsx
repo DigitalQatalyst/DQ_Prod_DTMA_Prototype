@@ -44,6 +44,7 @@ import { CollaborationTools } from '@/components/dashboard/CollaborationTools';
 import { LiveClassesNotifications } from '@/components/dashboard/LiveClassesNotifications';
 import { GamificationFeatures } from '@/components/dashboard/GamificationFeatures';
 import { TransactAI } from '@/components/mentor/TransactAI';
+import DTMALogo from '@/components/layout/DTMALogo';
 
 interface OnboardingData {
   learningGoal: string;
@@ -178,13 +179,7 @@ const LearnerDashboard = () => {
       >
         {/* Logo */}
         <div className="p-6">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/log.svg"
-              alt="DTMA"
-              className="h-[28px] w-auto brightness-0 invert"
-            />
-          </Link>
+          <DTMALogo variant="dark" />
         </div>
 
         {/* Navigation */}

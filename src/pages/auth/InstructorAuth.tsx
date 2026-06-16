@@ -51,16 +51,11 @@ const InstructorAuth = () => {
     <div className="min-h-screen flex h-screen font-sans">
 
       {/* ── Left Panel ── */}
-      <div className="hidden lg:flex lg:w-[45%] flex-col justify-between bg-[#050d1e] p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-[45%] flex-col bg-[#050d1e] p-12 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(ellipse 70% 50% at 20% 80%, rgba(255, 69, 0, 0.15) 0%, transparent 60%)' }} />
 
-        {/* Logo */}
-        <Link to="/" className="relative z-10">
-          <img src="/log.svg" alt="DTMA" className="h-[28px] w-auto brightness-0 invert" />
-        </Link>
-
         {/* Quote */}
-        <div className="relative z-10 max-w-sm">
+        <div className="relative z-10 flex flex-1 flex-col justify-center max-w-sm">
           <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-6">Instructor portal</p>
           <blockquote className="text-[22px] leading-[1.4] font-bold text-white mb-6">
             "Shape the Future of Digital Transformation. Join DTMA's community of expert instructors and drive digital transformation education forward."
@@ -87,11 +82,6 @@ const InstructorAuth = () => {
 
       {/* ── Right Panel ── */}
       <div className="w-full lg:w-[55%] flex flex-col bg-white">
-        {/* Mobile logo */}
-        <div className="lg:hidden p-6 border-b border-[#e8e8ec]">
-          <Link to="/"><img src="/log.svg" alt="DTMA" className="h-[26px] w-auto" /></Link>
-        </div>
-
         <div className="flex-1 flex items-center justify-center px-8 py-12 lg:px-16">
           <div className="w-full max-w-[400px]">
 

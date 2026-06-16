@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import { useSearchParams } from "react-router-dom";
+import PublicPageLayout from "@/components/layout/PublicPageLayout";
+import MeshSection from "@/components/layout/MeshSection";
+import CourseCard from "@/components/marketing/CourseCard";
+import CourseListRow from "@/components/marketing/CourseListRow";
 import { ButlerAI } from "@/components/butler/ButlerAI";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -13,8 +14,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Star, Clock, BookOpen, Search, Grid3X3, List, ChevronRight } from "lucide-react";
+import { Search, Grid3X3, List } from "lucide-react";
 import { dtmaCoursesNew } from "@/data/dtmaCoursesNew";
+import { eyebrow, landingHeroHeading, sectionPaddingX } from "@/lib/brandAccent";
 
 const Courses = () => {
   const [searchParams] = useSearchParams();
@@ -51,55 +53,39 @@ const Courses = () => {
     return matchesSearch && matchesCategory && matchesLevel;
   });
 
-  const getBadgeVariant = (badge: string | null) => {
-    switch (badge) {
-      case "Bestseller": return "bg-[#0a0f1e] text-white";
-      case "New": return "bg-white text-[#0a0f1e]";
-      case "Popular": return "bg-[#f5f4f0] text-[#0a0f1e]";
-      default: return "";
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-
-      {/* Hero Section */}
-      <section className="bg-[#f5f4f0] pt-28 pb-20">
-        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">
-            Browse Courses
-          </p>
-          <h1 className="text-[52px] md:text-[68px] leading-[1.05] font-bold text-[#0a0f1e] mb-6 max-w-2xl">
-            Explore Our <span className="text-[#ff4500]">Courses</span>
+    <PublicPageLayout>
+      <MeshSection variant="heroLight" grid className={`${sectionPaddingX} pt-20 md:pt-24 lg:pt-28 lg:pb-24`}>
+        <div className="relative z-10 mx-auto flex min-h-[280px] max-w-4xl flex-col justify-center md:min-h-[360px]">
+          <p className={`${eyebrow} mb-4`}>Browse Courses</p>
+          <h1 className={`${landingHeroHeading} mb-6`}>
+            Explore Our <span className="text-dq-orange">Courses</span>
           </h1>
-          <p className="text-[17px] text-[#4a4a5a] max-w-xl">
+          <p className="max-w-xl text-lg leading-relaxed text-gray-600">
             Master the 6XD framework with expert-led courses built for the digital economy.
           </p>
         </div>
-      </section>
+      </MeshSection>
 
       <main className="pb-20">
-
-        {/* Filters */}
-        <section className="py-6 border-b border-[#e8e8ec] bg-white sticky top-20 z-40">
-          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+        <section className="sticky top-16 z-40 border-b border-gray-200 bg-white py-6">
+          <div className={`mx-auto max-w-[1280px] ${sectionPaddingX}`}>
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
               <div className="flex flex-wrap gap-4 flex-1">
                 {/* Search */}
                 <div className="relative flex-1 min-w-[200px] max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b6b7b]" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                   <Input
                     placeholder="Search courses or instructors..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 border-[#e8e8ec] rounded-full"
+                    className="rounded-full border-gray-200 pl-10"
                   />
                 </div>
 
                 {/* Category Filter */}
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-[180px] border-[#e8e8ec] rounded-full">
+                  <SelectTrigger className="w-[180px] rounded-full border-gray-200">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -113,7 +99,7 @@ const Courses = () => {
 
                 {/* Level Filter */}
                 <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                  <SelectTrigger className="w-[150px] border-[#e8e8ec] rounded-full">
+                  <SelectTrigger className="w-[150px] rounded-full border-gray-200">
                     <SelectValue placeholder="Level" />
                   </SelectTrigger>
                   <SelectContent>
@@ -127,12 +113,12 @@ const Courses = () => {
               </div>
 
               {/* View Toggle */}
-              <div className="flex items-center gap-1 border border-[#e8e8ec] rounded-xl p-1">
+              <div className="flex items-center gap-1 rounded-xl border border-gray-200 p-1">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("grid")}
-                  className={viewMode === "grid" ? "bg-[#0a0f1e] hover:bg-[#0a0f1e]/90 text-white rounded-lg" : "rounded-lg"}
+                  className={viewMode === "grid" ? "rounded-lg bg-dq-navy text-white hover:bg-dq-navy/90" : "rounded-lg"}
                 >
                   <Grid3X3 className="w-4 h-4" />
                 </Button>
@@ -140,7 +126,7 @@ const Courses = () => {
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("list")}
-                  className={viewMode === "list" ? "bg-[#0a0f1e] hover:bg-[#0a0f1e]/90 text-white rounded-lg" : "rounded-lg"}
+                  className={viewMode === "list" ? "rounded-lg bg-dq-navy text-white hover:bg-dq-navy/90" : "rounded-lg"}
                 >
                   <List className="w-4 h-4" />
                 </Button>
@@ -150,251 +136,38 @@ const Courses = () => {
         </section>
 
         {/* Results */}
-        <section className="py-12 bg-[#f5f4f0]">
-          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+        <section className="bg-gray-50 px-5 pb-16 pt-10 md:px-8 md:pt-12 lg:px-10">
+          <div className="mx-auto max-w-[1280px]">
             <div className="mb-8">
-              <p className="text-[14px] text-[#6b6b7b]">
-                Showing <span className="font-semibold text-[#0a0f1e]">{filteredCourses.length}</span> courses
+              <p className="text-[14px] text-gray-600">
+                Showing <span className="font-semibold text-dq-navy">{filteredCourses.length}</span> courses
               </p>
             </div>
 
             {viewMode === "grid" ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {filteredCourses.map((course) => (
-                  <div
-                    key={course.id}
-                    className={`flex-shrink-0 bg-white border border-[#e8e8ec] rounded-xl overflow-hidden transition-all ${
-                      course.comingSoon
-                        ? 'opacity-75 cursor-not-allowed'
-                        : 'hover:shadow-md hover:-translate-y-0.5 group cursor-pointer'
-                    }`}
-                  >
-                    {course.comingSoon ? (
-                      // Coming Soon Card (not clickable)
-                      <div>
-                        <div className="relative aspect-video overflow-hidden">
-                          <img
-                            src={course.image}
-                            alt={course.title}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute top-4 left-1/2 -translate-x-1/2">
-                            <div className="bg-white text-[#0a0f1e] text-[14px] leading-[20px] font-medium px-4 py-2 rounded-full shadow-md">
-                              Coming Soon
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-5">
-                          <h3 className="text-[20px] leading-[28px] font-semibold text-[#0a0f1e] mb-3 line-clamp-2">
-                            {course.title}
-                          </h3>
-                          <div className="flex items-center gap-4 text-[14px] leading-[20px] text-[#6b6b7b] mb-4">
-                            <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-[#ff4500] fill-[#ff4500]" />
-                              <span className="font-semibold text-[#0a0f1e]">{course.rating}</span>
-                              <span className="text-[#6b6b7b]">({course.reviews})</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              <span>{course.duration}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 text-[12px] leading-[16px] text-[#6b6b7b] mb-4">
-                            <BookOpen className="w-4 h-4" />
-                            <span>Content in development</span>
-                          </div>
-                          <div className="flex items-center justify-between pt-3 border-t border-[#e8e8ec]">
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e]">${course.price}</span>
-                              <span className="text-[12px] leading-[16px] text-[#b0b0b8] line-through">${course.originalPrice}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      // Regular Course Card (clickable)
-                      <Link to={`/courses/${course.id}`} className="block">
-                        <div className="relative aspect-video overflow-hidden">
-                          <img
-                            src={course.image}
-                            alt={course.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                        <div className="p-5">
-                          <h3 className="text-[20px] leading-[28px] font-semibold text-[#0a0f1e] mb-3 line-clamp-2 group-hover:text-[#ff4500] transition-colors">
-                            {course.title}
-                          </h3>
-                          <div className="flex items-center gap-4 text-[14px] leading-[20px] text-[#6b6b7b] mb-4">
-                            <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-[#ff4500] fill-[#ff4500]" />
-                              <span className="font-semibold text-[#0a0f1e]">{course.rating}</span>
-                              <span className="text-[#6b6b7b]">({course.reviews})</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="w-4 h-4" />
-                              <span>{course.duration}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 text-[12px] leading-[16px] text-[#6b6b7b] mb-4">
-                            <BookOpen className="w-4 h-4" />
-                            <span>{course.modules.length} modules • {course.totalLessons} lessons</span>
-                          </div>
-                          <div className="flex items-center justify-between pt-3 border-t border-[#e8e8ec]">
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e]">${course.price}</span>
-                              <span className="text-[12px] leading-[16px] text-[#b0b0b8] line-through">${course.originalPrice}</span>
-                            </div>
-                            <Badge variant="outline" className="text-[11px] leading-[14px] font-semibold border-[#e8e8ec]">
-                              {course.level}
-                            </Badge>
-                          </div>
-                        </div>
-                      </Link>
-                    )}
-                  </div>
+                  <CourseCard key={course.id} course={course} />
                 ))}
               </div>
             ) : (
               <div className="space-y-4">
                 {filteredCourses.map((course) => (
-                  <div
-                    key={course.id}
-                    className={`flex gap-6 bg-white border border-[#e8e8ec] rounded-xl overflow-hidden p-4 transition-all duration-500 ${
-                      course.comingSoon
-                        ? 'opacity-75 cursor-not-allowed'
-                        : 'group hover:shadow-md hover:-translate-y-0.5 cursor-pointer'
-                    }`}
-                  >
-                    {course.comingSoon ? (
-                      // Coming Soon List Item (not clickable)
-                      <>
-                        <div className="relative w-48 h-32 rounded-lg overflow-hidden flex-shrink-0">
-                          <img
-                            src={course.image}
-                            alt={course.title}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute top-2 left-1/2 -translate-x-1/2">
-                            <div className="bg-white text-[#0a0f1e] text-[10px] leading-[14px] font-medium px-3 py-1.5 rounded-full shadow-md">
-                              Coming Soon
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex-1 flex flex-col justify-between py-1">
-                          <div>
-                            <div className="flex items-center gap-2 mb-3">
-                              <Badge variant="secondary" className="text-[11px] leading-[14px] font-semibold capitalize text-[#ff4500]">
-                                {course.category}
-                              </Badge>
-                              <span className="text-[11px] leading-[14px] font-semibold text-[#6b6b7b]">{course.level}</span>
-                            </div>
-
-                            <h3 className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e] mb-2">
-                              {course.title}
-                            </h3>
-                            <p className="text-[14px] leading-[20px] text-[#4a4a5a] mb-2">{course.description}</p>
-                            <p className="text-[14px] leading-[20px] text-[#6b6b7b]">by {course.instructor}</p>
-                          </div>
-
-                          <div className="flex items-center justify-between pt-3 border-t border-[#e8e8ec]">
-                            <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#6b6b7b]">
-                              <div className="flex items-center gap-1.5">
-                                <Star className="w-4 h-4 fill-[#ff4500] text-[#ff4500]" />
-                                <span className="font-semibold text-[#0a0f1e]">{course.rating}</span>
-                                <span>({course.reviews})</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
-                                {course.duration}
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <BookOpen className="w-4 h-4" />
-                                Content in development
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                              <span className="text-[12px] leading-[16px] text-[#b0b0b8] line-through">${course.originalPrice}</span>
-                              <span className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e]">${course.price}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      // Regular List Item (clickable)
-                      <Link to={`/courses/${course.id}`} className="flex gap-6 flex-1">
-                        <div className="relative w-48 h-32 rounded-lg overflow-hidden flex-shrink-0">
-                          <img
-                            src={course.image}
-                            alt={course.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                          />
-                          {course.badge && (
-                            <Badge className={`absolute top-2 left-2 text-xs ${getBadgeVariant(course.badge)}`}>
-                              {course.badge}
-                            </Badge>
-                          )}
-                        </div>
-
-                        <div className="flex-1 flex flex-col justify-between py-1">
-                          <div>
-                            <div className="flex items-center gap-2 mb-3">
-                              <Badge variant="secondary" className="text-[11px] leading-[14px] font-semibold capitalize">
-                                {course.category}
-                              </Badge>
-                              <span className="text-[11px] leading-[14px] font-semibold text-[#6b6b7b]">{course.level}</span>
-                            </div>
-
-                            <h3 className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e] mb-2 group-hover:text-[#ff4500] transition-colors">
-                              {course.title}
-                            </h3>
-                            <p className="text-[14px] leading-[20px] text-[#4a4a5a] mb-2">{course.description}</p>
-                            <p className="text-[14px] leading-[20px] text-[#6b6b7b]">by {course.instructor}</p>
-                          </div>
-
-                          <div className="flex items-center justify-between pt-3 border-t border-[#e8e8ec]">
-                            <div className="flex items-center gap-6 text-[13px] leading-[18px] text-[#6b6b7b]">
-                              <div className="flex items-center gap-1.5">
-                                <Star className="w-4 h-4 fill-[#ff4500] text-[#ff4500]" />
-                                <span className="font-semibold text-[#0a0f1e]">{course.rating}</span>
-                                <span>({course.reviews})</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
-                                {course.duration}
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <BookOpen className="w-4 h-4" />
-                                {course.modules.length} modules • {course.totalLessons} lessons
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                              <span className="text-[12px] leading-[16px] text-[#b0b0b8] line-through">${course.originalPrice}</span>
-                              <span className="text-[18px] leading-[26px] font-semibold text-[#0a0f1e]">${course.price}</span>
-                              <ChevronRight className="w-5 h-5 text-[#6b6b7b] group-hover:text-[#ff4500] group-hover:translate-x-1 transition-all" />
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    )}
-                  </div>
+                  <CourseListRow key={course.id} course={course} />
                 ))}
               </div>
             )}
 
             {filteredCourses.length === 0 && (
-              <div className="text-center py-20">
-                <div className="w-20 h-20 rounded-full bg-[#f5f4f0] flex items-center justify-center mx-auto mb-6">
-                  <Search className="w-8 h-8 text-[#6b6b7b]" />
+              <div className="py-20 text-center">
+                <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
+                  <Search className="h-8 w-8 text-gray-500" />
                 </div>
-                <h3 className="text-[24px] leading-[32px] font-medium text-[#0a0f1e] mb-2">No courses found</h3>
-                <p className="text-[16px] leading-[24px] text-[#6b6b7b] mb-6">Try adjusting your search or filter criteria</p>
+                <h3 className="mb-2 text-2xl font-medium text-dq-navy">No courses found</h3>
+                <p className="mb-6 text-base text-gray-600">Try adjusting your search or filter criteria</p>
                 <Button
                   variant="outline"
-                  className="rounded-full border-[#e8e8ec]"
+                  className="rounded-full border-gray-200"
                   onClick={() => {
                     setSearchQuery("");
                     setSelectedCategory("all");
@@ -409,9 +182,8 @@ const Courses = () => {
         </section>
       </main>
 
-      <Footer />
       <ButlerAI />
-    </div>
+    </PublicPageLayout>
   );
 };
 

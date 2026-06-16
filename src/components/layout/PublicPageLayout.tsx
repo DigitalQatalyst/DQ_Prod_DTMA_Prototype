@@ -3,15 +3,14 @@ import Footer from "./Footer";
 
 interface PublicPageLayoutProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-const PublicPageLayout = ({ children }: PublicPageLayoutProps) => {
+const PublicPageLayout = ({ children, className }: PublicPageLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className={`min-h-screen bg-white ${className ?? ""}`}>
       <Navbar />
-      <main className="flex-grow pt-[80px]">
-        {children}
-      </main>
+      <main>{children}</main>
       <Footer />
     </div>
   );

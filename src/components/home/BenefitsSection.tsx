@@ -1,58 +1,66 @@
-import { Link } from "react-router-dom";
-
-const BenefitsSection = () => {
-  const problems = [
-    {
-      icon: "📋",
-      title: "Trained, never applied",
-      description: "Courses delivered without connection to live transformation projects or real execution contexts.",
-    },
-    {
-      icon: "🧩",
-      title: "Learning without a framework",
-      description: "Skills taught in isolation — no structured methodology to connect strategy, technology, and people.",
-    },
-    {
-      icon: "🔄",
-      title: "No continuity",
-      description: "One-off training events treated as disconnected interventions, with no capability-building system.",
-    },
-  ];
-
-  return (
-    <section className="py-20 bg-[#050d1e]">
-      <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
-        {/* Eyebrow */}
-        <p className="text-xs font-semibold text-[#ff4500] uppercase tracking-widest mb-5">
-          Why DTMA exists
-        </p>
-
-        {/* Headline */}
-        <h2 className="text-[40px] md:text-[52px] leading-[1.1] font-bold text-white mb-4 max-w-3xl">
-          75% of digital transformation initiatives fail to deliver.
-        </h2>
-        <p className="text-[16px] text-white/50 mb-14 max-w-lg">
-          The root cause isn't strategy. It's a capability gap. The fix is structured learning.
-        </p>
-
-        {/* Problem Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14">
-          {problems.map((p, i) => (
-            <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/8 transition-colors">
-              <div className="text-2xl mb-4">{p.icon}</div>
-              <h3 className="text-base font-semibold text-white mb-2">{p.title}</h3>
-              <p className="text-sm text-white/50 leading-relaxed">{p.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom note */}
-        <p className="text-sm text-white/40 text-center max-w-xl mx-auto">
-          DTMA was founded to close this gap — with a methodology that treats digital capability building as a structured, continuous system.
-        </p>
-      </div>
-    </section>
-  );
-};
-
-export default BenefitsSection;
+import { ClipboardList, Puzzle, RefreshCw, type LucideIcon } from "lucide-react";
+import MeshSection from "@/components/layout/MeshSection";
+import { eyebrowOnDark, marketingSectionHeading, sectionPaddingX, sectionPaddingY } from "@/lib/brandAccent";
+
+const BenefitsSection = () => {
+  const problems: { icon: LucideIcon; title: string; description: string }[] = [
+    {
+      icon: ClipboardList,
+      title: "Trained, never applied",
+      description:
+        "Courses delivered without connection to live transformation projects or real execution contexts.",
+    },
+    {
+      icon: Puzzle,
+      title: "Learning without a framework",
+      description:
+        "Skills taught in isolation, no structured methodology to connect strategy, technology, and people.",
+    },
+    {
+      icon: RefreshCw,
+      title: "No continuity",
+      description:
+        "One-off training events treated as disconnected interventions, with no capability-building system.",
+    },
+  ];
+
+  return (
+    <MeshSection variant="heroDark" className={`${sectionPaddingY} ${sectionPaddingX} text-white`}>
+      <div className="relative z-10 mx-auto max-w-[1200px]">
+        <p className={`${eyebrowOnDark} mb-5`}>Why DTMA exists</p>
+
+        <h2 className={`${marketingSectionHeading} mb-4 max-w-3xl text-white`}>
+          75% of digital transformation initiatives fail to deliver.
+        </h2>
+        <p className="mb-14 max-w-lg text-lg text-white/70">
+          The root cause isn't strategy. It's a capability gap. The fix is structured learning.
+        </p>
+
+        <div className="mb-14 grid grid-cols-1 gap-5 md:grid-cols-3">
+          {problems.map((p) => {
+            const Icon = p.icon;
+            return (
+              <div
+                key={p.title}
+                className="rounded-2xl border border-white/10 bg-white/[0.06] p-6 transition-colors hover:bg-white/[0.08]"
+              >
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                  <Icon className="h-5 w-5 text-dq-orange" aria-hidden />
+                </div>
+                <h3 className="mb-2 text-base font-semibold text-white">{p.title}</h3>
+                <p className="text-sm leading-relaxed text-white/70">{p.description}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <p className="mx-auto max-w-xl text-center text-sm text-white/60">
+          DTMA was founded to close this gap, with a methodology that treats digital capability building
+          as a structured, continuous system.
+        </p>
+      </div>
+    </MeshSection>
+  );
+};
+
+export default BenefitsSection;

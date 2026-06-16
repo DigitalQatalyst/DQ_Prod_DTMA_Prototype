@@ -1,6 +1,9 @@
 import { useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import Footer from "@/components/layout/Footer";
+import PublicPageLayout from "@/components/layout/PublicPageLayout";
+import MeshSection from "@/components/layout/MeshSection";
+import CourseCard from "@/components/marketing/CourseCard";
+import MarketingCtaBand from "@/components/marketing/MarketingCtaBand";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/Badge";
 import {
@@ -30,6 +33,11 @@ import { useCourse, useIsEnrolled } from "@/hooks/useCourses";
 import { useAuth } from "@/contexts/AuthContext";
 import { EnrollmentModal } from "@/components/enrollment/EnrollmentModal";
 import { getCourseById } from "@/data/dtmaCoursesNew";
+import {
+  btnPrimary,
+  sectionHeading,
+  sectionPaddingX,
+} from "@/lib/brandAccent";
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -237,60 +245,56 @@ const CourseDetail = () => {
     0;
 
   return (
-    <div className="min-h-screen bg-white">
+    <PublicPageLayout>
       <main className="pb-20">
+        <div className="relative overflow-hidden">
+          <MeshSection variant="heroLight" grid className="absolute inset-0 z-0" />
 
-        {/* ── Hero Section ── */}
-        <section className="bg-[#f5f4f0] pt-24">
-          {/* Breadcrumb */}
-          <div className="max-w-[1200px] mx-auto px-8 lg:px-16 pt-6 pb-4">
+          <div className={`relative z-10 mx-auto max-w-[1200px] ${sectionPaddingX} pb-16 pt-20 md:pt-24`}>
             <Link
               to="/courses"
-              className="inline-flex items-center gap-2 text-[14px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors"
+              className="mb-6 inline-flex items-center gap-2 text-[14px] text-gray-500 transition-colors hover:text-dq-navy"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="h-4 w-4" />
               Back to Courses
             </Link>
-          </div>
 
-          <div className="max-w-[1200px] mx-auto px-8 lg:px-16 pb-16">
-            <div className="grid lg:grid-cols-3 gap-12">
+            <div className="grid gap-12 lg:grid-cols-3">
 
               {/* ── Left: Course Info ── */}
               <div className="lg:col-span-2">
                 {/* Badges */}
                 <div className="flex flex-wrap gap-2 mb-5">
                   {displayCourse.badge && (
-                    <Badge className="bg-[#ff4500] text-white border-0 rounded-full px-3">
+                    <Badge className="rounded-full border-0 bg-dq-orange px-3 text-white">
                       {displayCourse.badge}
                     </Badge>
                   )}
-                  <Badge className="bg-[#ff4500]/10 text-[#ff4500] border-0 rounded-full px-3">
+                  <Badge className="rounded-full border-0 bg-orange-50 px-3 text-dq-orange">
                     {displayCourse.category}
                   </Badge>
                   <Badge
                     variant="outline"
-                    className="border border-[#e8e8ec] text-[#4a4a5a] rounded-full px-3 bg-white"
+                    className="rounded-full border border-gray-200 bg-white px-3 text-gray-600"
                   >
                     {displayCourse.level}
                   </Badge>
                 </div>
 
                 {/* Title */}
-                <h1 className="text-[42px] md:text-[52px] leading-[1.1] font-bold text-[#0a0f1e] mb-5">
+                <h1 className="mb-5 text-3xl font-semibold leading-[1.1] text-dq-navy sm:text-4xl md:text-5xl">
                   {displayCourse.title}
                 </h1>
 
-                {/* Description */}
-                <p className="text-[17px] text-[#4a4a5a] leading-relaxed mb-7">
+                <p className="mb-7 text-base leading-[1.7] text-[#667085]">
                   {displayCourse.description || (displayCourse as any).subtitle}
                 </p>
 
                 {/* Meta row */}
-                <div className="flex flex-wrap items-center gap-5 text-[14px] text-[#6b6b7b] mb-8">
+                <div className="mb-8 flex flex-wrap items-center gap-5 text-[14px] text-gray-600">
                   <div className="flex items-center gap-1.5">
-                    <Star className="w-4 h-4 text-[#ff4500] fill-[#ff4500]" />
-                    <span className="font-semibold text-[#0a0f1e]">{displayCourse.rating}</span>
+                    <Star className="h-4 w-4 fill-dq-orange text-dq-orange" />
+                    <span className="font-semibold text-dq-navy">{displayCourse.rating}</span>
                     <span>({displayCourse.reviews} reviews)</span>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -331,13 +335,13 @@ const CourseDetail = () => {
                     className="w-10 h-10 rounded-full object-cover"
                   />
                   <div>
-                    <div className="text-[15px] text-[#0a0f1e] font-medium">
+                    <div className="text-[15px] font-medium text-dq-navy">
                       Created by{" "}
                       {typeof displayCourse.instructor === "string"
                         ? displayCourse.instructor
                         : displayCourse.instructor.name}
                     </div>
-                    <div className="text-[13px] text-[#9a9aaa]">
+                    <div className="text-[13px] text-gray-400">
                       {typeof displayCourse.instructor === "string"
                         ? "DTMA Faculty"
                         : displayCourse.instructor.title}
@@ -348,7 +352,7 @@ const CourseDetail = () => {
 
               {/* ── Right: Sticky Purchase Card (Desktop) ── */}
               <div className="hidden lg:block">
-                <div className="bg-white border border-[#e8e8ec] rounded-xl shadow-md sticky top-28 overflow-hidden">
+                <div className="sticky top-24 overflow-hidden rounded-2xl border border-gray-200 bg-white p-0 shadow-card">
                   {/* Course image */}
                   <div className="relative aspect-video">
                     <img
@@ -361,13 +365,13 @@ const CourseDetail = () => {
                   <div className="p-6">
                     {/* Price */}
                     <div className="flex items-baseline gap-3 mb-6">
-                      <span className="text-[32px] font-bold text-[#0a0f1e]">
+                      <span className="text-[32px] font-semibold text-dq-navy">
                         ${displayCourse.price}
                       </span>
-                      <span className="text-[18px] text-[#9a9aaa] line-through">
+                      <span className="text-[18px] text-gray-400 line-through">
                         ${displayCourse.originalPrice}
                       </span>
-                      <span className="bg-[#ff4500]/10 text-[#ff4500] text-[12px] font-semibold rounded-full px-2 py-0.5">
+                      <span className="rounded-full bg-orange-50 px-2 py-0.5 text-[12px] font-semibold text-dq-orange">
                         {Math.round((1 - displayCourse.price / displayCourse.originalPrice) * 100)}% off
                       </span>
                     </div>
@@ -385,7 +389,7 @@ const CourseDetail = () => {
                       ) : (
                         <>
                           <Button
-                            className="w-full rounded-full bg-[#ff4500] hover:bg-[#cc3700] text-white py-3"
+                            className={`w-full ${btnPrimary}`}
                             size="lg"
                             onClick={handleEnroll}
                             disabled={authLoading || enrollmentLoading}
@@ -395,7 +399,7 @@ const CourseDetail = () => {
                           {!isEnrolled && (
                             <Button
                               variant="outline"
-                              className="w-full rounded-full border border-[#e8e8ec] text-[#4a4a5a] hover:bg-[#f5f4f0]"
+                              className="w-full rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50"
                               size="lg"
                             >
                               Add to Wishlist
@@ -405,22 +409,22 @@ const CourseDetail = () => {
                       )}
                     </div>
 
-                    <p className="text-center text-[#9a9aaa] text-[13px] mb-6">
+                    <p className="text-center text-gray-400 text-[13px] mb-6">
                       30-day money-back guarantee
                     </p>
 
                     {/* Includes */}
                     <div>
-                      <h4 className="text-[16px] font-semibold text-[#0a0f1e] mb-4">
+                      <h4 className="text-[16px] font-semibold text-dq-navy mb-4">
                         This course includes:
                       </h4>
                       <ul className="space-y-3">
                         {((displayCourse as any).includes || []).map((item: any, index: number) => (
                           <li
                             key={index}
-                            className="flex items-center gap-3 text-[14px] text-[#4a4a5a]"
+                            className="flex items-center gap-3 text-[14px] text-gray-600"
                           >
-                            <item.icon className="w-4 h-4 text-[#ff4500] flex-shrink-0" />
+                            <item.icon className="w-4 h-4 text-dq-orange flex-shrink-0" />
                             <span>{item.text}</span>
                           </li>
                         ))}
@@ -431,68 +435,55 @@ const CourseDetail = () => {
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* ── Mobile CTA Bar ── */}
-        <div className="lg:hidden sticky top-20 z-40 bg-white border-b border-[#e8e8ec] shadow-sm">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="sticky top-16 z-40 border-b border-gray-200 bg-white shadow-sm lg:hidden">
+          <div className="container mx-auto flex items-center justify-between px-4 py-4">
             <div className="flex items-baseline gap-2">
-              <span className="text-[22px] font-bold text-[#0a0f1e]">${displayCourse.price}</span>
-              <span className="text-[13px] text-[#9a9aaa] line-through">${displayCourse.originalPrice}</span>
+              <span className="text-[22px] font-semibold text-dq-navy">${displayCourse.price}</span>
+              <span className="text-[13px] text-gray-400 line-through">${displayCourse.originalPrice}</span>
             </div>
             {displayCourse.comingSoon ? (
-              <Button
-                className="rounded-full bg-[#9a9aaa] cursor-not-allowed text-white"
-                disabled
-              >
+              <Button className="cursor-not-allowed rounded-full bg-gray-400 text-white" disabled>
                 Coming Soon
               </Button>
             ) : (
-              <Button
-                className="rounded-full bg-[#ff4500] hover:bg-[#cc3700] text-white"
-                onClick={handleEnroll}
-                disabled={authLoading || enrollmentLoading}
-              >
+              <Button className={btnPrimary} onClick={handleEnroll} disabled={authLoading || enrollmentLoading}>
                 {isEnrolled ? "Start Learning" : "Enroll Now"}
               </Button>
             )}
           </div>
         </div>
 
-        {/* ── Course Content Section ── */}
-        <section className="py-20">
-          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+        <section className={`bg-background py-20 ${sectionPaddingX}`}>
+          <div className="mx-auto max-w-[1200px]">
             <div className="lg:max-w-[720px]">
-
-              {/* What You'll Learn */}
               <div className="mb-14">
-                <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">Outcomes</p>
-                <h2 className="text-[28px] font-bold text-[#0a0f1e] mb-6">
-                  What you'll learn
-                </h2>
+                <p className="dq-eyebrow mb-3">Outcomes</p>
+                <h2 className={`${sectionHeading} mb-6 text-2xl md:text-3xl`}>What you'll learn</h2>
                 {((displayCourse as any).whatYouWillLearn || (displayCourse as any).outcomes || []).length > 0 ? (
-                  <div className="grid sm:grid-cols-2 gap-3 p-6 bg-[#f5f4f0] border border-[#e8e8ec] rounded-xl">
+                  <div className="grid gap-3 rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:grid-cols-2">
                     {((displayCourse as any).whatYouWillLearn || (displayCourse as any).outcomes || []).map((item: string, index: number) => (
                       <div key={index} className="flex gap-3 items-start">
-                        <CheckCircle className="w-4 h-4 text-[#ff4500] flex-shrink-0 mt-0.5" />
-                        <span className="text-[14px] text-[#4a4a5a] leading-relaxed">{item}</span>
+                        <CheckCircle className="w-4 h-4 text-dq-orange flex-shrink-0 mt-0.5" />
+                        <span className="text-[14px] text-gray-600 leading-relaxed">{item}</span>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="p-6 bg-[#f5f4f0] border border-[#e8e8ec] rounded-xl">
-                    <p className="text-[14px] text-[#9a9aaa] italic">Learning outcomes will be listed here once the course content is available.</p>
+                  <div className="p-6 bg-gray-50 border border-gray-200 rounded-xl">
+                    <p className="text-[14px] text-gray-400 italic">Learning outcomes will be listed here once the course content is available.</p>
                   </div>
                 )}
               </div>
 
               {/* Course Content / Curriculum */}
               <div className="mb-14">
-                <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">Curriculum</p>
-                <h2 className="text-[28px] font-bold text-[#0a0f1e] mb-2">
+                <p className="text-[11px] font-semibold text-dq-orange uppercase tracking-widest mb-3">Curriculum</p>
+                <h2 className="text-[28px] font-bold text-dq-navy mb-2">
                   Course Content
                 </h2>
-                <p className="text-[14px] text-[#9a9aaa] mb-8">
+                <p className="text-[14px] text-gray-400 mb-8">
                   {displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules •{" "}
                   {totalLessons} lessons • {displayCourse.duration} total
                 </p>
@@ -503,14 +494,14 @@ const CourseDetail = () => {
                       <AccordionItem
                         key={moduleIndex}
                         value={`module-${moduleIndex}`}
-                        className="border border-[#e8e8ec] rounded-xl px-6 bg-white"
+                        className="border border-gray-200 rounded-xl px-6 bg-white"
                       >
                         <AccordionTrigger className="hover:no-underline py-5">
                           <div className="flex items-center justify-between w-full pr-4">
-                            <span className="text-left text-[16px] font-medium text-[#0a0f1e]">
+                            <span className="text-left text-[16px] font-medium text-dq-navy">
                               {module.title}
                             </span>
-                            <span className="text-[13px] text-[#9a9aaa]">
+                            <span className="text-[13px] text-gray-400">
                               {module.lessons.length} lessons • {module.duration}
                             </span>
                           </div>
@@ -520,19 +511,19 @@ const CourseDetail = () => {
                             {module.lessons.map((lesson: any, lessonIndex: number) => (
                               <li
                                 key={lessonIndex}
-                                className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-[#f5f4f0] transition-colors"
+                                className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors"
                               >
                                 <div className="flex items-center gap-3">
                                   {lesson.type === "video" && (
-                                    <PlayCircle className="w-4 h-4 text-[#ff4500]" />
+                                    <PlayCircle className="w-4 h-4 text-dq-orange" />
                                   )}
                                   {lesson.type === "file" && (
-                                    <FileText className="w-4 h-4 text-[#9a9aaa]" />
+                                    <FileText className="w-4 h-4 text-gray-400" />
                                   )}
                                   {lesson.type === "quiz" && (
-                                    <Award className="w-4 h-4 text-[#ff4500]" />
+                                    <Award className="w-4 h-4 text-dq-orange" />
                                   )}
-                                  <span className="text-[14px] text-[#4a4a5a]">{lesson.title}</span>
+                                  <span className="text-[14px] text-gray-600">{lesson.title}</span>
                                   {lesson.preview && (
                                     <Badge
                                       variant="secondary"
@@ -544,12 +535,12 @@ const CourseDetail = () => {
                                 </div>
                                 <div className="flex items-center gap-3">
                                   {lesson.duration && (
-                                    <span className="text-[12px] text-[#9a9aaa]">
+                                    <span className="text-[12px] text-gray-400">
                                       {lesson.duration}
                                     </span>
                                   )}
                                   {!lesson.preview && (
-                                    <Lock className="w-3.5 h-3.5 text-[#9a9aaa]" />
+                                    <Lock className="w-3.5 h-3.5 text-gray-400" />
                                   )}
                                 </div>
                               </li>
@@ -564,31 +555,31 @@ const CourseDetail = () => {
 
               {/* Requirements */}
               <div className="mb-14">
-                <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">Prerequisites</p>
-                <h2 className="text-[28px] font-bold text-[#0a0f1e] mb-6">
+                <p className="text-[11px] font-semibold text-dq-orange uppercase tracking-widest mb-3">Prerequisites</p>
+                <h2 className="text-[28px] font-bold text-dq-navy mb-6">
                   Requirements
                 </h2>
                 <ul className="space-y-3">
                   {((displayCourse as any).requirements || []).map((req: string, index: number) => (
                     <li key={index} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#ff4500] mt-[9px] flex-shrink-0" />
-                      <span className="text-[16px] text-[#4a4a5a]">{req}</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-dq-orange mt-[9px] flex-shrink-0" />
+                      <span className="text-[16px] text-gray-600">{req}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               {/* Description */}
-              <div className="mb-14 pb-14 border-b border-[#e8e8ec]">
-                <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">About this course</p>
-                <h2 className="text-[28px] font-bold text-[#0a0f1e] mb-6">
+              <div className="mb-14 pb-14 border-b border-gray-200">
+                <p className="text-[11px] font-semibold text-dq-orange uppercase tracking-widest mb-3">About this course</p>
+                <h2 className="text-[28px] font-bold text-dq-navy mb-6">
                   Description
                 </h2>
                 <div>
                   {displayCourse.description.split("\n\n").map((paragraph: string, index: number) => (
                     <p
                       key={index}
-                      className="text-[16px] text-[#4a4a5a] leading-relaxed mb-4"
+                      className="text-[16px] text-gray-600 leading-relaxed mb-4"
                     >
                       {paragraph}
                     </p>
@@ -598,11 +589,11 @@ const CourseDetail = () => {
 
               {/* Instructor */}
               <div className="mb-14">
-                <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">Taught by</p>
-                <h2 className="text-[28px] font-bold text-[#0a0f1e] mb-6">
+                <p className="text-[11px] font-semibold text-dq-orange uppercase tracking-widest mb-3">Taught by</p>
+                <h2 className="text-[28px] font-bold text-dq-navy mb-6">
                   Your Instructor
                 </h2>
-                <div className="bg-white border border-[#e8e8ec] rounded-xl p-6">
+                <div className="bg-white border border-gray-200 rounded-xl p-6">
                   <div className="flex items-start gap-6">
                     <img
                       src={
@@ -618,17 +609,17 @@ const CourseDetail = () => {
                       className="w-24 h-24 rounded-xl object-cover"
                     />
                     <div>
-                      <h3 className="text-[20px] font-semibold text-[#0a0f1e] mb-1">
+                      <h3 className="text-[20px] font-semibold text-dq-navy mb-1">
                         {typeof displayCourse.instructor === "string"
                           ? displayCourse.instructor
                           : displayCourse.instructor.name}
                       </h3>
-                      <p className="text-[14px] text-[#ff4500] mb-3">
+                      <p className="text-[14px] text-dq-orange mb-3">
                         {typeof displayCourse.instructor === "string"
                           ? "DTMA Faculty"
                           : displayCourse.instructor.title}
                       </p>
-                      <div className="flex items-center gap-6 text-[14px] text-[#4a4a5a] mb-4">
+                      <div className="flex items-center gap-6 text-[14px] text-gray-600 mb-4">
                         <div className="flex items-center gap-1.5">
                           <Users className="w-4 h-4" />
                           {typeof displayCourse.instructor === "string"
@@ -644,7 +635,7 @@ const CourseDetail = () => {
                           courses
                         </div>
                       </div>
-                      <p className="text-[16px] text-[#4a4a5a] leading-relaxed">
+                      <p className="text-[16px] text-gray-600 leading-relaxed">
                         {typeof displayCourse.instructor === "string"
                           ? "DTMA Faculty includes multidisciplinary educators with expertise in digital transformation."
                           : displayCourse.instructor.bio}
@@ -658,121 +649,62 @@ const CourseDetail = () => {
           </div>
         </section>
 
-        {/* ── Recommended Courses ── */}
-        <section className="py-16 bg-[#f5f4f0]">
-          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
-            <div className="flex items-center justify-between mb-8">
+        <section className={`bg-gray-50 py-16 ${sectionPaddingX}`}>
+          <div className="mx-auto max-w-[1200px]">
+            <div className="mb-8 flex items-center justify-between">
               <div>
-                <p className="uppercase tracking-widest text-[#ff4500] text-[12px] font-semibold mb-2">
-                  Continue Learning
-                </p>
-                <h2 className="text-[28px] font-bold text-[#0a0f1e]">
-                  Recommended Courses
-                </h2>
+                <p className="dq-eyebrow mb-2">Continue Learning</p>
+                <h2 className={`${sectionHeading} text-2xl md:text-3xl`}>Recommended Courses</h2>
               </div>
-              <div className="hidden md:flex gap-2">
+              <div className="hidden gap-2 md:flex">
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => scroll("left")}
-                  className="rounded-full border border-[#e8e8ec] bg-white hover:bg-white hover:border-[#ff4500]"
+                  className="rounded-full border border-gray-200 bg-white hover:border-dq-orange"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="h-5 w-5" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => scroll("right")}
-                  className="rounded-full border border-[#e8e8ec] bg-white hover:bg-white hover:border-[#ff4500]"
+                  className="rounded-full border border-gray-200 bg-white hover:border-dq-orange"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="h-5 w-5" />
                 </Button>
               </div>
             </div>
 
             <div
               ref={carouselRef}
-              className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+              className="flex gap-6 overflow-x-auto scroll-smooth pb-4 scrollbar-hide"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {recommendedCourses.map((recCourse) => (
-                <Link
-                  key={recCourse.id}
-                  to={recCourse.comingSoon ? "#" : `/courses/${recCourse.id}`}
-                  onClick={(e) => recCourse.comingSoon && e.preventDefault()}
-                  className={`flex-shrink-0 w-[300px] bg-white rounded-xl overflow-hidden border border-[#e8e8ec] transition-all group ${
-                    recCourse.comingSoon
-                      ? "opacity-75 cursor-not-allowed"
-                      : "hover:shadow-md"
-                  }`}
-                >
-                  <div className="relative aspect-video overflow-hidden">
-                    <img
-                      src={recCourse.image}
-                      alt={recCourse.title}
-                      className={`w-full h-full object-cover transition-transform duration-300 ${
-                        !recCourse.comingSoon && "group-hover:scale-105"
-                      }`}
-                    />
-                    {recCourse.comingSoon && (
-                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <Badge className="bg-white text-[#0a0f1e] text-sm px-4 py-2 rounded-full">
-                          Coming Soon
-                        </Badge>
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-5 h-[180px] flex flex-col">
-                    <h3
-                      className={`text-[#0a0f1e] transition-colors mb-3 h-14 line-clamp-2 text-[18px] leading-[1.4] font-semibold ${
-                        !recCourse.comingSoon && "group-hover:text-[#ff4500]"
-                      }`}
-                    >
-                      {recCourse.title}
-                    </h3>
-                    <div className="flex items-center gap-4 text-[14px] text-[#4a4a5a] mb-3">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-[#ff4500] fill-[#ff4500]" />
-                        <span className="font-medium">{recCourse.rating}</span>
-                        <span className="text-[#9a9aaa]">({recCourse.reviews})</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        <span>{recCourse.duration}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between mt-auto">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-[20px] font-bold text-[#0a0f1e]">
-                          ${recCourse.price}
-                        </span>
-                        <span className="text-[13px] text-[#9a9aaa] line-through">
-                          ${recCourse.originalPrice}
-                        </span>
-                      </div>
-                      <Badge
-                        className={
-                          recCourse.comingSoon
-                            ? "bg-[#e8e8ec] text-[#4a4a5a] border-0 rounded-full text-[11px]"
-                            : "border border-[#e8e8ec] bg-white text-[#4a4a5a] rounded-full text-[11px]"
-                        }
-                        variant={recCourse.comingSoon ? "default" : "outline"}
-                      >
-                        {recCourse.comingSoon ? recCourse.badge : recCourse.level}
-                      </Badge>
-                    </div>
-                  </div>
-                </Link>
+                <div key={recCourse.id} className="w-[300px] flex-shrink-0">
+                  <CourseCard
+                    course={{
+                      ...recCourse,
+                      category: recCourse.category,
+                      modules: recCourse.comingSoon ? undefined : { length: 3 },
+                    }}
+                  />
+                </div>
               ))}
             </div>
           </div>
         </section>
 
+        <MarketingCtaBand
+          eyebrowText="Need guidance?"
+          title="Not sure if this is the right fit?"
+          description="Browse more courses or talk to our team about the best learning path for your role."
+          primaryCta={{ label: "Talk to our team", href: "/help" }}
+          secondaryCta={{ label: "Browse more courses", href: "/courses" }}
+        />
       </main>
 
-      <Footer />
-
-      {/* Enrollment Modal */}
       <EnrollmentModal
         open={showEnrollmentModal}
         onOpenChange={setShowEnrollmentModal}
@@ -785,7 +717,7 @@ const CourseDetail = () => {
         }}
         onEnrollmentComplete={handleEnrollmentComplete}
       />
-    </div>
+    </PublicPageLayout>
   );
 };
 

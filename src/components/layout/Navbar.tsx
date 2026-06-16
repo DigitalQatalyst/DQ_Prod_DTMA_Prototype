@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/Badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFlow } from "@/contexts/FlowContext";
 import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
-
-type SignInRole = "learner" | "instructor" | "admin";
+import DTMALogo from "@/components/layout/DTMALogo";
+import ExploreDigitalQatalystCta from "@/components/layout/ExploreDigitalQatalystCta";
+import { btnPrimary } from "@/lib/brandAccent";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +54,12 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const navLinkClass = cn(
+    "text-sm font-medium text-gray-600 transition-colors hover:text-dq-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dq-orange focus-visible:ring-offset-2 rounded-sm"
+  );
+
+  const dropdownTriggerClass = cn(navLinkClass, "flex items-center gap-1");
+
   const handleSignOut = async () => {
     await signOut();
     setIsOpen(false);
@@ -64,21 +71,13 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#e8e8ec]">
-      <nav className="w-full relative">
-        <div className="flex items-center justify-between w-full px-6 md:px-10 lg:px-16 py-2.5" style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          {/* Left: Logo + Nav links grouped together */}
+    <>
+      <header className="sticky top-0 z-40 border-b border-gray-100 bg-white">
+        <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between px-5 md:px-8 lg:px-10">
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2 flex-shrink-0 group">
-              <img
-                src="/log.svg"
-                alt="DTMA"
-                className="h-[26px] w-auto transition-transform duration-300 group-hover:scale-105"
-              />
-            </Link>
+            <DTMALogo />
 
-            {/* Nav Links — right next to logo */}
-            <div className="hidden md:flex items-center gap-5">
+            <nav className="hidden items-center gap-6 md:flex">
                 
                 {/* Explore Dropdown */}
                 <div className="relative" ref={exploreRef}>
@@ -87,7 +86,7 @@ const Navbar = () => {
                       setIsExploreOpen(!isExploreOpen);
                       setIsForYouOpen(false);
                     }}
-                    className="text-sm font-medium transition-colors duration-200 hover:text-[#ff4500] text-[#0a0f1e] flex items-center gap-1"
+                    className={dropdownTriggerClass}
                   >
                     Explore Courses
                     <ChevronDown className={`w-4 h-4 transition-transform ${isExploreOpen ? 'rotate-180' : ''}`} />
@@ -95,17 +94,17 @@ const Navbar = () => {
                   
                   {/* Full Screen Overlay Dropdown */}
                   {isExploreOpen && (
-                    <div className="fixed left-0 right-0 top-[48px] z-[9999] bg-white border-t border-[#e8e8ec] shadow-lg pointer-events-none">
-                      <div className="max-w-[1400px] mx-auto px-8 lg:px-16 py-10 pointer-events-auto">
+                    <div className="pointer-events-none fixed left-0 right-0 top-16 z-[9999] border-t border-gray-100 bg-white shadow-lg">
+                      <div className="pointer-events-auto mx-auto max-w-[1200px] px-5 py-10 md:px-8 lg:px-10">
                         {/* Header */}
-                        <div className="flex items-end justify-between mb-8 border-b border-[#e8e8ec] pb-6">
+                        <div className="mb-8 flex items-end justify-between border-b border-gray-200 pb-6">
                           <div>
-                            <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-2">6XD Framework</p>
-                            <h2 className="text-[28px] font-bold text-[#0a0f1e]">Explore Courses</h2>
+                            <p className="dq-eyebrow mb-2">6XD Framework</p>
+                            <h2 className="text-[28px] font-semibold text-dq-navy">Explore Courses</h2>
                           </div>
                           <Link
                             to="/courses"
-                            className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#ff4500] hover:text-[#cc3700] transition-colors"
+                            className="inline-flex items-center gap-2 text-[13px] font-semibold text-dq-orange transition-colors hover:text-[#E04020]"
                             onClick={() => setIsExploreOpen(false)}
                           >
                             View All Courses
@@ -128,12 +127,12 @@ const Navbar = () => {
                             <Link
                               key={course.num}
                               to={course.to}
-                              className="group flex gap-4 items-start py-2 hover:bg-[#f5f4f0] rounded-xl px-3 transition-colors"
+                              className="group flex items-start gap-4 rounded-xl px-3 py-2 transition-colors hover:bg-gray-50"
                               onClick={() => setIsExploreOpen(false)}
                             >
-                              <span className="text-[22px] font-bold text-[#e8e8ec] leading-none mt-0.5 flex-shrink-0 w-8">{course.num}</span>
-                              <div>
-                                <h3 className="text-[14px] font-semibold text-[#0a0f1e] mb-1 group-hover:text-[#ff4500] transition-colors leading-snug">{course.title}</h3>
+                              <span className="mt-0.5 w-8 flex-shrink-0 text-[22px] font-semibold leading-none text-gray-200">{course.num}</span>
+                                <div>
+                                <h3 className="mb-1 text-[14px] font-semibold leading-snug text-dq-navy transition-colors group-hover:text-dq-orange">{course.title}</h3>
                                 <p className="text-[13px] text-[#9a9aaa] leading-relaxed">{course.desc}</p>
                               </div>
                             </Link>
@@ -151,7 +150,7 @@ const Navbar = () => {
                       setIsForYouOpen(!isForYouOpen);
                       setIsExploreOpen(false);
                     }}
-                    className="text-sm font-medium transition-colors duration-200 hover:text-[#ff4500] text-[#0a0f1e] flex items-center gap-1"
+                    className={dropdownTriggerClass}
                   >
                     For You
                     <ChevronDown className={`w-4 h-4 transition-transform ${isForYouOpen ? 'rotate-180' : ''}`} />
@@ -179,227 +178,237 @@ const Navbar = () => {
                   )}
                 </div>
 
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className={`text-sm font-medium transition-colors duration-200 hover:text-white ${
-                      isActive(link.href) ? "text-white" : "text-white/90"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={cn(
+                    navLinkClass,
+                    isActive(link.href) && "font-semibold text-dq-orange"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-          {/* Right: Auth */}
-          <div className="hidden md:flex items-center gap-3">
-              {!loading && user ? (
-                <>
+          <div className="flex items-center gap-3 md:gap-4">
+            {!loading && user ? (
+              <>
+                <div className="hidden items-center gap-3 md:flex">
                   <Link to="/dashboard">
-                    <Button variant="ghost" size="sm" className="gap-2 text-[#0a0f1e] hover:text-[#ff4500] hover:bg-[#f5f4f0]">
+                    <Button variant="ghost" size="sm" className="gap-2 text-gray-600 hover:bg-gray-50 hover:text-dq-orange">
                       <LayoutDashboard className="w-4 h-4" />
                       Dashboard
                     </Button>
                   </Link>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#0a0f1e] flex items-center justify-center text-xs font-semibold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-dq-navy text-xs font-semibold text-white">
                       {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                     </div>
-                    <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-[#0a0f1e] hover:text-[#ff4500] hover:bg-[#f5f4f0]">
+                    <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-gray-600 hover:bg-gray-50 hover:text-dq-orange">
                       <LogOut className="w-4 h-4" />
                     </Button>
                   </div>
-                </>
-              ) : (
-                <>
-                  <button 
-                    onClick={handleSignIn}
-                    className="text-[13px] font-medium px-4 py-1.5 border-2 border-[#0a0f1e] rounded-full hover:bg-[#0a0f1e] hover:text-white text-[#0a0f1e] transition-colors"
-                  >
-                    Log In
-                  </button>
-                  <Button 
-                    variant="hero" 
-                    size="sm" 
-                    onClick={handleSignIn}
-                    className="px-4 py-1.5 bg-[#ff4500] hover:bg-[#cc3700] text-white border-transparent rounded-full text-[13px] font-medium h-auto"
-                  >
-                    Get Started
-                  </Button>
-                </>
-              )}
-            </div>
-
-            {/* Mobile Toggle */}
-            <div className="md:hidden flex items-center gap-4">
-              <button
-                className="p-1 rounded-lg hover:bg-[#f5f4f0] transition-colors text-[#0a0f1e]"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden py-6 border-t border-border animate-fade-in">
-            <div className="flex flex-col gap-4">
-              {/* Explore Dropdown Mobile */}
-              <div>
+                </div>
+                <ExploreDigitalQatalystCta className="hidden md:inline-flex" />
+              </>
+            ) : (
+              <div className="hidden items-center gap-3 md:flex">
+                <ExploreDigitalQatalystCta />
                 <button
-                  onClick={() => setIsExploreOpen(!isExploreOpen)}
-                  className="text-base font-medium py-2 transition-colors text-muted-foreground hover:text-primary flex items-center gap-2 w-full"
+                  type="button"
+                  onClick={handleSignIn}
+                  className="text-[13px] font-semibold text-dq-navy transition-colors hover:text-dq-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dq-orange focus-visible:ring-offset-2 rounded-sm"
                 >
-                  Explore
-                  <ChevronDown className={`w-4 h-4 transition-transform ${isExploreOpen ? 'rotate-180' : ''}`} />
+                  Log in
                 </button>
-                {isExploreOpen && (
-                  <div className="pl-4 space-y-3 mt-3 border-l-2 border-primary/30">
-                    <Link
-                      to="/categories"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsExploreOpen(false);
-                      }}
-                    >
-                      Course Categories
-                    </Link>
-                    <Link
-                      to="/masterclasses"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsExploreOpen(false);
-                      }}
-                    >
-                      In-Person Trainings
-                    </Link>
-                  </div>
-                )}
+                <Button size="sm" onClick={handleSignIn} className={cn(btnPrimary, "px-5")}>
+                  Get Started
+                </Button>
               </div>
+            )}
 
-              {/* For You Dropdown Mobile */}
-              <div>
-                <button
-                  onClick={() => setIsForYouOpen(!isForYouOpen)}
-                  className="text-base font-medium py-2 transition-colors text-muted-foreground hover:text-primary flex items-center gap-2 w-full"
-                >
-                  For You
-                  <ChevronDown className={`w-4 h-4 transition-transform ${isForYouOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {isForYouOpen && (
-                  <div className="pl-4 space-y-3 mt-3 border-l-2 border-primary/30">
-                    <Link
-                      to="/personas/digital-workers"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsForYouOpen(false);
-                      }}
-                    >
-                      Digital Workers
-                    </Link>
-                    <Link
-                      to="/personas/organizational-leaders"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsForYouOpen(false);
-                      }}
-                    >
-                      Organizational Leaders
-                    </Link>
-                    <Link
-                      to="/personas/transformation-specialists"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsForYouOpen(false);
-                      }}
-                    >
-                      Transformation Specialists
-                    </Link>
-                    <div className="border-t border-primary/30 pt-3 mt-3">
-                      <Link
-                        to="/blog"
-                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                        onClick={() => {
-                          setIsOpen(false);
-                          setIsForYouOpen(false);
-                        }}
-                      >
-                        Blog & Insights
-                      </Link>
-                      <Link
-                        to="/help"
-                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                        onClick={() => {
-                          setIsOpen(false);
-                          setIsForYouOpen(false);
-                        }}
-                      >
-                        Help Center
-                      </Link>
-                      <Link
-                        to="/accreditation"
-                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                        onClick={() => {
-                          setIsOpen(false);
-                          setIsForYouOpen(false);
-                        }}
-                      >
-                        Accreditation
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`text-base font-medium py-2 transition-colors ${
-                    isActive(link.href) ? "text-primary" : "text-muted-foreground"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                {!loading && user ? (
-                  <>
-                    <Link to="/dashboard" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full">
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                    <Button variant="ghost" className="w-full" onClick={handleSignOut}>
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Sign Out
-                    </Button>
-                  </>
-                ) : (
-                  <Button 
-                    variant="hero" 
-                    className="w-full px-6"
-                    onClick={handleSignIn}
-                  >
-                    Sign In
-                  </Button>
-                )}
-              </div>
-            </div>
+            <button
+              type="button"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              className="rounded-md p-2 outline-none focus-visible:ring-2 focus-visible:ring-dq-navy focus-visible:ring-offset-2 md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
-        )}
-      </nav>
-    </header>
+        </div>
+      </header>
+
+      {isOpen && (
+        <div className="fixed inset-0 top-16 z-30 flex flex-col gap-1 overflow-y-auto bg-white p-4 md:hidden">
+          <button
+            type="button"
+            onClick={() => setIsExploreOpen(!isExploreOpen)}
+            className="flex w-full items-center gap-2 border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
+          >
+            Explore Courses
+            <ChevronDown className={`h-4 w-4 transition-transform ${isExploreOpen ? "rotate-180" : ""}`} />
+          </button>
+          {isExploreOpen && (
+            <div className="space-y-2 pb-3 pl-4">
+              <Link
+                to="/courses"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsExploreOpen(false);
+                }}
+              >
+                View All Courses
+              </Link>
+              <Link
+                to="/categories"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsExploreOpen(false);
+                }}
+              >
+                Course Categories
+              </Link>
+              <Link
+                to="/masterclasses"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsExploreOpen(false);
+                }}
+              >
+                In-Person Trainings
+              </Link>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setIsForYouOpen(!isForYouOpen)}
+            className="flex w-full items-center gap-2 border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
+          >
+            For You
+            <ChevronDown className={`h-4 w-4 transition-transform ${isForYouOpen ? "rotate-180" : ""}`} />
+          </button>
+          {isForYouOpen && (
+            <div className="space-y-2 pb-3 pl-4">
+              <Link
+                to="/personas/digital-workers"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Digital Workers
+              </Link>
+              <Link
+                to="/personas/organizational-leaders"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Organizational Leaders
+              </Link>
+              <Link
+                to="/personas/transformation-specialists"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Transformation Specialists
+              </Link>
+              <Link
+                to="/blog"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Blog & Insights
+              </Link>
+              <Link
+                to="/help"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Help Center
+              </Link>
+              <Link
+                to="/accreditation"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Accreditation
+              </Link>
+            </div>
+          )}
+
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className="border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
+              onClick={() => setIsOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          {!loading && user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
+                onClick={() => setIsOpen(false)}
+              >
+                Dashboard
+              </Link>
+              <button
+                type="button"
+                className="mt-4 w-full rounded-full border border-gray-200 py-3 text-center font-semibold text-dq-navy"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <ExploreDigitalQatalystCta className="mt-4 w-full" showIcon={false} />
+              <button
+                type="button"
+                className="border-b border-gray-100 py-3 text-left text-lg font-medium text-dq-navy"
+                onClick={() => {
+                  handleSignIn();
+                  setIsOpen(false);
+                }}
+              >
+                Log in
+              </button>
+              <Button className={cn(btnPrimary, "mt-4 w-full py-3")} onClick={handleSignIn}>
+                Get Started
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 

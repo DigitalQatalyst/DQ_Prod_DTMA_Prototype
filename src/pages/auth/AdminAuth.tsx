@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { Shield, Eye, EyeOff, ArrowLeft, Mail, Lock, Loader2, User } from "lucide-react";
 import AdminDashboard from "@/pages/dashboard/AdminDashboard";
+import DTMALogo from "@/components/layout/DTMALogo";
 
 const AdminAuth = () => {
   const { toast } = useToast();
@@ -95,13 +96,7 @@ const AdminAuth = () => {
         </div>
 
         <div className="relative z-10 flex flex-col justify-between p-12 text-white">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/dtma-logo.png"
-              alt="DTMA"
-              className="h-[50px] w-auto"
-            />
-          </Link>
+          <DTMALogo variant="dark" />
 
           <div className="max-w-md">
             <h2 className="text-[32px] leading-[40px] font-semibold mb-4 text-white">
@@ -134,13 +129,7 @@ const AdminAuth = () => {
       {/* Right Panel - Form */}
       <div className="w-full lg:w-1/2 flex flex-col bg-white">
         <div className="lg:hidden p-6 border-b border-gray-200">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/dtma-logo.png"
-              alt="DTMA"
-              className="h-[40px] w-auto"
-            />
-          </Link>
+          <DTMALogo />
         </div>
 
         <div className="flex-1 flex items-center justify-center p-6 lg:p-12">

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAnalytics, usePendingCourses, useAdminUsers, useReviewCourse, useUpdateUserRole } from '@/hooks/useAdmin';
 import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
+import DTMALogo from '@/components/layout/DTMALogo';
 import { InviteManagement } from '@/components/admin/InviteManagement';
 import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalyticsDashboard';
 import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
@@ -1857,13 +1858,7 @@ const AdminDashboard = () => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-6 border-b border-white/5">
-            <Link to="/" className="flex items-center gap-3">
-              <img
-                src="/dtma-logo.png"
-                alt="DTMA"
-                className="h-[40px] w-auto brightness-0 invert"
-              />
-            </Link>
+            <DTMALogo variant="dark" />
           </div>
 
           <RoleSwitcher currentRole="admin" />

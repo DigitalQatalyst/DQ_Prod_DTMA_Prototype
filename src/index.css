@@ -62,6 +62,32 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 210 40% 96%;
     --sidebar-ring: 11 100% 65%;
+
+    /* DQ corp web brand tokens */
+    --dq-navy: #030f35;
+    --dq-orange: #fb5535;
+
+    /* Mesh / glow tokens (aligned with TMaaS / corp web) */
+    --mesh-hero-light: linear-gradient(
+      135deg,
+      oklch(0.98 0.006 264) 0%,
+      oklch(0.96 0.012 264 / 0.8) 35%,
+      oklch(0.97 0.01 30 / 0.35) 65%,
+      oklch(0.99 0.004 264) 100%
+    );
+    --mesh-hero-dark:
+      radial-gradient(ellipse 80% 60% at 20% 40%, oklch(0.25 0.06 264 / 0.8), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 60%, oklch(0.22 0.04 264 / 0.6), transparent 70%),
+      oklch(0.12 0.045 264);
+    --mesh-cta-orange:
+      radial-gradient(ellipse 50% 40% at 30% 50%, oklch(0.58 0.22 22 / 0.28), transparent 55%),
+      radial-gradient(ellipse 40% 50% at 75% 25%, oklch(0.45 0.18 20 / 0.18), transparent 55%),
+      oklch(0.1 0.04 264);
+
+    --glow-orange-md: 0 0 40px oklch(0.65 0.208 29 / 0.35), 0 0 80px oklch(0.65 0.208 29 / 0.15);
+    --glow-navy-md: 0 0 40px oklch(0.25 0.06 264 / 0.3), 0 8px 32px oklch(0.12 0.045 264 / 0.25);
+    --shadow-card: 0 2px 16px -2px hsl(222 47% 11% / 0.06);
+    --shadow-elevated: 0 8px 30px -8px hsl(222 47% 11% / 0.1);
   }
 
   .dark {
@@ -119,72 +145,22 @@
     @apply border-border;
   }
 
+  html,
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: 'Poppins', sans-serif;
+    overflow-x: clip;
   }
 
-  h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 3.813rem;
-    font-weight: 400;
-    line-height: 1.2;
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
   }
 
-  h2 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 3.063rem;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  h3 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2.438rem;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  h4 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.938rem;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  h5 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.563rem;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
   h6 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.250rem;
-    font-weight: 400;
-    line-height: 1.2;
-  }
-
-  p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.000rem;
-    font-weight: 400;
-    line-height: 1.5;
-  }
-
-  small {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.813rem;
-    font-weight: 400;
-    line-height: 1.5;
-  }
-
-  .caption {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.625rem;
-    font-weight: 400;
-    line-height: 1.5;
+    @apply font-semibold text-dq-navy;
   }
 }
 
@@ -240,6 +216,39 @@
     display: none;
   }
 
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glow-orange {
+    box-shadow: var(--glow-orange-md);
+  }
+
+  .glow-navy {
+    box-shadow: var(--glow-navy-md);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .dq-eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.2em] text-dq-orange;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
@@ -260,4 +269,37 @@
       transform: translateY(0);
     }
   }
+}
+
+/* Grid overlay (used on hero sections) */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, rgba(3, 15, 53, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(3, 15, 53, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 30%, black 40%, transparent 80%);
+  mask-image: radial-gradient(ellipse 70% 50% at 50% 30%, black 40%, transparent 80%);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s ease-out both;
+}
+.animation-delay-100 {
+  animation-delay: 0.1s;
+}
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+.animation-delay-300 {
+  animation-delay: 0.3s;
 }

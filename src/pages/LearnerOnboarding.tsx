@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
+import DTMALogo from "@/components/layout/DTMALogo";
 
 interface OnboardingData {
   learningGoal: string;
@@ -49,9 +50,7 @@ const LearnerOnboarding = () => {
     <div className="min-h-screen bg-[#f5f4f0] font-sans flex flex-col">
       {/* Minimal top bar */}
       <header className="bg-white border-b border-[#e8e8ec] px-8 py-3 flex items-center justify-between">
-        <Link to="/">
-          <img src="/log.svg" alt="DTMA" className="h-[26px] w-auto" />
-        </Link>
+        <DTMALogo />
         <button
           onClick={handleSkip}
           className="text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors"

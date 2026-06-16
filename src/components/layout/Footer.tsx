@@ -1,29 +1,28 @@
 import { Link } from "react-router-dom";
 import { Linkedin, Youtube, Twitter } from "lucide-react";
+import DTMALogo from "@/components/layout/DTMALogo";
+import { linkMuted, sectionPaddingX } from "@/lib/brandAccent";
+import { DQ_CORP_WEB_URL, EXPLORE_DQ_LABEL } from "@/lib/brandLinks";
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t border-[#e8e8ec] font-sans">
-      {/* Main footer */}
-      <div className="max-w-[1200px] mx-auto px-8 lg:px-16 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-
-          {/* Col 1: Brand */}
+    <footer className={`border-t border-gray-100 bg-white pb-8 pt-14 ${sectionPaddingX}`}>
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-12 grid grid-cols-1 gap-10 lg:grid-cols-4 lg:gap-12">
           <div className="lg:col-span-1">
-            <Link to="/" className="inline-flex items-center gap-2 mb-4">
-              <img src="/log.svg" alt="DTMA" className="h-8 w-auto" />
-            </Link>
-            <p className="text-[14px] text-[#6b6b7b] leading-relaxed max-w-[220px]">
+            <div className="mb-4">
+              <DTMALogo />
+            </div>
+            <p className="max-w-[320px] text-[14px] leading-relaxed text-gray-500">
               Master the skills to lead, deliver, and thrive in the new digital economy.
             </p>
           </div>
 
-          {/* Col 2: Explore */}
           <div>
-            <h4 className="text-[11px] font-semibold uppercase tracking-widest text-[#9a9aaa] mb-5">
+            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400">
               Explore
-            </h4>
-            <ul className="space-y-3">
+            </p>
+            <ul className="space-y-2.5 text-[14px] text-gray-600">
               {[
                 { label: "Courses", href: "/courses" },
                 { label: "The 6XD Framework", href: "/6xd" },
@@ -34,7 +33,7 @@ const Footer = () => {
                 { label: "Blog & Insights", href: "/blog" },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link to={link.href} className="text-[14px] text-[#4a4a5a] hover:text-[#ff4500] transition-colors">
+                  <Link to={link.href} className={linkMuted}>
                     {link.label}
                   </Link>
                 </li>
@@ -42,12 +41,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Col 3: Company */}
           <div>
-            <h4 className="text-[11px] font-semibold uppercase tracking-widest text-[#9a9aaa] mb-5">
+            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400">
               Company
-            </h4>
-            <ul className="space-y-3">
+            </p>
+            <ul className="space-y-2.5 text-[14px] text-gray-600">
               {[
                 { label: "About Us", href: "/about" },
                 { label: "Accreditation & Credentials", href: "/accreditation" },
@@ -59,7 +57,7 @@ const Footer = () => {
                 { label: "Instructor", href: "/auth/instructor" },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link to={link.href} className="text-[14px] text-[#4a4a5a] hover:text-[#ff4500] transition-colors">
+                  <Link to={link.href} className={linkMuted}>
                     {link.label}
                   </Link>
                 </li>
@@ -67,41 +65,64 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Col 4: Follow Us */}
           <div>
-            <h4 className="text-[11px] font-semibold uppercase tracking-widest text-[#9a9aaa] mb-5">
+            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400">
               Follow Us
-            </h4>
-            <ul className="space-y-3">
+            </p>
+            <ul className="space-y-2.5">
               <li>
-                <a href="#" className="inline-flex items-center gap-2 text-[14px] text-[#4a4a5a] hover:text-[#ff4500] transition-colors">
-                  <Linkedin className="w-4 h-4" /> LinkedIn
+                <a
+                  href="https://www.linkedin.com/company/digitalqatalyst"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 text-[14px] text-gray-600 ${linkMuted}`}
+                >
+                  <Linkedin className="h-4 w-4" /> LinkedIn
                 </a>
               </li>
               <li>
-                <a href="#" className="inline-flex items-center gap-2 text-[14px] text-[#4a4a5a] hover:text-[#ff4500] transition-colors">
-                  <Twitter className="w-4 h-4" /> X
+                <a
+                  href="https://x.com/digitalqatalyst"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 text-[14px] text-gray-600 ${linkMuted}`}
+                >
+                  <Twitter className="h-4 w-4" /> X
                 </a>
               </li>
               <li>
-                <a href="#" className="inline-flex items-center gap-2 text-[14px] text-[#4a4a5a] hover:text-[#ff4500] transition-colors">
-                  <Youtube className="w-4 h-4" /> YouTube
+                <a
+                  href="https://www.youtube.com/@digitalqatalyst"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 text-[14px] text-gray-600 ${linkMuted}`}
+                >
+                  <Youtube className="h-4 w-4" /> YouTube
+                </a>
+              </li>
+              <li>
+                <a
+                  href={DQ_CORP_WEB_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 text-[14px] text-gray-600 ${linkMuted}`}
+                >
+                  {EXPLORE_DQ_LABEL}
                 </a>
               </li>
             </ul>
           </div>
         </div>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-[#e8e8ec]">
-        <div className="max-w-[1200px] mx-auto px-8 lg:px-16 py-5 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-[13px] text-[#9a9aaa]">
-            © 2026 DTMA | Digital Transformation Management Academy. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <Link to="/privacy" className="text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors">Privacy</Link>
-            <Link to="/terms" className="text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors">Terms</Link>
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-100 pt-6 text-[12px] text-gray-400 sm:flex-row">
+          <p>© 2026 DTMA | Digital Transformation Management Academy. All rights reserved.</p>
+          <div className="flex gap-5">
+            <Link to="/privacy" className="transition-colors hover:text-gray-700">
+              Privacy
+            </Link>
+            <Link to="/terms" className="transition-colors hover:text-gray-700">
+              Terms
+            </Link>
           </div>
         </div>
       </div>

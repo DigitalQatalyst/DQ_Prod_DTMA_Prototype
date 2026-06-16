@@ -15,6 +15,7 @@ import {
   UserCog,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import DTMALogo from '@/components/layout/DTMALogo';
 
 import SMSOverviewPanel from '@/components/sms/SMSOverviewPanel';
 import SMSCoursesPanel from '@/components/sms/SMSCoursesPanel';
@@ -51,9 +52,7 @@ export default function SMSDashboard() {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="px-6 py-5 border-b border-white/10">
-            <Link to="/" className="flex items-center gap-3">
-              <img src="/dtma-logo.png" alt="DTMA" className="h-10 w-auto brightness-0 invert" />
-            </Link>
+            <DTMALogo variant="dark" />
           </div>
 
           {/* Nav */}

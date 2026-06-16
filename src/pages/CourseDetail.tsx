@@ -19,14 +19,12 @@ import {
   Award,
   Play,
   Download,
-  Users,
   Globe,
   CheckCircle,
   ChevronLeft,
   PlayCircle,
   FileText,
   Lock,
-  Loader2,
   ChevronRight,
 } from "lucide-react";
 import { useCourse, useIsEnrolled } from "@/hooks/useCourses";
@@ -35,9 +33,50 @@ import { EnrollmentModal } from "@/components/enrollment/EnrollmentModal";
 import { getCourseById } from "@/data/dtmaCoursesNew";
 import {
   btnPrimary,
+  btnSecondary,
+  eyebrow,
   sectionHeading,
   sectionPaddingX,
 } from "@/lib/brandAccent";
+import { cn } from "@/lib/utils";
+import type { Course } from "@/data/dtmaCoursesNew";
+
+const CATEGORY_LABELS: Record<string, string> = {
+  "digital-economy": "Digital Economy",
+  "digital-cognitive-organisation": "Digital Cognitive Organisation",
+  "digital-business-platform": "Digital Business Platform",
+  "digital-transformation": "Digital Transformation 2.0",
+  "digital-worker-workspace": "Digital Worker & Workspace",
+  "digital-accelerators": "Digital Accelerators",
+};
+
+const formatCategory = (slug: string) =>
+  CATEGORY_LABELS[slug] ??
+  slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+type DisplayCourse = Course & {
+  subtitle?: string;
+  whatYouWillLearn?: string[];
+  outcomes?: string[];
+  requirements?: string[];
+  curriculum?: Array<{
+    title: string;
+    duration: string;
+    lessons: Array<{ title: string; duration?: string; type: string; preview?: boolean }>;
+  }>;
+  includes?: Array<{ icon: typeof Play; text: string }>;
+  students?: number;
+  language?: string;
+};
+
+function getLearningOutcomes(course: DisplayCourse): string[] {
+  if (course.whatYouWillLearn?.length) return course.whatYouWillLearn;
+  if (course.outcomes?.length) return course.outcomes;
+  if (course.modules?.length) {
+    return course.modules.map((m) => m.description).filter(Boolean).slice(0, 6);
+  }
+  return [];
+}
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -46,7 +85,7 @@ const CourseDetail = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   // Fetch real course data
-  const { data: courseData, isLoading: courseLoading } = useCourse(id || "");
+  const { data: _courseData, isLoading: _courseLoading } = useCourse(id || "");
   const { data: isEnrolled, isLoading: enrollmentLoading } = useIsEnrolled(id || "");
 
   // Enrollment modal state
@@ -236,212 +275,101 @@ const CourseDetail = () => {
     ],
   };
 
-  // Use real course data for display, with proper typing
-  const displayCourse: any = courseFromNew || mockCourse;
+  // Use real course data for display
+  const displayCourse = (courseFromNew || mockCourse) as DisplayCourse;
 
   const totalLessons =
-    displayCourse.modules?.reduce((acc: number, mod: any) => acc + (mod.lessons?.length || 0), 0) ||
-    displayCourse.curriculum?.reduce((acc: number, mod: any) => acc + mod.lessons.length, 0) ||
+    displayCourse.modules?.reduce((acc, mod) => acc + (mod.lessons?.length || 0), 0) ||
+    displayCourse.curriculum?.reduce((acc, mod) => acc + mod.lessons.length, 0) ||
+    displayCourse.totalLessons ||
     0;
+
+  const moduleList = displayCourse.modules || displayCourse.curriculum || [];
+  const learningOutcomes = getLearningOutcomes(displayCourse);
+  const categoryLabel = formatCategory(displayCourse.category);
+  const instructorName =
+    typeof displayCourse.instructor === "string"
+      ? displayCourse.instructor
+      : displayCourse.instructor.name;
+  const instructorTitle =
+    typeof displayCourse.instructor === "string"
+      ? "Digital Transformation Experts"
+      : displayCourse.instructor.title;
+  const instructorImage =
+    typeof displayCourse.instructor === "string"
+      ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop"
+      : displayCourse.instructor.image;
+  const includesList =
+    displayCourse.includes ?? [
+      { icon: Play, text: `${displayCourse.duration} on-demand video` },
+      { icon: FileText, text: `${totalLessons} lessons across ${moduleList.length} modules` },
+      { icon: Globe, text: "Full lifetime access" },
+      { icon: Award, text: "KHDA-attested certificate" },
+    ];
+
+  const discountPct = Math.round(
+    (1 - displayCourse.price / displayCourse.originalPrice) * 100
+  );
+
+  const purchaseCard = (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+      <div className="relative aspect-video">
+        <img src={displayCourse.image} alt={displayCourse.title} className="h-full w-full object-cover" />
+      </div>
+      <div className="p-6">
+        <div className="mb-6 flex flex-wrap items-baseline gap-2">
+          <span className="text-3xl font-semibold text-dq-navy">${displayCourse.price}</span>
+          <span className="text-lg text-gray-400 line-through">${displayCourse.originalPrice}</span>
+          {discountPct > 0 && (
+            <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-semibold text-dq-orange">
+              {discountPct}% off
+            </span>
+          )}
+        </div>
+        <div className="space-y-3">
+          {displayCourse.comingSoon ? (
+            <Button className="w-full cursor-not-allowed rounded-full bg-gray-400 text-white" disabled>
+              Coming Soon
+            </Button>
+          ) : (
+            <>
+              <Button
+                className={cn(btnPrimary, "w-full")}
+                onClick={handleEnroll}
+                disabled={authLoading || enrollmentLoading}
+              >
+                {isEnrolled ? "Start Learning" : "Enroll Now"}
+              </Button>
+              {!isEnrolled && (
+                <Button variant="outline" className={cn(btnSecondary, "w-full")}>
+                  Add to Wishlist
+                </Button>
+              )}
+            </>
+          )}
+        </div>
+        <p className="mb-6 mt-4 text-center text-[13px] text-gray-500">30-day money-back guarantee</p>
+        <h4 className={`${sectionHeading} mb-4`}>This course includes</h4>
+        <ul className="space-y-3">
+          {includesList.map((item, index) => (
+            <li key={index} className="flex items-center gap-3 text-sm text-gray-600">
+              <item.icon className="h-4 w-4 shrink-0 text-dq-orange" />
+              <span>{item.text}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 
   return (
     <PublicPageLayout>
       <main className="pb-20">
-        <div className="relative overflow-hidden">
-          <MeshSection variant="heroLight" grid className="absolute inset-0 z-0" />
-
-          <div className={`relative z-10 mx-auto max-w-[1200px] ${sectionPaddingX} pb-16 pt-20 md:pt-24`}>
-            <Link
-              to="/courses"
-              className="mb-6 inline-flex items-center gap-2 text-[14px] text-gray-500 transition-colors hover:text-dq-navy"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              Back to Courses
-            </Link>
-
-            <div className="grid gap-12 lg:grid-cols-3">
-
-              {/* ── Left: Course Info ── */}
-              <div className="lg:col-span-2">
-                {/* Badges */}
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {displayCourse.badge && (
-                    <Badge className="rounded-full border-0 bg-dq-orange px-3 text-white">
-                      {displayCourse.badge}
-                    </Badge>
-                  )}
-                  <Badge className="rounded-full border-0 bg-orange-50 px-3 text-dq-orange">
-                    {displayCourse.category}
-                  </Badge>
-                  <Badge
-                    variant="outline"
-                    className="rounded-full border border-gray-200 bg-white px-3 text-gray-600"
-                  >
-                    {displayCourse.level}
-                  </Badge>
-                </div>
-
-                {/* Title */}
-                <h1 className="mb-5 text-3xl font-semibold leading-[1.1] text-dq-navy sm:text-4xl md:text-5xl">
-                  {displayCourse.title}
-                </h1>
-
-                <p className="mb-7 text-base leading-[1.7] text-[#667085]">
-                  {displayCourse.description || (displayCourse as any).subtitle}
-                </p>
-
-                {/* Meta row */}
-                <div className="mb-8 flex flex-wrap items-center gap-5 text-[14px] text-gray-600">
-                  <div className="flex items-center gap-1.5">
-                    <Star className="h-4 w-4 fill-dq-orange text-dq-orange" />
-                    <span className="font-semibold text-dq-navy">{displayCourse.rating}</span>
-                    <span>({displayCourse.reviews} reviews)</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Users className="w-4 h-4" />
-                    <span>{((displayCourse as any).students || 12453).toLocaleString()} students</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-4 h-4" />
-                    <span>{displayCourse.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <BookOpen className="w-4 h-4" />
-                    <span>
-                      {displayCourse.comingSoon
-                        ? "Content coming soon"
-                        : `${displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules • ${totalLessons} lessons`}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Globe className="w-4 h-4" />
-                    <span>{(displayCourse as any).language || "English"}</span>
-                  </div>
-                </div>
-
-                {/* Instructor row */}
-                <div className="flex items-center gap-3">
-                  <img
-                    src={
-                      typeof displayCourse.instructor === "string"
-                        ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop"
-                        : displayCourse.instructor.image
-                    }
-                    alt={
-                      typeof displayCourse.instructor === "string"
-                        ? displayCourse.instructor
-                        : displayCourse.instructor.name
-                    }
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  <div>
-                    <div className="text-[15px] font-medium text-dq-navy">
-                      Created by{" "}
-                      {typeof displayCourse.instructor === "string"
-                        ? displayCourse.instructor
-                        : displayCourse.instructor.name}
-                    </div>
-                    <div className="text-[13px] text-gray-400">
-                      {typeof displayCourse.instructor === "string"
-                        ? "DTMA Faculty"
-                        : displayCourse.instructor.title}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* ── Right: Sticky Purchase Card (Desktop) ── */}
-              <div className="hidden lg:block">
-                <div className="sticky top-24 overflow-hidden rounded-2xl border border-gray-200 bg-white p-0 shadow-card">
-                  {/* Course image */}
-                  <div className="relative aspect-video">
-                    <img
-                      src={displayCourse.image}
-                      alt={displayCourse.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <div className="p-6">
-                    {/* Price */}
-                    <div className="flex items-baseline gap-3 mb-6">
-                      <span className="text-[32px] font-semibold text-dq-navy">
-                        ${displayCourse.price}
-                      </span>
-                      <span className="text-[18px] text-gray-400 line-through">
-                        ${displayCourse.originalPrice}
-                      </span>
-                      <span className="rounded-full bg-orange-50 px-2 py-0.5 text-[12px] font-semibold text-dq-orange">
-                        {Math.round((1 - displayCourse.price / displayCourse.originalPrice) * 100)}% off
-                      </span>
-                    </div>
-
-                    {/* CTA Buttons */}
-                    <div className="space-y-3 mb-5">
-                      {displayCourse.comingSoon ? (
-                        <Button
-                          className="w-full rounded-full bg-[#9a9aaa] cursor-not-allowed text-white"
-                          size="lg"
-                          disabled
-                        >
-                          Coming Soon
-                        </Button>
-                      ) : (
-                        <>
-                          <Button
-                            className={`w-full ${btnPrimary}`}
-                            size="lg"
-                            onClick={handleEnroll}
-                            disabled={authLoading || enrollmentLoading}
-                          >
-                            {isEnrolled ? "Start Learning" : "Enroll Now"}
-                          </Button>
-                          {!isEnrolled && (
-                            <Button
-                              variant="outline"
-                              className="w-full rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50"
-                              size="lg"
-                            >
-                              Add to Wishlist
-                            </Button>
-                          )}
-                        </>
-                      )}
-                    </div>
-
-                    <p className="text-center text-gray-400 text-[13px] mb-6">
-                      30-day money-back guarantee
-                    </p>
-
-                    {/* Includes */}
-                    <div>
-                      <h4 className="text-[16px] font-semibold text-dq-navy mb-4">
-                        This course includes:
-                      </h4>
-                      <ul className="space-y-3">
-                        {((displayCourse as any).includes || []).map((item: any, index: number) => (
-                          <li
-                            key={index}
-                            className="flex items-center gap-3 text-[14px] text-gray-600"
-                          >
-                            <item.icon className="w-4 h-4 text-dq-orange flex-shrink-0" />
-                            <span>{item.text}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="sticky top-16 z-40 border-b border-gray-200 bg-white shadow-sm lg:hidden">
-          <div className="container mx-auto flex items-center justify-between px-4 py-4">
+        <div className="sticky top-16 z-40 border-b border-gray-200 bg-white lg:hidden">
+          <div className={`mx-auto flex max-w-[1200px] items-center justify-between ${sectionPaddingX} py-3`}>
             <div className="flex items-baseline gap-2">
-              <span className="text-[22px] font-semibold text-dq-navy">${displayCourse.price}</span>
-              <span className="text-[13px] text-gray-400 line-through">${displayCourse.originalPrice}</span>
+              <span className="text-xl font-semibold text-dq-navy">${displayCourse.price}</span>
+              <span className="text-sm text-gray-400 line-through">${displayCourse.originalPrice}</span>
             </div>
             {displayCourse.comingSoon ? (
               <Button className="cursor-not-allowed rounded-full bg-gray-400 text-white" disabled>
@@ -455,206 +383,217 @@ const CourseDetail = () => {
           </div>
         </div>
 
-        <section className={`bg-background py-20 ${sectionPaddingX}`}>
-          <div className="mx-auto max-w-[1200px]">
-            <div className="lg:max-w-[720px]">
-              <div className="mb-14">
-                <p className="dq-eyebrow mb-3">Outcomes</p>
-                <h2 className={`${sectionHeading} mb-6 text-2xl md:text-3xl`}>What you'll learn</h2>
-                {((displayCourse as any).whatYouWillLearn || (displayCourse as any).outcomes || []).length > 0 ? (
+        <div className={`mx-auto max-w-[1200px] ${sectionPaddingX}`}>
+          <Link
+            to="/courses"
+            className="mb-8 inline-flex items-center gap-2 pt-20 text-sm text-gray-500 transition-colors hover:text-dq-navy md:pt-24"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Back to Courses
+          </Link>
+
+          <div className="grid gap-10 lg:grid-cols-3 lg:gap-12">
+            <div className="space-y-16 lg:col-span-2">
+              <MeshSection variant="heroLight" grid className="-mx-5 rounded-none border-b border-gray-100 px-5 pb-10 md:-mx-8 md:px-8 lg:-mx-10 lg:rounded-2xl lg:border lg:px-10">
+                <div className="relative z-10">
+                  <div className="mb-4 flex flex-wrap gap-2">
+                  {displayCourse.badge && (
+                    <Badge className="rounded-full border-0 bg-dq-orange px-3 text-white">
+                      {displayCourse.badge}
+                    </Badge>
+                  )}
+                  <Badge className="rounded-full border-0 bg-gray-100 px-3 text-dq-navy">
+                    {categoryLabel}
+                  </Badge>
+                  <Badge variant="outline" className="rounded-full border-gray-200 bg-white px-3 text-gray-600">
+                    {displayCourse.level}
+                  </Badge>
+                </div>
+
+                <h1 className="mb-4 text-3xl font-semibold leading-[1.1] tracking-tight text-dq-navy sm:text-4xl lg:text-[2.75rem]">
+                  {displayCourse.title}
+                </h1>
+
+                <p className="mb-6 max-w-2xl text-base leading-[1.7] text-[#667085]">
+                  {displayCourse.description || displayCourse.subtitle}
+                </p>
+
+                <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Star className="h-4 w-4 fill-dq-orange text-dq-orange" />
+                    <span className="font-semibold text-dq-navy">{displayCourse.rating}</span>
+                    <span className="text-gray-500">({displayCourse.reviews} reviews)</span>
+                  </span>
+                  <span className="hidden text-gray-300 sm:inline" aria-hidden>
+                    |
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock className="h-4 w-4 text-gray-400" />
+                    {displayCourse.duration}
+                  </span>
+                  <span className="hidden text-gray-300 sm:inline" aria-hidden>
+                    |
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <BookOpen className="h-4 w-4 text-gray-400" />
+                    {displayCourse.comingSoon
+                      ? "Content coming soon"
+                      : `${moduleList.length} modules, ${totalLessons} lessons`}
+                  </span>
+                  <span className="hidden text-gray-300 sm:inline" aria-hidden>
+                    |
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Globe className="h-4 w-4 text-gray-400" />
+                    {displayCourse.language ?? "English"}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3 border-t border-gray-200/80 pt-6">
+                  <img
+                    src={instructorImage}
+                    alt={instructorName}
+                    className="h-11 w-11 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-dq-navy">
+                      Created by <span className="font-semibold">{instructorName}</span>
+                    </p>
+                    <p className="text-[13px] text-gray-500">{instructorTitle}</p>
+                  </div>
+                </div>
+                </div>
+              </MeshSection>
+
+              {learningOutcomes.length > 0 && (
+                <div>
+                  <p className={`${eyebrow} mb-3`}>Outcomes</p>
+                  <h2 className={`${sectionHeading} mb-6`}>What you&apos;ll learn</h2>
                   <div className="grid gap-3 rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:grid-cols-2">
-                    {((displayCourse as any).whatYouWillLearn || (displayCourse as any).outcomes || []).map((item: string, index: number) => (
-                      <div key={index} className="flex gap-3 items-start">
-                        <CheckCircle className="w-4 h-4 text-dq-orange flex-shrink-0 mt-0.5" />
-                        <span className="text-[14px] text-gray-600 leading-relaxed">{item}</span>
+                    {learningOutcomes.map((item, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-dq-orange" />
+                        <span className="text-sm leading-relaxed text-gray-600">{item}</span>
                       </div>
                     ))}
                   </div>
-                ) : (
-                  <div className="p-6 bg-gray-50 border border-gray-200 rounded-xl">
-                    <p className="text-[14px] text-gray-400 italic">Learning outcomes will be listed here once the course content is available.</p>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
 
-              {/* Course Content / Curriculum */}
-              <div className="mb-14">
-                <p className="text-[11px] font-semibold text-dq-orange uppercase tracking-widest mb-3">Curriculum</p>
-                <h2 className="text-[28px] font-bold text-dq-navy mb-2">
-                  Course Content
-                </h2>
-                <p className="text-[14px] text-gray-400 mb-8">
-                  {displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules •{" "}
-                  {totalLessons} lessons • {displayCourse.duration} total
+              <div>
+                <p className={`${eyebrow} mb-3`}>Curriculum</p>
+                <h2 className={`${sectionHeading} mb-2`}>Course content</h2>
+                <p className="mb-6 text-sm text-gray-500">
+                  {moduleList.length} modules · {totalLessons} lessons · {displayCourse.duration} total
                 </p>
-
                 <Accordion type="multiple" className="space-y-3">
-                  {(displayCourse.modules || (displayCourse as any).curriculum || []).map(
-                    (module: any, moduleIndex: number) => (
-                      <AccordionItem
-                        key={moduleIndex}
-                        value={`module-${moduleIndex}`}
-                        className="border border-gray-200 rounded-xl px-6 bg-white"
-                      >
-                        <AccordionTrigger className="hover:no-underline py-5">
-                          <div className="flex items-center justify-between w-full pr-4">
-                            <span className="text-left text-[16px] font-medium text-dq-navy">
-                              {module.title}
-                            </span>
-                            <span className="text-[13px] text-gray-400">
-                              {module.lessons.length} lessons • {module.duration}
-                            </span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <ul className="space-y-2 pb-4">
-                            {module.lessons.map((lesson: any, lessonIndex: number) => (
-                              <li
-                                key={lessonIndex}
-                                className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-gray-50 transition-colors"
-                              >
-                                <div className="flex items-center gap-3">
-                                  {lesson.type === "video" && (
-                                    <PlayCircle className="w-4 h-4 text-dq-orange" />
-                                  )}
-                                  {lesson.type === "file" && (
-                                    <FileText className="w-4 h-4 text-gray-400" />
-                                  )}
-                                  {lesson.type === "quiz" && (
-                                    <Award className="w-4 h-4 text-dq-orange" />
-                                  )}
-                                  <span className="text-[14px] text-gray-600">{lesson.title}</span>
-                                  {lesson.preview && (
-                                    <Badge
-                                      variant="secondary"
-                                      className="text-[11px] rounded-full"
-                                    >
-                                      Preview
-                                    </Badge>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  {lesson.duration && (
-                                    <span className="text-[12px] text-gray-400">
-                                      {lesson.duration}
-                                    </span>
-                                  )}
-                                  {!lesson.preview && (
-                                    <Lock className="w-3.5 h-3.5 text-gray-400" />
-                                  )}
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </AccordionContent>
-                      </AccordionItem>
-                    )
-                  )}
+                  {moduleList.map((module, moduleIndex) => (
+                    <AccordionItem
+                      key={moduleIndex}
+                      value={`module-${moduleIndex}`}
+                      className="rounded-2xl border border-gray-200 bg-white px-5 transition-colors hover:border-dq-orange/40"
+                    >
+                      <AccordionTrigger className="py-4 hover:no-underline">
+                        <div className="flex w-full items-start justify-between gap-4 pr-2 text-left">
+                          <span className="text-base font-medium text-dq-navy">{module.title}</span>
+                          <span className="shrink-0 text-xs text-gray-500">
+                            {module.lessons.length} lessons · {module.duration}
+                          </span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <ul className="space-y-1 border-t border-gray-100 pb-3 pt-2">
+                          {module.lessons.map((lesson, lessonIndex) => (
+                            <li
+                              key={lessonIndex}
+                              className="flex items-center justify-between rounded-lg px-2 py-2.5 hover:bg-gray-50"
+                            >
+                              <div className="flex min-w-0 items-center gap-3">
+                                {lesson.type === "video" && (
+                                  <PlayCircle className="h-4 w-4 shrink-0 text-dq-orange" />
+                                )}
+                                {lesson.type === "reading" && (
+                                  <FileText className="h-4 w-4 shrink-0 text-gray-400" />
+                                )}
+                                {lesson.type === "quiz" && (
+                                  <Award className="h-4 w-4 shrink-0 text-dq-orange" />
+                                )}
+                                {!["video", "reading", "quiz"].includes(lesson.type) && (
+                                  <FileText className="h-4 w-4 shrink-0 text-gray-400" />
+                                )}
+                                <span className="truncate text-sm text-gray-600">{lesson.title}</span>
+                                {lesson.preview && (
+                                  <Badge variant="secondary" className="shrink-0 rounded-full text-[11px]">
+                                    Preview
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="flex shrink-0 items-center gap-2 pl-3">
+                                {lesson.duration && (
+                                  <span className="text-xs text-gray-400">{lesson.duration}</span>
+                                )}
+                                {!lesson.preview && <Lock className="h-3.5 w-3.5 text-gray-300" />}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
                 </Accordion>
               </div>
 
-              {/* Requirements */}
-              <div className="mb-14">
-                <p className="text-[11px] font-semibold text-dq-orange uppercase tracking-widest mb-3">Prerequisites</p>
-                <h2 className="text-[28px] font-bold text-dq-navy mb-6">
-                  Requirements
-                </h2>
-                <ul className="space-y-3">
-                  {((displayCourse as any).requirements || []).map((req: string, index: number) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-dq-orange mt-[9px] flex-shrink-0" />
-                      <span className="text-[16px] text-gray-600">{req}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Description */}
-              <div className="mb-14 pb-14 border-b border-gray-200">
-                <p className="text-[11px] font-semibold text-dq-orange uppercase tracking-widest mb-3">About this course</p>
-                <h2 className="text-[28px] font-bold text-dq-navy mb-6">
-                  Description
-                </h2>
+              {displayCourse.requirements && displayCourse.requirements.length > 0 && (
                 <div>
-                  {displayCourse.description.split("\n\n").map((paragraph: string, index: number) => (
-                    <p
-                      key={index}
-                      className="text-[16px] text-gray-600 leading-relaxed mb-4"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
+                  <p className={`${eyebrow} mb-3`}>Prerequisites</p>
+                  <h2 className={`${sectionHeading} mb-6`}>Requirements</h2>
+                  <ul className="space-y-3">
+                    {displayCourse.requirements.map((req, index) => (
+                      <li key={index} className="flex items-start gap-3 text-sm leading-relaxed text-gray-600">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-dq-orange" />
+                        {req}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+              )}
 
-              {/* Instructor */}
-              <div className="mb-14">
-                <p className="text-[11px] font-semibold text-dq-orange uppercase tracking-widest mb-3">Taught by</p>
-                <h2 className="text-[28px] font-bold text-dq-navy mb-6">
-                  Your Instructor
-                </h2>
-                <div className="bg-white border border-gray-200 rounded-xl p-6">
-                  <div className="flex items-start gap-6">
+              <div>
+                <p className={`${eyebrow} mb-3`}>Faculty</p>
+                <h2 className={`${sectionHeading} mb-6`}>Your instructor</h2>
+                <div className="rounded-2xl border border-gray-200 bg-white p-6">
+                  <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
                     <img
-                      src={
-                        typeof displayCourse.instructor === "string"
-                          ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop"
-                          : displayCourse.instructor.image
-                      }
-                      alt={
-                        typeof displayCourse.instructor === "string"
-                          ? displayCourse.instructor
-                          : displayCourse.instructor.name
-                      }
-                      className="w-24 h-24 rounded-xl object-cover"
+                      src={instructorImage}
+                      alt={instructorName}
+                      className="h-20 w-20 rounded-xl object-cover"
                     />
                     <div>
-                      <h3 className="text-[20px] font-semibold text-dq-navy mb-1">
+                      <h3 className="text-lg font-semibold text-dq-navy">{instructorName}</h3>
+                      <p className="mb-3 text-sm text-dq-orange">{instructorTitle}</p>
+                      <p className="text-sm leading-relaxed text-gray-600">
                         {typeof displayCourse.instructor === "string"
-                          ? displayCourse.instructor
-                          : displayCourse.instructor.name}
-                      </h3>
-                      <p className="text-[14px] text-dq-orange mb-3">
-                        {typeof displayCourse.instructor === "string"
-                          ? "DTMA Faculty"
-                          : displayCourse.instructor.title}
-                      </p>
-                      <div className="flex items-center gap-6 text-[14px] text-gray-600 mb-4">
-                        <div className="flex items-center gap-1.5">
-                          <Users className="w-4 h-4" />
-                          {typeof displayCourse.instructor === "string"
-                            ? "15,420"
-                            : displayCourse.instructor.students.toLocaleString()}{" "}
-                          students
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <BookOpen className="w-4 h-4" />
-                          {typeof displayCourse.instructor === "string"
-                            ? "24"
-                            : displayCourse.instructor.courses}{" "}
-                          courses
-                        </div>
-                      </div>
-                      <p className="text-[16px] text-gray-600 leading-relaxed">
-                        {typeof displayCourse.instructor === "string"
-                          ? "DTMA Faculty includes multidisciplinary educators with expertise in digital transformation."
+                          ? "DTMA Faculty includes multidisciplinary educators with expertise in digital transformation and the 6XD framework."
                           : displayCourse.instructor.bio}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
+            <div className="hidden lg:block">
+              <div className="sticky top-24">{purchaseCard}</div>
             </div>
           </div>
-        </section>
+        </div>
 
         <section className={`bg-gray-50 py-16 ${sectionPaddingX}`}>
           <div className="mx-auto max-w-[1200px]">
             <div className="mb-8 flex items-center justify-between">
               <div>
-                <p className="dq-eyebrow mb-2">Continue Learning</p>
-                <h2 className={`${sectionHeading} text-2xl md:text-3xl`}>Recommended Courses</h2>
+                <p className={`${eyebrow} mb-2`}>Continue learning</p>
+                <h2 className={sectionHeading}>Recommended courses</h2>
               </div>
               <div className="hidden gap-2 md:flex">
                 <Button

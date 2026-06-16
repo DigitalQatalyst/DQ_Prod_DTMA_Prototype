@@ -54,14 +54,16 @@ const InstructorAuth = () => {
       <div className="hidden lg:flex lg:w-[45%] flex-col justify-between bg-[#050d1e] p-12 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(ellipse 70% 50% at 20% 80%, rgba(255, 69, 0, 0.15) 0%, transparent 60%)' }} />
 
+        {/* Logo */}
         <Link to="/" className="relative z-10">
-          <img src="/log.svg" alt="DTMA" className="h-[28px] w-auto" />
+          <img src="/log.svg" alt="DTMA" className="h-[28px] w-auto brightness-0 invert" />
         </Link>
 
+        {/* Quote */}
         <div className="relative z-10 max-w-sm">
-          <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-6">Instructor Hub</p>
+          <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-6">Instructor portal</p>
           <blockquote className="text-[22px] leading-[1.4] font-bold text-white mb-6">
-            "Shape the future of digital transformation. Join DTMA's community of expert instructors."
+            "Shape the Future of Digital Transformation. Join DTMA's community of expert instructors and drive digital transformation education forward."
           </blockquote>
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#ff4500] flex items-center justify-center text-white text-[13px] font-bold flex-shrink-0">DI</div>
@@ -72,6 +74,7 @@ const InstructorAuth = () => {
           </div>
         </div>
 
+        {/* Stats */}
         <div className="relative z-10 flex gap-10 border-t border-white/10 pt-8">
           {[{ value: "Create", label: "Courses" }, { value: "Inspire", label: "Learners" }, { value: "Transform", label: "Education" }].map((s) => (
             <div key={s.label}>
@@ -84,6 +87,7 @@ const InstructorAuth = () => {
 
       {/* ── Right Panel ── */}
       <div className="w-full lg:w-[55%] flex flex-col bg-white">
+        {/* Mobile logo */}
         <div className="lg:hidden p-6 border-b border-[#e8e8ec]">
           <Link to="/"><img src="/log.svg" alt="DTMA" className="h-[26px] w-auto" /></Link>
         </div>
@@ -91,17 +95,22 @@ const InstructorAuth = () => {
         <div className="flex-1 flex items-center justify-center px-8 py-12 lg:px-16">
           <div className="w-full max-w-[400px]">
 
+            {/* Back link */}
             <Link to="/" className="inline-flex items-center gap-2 text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors mb-10">
               <ArrowLeft className="w-4 h-4" />
               Back to home
             </Link>
 
+            {/* Heading */}
             <div className="mb-8">
               <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">Instructor access</p>
-              <h1 className="text-[36px] leading-[1.1] font-bold text-[#0a0f1e] mb-2">Sign in to DTMA</h1>
+              <h1 className="text-[36px] leading-[1.1] font-bold text-[#0a0f1e] mb-2">
+                Instructor Sign In
+              </h1>
               <p className="text-[15px] text-[#9a9aaa]">Access your instructor dashboard</p>
             </div>
 
+            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-1.5">
                 <Label htmlFor="email" className="text-[13px] font-medium text-[#0a0f1e]">Email Address</Label>
@@ -150,7 +159,11 @@ const InstructorAuth = () => {
                 className="w-full h-11 bg-[#ff4500] hover:bg-[#cc3700] text-white text-[14px] font-semibold rounded-full transition-colors mt-2"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Signing in...</> : "Sign In"}
+                {isSubmitting ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Signing in...</>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
             </form>
 

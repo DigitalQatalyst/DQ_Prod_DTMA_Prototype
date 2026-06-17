@@ -51,13 +51,7 @@ export default function SMSFinancePanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-[28px] leading-[36px] font-semibold">Finance</h2>
-          <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-            Revenue trends, course earnings, and subscription performance.
-          </p>
-        </div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
         <Button variant="outline" size="sm" onClick={() => toast({ title: "Executive Report Generated", description: "Compiling a PDF summary of Finance KPIs, Compliance status, and Faculty backlogs for board review." })}>
           <Download className="mr-2 h-4 w-4" /> Export Executive Summary
         </Button>

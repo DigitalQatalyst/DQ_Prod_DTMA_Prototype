@@ -67,13 +67,6 @@ export default function SMSFacultyPanel() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Faculty</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Human instructors manage course content. AI agents handle all student Q&amp;A.
-        </p>
-      </div>
-
       {/* KPI cards — faculty only */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">

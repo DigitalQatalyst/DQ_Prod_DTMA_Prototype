@@ -52,9 +52,6 @@ const Footer = () => {
                 { label: "Help Centre", href: "/help" },
                 { label: "Privacy Policy", href: "/privacy" },
                 { label: "Terms of Use", href: "/terms" },
-                { label: "Admin", href: "/admin" },
-                { label: "School Manager", href: "/sms-admin" },
-                { label: "Instructor", href: "/auth/instructor" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link to={link.href} className={linkMuted}>

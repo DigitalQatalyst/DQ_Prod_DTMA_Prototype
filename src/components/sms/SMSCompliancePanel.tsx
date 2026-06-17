@@ -58,12 +58,6 @@ export default function SMSCompliancePanel() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Accreditation</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Accreditation status for all courses. Escalate expiring or lapsed items to the compliance officer.
-        </p>
-      </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">

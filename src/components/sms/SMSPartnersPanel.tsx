@@ -46,12 +46,6 @@ export default function SMSPartnersPanel() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Partners</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Content providers and schools contributing courses to the platform. Escalate inactive partners to the partnership manager.
-        </p>
-      </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">

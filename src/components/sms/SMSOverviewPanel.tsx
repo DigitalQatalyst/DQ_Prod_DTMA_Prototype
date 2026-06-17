@@ -15,7 +15,7 @@ const Tip = ({ text }: { text: string }) => (
   </Tooltip></TooltipProvider>
 );
 
-type SMSTab = 'overview' | 'courses' | 'faculty' | 'students' | 'finance' | 'billing' | 'partners' | 'compliance';
+import type { SMSTabId } from "@/components/dashboard/SMSDashboardSidebar";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -24,10 +24,10 @@ const fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD",
 
 // Flags — Review link only, no action buttons (per expert recommendation)
 const flags = [
-  { id: "f1", label: "2 students with payment failures",                destination: "billing"    as SMSTab, autoEscalated: true },
-  { id: "f2", label: "KNQA accreditation expiring in 14 days",          destination: "compliance" as SMSTab },
-  { id: "f3", label: "Sofia Reyes hasn't published content in 16 days", destination: "faculty"    as SMSTab },
-  { id: "f4", label: "Sprint AI agent degraded — 18% escalation rate",  destination: "faculty"    as SMSTab },
+  { id: "f1", label: "2 students with payment failures",                destination: "billing"    as SMSTabId, autoEscalated: true },
+  { id: "f2", label: "KNQA accreditation expiring in 14 days",          destination: "compliance" as SMSTabId },
+  { id: "f3", label: "Sofia Reyes hasn't published content in 16 days", destination: "faculty"    as SMSTabId },
+  { id: "f4", label: "Sprint AI agent degraded — 18% escalation rate",  destination: "faculty"    as SMSTabId },
 ];
 
 // Snapshot data
@@ -57,14 +57,11 @@ const horizon = [
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMSTab) => void }) {
+export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMSTabId) => void }) {
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
 
   return (
     <div className="space-y-8">
-      {/* Header — title only */}
-      <h2 className="text-[28px] leading-[36px] font-semibold">Overview</h2>
-
       {/* 1. KPI Rail — standard portal card style, grouped */}
       <div className="space-y-5">
         {/* People */}

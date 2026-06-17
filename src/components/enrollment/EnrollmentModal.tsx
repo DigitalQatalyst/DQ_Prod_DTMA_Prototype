@@ -215,46 +215,48 @@ export function EnrollmentModal({
   return (
     <>
       <Dialog open={open && !showEligibilityTest && !showWhatsAppOptIn} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-5xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[calc(100vh-2rem)] w-[calc(100vw-2rem)] max-w-4xl overflow-hidden p-4 sm:p-5">
           {/* Progress Steps */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-2">
+          <div className="mb-4 shrink-0">
+            <div className="flex items-center justify-between gap-1">
               {steps.map((step, index) => {
                 const StepIcon = step.icon;
                 const isActive = step.id === currentStep;
                 const isCompleted = index < currentStepIndex || currentStep === 'complete';
                 
                 return (
-                  <div key={step.id} className="flex flex-col items-center flex-1">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                  <div key={step.id} className="flex min-w-0 flex-1 flex-col items-center">
+                    <div className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
                       isCompleted 
                         ? 'bg-green-600 text-white' 
                         : isActive 
-                          ? 'bg-[#ff6b4d]/20 text-[#ff6b4d] border-2 border-[#ff6b4d]' 
-                          : 'bg-muted text-muted-foreground'
+                          ? 'border-2 border-dq-orange bg-orange-50 text-dq-orange' 
+                          : 'bg-gray-100 text-gray-400'
                     }`}>
                       {isCompleted ? (
-                        <CheckCircle2 className="w-5 h-5" />
+                        <CheckCircle2 className="h-4 w-4" />
                       ) : (
-                        <StepIcon className="w-5 h-5" />
+                        <StepIcon className="h-4 w-4" />
                       )}
                     </div>
-                    <span className={`text-xs mt-1 ${isActive ? 'text-[#ff6b4d] font-medium' : 'text-muted-foreground'}`}>
+                    <span className={`mt-1 truncate text-[10px] ${isActive ? 'font-medium text-dq-orange' : 'text-gray-500'}`}>
                       {step.label}
                     </span>
                   </div>
                 );
               })}
             </div>
-            <Progress value={progress} className="h-1" />
+            <Progress value={progress} className="mt-2 h-1" />
           </div>
 
+          <div className="overflow-hidden">
           {currentStep === 'pricing' && (
             <>
-              <div className="py-4">
+              <div className="py-1">
                 <SubscriptionPlans
                   currentCoursePrice={course.price}
                   currentCourseId={course.id}
+                  courseTitle={course.title}
                   onSelectPlan={(planType) => {
                     setSelectedPlan(planType);
                     setCurrentStep('overview');
@@ -687,36 +689,31 @@ export function EnrollmentModal({
           {currentStep === 'complete' && (
             <>
               <DialogHeader className="text-center">
-                <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
-                  <Rocket className="w-10 h-10 text-green-600 dark:text-green-400" />
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-green-100">
+                  <Rocket className="h-7 w-7 text-green-600" />
                 </div>
-                <DialogTitle className="text-2xl font-display">
+                <DialogTitle className="text-xl">
                   {selectedPlan === 'single' ? "You're Enrolled!" : "Subscription Activated!"}
                 </DialogTitle>
-                <DialogDescription className="text-base">
+                <DialogDescription>
                   {selectedPlan === 'single' 
-                    ? `Congratulations! You now have access to "${course.title}".`
+                    ? `You now have access to "${course.title}".`
                     : `You now have access to ${selectedPlan === 'basic' ? '3 courses' : 'all 6 courses'} with your ${selectedPlan} plan!`
                   }
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="py-6">
-                <div className="bg-muted/50 rounded-xl p-6 text-center">
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {selectedPlan === 'single' 
-                      ? 'Start your learning journey now and unlock your potential!'
-                      : 'Explore all your courses and start learning today!'
-                    }
-                  </p>
-                  <Button variant="hero" size="lg" onClick={handleComplete} className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
+              <div className="py-3">
+                <div className="rounded-xl bg-gray-50 p-4 text-center">
+                  <Button variant="hero" onClick={handleComplete} className="bg-dq-orange text-white hover:bg-[#E04020]">
                     {selectedPlan === 'single' ? 'Start Learning' : 'View My Courses'}
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
               </div>
             </>
           )}
+          </div>
         </DialogContent>
       </Dialog>
 

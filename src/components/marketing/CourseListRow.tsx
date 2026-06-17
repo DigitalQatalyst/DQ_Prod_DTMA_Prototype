@@ -8,9 +8,11 @@ import { CourseCardData, formatCategoryLabel } from "./courseCardUtils";
 export default function CourseListRow({
   course,
   className,
+  onCourseClick,
 }: {
   course: CourseCardData;
   className?: string;
+  onCourseClick?: (courseId: string) => void;
 }) {
   const rowClass = cn(
     "flex gap-6 overflow-hidden rounded-2xl border border-gray-200 bg-white p-4 shadow-card",
@@ -103,6 +105,25 @@ export default function CourseListRow({
 
   if (course.comingSoon) {
     return <div className={rowClass}>{content}</div>;
+  }
+
+  if (onCourseClick) {
+    return (
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => onCourseClick(course.id)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onCourseClick(course.id);
+          }
+        }}
+        className={cn(rowClass, "w-full text-left")}
+      >
+        {content}
+      </div>
+    );
   }
 
   return (

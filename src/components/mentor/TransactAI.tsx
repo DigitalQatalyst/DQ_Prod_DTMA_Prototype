@@ -27,31 +27,46 @@ interface Message {
 }
 
 interface TransactAIProps {
+  embedded?: boolean;
+  variant?: "learner" | "instructor";
   enrolledCourses?: number;
   completedCourses?: number;
+  draftCoursesCount?: number;
   averageProgress?: number;
   learningGoal?: string;
   skillLevel?: string;
   streak?: number;
 }
 
-const quickInsights = [
-  { icon: TrendingUp, text: 'Progress Check', action: 'progress', color: 'text-green-600' },
-  { icon: Target, text: 'Set Goals', action: 'goals', color: 'text-blue-600' },
-  { icon: Lightbulb, text: 'Get Advice', action: 'advice', color: 'text-amber-600' },
-  { icon: BookOpen, text: 'Next Steps', action: 'nextsteps', color: 'text-[#ff6b4d]' },
+const learnerQuickInsights = [
+  { icon: TrendingUp, text: "Progress Check", action: "progress", color: "text-green-600" },
+  { icon: Target, text: "Set Goals", action: "goals", color: "text-blue-600" },
+  { icon: Lightbulb, text: "Get Advice", action: "advice", color: "text-amber-600" },
+  { icon: BookOpen, text: "Next Steps", action: "nextsteps", color: "text-[#ff6b4d]" },
+];
+
+const instructorQuickInsights = [
+  { icon: BookOpen, text: "Course outline", action: "outline", color: "text-[#ff6b4d]" },
+  { icon: Target, text: "Module plan", action: "modules", color: "text-blue-600" },
+  { icon: Lightbulb, text: "Outcomes", action: "outcomes", color: "text-amber-600" },
+  { icon: Zap, text: "6XD mapping", action: "framework", color: "text-green-600" },
 ];
 
 export const TransactAI = ({ 
+  embedded = false,
+  variant = "learner",
   enrolledCourses = 0, 
-  completedCourses = 0, 
+  completedCourses = 0,
+  draftCoursesCount = 0,
   averageProgress = 0,
   learningGoal = '',
   skillLevel = 'Beginner',
   streak = 0
 }: TransactAIProps) => {
+  const isInstructor = variant === "instructor";
+  const quickInsights = isInstructor ? instructorQuickInsights : learnerQuickInsights;
   const { profile } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(embedded);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -61,8 +76,7 @@ export const TransactAI = ({
   const firstName = profile?.full_name?.split(' ')[0] || 'there';
 
   useEffect(() => {
-    // Initialize with personalized greeting
-    const greeting = getPersonalizedGreeting();
+    const greeting = isInstructor ? getInstructorGreeting() : getPersonalizedGreeting();
     setMessages([{
       id: '1',
       type: 'mentor',
@@ -71,7 +85,7 @@ export const TransactAI = ({
       suggestions: greeting.suggestions,
       insights: greeting.insights
     }]);
-  }, []);
+  }, [isInstructor, draftCoursesCount, enrolledCourses]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -127,6 +141,152 @@ export const TransactAI = ({
       message,
       suggestions: ['Review my progress', 'What should I learn next?', 'Career guidance', 'Motivate me!'],
       insights
+    };
+  };
+
+  const getInstructorGreeting = () => {
+    const hour = new Date().getHours();
+    let timeGreeting = 'Hello';
+    if (hour < 12) timeGreeting = 'Good morning';
+    else if (hour < 18) timeGreeting = 'Good afternoon';
+    else timeGreeting = 'Good evening';
+
+    let message = `${timeGreeting}, ${firstName}!\n\n`;
+    message += "I'm your AI Cockpit assistant for course authoring. I help you draft outlines, modules, learning outcomes, and marketplace-ready course structures.\n\n";
+
+    if (draftCoursesCount > 0) {
+      message += `You have ${draftCoursesCount} draft course${draftCoursesCount > 1 ? 's' : ''} in progress. I can help you refine any of them or start a new one.`;
+    } else {
+      message += "You don't have any draft courses yet. Tell me your topic and 6XD dimension, and I'll help you build a first draft outline.";
+    }
+
+    return {
+      message,
+      suggestions: [
+        'Outline a new course',
+        'Draft module structure',
+        'Write learning outcomes',
+        'Map to 6XD framework',
+      ],
+      insights: [],
+    };
+  };
+
+  const getInstructorResponse = (userMessage: string) => {
+    const lowerMessage = userMessage.toLowerCase();
+
+    if (
+      lowerMessage.includes('outline') ||
+      lowerMessage.includes('new course') ||
+      lowerMessage.includes('draft')
+    ) {
+      return {
+        message:
+          `Here is a starter draft outline you can use:\n\n` +
+          `Course title: [Working title]\n` +
+          `6XD dimension: [Pick one dimension]\n` +
+          `Audience: [Role and experience level]\n\n` +
+          `Module 1: Foundations\n` +
+          `• Lesson: Context and business problem\n` +
+          `• Lesson: Key concepts and terminology\n` +
+          `• Activity: Diagnostic checklist\n\n` +
+          `Module 2: Application\n` +
+          `• Lesson: Framework walkthrough\n` +
+          `• Lesson: Worked example\n` +
+          `• Assignment: Apply to a real scenario\n\n` +
+          `Module 3: Handover\n` +
+          `• Lesson: Implementation playbook\n` +
+          `• Assessment: Knowledge check\n` +
+          `• Resource pack: Templates and references\n\n` +
+          `Tell me your topic and I will tailor this into a full draft.`,
+        suggestions: ['Add assessments', 'Suggest pricing tier', 'Write lesson titles', 'Create module 2 detail'],
+        insights: [{ icon: BookOpen, text: 'Draft-ready structure', color: 'text-[#ff6b4d]' }],
+      };
+    }
+
+    if (lowerMessage.includes('module') || lowerMessage.includes('structure') || lowerMessage.includes('curriculum')) {
+      return {
+        message:
+          `Recommended module structure for a DTMA draft course:\n\n` +
+          `1. Context and outcomes (why this matters)\n` +
+          `2. Core methods and models (what to do)\n` +
+          `3. Guided application (how to apply)\n` +
+          `4. Assessment and handover (prove competence)\n\n` +
+          `Aim for 3 to 5 modules with 3 to 6 lessons each. Keep lesson titles action-oriented and map each lesson to one measurable outcome.`,
+        suggestions: ['Generate lesson list', 'Add quiz ideas', 'Suggest duration', 'Review my draft'],
+        insights: [{ icon: Target, text: 'Marketplace-ready pacing', color: 'text-blue-600' }],
+      };
+    }
+
+    if (lowerMessage.includes('outcome') || lowerMessage.includes('objective')) {
+      return {
+        message:
+          `Sample learning outcomes for your draft:\n\n` +
+          `• Explain the business drivers for the chosen transformation theme\n` +
+          `• Apply the core framework to a realistic organisational scenario\n` +
+          `• Evaluate options and recommend a practical next-step roadmap\n` +
+          `• Produce a handover artefact suitable for stakeholder review\n\n` +
+          `Share your course topic and I will rewrite these outcomes in your voice.`,
+        suggestions: ['Rewrite for executives', 'Rewrite for practitioners', 'Add assessment rubric', 'Shorten for catalog copy'],
+        insights: [{ icon: Lightbulb, text: 'Outcome-led drafting', color: 'text-amber-600' }],
+      };
+    }
+
+    if (lowerMessage.includes('6xd') || lowerMessage.includes('framework') || lowerMessage.includes('dimension')) {
+      return {
+        message:
+          `Map your draft course to one primary 6XD dimension:\n\n` +
+          `• Digital Economy\n` +
+          `• Digital Cognitive Organisation\n` +
+          `• Digital Business Platform\n` +
+          `• Digital Transformation 2.0\n` +
+          `• Digital Worker and Workspace\n` +
+          `• Digital Accelerators\n\n` +
+          `Pick the dimension that best matches the transformation outcome, then align module titles and assessments to that dimension's language.`,
+        suggestions: ['Pick dimension for my topic', 'Suggest course title', 'Align modules to DE', 'Write catalog description'],
+        insights: [{ icon: Zap, text: '6XD-aligned catalog copy', color: 'text-green-600' }],
+      };
+    }
+
+    if (lowerMessage.includes('assessment') || lowerMessage.includes('quiz')) {
+      return {
+        message:
+          `Assessment ideas for your draft course:\n\n` +
+          `• Module checkpoint quizzes (5 to 8 questions each)\n` +
+          `• Scenario-based assignment with rubric\n` +
+          `• Final knowledge check tied to learning outcomes\n` +
+          `• Optional reflection prompt for workplace application\n\n` +
+          `Keep assessments aligned to outcomes, not trivia.`,
+        suggestions: ['Draft quiz questions', 'Create assignment brief', 'Add rubric', 'Estimate completion time'],
+        insights: [],
+      };
+    }
+
+    if (lowerMessage.includes('pricing') || lowerMessage.includes('duration') || lowerMessage.includes('marketplace')) {
+      return {
+        message:
+          `Marketplace draft checklist:\n\n` +
+          `• Short description with outcome-led copy (no duration in the hero line)\n` +
+          `• Level, category, and 6XD dimension tags\n` +
+          `• Realistic duration based on lesson count\n` +
+          `• Pricing aligned to depth (assess and design courses differ from deploy bundles)\n` +
+          `• Thumbnail and instructor profile complete before submit for review`,
+        suggestions: ['Write short description', 'Suggest price range', 'Estimate course length', 'Pre-submission checklist'],
+        insights: [],
+      };
+    }
+
+    return {
+      message:
+        `I can help you draft courses for the marketplace. Ask me to:\n\n` +
+        `• Build a course outline\n` +
+        `• Structure modules and lessons\n` +
+        `• Write learning outcomes\n` +
+        `• Map content to the 6XD framework\n` +
+        `• Plan assessments and marketplace copy\n\n` +
+        `What would you like to draft first?`,
+      suggestions: ['Outline a new course', 'Draft module structure', 'Write learning outcomes', 'Map to 6XD framework'],
+      insights: [],
     };
   };
 
@@ -340,7 +500,9 @@ export const TransactAI = ({
     setInputValue('');
 
     setTimeout(() => {
-      const response = getMentorResponse(inputValue);
+      const response = isInstructor
+        ? getInstructorResponse(inputValue)
+        : getMentorResponse(inputValue);
       const mentorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'mentor',
@@ -359,65 +521,83 @@ export const TransactAI = ({
   };
 
   const handleQuickInsight = (action: string) => {
-    const actionMessages: Record<string, string> = {
-      progress: 'Review my progress',
-      goals: 'Help me set learning goals',
-      advice: 'Give me some advice',
-      nextsteps: 'What should I learn next?'
-    };
+    const actionMessages: Record<string, string> = isInstructor
+      ? {
+          outline: "Help me outline a new draft course",
+          modules: "Draft a module structure for my course",
+          outcomes: "Write learning outcomes for my course",
+          framework: "Map my course idea to the 6XD framework",
+        }
+      : {
+          progress: "Review my progress",
+          goals: "Help me set learning goals",
+          advice: "Give me some advice",
+          nextsteps: "What should I learn next?",
+        };
     setInputValue(actionMessages[action] || action);
     setTimeout(() => handleSendMessage(), 100);
   };
 
-  if (!isOpen) {
+  if (!embedded && !isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-br from-[#ff6b4d] to-[#e56045] text-white rounded-full shadow-2xl hover:shadow-orange-500/20 hover:scale-110 transition-all duration-300 flex items-center justify-center group"
+        className="fixed bottom-6 right-6 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-dq-orange to-[#e56045] text-white shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-orange-500/20 group"
       >
-        <Brain className="w-7 h-7 group-hover:scale-110 transition-transform" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse"></span>
+        <Brain className="h-7 w-7 transition-transform group-hover:scale-110" />
+        <span className="absolute -right-1 -top-1 h-4 w-4 animate-pulse rounded-full bg-green-500" />
       </button>
     );
   }
 
-  return (
-    <div className={`fixed bottom-6 right-6 z-40 transition-all duration-300 ${
-      isMinimized ? 'w-80' : 'w-96'
-    }`}>
-      <div className={`bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 flex flex-col ${
-        isMinimized ? 'h-16' : 'h-[calc(100vh-120px)]'
-      }`}>
+  const chatPanel = (
+    <div
+      className={`flex flex-col overflow-hidden border border-gray-200 bg-white ${
+        embedded
+          ? "h-[calc(100vh-11rem)] min-h-[420px] rounded-xl shadow-sm"
+          : `rounded-2xl shadow-2xl transition-all duration-300 ${isMinimized ? "h-16" : "h-[calc(100vh-120px)]"}`
+      }`}
+    >
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#ff6b4d] to-[#e56045] p-4 flex items-center justify-between">
+        <div className="flex shrink-0 items-center justify-between bg-gradient-to-r from-dq-orange to-[#e56045] p-4">
           <div className="flex items-center gap-3">
-            <Avatar className="w-10 h-10 ring-2 ring-white">
-              <AvatarFallback className="bg-gradient-to-br from-[#ff6b4d] to-[#e56045] text-white">
-                <Brain className="w-5 h-5" />
+            <Avatar className="h-10 w-10 ring-2 ring-white">
+              <AvatarFallback className="bg-gradient-to-br from-dq-orange to-[#e56045] text-white">
+                <Brain className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="text-[16px] leading-[24px] font-semibold text-white">Transact AI</h3>
-              <p className="text-[12px] leading-[16px] text-white/80">Your Personal Mentor</p>
+              <h3 className="text-base font-semibold text-white">
+                {embedded ? "AI Cockpit" : isInstructor ? "AI Cockpit" : "Transact AI"}
+              </h3>
+              <p className="text-xs text-white/80">
+                {isInstructor
+                  ? "Draft courses with AI assistance"
+                  : "Your personal learning mentor"}
+              </p>
             </div>
           </div>
+          {!embedded && (
           <div className="flex items-center gap-2">
             <button
+              type="button"
               onClick={() => setIsMinimized(!isMinimized)}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="rounded-lg p-2 transition-colors hover:bg-white/10"
             >
-              <Minimize2 className="w-4 h-4 text-white" />
+              <Minimize2 className="h-4 w-4 text-white" />
             </button>
             <button
+              type="button"
               onClick={() => setIsOpen(false)}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="rounded-lg p-2 transition-colors hover:bg-white/10"
             >
-              <X className="w-4 h-4 text-white" />
+              <X className="h-4 w-4 text-white" />
             </button>
           </div>
+          )}
         </div>
 
-        {!isMinimized && (
+        {(embedded || !isMinimized) && (
           <>
             {/* Quick Insights */}
             <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 border-b grid grid-cols-2 gap-2">
@@ -493,7 +673,7 @@ export const TransactAI = ({
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Ask your mentor..."
+                  placeholder={isInstructor ? "Describe your course idea..." : "Ask your mentor..."}
                   className="flex-1 px-4 py-2 border border-orange-200 rounded-lg text-[14px] leading-[20px] focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
                 />
                 <Button
@@ -505,12 +685,23 @@ export const TransactAI = ({
                 </Button>
               </div>
               <p className="text-[12px] leading-[16px] text-gray-500 mt-2 text-center">
-                Personalized AI Mentor • Here for your success
+                {isInstructor
+                  ? "AI Cockpit • Draft marketplace courses"
+                  : "Personalized AI Mentor • Here for your success"}
               </p>
             </div>
           </>
         )}
-      </div>
+    </div>
+  );
+
+  if (embedded) {
+    return chatPanel;
+  }
+
+  return (
+    <div className={`fixed bottom-6 right-6 z-40 w-96 transition-all duration-300 ${isMinimized ? "w-80" : ""}`}>
+      {chatPanel}
     </div>
   );
 };

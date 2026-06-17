@@ -14,6 +14,7 @@ import {
   Award, 
   Clock, 
   ChevronRight,
+  ChevronLeft,
   GraduationCap,
   Loader2,
   PlayCircle,
@@ -45,6 +46,32 @@ import { LiveClassesNotifications } from '@/components/dashboard/LiveClassesNoti
 import { GamificationFeatures } from '@/components/dashboard/GamificationFeatures';
 import { TransactAI } from '@/components/mentor/TransactAI';
 import DTMALogo from '@/components/layout/DTMALogo';
+import {
+  LearnerDashboardSidebar,
+  type LearnerTabId,
+} from '@/components/dashboard/LearnerDashboardSidebar';
+import { CourseCatalogPanel } from '@/components/dashboard/CourseCatalogPanel';
+import { LearnerOverviewPanel } from '@/components/dashboard/LearnerOverviewPanel';
+import CourseDetail from '@/pages/CourseDetail';
+import {
+  btnPrimary,
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerEmptyBody,
+  learnerEmptyTitle,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerLink,
+  learnerPageDescription,
+  learnerPageTitle,
+  learnerPanel,
+  learnerWorkspaceBg,
+} from '@/lib/brandAccent';
+import { cn } from '@/lib/utils';
 
 interface OnboardingData {
   learningGoal: string;
@@ -52,13 +79,63 @@ interface OnboardingData {
   preferredFormat: string;
 }
 
+const TAB_DESCRIPTIONS: Partial<Record<LearnerTabId, string>> = {
+  assignments: 'Submit assignments, track your progress, and view feedback',
+  certificates: 'View your earned certificates and achievement badges',
+};
+
+const getPageTitle = (
+  activeTab: LearnerTabId,
+  firstName: string,
+) => {
+  if (activeTab === 'getting-started') return 'Home';
+  if (activeTab === 'ai-cockpit') return 'AI cockpit';
+  if (activeTab === 'catalog') return 'Explore courses';
+  if (activeTab === 'overview') return `Welcome back, ${firstName}`;
+  return TAB_LABELS[activeTab];
+};
+
+const getPageDescription = (
+  activeTab: LearnerTabId,
+  inProgressCount: number,
+) => {
+  if (activeTab === 'getting-started') {
+    return undefined;
+  }
+  if (activeTab === 'catalog') {
+    return undefined;
+  }
+  if (activeTab === 'overview') {
+    return inProgressCount > 0
+      ? `You have ${inProgressCount} course${inProgressCount > 1 ? 's' : ''} in progress. Keep going!`
+      : undefined;
+  }
+  return TAB_DESCRIPTIONS[activeTab];
+};
+
+const TAB_LABELS: Record<LearnerTabId, string> = {
+  'getting-started': 'Getting started',
+  overview: 'Dashboard',
+  courses: 'My courses',
+  catalog: 'Explore courses',
+  gamification: 'Microlearning paths',
+  assignments: 'Assignments',
+  certificates: 'Certificates & badges',
+  collaboration: 'Discussions',
+  live: 'Live classes',
+  progress: 'Progress & notes',
+  profile: 'My profile',
+  'ai-cockpit': 'AI cockpit',
+};
+
 const LearnerDashboard = () => {
   const { profile, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const { data: enrollments, isLoading: enrollmentsLoading } = useEnrollments();
   const { data: certificates, isLoading: certificatesLoading } = useCertificates();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState<LearnerTabId>('overview');
+  const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -169,157 +246,40 @@ const LearnerDashboard = () => {
     });
   };
 
+  const handleCourseSelect = (courseId: string) => {
+    setSelectedCourseId(courseId);
+  };
+
+  const handleCourseBack = () => {
+    setSelectedCourseId(null);
+  };
+
+  const handleCourseEnrolled = () => {
+    setSelectedCourseId(null);
+    setActiveTab('courses');
+  };
+
+  const pageDescription = getPageDescription(activeTab, inProgressCourses.length);
+
   return (
-    <div className="w-screen h-screen bg-[#f5f4f0] flex overflow-hidden">
-      {/* Sidebar */}
-      <aside
+    <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
+      <LearnerDashboardSidebar
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          setSelectedCourseId(null);
+          setSidebarOpen(false);
+        }}
+        onSignOut={handleSignOut}
+        profileName={profile?.full_name ?? null}
+        profileEmail={profile?.email ?? null}
+        profileAvatar={profile?.avatar_url}
+        inProgressCount={inProgressCourses.length}
+        certificateCount={certificates?.length ?? 0}
         className={`${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 fixed lg:sticky top-0 left-0 z-50 w-72 h-screen bg-[#0a0f1e] transition-transform duration-200 flex flex-col`}
-      >
-        {/* Logo */}
-        <div className="p-6">
-          <DTMALogo variant="dark" />
-        </div>
-
-        {/* Navigation */}
-        <ScrollArea className="flex-1 px-4 py-6">
-          <nav className="space-y-2">
-            <button
-              onClick={() => setActiveTab('overview')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                activeTab === 'overview' 
-                  ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <Home className="w-5 h-5" />
-              <span className="text-[14px] leading-[24px] font-normal">Dashboard</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('courses')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                activeTab === 'courses' 
-                  ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <BookOpen className="w-5 h-5" />
-              <span className="text-[14px] leading-[24px] font-normal">My Courses</span>
-              {inProgressCourses.length > 0 && (
-                <Badge className="ml-auto bg-[#ff4500] text-white">{inProgressCourses.length}</Badge>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('gamification')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                activeTab === 'gamification' 
-                  ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <Zap className="w-5 h-5" />
-              <span className="text-[14px] leading-[24px] font-normal">Microlearning Paths</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('assignments')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                activeTab === 'assignments' 
-                  ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <Award className="w-5 h-5 flex-shrink-0" />
-              <span className="text-[14px] leading-[24px] font-normal">Assignments</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('certificates')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                activeTab === 'certificates' 
-                  ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <Trophy className="w-5 h-5" />
-              <span className="text-[14px] leading-[24px] font-normal">Certificates & Badges</span>
-              {certificates && certificates.length > 0 && (
-                <Badge className="ml-auto bg-[#ff4500] text-white">{certificates.length}</Badge>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('collaboration')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                activeTab === 'collaboration' 
-                  ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <MessageSquare className="w-5 h-5" />
-              <span className="text-[14px] leading-[24px] font-normal">Discussions</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('live')}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                activeTab === 'live' 
-                  ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                  : 'text-white/60 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <Video className="w-5 h-5" />
-              <span className="text-[14px] leading-[24px] font-normal">Live Classes</span>
-            </button>
-            
-            <div className="pt-4 mt-4">
-              <button
-                onClick={() => setActiveTab('progress')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                  activeTab === 'progress' 
-                    ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                    : 'text-white/60 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                <TrendingUp className="w-5 h-5" />
-                <span className="text-[14px] leading-[24px] font-normal">Progress & Notes</span>
-              </button>
-              <button
-                onClick={() => setActiveTab('profile')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                  activeTab === 'profile' 
-                    ? 'bg-[#ff4500] text-white shadow-lg shadow-[#ff4500]/20' 
-                    : 'text-white/60 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                <User className="w-5 h-5" />
-                <span className="text-[14px] leading-[24px] font-normal">Profile</span>
-              </button>
-            </div>
-          </nav>
-        </ScrollArea>
-
-        {/* User Section */}
-        <div className="p-4 border-t border-white/10">
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
-            <Avatar className="w-10 h-10 ring-2 ring-[#ff4500]">
-              <AvatarImage src={profile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-[#ff4500] text-white">
-                {getInitials(profile?.full_name)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-[14px] leading-[20px] font-medium truncate text-white">{profile?.full_name || 'Learner'}</p>
-              <p className="text-[12px] leading-[16px] font-normal text-white/60 truncate">{profile?.email}</p>
-            </div>
-          </div>
-          <Button 
-            variant="ghost" 
-            className="w-full mt-3 justify-start gap-3 text-white/70 hover:text-white hover:bg-white/10"
-            onClick={handleSignOut}
-          >
-            <LogOut className="w-4 h-4" />
-            Sign Out
-          </Button>
-        </div>
-      </aside>
+        } fixed left-0 top-0 z-50 transition-transform duration-200 lg:sticky lg:translate-x-0`}
+      />
 
       {/* Mobile overlay */}
       {sidebarOpen && (
@@ -330,117 +290,148 @@ const LearnerDashboard = () => {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 h-full overflow-y-auto bg-[#0a0f1e]">
+      <main className={`flex-1 h-full overflow-y-auto ${learnerWorkspaceBg}`}>
         {/* Top Bar */}
-        <header className="sticky top-0 z-30 bg-[#0a0f1e] border-b border-[#1a2540] px-4 lg:px-8 py-6 flex flex-col justify-start gap-0">
-          {activeTab === 'overview' && (
-            <>
-              <div className="flex items-center justify-between gap-4 lg:items-center">
-                <button 
-                  className="lg:hidden p-2 -ml-2"
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                >
-                  {sidebarOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
-                </button>
-
-                <div className="flex-1">
-                  <h2 className="text-[28px] leading-[36px] lg:text-[32px] lg:leading-[40px] font-semibold mb-2 text-white">
-                    Welcome back, {profile?.full_name?.split(' ')[0] || 'Learner'}! 👋
-                  </h2>
-                  <p className="text-[16px] leading-[24px] font-normal text-[rgba(255,255,255,0.6)]">
-                    {inProgressCourses.length > 0 
-                      ? `You have ${inProgressCourses.length} course${inProgressCourses.length > 1 ? 's' : ''} in progress. Keep going!`
-                      : 'Start your learning journey today!'}
-                  </p>
-                </div>
-
-                {/* Browse Courses Button - Only show if no enrolled courses */}
-                {inProgressCourses.length === 0 && (
-                  <Link to="/courses" className="flex-shrink-0">
-                    <Button variant="outline" size="sm" className="gap-2 border-[#ff4500] text-[#ff4500] hover:bg-[#ff4500] hover:text-white hover:border-[#ff4500]">
-                      <BookOpen className="w-4 h-4" />
-                      <span className="hidden sm:inline">Browse Courses</span>
-                    </Button>
-                  </Link>
-                )}
-
-                {/* User Avatar - Mobile */}
-                <Avatar className="w-8 h-8 lg:hidden ring-2 ring-[#ff4500] flex-shrink-0">
-                  <AvatarImage src={profile?.avatar_url || undefined} />
-                  <AvatarFallback className="bg-[#0a0f1e] text-white text-xs">
-                    {getInitials(profile?.full_name)}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
-
-              {/* Continue Learning Button */}
-              {inProgressCourses.length > 0 && (
-                <div className="flex gap-3 mt-4">
-                  <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
-                    <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-full" size="lg">
-                      <PlayCircle className="w-5 h-5 mr-2" />
-                      Continue Learning
-                    </Button>
-                  </Link>
-                </div>
+        <header className="sticky top-0 z-30 border-b border-gray-200 bg-white px-4 py-3 lg:px-8 lg:py-4">
+          <div className="flex items-start justify-between gap-4">
+            <button
+              type="button"
+              className="lg:hidden p-2 -ml-2 shrink-0"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              {sidebarOpen ? (
+                <X className="h-6 w-6 text-dq-navy" />
+              ) : (
+                <Menu className="h-6 w-6 text-dq-navy" />
               )}
-            </>
+            </button>
+
+            <div className="min-w-0 flex-1">
+              {selectedCourseId ? (
+                <button
+                  type="button"
+                  onClick={handleCourseBack}
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-dq-navy"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Back
+                </button>
+              ) : (
+                <>
+                  <h2 className={learnerPageTitle}>
+                    {getPageTitle(activeTab, profile?.full_name?.split(' ')[0] || 'Learner')}
+                  </h2>
+                  {pageDescription && (
+                    <p className={cn(learnerPageDescription, 'mt-0.5')}>
+                      {pageDescription}
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+
+            <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
+              <AvatarImage src={profile?.avatar_url || undefined} />
+              <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">
+                {getInitials(profile?.full_name)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+
+          {activeTab === 'overview' && inProgressCourses.length > 0 && !selectedCourseId && (
+            <div className="mt-4 flex gap-3">
+              <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
+                <Button className={btnPrimary} size="lg">
+                  <PlayCircle className="mr-2 h-5 w-5" />
+                  Continue Learning
+                </Button>
+              </Link>
+            </div>
           )}
         </header>
 
         {/* Content */}
-        <div className="p-4 lg:p-8 bg-white">
+        <div
+          className={
+            selectedCourseId
+              ? 'p-4 lg:p-6'
+              : activeTab === 'catalog'
+                ? 'bg-white'
+                : 'p-4 lg:p-6'
+          }
+        >
+          {selectedCourseId ? (
+            <CourseDetail
+              embedded
+              courseId={selectedCourseId}
+              onBack={handleCourseBack}
+              onCourseSelect={handleCourseSelect}
+              onEnrolled={handleCourseEnrolled}
+            />
+          ) : (
+          <>
+          {activeTab === 'catalog' && (
+            <CourseCatalogPanel embedded onCourseClick={handleCourseSelect} />
+          )}
+
+          {activeTab === 'getting-started' && (
+            <LearnerOverviewPanel
+              onNavigate={setActiveTab}
+              onboardingData={onboardingData}
+            />
+          )}
+
           {/* Overview Tab */}
           {activeTab === 'overview' && (
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Stats Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-                <div className="bg-white rounded-xl p-5 shadow-sm border border-[#e8e8ec]">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#f5f4f0] rounded-lg flex items-center justify-center">
-                      <BookOpen className="w-5 h-5 text-[#0a0f1e]" />
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
+                <div className={learnerKpiCard}>
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50">
+                      <BookOpen className="h-5 w-5 text-blue-600" />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-medium text-[#0a0f1e]">{inProgressCourses.length}</div>
-                  <div className="text-[14px] leading-[20px] font-normal text-[#9a9aaa]">In Progress</div>
+                  <div className={learnerKpiValue}>{inProgressCourses.length}</div>
+                  <div className={learnerKpiLabel}>In Progress</div>
                 </div>
-                <div className="bg-white rounded-xl p-5 shadow-sm border border-[#e8e8ec]">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#dcfce7] rounded-lg flex items-center justify-center">
-                      <CheckCircle className="w-5 h-5 text-[#22c55e]" />
+                <div className={learnerKpiCard}>
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-50">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-medium text-[#0a0f1e]">{completedCourses.length}</div>
-                  <div className="text-[14px] leading-[20px] font-normal text-[#9a9aaa]">Completed</div>
+                  <div className={learnerKpiValue}>{completedCourses.length}</div>
+                  <div className={learnerKpiLabel}>Completed</div>
                 </div>
-                <div className="bg-white rounded-xl p-5 shadow-sm border border-[#e8e8ec]">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#fff7ed] rounded-lg flex items-center justify-center">
-                      <Award className="w-5 h-5 text-[#ff4500]" />
+                <div className={learnerKpiCard}>
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50">
+                      <Award className="h-5 w-5 text-dq-orange" />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-medium text-[#0a0f1e]">{certificates?.length || 0}</div>
-                  <div className="text-[14px] leading-[20px] font-normal text-[#9a9aaa]">Certificates</div>
+                  <div className={learnerKpiValue}>{certificates?.length || 0}</div>
+                  <div className={learnerKpiLabel}>Certificates</div>
                 </div>
-                <div className="bg-white rounded-xl p-5 shadow-sm border border-[#e8e8ec]">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-[#f5f4f0] rounded-lg flex items-center justify-center">
-                      <Target className="w-5 h-5 text-[#0a0f1e]" />
+                <div className={learnerKpiCard}>
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-50">
+                      <Target className="h-5 w-5 text-purple-600" />
                     </div>
                   </div>
-                  <div className="text-[24px] leading-[32px] font-medium text-[#0a0f1e]">{totalProgress}%</div>
-                  <div className="text-[14px] leading-[20px] font-normal text-[#9a9aaa]">Avg. Progress</div>
+                  <div className={learnerKpiValue}>{totalProgress}%</div>
+                  <div className={learnerKpiLabel}>Avg. Progress</div>
                 </div>
               </div>
 
               {/* Continue Learning */}
               <section>
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-[20px] leading-[28px] font-medium text-foreground">Continue Learning</h3>
+                <div className="mb-3 flex items-center justify-between">
+                  <h3 className={learnerCardTitle}>Continue Learning</h3>
                   {inProgressCourses.length > 0 && (
                     <button 
                       onClick={() => setActiveTab('courses')}
-                      className="text-[14px] leading-[20px] font-normal text-[#ff4500] hover:underline flex items-center gap-1"
+                      className={learnerLink}
                     >
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
@@ -452,15 +443,23 @@ const LearnerDashboard = () => {
                     <Loader2 className="w-6 h-6 animate-spin text-primary" />
                   </div>
                 ) : inProgressCourses.length === 0 ? (
-                  <div className="bg-white rounded-xl p-8 text-center border border-[#e8e8ec]">
-                    <div className="w-16 h-16 bg-[#f5f4f0] rounded-xl flex items-center justify-center mx-auto mb-4">
-                      <BookOpen className="w-8 h-8 text-[#0a0f1e]" />
+                  <div className={cn(learnerPanel, "flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between")}>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50">
+                        <BookOpen className="h-5 w-5 text-dq-navy" />
+                      </div>
+                      <div>
+                        <h3 className={learnerItemTitle}>No courses yet</h3>
+                        <p className={learnerBodyMuted}>Start your learning journey by exploring our digital transformation courses</p>
+                      </div>
                     </div>
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-2">No courses yet</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa] mb-6">Start your learning journey by exploring our digital transformation courses</p>
-                    <Link to="/courses">
-                      <Button className="bg-[#ff4500] hover:bg-[#cc3700] text-white rounded-full">Explore Courses</Button>
-                    </Link>
+                    <Button
+                      className={cn(btnPrimary, "w-full shrink-0 sm:w-auto")}
+                      size="sm"
+                      onClick={() => setActiveTab('catalog')}
+                    >
+                      Explore Courses
+                    </Button>
                   </div>
                 ) : (
                   <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -473,7 +472,7 @@ const LearnerDashboard = () => {
                         <Link
                           key={enrollment.id}
                           to={`/courses/${enrollment.course_id}/learn`}
-                          className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-[#e8e8ec]"
+                          className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-200"
                         >
                           <div className="relative">
                             <img
@@ -489,10 +488,10 @@ const LearnerDashboard = () => {
                             </div>
                           </div>
                           <div className="p-5">
-                            <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[#ff4500] transition-colors">
+                            <h4 className={cn(learnerItemTitle, "mb-2 line-clamp-2 transition-colors group-hover:text-dq-orange")}>
                               {enrollment.course?.title}
                             </h4>
-                            <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-[#9a9aaa] mb-4">
+                            <div className={cn(learnerBodyMuted, "mb-4 flex items-center gap-2")}>
                               <Clock className="w-4 h-4" />
                               <span>{enrollment.course?.duration_hours || 0} hours</span>
                             </div>
@@ -510,17 +509,21 @@ const LearnerDashboard = () => {
                 <section>
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-[#ff4500]" />
-                      <h3 className="text-[20px] leading-[28px] font-medium text-foreground">Recommended for You</h3>
+                      <Sparkles className="h-5 w-5 text-dq-orange" />
+                      <h3 className={learnerCardTitle}>Recommended for You</h3>
                     </div>
-                    <Link to="/courses" className="text-[14px] leading-[20px] font-normal text-[#ff4500] hover:underline flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('catalog')}
+                      className={learnerLink}
+                    >
                       View all <ChevronRight className="w-4 h-4" />
-                    </Link>
+                    </button>
                   </div>
 
                   {recommendedCourses.length === 0 ? (
                     <div className="flex items-center justify-center py-12">
-                      <Loader2 className="w-6 h-6 animate-spin text-[#ff4500]" />
+                      <Loader2 className="h-6 w-6 animate-spin text-dq-orange" />
                     </div>
                   ) : (
                     <div className="relative">
@@ -528,13 +531,14 @@ const LearnerDashboard = () => {
                         ref={carouselRef}
                         className="flex gap-6 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory"
                       >
-                        {recommendedCourses.map((course, index) => (
-                          <Link
+                        {recommendedCourses.map((course) => (
+                          <button
                             key={course.id}
-                            to={course.comingSoon ? '#' : `/courses/${course.id}`}
-                            onClick={(e) => course.comingSoon && e.preventDefault()}
-                            className={`group bg-white rounded-xl overflow-hidden shadow-sm transition-all h-full flex flex-col border border-[#e8e8ec] flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] snap-start ${
-                              course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-md hover:shadow-[#ff4500]/20'
+                            type="button"
+                            disabled={course.comingSoon}
+                            onClick={() => !course.comingSoon && handleCourseSelect(course.id)}
+                            className={`group bg-white rounded-xl overflow-hidden shadow-sm transition-all h-full flex flex-col border border-gray-200 flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] snap-start text-left ${
+                              course.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-md hover:shadow-dq-orange/20 cursor-pointer'
                             }`}
                           >
                             <div className="relative">
@@ -555,33 +559,33 @@ const LearnerDashboard = () => {
                               )}
                               {course.badge && !course.comingSoon && (
                                 <div className="absolute top-3 right-3">
-                                  <Badge className="bg-[#ff4500] text-white capitalize">
+                                  <Badge className="bg-dq-orange capitalize text-white">
                                     {course.badge}
                                   </Badge>
                                 </div>
                               )}
                             </div>
                             <div className="p-5 flex-1 flex flex-col">
-                              <h4 className="text-[16px] leading-[24px] font-medium mb-2 line-clamp-2 group-hover:text-[#ff4500] transition-colors">
+                              <h4 className={cn(learnerItemTitle, "mb-2 line-clamp-2 transition-colors group-hover:text-dq-orange")}>
                                 {course.title}
                               </h4>
-                              <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa] mb-4 line-clamp-2 flex-1">
+                              <p className={cn(learnerBodyMuted, "mb-4 line-clamp-2 flex-1")}>
                                 {course.description}
                               </p>
                               <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2 text-[14px] leading-[20px] font-normal text-[#9a9aaa]">
+                                <div className={cn(learnerBodyMuted, "flex items-center gap-2")}>
                                   <Clock className="w-4 h-4" />
                                   <span>{course.duration}</span>
                                 </div>
                                 <Badge
-                                  className={course.comingSoon ? 'bg-gray-100 text-[#9a9aaa]' : ''}
+                                  className={course.comingSoon ? 'bg-gray-100 text-gray-500' : ''}
                                   variant={course.comingSoon ? 'default' : 'secondary'}
                                 >
                                   {course.comingSoon ? 'Coming Soon' : course.level}
                                 </Badge>
                               </div>
                             </div>
-                          </Link>
+                          </button>
                         ))}
                       </div>
                       
@@ -599,7 +603,7 @@ const LearnerDashboard = () => {
                             }}
                             className={`w-2 h-2 rounded-full transition-all ${
                               carouselIndex === index 
-                                ? 'bg-[#ff4500] w-8' 
+                                ? 'w-8 bg-dq-orange' 
                                 : 'bg-gray-300 hover:bg-gray-400'
                             }`}
                             aria-label={`Go to carousel page ${index + 1}`}
@@ -615,23 +619,23 @@ const LearnerDashboard = () => {
               {certificates && certificates.length > 0 && (
                 <section>
                   <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-[20px] leading-[28px] font-medium text-foreground">Recent Certificates</h3>
+                    <h3 className={learnerCardTitle}>Recent Certificates</h3>
                     <button 
                       onClick={() => setActiveTab('certificates')}
-                      className="text-[14px] leading-[20px] font-normal text-[#ff4500] hover:underline flex items-center gap-1"
+                      className={learnerLink}
                     >
                       View all <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     {certificates.slice(0, 2).map((cert: any) => (
-                      <div key={cert.id} className="bg-white rounded-xl p-5 shadow-sm flex items-center gap-4 border border-[#e8e8ec]">
-                        <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center shrink-0">
-                          <Trophy className="w-7 h-7 text-white" />
+                      <div key={cert.id} className="bg-white rounded-xl p-5 shadow-sm flex items-center gap-4 border border-gray-200">
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-orange-50">
+                          <Trophy className="h-7 w-7 text-dq-orange" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-[16px] leading-[24px] font-medium truncate">{cert.course?.title}</h4>
-                          <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa]">
+                          <h4 className={cn(learnerItemTitle, "truncate")}>{cert.course?.title}</h4>
+                          <p className={learnerBodyMuted}>
                             Issued {formatDate(cert.issued_at)}
                           </p>
                         </div>
@@ -648,9 +652,9 @@ const LearnerDashboard = () => {
 
           {/* Courses Tab */}
           {activeTab === 'courses' && (
-            <div className="space-y-8">
+            <div className="space-y-4">
               <Tabs defaultValue="in-progress" className="w-full">
-                <TabsList className="mb-6">
+                <TabsList className="mb-4 h-9">
                   <TabsTrigger value="in-progress" className="gap-2">
                     <PlayCircle className="w-4 h-4" />
                     In Progress ({inProgressCourses.length})
@@ -663,54 +667,63 @@ const LearnerDashboard = () => {
 
                 <TabsContent value="in-progress">
                   {inProgressCourses.length === 0 ? (
-                    <div className="bg-white rounded-xl p-12 text-center border border-[#e8e8ec]">
-                      <BookOpen className="w-12 h-12 text-[#9a9aaa] mx-auto mb-4" />
-                      <h3 className="text-[20px] leading-[28px] font-medium mb-2">No courses in progress</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa] mb-6">Enroll in a course to start learning</p>
-                      <Link to="/courses">
-                        <Button className="bg-[#ff4500] hover:bg-[#cc3700] text-white rounded-full">Browse Courses</Button>
-                      </Link>
+                    <div className={cn(learnerPanel, "flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between")}>
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50">
+                          <BookOpen className="h-5 w-5 text-gray-500" />
+                        </div>
+                        <div>
+                          <h3 className={learnerItemTitle}>No courses in progress</h3>
+                          <p className={learnerBodyMuted}>Enroll in a course to start learning</p>
+                        </div>
+                      </div>
+                      <Button
+                        className={cn(btnPrimary, "w-full shrink-0 sm:w-auto")}
+                        size="sm"
+                        onClick={() => setActiveTab('catalog')}
+                      >
+                        Browse Courses
+                      </Button>
                     </div>
                   ) : (
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {inProgressCourses.map((enrollment) => {
-                        // Find the actual course data to get the correct image
                         const courseData = dtmaCourses.find(c => c.id === enrollment.course_id);
                         const courseImage = courseData?.image || enrollment.course?.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop';
                         
                         return (
-                          <div key={enrollment.id} className="bg-white rounded-xl p-5 shadow-sm flex flex-col md:flex-row gap-5 border border-[#e8e8ec]">
+                          <div key={enrollment.id} className={cn(learnerPanel, "flex flex-col gap-4 p-4 sm:flex-row")}>
                             <img
                               src={courseImage}
                               alt={enrollment.course?.title}
-                              className="w-full md:w-48 h-32 object-cover rounded-lg"
+                              className="h-24 w-full shrink-0 rounded-lg object-cover sm:w-36"
                             />
-                            <div className="flex-1">
-                              <div className="flex items-start justify-between gap-4 mb-3">
-                                <div>
-                                  <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
-                                  <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa] line-clamp-2">
+                            <div className="min-w-0 flex-1">
+                              <div className="mb-2 flex items-start justify-between gap-3">
+                                <div className="min-w-0">
+                                  <h3 className={cn(learnerItemTitle, "truncate")}>{enrollment.course?.title}</h3>
+                                  <p className={cn(learnerBodyMuted, "line-clamp-1")}>
                                     {enrollment.course?.short_description}
                                   </p>
                                 </div>
-                                <Badge variant="secondary">{enrollment.course?.level}</Badge>
+                                <Badge variant="secondary" className="shrink-0 text-xs">{enrollment.course?.level}</Badge>
                               </div>
-                              <div className="flex items-center gap-4 text-[14px] leading-[20px] font-normal text-[#9a9aaa] mb-4">
+                              <div className={cn(learnerBodyMuted, "mb-3 flex flex-wrap items-center gap-3 text-xs")}>
                                 <span className="flex items-center gap-1">
-                                  <Clock className="w-4 h-4" />
+                                  <Clock className="h-3.5 w-3.5" />
                                   {enrollment.course?.duration_hours || 0}h
                                 </span>
                                 <span className="flex items-center gap-1">
-                                  <Calendar className="w-4 h-4" />
+                                  <Calendar className="h-3.5 w-3.5" />
                                   Enrolled {formatDate(enrollment.enrolled_at)}
                                 </span>
                               </div>
-                              <div className="flex items-center gap-4">
-                                <Progress value={enrollment.progress || 0} className="flex-1 h-2" />
-                                <span className="text-[14px] leading-[20px] font-medium">{enrollment.progress || 0}%</span>
+                              <div className="flex items-center gap-3">
+                                <Progress value={enrollment.progress || 0} className="h-1.5 flex-1" />
+                                <span className="text-xs font-medium text-dq-navy">{enrollment.progress || 0}%</span>
                                 <Link to={`/courses/${enrollment.course_id}/learn`}>
-                                  <Button className="bg-[#ff4500] hover:bg-[#cc3700] text-white rounded-full" size="sm">
-                                    <PlayCircle className="w-4 h-4 mr-2" />
+                                  <Button className={cn(btnPrimary, "h-8 px-3 text-xs")} size="sm">
+                                    <PlayCircle className="mr-1.5 h-3.5 w-3.5" />
                                     Continue
                                   </Button>
                                 </Link>
@@ -725,10 +738,12 @@ const LearnerDashboard = () => {
 
                 <TabsContent value="completed">
                   {completedCourses.length === 0 ? (
-                    <div className="bg-white rounded-xl p-12 text-center border border-[#e8e8ec]">
-                      <GraduationCap className="w-12 h-12 text-[#9a9aaa] mx-auto mb-4" />
-                      <h3 className="text-[20px] leading-[28px] font-medium mb-2">No completed courses yet</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa]">Complete your first course to earn a certificate!</p>
+                    <div className={cn(learnerPanel, "flex items-center gap-3 p-4")}>
+                      <GraduationCap className="h-8 w-8 shrink-0 text-gray-400" />
+                      <div>
+                        <h3 className={learnerItemTitle}>No completed courses yet</h3>
+                        <p className={learnerBodyMuted}>Complete your first course to earn a certificate!</p>
+                      </div>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -738,7 +753,7 @@ const LearnerDashboard = () => {
                         const courseImage = courseData?.image || enrollment.course?.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop';
                         
                         return (
-                          <div key={enrollment.id} className="bg-white rounded-xl p-5 shadow-sm flex flex-col md:flex-row gap-5 border border-[#e8e8ec]">
+                          <div key={enrollment.id} className="bg-white rounded-xl p-5 shadow-sm flex flex-col md:flex-row gap-5 border border-gray-200">
                             <img
                               src={courseImage}
                               alt={enrollment.course?.title}
@@ -747,8 +762,8 @@ const LearnerDashboard = () => {
                             <div className="flex-1">
                               <div className="flex items-start justify-between gap-4 mb-3">
                                 <div>
-                                  <h3 className="text-[20px] leading-[28px] font-medium mb-1">{enrollment.course?.title}</h3>
-                                  <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa]">
+                                  <h3 className={cn(learnerCardTitle, "mb-1")}>{enrollment.course?.title}</h3>
+                                  <p className={learnerBodyMuted}>
                                     Completed on {enrollment.completed_at ? formatDate(enrollment.completed_at) : 'N/A'}
                                   </p>
                                 </div>
@@ -777,76 +792,6 @@ const LearnerDashboard = () => {
                   )}
                 </TabsContent>
               </Tabs>
-            </div>
-          )}
-
-          {/* Certificates Tab */}
-          {activeTab === 'certificates' && (
-            <div className="space-y-6">
-              {certificatesLoading ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                </div>
-              ) : !certificates || certificates.length === 0 ? (
-                <div className="bg-white rounded-xl p-12 text-center border border-[#e8e8ec]">
-                  <div className="w-20 h-20 bg-[#fff7ed] rounded-xl flex items-center justify-center mx-auto mb-6">
-                    <Trophy className="w-10 h-10 text-[#ff4500]" />
-                  </div>
-                  <h3 className="text-[20px] leading-[28px] font-medium mb-2">No certificates yet</h3>
-                  <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa] mb-6 max-w-md mx-auto">
-                    Complete a course to earn your first certificate. Certificates showcase your achievements and newly acquired skills.
-                  </p>
-                  {inProgressCourses.length > 0 ? (
-                    <Link to={`/courses/${inProgressCourses[0].course_id}/learn`}>
-                      <Button className="bg-[#ff4500] hover:bg-[#cc3700] text-white rounded-full">Continue Learning</Button>
-                    </Link>
-                  ) : (
-                    <Link to="/courses">
-                      <Button className="bg-[#ff4500] hover:bg-[#cc3700] text-white rounded-full">Explore Courses</Button>
-                    </Link>
-                  )}
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 gap-6">
-                  {certificates.map((cert: any) => (
-                    <div key={cert.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#e8e8ec]">
-                      <div className="bg-gradient-to-r from-amber-500 to-amber-600 p-6 text-white">
-                        <div className="flex items-center gap-4">
-                          <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                            <Award className="w-8 h-8" />
-                          </div>
-                          <div>
-                            <p className="text-[12px] leading-[16px] font-medium text-white/80 mb-1">Certificate of Completion</p>
-                            <h3 className="text-[20px] leading-[28px] font-medium">{cert.course?.title}</h3>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-6">
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                          <div>
-                            <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa] mb-1">Issue Date</p>
-                            <p className="text-[16px] leading-[24px] font-normal">{formatDate(cert.issued_at)}</p>
-                          </div>
-                          <div>
-                            <p className="text-[14px] leading-[20px] font-normal text-[#9a9aaa] mb-1">Certificate ID</p>
-                            <p className="text-[14px] leading-[20px] font-normal font-mono">{cert.certificate_number}</p>
-                          </div>
-                        </div>
-                        <div className="flex gap-3">
-                          <Button className="bg-[#ff4500] hover:bg-[#cc3700] text-white rounded-full flex-1">
-                            <Download className="w-4 h-4 mr-2" />
-                            Download
-                          </Button>
-                          <Button variant="outline" className="gap-2">
-                            <ExternalLink className="w-4 h-4" />
-                            Share
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           )}
 
@@ -884,10 +829,24 @@ const LearnerDashboard = () => {
           {activeTab === 'gamification' && (
             <GamificationFeatures />
           )}
+
+          {activeTab === 'ai-cockpit' && (
+            <TransactAI
+              embedded
+              enrolledCourses={enrollments?.length || 0}
+              completedCourses={completedCourses.length}
+              averageProgress={totalProgress}
+              learningGoal={onboardingData?.learningGoal || ''}
+              skillLevel={onboardingData?.skillLevel || 'Beginner'}
+              streak={0}
+            />
+          )}
+          </>
+          )}
         </div>
       </main>
 
-      {/* Transact AI - Personal Mentor (Floating Widget) */}
+      {activeTab !== 'ai-cockpit' && (
       <TransactAI
         enrolledCourses={enrollments?.length || 0}
         completedCourses={completedCourses.length}
@@ -896,6 +855,7 @@ const LearnerDashboard = () => {
         skillLevel={onboardingData?.skillLevel || 'Beginner'}
         streak={0}
       />
+      )}
     </div>
   );
 };

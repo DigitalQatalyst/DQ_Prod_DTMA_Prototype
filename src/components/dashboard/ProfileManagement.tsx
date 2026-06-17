@@ -8,6 +8,16 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { User, Mail, Phone, MapPin, Briefcase, Save, Camera } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  learnerBodyMuted,
+  learnerBtnPrimary,
+  learnerCardTitle,
+  learnerItemTitle,
+  learnerPanel,
+} from '@/lib/brandAccent';
+import { cn } from '@/lib/utils';
+
+const fieldLabel = 'mb-1.5 flex items-center gap-1.5 text-xs font-medium text-dq-navy';
 
 export const ProfileManagement = () => {
   const { profile, updateProfile } = useAuth();
@@ -25,7 +35,7 @@ export const ProfileManagement = () => {
       await updateProfile(formData);
       setIsEditing(false);
       toast.success('Profile updated successfully!');
-    } catch (error) {
+    } catch {
       toast.error('Failed to update profile');
     }
   };
@@ -36,21 +46,18 @@ export const ProfileManagement = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <Card className="p-6 border border-border">
-        <div className="flex items-start justify-between mb-6">
-          <h3 className="font-semibold !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
-            Profile Information
-          </h3>
+    <div className="space-y-4">
+      <Card className={cn(learnerPanel, 'p-4 lg:p-5')}>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h3 className={learnerCardTitle}>Profile Information</h3>
           <Button
-            onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-            className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white"
-            style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
+            onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+            className={cn(learnerBtnPrimary, 'h-8 shrink-0 px-3 text-xs')}
           >
             {isEditing ? (
               <>
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
+                <Save className="mr-1.5 h-3.5 w-3.5" />
+                Save
               </>
             ) : (
               'Edit Profile'
@@ -58,36 +65,35 @@ export const ProfileManagement = () => {
           </Button>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8">
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative">
-              <Avatar className="w-24 h-24">
+        <div className="flex flex-col gap-5 lg:flex-row lg:gap-6">
+          <div className="flex items-center gap-4 lg:w-48 lg:flex-col lg:items-center lg:text-center">
+            <div className="relative shrink-0">
+              <Avatar className="h-16 w-16 lg:h-20 lg:w-20">
                 <AvatarImage src={profile?.avatar_url || undefined} />
-                <AvatarFallback className="bg-[var(--dq-navy-950)] text-white text-2xl">
+                <AvatarFallback className="bg-gray-100 text-sm text-dq-navy">
                   {getInitials(profile?.full_name)}
                 </AvatarFallback>
               </Avatar>
               {isEditing && (
-                <button className="absolute bottom-0 right-0 w-8 h-8 bg-[var(--dq-orange-500)] rounded-full flex items-center justify-center text-white hover:bg-[var(--dq-orange-600)]">
-                  <Camera className="w-4 h-4" />
+                <button
+                  type="button"
+                  className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-dq-orange text-white hover:bg-[#E04020]"
+                >
+                  <Camera className="h-3.5 w-3.5" />
                 </button>
               )}
             </div>
-            <div className="text-center">
-              <p className="font-semibold" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
-                {profile?.full_name || 'Learner'}
-              </p>
-              <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                {profile?.email}
-              </p>
+            <div className="min-w-0">
+              <p className={learnerItemTitle}>{profile?.full_name || 'Learner'}</p>
+              <p className={cn(learnerBodyMuted, 'truncate text-xs')}>{profile?.email}</p>
             </div>
           </div>
 
-          <div className="flex-1 space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
+          <div className="min-w-0 flex-1 space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <Label htmlFor="full_name" className="flex items-center gap-2 mb-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
-                  <User className="w-4 h-4" />
+                <Label htmlFor="full_name" className={fieldLabel}>
+                  <User className="h-3.5 w-3.5" />
                   Full Name
                 </Label>
                 <Input
@@ -95,28 +101,21 @@ export const ProfileManagement = () => {
                   value={formData.full_name}
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                   disabled={!isEditing}
-                  className="bg-white border-border"
-                  style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
+                  className="h-9 text-sm"
                 />
               </div>
 
               <div>
-                <Label htmlFor="email" className="flex items-center gap-2 mb-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
-                  <Mail className="w-4 h-4" />
+                <Label htmlFor="email" className={fieldLabel}>
+                  <Mail className="h-3.5 w-3.5" />
                   Email
                 </Label>
-                <Input
-                  id="email"
-                  value={profile?.email || ''}
-                  disabled
-                  className="bg-white border-border"
-                  style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
-                />
+                <Input id="email" value={profile?.email || ''} disabled className="h-9 text-sm" />
               </div>
 
               <div>
-                <Label htmlFor="phone" className="flex items-center gap-2 mb-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
-                  <Phone className="w-4 h-4" />
+                <Label htmlFor="phone" className={fieldLabel}>
+                  <Phone className="h-3.5 w-3.5" />
                   Phone
                 </Label>
                 <Input
@@ -124,14 +123,13 @@ export const ProfileManagement = () => {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   disabled={!isEditing}
-                  className="bg-white border-border"
-                  style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
+                  className="h-9 text-sm"
                 />
               </div>
 
               <div>
-                <Label htmlFor="location" className="flex items-center gap-2 mb-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
-                  <MapPin className="w-4 h-4" />
+                <Label htmlFor="location" className={fieldLabel}>
+                  <MapPin className="h-3.5 w-3.5" />
                   Location
                 </Label>
                 <Input
@@ -139,14 +137,13 @@ export const ProfileManagement = () => {
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   disabled={!isEditing}
-                  className="bg-white border-border"
-                  style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
+                  className="h-9 text-sm"
                 />
               </div>
 
-              <div className="md:col-span-2">
-                <Label htmlFor="occupation" className="flex items-center gap-2 mb-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
-                  <Briefcase className="w-4 h-4" />
+              <div className="sm:col-span-2">
+                <Label htmlFor="occupation" className={fieldLabel}>
+                  <Briefcase className="h-3.5 w-3.5" />
                   Occupation
                 </Label>
                 <Input
@@ -154,14 +151,13 @@ export const ProfileManagement = () => {
                   value={formData.occupation}
                   onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
                   disabled={!isEditing}
-                  className="bg-white border-border"
-                  style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
+                  className="h-9 text-sm"
                 />
               </div>
             </div>
 
             <div>
-              <Label htmlFor="bio" className="mb-2 block" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
+              <Label htmlFor="bio" className={cn(fieldLabel, 'block')}>
                 Bio
               </Label>
               <Textarea
@@ -169,27 +165,24 @@ export const ProfileManagement = () => {
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 disabled={!isEditing}
-                className="bg-white border-border min-h-[100px]"
+                className="min-h-[72px] text-sm"
                 placeholder="Tell us about yourself..."
-                style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
               />
             </div>
           </div>
         </div>
       </Card>
 
-      <Card className="p-6 border border-border">
-        <h3 className="font-semibold mb-4 !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
-          Account Settings
-        </h3>
-        <div className="space-y-4">
-          <Button variant="outline" className="w-full justify-start" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+      <Card className={cn(learnerPanel, 'p-4')}>
+        <h3 className={cn(learnerCardTitle, 'mb-3')}>Account Settings</h3>
+        <div className="grid gap-2 sm:grid-cols-3">
+          <Button variant="outline" className="h-9 justify-start text-xs">
             Change Password
           </Button>
-          <Button variant="outline" className="w-full justify-start" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+          <Button variant="outline" className="h-9 justify-start text-xs">
             Privacy Settings
           </Button>
-          <Button variant="outline" className="w-full justify-start" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+          <Button variant="outline" className="h-9 justify-start text-xs">
             Notification Preferences
           </Button>
         </div>

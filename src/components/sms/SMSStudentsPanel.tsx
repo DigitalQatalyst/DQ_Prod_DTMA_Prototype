@@ -85,14 +85,6 @@ export default function SMSStudentsPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Students</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Progress, access status, and engagement for all enrolled students.
-        </p>
-      </div>
-
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">

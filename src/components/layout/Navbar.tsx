@@ -5,8 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFlow } from "@/contexts/FlowContext";
 import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import DTMALogo from "@/components/layout/DTMALogo";
-import ExploreDigitalQatalystCta from "@/components/layout/ExploreDigitalQatalystCta";
-import { btnPrimary } from "@/lib/brandAccent";
+import JourneyContextSwitcher from "@/components/layout/JourneyContextSwitcher";
+import { btnPrimary, btnSecondaryNavy } from "@/lib/brandAccent";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
@@ -212,18 +212,20 @@ const Navbar = () => {
                     </Button>
                   </div>
                 </div>
-                <ExploreDigitalQatalystCta className="hidden md:inline-flex" />
+                <JourneyContextSwitcher className="hidden md:inline-flex" />
               </>
             ) : (
               <div className="hidden items-center gap-3 md:flex">
-                <ExploreDigitalQatalystCta />
-                <button
+                <JourneyContextSwitcher />
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={handleSignIn}
-                  className="text-[13px] font-semibold text-dq-navy transition-colors hover:text-dq-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dq-orange focus-visible:ring-offset-2 rounded-sm"
+                  className={btnSecondaryNavy}
                 >
                   Log in
-                </button>
+                </Button>
                 <Button size="sm" onClick={handleSignIn} className={cn(btnPrimary, "px-5")}>
                   Get Started
                 </Button>
@@ -373,6 +375,10 @@ const Navbar = () => {
 
           {!loading && user ? (
             <>
+              <JourneyContextSwitcher
+                variant="mobile"
+                onNavigate={() => setIsOpen(false)}
+              />
               <Link
                 to="/dashboard"
                 className="border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
@@ -390,17 +396,21 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <ExploreDigitalQatalystCta className="mt-4 w-full" showIcon={false} />
-              <button
+              <JourneyContextSwitcher
+                variant="mobile"
+                onNavigate={() => setIsOpen(false)}
+              />
+              <Button
                 type="button"
-                className="border-b border-gray-100 py-3 text-left text-lg font-medium text-dq-navy"
+                variant="outline"
+                className={cn(btnSecondaryNavy, "mt-2 w-full")}
                 onClick={() => {
                   handleSignIn();
                   setIsOpen(false);
                 }}
               >
                 Log in
-              </button>
+              </Button>
               <Button className={cn(btnPrimary, "mt-4 w-full py-3")} onClick={handleSignIn}>
                 Get Started
               </Button>

@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminAnalytics, usePendingCourses, useAdminUsers, useReviewCourse, useUpdateUserRole } from '@/hooks/useAdmin';
-import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
-import DTMALogo from '@/components/layout/DTMALogo';
+import {
+  AdminDashboardSidebar,
+  type AdminTabId,
+} from '@/components/dashboard/AdminDashboardSidebar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { InviteManagement } from '@/components/admin/InviteManagement';
 import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalyticsDashboard';
 import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
@@ -95,8 +98,70 @@ import {
   Share2,
   Activity,
 } from 'lucide-react';
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerIconWell,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPageDescription,
+  learnerPageTitle,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerWorkspaceBg,
+} from '@/lib/brandAccent';
+import { cn } from '@/lib/utils';
 
-type AdminTab = 'overview' | 'users' | 'courses' | 'pending' | 'invites' | 'assessments' | 'scheduling' | 'enrollment' | 'faculty' | 'resources' | 'system' | 'communication' | 'governance' | 'organizations' | 'certification' | 'commerce' | 'whatsapp-analytics' | 'ai-usage' | 'ai-assistant' | 'ai-faculty' | 'ai-content' | 'ai-assessment' | 'ai-cohort' | 'ai-feedback' | 'ai-moderation' | 'ai-support' | 'ai-localization';
+const TAB_LABELS: Record<AdminTabId, string> = {
+  overview: 'Platform Overview',
+  users: 'User Management',
+  courses: 'Course Management',
+  pending: 'Pending Approval',
+  invites: 'Invites',
+  assessments: 'Assessments',
+  scheduling: 'Training Delivery',
+  enrollment: 'Enrollment',
+  faculty: 'Faculty Operations',
+  resources: 'Resources',
+  system: 'System Settings',
+  communication: 'Communication',
+  governance: 'Content Governance',
+  organizations: 'Organizations',
+  certification: 'Certification',
+  commerce: 'Commerce & Billing',
+  'whatsapp-analytics': 'WhatsApp Analytics',
+  'ai-usage': 'AI Usage Monitoring',
+  'ai-assistant': 'AI Operations Assistant',
+  'ai-faculty': 'AI Faculty Support',
+  'ai-content': 'AI Content Authoring',
+  'ai-assessment': 'AI Assessment Tools',
+  'ai-cohort': 'AI Cohort Intelligence',
+  'ai-feedback': 'AI Feedback Analysis',
+  'ai-moderation': 'AI Discussion Moderation',
+  'ai-support': 'AI Support Triage',
+  'ai-localization': 'AI Localization',
+};
+
+const TAB_DESCRIPTIONS: Partial<Record<AdminTabId, string>> = {
+  overview: 'Monitor key metrics and platform performance at a glance',
+  users: 'Manage learners, instructors, and administrators',
+  courses: 'Review and manage platform course content',
+  pending: 'Review courses awaiting approval',
+  invites: 'Manage user invitations and onboarding',
+  assessments: 'Configure and monitor assessments',
+  scheduling: 'Manage training sessions and delivery',
+  enrollment: 'Track and manage course enrollments',
+  faculty: 'Oversee faculty operations and programs',
+  communication: 'Platform announcements and support',
+  governance: 'Content governance and compliance',
+  organizations: 'Manage organizations and institutions',
+  certification: 'Certificate templates and issuance',
+  commerce: 'Billing, pricing, and commerce settings',
+  'whatsapp-analytics': 'WhatsApp engagement and delivery metrics',
+  'ai-usage': 'Monitor AI feature usage across the platform',
+  system: 'Platform configuration and system settings',
+};
 
 // ─── Mock data ───────────────────────────────────────────────────────────────
 const MOCK_COURSES = [
@@ -1596,7 +1661,8 @@ const PendingApprovalsTab = () => {
 const AdminDashboard = () => {
   const { profile, signOut, role } = useAuth();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<AdminTab>('overview');
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<AdminTabId>('overview');
   const [governanceSubTab, setGovernanceSubTab] = useState<'overview' | 'workflow' | 'reporting' | 'scanning' | 'policies' | 'activity'>('overview');
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
@@ -1821,337 +1887,247 @@ const AdminDashboard = () => {
     }
   };
 
-  const navItems = [
-    { id: 'overview' as AdminTab, label: 'Overview', icon: LayoutDashboard },
-    { id: 'courses' as AdminTab, label: 'Course Management', icon: BookOpen },
-    { id: 'pending' as AdminTab, label: 'Pending Approval', icon: Clock, badge: pendingCourses?.length },
-    { id: 'assessments' as AdminTab, label: 'Assessments', icon: Award },
-    { id: 'scheduling' as AdminTab, label: 'Training Delivery', icon: GraduationCap },
-    { id: 'enrollment' as AdminTab, label: 'Enrollment', icon: Users },
-    { id: 'faculty' as AdminTab, label: 'Faculty Operations', icon: Users },
-    { id: 'users' as AdminTab, label: 'User Management', icon: Users },
-    { id: 'invites' as AdminTab, label: 'Invites', icon: UserPlus },
-    { id: 'whatsapp-analytics' as AdminTab, label: 'WhatsApp Analytics', icon: MessageSquare },
-    { id: 'ai-usage' as AdminTab, label: 'AI Usage Monitoring', icon: Bot },
-    { id: 'communication' as AdminTab, label: 'Communication', icon: Settings },
-    { id: 'governance' as AdminTab, label: 'Content Governance', icon: Settings },
-    { id: 'organizations' as AdminTab, label: 'Organizations', icon: Settings },
-    { id: 'certification' as AdminTab, label: 'Certification', icon: Award },
-    { id: 'commerce' as AdminTab, label: 'Commerce & Billing', icon: Settings },
-    { id: 'system' as AdminTab, label: 'System Settings', icon: Settings },
-    // AI Features Section
-    { id: 'ai-assistant' as AdminTab, label: 'AI Operations Assistant', icon: Bot, section: 'ai' },
-    { id: 'ai-faculty' as AdminTab, label: 'AI Faculty Support', icon: Sparkles, section: 'ai' },
-    { id: 'ai-content' as AdminTab, label: 'AI Content Authoring', icon: FileText, section: 'ai' },
-    { id: 'ai-assessment' as AdminTab, label: 'AI Assessment Tools', icon: Brain, section: 'ai' },
-    { id: 'ai-cohort' as AdminTab, label: 'AI Cohort Intelligence', icon: AlertTriangle, section: 'ai' },
-    { id: 'ai-feedback' as AdminTab, label: 'AI Feedback Analysis', icon: MessageSquare, section: 'ai' },
-    { id: 'ai-moderation' as AdminTab, label: 'AI Discussion Moderation', icon: Shield, section: 'ai' },
-    { id: 'ai-support' as AdminTab, label: 'AI Support Triage', icon: Headphones, section: 'ai' },
-    { id: 'ai-localization' as AdminTab, label: 'AI Localization', icon: Globe, section: 'ai' },
-  ];
+  const pageDescription = TAB_DESCRIPTIONS[activeTab];
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
-    <div className="min-h-screen bg-background flex">
-      {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[var(--dq-navy-950)] to-[#2a3058] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="p-6 border-b border-white/5">
-            <DTMALogo variant="dark" />
-          </div>
+    <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
+      <AdminDashboardSidebar
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          setSidebarOpen(false);
+        }}
+        onSignOut={handleSignOut}
+        profileName={profile?.full_name ?? null}
+        profileEmail={profile?.email ?? null}
+        profileAvatar={profile?.avatar_url}
+        pendingCount={pendingCourses?.length}
+        className={`${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } fixed left-0 top-0 z-50 transition-transform duration-200 lg:sticky lg:translate-x-0`}
+      />
 
-          <RoleSwitcher currentRole="admin" />
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-            {navItems.filter(item => !item.section).map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setSidebarOpen(false);
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-[16px] leading-[24px] font-normal ${
-                  activeTab === item.id
-                    ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20'
-                    : 'text-white/70 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                <item.icon className="w-5 h-5" />
-                <span className="flex-1">{item.label}</span>
-                {item.badge && item.badge > 0 && (
-                  <Badge className="bg-[var(--dq-orange-500)] text-white">{item.badge}</Badge>
-                )}
-              </button>
-            ))}
-            
-            {/* AI Features Section */}
-            <div className="pt-4 mt-4 border-t border-white/10">
-              <div className="px-4 py-2 text-[12px] leading-[16px] font-medium text-white/50 uppercase tracking-wide">
-                AI Capabilities
-              </div>
-              {navItems.filter(item => item.section === 'ai').map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setActiveTab(item.id);
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors text-[16px] leading-[24px] font-normal ${
-                    activeTab === item.id
-                      ? 'bg-[var(--dq-orange-500)] text-white shadow-lg shadow-[var(--dq-orange-500)]/20'
-                      : 'text-white/70 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="flex-1">{item.label}</span>
-                </button>
-              ))}
-            </div>
-          </nav>
-
-          {/* User & Logout */}
-          <div className="p-4 border-t border-white/10">
-            <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] flex items-center justify-center text-[14px] leading-[20px] font-medium">
-                {profile?.full_name?.charAt(0) || 'A'}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-[14px] leading-[20px] font-medium truncate">{profile?.full_name || 'Admin'}</div>
-                <div className="text-[12px] leading-[16px] font-normal text-white/60">Administrator</div>
-              </div>
-            </div>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10"
-              onClick={signOut}
+      <main className={cn('flex-1 h-full overflow-y-auto', learnerWorkspaceBg)}>
+        <header className="sticky top-0 z-30 border-b border-gray-200 bg-white px-4 py-3 lg:px-8 lg:py-4">
+          <div className="flex items-start justify-between gap-4">
+            <button
+              type="button"
+              className="-ml-2 shrink-0 p-2 lg:hidden"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
-        </div>
-      </aside>
+              {sidebarOpen ? (
+                <X className="h-6 w-6 text-dq-navy" />
+              ) : (
+                <Menu className="h-6 w-6 text-dq-navy" />
+              )}
+            </button>
 
-      {/* Main Content */}
-      <div className="flex-1 lg:ml-64">
-        {/* Mobile Header */}
-        <header className="lg:hidden sticky top-0 z-40 bg-background border-b border-border p-4 flex items-center justify-between">
-          <button onClick={() => setSidebarOpen(true)} className="p-2 hover:bg-accent rounded-lg">
-            <Menu className="w-6 h-6" />
-          </button>
-          <span className="font-semibold">Admin Dashboard</span>
-          <div className="w-10" />
+            <div className="min-w-0 flex-1">
+              <h2 className={learnerPageTitle}>{TAB_LABELS[activeTab]}</h2>
+              {pageDescription && (
+                <p className={cn(learnerPageDescription, 'mt-0.5')}>{pageDescription}</p>
+              )}
+            </div>
+
+            <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
+              <AvatarImage src={profile?.avatar_url || undefined} />
+              <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">
+                {profile?.full_name?.charAt(0) || 'A'}
+              </AvatarFallback>
+            </Avatar>
+          </div>
         </header>
 
-        {/* Mobile Sidebar Overlay */}
-        {sidebarOpen && (
-          <div className="fixed inset-0 z-40 bg-foreground/50 lg:hidden" onClick={() => setSidebarOpen(false)}>
-            <button className="absolute top-4 right-4 p-2 bg-background rounded-full" onClick={() => setSidebarOpen(false)}>
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-        )}
-
-        <main className="p-6 lg:p-8">
+        <div className="p-4 lg:p-6">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
-            <div className="space-y-8">
-              {/* Header */}
-              <div>
-                <h1 className="text-[32px] leading-[40px] font-semibold text-[var(--dq-navy-950)] mb-2">Platform Overview</h1>
-                <p className="text-[14px] leading-[20px] text-[var(--dq-text-disabled)]">Monitor key metrics and platform performance at a glance</p>
-              </div>
-              
+            <div className="space-y-6">
               {analyticsLoading ? (
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-[var(--dq-surface-border-default)] border-t-[var(--dq-orange-500)] rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-disabled)]">Loading analytics...</p>
+                    <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-dq-orange" />
+                    <p className={learnerBodyMuted}>Loading analytics...</p>
                   </div>
                 </div>
               ) : (
                 <>
-                  {/* Primary Stats Grid - Clean Executive Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {/* Total Users Card */}
-                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30 transition-all hover:shadow-lg group">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 bg-[var(--dq-orange-50)] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
-                          <Users className="w-6 h-6 text-[var(--dq-orange-500)]" />
+                  <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
+                    <div className={learnerKpiCard}>
+                      <div className="mb-3 flex items-start justify-between">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50">
+                          <Users className="h-5 w-5 text-dq-orange" />
                         </div>
-                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
-                          <ArrowUpRight className="w-3 h-3" />
+                        <div className="flex items-center gap-1 text-xs font-medium text-emerald-600">
+                          <ArrowUpRight className="h-3 w-3" />
                           <span>+12%</span>
                         </div>
                       </div>
-                      <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">{analytics?.totalUsers || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Total Users</div>
-                      <div className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">Active platform members</div>
+                      <div className={learnerKpiValue}>{analytics?.totalUsers || 0}</div>
+                      <div className={learnerKpiLabel}>Total Users</div>
+                      <p className={cn(learnerBodyMuted, 'mt-1')}>Active platform members</p>
                     </div>
 
-                    {/* Published Courses Card */}
-                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30 transition-all hover:shadow-lg group">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 bg-[var(--dq-gray-100)] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
-                          <BookOpen className="w-6 h-6 text-[var(--dq-navy-950)]" />
+                    <div className={learnerKpiCard}>
+                      <div className="mb-3 flex items-start justify-between">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50">
+                          <BookOpen className="h-5 w-5 text-dq-navy" />
                         </div>
-                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
-                          <ArrowUpRight className="w-3 h-3" />
+                        <div className="flex items-center gap-1 text-xs font-medium text-emerald-600">
+                          <ArrowUpRight className="h-3 w-3" />
                           <span>+8%</span>
                         </div>
                       </div>
-                      <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">{analytics?.publishedCourses || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Published Courses</div>
-                      <div className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">Live learning content</div>
+                      <div className={learnerKpiValue}>{analytics?.publishedCourses || 0}</div>
+                      <div className={learnerKpiLabel}>Published Courses</div>
+                      <p className={cn(learnerBodyMuted, 'mt-1')}>Live learning content</p>
                     </div>
 
-                    {/* Enrollments Card */}
-                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30 transition-all hover:shadow-lg group">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 bg-[var(--dq-orange-50)] rounded-xl flex items-center justify-center group-hover:bg-[#ffe9e4] transition-colors">
-                          <TrendingUp className="w-6 h-6 text-[var(--dq-orange-500)]" />
+                    <div className={learnerKpiCard}>
+                      <div className="mb-3 flex items-start justify-between">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50">
+                          <TrendingUp className="h-5 w-5 text-dq-orange" />
                         </div>
-                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
-                          <ArrowUpRight className="w-3 h-3" />
+                        <div className="flex items-center gap-1 text-xs font-medium text-emerald-600">
+                          <ArrowUpRight className="h-3 w-3" />
                           <span>+24%</span>
                         </div>
                       </div>
-                      <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">{analytics?.totalEnrollments || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Total Enrollments</div>
-                      <div className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">Course registrations</div>
+                      <div className={learnerKpiValue}>{analytics?.totalEnrollments || 0}</div>
+                      <div className={learnerKpiLabel}>Total Enrollments</div>
+                      <p className={cn(learnerBodyMuted, 'mt-1')}>Course registrations</p>
                     </div>
 
-                    {/* Certificates Card */}
-                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-500)]/30 transition-all hover:shadow-lg group">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="w-12 h-12 bg-[var(--dq-gray-100)] rounded-xl flex items-center justify-center group-hover:bg-[#dddee4] transition-colors">
-                          <Award className="w-6 h-6 text-[var(--dq-navy-950)]" />
+                    <div className={learnerKpiCard}>
+                      <div className="mb-3 flex items-start justify-between">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-50">
+                          <Award className="h-5 w-5 text-dq-navy" />
                         </div>
-                        <div className="flex items-center gap-1 text-emerald-600 text-[12px] leading-[16px] font-medium">
-                          <ArrowUpRight className="w-3 h-3" />
+                        <div className="flex items-center gap-1 text-xs font-medium text-emerald-600">
+                          <ArrowUpRight className="h-3 w-3" />
                           <span>+18%</span>
                         </div>
                       </div>
-                      <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">{analytics?.certificatesIssued || 0}</div>
-                      <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Certificates Issued</div>
-                      <div className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)] mt-1">Completed achievements</div>
+                      <div className={learnerKpiValue}>{analytics?.certificatesIssued || 0}</div>
+                      <div className={learnerKpiLabel}>Certificates Issued</div>
+                      <p className={cn(learnerBodyMuted, 'mt-1')}>Completed achievements</p>
                     </div>
                   </div>
 
-                  {/* Secondary Metrics Row */}
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Users by Role */}
-                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)]">
-                      <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-navy-950)]">Users by Role</h3>
-                        <div className="w-8 h-8 bg-[var(--dq-gray-50)] rounded-lg flex items-center justify-center">
-                          <Users2 className="w-4 h-4 text-[var(--dq-text-secondary)]" />
+                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                    <div className={cn(learnerPanel, 'p-6')}>
+                      <div className="mb-6 flex items-center justify-between">
+                        <h3 className={learnerSectionHeading}>Users by Role</h3>
+                        <div className={learnerIconWell}>
+                          <Users2 className="h-4 w-4 text-gray-500" />
                         </div>
                       </div>
                       <div className="space-y-4">
-                        <div className="flex items-center justify-between group">
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-[var(--dq-orange-500)]"></div>
-                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Learners</span>
+                        {[
+                          { label: 'Learners', value: analytics?.usersByRole.learner || 0, dot: 'bg-dq-orange' },
+                          { label: 'Instructors', value: analytics?.usersByRole.instructor || 0, dot: 'bg-dq-navy' },
+                          { label: 'Admins', value: analytics?.usersByRole.admin || 0, dot: 'bg-gray-400' },
+                        ].map((row) => (
+                          <div key={row.label} className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className={cn('h-2 w-2 rounded-full', row.dot)} />
+                              <span className={learnerBody}>{row.label}</span>
+                            </div>
+                            <span className="text-lg font-semibold text-dq-navy">{row.value}</span>
                           </div>
-                          <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">{analytics?.usersByRole.learner || 0}</span>
-                        </div>
-                        <div className="flex items-center justify-between group">
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-[var(--dq-navy-950)]"></div>
-                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Instructors</span>
-                          </div>
-                          <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">{analytics?.usersByRole.instructor || 0}</span>
-                        </div>
-                        <div className="flex items-center justify-between group">
-                          <div className="flex items-center gap-3">
-                            <div className="w-2 h-2 rounded-full bg-[var(--dq-text-disabled)]"></div>
-                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Admins</span>
-                          </div>
-                          <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">{analytics?.usersByRole.admin || 0}</span>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
-                    {/* Performance Metrics */}
-                    <div className="bg-white rounded-2xl p-6 border border-[var(--dq-surface-border-default)]">
-                      <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-[18px] leading-[26px] font-semibold text-[var(--dq-navy-950)]">Performance</h3>
-                        <div className="w-8 h-8 bg-[var(--dq-gray-50)] rounded-lg flex items-center justify-center">
-                          <BarChart2 className="w-4 h-4 text-[var(--dq-text-secondary)]" />
+                    <div className={cn(learnerPanel, 'p-6')}>
+                      <div className="mb-6 flex items-center justify-between">
+                        <h3 className={learnerSectionHeading}>Performance</h3>
+                        <div className={learnerIconWell}>
+                          <BarChart2 className="h-4 w-4 text-gray-500" />
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Completion Rate</span>
-                            <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">{analytics?.completionRate || 0}%</span>
+                          <div className="mb-2 flex items-center justify-between">
+                            <span className={learnerBody}>Completion Rate</span>
+                            <span className="text-lg font-semibold text-dq-navy">{analytics?.completionRate || 0}%</span>
                           </div>
-                          <div className="w-full h-2 bg-[var(--dq-gray-50)] rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-gradient-to-r from-[var(--dq-orange-500)] to-[#e66045] rounded-full transition-all duration-500"
+                          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                            <div
+                              className="h-full rounded-full bg-dq-orange transition-all duration-500"
                               style={{ width: `${analytics?.completionRate || 0}%` }}
-                            ></div>
+                            />
                           </div>
                         </div>
-                        <div className="pt-2 border-t border-[var(--dq-surface-border-default)]">
+                        <div className="border-t border-gray-200 pt-4">
                           <div className="flex items-center justify-between">
-                            <span className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Avg. Course Rating</span>
+                            <span className={learnerBody}>Avg. Course Rating</span>
                             <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                              <span className="text-[18px] leading-[26px] font-bold text-[var(--dq-navy-950)]">4.7</span>
+                              <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+                              <span className="text-lg font-semibold text-dq-navy">4.7</span>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Quick Actions */}
-                    <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-2xl p-6 text-white">
-                      <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-[18px] leading-[26px] font-semibold text-white">Quick Actions</h3>
-                        <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-                          <Target className="w-4 h-4" />
+                    <div className="rounded-xl bg-dq-navy p-6 text-white">
+                      <div className="mb-6 flex items-center justify-between">
+                        <h3 className="text-xl font-semibold tracking-tight text-white">Quick Actions</h3>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                          <Target className="h-4 w-4" />
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <button 
+                        <button
+                          type="button"
                           onClick={() => setActiveTab('pending')}
-                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                          className="group flex w-full items-center justify-between rounded-xl bg-white/10 p-3 transition-all hover:bg-white/20"
                         >
                           <div className="flex items-center gap-3">
-                            <Clock className="w-4 h-4" />
-                            <span className="text-[14px] leading-[20px] font-medium">Pending Reviews</span>
+                            <Clock className="h-4 w-4" />
+                            <span className="text-sm font-medium">Pending Reviews</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[16px] leading-[24px] font-bold text-[var(--dq-orange-500)]">{analytics?.pendingReviews || 0}</span>
-                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            <span className="text-base font-semibold text-dq-orange">{analytics?.pendingReviews || 0}</span>
+                            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                           </div>
                         </button>
-                        <button 
+                        <button
+                          type="button"
                           onClick={() => setActiveTab('courses')}
-                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                          className="group flex w-full items-center justify-between rounded-xl bg-white/10 p-3 transition-all hover:bg-white/20"
                         >
                           <div className="flex items-center gap-3">
-                            <BookOpen className="w-4 h-4" />
-                            <span className="text-[14px] leading-[20px] font-medium">Total Courses</span>
+                            <BookOpen className="h-4 w-4" />
+                            <span className="text-sm font-medium">Total Courses</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[16px] leading-[24px] font-bold">{analytics?.totalCourses || 0}</span>
-                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            <span className="text-base font-semibold">{analytics?.totalCourses || 0}</span>
+                            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                           </div>
                         </button>
-                        <button 
+                        <button
+                          type="button"
                           onClick={() => setActiveTab('users')}
-                          className="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group"
+                          className="group flex w-full items-center justify-between rounded-xl bg-white/10 p-3 transition-all hover:bg-white/20"
                         >
                           <div className="flex items-center gap-3">
-                            <Users className="w-4 h-4" />
-                            <span className="text-[14px] leading-[20px] font-medium">Manage Users</span>
+                            <Users className="h-4 w-4" />
+                            <span className="text-sm font-medium">Manage Users</span>
                           </div>
-                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </button>
                       </div>
                     </div>
@@ -6095,8 +6071,8 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
-        </main>
-      </div>
+        </div>
+      </main>
 
       {/* Announcement Creation Modal */}
       {showAnnouncementModal && (

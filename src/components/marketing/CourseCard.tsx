@@ -88,9 +88,11 @@ function CourseCardContent({ course }: { course: CourseCardData }) {
 export default function CourseCard({
   course,
   className,
+  onCourseClick,
 }: {
   course: CourseCardData;
   className?: string;
+  onCourseClick?: (courseId: string) => void;
 }) {
   const cardClass = cn(
     "group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card",
@@ -102,6 +104,25 @@ export default function CourseCard({
   if (course.comingSoon) {
     return (
       <div className={cardClass}>
+        <CourseCardContent course={course} />
+      </div>
+    );
+  }
+
+  if (onCourseClick) {
+    return (
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => onCourseClick(course.id)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onCourseClick(course.id);
+          }
+        }}
+        className={cn("block w-full text-left", cardClass)}
+      >
         <CourseCardContent course={course} />
       </div>
     );

@@ -69,12 +69,6 @@ export default function SMSStaffPanel() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Staff</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          The operational teams behind the portal. When you escalate an issue from any page, it goes to the relevant team here.
-        </p>
-      </div>
 
       {/* KPI cards — one per team, shows who handles what */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">

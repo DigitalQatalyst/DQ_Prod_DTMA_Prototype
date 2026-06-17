@@ -7,20 +7,31 @@ import { Badge } from '@/components/ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  MessageSquare, 
-  Send, 
-  ThumbsUp, 
+import {
+  MessageSquare,
+  Send,
+  ThumbsUp,
   MessageCircle,
   Users,
   Search,
   Pin,
-  CheckCheck
+  CheckCheck,
 } from 'lucide-react';
+import {
+  btnPrimary,
+  learnerBadge,
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerItemTitle,
+  learnerPanel,
+  learnerSectionHeading,
+} from '@/lib/brandAccent';
+import { cn } from '@/lib/utils';
 
 export const CollaborationTools = () => {
   const [newQuestion, setNewQuestion] = useState('');
-  const [newReply, setNewReply] = useState('');
   const [chatMessage, setChatMessage] = useState('');
 
   const qnaThreads = [
@@ -33,7 +44,7 @@ export const CollaborationTools = () => {
       replies: 5,
       likes: 12,
       isPinned: true,
-      hasAnswer: true
+      hasAnswer: true,
     },
     {
       id: '2',
@@ -44,7 +55,7 @@ export const CollaborationTools = () => {
       replies: 3,
       likes: 8,
       isPinned: false,
-      hasAnswer: true
+      hasAnswer: true,
     },
     {
       id: '3',
@@ -55,7 +66,7 @@ export const CollaborationTools = () => {
       replies: 7,
       likes: 15,
       isPinned: false,
-      hasAnswer: false
+      hasAnswer: false,
     },
   ];
 
@@ -67,7 +78,7 @@ export const CollaborationTools = () => {
       category: 'Industry Applications',
       replies: 24,
       views: 156,
-      lastActivity: '30 min ago'
+      lastActivity: '30 min ago',
     },
     {
       id: '2',
@@ -76,7 +87,7 @@ export const CollaborationTools = () => {
       category: 'Technology',
       replies: 18,
       views: 203,
-      lastActivity: '2 hours ago'
+      lastActivity: '2 hours ago',
     },
     {
       id: '3',
@@ -85,7 +96,7 @@ export const CollaborationTools = () => {
       category: 'Leadership',
       replies: 31,
       views: 287,
-      lastActivity: '4 hours ago'
+      lastActivity: '4 hours ago',
     },
   ];
 
@@ -95,105 +106,94 @@ export const CollaborationTools = () => {
       sender: 'Instructor',
       message: 'Welcome everyone! Feel free to ask questions during the session.',
       timestamp: '10:00 AM',
-      isInstructor: true
+      isInstructor: true,
     },
     {
       id: '2',
       sender: 'Ahmed',
       message: 'Thank you! Excited to learn about digital transformation.',
       timestamp: '10:02 AM',
-      isInstructor: false
+      isInstructor: false,
     },
     {
       id: '3',
       sender: 'Fatima',
       message: 'Could you explain more about the Digital Economy dimension?',
       timestamp: '10:15 AM',
-      isInstructor: false
+      isInstructor: false,
     },
   ];
 
-  const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
-  };
+  const getInitials = (name: string) =>
+    name.split(' ').map((n) => n[0]).join('').toUpperCase();
 
   return (
     <Tabs defaultValue="qna" className="space-y-6">
       <TabsList>
-        <TabsTrigger value="qna">Q&A</TabsTrigger>
-        <TabsTrigger value="forums">Discussion Forums</TabsTrigger>
-        <TabsTrigger value="chat">Class Chat</TabsTrigger>
+        <TabsTrigger value="qna" className="text-sm">Q&A</TabsTrigger>
+        <TabsTrigger value="forums" className="text-sm">Discussion Forums</TabsTrigger>
+        <TabsTrigger value="chat" className="text-sm">Class Chat</TabsTrigger>
       </TabsList>
 
-      {/* Q&A Tab */}
       <TabsContent value="qna" className="space-y-4">
-        <Card className="p-6 border border-border">
-          <h3 className="font-semibold mb-4 !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
-            Ask a Question
-          </h3>
+        <Card className={cn(learnerPanel, 'p-6')}>
+          <h3 className={cn(learnerSectionHeading, 'mb-4')}>Ask a Question</h3>
           <Textarea
             placeholder="What would you like to know?"
             value={newQuestion}
             onChange={(e) => setNewQuestion(e.target.value)}
-            className="mb-4"
-            style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
+            className="mb-4 text-sm"
           />
-          <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-            <MessageSquare className="w-4 h-4 mr-2" />
+          <Button className={cn(btnPrimary, 'h-9 px-4 py-2 text-sm')}>
+            <MessageSquare className="mr-2 h-4 w-4" />
             Post Question
           </Button>
         </Card>
 
         <div className="space-y-4">
           {qnaThreads.map((thread) => (
-            <Card key={thread.id} className="p-6 hover:shadow-lg transition-shadow border border-border">
+            <Card key={thread.id} className={cn(learnerPanel, 'p-6 transition-shadow hover:shadow-md')}>
               <div className="flex items-start gap-4">
-                <Avatar className="w-10 h-10">
+                <Avatar className="h-10 w-10">
                   <AvatarImage src={thread.avatar || undefined} />
-                  <AvatarFallback className="bg-[#1e2348] text-white">
+                  <AvatarFallback className="bg-gray-100 text-dq-navy">
                     {getInitials(thread.author)}
                   </AvatarFallback>
                 </Avatar>
 
                 <div className="flex-1">
-                  <div className="flex items-start justify-between mb-2">
+                  <div className="mb-2 flex items-start justify-between gap-4">
                     <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
-                          {thread.author}
-                        </span>
-                        <span className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                          {thread.timestamp}
-                        </span>
+                      <div className="mb-1 flex flex-wrap items-center gap-2">
+                        <span className="text-sm font-medium text-dq-navy">{thread.author}</span>
+                        <span className={learnerBodyMuted}>{thread.timestamp}</span>
                         {thread.isPinned && (
-                          <Badge className="bg-[#ff6b4d] text-white" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                            <Pin className="w-3 h-3 mr-1" />
+                          <Badge className={cn('bg-dq-orange text-white', learnerBadge)}>
+                            <Pin className="mr-1 h-3 w-3" />
                             Pinned
                           </Badge>
                         )}
                       </div>
-                      <h4 className="font-medium !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
-                        {thread.question}
-                      </h4>
+                      <h4 className={learnerItemTitle}>{thread.question}</h4>
                     </div>
                     {thread.hasAnswer && (
-                      <Badge className="bg-green-100 text-green-800 border-green-200" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                        <CheckCheck className="w-3 h-3 mr-1" />
+                      <Badge className={cn('border-green-200 bg-green-100 text-green-800', learnerBadge)}>
+                        <CheckCheck className="mr-1 h-3 w-3" />
                         Answered
                       </Badge>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-6 mt-4">
-                    <button className="flex items-center gap-2 text-muted-foreground hover:text-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                      <ThumbsUp className="w-4 h-4" />
+                  <div className="mt-4 flex flex-wrap items-center gap-6">
+                    <button type="button" className={cn(learnerBodyMuted, 'flex items-center gap-2 hover:text-dq-orange')}>
+                      <ThumbsUp className="h-4 w-4" />
                       {thread.likes}
                     </button>
-                    <button className="flex items-center gap-2 text-muted-foreground hover:text-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                      <MessageCircle className="w-4 h-4" />
+                    <button type="button" className={cn(learnerBodyMuted, 'flex items-center gap-2 hover:text-dq-orange')}>
+                      <MessageCircle className="h-4 w-4" />
                       {thread.replies} replies
                     </button>
-                    <Button variant="ghost" size="sm" className="hover:bg-[#FFE9E4] hover:text-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    <Button variant="ghost" size="sm" className="text-sm hover:text-dq-orange">
                       View Thread
                     </Button>
                   </div>
@@ -204,96 +204,78 @@ export const CollaborationTools = () => {
         </div>
       </TabsContent>
 
-      {/* Forums Tab */}
       <TabsContent value="forums" className="space-y-4">
-        <Card className="p-6 border border-border">
-          <div className="flex gap-4 mb-6">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input placeholder="Search discussions..." className="pl-10" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} />
+        <Card className={cn(learnerPanel, 'p-6')}>
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Input placeholder="Search discussions..." className="pl-10 text-sm" />
             </div>
-            <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-              New Topic
-            </Button>
+            <Button className={cn(btnPrimary, 'h-9 px-4 py-2 text-sm')}>New Topic</Button>
           </div>
 
-          <div className="flex gap-2 flex-wrap">
-            <Badge variant="secondary" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>All Topics</Badge>
-            <Badge variant="outline" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Technology</Badge>
-            <Badge variant="outline" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Leadership</Badge>
-            <Badge variant="outline" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Industry Applications</Badge>
-            <Badge variant="outline" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Best Practices</Badge>
+          <div className="flex flex-wrap gap-2">
+            {['All Topics', 'Technology', 'Leadership', 'Industry Applications', 'Best Practices'].map(
+              (label, index) => (
+                <Badge key={label} variant={index === 0 ? 'secondary' : 'outline'} className={learnerBadge}>
+                  {label}
+                </Badge>
+              )
+            )}
           </div>
         </Card>
 
         <div className="space-y-3">
           {forumTopics.map((topic) => (
-            <Card key={topic.id} className="p-5 hover:shadow-lg transition-shadow cursor-pointer border border-border">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="secondary" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                      {topic.category}
-                    </Badge>
-                  </div>
-                  <h4 className="font-semibold mb-2 hover:text-[#ff6b4d] !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
-                    {topic.title}
-                  </h4>
-                  <div className="flex items-center gap-4 text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                    <span className="flex items-center gap-1">
-                      <Users className="w-4 h-4" />
-                      {topic.author}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MessageCircle className="w-4 h-4" />
-                      {topic.replies} replies
-                    </span>
-                    <span>{topic.views} views</span>
-                    <span>Last activity: {topic.lastActivity}</span>
-                  </div>
-                </div>
+            <Card key={topic.id} className={cn(learnerPanel, 'cursor-pointer p-5 transition-shadow hover:shadow-md')}>
+              <Badge variant="secondary" className={cn('mb-2', learnerBadge)}>
+                {topic.category}
+              </Badge>
+              <h4 className={cn(learnerItemTitle, 'mb-2 hover:text-dq-orange')}>{topic.title}</h4>
+              <div className={cn(learnerBodyMuted, 'flex flex-wrap items-center gap-4')}>
+                <span className="flex items-center gap-1">
+                  <Users className="h-4 w-4" />
+                  {topic.author}
+                </span>
+                <span className="flex items-center gap-1">
+                  <MessageCircle className="h-4 w-4" />
+                  {topic.replies} replies
+                </span>
+                <span>{topic.views} views</span>
+                <span>Last activity: {topic.lastActivity}</span>
               </div>
             </Card>
           ))}
         </div>
       </TabsContent>
 
-      {/* Chat Tab */}
       <TabsContent value="chat">
-        <Card className="h-[600px] flex flex-col border border-border">
-          <div className="p-4 border-b">
-            <h3 className="font-semibold !text-[#1e2348]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
-              Digital Transformation Cohort - March 2024
-            </h3>
-            <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-              45 participants online
-            </p>
+        <Card className={cn(learnerPanel, 'flex h-[600px] flex-col')}>
+          <div className="border-b border-gray-200 p-4">
+            <h3 className={learnerCardTitle}>Digital Transformation Cohort - March 2024</h3>
+            <p className={learnerBodyMuted}>45 participants online</p>
           </div>
 
           <ScrollArea className="flex-1 p-4">
             <div className="space-y-4">
               {chatMessages.map((msg) => (
                 <div key={msg.id} className="flex gap-3">
-                  <Avatar className="w-8 h-8">
-                    <AvatarFallback className={msg.isInstructor ? 'bg-[#ff6b4d] text-white' : 'bg-[#1e2348] text-white'}>
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback
+                      className={msg.isInstructor ? 'bg-dq-orange text-white' : 'bg-gray-100 text-dq-navy'}
+                    >
                       {getInitials(msg.sender)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 500 }}>
-                        {msg.sender}
-                      </span>
+                    <div className="mb-1 flex flex-wrap items-center gap-2">
+                      <span className="text-sm font-medium text-dq-navy">{msg.sender}</span>
                       {msg.isInstructor && (
-                        <Badge className="bg-[#ff6b4d] text-white" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                          Instructor
-                        </Badge>
+                        <Badge className={cn('bg-dq-orange text-white', learnerBadge)}>Instructor</Badge>
                       )}
-                      <span className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 400 }}>
-                        {msg.timestamp}
-                      </span>
+                      <span className={learnerCaption}>{msg.timestamp}</span>
                     </div>
-                    <p className="bg-white border border-gray-200 p-3 rounded-lg text-[#1e2348]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                    <p className={cn(learnerBody, 'rounded-lg border border-gray-200 bg-white p-3 text-dq-navy')}>
                       {msg.message}
                     </p>
                   </div>
@@ -302,21 +284,19 @@ export const CollaborationTools = () => {
             </div>
           </ScrollArea>
 
-          <div className="p-4 border-t">
+          <div className="border-t border-gray-200 p-4">
             <div className="flex gap-2">
               <Input
                 placeholder="Type your message..."
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
                 onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    setChatMessage('');
-                  }
+                  if (e.key === 'Enter') setChatMessage('');
                 }}
-                style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}
+                className="text-sm"
               />
-              <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white">
-                <Send className="w-4 h-4" />
+              <Button className={cn(btnPrimary, 'h-9 w-9 shrink-0 p-0')}>
+                <Send className="h-4 w-4" />
               </Button>
             </div>
           </div>

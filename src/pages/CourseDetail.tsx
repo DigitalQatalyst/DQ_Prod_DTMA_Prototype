@@ -78,8 +78,23 @@ function getLearningOutcomes(course: DisplayCourse): string[] {
   return [];
 }
 
-const CourseDetail = () => {
-  const { id } = useParams();
+export type CourseDetailProps = {
+  embedded?: boolean;
+  courseId?: string;
+  onBack?: () => void;
+  onCourseSelect?: (courseId: string) => void;
+  onEnrolled?: (courseId: string) => void;
+};
+
+const CourseDetail = ({
+  embedded = false,
+  courseId: courseIdProp,
+  onBack,
+  onCourseSelect,
+  onEnrolled,
+}: CourseDetailProps = {}) => {
+  const { id: paramId } = useParams();
+  const id = courseIdProp ?? paramId;
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -182,6 +197,10 @@ const CourseDetail = () => {
   };
 
   const handleEnrollmentComplete = () => {
+    if (embedded && onEnrolled) {
+      onEnrolled(id || "");
+      return;
+    }
     navigate(`/courses/${id}/learn`);
   };
 
@@ -362,9 +381,9 @@ const CourseDetail = () => {
     </div>
   );
 
-  return (
-    <PublicPageLayout>
-      <main className="pb-20">
+  const mainContent = (
+    <main className={cn(embedded ? "pb-4" : "pb-20")}>
+      {!embedded && (
         <div className="sticky top-16 z-40 border-b border-gray-200 bg-white lg:hidden">
           <div className={`mx-auto flex max-w-[1200px] items-center justify-between ${sectionPaddingX} py-3`}>
             <div className="flex items-baseline gap-2">
@@ -382,8 +401,10 @@ const CourseDetail = () => {
             )}
           </div>
         </div>
+      )}
 
-        <div className={`mx-auto max-w-[1200px] ${sectionPaddingX}`}>
+      <div className={cn("mx-auto max-w-[1200px]", !embedded && sectionPaddingX)}>
+        {!embedded && (
           <Link
             to="/courses"
             className="mb-8 inline-flex items-center gap-2 pt-20 text-sm text-gray-500 transition-colors hover:text-dq-navy md:pt-24"
@@ -391,11 +412,22 @@ const CourseDetail = () => {
             <ChevronLeft className="h-4 w-4" />
             Back to Courses
           </Link>
+        )}
 
-          <div className="grid gap-10 lg:grid-cols-3 lg:gap-12">
-            <div className="space-y-16 lg:col-span-2">
-              <MeshSection variant="heroLight" grid className="-mx-5 rounded-none border-b border-gray-100 px-5 pb-10 md:-mx-8 md:px-8 lg:-mx-10 lg:rounded-2xl lg:border lg:px-10">
+          <div className={cn("grid", embedded ? "gap-6 lg:grid-cols-3 lg:gap-8" : "gap-10 lg:grid-cols-3 lg:gap-12")}>
+            {embedded && (
+              <div className="lg:hidden">
+                {purchaseCard}
+              </div>
+            )}
+            <div className={cn(embedded ? "space-y-8" : "space-y-16", "lg:col-span-2")}>
+              <MeshSection variant="heroLight" grid className={cn(
+                embedded
+                  ? "rounded-xl border border-gray-200 bg-white px-5 py-6"
+                  : "rounded-none border-b border-gray-100 pb-10 -mx-5 px-5 md:-mx-8 md:px-8 lg:-mx-10 lg:rounded-2xl lg:border lg:px-10"
+              )}>
                 <div className="relative z-10">
+                  {!embedded && (
                   <div className="mb-4 flex flex-wrap gap-2">
                   {displayCourse.badge && (
                     <Badge className="rounded-full border-0 bg-dq-orange px-3 text-white">
@@ -409,16 +441,26 @@ const CourseDetail = () => {
                     {displayCourse.level}
                   </Badge>
                 </div>
+                  )}
 
-                <h1 className="mb-4 text-3xl font-semibold leading-[1.1] tracking-tight text-dq-navy sm:text-4xl lg:text-[2.75rem]">
+                <h1 className={cn(
+                  "mb-3 font-semibold leading-[1.15] tracking-tight text-dq-navy",
+                  embedded ? "text-xl sm:text-2xl" : "mb-4 text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.1]"
+                )}>
                   {displayCourse.title}
                 </h1>
 
-                <p className="mb-6 max-w-2xl text-base leading-[1.7] text-[#667085]">
+                <p className={cn(
+                  "max-w-2xl leading-relaxed text-[#667085]",
+                  embedded ? "mb-4 text-sm" : "mb-6 text-base leading-[1.7]"
+                )}>
                   {displayCourse.description || displayCourse.subtitle}
                 </p>
 
-                <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600">
+                <div className={cn(
+                  "flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600",
+                  embedded ? "mb-4" : "mb-6"
+                )}>
                   <span className="inline-flex items-center gap-1.5">
                     <Star className="h-4 w-4 fill-dq-orange text-dq-orange" />
                     <span className="font-semibold text-dq-navy">{displayCourse.rating}</span>
@@ -449,17 +491,20 @@ const CourseDetail = () => {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3 border-t border-gray-200/80 pt-6">
+                <div className={cn(
+                  "flex items-center gap-3 border-t border-gray-200/80",
+                  embedded ? "pt-4" : "pt-6"
+                )}>
                   <img
                     src={instructorImage}
                     alt={instructorName}
-                    className="h-11 w-11 rounded-full object-cover"
+                    className={cn("rounded-full object-cover", embedded ? "h-9 w-9" : "h-11 w-11")}
                   />
                   <div>
                     <p className="text-sm font-medium text-dq-navy">
                       Created by <span className="font-semibold">{instructorName}</span>
                     </p>
-                    <p className="text-[13px] text-gray-500">{instructorTitle}</p>
+                    <p className="text-xs text-gray-500">{instructorTitle}</p>
                   </div>
                 </div>
                 </div>
@@ -467,9 +512,12 @@ const CourseDetail = () => {
 
               {learningOutcomes.length > 0 && (
                 <div>
-                  <p className={`${eyebrow} mb-3`}>Outcomes</p>
-                  <h2 className={`${sectionHeading} mb-6`}>What you&apos;ll learn</h2>
-                  <div className="grid gap-3 rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:grid-cols-2">
+                  {!embedded && <p className={`${eyebrow} mb-3`}>Outcomes</p>}
+                  <h2 className={cn(sectionHeading, embedded ? "mb-4" : "mb-6")}>What you&apos;ll learn</h2>
+                  <div className={cn(
+                    "grid gap-3 rounded-2xl border border-gray-200 bg-gray-50 sm:grid-cols-2",
+                    embedded ? "p-4" : "p-6"
+                  )}>
                     {learningOutcomes.map((item, index) => (
                       <div key={index} className="flex items-start gap-3">
                         <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-dq-orange" />
@@ -481,9 +529,9 @@ const CourseDetail = () => {
               )}
 
               <div>
-                <p className={`${eyebrow} mb-3`}>Curriculum</p>
-                <h2 className={`${sectionHeading} mb-2`}>Course content</h2>
-                <p className="mb-6 text-sm text-gray-500">
+                {!embedded && <p className={`${eyebrow} mb-3`}>Curriculum</p>}
+                <h2 className={cn(sectionHeading, "mb-2")}>Course content</h2>
+                <p className={cn("mb-4 text-sm text-gray-500", !embedded && "mb-6")}>
                   {moduleList.length} modules · {totalLessons} lessons · {displayCourse.duration} total
                 </p>
                 <Accordion type="multiple" className="space-y-3">
@@ -545,8 +593,8 @@ const CourseDetail = () => {
 
               {displayCourse.requirements && displayCourse.requirements.length > 0 && (
                 <div>
-                  <p className={`${eyebrow} mb-3`}>Prerequisites</p>
-                  <h2 className={`${sectionHeading} mb-6`}>Requirements</h2>
+                  {!embedded && <p className={`${eyebrow} mb-3`}>Prerequisites</p>}
+                  <h2 className={cn(sectionHeading, embedded ? "mb-4" : "mb-6")}>Requirements</h2>
                   <ul className="space-y-3">
                     {displayCourse.requirements.map((req, index) => (
                       <li key={index} className="flex items-start gap-3 text-sm leading-relaxed text-gray-600">
@@ -559,9 +607,9 @@ const CourseDetail = () => {
               )}
 
               <div>
-                <p className={`${eyebrow} mb-3`}>Faculty</p>
-                <h2 className={`${sectionHeading} mb-6`}>Your instructor</h2>
-                <div className="rounded-2xl border border-gray-200 bg-white p-6">
+                {!embedded && <p className={`${eyebrow} mb-3`}>Faculty</p>}
+                <h2 className={cn(sectionHeading, embedded ? "mb-4" : "mb-6")}>Your instructor</h2>
+                <div className={cn("rounded-2xl border border-gray-200 bg-white", embedded ? "p-4" : "p-6")}>
                   <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
                     <img
                       src={instructorImage}
@@ -583,11 +631,12 @@ const CourseDetail = () => {
             </div>
 
             <div className="hidden lg:block">
-              <div className="sticky top-24">{purchaseCard}</div>
+              <div className={cn("sticky", embedded ? "top-4" : "top-24")}>{purchaseCard}</div>
             </div>
           </div>
         </div>
 
+        {!embedded && (
         <section className={`bg-gray-50 py-16 ${sectionPaddingX}`}>
           <div className="mx-auto max-w-[1200px]">
             <div className="mb-8 flex items-center justify-between">
@@ -634,7 +683,9 @@ const CourseDetail = () => {
             </div>
           </div>
         </section>
+        )}
 
+        {!embedded && (
         <MarketingCtaBand
           eyebrowText="Need guidance?"
           title="Not sure if this is the right fit?"
@@ -642,7 +693,13 @@ const CourseDetail = () => {
           primaryCta={{ label: "Talk to our team", href: "/help" }}
           secondaryCta={{ label: "Browse more courses", href: "/courses" }}
         />
+        )}
       </main>
+  );
+
+  return (
+    <>
+      {embedded ? mainContent : <PublicPageLayout>{mainContent}</PublicPageLayout>}
 
       <EnrollmentModal
         open={showEnrollmentModal}
@@ -656,7 +713,7 @@ const CourseDetail = () => {
         }}
         onEnrollmentComplete={handleEnrollmentComplete}
       />
-    </PublicPageLayout>
+    </>
   );
 };
 

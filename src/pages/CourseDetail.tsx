@@ -473,15 +473,17 @@ const CourseDetail = ({
                     <Clock className="h-4 w-4 text-gray-400" />
                     {displayCourse.duration}
                   </span>
-                  <span className="hidden text-gray-300 sm:inline" aria-hidden>
-                    |
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <BookOpen className="h-4 w-4 text-gray-400" />
-                    {displayCourse.comingSoon
-                      ? "Content coming soon"
-                      : `${moduleList.length} modules, ${totalLessons} lessons`}
-                  </span>
+                  {!displayCourse.comingSoon ? (
+                    <>
+                      <span className="hidden text-gray-300 sm:inline" aria-hidden>
+                        |
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <BookOpen className="h-4 w-4 text-gray-400" />
+                        {`${moduleList.length} modules, ${totalLessons} lessons`}
+                      </span>
+                    </>
+                  ) : null}
                   <span className="hidden text-gray-300 sm:inline" aria-hidden>
                     |
                   </span>

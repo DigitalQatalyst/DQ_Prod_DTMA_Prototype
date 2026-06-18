@@ -15,7 +15,18 @@ import {
   Zap,
   Calendar,
   Minimize2,
+  AlertTriangle,
+  FileText,
+  Headphones,
+  Clock,
+  ArrowLeft,
 } from 'lucide-react';
+import type { AdminAICapabilityId } from '@/components/admin/adminAICapabilities';
+import {
+  ADMIN_AI_CAPABILITIES,
+  ADMIN_AI_CAPABILITY_LABELS,
+} from '@/components/admin/adminAICapabilities';
+import { AdminAICapabilityContent, CAPABILITY_CONFIG } from '@/components/admin/AdminAICapabilityContent';
 
 interface Message {
   id: string;
@@ -28,14 +39,18 @@ interface Message {
 
 interface TransactAIProps {
   embedded?: boolean;
-  variant?: "learner" | "instructor";
+  variant?: "learner" | "instructor" | "admin";
   enrolledCourses?: number;
   completedCourses?: number;
   draftCoursesCount?: number;
+  pendingReviewsCount?: number;
   averageProgress?: number;
   learningGoal?: string;
   skillLevel?: string;
   streak?: number;
+  onCapabilitySelect?: (capability: AdminAICapabilityId) => void;
+  adminCapability?: AdminAICapabilityId | null;
+  onClearCapability?: () => void;
 }
 
 const learnerQuickInsights = [
@@ -52,19 +67,55 @@ const instructorQuickInsights = [
   { icon: Zap, text: "6XD mapping", action: "framework", color: "text-green-600" },
 ];
 
+const adminQuickInsights: {
+  icon: typeof TrendingUp;
+  text: string;
+  action: string;
+  capability: AdminAICapabilityId;
+  color: string;
+}[] = [
+  { icon: TrendingUp, text: "Platform summary", action: "summary", capability: "ai-assistant", color: "text-green-600" },
+  { icon: AlertTriangle, text: "Cohort risks", action: "cohort", capability: "ai-cohort", color: "text-amber-600" },
+  { icon: FileText, text: "Content drafting", action: "content", capability: "ai-content", color: "text-[#ff6b4d]" },
+  { icon: Headphones, text: "Support triage", action: "support", capability: "ai-support", color: "text-blue-600" },
+];
+
 export const TransactAI = ({ 
   embedded = false,
   variant = "learner",
   enrolledCourses = 0, 
   completedCourses = 0,
   draftCoursesCount = 0,
+  pendingReviewsCount = 0,
   averageProgress = 0,
   learningGoal = '',
   skillLevel = 'Beginner',
-  streak = 0
+  streak = 0,
+  onCapabilitySelect,
+  adminCapability = null,
+  onClearCapability,
 }: TransactAIProps) => {
+  const isAdmin = variant === "admin";
   const isInstructor = variant === "instructor";
-  const quickInsights = isInstructor ? instructorQuickInsights : learnerQuickInsights;
+  const activeCapabilityMeta = isAdmin && adminCapability
+    ? ADMIN_AI_CAPABILITIES.find((item) => item.id === adminCapability)
+    : null;
+  const ActiveCapabilityIcon = activeCapabilityMeta?.icon;
+  const capabilityQuickInsights = adminCapability
+    ? CAPABILITY_CONFIG[adminCapability].tools.slice(0, 4).map((tool, index) => ({
+        icon: [TrendingUp, Target, Lightbulb, BookOpen][index] ?? Lightbulb,
+        text: tool.action,
+        action: tool.action,
+        color: index % 2 === 0 ? "text-[#ff6b4d]" : "text-blue-600",
+      }))
+    : [];
+  const quickInsights = isAdmin
+    ? adminCapability
+      ? capabilityQuickInsights
+      : adminQuickInsights
+    : isInstructor
+      ? instructorQuickInsights
+      : learnerQuickInsights;
   const { profile } = useAuth();
   const [isOpen, setIsOpen] = useState(embedded);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -76,7 +127,16 @@ export const TransactAI = ({
   const firstName = profile?.full_name?.split(' ')[0] || 'there';
 
   useEffect(() => {
-    const greeting = isInstructor ? getInstructorGreeting() : getPersonalizedGreeting();
+    if (isAdmin && adminCapability) {
+      setMessages([]);
+      return;
+    }
+
+    const greeting = isAdmin
+      ? getAdminGreeting()
+      : isInstructor
+        ? getInstructorGreeting()
+        : getPersonalizedGreeting();
     setMessages([{
       id: '1',
       type: 'mentor',
@@ -85,7 +145,7 @@ export const TransactAI = ({
       suggestions: greeting.suggestions,
       insights: greeting.insights
     }]);
-  }, [isInstructor, draftCoursesCount, enrolledCourses]);
+  }, [isInstructor, isAdmin, adminCapability, draftCoursesCount, enrolledCourses, pendingReviewsCount]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -169,6 +229,189 @@ export const TransactAI = ({
         'Map to 6XD framework',
       ],
       insights: [],
+    };
+  };
+
+  const getAdminGreeting = () => {
+    const hour = new Date().getHours();
+    let timeGreeting = 'Hello';
+    if (hour < 12) timeGreeting = 'Good morning';
+    else if (hour < 18) timeGreeting = 'Good afternoon';
+    else timeGreeting = 'Good evening';
+
+    let message = `${timeGreeting}, ${firstName}!\n\n`;
+    message +=
+      "I'm your AI Cockpit for platform operations. I can help with summaries, cohort intelligence, content authoring, support triage, and every other AI capability from one place.\n\n";
+
+    if (pendingReviewsCount > 0) {
+      message += `You have ${pendingReviewsCount} course${pendingReviewsCount > 1 ? 's' : ''} awaiting review. I can help prioritize next actions.`;
+    } else {
+      message += 'Pick a capability on the right or ask me where to start.';
+    }
+
+    const insights: { icon: typeof Clock; text: string; color: string }[] = [];
+    if (pendingReviewsCount > 0) {
+      insights.push({
+        icon: Clock,
+        text: `${pendingReviewsCount} pending review${pendingReviewsCount > 1 ? 's' : ''}`,
+        color: 'text-amber-600',
+      });
+    }
+
+    return {
+      message,
+      suggestions: [
+        'Platform activity summary',
+        'Review cohort risks',
+        'Open content authoring',
+        'Triage support requests',
+      ],
+      insights,
+    };
+  };
+
+  const getAdminResponse = (userMessage: string) => {
+    const lowerMessage = userMessage.toLowerCase();
+
+    if (
+      lowerMessage.includes('summary') ||
+      lowerMessage.includes('report') ||
+      lowerMessage.includes('activity')
+    ) {
+      onCapabilitySelect?.('ai-assistant');
+      return {
+        message:
+          'I can open the Operations Assistant workspace for platform summaries and operational reports. Use the capability panel to generate a summary or draft a report.',
+        suggestions: ['Open faculty support', 'Review cohort risks', 'Analyze feedback'],
+        insights: [{ icon: TrendingUp, text: 'Operations Assistant', color: 'text-green-600' }],
+      };
+    }
+
+    if (
+      lowerMessage.includes('cohort') ||
+      lowerMessage.includes('risk') ||
+      lowerMessage.includes('at-risk')
+    ) {
+      onCapabilitySelect?.('ai-cohort');
+      return {
+        message:
+          'Cohort Intelligence highlights at-risk learners, disengagement patterns, and training needs. I have opened that workspace for you.',
+        suggestions: ['Early intervention ideas', 'Training needs analysis', 'Open support triage'],
+        insights: [{ icon: AlertTriangle, text: 'Cohort intelligence', color: 'text-amber-600' }],
+      };
+    }
+
+    if (
+      lowerMessage.includes('content') ||
+      lowerMessage.includes('outline') ||
+      lowerMessage.includes('author')
+    ) {
+      onCapabilitySelect?.('ai-content');
+      return {
+        message:
+          'Content Authoring helps you draft lesson outlines, exercises, and learning objectives while keeping humans in control.',
+        suggestions: ['Generate quiz ideas', 'Open assessment tools', 'Localization help'],
+        insights: [{ icon: FileText, text: 'Content authoring', color: 'text-[#ff6b4d]' }],
+      };
+    }
+
+    if (
+      lowerMessage.includes('support') ||
+      lowerMessage.includes('triage') ||
+      lowerMessage.includes('ticket')
+    ) {
+      onCapabilitySelect?.('ai-support');
+      return {
+        message:
+          'Support Triage classifies requests, drafts replies, and routes issues to the right team. I have opened that workspace.',
+        suggestions: ['Moderation queue', 'Faculty support mode', 'Feedback analysis'],
+        insights: [{ icon: Headphones, text: 'Support triage', color: 'text-blue-600' }],
+      };
+    }
+
+    if (lowerMessage.includes('faculty') || lowerMessage.includes('mentor')) {
+      onCapabilitySelect?.('ai-faculty');
+      return {
+        message:
+          'Faculty Support mode provides learner progress summaries, mentoring suggestions, and intervention recommendations.',
+        suggestions: ['Open assessment tools', 'Cohort risks', 'Platform summary'],
+        insights: [],
+      };
+    }
+
+    if (lowerMessage.includes('assessment') || lowerMessage.includes('quiz') || lowerMessage.includes('grading')) {
+      onCapabilitySelect?.('ai-assessment');
+      return {
+        message:
+          'Assessment Tools cover quiz generation, grading helpers, and rubric matching for open-ended responses.',
+        suggestions: ['Draft course content', 'Analyze feedback', 'Localization'],
+        insights: [],
+      };
+    }
+
+    if (lowerMessage.includes('feedback') || lowerMessage.includes('sentiment')) {
+      onCapabilitySelect?.('ai-feedback');
+      return {
+        message:
+          'Feedback Analysis tracks sentiment trends, recurring complaints, and improvement opportunities across courses.',
+        suggestions: ['Discussion moderation', 'Support triage', 'Cohort intelligence'],
+        insights: [],
+      };
+    }
+
+    if (lowerMessage.includes('moderation') || lowerMessage.includes('forum')) {
+      onCapabilitySelect?.('ai-moderation');
+      return {
+        message:
+          'Discussion Moderation flags inappropriate content and surfaces a moderator review queue with suggested responses.',
+        suggestions: ['Support triage', 'Feedback analysis', 'Platform summary'],
+        insights: [],
+      };
+    }
+
+    if (lowerMessage.includes('local') || lowerMessage.includes('translat')) {
+      onCapabilitySelect?.('ai-localization');
+      return {
+        message:
+          'Localization assists with content translation, cultural adaptation, and consistency across multilingual program delivery.',
+        suggestions: ['Content authoring', 'Assessment tools', 'Faculty support'],
+        insights: [],
+      };
+    }
+
+    return {
+      message:
+        'I can route you to any platform AI capability:\n\n' +
+        '• Operations summaries and reports\n' +
+        '• Faculty support and mentoring insights\n' +
+        '• Content authoring and assessments\n' +
+        '• Cohort risk and feedback analysis\n' +
+        '• Moderation, support triage, and localization\n\n' +
+        'Tell me what you need or pick a capability on the right.',
+      suggestions: [
+        'Platform activity summary',
+        'Review cohort risks',
+        'Open content authoring',
+        'Triage support requests',
+      ],
+      insights: [],
+    };
+  };
+
+  const getAdminCapabilityResponse = (
+    userMessage: string,
+    capability: AdminAICapabilityId
+  ) => {
+    const config = CAPABILITY_CONFIG[capability];
+    const label = ADMIN_AI_CAPABILITY_LABELS[capability];
+
+    return {
+      message:
+        `You're in ${label}.\n\n${config.heroDescription}\n\n` +
+        `You asked: "${userMessage.trim()}"\n\n` +
+        'Use the workspace actions above or tell me which deliverable you want to generate next.',
+      suggestions: config.tools.map((tool) => tool.action).slice(0, 4),
+      insights: [{ icon: Lightbulb, text: label, color: 'text-[#ff6b4d]' }],
     };
   };
 
@@ -500,9 +743,13 @@ export const TransactAI = ({
     setInputValue('');
 
     setTimeout(() => {
-      const response = isInstructor
-        ? getInstructorResponse(inputValue)
-        : getMentorResponse(inputValue);
+      const response = isAdmin && adminCapability
+        ? getAdminCapabilityResponse(inputValue, adminCapability)
+        : isAdmin
+          ? getAdminResponse(inputValue)
+          : isInstructor
+            ? getInstructorResponse(inputValue)
+            : getMentorResponse(inputValue);
       const mentorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'mentor',
@@ -521,6 +768,20 @@ export const TransactAI = ({
   };
 
   const handleQuickInsight = (action: string) => {
+    if (isAdmin && adminCapability) {
+      setInputValue(`Help me with: ${action}`);
+      setTimeout(() => handleSendMessage(), 100);
+      return;
+    }
+
+    if (isAdmin) {
+      const insight = adminQuickInsights.find((item) => item.action === action);
+      if (insight) {
+        onCapabilitySelect?.(insight.capability);
+        return;
+      }
+    }
+
     const actionMessages: Record<string, string> = isInstructor
       ? {
           outline: "Help me outline a new draft course",
@@ -560,20 +821,44 @@ export const TransactAI = ({
     >
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between bg-gradient-to-r from-dq-orange to-[#e56045] p-4">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 ring-2 ring-white">
+          <div className="flex min-w-0 items-center gap-3">
+            {embedded && isAdmin && adminCapability && onClearCapability ? (
+              <button
+                type="button"
+                onClick={onClearCapability}
+                className="rounded-lg p-2 transition-colors hover:bg-white/10"
+                aria-label="Back to cockpit hub"
+              >
+                <ArrowLeft className="h-4 w-4 text-white" />
+              </button>
+            ) : null}
+            <Avatar className="h-10 w-10 shrink-0 ring-2 ring-white">
               <AvatarFallback className="bg-gradient-to-br from-dq-orange to-[#e56045] text-white">
-                <Brain className="h-5 w-5" />
+                {ActiveCapabilityIcon ? (
+                  <ActiveCapabilityIcon className="h-5 w-5" />
+                ) : (
+                  <Brain className="h-5 w-5" />
+                )}
               </AvatarFallback>
             </Avatar>
-            <div>
-              <h3 className="text-base font-semibold text-white">
-                {embedded ? "AI Cockpit" : isInstructor ? "AI Cockpit" : "Transact AI"}
+            <div className="min-w-0">
+              <h3 className="truncate text-base font-semibold text-white">
+                {isAdmin && adminCapability
+                  ? ADMIN_AI_CAPABILITY_LABELS[adminCapability]
+                  : embedded
+                    ? "AI Cockpit"
+                    : isInstructor || isAdmin
+                      ? "AI Cockpit"
+                      : "Transact AI"}
               </h3>
-              <p className="text-xs text-white/80">
-                {isInstructor
-                  ? "Draft courses with AI assistance"
-                  : "Your personal learning mentor"}
+              <p className="truncate text-xs text-white/80">
+                {isAdmin && activeCapabilityMeta
+                  ? activeCapabilityMeta.description
+                  : isAdmin
+                    ? "Platform AI operations hub"
+                    : isInstructor
+                      ? "Draft courses with AI assistance"
+                      : "Your personal learning mentor"}
               </p>
             </div>
           </div>
@@ -613,8 +898,52 @@ export const TransactAI = ({
               ))}
             </div>
 
-            {/* Messages */}
+            {/* Messages / capability workspace */}
             <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+              {isAdmin && adminCapability ? (
+                <div className="space-y-4">
+                  <AdminAICapabilityContent capability={adminCapability} />
+                  {messages.length > 0 ? (
+                    <div className="space-y-4 border-t border-gray-100 pt-4">
+                      {messages.map((message) => (
+                        <div key={message.id}>
+                          <div className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                            {message.type === 'mentor' && (
+                              <Avatar className="w-8 h-8 shrink-0">
+                                <AvatarFallback className="bg-gradient-to-br from-[#ff6b4d] to-[#e56045] text-white">
+                                  <Brain className="w-4 h-4" />
+                                </AvatarFallback>
+                              </Avatar>
+                            )}
+                            <div className={`max-w-[80%] ${message.type === 'user' ? 'order-first' : ''}`}>
+                              <div className={`rounded-2xl p-3 ${
+                                message.type === 'user'
+                                  ? 'bg-gradient-to-r from-[#ff6b4d] to-[#e56045] text-white'
+                                  : 'bg-gradient-to-r from-orange-50 to-red-50 text-gray-800 border border-orange-100'
+                              }`}>
+                                <p className="text-[14px] leading-[20px] whitespace-pre-line">{message.content}</p>
+                              </div>
+                              {message.suggestions && message.suggestions.length > 0 && (
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  {message.suggestions.map((suggestion, idx) => (
+                                    <button
+                                      key={idx}
+                                      onClick={() => handleSuggestionClick(suggestion)}
+                                      className="text-[12px] leading-[16px] px-3 py-1 bg-white border border-orange-300 text-[#ff6b4d] rounded-full hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d] transition-colors"
+                                    >
+                                      {suggestion}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
               <div className="space-y-4">
                 {messages.map((message) => (
                   <div key={message.id}>
@@ -662,6 +991,7 @@ export const TransactAI = ({
                   </div>
                 ))}
               </div>
+              )}
             </ScrollArea>
 
             {/* Input */}
@@ -673,7 +1003,15 @@ export const TransactAI = ({
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder={isInstructor ? "Describe your course idea..." : "Ask your mentor..."}
+                  placeholder={
+                    isAdmin && adminCapability
+                      ? `Ask about ${ADMIN_AI_CAPABILITY_LABELS[adminCapability].toLowerCase()}...`
+                      : isAdmin
+                        ? "Ask about platform operations..."
+                        : isInstructor
+                          ? "Describe your course idea..."
+                          : "Ask your mentor..."
+                  }
                   className="flex-1 px-4 py-2 border border-orange-200 rounded-lg text-[14px] leading-[20px] focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] focus:border-transparent"
                 />
                 <Button
@@ -685,9 +1023,13 @@ export const TransactAI = ({
                 </Button>
               </div>
               <p className="text-[12px] leading-[16px] text-gray-500 mt-2 text-center">
-                {isInstructor
-                  ? "AI Cockpit • Draft marketplace courses"
-                  : "Personalized AI Mentor • Here for your success"}
+                {isAdmin && adminCapability
+                  ? `AI Cockpit • ${ADMIN_AI_CAPABILITY_LABELS[adminCapability]}`
+                  : isAdmin
+                    ? "AI Cockpit • Platform operations"
+                    : isInstructor
+                      ? "AI Cockpit • Draft marketplace courses"
+                      : "Personalized AI Mentor • Here for your success"}
               </p>
             </div>
           </>

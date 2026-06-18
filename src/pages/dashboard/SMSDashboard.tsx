@@ -7,6 +7,10 @@ import {
   SMSDashboardSidebar,
   type SMSTabId,
 } from "@/components/dashboard/SMSDashboardSidebar";
+import {
+  LearnerOverviewPanel,
+  type OverviewPanelTab,
+} from "@/components/dashboard/LearnerOverviewPanel";
 import SMSOverviewPanel from "@/components/sms/SMSOverviewPanel";
 import SMSCoursesPanel from "@/components/sms/SMSCoursesPanel";
 import SMSFacultyPanel from "@/components/sms/SMSFacultyPanel";
@@ -16,6 +20,7 @@ import SMSBillingPanel from "@/components/sms/SMSBillingPanel";
 import SMSPartnersPanel from "@/components/sms/SMSPartnersPanel";
 import SMSCompliancePanel from "@/components/sms/SMSCompliancePanel";
 import SMSStaffPanel from "@/components/sms/SMSStaffPanel";
+import SMSMyProfilePanel from "@/components/sms/SMSMyProfilePanel";
 import {
   learnerPageDescription,
   learnerPageTitle,
@@ -24,6 +29,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const TAB_LABELS: Record<SMSTabId, string> = {
+  "getting-started": "Home",
   overview: "Overview",
   courses: "Courses",
   faculty: "Faculty",
@@ -33,6 +39,7 @@ const TAB_LABELS: Record<SMSTabId, string> = {
   partners: "Partners",
   compliance: "Accreditation",
   staff: "Staff",
+  profile: "My Profile",
 };
 
 const TAB_DESCRIPTIONS: Partial<Record<SMSTabId, string>> = {
@@ -45,6 +52,7 @@ const TAB_DESCRIPTIONS: Partial<Record<SMSTabId, string>> = {
   partners: "Content providers and schools contributing courses to the platform",
   compliance: "Accreditation status for all courses. Escalate expiring or lapsed items",
   staff: "Operational teams behind the portal and escalation routing",
+  profile: "Your Academy Manager platform account, security, and access settings",
 };
 
 /** Open billing issues count for nav badge (matches SMSBillingPanel mock data) */
@@ -56,7 +64,18 @@ export default function SMSDashboard() {
   const [activeTab, setActiveTab] = useState<SMSTabId>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const pageDescription = TAB_DESCRIPTIONS[activeTab];
+  const pageDescription =
+    activeTab === "getting-started" ? undefined : TAB_DESCRIPTIONS[activeTab];
+
+  const pageTitle = activeTab === "getting-started" ? "Home" : TAB_LABELS[activeTab];
+
+  const handleOverviewNavigate = (tab: OverviewPanelTab) => {
+    if (tab === "catalog" || tab === "courses") {
+      setActiveTab("courses");
+      return;
+    }
+    setActiveTab("overview");
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -104,7 +123,7 @@ export default function SMSDashboard() {
             </button>
 
             <div className="min-w-0 flex-1">
-              <h2 className={learnerPageTitle}>{TAB_LABELS[activeTab]}</h2>
+              <h2 className={learnerPageTitle}>{pageTitle}</h2>
               {pageDescription && (
                 <p className={cn(learnerPageDescription, "mt-0.5")}>{pageDescription}</p>
               )}
@@ -120,6 +139,9 @@ export default function SMSDashboard() {
         </header>
 
         <div className="p-4 lg:p-6">
+          {activeTab === "getting-started" && (
+            <LearnerOverviewPanel onNavigate={handleOverviewNavigate} />
+          )}
           {activeTab === "overview" && (
             <SMSOverviewPanel onNavigate={setActiveTab} />
           )}
@@ -131,6 +153,7 @@ export default function SMSDashboard() {
           {activeTab === "partners" && <SMSPartnersPanel />}
           {activeTab === "compliance" && <SMSCompliancePanel />}
           {activeTab === "staff" && <SMSStaffPanel />}
+          {activeTab === "profile" && <SMSMyProfilePanel />}
         </div>
       </main>
     </div>

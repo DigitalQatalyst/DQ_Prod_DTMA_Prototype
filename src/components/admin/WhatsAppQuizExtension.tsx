@@ -1,3 +1,19 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerBadge,
+  learnerIconWell,
+} from "@/lib/brandAccent";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
@@ -72,7 +88,7 @@ export const WhatsAppQuizExtension = ({ quizId, onSave }: WhatsAppQuizExtensionP
               Send via WhatsApp
             </label>
           </div>
-          <p className="text-[12px] text-muted-foreground">
+          <p className={learnerCaption}>
             Deliver this question as a chat message to opted-in learners
           </p>
         </div>
@@ -133,7 +149,7 @@ export const WhatsAppQuizExtension = ({ quizId, onSave }: WhatsAppQuizExtensionP
                 </div>
               ))}
             </div>
-            <p className="text-[12px] text-muted-foreground">
+            <p className={learnerCaption}>
               Click the checkmark to indicate the correct answer
             </p>
           </div>
@@ -163,7 +179,7 @@ export const WhatsAppQuizExtension = ({ quizId, onSave }: WhatsAppQuizExtensionP
               placeholder="Provide a brief explanation of the correct answer..."
               className="w-full min-h-[80px] p-4 border border-border rounded-xl text-[14px] bg-background focus:outline-none focus:ring-2 focus:ring-[#ff6b4d]/40 resize-none"
             />
-            <p className="text-[12px] text-muted-foreground">
+            <p className={learnerCaption}>
               This explanation will be shown after the learner responds
             </p>
           </div>

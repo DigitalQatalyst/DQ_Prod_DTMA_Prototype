@@ -36,6 +36,22 @@ import {
 import { Link } from "react-router-dom";
 import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
 import DTMALogo from "@/components/layout/DTMALogo";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerBtnPrimary,
+  learnerCaption,
+  learnerItemTitle,
+  learnerNavSubItem,
+  learnerNavSubItemActive,
+  learnerPageDescription,
+  learnerPageTitle,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerWorkspaceBg,
+} from "@/lib/brandAccent";
+import { cn } from "@/lib/utils";
 
 const STEPS = [
   { id: "basics", label: "Course Basics" },
@@ -46,6 +62,9 @@ const STEPS = [
   { id: "pricing", label: "Pricing & Settings" },
   { id: "submit", label: "Submit for Review" },
 ];
+
+const builderFieldLabel = cn(learnerCaption, "mb-2 block font-medium uppercase tracking-wide");
+const builderStepPanel = cn(learnerPanel, "p-6 lg:p-8");
 
 const CourseBuilder = () => {
   const { courseId } = useParams();
@@ -143,38 +162,60 @@ const CourseBuilder = () => {
   };
 
   if (isLoading || !course) {
-    return <div>Loading...</div>;
+    return (
+      <div className={cn("flex min-h-screen items-center justify-center", learnerWorkspaceBg)}>
+        <p className={learnerBodyMuted}>Loading course builder...</p>
+      </div>
+    );
   }
 
+  const profileInitials =
+    profile?.full_name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "I";
+
   return (
-    <div className="min-h-screen bg-[var(--dq-gray-50)] flex">
+    <div className={cn("flex min-h-screen", learnerWorkspaceBg)}>
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[var(--dq-navy-950)] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 border-r border-gray-200 bg-white transform ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 transition-transform duration-300`}
+      >
         <div className="flex flex-col h-full">
-          <div className="p-6 border-b border-white/10">
-            <DTMALogo variant="dark" />
+          <div className="border-b border-gray-100 px-5 py-5">
+            <DTMALogo />
           </div>
 
-          <RoleSwitcher currentRole="instructor" />
+          <RoleSwitcher currentRole="instructor" variant="light" />
 
           {/* Course Builder Steps */}
-          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+          <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
             {STEPS.map((step) => {
               const isCompleted = stepCompletion[step.id as keyof typeof stepCompletion];
+              const isActive = currentStep === step.id;
               return (
                 <button
                   key={step.id}
+                  type="button"
                   onClick={() => setCurrentStep(step.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-left text-[14px] leading-[20px] font-medium ${
-                    currentStep === step.id
-                      ? "bg-[var(--dq-orange-500)] text-white shadow-md"
-                      : "text-[var(--dq-text-on-dark-secondary)] hover:bg-white/10 hover:text-white"
-                  }`}
+                  className={cn(
+                    "relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
+                    isActive
+                      ? cn(
+                          learnerNavSubItemActive,
+                          "bg-[#eef2f9] before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-dq-orange"
+                        )
+                      : cn(learnerNavSubItem, "hover:bg-gray-50 hover:text-dq-navy")
+                  )}
                 >
                   {isCompleted ? (
-                    <CheckCircle className="w-5 h-5 flex-shrink-0 text-[var(--dq-success)]" />
+                    <CheckCircle className="h-5 w-5 shrink-0 text-emerald-600" />
                   ) : (
-                    <Circle className="w-5 h-5 flex-shrink-0" />
+                    <Circle className="h-5 w-5 shrink-0 text-gray-300" />
                   )}
                   <span>{step.label}</span>
                 </button>
@@ -182,23 +223,28 @@ const CourseBuilder = () => {
             })}
           </nav>
 
-          <div className="p-4 border-t border-white/10">
-            <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] flex items-center justify-center text-[14px] leading-[20px] font-semibold text-white">
-                {profile?.full_name?.charAt(0) || 'I'}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-[14px] leading-[20px] font-medium truncate text-white">{profile?.full_name || 'Instructor'}</div>
-                <div className="text-[12px] leading-[16px] font-normal text-white/70">Instructor</div>
+          <div className="border-t border-gray-100 p-4">
+            <div className="mb-3 flex items-center gap-3 rounded-xl bg-gray-50 p-3">
+              <Avatar className="h-9 w-9">
+                <AvatarImage src={profile?.avatar_url || undefined} />
+                <AvatarFallback className="bg-dq-navy text-xs text-white">
+                  {profileInitials}
+                </AvatarFallback>
+              </Avatar>
+              <div className="min-w-0 flex-1">
+                <p className={cn(learnerNavSubItemActive, "truncate")}>
+                  {profile?.full_name || "Instructor"}
+                </p>
+                <p className={cn(learnerCaption, "truncate")}>Instructor</p>
               </div>
             </div>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10 text-[14px] leading-[20px] font-medium"
+              className="w-full justify-start gap-2 text-gray-600 hover:bg-gray-50 hover:text-dq-navy"
               onClick={signOut}
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
+              <LogOut className="h-4 w-4" />
+              Sign out
             </Button>
           </div>
         </div>
@@ -207,22 +253,20 @@ const CourseBuilder = () => {
       {/* Main Content */}
       <div className="flex-1 lg:ml-64">
         {/* Header */}
-        <header className="sticky top-0 z-40 bg-white border-b border-[var(--dq-surface-border-default)] shadow-sm">
-          <div className="px-6 lg:px-8 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-4 ml-[30px]">
-              <div className="flex flex-col justify-center">
-                <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-text-primary)] m-0">{course.title || "New Course"}</h1>
-                <p className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-secondary)] m-0">
-                  {lastSaved ? `Last saved ${lastSaved.toLocaleTimeString()}` : "Not saved yet"}
-                </p>
-              </div>
+        <header className="sticky top-0 z-40 border-b border-gray-200 bg-white">
+          <div className="flex flex-col gap-4 px-4 py-3 sm:flex-row sm:items-center sm:justify-between lg:px-8 lg:py-4">
+            <div className="min-w-0">
+              <h1 className={learnerPageTitle}>{course.title || "New Course"}</h1>
+              <p className={cn(learnerPageDescription, "mt-0.5")}>
+                {lastSaved ? `Last saved ${lastSaved.toLocaleTimeString()}` : "Not saved yet"}
+              </p>
             </div>
-            <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={handleBack} className="text-[14px] leading-[20px] font-medium hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)]">
+            <div className="flex shrink-0 items-center gap-2">
+              <Button variant="outline" size="sm" onClick={handleBack} className="rounded-full border-gray-200">
                 Back to Dashboard
               </Button>
-              <Button variant="outline" size="sm" onClick={handlePreview} className="text-[14px] leading-[20px] font-medium hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)]">
-                <Eye className="w-4 h-4 mr-2" />
+              <Button variant="outline" size="sm" onClick={handlePreview} className="rounded-full border-gray-200">
+                <Eye className="mr-2 h-4 w-4" />
                 Preview
               </Button>
             </div>
@@ -230,20 +274,20 @@ const CourseBuilder = () => {
 
           {/* Progress Bar */}
           {currentStep !== "submit" && (
-            <div className="px-6 lg:px-8 pb-6">
-              <div className="ml-[30px] mr-6 lg:mr-8">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-primary)]">Progress</span>
-                  <span className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-secondary)]">{completedSteps} of {STEPS.length}</span>
-                </div>
-                <Progress value={progressPercent} className="h-2 bg-[var(--dq-surface-border-default)]" />
+            <div className="border-t border-gray-100 px-4 pb-4 pt-3 lg:px-8">
+              <div className="flex items-center justify-between mb-2">
+                <span className={cn(learnerItemTitle, "text-sm")}>Progress</span>
+                <span className={learnerCaption}>
+                  {completedSteps} of {STEPS.length}
+                </span>
               </div>
+              <Progress value={progressPercent} className="h-2 bg-gray-200" />
             </div>
           )}
         </header>
 
         {/* Content */}
-        <main className="p-6 lg:p-8">
+        <main className="p-4 lg:p-6">
           {renderStepContent()}
         </main>
       </div>
@@ -254,33 +298,33 @@ const CourseBuilder = () => {
 // Step Components
 const CourseBasicsStep = ({ course }: any) => (
   <div className="w-full">
-    <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm">
+    <div className={builderStepPanel}>
       <div className="flex items-start justify-between mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold text-[var(--dq-text-primary)]">Course Basics</h2>
+        <h2 className={learnerSectionHeading}>Course Basics</h2>
         <Badge className="bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] hover:bg-[var(--dq-success-surface)] text-[12px] leading-[16px] font-semibold px-3 py-1">✓ Completed</Badge>
       </div>
       <div className="space-y-6">
         <div>
-          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Course Title</label>
-          <p className="text-[18px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">{course.title}</p>
+          <label className={builderFieldLabel}>Course Title</label>
+          <p className={learnerItemTitle}>{course.title}</p>
         </div>
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Category</label>
-            <p className="text-[15px] leading-[22px] font-medium capitalize text-[var(--dq-text-primary)]">{course.category}</p>
+            <label className={builderFieldLabel}>Category</label>
+            <p className={cn(learnerBody, "font-medium capitalize text-dq-navy")}>{course.category}</p>
           </div>
           <div>
-            <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Level</label>
-            <p className="text-[15px] leading-[22px] font-medium capitalize text-[var(--dq-text-primary)]">{course.level}</p>
+            <label className={builderFieldLabel}>Level</label>
+            <p className={cn(learnerBody, "font-medium capitalize text-dq-navy")}>{course.level}</p>
           </div>
         </div>
         <div>
-          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Description</label>
-          <p className="text-[14px] leading-[22px] font-normal text-[var(--dq-text-secondary)]">{course.description || "No description provided"}</p>
+          <label className={builderFieldLabel}>Description</label>
+          <p className={learnerBody}>{course.description || "No description provided"}</p>
         </div>
         <div>
-          <label className="block text-[13px] leading-[18px] font-medium mb-2 text-[var(--dq-text-secondary)] uppercase tracking-wide">Price</label>
-          <p className="text-[15px] leading-[22px] font-semibold text-[var(--dq-text-primary)]">${course.price}</p>
+          <label className={builderFieldLabel}>Price</label>
+          <p className={learnerItemTitle}>${course.price}</p>
         </div>
       </div>
     </div>
@@ -688,13 +732,13 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
+      <div className={cn(builderStepPanel, "mb-6")}>
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Curriculum</h2>
-            <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Add modules and lessons to your course.</p>
+            <h2 className={cn(learnerSectionHeading, "mb-2")}>Curriculum</h2>
+            <p className={learnerBodyMuted}>Add modules and lessons to your course.</p>
           </div>
-          <Button onClick={addSection} className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white text-[14px] leading-[20px] font-medium shadow-sm" size="sm">
+          <Button onClick={addSection} className={cn(learnerBtnPrimary, "shadow-sm")} size="sm">
             <Plus className="w-4 h-4 mr-2" />
             Add Module
           </Button>
@@ -1148,8 +1192,14 @@ const CurriculumStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-500)] border-[var(--dq-surface-border-default)] text-[14px] leading-[20px] font-medium">Save as Draft</Button>
-        <Button disabled={!hasValidCurriculum} onClick={onContinue} className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white text-[14px] leading-[20px] font-medium shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="rounded-full border-gray-200">Save as Draft</Button>
+        <Button
+          disabled={!hasValidCurriculum}
+          onClick={onContinue}
+          className={cn(learnerBtnPrimary, "disabled:cursor-not-allowed disabled:opacity-50")}
+        >
+          Continue to Next Step
+        </Button>
       </div>
     </div>
   );
@@ -1231,9 +1281,9 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Course Media</h2>
-        <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)] mb-6">Upload course thumbnail, promo video, and define learning objectives.</p>
+      <div className={cn(builderStepPanel, "mb-6")}>
+        <h2 className={cn(learnerSectionHeading, "mb-2")}>Course Media</h2>
+        <p className={cn(learnerBodyMuted, "mb-6")}>Upload course thumbnail, promo video, and define learning objectives.</p>
 
         {!hasThumbnail && (
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
@@ -1248,7 +1298,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
         <div className="space-y-6">
           {/* Course Thumbnail */}
           <div>
-            <label className="block text-[14px] leading-[20px] font-semibold mb-2 text-[var(--dq-text-primary)]">
+            <label className={cn(learnerItemTitle, "mb-2 block text-sm")}>
               Course Thumbnail <span className="text-red-600">*</span>
             </label>
             <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mb-3">Recommended size: 1280x720px (16:9 ratio)</p>
@@ -1287,7 +1337,7 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
 
           {/* Promo Video */}
           <div>
-            <label className="block text-[14px] leading-[20px] font-semibold mb-2 text-[var(--dq-text-primary)]">Promo Video (Optional)</label>
+            <label className={cn(learnerItemTitle, "mb-2 block text-sm")}>Promo Video (Optional)</label>
             <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mb-3">A short video introducing your course</p>
             {promoVideoPreview ? (
               <div className="relative w-full max-w-md">
@@ -1403,8 +1453,14 @@ const CourseMediaStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
-        <Button disabled={!hasThumbnail} onClick={onContinue} className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="rounded-full border-gray-200">Save as Draft</Button>
+        <Button
+          disabled={!hasThumbnail}
+          onClick={onContinue}
+          className={cn(learnerBtnPrimary, "disabled:cursor-not-allowed disabled:opacity-50")}
+        >
+          Continue to Next Step
+        </Button>
       </div>
     </div>
   );
@@ -1496,9 +1552,9 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Final Assessment</h2>
-        <p className="text-sm text-muted-foreground mb-6">Configure quizzes, assignments, and evaluation methods.</p>
+      <div className={cn(builderStepPanel, "mb-6")}>
+        <h2 className={cn(learnerSectionHeading, "mb-2")}>Final Assessment</h2>
+        <p className={cn(learnerBodyMuted, "mb-6")}>Configure quizzes, assignments, and evaluation methods.</p>
 
         {assessmentRequired && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
@@ -2115,11 +2171,11 @@ const AssessmentsStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
-        <Button 
-          disabled={assessmentRequired || (assessmentType !== "none" && !hasValidContent)} 
+        <Button variant="outline" onClick={onSave} className="rounded-full border-gray-200">Save as Draft</Button>
+        <Button
+          disabled={assessmentRequired || (assessmentType !== "none" && !hasValidContent)}
           onClick={onContinue}
-          className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className={cn(learnerBtnPrimary, "disabled:cursor-not-allowed disabled:opacity-50")}
         >
           Continue to Next Step
         </Button>
@@ -2162,9 +2218,9 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Eligibility & Certification</h2>
-        <p className="text-sm text-muted-foreground mb-6">Configure certification rules and completion requirements.</p>
+      <div className={cn(builderStepPanel, "mb-6")}>
+        <h2 className={cn(learnerSectionHeading, "mb-2")}>Eligibility & Certification</h2>
+        <p className={cn(learnerBodyMuted, "mb-6")}>Configure certification rules and completion requirements.</p>
 
         <div className="space-y-6">
           {/* Certification Toggle */}
@@ -2405,8 +2461,10 @@ const EligibilityStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
-        <Button onClick={onContinue} className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="rounded-full border-gray-200">Save as Draft</Button>
+        <Button onClick={onContinue} className={learnerBtnPrimary}>
+          Continue to Next Step
+        </Button>
       </div>
     </div>
   );
@@ -2480,9 +2538,9 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Pricing & Settings</h2>
-        <p className="text-sm text-muted-foreground mb-6">Edit pricing, discounts, and course settings.</p>
+      <div className={cn(builderStepPanel, "mb-6")}>
+        <h2 className={cn(learnerSectionHeading, "mb-2")}>Pricing & Settings</h2>
+        <p className={cn(learnerBodyMuted, "mb-6")}>Edit pricing, discounts, and course settings.</p>
 
         <div className="space-y-6">
           {/* Course Price */}
@@ -2889,8 +2947,10 @@ const PricingStep = ({ course, onSave, onContinue }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
-        <Button onClick={onContinue} className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium">Continue to Next Step</Button>
+        <Button variant="outline" onClick={onSave} className="rounded-full border-gray-200">Save as Draft</Button>
+        <Button onClick={onContinue} className={learnerBtnPrimary}>
+          Continue to Next Step
+        </Button>
       </div>
     </div>
   );
@@ -3006,22 +3066,24 @@ const SubmitStep = ({ course, onSave }: any) => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm mb-6">
-        <h2 className="text-[24px] leading-[32px] font-semibold mb-2 text-[var(--dq-text-primary)]">Submit for Review</h2>
-        <p className="text-sm text-muted-foreground mb-6">Review your course and submit for admin approval.</p>
+      <div className={cn(builderStepPanel, "mb-6")}>
+        <h2 className={cn(learnerSectionHeading, "mb-2")}>Submit for Review</h2>
+        <p className={cn(learnerBodyMuted, "mb-6")}>Review your course and submit for admin approval.</p>
 
         {/* Progress Bar */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium">Completion Progress</span>
-            <span className="text-sm text-muted-foreground">{completedItems.length} of {requiredItems.length} completed</span>
+            <span className={cn(learnerItemTitle, "text-sm")}>Completion Progress</span>
+            <span className={learnerCaption}>
+              {completedItems.length} of {requiredItems.length} completed
+            </span>
           </div>
-          <Progress value={progressPercent} className="h-2" />
+          <Progress value={progressPercent} className="h-2 bg-gray-200" />
         </div>
 
         {/* Validation Checklist */}
         <div className="space-y-3 mb-6">
-          <h3 className="text-sm font-semibold">Submission Checklist</h3>
+          <h3 className={cn(learnerItemTitle, "text-sm")}>Submission Checklist</h3>
           {validationChecklist.map((item) => (
             item.required && (
               <div
@@ -3037,7 +3099,7 @@ const SubmitStep = ({ course, onSave }: any) => {
                 ) : (
                   <Circle className="w-5 h-5 text-red-600 flex-shrink-0" />
                 )}
-                <span className={`text-sm ${item.completed ? "text-green-900" : "text-red-900"}`}>
+                <span className={cn(learnerBody, item.completed ? "text-green-900" : "text-red-900")}>
                   {item.label}
                 </span>
               </div>
@@ -3050,8 +3112,8 @@ const SubmitStep = ({ course, onSave }: any) => {
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-red-900">Missing required items</p>
-              <p className="text-xs text-red-800 mt-1">
+              <p className={cn(learnerItemTitle, "text-sm text-red-900")}>Missing required items</p>
+              <p className={cn(learnerCaption, "mt-1 text-red-800")}>
                 Complete all checklist items before submitting for review.
               </p>
             </div>
@@ -3063,8 +3125,8 @@ const SubmitStep = ({ course, onSave }: any) => {
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-blue-900">Ready to submit</p>
-              <p className="text-xs text-blue-800 mt-1">
+              <p className={cn(learnerItemTitle, "text-sm text-dq-navy")}>Ready to submit</p>
+              <p className={cn(learnerCaption, "mt-1 text-gray-600")}>
                 Once submitted, your course will be locked for review. You'll be able to make minor metadata edits, but curriculum, assessments, and certification settings will be locked until the review is complete.
               </p>
             </div>
@@ -3072,9 +3134,9 @@ const SubmitStep = ({ course, onSave }: any) => {
         )}
 
         {/* What happens after submission */}
-        <div className="border border-border rounded-lg p-4">
-          <h3 className="text-sm font-semibold mb-3">What happens after submission?</h3>
-          <div className="space-y-2 text-sm text-muted-foreground">
+        <div className="rounded-lg border border-gray-200 p-4">
+          <h3 className={cn(learnerItemTitle, "mb-3 text-sm")}>What happens after submission?</h3>
+          <div className={cn("space-y-2", learnerBodyMuted)}>
             <div className="flex items-start gap-2">
               <span className="text-[var(--dq-orange-500)] mt-0.5">•</span>
               <span>Course status changes to "Pending Review"</span>
@@ -3100,11 +3162,13 @@ const SubmitStep = ({ course, onSave }: any) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline" onClick={onSave} className="hover:bg-[var(--dq-orange-500)] hover:text-white hover:border-[var(--dq-orange-500)]">Save as Draft</Button>
-        <Button 
+        <Button variant="outline" onClick={onSave} className="rounded-full border-gray-200">
+          Save as Draft
+        </Button>
+        <Button
           onClick={handleSubmit}
           disabled={!isValid || isSubmitting}
-          className="bg-[var(--dq-orange-500)] hover:bg-[#e56045] text-white text-[14px] leading-[20px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className={cn(learnerBtnPrimary, "disabled:cursor-not-allowed disabled:opacity-50")}
         >
           {isSubmitting ? "Submitting..." : "Submit for Review"}
         </Button>

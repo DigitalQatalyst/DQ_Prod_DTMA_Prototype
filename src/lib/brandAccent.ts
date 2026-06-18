@@ -70,6 +70,10 @@ export const learnerBodyMuted = "text-sm text-gray-500";
 
 export const learnerCaption = "text-xs text-gray-500";
 
+/** Dashboard content section group label (People, Operations, etc.) */
+export const learnerGroupLabel =
+  "font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400";
+
 export const learnerBadge = "text-xs font-medium";
 
 export const learnerKpiValue = "text-2xl font-semibold tracking-tight text-dq-navy";

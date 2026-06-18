@@ -7,11 +7,16 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import {
+  learnerCaption,
+  learnerCardTitle,
+  learnerItemTitle,
   learnerBodyMuted,
   learnerIconWell,
   learnerKpiCard,
   learnerKpiLabel,
   learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
 } from "@/lib/brandAccent";
 import type { SMSTabId } from "@/components/dashboard/SMSDashboardSidebar";
 
@@ -106,13 +111,13 @@ export default function SMSBillingPanel() {
       </div>
 
       {/* Billing Issues */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>Billing Issues</CardTitle>
-          <CardDescription>The finance team handles all resolutions. Flag an issue as urgent to notify them immediately.</CardDescription>
+          <CardTitle className={learnerSectionHeading}>Billing Issues</CardTitle>
+          <CardDescription className={learnerBodyMuted}>The finance team handles all resolutions. Flag an issue as urgent to notify them immediately.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+          <div className={cn(learnerPanel, "rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600")}>
             Need urgent help? Contact the finance team: <span className="font-medium">finance@academy.com</span> · ext. 204
           </div>
           {openIssues.length > 0 && (
@@ -125,7 +130,7 @@ export default function SMSBillingPanel() {
           {/* Failed Payments */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-slate-700">Failed Payments</h3>
+              <h3 className={cn(learnerCardTitle, "text-base")}>Failed Payments</h3>
               <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-700">{failures.length}</span>
             </div>
             {failures.length === 0 && <p className="text-sm text-slate-400 py-2">No failed payments.</p>}
@@ -136,13 +141,13 @@ export default function SMSBillingPanel() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-slate-900">{b.name}</span>
+                        <span className={learnerItemTitle}>{b.name}</span>
                         {b.subType && <Badge className="border border-slate-200 bg-slate-50 text-slate-600 text-xs capitalize">{b.subType}</Badge>}
                         {flaggedIds.has(b.id) && <Badge className="border border-rose-200 bg-rose-50 text-rose-700 text-xs">Flagged urgent</Badge>}
                       </div>
                       <div className="text-sm text-slate-600">{b.course}</div>
-                      <div className="text-sm text-slate-500">{b.reason}</div>
-                      <div className="flex items-center gap-3 text-xs text-slate-400">
+                      <div className={learnerBodyMuted}>{b.reason}</div>
+                      <div className={cn(learnerCaption, "flex items-center gap-3 text-slate-400")}>
                         <span>Raised {fmtDate(b.dateRaised)}</span>
                         {daysOpen >= 5 && <span className="text-amber-600 font-medium">{daysOpen} days open</span>}
                       </div>
@@ -164,7 +169,7 @@ export default function SMSBillingPanel() {
           {/* Refund Requests */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-slate-700">Refund Requests</h3>
+              <h3 className={cn(learnerCardTitle, "text-base")}>Refund Requests</h3>
               <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">{refunds.length}</span>
             </div>
             {refunds.length === 0 && <p className="text-sm text-slate-400 py-2">No refund requests.</p>}
@@ -175,16 +180,16 @@ export default function SMSBillingPanel() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-slate-900">{b.name}</span>
+                        <span className={learnerItemTitle}>{b.name}</span>
                         {flaggedIds.has(b.id) && <Badge className="border border-rose-200 bg-rose-50 text-rose-700 text-xs">Flagged urgent</Badge>}
                       </div>
                       <div className="text-sm text-slate-600">{b.course}</div>
-                      <div className="text-sm text-slate-500">{b.reason}</div>
-                      <div className="flex items-center gap-3 text-xs text-slate-400">
+                      <div className={learnerBodyMuted}>{b.reason}</div>
+                      <div className={cn(learnerCaption, "flex items-center gap-3 text-slate-400")}>
                         <span>Raised {fmtDate(b.dateRaised)}</span>
                         {daysOpen >= 5 && <span className="text-amber-600 font-medium">{daysOpen} days open</span>}
                       </div>
-                      <div className="text-xs text-slate-400 italic">Approval handled by finance team.</div>
+                      <div className={cn(learnerCaption, "italic text-slate-400")}>Approval handled by finance team.</div>
                     </div>
                     <div className="flex flex-col items-end gap-2 shrink-0">
                       <Badge className={`border text-xs font-semibold capitalize ${issueBadge(b.status)}`}>{b.status.replace("-", " ")}</Badge>

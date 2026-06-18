@@ -82,14 +82,14 @@ export default function CourseListRow({
               <Clock className="h-4 w-4" />
               {course.duration}
             </div>
-            <div className="flex items-center gap-1">
-              <BookOpen className="h-4 w-4" />
-              {course.comingSoon
-                ? "Content in development"
-                : course.modules
+            {!course.comingSoon ? (
+              <div className="flex items-center gap-1">
+                <BookOpen className="h-4 w-4" />
+                {course.modules
                   ? `${course.modules.length} modules • ${course.totalLessons ?? 0} lessons`
                   : "Course content"}
-            </div>
+              </div>
+            ) : null}
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs text-gray-400 line-through">${course.originalPrice}</span>

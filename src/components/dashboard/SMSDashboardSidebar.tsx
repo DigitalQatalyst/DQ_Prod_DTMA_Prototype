@@ -11,6 +11,7 @@ import {
   Link2,
   LogOut,
   ShieldCheck,
+  User,
   UserCog,
   Users,
   type LucideIcon,
@@ -31,6 +32,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export type SMSTabId =
+  | "getting-started"
   | "overview"
   | "courses"
   | "faculty"
@@ -39,7 +41,8 @@ export type SMSTabId =
   | "billing"
   | "partners"
   | "compliance"
-  | "staff";
+  | "staff"
+  | "profile";
 
 type NavLeaf = {
   id: SMSTabId;
@@ -70,17 +73,13 @@ const NAV_SECTIONS: NavSection[] = [
         id: "getting-started",
         label: "Getting Started",
         icon: Compass,
-        items: [{ id: "overview", label: "Home" }],
+        items: [{ id: "getting-started", label: "Home" }],
       },
       {
         id: "quick-links",
         label: "Quick Links",
         icon: Link2,
-        items: [
-          { id: "overview", label: "Dashboard" },
-          { id: "billing", label: "Billing" },
-          { id: "compliance", label: "Accreditation" },
-        ],
+        items: [{ id: "overview", label: "Dashboard" }],
       },
     ],
   },
@@ -99,16 +98,15 @@ const NAV_SECTIONS: NavSection[] = [
       { id: "faculty", label: "Faculty" },
       { id: "students", label: "Students" },
       { id: "staff", label: "Staff" },
+      { id: "billing", label: "Billing" },
+      { id: "compliance", label: "Accreditation" },
+      { id: "finance", label: "Finance" },
     ],
   },
   {
     id: "platform",
     label: "Platform Management",
-    items: [
-      { id: "finance", label: "Finance" },
-      { id: "billing", label: "Billing" },
-      { id: "compliance", label: "Accreditation" },
-    ],
+    items: [{ id: "profile", label: "My Profile" }],
   },
 ];
 
@@ -121,6 +119,7 @@ const ITEM_ICONS: Partial<Record<SMSTabId, LucideIcon>> = {
   partners: Globe,
   compliance: ShieldCheck,
   staff: UserCog,
+  profile: User,
 };
 
 function groupContainsTab(group: NavGroup, tab: SMSTabId) {

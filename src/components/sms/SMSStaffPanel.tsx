@@ -3,6 +3,17 @@ import { Briefcase, Mail, Phone, Shield, UserCog, Users } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import {
+  learnerBodyMuted,
+  learnerCaption,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -80,18 +91,19 @@ export default function SMSStaffPanel() {
             <div
               key={team}
               className={cn(
-                "bg-card rounded-2xl p-6 shadow-sm border cursor-pointer hover:border-slate-300 transition-colors",
-                !hasAvailable ? "border-amber-200 bg-amber-50/20" : "border-slate-200/80"
+                learnerKpiCard,
+                "cursor-pointer transition-colors hover:border-slate-300",
+                !hasAvailable && "border-amber-200 bg-amber-50/20"
               )}
               onClick={() => setActiveTeam(activeTeam === team ? "All" : team)}
             >
-              <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-3">
-                <Icon className="w-5 h-5 text-slate-600" />
+              <div className={cn(learnerIconWell, "mb-3 bg-slate-100")}>
+                <Icon className="h-5 w-5 text-slate-600" />
               </div>
-              <div className="text-[24px] leading-[32px] font-medium">{members.length}</div>
-              <div className="text-[14px] leading-[20px] font-medium text-slate-700">{team} Team</div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">{teamPurpose[team]}</div>
-              <div className={cn("text-[12px] leading-[16px] mt-1 font-medium", hasAvailable ? "text-emerald-600" : "text-amber-700")}>
+              <div className={learnerKpiValue}>{members.length}</div>
+              <div className={learnerKpiLabel}>{team} Team</div>
+              <div className={cn(learnerCaption, "mt-0.5")}>{teamPurpose[team]}</div>
+              <div className={cn(learnerCaption, "mt-1 font-medium", hasAvailable ? "text-emerald-600" : "text-amber-700")}>
                 {hasAvailable ? "Someone available" : "No one available now"}
               </div>
             </div>
@@ -100,10 +112,10 @@ export default function SMSStaffPanel() {
       </div>
 
       {/* Staff directory */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>Staff Directory</CardTitle>
-          <CardDescription>
+          <CardTitle className={learnerSectionHeading}>Staff Directory</CardTitle>
+          <CardDescription className={learnerBodyMuted}>
             Contact details for each team. Click a team card above to filter by team.
           </CardDescription>
         </CardHeader>
@@ -131,13 +143,13 @@ export default function SMSStaffPanel() {
             {displayed.map((m) => (
               <div
                 key={m.id}
-                className="rounded-2xl border border-slate-200 bg-slate-50/50 p-4 space-y-3"
+                className={cn(learnerPanel, "rounded-2xl border-slate-200 bg-slate-50/50 p-4 space-y-3")}
               >
                 {/* Name + availability */}
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <div className="font-semibold text-slate-900 text-sm">{m.name}</div>
-                    <div className="text-xs text-slate-500">{m.role}</div>
+                    <div className={cn(learnerItemTitle, "text-sm")}>{m.name}</div>
+                    <div className={learnerCaption}>{m.role}</div>
                   </div>
                   <Badge className={`border text-xs font-semibold shrink-0 ${statusBadge(m.status)}`}>
                     {statusLabel[m.status]}
@@ -147,15 +159,15 @@ export default function SMSStaffPanel() {
                 {/* Team + last active */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <Badge className={`border text-xs ${teamColors[m.team]}`}>{m.team}</Badge>
-                  <span className="text-xs text-slate-400">{lastActiveLabel(m.lastActiveHoursAgo)}</span>
+                  <span className={cn(learnerCaption, "text-slate-400")}>{lastActiveLabel(m.lastActiveHoursAgo)}</span>
                 </div>
 
                 {/* Contact details */}
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <div className={cn(learnerCaption, "flex items-center gap-1.5 text-slate-600")}>
                     <Mail className="h-3 w-3 text-slate-400 shrink-0" />{m.email}
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <div className={cn(learnerCaption, "flex items-center gap-1.5 text-slate-600")}>
                     <Phone className="h-3 w-3 text-slate-400 shrink-0" />{m.phone}
                   </div>
                 </div>

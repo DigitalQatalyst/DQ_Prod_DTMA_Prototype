@@ -58,16 +58,16 @@ function CourseCardContent({ course }: { course: CourseCardData }) {
           </div>
         </div>
 
-        <div className="mb-4 flex items-center gap-2 text-xs text-gray-600">
-          <BookOpen className="h-4 w-4" />
-          <span>
-            {course.comingSoon
-              ? "Content in development"
-              : course.modules
+        {!course.comingSoon ? (
+          <div className="mb-4 flex items-center gap-2 text-xs text-gray-600">
+            <BookOpen className="h-4 w-4" />
+            <span>
+              {course.modules
                 ? `${course.modules.length} modules • ${course.totalLessons ?? 0} lessons`
                 : "Course content"}
-          </span>
-        </div>
+            </span>
+          </div>
+        ) : null}
 
         <div className="flex items-center justify-between border-t border-gray-200 pt-3">
           <div className="flex items-baseline gap-2">

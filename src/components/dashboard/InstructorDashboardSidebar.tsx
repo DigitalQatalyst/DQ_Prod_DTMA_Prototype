@@ -90,15 +90,17 @@ const NAV_SECTIONS: NavSection[] = [
   {
     id: "workspaces",
     label: "Workspaces",
-    items: [{ id: "course-builder", label: "Course builder" }],
+    items: [
+      { id: "course-builder", label: "Course builder" },
+      { id: "learners", label: "Learners" },
+      { id: "reviews", label: "Reviews" },
+    ],
   },
   {
     id: "platform",
     label: "Platform Management",
     items: [
       { id: "verification", label: "Verification" },
-      { id: "learners", label: "Learners" },
-      { id: "reviews", label: "Reviews" },
       { id: "profile", label: "Profile & Settings" },
     ],
   },

@@ -1,3 +1,18 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerBtnPrimary,
+  learnerCaption,
+  learnerCardTitle,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 import { useState } from "react";
 import {
   MessageSquare,
@@ -56,11 +71,7 @@ export const WhatsAppAnalyticsDashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-[28px] leading-[36px] font-semibold text-[#1e2348]">WhatsApp Learning Analytics</h2>
-          <p className="text-[14px] leading-[20px] text-[#4B5563] mt-1">Platform-wide WhatsApp engagement and performance metrics</p>
-        </div>
+      <div className="flex items-center justify-end">
         <select
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value as any)}
@@ -75,38 +86,38 @@ export const WhatsAppAnalyticsDashboard = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+        <div className={learnerKpiCard}>
           <Users className="w-6 h-6 text-[#ff6b4d] mb-3" strokeWidth={1.5} />
-          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_ANALYTICS.optedInLearners.toLocaleString()}</div>
-          <div className="text-[13px] text-[#4B5563] mt-1">WhatsApp Opted In</div>
-          <div className="text-[12px] text-[#ff6b4d] font-medium mt-2">
+          <div className={learnerKpiValue}>{MOCK_ANALYTICS.optedInLearners.toLocaleString()}</div>
+          <div className={cn(learnerKpiLabel, "mt-1")}>WhatsApp Opted In</div>
+          <div className={cn(learnerCaption, "mt-2 font-medium text-dq-orange")}>
             {MOCK_ANALYTICS.optInRate}% opt-in rate
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+        <div className={learnerKpiCard}>
           <Send className="w-6 h-6 text-[#1e2348] mb-3" strokeWidth={1.5} />
-          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_ANALYTICS.messagesSent.toLocaleString()}</div>
-          <div className="text-[13px] text-[#4B5563] mt-1">Messages Sent</div>
-          <div className="text-[12px] text-[#1e2348] font-medium mt-2">
+          <div className={learnerKpiValue}>{MOCK_ANALYTICS.messagesSent.toLocaleString()}</div>
+          <div className={cn(learnerKpiLabel, "mt-1")}>Messages Sent</div>
+          <div className={cn(learnerCaption, "mt-2 font-medium text-dq-navy")}>
             {MOCK_ANALYTICS.deliveryRate}% delivered
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+        <div className={learnerKpiCard}>
           <Eye className="w-6 h-6 text-[#ff6b4d] mb-3" strokeWidth={1.5} />
-          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_ANALYTICS.readRate}%</div>
-          <div className="text-[13px] text-[#4B5563] mt-1">Read Rate</div>
-          <div className="text-[12px] text-[#ff6b4d] font-medium mt-2">
+          <div className={learnerKpiValue}>{MOCK_ANALYTICS.readRate}%</div>
+          <div className={cn(learnerKpiLabel, "mt-1")}>Read Rate</div>
+          <div className={cn(learnerCaption, "mt-2 font-medium text-dq-orange")}>
             {MOCK_ANALYTICS.messagesRead.toLocaleString()} opened
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+        <div className={learnerKpiCard}>
           <MessageCircle className="w-6 h-6 text-[#1e2348] mb-3" strokeWidth={1.5} />
-          <div className="text-[32px] leading-[40px] font-bold text-[#1e2348]">{MOCK_ANALYTICS.responseRate}%</div>
-          <div className="text-[13px] text-[#4B5563] mt-1">Response Rate</div>
-          <div className="text-[12px] text-[#1e2348] font-medium mt-2">
+          <div className={learnerKpiValue}>{MOCK_ANALYTICS.responseRate}%</div>
+          <div className={cn(learnerKpiLabel, "mt-1")}>Response Rate</div>
+          <div className={cn(learnerCaption, "mt-2 font-medium text-dq-navy")}>
             Avg: {MOCK_ANALYTICS.avgResponseTime}
           </div>
         </div>
@@ -116,8 +127,8 @@ export const WhatsAppAnalyticsDashboard = () => {
         {/* Course Performance */}
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-[var(--dq-surface-border-default)] overflow-hidden">
           <div className="px-6 py-5 border-b border-[var(--dq-surface-border-default)]">
-            <h3 className="text-[18px] font-semibold text-[var(--dq-text-primary)]">WhatsApp Performance by Course</h3>
-            <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Opt-in rates and engagement metrics</p>
+            <h3 className={learnerSectionHeading}>WhatsApp Performance by Course</h3>
+            <p className={cn(learnerKpiLabel, "mt-1")}>Opt-in rates and engagement metrics</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -134,7 +145,7 @@ export const WhatsAppAnalyticsDashboard = () => {
                 {MOCK_COURSE_STATS.map((course, idx) => (
                   <tr key={course.id} className={`border-t border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[var(--dq-gray-50)]'}`}>
                     <td className="px-4 py-3">
-                      <div className="text-[13px] font-medium text-[var(--dq-text-primary)] max-w-[200px] truncate" title={course.courseName}>
+                      <div className={cn(learnerItemTitle, "max-w-[200px] truncate text-sm")} title={course.courseName}>
                         {course.courseName}
                       </div>
                     </td>
@@ -176,7 +187,7 @@ export const WhatsAppAnalyticsDashboard = () => {
           <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB]">
             <div className="px-5 py-4 border-b border-[#E5E7EB]">
               <h3 className="text-[18px] font-semibold text-[#1e2348]">Message Types</h3>
-              <p className="text-[13px] text-[#4B5563] mt-1">Distribution by category</p>
+              <p className={cn(learnerKpiLabel, "mt-1")}>Distribution by category</p>
             </div>
             <div className="p-5 space-y-4">
               {MOCK_MESSAGE_TYPES.map((type) => (
@@ -201,7 +212,7 @@ export const WhatsAppAnalyticsDashboard = () => {
           <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB]">
             <div className="px-5 py-4 border-b border-[#E5E7EB]">
               <h3 className="text-[18px] font-semibold text-[#1e2348]">Growth Trend</h3>
-              <p className="text-[13px] text-[#4B5563] mt-1">Last 4 months</p>
+              <p className={cn(learnerKpiLabel, "mt-1")}>Last 4 months</p>
             </div>
             <div className="p-5 space-y-3">
               {MOCK_TRENDS.map((trend) => (
@@ -222,7 +233,7 @@ export const WhatsAppAnalyticsDashboard = () => {
       </div>
 
       {/* System Health */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E7EB]">
+      <div className={learnerKpiCard}>
         <h3 className="text-[18px] font-semibold text-[#1e2348] mb-5">System Health</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex items-center gap-3 p-4 rounded-xl bg-green-50 border border-green-200">

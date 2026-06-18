@@ -1,3 +1,19 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerBadge,
+  learnerIconWell,
+} from "@/lib/brandAccent";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
@@ -89,7 +105,7 @@ export const WhatsAppSystemSettings = () => {
                   </button>
                 ))}
               </div>
-              <p className="text-[12px] text-muted-foreground">
+              <p className={learnerCaption}>
                 How often should micro-learning messages be sent to learners?
               </p>
             </div>
@@ -110,7 +126,7 @@ export const WhatsAppSystemSettings = () => {
                 />
                 <span className="text-[14px] text-muted-foreground">messages per learner</span>
               </div>
-              <p className="text-[12px] text-muted-foreground">
+              <p className={learnerCaption}>
                 Limit the number of WhatsApp messages sent to each learner per day to avoid overwhelming them
               </p>
             </div>
@@ -177,7 +193,7 @@ export const WhatsAppSystemSettings = () => {
           <div className="p-6 bg-card rounded-2xl border border-border space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-[16px] font-semibold text-foreground">
+                <h4 className={learnerItemTitle}>
                   Automatic Opt-In Reminders
                 </h4>
                 <p className="text-[13px] text-muted-foreground mt-1">
@@ -206,7 +222,7 @@ export const WhatsAppSystemSettings = () => {
                   />
                   <span className="text-[14px] text-muted-foreground">days between reminders</span>
                 </div>
-                <p className="text-[12px] text-muted-foreground">
+                <p className={learnerCaption}>
                   Send a gentle reminder every {reminderFrequency} days to learners who haven't opted in
                 </p>
               </div>
@@ -215,7 +231,7 @@ export const WhatsAppSystemSettings = () => {
 
           {/* Feature Flags */}
           <div className="p-6 bg-card rounded-2xl border border-border space-y-4">
-            <h4 className="text-[16px] font-semibold text-foreground">
+            <h4 className={learnerItemTitle}>
               Feature Flags
             </h4>
 

@@ -1,3 +1,19 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerBadge,
+  learnerIconWell,
+} from "@/lib/brandAccent";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
@@ -371,7 +387,7 @@ export const CommunicationSupportTab = () => {
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
                 <div>
                   <h2 className="text-[20px] leading-[28px] font-medium text-foreground">Amara Osei</h2>
-                  <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">+234 801 234 5678</p>
+                  <p className={learnerBodyMuted}>+234 801 234 5678</p>
                 </div>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" className="gap-2">
@@ -402,7 +418,7 @@ export const CommunicationSupportTab = () => {
                 <div className="flex gap-3 justify-end">
                   <div className="flex-1 max-w-[70%]">
                     <div className="bg-[var(--dq-orange-500)] text-white rounded-lg p-3 mb-1 ml-auto">
-                      <p className="text-[14px] leading-[20px] font-normal">Hi Amara! You can reset your password by clicking on "Forgot Password" on the login page. You'll receive a reset link via email.</p>
+                      <p className={learnerBody}>Hi Amara! You can reset your password by clicking on "Forgot Password" on the login page. You'll receive a reset link via email.</p>
                     </div>
                     <p className="text-[10px] leading-[14px] font-medium text-muted-foreground text-right">Today at 15:32</p>
                   </div>
@@ -508,7 +524,7 @@ export const CommunicationSupportTab = () => {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-[24px] leading-[32px] font-medium text-foreground">{selectedTicket.subject}</h2>
-                <p className="text-[14px] leading-[20px] font-normal text-muted-foreground">Ticket #{selectedTicket.id.toUpperCase()}</p>
+                <p className={learnerBodyMuted}>Ticket #{selectedTicket.id.toUpperCase()}</p>
               </div>
               <button onClick={() => setShowTicketModal(false)} className="p-2 hover:bg-muted rounded-lg">
                 <X className="w-5 h-5" />

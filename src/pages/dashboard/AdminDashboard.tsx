@@ -10,7 +10,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { InviteManagement } from '@/components/admin/InviteManagement';
 import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalyticsDashboard';
 import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
+import { AdminAICockpitPanel } from '@/components/admin/AdminAICockpitPanel';
 import { CommunicationSupportTab } from '@/components/admin/CommunicationSupportTab';
+import {
+  LearnerOverviewPanel,
+  type OverviewPanelTab,
+} from '@/components/dashboard/LearnerOverviewPanel';
+import {
+  ADMIN_AI_CAPABILITY_LABELS,
+  ADMIN_AI_CAPABILITIES,
+  type AdminAICapabilityId,
+} from '@/components/admin/adminAICapabilities';
 import { CoursePreviewModal } from '@/components/admin/CoursePreviewModal';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
@@ -99,9 +109,15 @@ import {
   Activity,
 } from 'lucide-react';
 import {
+  learnerBadge,
   learnerBody,
   learnerBodyMuted,
+  learnerBtnPrimary,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
   learnerIconWell,
+  learnerItemTitle,
   learnerKpiCard,
   learnerKpiLabel,
   learnerKpiValue,
@@ -114,10 +130,11 @@ import {
 import { cn } from '@/lib/utils';
 
 const TAB_LABELS: Record<AdminTabId, string> = {
+  'getting-started': 'Home',
   overview: 'Platform Overview',
   users: 'User Management',
   courses: 'Course Management',
-  pending: 'Pending Approval',
+  pending: 'Requests',
   invites: 'Invites',
   assessments: 'Assessments',
   scheduling: 'Training Delivery',
@@ -132,15 +149,7 @@ const TAB_LABELS: Record<AdminTabId, string> = {
   commerce: 'Commerce & Billing',
   'whatsapp-analytics': 'WhatsApp Analytics',
   'ai-usage': 'AI Usage Monitoring',
-  'ai-assistant': 'AI Operations Assistant',
-  'ai-faculty': 'AI Faculty Support',
-  'ai-content': 'AI Content Authoring',
-  'ai-assessment': 'AI Assessment Tools',
-  'ai-cohort': 'AI Cohort Intelligence',
-  'ai-feedback': 'AI Feedback Analysis',
-  'ai-moderation': 'AI Discussion Moderation',
-  'ai-support': 'AI Support Triage',
-  'ai-localization': 'AI Localization',
+  'ai-cockpit': 'AI cockpit',
 };
 
 const TAB_DESCRIPTIONS: Partial<Record<AdminTabId, string>> = {
@@ -160,6 +169,7 @@ const TAB_DESCRIPTIONS: Partial<Record<AdminTabId, string>> = {
   commerce: 'Billing, pricing, and commerce settings',
   'whatsapp-analytics': 'WhatsApp engagement and delivery metrics',
   'ai-usage': 'Monitor AI feature usage across the platform',
+  'ai-cockpit': 'Access platform AI capabilities from one operations hub',
   system: 'Platform configuration and system settings',
 };
 
@@ -281,12 +291,12 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
 
   return (
     <div className="space-y-8">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">Course &amp; Content Management</h1>
+      <h1 className={learnerSectionHeading}>Course &amp; Content Management</h1>
 
       {/* ── Section 1: Authoring & Publishing ── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Course Authoring &amp; Publishing</h2>
+          <h2 className={learnerSectionHeading}>Course Authoring &amp; Publishing</h2>
           <Button 
             onClick={onNavigateToPending}
             className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white gap-2"
@@ -305,7 +315,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
             { label: 'Pending Review',value: pending,              color: 'bg-purple-50 text-purple-700 border border-purple-200' },
           ].map(pill => (
             <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
-              <span className="font-bold text-[15px]">{pill.value}</span>
+              <span className={cn(learnerItemTitle, "text-[15px]")}>{pill.value}</span>
               <span>{pill.label}</span>
             </div>
           ))}
@@ -367,7 +377,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
               <tbody>
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-12 text-[14px] text-[var(--dq-text-disabled)]">
+                    <td colSpan={8} className={cn("py-12 text-center", learnerBodyMuted)}>
                       <BookOpen className="w-8 h-8 mx-auto mb-2 opacity-30" />
                       No courses match your filters.
                     </td>
@@ -375,12 +385,12 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
                 ) : filtered.map((course, idx) => (
                   <tr key={course.id} className={`border-t border-[var(--dq-surface-border-default)] transition-colors hover:bg-[var(--dq-gray-50)] ${idx % 2 === 0 ? '' : 'bg-[var(--dq-gray-50)]/50'}`}>
                     <td className="px-4 py-3 w-[20%]">
-                      <div className="font-medium text-[14px] text-[var(--dq-navy-950)] truncate" title={course.title}>{course.title}</div>
+                      <div className={cn(learnerItemTitle, "truncate")} title={course.title}>{course.title}</div>
                     </td>
                     <td className="px-4 py-3 w-[15%] text-[13px] text-[var(--dq-text-secondary)] truncate">{course.instructor}</td>
                     <td className="px-4 py-3 w-[18%] text-[13px] text-[var(--dq-text-secondary)] truncate">{course.category}</td>
                     <td className="px-4 py-3 w-[10%]">
-                      <span className="text-[12px] px-2 py-0.5 rounded-full bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)] font-medium capitalize">{course.level}</span>
+                      <span className={cn(learnerBadge, "rounded-full bg-gray-100 px-2 py-0.5 capitalize text-dq-navy")}>{course.level}</span>
                     </td>
                     <td className="px-4 py-3 w-[10%]">
                       <span className={`text-[12px] px-2.5 py-0.5 rounded-full font-semibold capitalize ${STATUS_STYLES[course.status]}`}>
@@ -445,7 +455,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
       {/* ── Section 2: Course Performance Analytics ── */}
       <section>
         <div className="mb-4">
-          <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Course Performance Analytics</h2>
+          <h2 className={learnerSectionHeading}>Course Performance Analytics</h2>
           <p className="text-[13px] text-[var(--dq-text-secondary)] mt-0.5">Track engagement, completion rates, and learner feedback across all courses.</p>
         </div>
 
@@ -471,15 +481,15 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
           {/* Top performing courses table */}
           <div className="lg:col-span-2 bg-card rounded-xl shadow-sm border border-border overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-              <h3 className="text-[16px] font-semibold text-foreground">Top Performing Courses</h3>
-              <span className="text-[12px] text-muted-foreground">By Enrollments</span>
+              <h3 className={learnerItemTitle}>Top Performing Courses</h3>
+              <span className={learnerCaption}>By Enrollments</span>
             </div>
             <div className="w-full">
               <table className="w-full table-fixed">
                 <thead className="bg-muted/40">
                   <tr>
                     {['Course', 'Instructor', 'Enrolled', 'Completion', 'Rating', 'Revenue'].map(h => (
-                      <th key={h} className="text-left px-4 py-2.5 text-[12px] font-medium text-muted-foreground whitespace-nowrap">{h}</th>
+                      <th key={h} className={cn("px-4 py-2.5 text-left whitespace-nowrap", learnerCaption, "font-medium")}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -499,7 +509,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
                           <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
                             <div className="h-full rounded-full bg-emerald-500" style={{ width: `${c.completion}%` }} />
                           </div>
-                          <span className="text-[12px] text-muted-foreground">{c.completion}%</span>
+                          <span className={learnerCaption}>{c.completion}%</span>
                         </div>
                       </td>
                       <td className="px-4 py-3">
@@ -518,8 +528,8 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
           {/* Engagement panel */}
           <div className="bg-card rounded-xl shadow-sm border border-border">
             <div className="px-5 py-4 border-b border-border">
-              <h3 className="text-[16px] font-semibold text-foreground">Engagement Snapshot</h3>
-              <p className="text-[12px] text-muted-foreground mt-0.5">Platform-wide activity this month</p>
+              <h3 className={learnerItemTitle}>Engagement Snapshot</h3>
+              <p className={cn(learnerCaption, "mt-0.5")}>Platform-wide activity this month</p>
             </div>
             <div className="p-5 space-y-4">
               {[
@@ -538,7 +548,7 @@ const CourseManagementTab = ({ onNavigateToPending }: { onNavigateToPending: () 
                     <span className="text-[13px] text-muted-foreground">{row.label}</span>
                   </div>
                   <div className="text-right">
-                    <div className="text-[14px] font-semibold text-foreground">{row.value}</div>
+                    <div className={learnerItemTitle}>{row.value}</div>
                     <div className={`text-[11px] font-medium ${
                       row.up === true ? 'text-emerald-600' : row.up === false ? 'text-red-500' : 'text-muted-foreground'
                     }`}>{row.trend}</div>
@@ -722,7 +732,7 @@ const AssessmentsTab = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">Assessments &amp; Evaluation</h1>
+      <h1 className={learnerSectionHeading}>Assessments &amp; Evaluation</h1>
 
       {/* Stat pills */}
       <div className="flex flex-wrap gap-3">
@@ -734,7 +744,7 @@ const AssessmentsTab = () => {
           { label: 'Pending Grading',    value: MOCK_SUBMISSIONS.filter(s => !graded[s.id]).length,      color: 'bg-red-50 text-red-700 border border-red-200'            },
         ].map(p => (
           <div key={p.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${p.color}`}>
-            <span className="font-bold text-[15px]">{p.value}</span>
+            <span className={cn(learnerItemTitle, "text-[15px]")}>{p.value}</span>
             <span>{p.label}</span>
           </div>
         ))}
@@ -779,14 +789,14 @@ const AssessmentsTab = () => {
                 <thead className="bg-[var(--dq-navy-950)]">
                   <tr>
                     {['Assessment', 'Course', 'Type', 'Questions', 'Submissions', 'Avg Score', 'Pass Rate', 'Status', 'Actions'].map(h => (
-                      <th key={h} className="text-left px-4 py-3 text-[12px] font-medium text-white whitespace-nowrap">{h}</th>
+                      <th key={h} className={cn("px-4 py-3 text-left whitespace-nowrap", learnerCaption, "font-medium text-white")}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {filteredQuizzes.length === 0 ? (
                     <tr>
-                      <td colSpan={9} className="text-center py-10 text-[14px] text-[var(--dq-text-disabled)]">
+                      <td colSpan={9} className={cn("py-10 text-center", learnerBodyMuted)}>
                         No assessments match your search.
                       </td>
                     </tr>
@@ -807,9 +817,9 @@ const AssessmentsTab = () => {
                             <div className="w-14 h-1.5 rounded-full bg-[var(--dq-surface-border-default)] overflow-hidden">
                               <div className={`h-full rounded-full ${q.avgScore >= 75 ? 'bg-emerald-500' : q.avgScore >= 60 ? 'bg-amber-400' : 'bg-red-400'}`} style={{ width: `${q.avgScore}%` }} />
                             </div>
-                            <span className="text-[12px] text-[var(--dq-text-secondary)]">{q.avgScore}%</span>
+                            <span className={learnerCaption}>{q.avgScore}%</span>
                           </div>
-                        ) : <span className="text-[12px] text-[var(--dq-text-disabled)]">—</span>}
+                        ) : <span className={learnerCaption}>—</span>}
                       </td>
                       <td className="px-4 py-3 text-[13px] text-center font-medium text-[var(--dq-navy-950)]">{q.passRate > 0 ? `${q.passRate}%` : '—'}</td>
                       <td className="px-4 py-3">
@@ -856,21 +866,21 @@ const AssessmentsTab = () => {
                     <div className="w-8 h-8 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center text-[var(--dq-orange-500)] font-bold text-[13px]">
                       {sub.learner.charAt(0)}
                     </div>
-                    <span className="font-semibold text-[14px] text-foreground">{sub.learner}</span>
+                    <span className={learnerItemTitle}>{sub.learner}</span>
                     {graded[sub.id] && <span className="text-[11px] px-2 py-0.5 rounded-full bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] font-semibold">Graded</span>}
                   </div>
                   <p className="text-[13px] font-medium text-foreground">{sub.assessment}</p>
-                  <p className="text-[12px] text-muted-foreground">{sub.course}</p>
+                  <p className={learnerCaption}>{sub.course}</p>
                   <p className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1"><Calendar className="w-3 h-3" /> Submitted: {sub.submitted}</p>
                 </div>
-                <button className="px-3 py-1.5 border border-border rounded-lg text-[12px] text-muted-foreground hover:bg-muted transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                <button className={cn(learnerCaption, "flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-gray-200 px-3 py-1.5 text-gray-500 transition-colors hover:bg-gray-50")}>
                   <Eye className="w-3.5 h-3.5" /> View Submission
                 </button>
               </div>
               {!graded[sub.id] && (
                 <div className="px-5 pb-5 flex flex-wrap gap-4 items-start">
                   <div>
-                    <label className="text-[12px] font-medium text-foreground block mb-1">Score (out of {sub.maxScore})</label>
+                    <label className={cn(learnerCaption, "font-medium text-dq-navy block mb-1")}>Score (out of {sub.maxScore})</label>
                     <input
                       type="number"
                       min={0}
@@ -882,7 +892,7 @@ const AssessmentsTab = () => {
                     />
                   </div>
                   <div className="flex-1 min-w-[200px]">
-                    <label className="text-[12px] font-medium text-foreground block mb-1">Instructor Feedback</label>
+                    <label className={cn(learnerCaption, "font-medium text-dq-navy block mb-1")}>Instructor Feedback</label>
                     <textarea
                       placeholder="Write feedback for the learner…"
                       rows={2}
@@ -907,7 +917,7 @@ const AssessmentsTab = () => {
           {MOCK_SUBMISSIONS.every(s => graded[s.id]) && (
             <div className="bg-card rounded-2xl p-10 text-center border border-border">
               <CheckCircle className="w-10 h-10 text-[var(--dq-orange-500)] mx-auto mb-2" />
-              <h3 className="font-semibold text-[16px]">All submissions graded!</h3>
+              <h3 className={learnerItemTitle}>All submissions graded!</h3>
               <p className="text-[13px] text-muted-foreground">No pending submissions.</p>
             </div>
           )}
@@ -920,11 +930,11 @@ const AssessmentsTab = () => {
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Score distribution */}
             <div className="bg-card rounded-2xl border border-border shadow-sm p-5">
-              <h3 className="text-[16px] font-semibold text-foreground mb-4">Score Distribution (All Assessments)</h3>
+              <h3 className={cn(learnerItemTitle, "mb-4")}>Score Distribution (All Assessments)</h3>
               <div className="space-y-3">
                 {SCORE_DISTRIBUTION.map(d => (
                   <div key={d.range} className="flex items-center gap-3">
-                    <span className="text-[12px] text-muted-foreground w-14 text-right flex-shrink-0">{d.range}</span>
+                    <span className={cn(learnerCaption, "w-14 text-right shrink-0")}>{d.range}</span>
                     <div className="flex-1 h-5 bg-muted rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full ${d.color} flex items-center justify-end pr-2 transition-all`}
@@ -940,9 +950,9 @@ const AssessmentsTab = () => {
 
             {/* Top & bottom performers */}
             <div className="bg-card rounded-2xl border border-border shadow-sm p-5">
-              <h3 className="text-[16px] font-semibold text-foreground mb-4">Assessment Performance Rankings</h3>
+              <h3 className={cn(learnerItemTitle, "mb-4")}>Assessment Performance Rankings</h3>
               <div className="space-y-3">
-                <p className="text-[12px] font-semibold text-emerald-600 uppercase tracking-wide">Highest Scoring</p>
+                <p className={cn(learnerGroupLabel, "text-emerald-600")}>Highest Scoring</p>
                 {[...MOCK_QUIZZES].filter(q => q.avgScore > 0).sort((a, b) => b.avgScore - a.avgScore).slice(0, 3).map((q, i) => (
                   <div key={q.id} className="flex items-center justify-between py-1 border-b border-border last:border-0">
                     <div className="flex items-center gap-2">
@@ -952,7 +962,7 @@ const AssessmentsTab = () => {
                     <span className="text-[13px] font-semibold text-emerald-600">{q.avgScore}%</span>
                   </div>
                 ))}
-                <p className="text-[12px] font-semibold text-red-500 uppercase tracking-wide mt-3">Needs Attention</p>
+                <p className={cn(learnerGroupLabel, "text-red-500 mt-3")}>Needs Attention</p>
                 {[...MOCK_QUIZZES].filter(q => q.avgScore > 0).sort((a, b) => a.avgScore - b.avgScore).slice(0, 2).map((q, i) => (
                   <div key={q.id} className="flex items-center justify-between py-1 border-b border-border last:border-0">
                     <div className="flex items-center gap-2">
@@ -978,8 +988,8 @@ const AssessmentsTab = () => {
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center mb-3 ${card.bg}`}>
                   <card.icon className={`w-4 h-4 ${card.color}`} />
                 </div>
-                <div className="text-[20px] font-bold text-foreground">{card.value}</div>
-                <div className="text-[12px] text-muted-foreground mt-0.5">{card.label}</div>
+                <div className={learnerKpiValue}>{card.value}</div>
+                <div className={cn(learnerCaption, "mt-0.5")}>{card.label}</div>
               </div>
             ))}
           </div>
@@ -992,7 +1002,7 @@ const AssessmentsTab = () => {
           <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-[var(--dq-surface-border-default)]">
               <div>
-                <h2 className="text-[20px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.title}</h2>
+                <h2 className={learnerSectionHeading}>{viewingAssessment.title}</h2>
                 <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">{viewingAssessment.course}</p>
               </div>
               <button 
@@ -1008,11 +1018,11 @@ const AssessmentsTab = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                   <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Type</div>
-                  <div className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.type}</div>
+                  <div className={learnerItemTitle}>{viewingAssessment.type}</div>
                 </div>
                 <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                   <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Questions</div>
-                  <div className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.questions}</div>
+                  <div className={learnerItemTitle}>{viewingAssessment.questions}</div>
                 </div>
                 <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                   <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Status</div>
@@ -1022,7 +1032,7 @@ const AssessmentsTab = () => {
                 </div>
                 <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                   <div className="text-[11px] text-[var(--dq-text-disabled)] uppercase tracking-wide mb-1">Submissions</div>
-                  <div className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.submissions.toLocaleString()}</div>
+                  <div className={learnerItemTitle}>{viewingAssessment.submissions.toLocaleString()}</div>
                 </div>
               </div>
 
@@ -1033,7 +1043,7 @@ const AssessmentsTab = () => {
                   <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[13px] text-[var(--dq-text-secondary)]">Average Score</span>
-                      <span className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.avgScore}%</span>
+                      <span className={learnerItemTitle}>{viewingAssessment.avgScore}%</span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-[var(--dq-surface-border-default)] overflow-hidden">
                       <div 
@@ -1045,7 +1055,7 @@ const AssessmentsTab = () => {
                   <div className="bg-[var(--dq-gray-50)] rounded-xl p-4">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[13px] text-[var(--dq-text-secondary)]">Pass Rate</span>
-                      <span className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{viewingAssessment.passRate}%</span>
+                      <span className={learnerItemTitle}>{viewingAssessment.passRate}%</span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-[var(--dq-surface-border-default)] overflow-hidden">
                       <div 
@@ -1111,7 +1121,7 @@ const AssessmentsTab = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
             <div className="flex items-center justify-between p-6 border-b border-[var(--dq-surface-border-default)]">
-              <h2 className="text-[20px] font-semibold text-[var(--dq-navy-950)]">Edit Assessment</h2>
+              <h2 className={learnerSectionHeading}>Edit Assessment</h2>
               <button 
                 onClick={() => setEditingAssessment(null)}
                 className="p-2 rounded-lg hover:bg-[var(--dq-gray-50)] text-[var(--dq-text-secondary)] transition-colors"
@@ -1444,7 +1454,7 @@ const PendingApprovalsTab = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">Pending Course Approvals</h1>
+      <h1 className={learnerSectionHeading}>Pending Course Approvals</h1>
 
       {/* Stat pills */}
       <div className="flex flex-wrap gap-3">
@@ -1455,7 +1465,7 @@ const PendingApprovalsTab = () => {
           { label: 'Changes Requested',   value: 1,                   color: 'bg-white text-amber-700 border border-[var(--dq-surface-border-default)]'      },
         ].map(p => (
           <div key={p.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${p.color}`}>
-            <span className="font-bold text-[15px]">{p.value}</span>
+            <span className={cn(learnerItemTitle, "text-[15px]")}>{p.value}</span>
             <span>{p.label}</span>
           </div>
         ))}
@@ -1523,7 +1533,7 @@ const PendingApprovalsTab = () => {
                     <span className="text-[12px] px-2 py-0.5 rounded-full bg-[var(--dq-gray-100)] text-[var(--dq-navy-950)] font-medium">{course.category}</span>
                     <span className="text-[12px] px-2 py-0.5 rounded-full bg-[var(--dq-gray-50)] text-[var(--dq-text-secondary)] capitalize">{course.level}</span>
                     <span className="text-[12px] text-[var(--dq-text-secondary)] flex items-center gap-1"><Clock className="w-3 h-3" />{course.duration}</span>
-                    <span className="text-[12px] text-[var(--dq-text-secondary)]">{course.lessons} lessons</span>
+                    <span className={learnerCaption}>{course.lessons} lessons</span>
                     <span className="text-[13px] font-semibold text-[var(--dq-orange-500)]">${course.price}</span>
                   </div>
                 </div>
@@ -1627,7 +1637,7 @@ const PendingApprovalsTab = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[13px] font-medium text-[var(--dq-navy-950)] truncate">{item.course}</p>
-                  <p className="text-[12px] text-[var(--dq-text-secondary)]">
+                  <p className={learnerCaption}>
                     <span className={`font-medium capitalize ${item.color}`}>{item.action}</span> by {item.reviewer}
                   </p>
                   <p className="text-[11px] text-[var(--dq-text-disabled)] mt-0.5">{item.time}</p>
@@ -1663,6 +1673,7 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<AdminTabId>('overview');
+  const [selectedAICapability, setSelectedAICapability] = useState<AdminAICapabilityId | null>(null);
   const [governanceSubTab, setGovernanceSubTab] = useState<'overview' | 'workflow' | 'reporting' | 'scanning' | 'policies' | 'activity'>('overview');
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
@@ -1887,7 +1898,27 @@ const AdminDashboard = () => {
     }
   };
 
-  const pageDescription = TAB_DESCRIPTIONS[activeTab];
+  const pageDescription =
+    activeTab === 'getting-started'
+      ? undefined
+      : activeTab === 'ai-cockpit' && selectedAICapability
+        ? ADMIN_AI_CAPABILITIES.find((item) => item.id === selectedAICapability)?.description
+        : TAB_DESCRIPTIONS[activeTab];
+
+  const pageTitle =
+    activeTab === 'getting-started'
+      ? 'Home'
+      : activeTab === 'ai-cockpit' && selectedAICapability
+        ? ADMIN_AI_CAPABILITY_LABELS[selectedAICapability]
+        : TAB_LABELS[activeTab];
+
+  const handleOverviewNavigate = (tab: OverviewPanelTab) => {
+    if (tab === 'catalog' || tab === 'courses') {
+      setActiveTab('courses');
+      return;
+    }
+    setActiveTab('overview');
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -1900,6 +1931,9 @@ const AdminDashboard = () => {
         activeTab={activeTab}
         onTabChange={(tab) => {
           setActiveTab(tab);
+          if (tab !== 'ai-cockpit') {
+            setSelectedAICapability(null);
+          }
           setSidebarOpen(false);
         }}
         onSignOut={handleSignOut}
@@ -1935,7 +1969,7 @@ const AdminDashboard = () => {
             </button>
 
             <div className="min-w-0 flex-1">
-              <h2 className={learnerPageTitle}>{TAB_LABELS[activeTab]}</h2>
+              <h2 className={learnerPageTitle}>{pageTitle}</h2>
               {pageDescription && (
                 <p className={cn(learnerPageDescription, 'mt-0.5')}>{pageDescription}</p>
               )}
@@ -1951,6 +1985,10 @@ const AdminDashboard = () => {
         </header>
 
         <div className="p-4 lg:p-6">
+          {activeTab === 'getting-started' && (
+            <LearnerOverviewPanel onNavigate={handleOverviewNavigate} />
+          )}
+
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div className="space-y-6">
@@ -2141,7 +2179,7 @@ const AdminDashboard = () => {
           {activeTab === 'users' && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">User Management</h1>
+                <h1 className={learnerSectionHeading}>User Management</h1>
                 <Button 
                   onClick={() => setShowCreateUserModal(true)}
                   className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] text-white transition-colors"
@@ -2161,7 +2199,7 @@ const AdminDashboard = () => {
                   { label: 'Active', value: MOCK_USERS.filter(u => u.status === 'active').length, color: 'bg-white text-emerald-700 border border-[var(--dq-surface-border-default)]' },
                 ].map(pill => (
                   <div key={pill.label} className={`flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-medium ${pill.color}`}>
-                    <span className="font-bold text-[15px]">{pill.value}</span>
+                    <span className={cn(learnerItemTitle, "text-[15px]")}>{pill.value}</span>
                     <span>{pill.label}</span>
                   </div>
                 ))}
@@ -2235,7 +2273,7 @@ const AdminDashboard = () => {
                               <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-50)] flex items-center justify-center text-[14px] font-medium text-[var(--dq-orange-500)]">
                                 {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
                               </div>
-                              <span className="text-[14px] font-medium text-[var(--dq-navy-950)]">{user.full_name}</span>
+                              <span className={learnerItemTitle}>{user.full_name}</span>
                             </div>
                           </td>
                           <td className="px-4 py-3 text-[13px] text-[var(--dq-text-secondary)]">{user.email}</td>
@@ -2533,7 +2571,7 @@ const AdminDashboard = () => {
                     <Users className="w-7 h-7 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">1,247</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Total Enrolled</div>
+                  <div className={learnerBodyMuted}>Total Enrolled</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
                     <span>+18% this month</span>
@@ -2545,7 +2583,7 @@ const AdminDashboard = () => {
                     <Clock className="w-7 h-7 text-amber-600" strokeWidth={1.5} />
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">23</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Pending Approval</div>
+                  <div className={learnerBodyMuted}>Pending Approval</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-secondary)] font-medium">
                     <span>Requires action</span>
                   </div>
@@ -2556,7 +2594,7 @@ const AdminDashboard = () => {
                     <BookOpen className="w-7 h-7 text-[var(--dq-navy-950)]" strokeWidth={1.5} />
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">42</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Active Courses</div>
+                  <div className={learnerBodyMuted}>Active Courses</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-secondary)] font-medium">
                     <span>With enrollments</span>
                   </div>
@@ -2567,7 +2605,7 @@ const AdminDashboard = () => {
                     <CheckCircle className="w-7 h-7 text-emerald-600" strokeWidth={1.5} />
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">89%</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Completion Rate</div>
+                  <div className={learnerBodyMuted}>Completion Rate</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
                     <span>+5% vs last month</span>
@@ -2580,7 +2618,7 @@ const AdminDashboard = () => {
                 <div className="flex items-center gap-4 mb-6">
                   <Users className="w-8 h-8 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Enrollment Dashboard</h3>
+                    <h3 className={learnerSectionHeading}>Enrollment Dashboard</h3>
                     <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Manage student enrollments, approvals, and bulk operations</p>
                   </div>
                 </div>
@@ -2617,7 +2655,7 @@ const AdminDashboard = () => {
                     <Building2 className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Seat Management</h3>
+                    <h3 className={learnerSectionHeading}>Seat Management</h3>
                     <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Track available seats and manage course capacity across all programs</p>
                   </div>
                 </div>
@@ -2626,7 +2664,7 @@ const AdminDashboard = () => {
                 <div className="grid md:grid-cols-3 gap-6 mb-8">
                   <div className="bg-gradient-to-br from-[var(--dq-gray-50)] to-[var(--dq-surface-border-default)] rounded-xl p-6 border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)]">Total Capacity</div>
+                      <div className={learnerItemTitle}>Total Capacity</div>
                       <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
                         <Users className="w-5 h-5 text-[var(--dq-navy-950)]" />
                       </div>
@@ -2765,7 +2803,7 @@ const AdminDashboard = () => {
                     <GraduationCap className="w-7 h-7 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">87</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Active Faculty</div>
+                  <div className={learnerBodyMuted}>Active Faculty</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <TrendingUp className="w-4 h-4" strokeWidth={1.5} />
                     <span>+12 this quarter</span>
@@ -2777,7 +2815,7 @@ const AdminDashboard = () => {
                     <BookOpen className="w-7 h-7 text-[var(--dq-navy-950)]" strokeWidth={1.5} />
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">24</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Learning Programs</div>
+                  <div className={learnerBodyMuted}>Learning Programs</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-secondary)] font-medium">
                     <span>Across 6 categories</span>
                   </div>
@@ -2788,7 +2826,7 @@ const AdminDashboard = () => {
                     <Star className="w-7 h-7 text-amber-600" strokeWidth={1.5} />
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">4.8</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Avg Faculty Rating</div>
+                  <div className={learnerBodyMuted}>Avg Faculty Rating</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-amber-600 font-medium">
                     <Star className="w-4 h-4 fill-amber-600" strokeWidth={1.5} />
                     <span>Based on 2,341 reviews</span>
@@ -2800,7 +2838,7 @@ const AdminDashboard = () => {
                     <Target className="w-7 h-7 text-emerald-600" strokeWidth={1.5} />
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">156</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Active Assignments</div>
+                  <div className={learnerBodyMuted}>Active Assignments</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <CheckCircle className="w-4 h-4" strokeWidth={1.5} />
                     <span>92% completion rate</span>
@@ -2813,7 +2851,7 @@ const AdminDashboard = () => {
                 <div className="flex items-center gap-4 mb-6">
                   <GraduationCap className="w-8 h-8 text-[var(--dq-orange-500)]" strokeWidth={1.5} />
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Faculty Dashboard</h3>
+                    <h3 className={learnerSectionHeading}>Faculty Dashboard</h3>
                     <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Manage faculty members, assignments, and performance tracking</p>
                   </div>
                 </div>
@@ -2861,7 +2899,7 @@ const AdminDashboard = () => {
                 <div className="flex items-center gap-4 mb-6">
                   <BookOpen className="w-8 h-8 text-[var(--dq-navy-950)]" strokeWidth={1.5} />
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Program Builder</h3>
+                    <h3 className={learnerSectionHeading}>Program Builder</h3>
                     <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Create and manage comprehensive learning programs and curriculum pathways</p>
                   </div>
                 </div>
@@ -2870,7 +2908,7 @@ const AdminDashboard = () => {
                 <div className="grid md:grid-cols-3 gap-6 mb-8">
                   <div className="bg-gradient-to-br from-[var(--dq-gray-50)] to-[var(--dq-surface-border-default)] rounded-xl p-6 border border-[var(--dq-surface-border-default)]">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)]">Total Programs</div>
+                      <div className={learnerItemTitle}>Total Programs</div>
                       <BookOpen className="w-5 h-5 text-[var(--dq-navy-950)]" strokeWidth={1.5} />
                     </div>
                     <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-navy-950)] mb-1">24</div>
@@ -3052,7 +3090,7 @@ const AdminDashboard = () => {
                         <div key={index} className="flex items-start gap-3 bg-white rounded-lg p-4 border border-[var(--dq-surface-border-default)]">
                           <Icon className="w-5 h-5 text-[var(--dq-orange-500)] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                           <div>
-                            <div className="text-[14px] leading-[20px] font-semibold text-[var(--dq-navy-950)]">{feature.title}</div>
+                            <div className={learnerItemTitle}>{feature.title}</div>
                             <div className="text-[12px] leading-[18px] text-[var(--dq-text-secondary)] mt-1">{feature.desc}</div>
                           </div>
                         </div>
@@ -3692,7 +3730,7 @@ const AdminDashboard = () => {
                     {/* Compliance Alerts */}
                     <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                       <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Compliance Alerts</h2>
+                        <h2 className={learnerSectionHeading}>Compliance Alerts</h2>
                         <Badge className="bg-red-100 text-red-700 hover:bg-red-100">12 Active</Badge>
                       </div>
                       <div className="space-y-4">
@@ -3981,7 +4019,7 @@ const AdminDashboard = () => {
                               </div>
                             </div>
                             <p className="text-[13px] leading-[18px] text-[var(--dq-text-secondary)] mb-1">{integration.type}</p>
-                            <p className="text-[12px] leading-[16px] text-[var(--dq-text-disabled)]">Last sync: {integration.lastSync}</p>
+                            <p className={learnerCaption}>Last sync: {integration.lastSync}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 pt-4 border-t border-[var(--dq-surface-border-default)]">
@@ -4144,7 +4182,7 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">2,847</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Certificates Issued</div>
+                  <div className={learnerBodyMuted}>Certificates Issued</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <TrendingUp className="w-4 h-4" />
                     <span>+234 this month</span>
@@ -4158,7 +4196,7 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">78%</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Completion Rate</div>
+                  <div className={learnerBodyMuted}>Completion Rate</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-emerald-600 font-medium">
                     <ArrowUpRight className="w-4 h-4" />
                     <span>+5% from last month</span>
@@ -4172,7 +4210,7 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">1,234</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Active Learners</div>
+                  <div className={learnerBodyMuted}>Active Learners</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-secondary)] font-medium">
                     <span>Pursuing certifications</span>
                   </div>
@@ -4185,7 +4223,7 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                   <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-navy-950)] mb-1">4.7★</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-secondary)]">Avg Satisfaction</div>
+                  <div className={learnerBodyMuted}>Avg Satisfaction</div>
                   <div className="mt-3 flex items-center gap-1 text-[13px] text-amber-600 font-medium">
                     <Star className="w-4 h-4 fill-amber-600" />
                     <span>Based on 1,847 reviews</span>
@@ -4200,7 +4238,7 @@ const AdminDashboard = () => {
                     <Award className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Certificate Template Management</h2>
+                    <h2 className={learnerSectionHeading}>Certificate Template Management</h2>
                     <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                       Design and manage certificate templates for courses and achievements
                     </p>
@@ -4350,7 +4388,7 @@ const AdminDashboard = () => {
                       { label: 'Blockchain Verification', value: 'Enabled', status: 'active' },
                     ].map((setting, index) => (
                       <div key={index} className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-surface-border-default)] transition-colors">
-                        <span className="text-[14px] font-medium text-[var(--dq-navy-950)]">{setting.label}</span>
+                        <span className={learnerItemTitle}>{setting.label}</span>
                         <div className="flex items-center gap-3">
                           <Badge className={`${
                             setting.status === 'active' ? 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)] border-emerald-200' : 'bg-gray-100 text-gray-600 border-gray-200'
@@ -4422,11 +4460,11 @@ const AdminDashboard = () => {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="p-4 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] text-center">
                         <div className="text-[24px] font-bold text-[var(--dq-navy-950)] mb-1">2,847</div>
-                        <div className="text-[12px] text-[var(--dq-text-secondary)]">Verified Today</div>
+                        <div className={learnerCaption}>Verified Today</div>
                       </div>
                       <div className="p-4 bg-[var(--dq-gray-50)] rounded-xl border border-[var(--dq-surface-border-default)] text-center">
                         <div className="text-[24px] font-bold text-[var(--dq-navy-950)] mb-1">99.8%</div>
-                        <div className="text-[12px] text-[var(--dq-text-secondary)]">Success Rate</div>
+                        <div className={learnerCaption}>Success Rate</div>
                       </div>
                     </div>
                   </div>
@@ -4449,7 +4487,7 @@ const AdminDashboard = () => {
                     <TrendingUp className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Customer Success Tracking</h2>
+                    <h2 className={learnerSectionHeading}>Customer Success Tracking</h2>
                     <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">
                       Monitor learner success metrics, engagement, and satisfaction
                     </p>
@@ -4538,7 +4576,7 @@ const AdminDashboard = () => {
                               <h4 className="text-[15px] font-semibold text-[var(--dq-navy-950)]">{story.learner}</h4>
                               <p className="text-[13px] text-[var(--dq-text-secondary)]">{story.achievement}</p>
                             </div>
-                            <span className="text-[12px] text-[var(--dq-text-disabled)]">{story.date}</span>
+                            <span className={learnerCaption}>{story.date}</span>
                           </div>
                           <div className="flex items-center gap-2 mb-2">
                             <Badge className="bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]">
@@ -4995,7 +5033,7 @@ const AdminDashboard = () => {
                           <div className="flex items-center gap-12 text-[14px] mt-4">
                             <div className="text-center">
                               <p className="text-white/70 mb-1">Issue Date</p>
-                              <p className="font-semibold text-[16px]">[Date]</p>
+                              <p className={learnerItemTitle}>[Date]</p>
                             </div>
                             <div className="w-px h-12 bg-white/30"></div>
                             <div className="text-center">
@@ -5037,7 +5075,7 @@ const AdminDashboard = () => {
           {/* Commerce Tab */}
           {activeTab === 'commerce' && (
             <div className="space-y-8">
-              <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)]">Commerce & Billing Operations</h1>
+              <h1 className={learnerSectionHeading}>Commerce & Billing Operations</h1>
 
               {/* Revenue Overview Statistics */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -5205,7 +5243,7 @@ const AdminDashboard = () => {
                     ].map((metric) => (
                       <div key={metric.label} className={`${metric.bg} rounded-lg p-4 border border-[var(--dq-surface-border-default)]`}>
                         <div className={`text-[24px] font-bold ${metric.color} mb-1`}>{metric.value}</div>
-                        <div className="text-[12px] text-[var(--dq-text-secondary)]">{metric.label}</div>
+                        <div className={learnerCaption}>{metric.label}</div>
                       </div>
                     ))}
                   </div>
@@ -5221,7 +5259,7 @@ const AdminDashboard = () => {
                         <span className="text-2xl">{pm.icon}</span>
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-[14px] font-medium text-[var(--dq-navy-950)]">{pm.method}</span>
+                            <span className={learnerItemTitle}>{pm.method}</span>
                             <span className="text-[13px] font-semibold text-[var(--dq-text-secondary)]">{pm.percentage}%</span>
                           </div>
                           <div className="w-full h-2 bg-[var(--dq-gray-50)] rounded-full overflow-hidden">
@@ -5255,7 +5293,7 @@ const AdminDashboard = () => {
                     ].map((metric) => (
                       <div key={metric.label} className="bg-[var(--dq-gray-50)] rounded-lg p-4 border border-[var(--dq-surface-border-default)]">
                         <div className="text-[20px] font-bold text-[var(--dq-navy-950)] mb-1">{metric.value}</div>
-                        <div className="text-[12px] text-[var(--dq-text-secondary)]">{metric.label}</div>
+                        <div className={learnerCaption}>{metric.label}</div>
                       </div>
                     ))}
                   </div>
@@ -5270,14 +5308,14 @@ const AdminDashboard = () => {
                       <div key={index} className="flex items-center justify-between p-3 bg-[var(--dq-gray-50)] rounded-lg border border-[var(--dq-surface-border-default)]">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[14px] font-medium text-[var(--dq-navy-950)]">{refund.user}</span>
+                            <span className={learnerItemTitle}>{refund.user}</span>
                             <Badge className={`${
                               refund.status === 'pending' ? 'bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]' : 'bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]'
                             }`}>
                               {refund.status}
                             </Badge>
                           </div>
-                          <div className="text-[12px] text-[var(--dq-text-secondary)]">
+                          <div className={learnerCaption}>
                             {refund.course} • {refund.amount} • {refund.date}
                           </div>
                         </div>
@@ -5452,7 +5490,7 @@ const AdminDashboard = () => {
               <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)] mb-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Roles & Permissions</h3>
+                    <h3 className={learnerSectionHeading}>Roles & Permissions</h3>
                     <p className="text-[14px] text-[var(--dq-text-secondary)] mt-1">Define and manage user roles with granular permissions</p>
                   </div>
                   <Button className="bg-[var(--dq-orange-500)] hover:bg-[#e66045] text-white">
@@ -5500,7 +5538,7 @@ const AdminDashboard = () => {
                     <h4 className="text-[16px] font-semibold text-[var(--dq-navy-950)] mb-4">General Settings</h4>
                     <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Platform Name</p>
+                        <p className={learnerItemTitle}>Platform Name</p>
                         <p className="text-[13px] text-[var(--dq-text-secondary)]">DTMA Learning Platform</p>
                       </div>
                       <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
@@ -5509,7 +5547,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Time Zone</p>
+                        <p className={learnerItemTitle}>Time Zone</p>
                         <p className="text-[13px] text-[var(--dq-text-secondary)]">UTC+04:00 (Dubai)</p>
                       </div>
                       <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
@@ -5518,7 +5556,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Default Language</p>
+                        <p className={learnerItemTitle}>Default Language</p>
                         <p className="text-[13px] text-[var(--dq-text-secondary)]">English (US)</p>
                       </div>
                       <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
@@ -5527,7 +5565,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Maintenance Mode</p>
+                        <p className={learnerItemTitle}>Maintenance Mode</p>
                         <p className="text-[13px] text-[var(--dq-text-secondary)]">Disabled</p>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
@@ -5542,7 +5580,7 @@ const AdminDashboard = () => {
                     <h4 className="text-[16px] font-semibold text-[var(--dq-navy-950)] mb-4">Security Settings</h4>
                     <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Two-Factor Authentication</p>
+                        <p className={learnerItemTitle}>Two-Factor Authentication</p>
                         <p className="text-[13px] text-[var(--dq-text-secondary)]">Required for admins</p>
                       </div>
                       <label className="relative inline-flex items-center cursor-pointer">
@@ -5552,7 +5590,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Session Timeout</p>
+                        <p className={learnerItemTitle}>Session Timeout</p>
                         <p className="text-[13px] text-[var(--dq-text-secondary)]">30 minutes of inactivity</p>
                       </div>
                       <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
@@ -5561,7 +5599,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">Password Policy</p>
+                        <p className={learnerItemTitle}>Password Policy</p>
                         <p className="text-[13px] text-[var(--dq-text-secondary)]">Strong (12+ chars, mixed)</p>
                       </div>
                       <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
@@ -5570,7 +5608,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="flex items-center justify-between p-4 bg-[var(--dq-gray-50)] rounded-lg">
                       <div>
-                        <p className="text-[14px] font-medium text-[var(--dq-navy-950)]">IP Whitelist</p>
+                        <p className={learnerItemTitle}>IP Whitelist</p>
                         <p className="text-[13px] text-[var(--dq-text-secondary)]">8 addresses configured</p>
                       </div>
                       <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
@@ -5585,7 +5623,7 @@ const AdminDashboard = () => {
               <div className="bg-white rounded-xl p-$1 shadow-sm border border-[var(--dq-surface-border-default)]">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-navy-950)]">Audit Logs</h3>
+                    <h3 className={learnerSectionHeading}>Audit Logs</h3>
                     <p className="text-[14px] text-[var(--dq-text-secondary)] mt-1">Track all system activities and user actions</p>
                   </div>
                   <div className="flex gap-2">
@@ -5618,11 +5656,11 @@ const AdminDashboard = () => {
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-1">
-                          <p className="text-[14px] font-semibold text-[var(--dq-navy-950)]">{log.action}</p>
+                          <p className={learnerItemTitle}>{log.action}</p>
                           <span className="text-[13px] text-[var(--dq-text-secondary)]">{log.time}</span>
                         </div>
                         <p className="text-[13px] text-[var(--dq-text-secondary)] mb-1">{log.details}</p>
-                        <p className="text-[12px] text-[var(--dq-text-disabled)]">By: {log.user}</p>
+                        <p className={learnerCaption}>By: {log.user}</p>
                       </div>
                       <Button variant="ghost" size="sm" className="text-[var(--dq-navy-950)] hover:bg-white hover:text-[var(--dq-orange-500)]">
                         <Eye className="w-4 h-4" />
@@ -5640,436 +5678,12 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {/* AI Operations Assistant Tab */}
-          {activeTab === 'ai-assistant' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Operations Assistant</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Bot className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Your AI Assistant</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80 mb-4">
-                    A general-purpose assistant to support daily operational work.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Platform Activity Summary</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Get AI-generated summaries of platform activity and key metrics.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Generate Summary</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Operational Reports</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Create comprehensive reports with AI assistance.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Create Report</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Next-Best Actions</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI suggests priority actions for admins and faculty.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Suggestions</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Draft Responses</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Generate draft responses to learner queries.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Draft Response</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Faculty Support Tab */}
-          {activeTab === 'ai-faculty' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Faculty Support Mode</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Sparkles className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Transact AI - Faculty Mode</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80">
-                    Extended AI support for faculty to mentor and support learners effectively.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Learner Progress Summaries</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      View AI-generated summaries of individual learner progress.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Summaries</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Mentoring Suggestions</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Get AI-powered mentoring strategies for each learner.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Get Suggestions</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Struggling Learner Guidance</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Receive guidance on how to support struggling learners.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Guidance</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Intervention Recommendations</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI recommends timely interventions and outreach actions.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Recommendations</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Content Authoring Tab */}
-          {activeTab === 'ai-content' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Content Authoring & Drafting</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <FileText className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">AI-Powered Course Creation</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80">
-                    Accelerate course development with AI assistance while keeping humans in control.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Draft Lesson Outlines</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Generate structured lesson outlines based on learning objectives.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Create Outline</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Generate Examples & Exercises</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Create relevant examples and practice exercises automatically.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Generate Content</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Propose Learning Objectives</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI suggests clear, measurable learning objectives.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Get Objectives</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Content Improvement Suggestions</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Get AI recommendations to enhance existing content.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Analyze Content</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Assessment Tools Tab */}
-          {activeTab === 'ai-assessment' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Assessment Tools</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Brain className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Intelligent Assessment Creation & Grading</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80">
-                    Streamline quiz creation and grading with AI assistance.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">AI Quiz Generator</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Create quizzes from lesson content with varied difficulty levels.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Generate Quiz</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Question Variations</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI suggests question variations and difficulty adjustments.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Create Variations</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">AI Grading Helper</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Assist in grading open-ended responses with AI analysis.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Start Grading</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Rubric Matching</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI highlights key points and suggests provisional scores.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Analyze Responses</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Cohort Intelligence Tab */}
-          {activeTab === 'ai-cohort' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Cohort Risk & Training Needs Intelligence</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <AlertTriangle className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Predictive Learner Analytics</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80">
-                    Identify at-risk learners and skill gaps across cohorts.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Cohort Risk Alerts</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Detect learners falling behind and disengagement patterns.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Alerts</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Early Intervention</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI recommends timely interventions for struggling learners.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Get Recommendations</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Training Needs Analysis</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Analyze performance data to identify common skill gaps.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Analyze Cohorts</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Course Planning Insights</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Feed insights into future course planning and development.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Insights</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Feedback Analysis Tab */}
-          {activeTab === 'ai-feedback' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Feedback & Sentiment Analysis</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <MessageSquare className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Qualitative Feedback at Scale</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80">
-                    Analyze course reviews, ratings, and feedback automatically.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Sentiment Trends</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Track sentiment trends across courses and time periods.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Trends</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Recurring Complaints</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Identify common issues and pain points from feedback.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Analyze Feedback</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Improvement Opportunities</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI highlights areas for course and platform improvement.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Get Recommendations</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Support Ticket Analysis</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Analyze support tickets for patterns and insights.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Analyze Tickets</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Discussion Moderation Tab */}
-          {activeTab === 'ai-moderation' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Discussion Moderation</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Shield className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Safe Learning Environments</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80">
-                    Maintain productive and respectful discussion forums with AI.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Content Detection</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Detect inappropriate or off-topic content automatically.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Flagged Content</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Moderator Review Queue</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Flag posts for human moderator review and action.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Review Queue</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Suggested Responses</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI suggests automated or drafted moderator responses.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Suggestions</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Moderation Analytics</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Track moderation metrics and community health.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Analytics</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Support Triage Tab */}
-          {activeTab === 'ai-support' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI Support Triage</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Headphones className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Optimized Support Operations</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80">
-                    Streamline support with intelligent request classification and routing.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Request Classification</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Automatically classify incoming support requests by type.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">View Requests</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Suggested Replies</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      AI generates draft responses for common support issues.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Generate Replies</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Smart Routing</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Route issues to the correct team or faculty member.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Configure Routing</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Priority Detection</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Identify and prioritize urgent learner problems.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">View Urgent Issues</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* AI Localization Tab */}
-          {activeTab === 'ai-localization' && (
-            <div>
-              <h1 className="text-[28px] leading-[36px] font-semibold mb-6">AI-Assisted Localization</h1>
-              <div className="grid gap-6">
-                <div className="bg-gradient-to-br from-[var(--dq-navy-950)] to-[#2a3058] rounded-xl p-6 shadow-sm text-white">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Globe className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    <h3 className="text-[20px] leading-[28px] font-medium text-white">Global Program Delivery</h3>
-                  </div>
-                  <p className="text-[14px] leading-[20px] font-normal text-white/80">
-                    Support multilingual delivery of DTMA programs worldwide.
-                  </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Content Translation</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Translate course content while maintaining accuracy.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Translate Content</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Cultural Adaptation</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Suggest culturally appropriate phrasing and examples.
-                    </p>
-                    <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-700)] text-white">Get Suggestions</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Multilingual Support</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Assist with multilingual support responses.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Translate Response</Button>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 shadow-sm">
-                    <h3 className="text-[20px] leading-[28px] font-medium mb-4">Consistency Management</h3>
-                    <p className="text-[14px] leading-[20px] font-normal text-muted-foreground mb-4">
-                      Maintain consistency across localized versions.
-                    </p>
-                    <Button variant="outline" className="border-[var(--dq-navy-950)] text-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)] hover:text-white">Check Consistency</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {activeTab === 'ai-cockpit' && (
+            <AdminAICockpitPanel
+              selectedCapability={selectedAICapability}
+              onSelectCapability={setSelectedAICapability}
+              pendingReviewsCount={pendingCourses?.length ?? 0}
+            />
           )}
         </div>
       </main>
@@ -6083,7 +5697,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <Bell className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">Create Announcement</h2>
+                <h2 className={learnerKpiValue}>Create Announcement</h2>
               </div>
               <button
                 onClick={() => setShowAnnouncementModal(false)}
@@ -6332,7 +5946,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <GraduationCap className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">Schedule Class</h2>
+                <h2 className={learnerKpiValue}>Schedule Class</h2>
               </div>
               <button
                 onClick={() => setShowScheduleModal(false)}
@@ -6685,7 +6299,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <UserPlusIcon className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">Bulk Enrollment</h2>
+                <h2 className={learnerKpiValue}>Bulk Enrollment</h2>
               </div>
               <button
                 onClick={() => setShowBulkEnrollModal(false)}
@@ -7011,7 +6625,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <GraduationCap className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">Add Faculty Member</h2>
+                <h2 className={learnerKpiValue}>Add Faculty Member</h2>
               </div>
               <button
                 onClick={() => setShowAddFacultyModal(false)}
@@ -7408,7 +7022,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <UserPlusIcon className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">Create New User</h2>
+                <h2 className={learnerKpiValue}>Create New User</h2>
               </div>
               <button
                 onClick={() => setShowCreateUserModal(false)}
@@ -7720,7 +7334,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <FileTextIcon className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">Content Review</h2>
+                <h2 className={learnerKpiValue}>Content Review</h2>
               </div>
               <button
                 onClick={() => setShowReviewContentModal(false)}
@@ -8051,7 +7665,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <BookOpen className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">Create New Learning Program</h2>
+                <h2 className={learnerKpiValue}>Create New Learning Program</h2>
               </div>
               <button
                 onClick={() => setShowCreateProgramModal(false)}
@@ -8162,7 +7776,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <Users className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">All Faculty Members</h2>
+                <h2 className={learnerKpiValue}>All Faculty Members</h2>
               </div>
               <button
                 onClick={() => setShowFacultyListModal(false)}
@@ -8204,7 +7818,7 @@ const AdminDashboard = () => {
                 <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)]/10 flex items-center justify-center">
                   <BarChart2 className="w-5 h-5 text-[var(--dq-orange-500)]" />
                 </div>
-                <h2 className="text-[24px] leading-[32px] font-semibold">Faculty Performance Reports</h2>
+                <h2 className={learnerKpiValue}>Faculty Performance Reports</h2>
               </div>
               <button
                 onClick={() => setShowPerformanceReportsModal(false)}

@@ -3,25 +3,19 @@ import {
   Award,
   BookOpen,
   Bot,
-  Brain,
   Building2,
   ChevronDown,
   Clock,
   Compass,
-  FileText,
-  Globe,
   GraduationCap,
-  Headphones,
   LayoutGrid,
   Link2,
   LogOut,
   MessageSquare,
   Settings,
   Shield,
-  Sparkles,
   UserPlus,
   Users,
-  AlertTriangle,
   type LucideIcon,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -41,6 +35,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export type AdminTabId =
+  | "getting-started"
   | "overview"
   | "users"
   | "courses"
@@ -59,15 +54,7 @@ export type AdminTabId =
   | "commerce"
   | "whatsapp-analytics"
   | "ai-usage"
-  | "ai-assistant"
-  | "ai-faculty"
-  | "ai-content"
-  | "ai-assessment"
-  | "ai-cohort"
-  | "ai-feedback"
-  | "ai-moderation"
-  | "ai-support"
-  | "ai-localization";
+  | "ai-cockpit";
 
 type NavLeaf = {
   id: AdminTabId;
@@ -105,16 +92,8 @@ const ITEM_ICONS: Partial<Record<AdminTabId, LucideIcon>> = {
   commerce: Settings,
   "whatsapp-analytics": MessageSquare,
   "ai-usage": Bot,
+  "ai-cockpit": Bot,
   system: Settings,
-  "ai-assistant": Bot,
-  "ai-faculty": Sparkles,
-  "ai-content": FileText,
-  "ai-assessment": Brain,
-  "ai-cohort": AlertTriangle,
-  "ai-feedback": MessageSquare,
-  "ai-moderation": Shield,
-  "ai-support": Headphones,
-  "ai-localization": Globe,
 };
 
 function groupContainsTab(group: NavGroup, tab: AdminTabId) {
@@ -151,7 +130,7 @@ export function AdminDashboardSidebar({
           id: "getting-started",
           label: "Getting Started",
           icon: Compass,
-          items: [{ id: "overview", label: "Home" }],
+          items: [{ id: "getting-started", label: "Home" }],
         },
         {
           id: "quick-links",
@@ -159,12 +138,7 @@ export function AdminDashboardSidebar({
           icon: Link2,
           items: [
             { id: "overview", label: "Dashboard" },
-            {
-              id: "pending",
-              label: "Pending Reviews",
-              badge: pendingCount > 0 ? pendingCount : undefined,
-            },
-            { id: "users", label: "User Management" },
+            { id: "ai-cockpit", label: "AI cockpit" },
           ],
         },
       ],
@@ -176,7 +150,7 @@ export function AdminDashboardSidebar({
         { id: "courses", label: "Course Management" },
         {
           id: "pending",
-          label: "Pending Approval",
+          label: "Requests",
           badge: pendingCount > 0 ? pendingCount : undefined,
         },
       ],
@@ -185,6 +159,11 @@ export function AdminDashboardSidebar({
       id: "workspaces",
       label: "Workspaces",
       items: [
+        {
+          id: "pending",
+          label: "Pending Reviews",
+          badge: pendingCount > 0 ? pendingCount : undefined,
+        },
         { id: "assessments", label: "Assessments" },
         { id: "scheduling", label: "Training Delivery" },
         { id: "enrollment", label: "Enrollment" },
@@ -210,22 +189,6 @@ export function AdminDashboardSidebar({
             { id: "whatsapp-analytics", label: "WhatsApp Analytics" },
             { id: "ai-usage", label: "AI Usage Monitoring" },
             { id: "system", label: "System Settings" },
-          ],
-        },
-        {
-          id: "ai-capabilities",
-          label: "AI Capabilities",
-          icon: Bot,
-          items: [
-            { id: "ai-assistant", label: "AI Operations Assistant" },
-            { id: "ai-faculty", label: "AI Faculty Support" },
-            { id: "ai-content", label: "AI Content Authoring" },
-            { id: "ai-assessment", label: "AI Assessment Tools" },
-            { id: "ai-cohort", label: "AI Cohort Intelligence" },
-            { id: "ai-feedback", label: "AI Feedback Analysis" },
-            { id: "ai-moderation", label: "AI Discussion Moderation" },
-            { id: "ai-support", label: "AI Support Triage" },
-            { id: "ai-localization", label: "AI Localization" },
           ],
         },
       ],

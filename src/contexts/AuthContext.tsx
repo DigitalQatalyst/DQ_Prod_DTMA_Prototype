@@ -3,6 +3,8 @@ import { seedUsers } from "@/mocks/data";
 
 export type AppRole = "learner" | "instructor" | "admin";
 
+export type DemoJourneyId = "learner" | "instructor" | "admin" | "academy-manager";
+
 interface Profile {
   id: string;
   email: string;
@@ -33,6 +35,7 @@ interface AuthContextType {
     providerType?: "individual" | "institution"
   ) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  signInAsDemo: (journey: DemoJourneyId) => Promise<{ error: Error | null }>;
   updateProfile: (data: Partial<Profile>) => Promise<{ error: Error | null }>;
 }
 
@@ -145,6 +148,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     saveSession(null);
   };
 
+  const signInAsDemo = async (journey: DemoJourneyId) => {
+    let target: LocalUser | undefined;
+
+    if (journey === "learner") {
+      target = users.find((u) => u.role === "learner");
+    } else if (journey === "instructor") {
+      target = users.find(
+        (u) => u.role === "instructor" && u.provider_type !== "institution"
+      );
+    } else if (journey === "admin") {
+      target = users.find((u) => u.role === "admin");
+    } else {
+      target = users.find(
+        (u) => u.role === "instructor" && u.provider_type === "institution"
+      );
+      if (!target) {
+        const academyUser: LocalUser = {
+          id: "inst-academy-1",
+          email: "academy@browz.com",
+          full_name: "Academy Manager",
+          avatar_url: null,
+          bio: null,
+          phone: null,
+          password: "password",
+          role: "instructor",
+          provider_type: "institution",
+        };
+        const next = [...users, academyUser];
+        setUsers(next);
+        saveUsers(next);
+        target = academyUser;
+      }
+    }
+
+    if (!target) {
+      return { error: new Error(`No demo user available for ${journey}`) };
+    }
+
+    setUserId(target.id);
+    saveSession(target.id);
+    return { error: null };
+  };
+
   const updateProfile = async (data: Partial<Profile>) => {
     if (!currentUser) return { error: new Error("No user logged in") };
     const updated: LocalUser = { ...currentUser, ...data };
@@ -165,6 +211,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signIn,
         signUp,
         signOut,
+        signInAsDemo,
         updateProfile,
       }}
     >

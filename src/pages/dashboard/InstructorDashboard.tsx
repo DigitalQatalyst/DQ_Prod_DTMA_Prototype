@@ -21,6 +21,7 @@ import { InstructorCourseBuilderPanel } from "@/components/instructor/Instructor
 import { LearnerOverviewPanel } from "@/components/dashboard/LearnerOverviewPanel";
 import { CourseCatalogPanel } from "@/components/dashboard/CourseCatalogPanel";
 import { TransactAI } from "@/components/mentor/TransactAI";
+import JourneyContextSwitcher from "@/components/layout/JourneyContextSwitcher";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -403,12 +404,15 @@ const InstructorDashboard = () => {
               )}
             </div>
 
-            <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
+            <div className="flex shrink-0 items-center gap-3">
+              <JourneyContextSwitcher context="dashboard" className="inline-flex shrink-0" />
+              <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
               <AvatarImage src={profile?.avatar_url || undefined} />
               <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">
                 {profile?.full_name?.charAt(0) || "I"}
               </AvatarFallback>
             </Avatar>
+            </div>
           </div>
         </header>
 

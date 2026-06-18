@@ -10,30 +10,37 @@ import { Eye, EyeOff, ArrowLeft, Mail, Lock, Loader2 } from "lucide-react";
 const InstructorAuth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { user, signIn, loading: authLoading } = useAuth();
+  const { signInAsDemo, loading: authLoading } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  if (user && !authLoading) {
-    navigate("/dashboard");
-    return null;
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const { error } = await signIn(formData.email, formData.password);
+      const { error } = await signInAsDemo("instructor");
       if (error) {
-        toast({ title: "Sign in failed", description: "Invalid credentials. Please try again.", variant: "destructive" });
-      } else {
-        toast({ title: "Signed in!", description: "Welcome back to the Instructor Hub." });
-        navigate("/dashboard");
+        toast({
+          title: "Demo sign in failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
       }
+
+      toast({
+        title: "Welcome!",
+        description: "Let's set up your instructor profile.",
+      });
+      navigate("/instructor-application");
     } catch {
-      toast({ title: "Error", description: "An unexpected error occurred. Please try again.", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -113,7 +120,6 @@ const InstructorAuth = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="pl-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
-                    required
                     disabled={isSubmitting}
                   />
                 </div>
@@ -130,8 +136,6 @@ const InstructorAuth = () => {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="pl-10 pr-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
-                    required
-                    minLength={6}
                     disabled={isSubmitting}
                   />
                   <button

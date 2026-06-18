@@ -21,6 +21,7 @@ import SMSPartnersPanel from "@/components/sms/SMSPartnersPanel";
 import SMSCompliancePanel from "@/components/sms/SMSCompliancePanel";
 import SMSStaffPanel from "@/components/sms/SMSStaffPanel";
 import SMSMyProfilePanel from "@/components/sms/SMSMyProfilePanel";
+import JourneyContextSwitcher from "@/components/layout/JourneyContextSwitcher";
 import {
   learnerPageDescription,
   learnerPageTitle,
@@ -129,12 +130,15 @@ export default function SMSDashboard() {
               )}
             </div>
 
-            <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
+            <div className="flex shrink-0 items-center gap-3">
+              <JourneyContextSwitcher context="dashboard" className="inline-flex shrink-0" />
+              <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
               <AvatarImage src={profile?.avatar_url || undefined} />
               <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">
                 {profile?.full_name?.charAt(0) || "A"}
               </AvatarFallback>
             </Avatar>
+            </div>
           </div>
         </header>
 

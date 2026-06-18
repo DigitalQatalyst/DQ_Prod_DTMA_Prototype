@@ -11,6 +11,7 @@ import { InviteManagement } from '@/components/admin/InviteManagement';
 import { WhatsAppAnalyticsDashboard } from '@/components/admin/WhatsAppAnalyticsDashboard';
 import { AIUsageMonitoringDashboard } from '@/components/admin/AIUsageMonitoringDashboard';
 import { AdminAICockpitPanel } from '@/components/admin/AdminAICockpitPanel';
+import JourneyContextSwitcher from '@/components/layout/JourneyContextSwitcher';
 import { CommunicationSupportTab } from '@/components/admin/CommunicationSupportTab';
 import {
   LearnerOverviewPanel,
@@ -1975,12 +1976,15 @@ const AdminDashboard = () => {
               )}
             </div>
 
-            <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
+            <div className="flex shrink-0 items-center gap-3">
+              <JourneyContextSwitcher context="dashboard" className="inline-flex shrink-0" />
+              <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
               <AvatarImage src={profile?.avatar_url || undefined} />
               <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">
                 {profile?.full_name?.charAt(0) || 'A'}
               </AvatarFallback>
             </Avatar>
+            </div>
           </div>
         </header>
 

@@ -12,7 +12,7 @@ const Auth = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, signIn, signUp, loading: authLoading } = useAuth();
+  const { user, signInAsDemo, loading: authLoading } = useAuth();
 
   const redirectPath = searchParams.get("redirect");
 
@@ -42,40 +42,40 @@ const Auth = () => {
 
   useEffect(() => {
     if (user && !authLoading && isNewSignup) navigate("/learner-onboarding");
-    else if (user && !authLoading && !redirectPath && !isNewSignup) navigate("/dashboard");
+    else if (user && !authLoading && redirectPath) navigate(redirectPath);
   }, [user, authLoading, isNewSignup, redirectPath, navigate]);
 
-  if (user && !authLoading && !redirectPath && !isNewSignup) return null;
+  if (user && !authLoading && (isNewSignup || redirectPath)) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      if (mode === "signup") {
-        if (!formData.agreeTerms) {
-          toast({ title: "Terms required", description: "Please agree to the Terms of Service and Privacy Policy", variant: "destructive" });
-          setIsSubmitting(false);
-          return;
-        }
-        const { error } = await signUp(formData.email, formData.password, formData.name, "learner");
-        if (error) {
-          let message = error.message;
-          if (error.message.includes("already registered")) message = "This email is already registered. Please sign in instead.";
-          toast({ title: "Sign up failed", description: message, variant: "destructive" });
-        } else {
-          toast({ title: "Account created!", description: "Welcome to DTMA. Setting up your profile..." });
-          setIsNewSignup(true);
-        }
-      } else {
-        const { error } = await signIn(formData.email, formData.password);
-        if (error) {
-          toast({ title: "Sign in failed", description: "Invalid email or password. Please try again.", variant: "destructive" });
-        } else {
-          toast({ title: "Welcome back!", description: "You've successfully signed in." });
-        }
+      const { error } = await signInAsDemo("learner");
+      if (error) {
+        toast({
+          title: "Demo sign in failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
       }
+
+      toast({
+        title: mode === "signup" ? "Account created!" : "Welcome back!",
+        description:
+          mode === "signup"
+            ? "Welcome to DTMA. Setting up your profile..."
+            : "Let's personalise your learning journey.",
+      });
+      setIsNewSignup(true);
+      navigate("/learner-onboarding");
     } catch {
-      toast({ title: "Error", description: "An unexpected error occurred. Please try again.", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -161,7 +161,6 @@ const Auth = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="pl-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
-                      required
                       disabled={isSubmitting}
                     />
                   </div>
@@ -179,7 +178,6 @@ const Auth = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="pl-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
-                    required
                     disabled={isSubmitting}
                   />
                 </div>
@@ -196,8 +194,6 @@ const Auth = () => {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="pl-10 pr-10 h-11 border-[#e8e8ec] rounded-xl focus:border-[#ff4500] focus:ring-0 text-[14px] text-[#0a0f1e] placeholder:text-[#9a9aaa]"
-                    required
-                    minLength={6}
                     disabled={isSubmitting}
                   />
                   <button

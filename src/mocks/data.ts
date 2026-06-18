@@ -1,5 +1,6 @@
 import { Course, Module, Lesson, Enrollment } from "@/hooks/useCourses";
 import { AppRole } from "@/contexts/AuthContext";
+import { DTMA_ECONOMY_COURSE_ID } from "@/lib/dtmaCourseBridge";
 
 const makeId = (prefix: string) => `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 
@@ -210,12 +211,13 @@ export const mockCourses: Course[] = [
 
 export const mockEnrollments: Enrollment[] = [
   {
-    id: makeId("enroll"),
+    id: "enroll-learner-economy-40",
     user_id: "learner-1",
-    course_id: "course-1",
+    course_id: DTMA_ECONOMY_COURSE_ID,
     status: "active",
     enrolled_at: now,
     completed_at: null,
     progress_label: "In progress",
+    progress: 50,
   },
 ];

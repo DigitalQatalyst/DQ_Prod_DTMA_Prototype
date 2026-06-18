@@ -1,6 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import { mockCourses, mockEnrollments, mockModules, mockLessons } from "@/mocks/data";
+import {
+  DTMA_ECONOMY_COURSE_ID,
+  mergeCoursesWithDtma,
+  migrateEnrollmentCourseIds,
+  resolveMockCourse,
+} from "@/lib/dtmaCourseBridge";
 
 export interface Course {
   id: string;
@@ -77,9 +83,10 @@ export const PROGRESS_KEY = "mock_lesson_progress";
 
 export const loadCourses = (): Course[] => {
   const raw = localStorage.getItem(COURSES_KEY);
-  if (raw) return JSON.parse(raw) as Course[];
-  localStorage.setItem(COURSES_KEY, JSON.stringify(mockCourses));
-  return mockCourses;
+  const stored = raw ? (JSON.parse(raw) as Course[]) : mockCourses;
+  const merged = mergeCoursesWithDtma(stored);
+  localStorage.setItem(COURSES_KEY, JSON.stringify(merged));
+  return merged;
 };
 
 export const saveCourses = (courses: Course[]) => {
@@ -88,9 +95,14 @@ export const saveCourses = (courses: Course[]) => {
 
 export const loadEnrollments = (): Enrollment[] => {
   const raw = localStorage.getItem(ENROLLMENTS_KEY);
-  if (raw) return JSON.parse(raw) as Enrollment[];
-  localStorage.setItem(ENROLLMENTS_KEY, JSON.stringify(mockEnrollments));
-  return mockEnrollments;
+  const stored = raw ? (JSON.parse(raw) as Enrollment[]) : mockEnrollments;
+  const { enrollments: migrated, changed } = migrateEnrollmentCourseIds(stored);
+
+  if (!raw || changed) {
+    localStorage.setItem(ENROLLMENTS_KEY, JSON.stringify(migrated));
+  }
+
+  return migrated as Enrollment[];
 };
 
 export const saveEnrollments = (enrollments: Enrollment[]) => {
@@ -139,28 +151,32 @@ export function useCourse(courseId: string) {
   return useQuery({
     queryKey: ["course", courseId],
     queryFn: async () => {
-      const course = loadCourses().find((c) => c.id === courseId);
-      if (!course) throw new Error("Course not found");
+      const courses = loadCourses();
+      const resolved = resolveMockCourse(courseId, courses);
+      if (!resolved) throw new Error("Course not found");
 
-      const modules = mockModules
-        .filter((m) => m.course_id === courseId)
-        .map((m) => ({
-          ...m,
-          lessons: mockLessons.filter((l) => l.module_id === m.id),
-        }));
+      const modules =
+        resolved.modules && resolved.modules.length > 0
+          ? resolved.modules
+          : mockModules
+              .filter((module) => module.course_id === courseId)
+              .map((module) => ({
+                ...module,
+                lessons: mockLessons.filter((lesson) => lesson.module_id === module.id),
+              }));
 
-      const lessonCount = modules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0);
+      const lessonCount = modules.reduce((sum, module) => sum + (module.lessons?.length || 0), 0);
 
       return {
-        ...course,
+        ...resolved,
         modules,
         _count: {
           lessons: lessonCount,
-          enrollments: course._count?.enrollments ?? 0,
-          reviews: course._count?.reviews ?? 0,
+          enrollments: resolved._count?.enrollments ?? 0,
+          reviews: resolved._count?.reviews ?? 0,
         },
         _avg: {
-          rating: course._avg?.rating ?? 0,
+          rating: resolved._avg?.rating ?? 0,
         },
       } as Course;
     },
@@ -219,9 +235,10 @@ export function useEnrollments() {
     queryFn: async () => {
       if (!user) return [];
       const enrollments = loadEnrollments().filter((e) => e.user_id === user.id);
+      const courses = loadCourses();
       return enrollments.map((e) => ({
         ...e,
-        course: loadCourses().find((c) => c.id === e.course_id),
+        course: resolveMockCourse(e.course_id, courses),
         progress: e.progress ?? 50,
       }));
     },

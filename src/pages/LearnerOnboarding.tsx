@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import DTMALogo from "@/components/layout/DTMALogo";
+import JourneyContextSwitcher from "@/components/layout/JourneyContextSwitcher";
 
 interface OnboardingData {
   learningGoal: string;
@@ -51,12 +52,15 @@ const LearnerOnboarding = () => {
       {/* Minimal top bar */}
       <header className="bg-white border-b border-[#e8e8ec] px-8 py-3 flex items-center justify-between">
         <DTMALogo />
-        <button
-          onClick={handleSkip}
-          className="text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors"
-        >
-          Skip for now
-        </button>
+        <div className="flex items-center gap-4">
+          <JourneyContextSwitcher />
+          <button
+            onClick={handleSkip}
+            className="text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors"
+          >
+            Skip for now
+          </button>
+        </div>
       </header>
 
       <div className="flex-1 flex items-center justify-center px-6 py-16">

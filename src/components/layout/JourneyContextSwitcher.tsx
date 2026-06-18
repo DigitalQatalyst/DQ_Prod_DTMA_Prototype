@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowRightLeft,
   Building2,
@@ -28,6 +28,7 @@ type Journey = {
   label: string;
   description: string;
   href: string;
+  dashboardHref: string;
   icon: LucideIcon;
   matchPaths: string[];
 };
@@ -38,6 +39,7 @@ export const DTMA_JOURNEYS: Journey[] = [
     label: "Learner",
     description: "Browse courses and track your progress",
     href: "/auth",
+    dashboardHref: "/dashboard",
     icon: GraduationCap,
     matchPaths: ["/auth", "/dashboard", "/learner-onboarding"],
   },
@@ -46,6 +48,7 @@ export const DTMA_JOURNEYS: Journey[] = [
     label: "Instructor",
     description: "Create and deliver courses",
     href: "/auth/instructor",
+    dashboardHref: "/dashboard",
     icon: Presentation,
     matchPaths: ["/auth/instructor", "/instructor-application", "/instructor"],
   },
@@ -54,6 +57,7 @@ export const DTMA_JOURNEYS: Journey[] = [
     label: "Admin",
     description: "Platform administration",
     href: "/admin",
+    dashboardHref: "/admin",
     icon: Shield,
     matchPaths: ["/admin", "/auth/admin"],
   },
@@ -62,6 +66,7 @@ export const DTMA_JOURNEYS: Journey[] = [
     label: "Academy Manager",
     description: "Institutional operations",
     href: "/sms-admin",
+    dashboardHref: "/sms-admin",
     icon: Building2,
     matchPaths: ["/sms-admin", "/institution"],
   },
@@ -104,23 +109,65 @@ function resolveActiveJourney(
   return match ?? DTMA_JOURNEYS[0];
 }
 
+const DASHBOARD_PATHS = ["/dashboard", "/admin", "/sms-admin"];
+
+function isDashboardPath(pathname: string): boolean {
+  return DASHBOARD_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+}
+
+function journeyDestination(journey: Journey, pathname: string): string {
+  return isDashboardPath(pathname) ? journey.dashboardHref : journey.href;
+}
+
+function destinationNeedsDemoSignIn(destination: string): boolean {
+  return (
+    destination === "/dashboard" ||
+    destination === "/admin" ||
+    destination === "/sms-admin"
+  );
+}
+
 type JourneyContextSwitcherProps = {
   className?: string;
   variant?: "navbar" | "mobile";
+  context?: "default" | "dashboard";
   onNavigate?: () => void;
 };
 
 const JourneyContextSwitcher = ({
   className,
   variant = "navbar",
+  context = "default",
   onNavigate,
 }: JourneyContextSwitcherProps) => {
   const location = useLocation();
-  const { role, profile } = useAuth();
+  const navigate = useNavigate();
+  const { role, profile, signInAsDemo } = useAuth();
   const activeJourney = useMemo(
     () => resolveActiveJourney(location.pathname, role, profile?.provider_type),
     [location.pathname, role, profile?.provider_type]
   );
+
+  const pathname = context === "dashboard" ? "/dashboard" : location.pathname;
+
+  const handleJourneySelect = async (journey: Journey) => {
+    if (journey.id === activeJourney.id) {
+      onNavigate?.();
+      return;
+    }
+
+    const destination = journeyDestination(journey, pathname);
+
+    if (destinationNeedsDemoSignIn(destination)) {
+      const { error } = await signInAsDemo(journey.id);
+      if (error) return;
+    }
+
+    onNavigate?.();
+    navigate(destination);
+  };
 
   if (variant === "mobile") {
     return (
@@ -134,12 +181,12 @@ const JourneyContextSwitcher = ({
             const isActive = journey.id === activeJourney.id;
 
             return (
-              <Link
+              <button
                 key={journey.id}
-                to={journey.href}
-                onClick={onNavigate}
+                type="button"
+                onClick={() => void handleJourneySelect(journey)}
                 className={cn(
-                  "flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors",
+                  "flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition-colors",
                   isActive ? "bg-gray-50" : "hover:bg-gray-50"
                 )}
               >
@@ -155,7 +202,7 @@ const JourneyContextSwitcher = ({
                     {journey.description}
                   </span>
                 </span>
-              </Link>
+              </button>
             );
           })}
         </div>
@@ -189,12 +236,15 @@ const JourneyContextSwitcher = ({
           const isActive = journey.id === activeJourney.id;
 
           return (
-            <DropdownMenuItem key={journey.id} asChild className="cursor-pointer p-0">
-              <Link
-                to={journey.href}
-                onClick={onNavigate}
-                className="flex w-full items-start gap-3 px-2 py-2.5"
-              >
+            <DropdownMenuItem
+              key={journey.id}
+              className="cursor-pointer p-0"
+              onSelect={(event) => {
+                event.preventDefault();
+                void handleJourneySelect(journey);
+              }}
+            >
+              <span className="flex w-full items-start gap-3 px-2 py-2.5">
                 <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100">
                   <Icon className="h-4 w-4 text-dq-navy" />
                 </span>
@@ -207,7 +257,7 @@ const JourneyContextSwitcher = ({
                     {journey.description}
                   </span>
                 </span>
-              </Link>
+              </span>
             </DropdownMenuItem>
           );
         })}

@@ -251,21 +251,26 @@ const CourseLearning = () => {
   
   const courseData = {
     ...course,
+    title: dtmaCourse?.title || course?.title,
     modules: dtmaCourse?.modules && dtmaCourse.modules.length > 0 ? dtmaCourse.modules.map((module: any) => ({
       id: module.id,
       title: module.title,
       lessons: module.lessons?.map((lesson: any) => ({
         id: lesson.id,
         title: lesson.title,
-        content: `Lesson content for ${lesson.title}`,
-        video_url: lesson.videoUrl || null,
+        content: lesson.type === "reading" ? lesson.title : `Lesson content for ${lesson.title}`,
+        video_url: lesson.videoUrl || lesson.imageUrl || null,
         videoUrl: lesson.videoUrl || null,
-        resources: [],
+        imageUrl: lesson.imageUrl || null,
+        quizId: lesson.quizId || null,
+        resourceType: lesson.resourceType || null,
+        resources: lesson.resources || [],
         duration_minutes: parseInt(lesson.duration) || 15,
         type: lesson.type || 'video',
         isQuiz: lesson.type === 'quiz',
         isAssignment: lesson.type === 'assignment',
         isPractical: lesson.type === 'practical',
+        isResourceGroup: lesson.isResourceGroup || false,
       })) || [],
     })) : curriculum.length > 0 ? curriculum.map((section: any) => ({
       id: section.id,

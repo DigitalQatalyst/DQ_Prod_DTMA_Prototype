@@ -1,3 +1,18 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerBtnPrimary,
+  learnerCaption,
+  learnerCardTitle,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 import { useState } from 'react';
 import { useInvites, useCreateInvite, useRevokeInvite, Invite } from '@/hooks/useInvites';
 import { Button } from '@/components/ui/button';
@@ -93,32 +108,25 @@ export function InviteManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-[20px] leading-[28px] font-medium text-[#1e2348]">Invite Management</h2>
-          <p className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
-            Generate invite links for new admins and instructors
-          </p>
-        </div>
-        
+      <div className="flex items-center justify-end">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors">
+            <Button className={learnerBtnPrimary}>
               <Plus className="w-4 h-4 mr-2" />
               Create Invite
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle className="text-[20px] leading-[28px] font-medium text-[#1e2348]">Create New Invite</DialogTitle>
-              <DialogDescription className="text-[14px] leading-[20px] font-normal text-[#4B5563]">
+              <DialogTitle className={learnerSectionHeading}>Create New Invite</DialogTitle>
+              <DialogDescription className={learnerBodyMuted}>
                 Generate an invite link for a new admin or instructor.
               </DialogDescription>
             </DialogHeader>
             
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label className="text-[14px] leading-[20px] font-normal text-[#1e2348]">Role</Label>
+                <Label className={learnerItemTitle}>Role</Label>
                 <Select value={newInviteRole} onValueChange={(v) => setNewInviteRole(v as 'admin' | 'instructor')}>
                   <SelectTrigger>
                     <SelectValue />
@@ -141,7 +149,7 @@ export function InviteManagement() {
               </div>
               
               <div className="space-y-2">
-                <Label className="text-[14px] leading-[20px] font-normal text-[#1e2348]">Email (optional)</Label>
+                <Label className={learnerItemTitle}>Email (optional)</Label>
                 <Input
                   type="email"
                   placeholder="Restrict to specific email"
@@ -149,13 +157,13 @@ export function InviteManagement() {
                   onChange={(e) => setNewInviteEmail(e.target.value)}
                   className="text-[16px] leading-[24px] font-normal border-[#E5E7EB] focus:ring-[#ff6b4d]/40"
                 />
-                <p className="text-[12px] leading-[16px] font-medium text-[#9CA3AF]">
+                <p className={cn(learnerCaption, "font-medium")}>
                   If set, only this email can use the invite
                 </p>
               </div>
               
               <div className="space-y-2">
-                <Label className="text-[14px] leading-[20px] font-normal text-[#1e2348]">Expires in</Label>
+                <Label className={learnerItemTitle}>Expires in</Label>
                 <Select value={newInviteExpiry} onValueChange={setNewInviteExpiry}>
                   <SelectTrigger>
                     <SelectValue />
@@ -175,7 +183,7 @@ export function InviteManagement() {
               <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="border-[#E5E7EB] text-[#4B5563]">
                 Cancel
               </Button>
-              <Button onClick={handleCreateInvite} disabled={createInvite.isPending} className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors">
+              <Button onClick={handleCreateInvite} disabled={createInvite.isPending} className={learnerBtnPrimary}>
                 {createInvite.isPending ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -195,17 +203,17 @@ export function InviteManagement() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl p-4 border border-[#E5E7EB]">
-          <div className="text-[24px] leading-[32px] font-medium text-[#ff6b4d]">{activeInvites.length}</div>
-          <div className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Active Invites</div>
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerKpiValue, "text-dq-orange")}>{activeInvites.length}</div>
+          <div className={learnerBodyMuted}>Active Invites</div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-[#E5E7EB]">
-          <div className="text-[24px] leading-[32px] font-medium text-green-600">{usedInvites.length}</div>
-          <div className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Redeemed</div>
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerKpiValue, "text-emerald-600")}>{usedInvites.length}</div>
+          <div className={learnerBodyMuted}>Redeemed</div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-[#E5E7EB]">
-          <div className="text-[24px] leading-[32px] font-medium text-[#9CA3AF]">{expiredOrRevokedInvites.length}</div>
-          <div className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Expired/Revoked</div>
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerKpiValue, "text-gray-400")}>{expiredOrRevokedInvites.length}</div>
+          <div className={learnerBodyMuted}>Expired/Revoked</div>
         </div>
       </div>
 
@@ -215,7 +223,7 @@ export function InviteManagement() {
           <Loader2 className="w-8 h-8 animate-spin text-[#9CA3AF]" />
         </div>
       ) : invites && invites.length > 0 ? (
-        <div className="border border-[var(--dq-surface-border-default)] rounded-xl overflow-hidden bg-white">
+        <div className={cn(learnerPanel, "overflow-hidden")}>
           <Table>
             <TableHeader>
               <TableRow className="bg-[var(--dq-navy-950)] hover:bg-[var(--dq-navy-950)]">
@@ -305,11 +313,11 @@ export function InviteManagement() {
       ) : (
         <div className="text-center py-12 border border-[#E5E7EB] rounded-xl bg-white">
           <UserPlus className="w-12 h-12 text-[#9CA3AF] mx-auto mb-4" />
-          <h3 className="text-[20px] leading-[28px] font-medium mb-2 text-[#1e2348]">No invites yet</h3>
+          <h3 className={cn(learnerSectionHeading, "mb-2")}>No invites yet</h3>
           <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] mb-4">
             Create your first invite to add admins or instructors
           </p>
-          <Button onClick={() => setIsDialogOpen(true)} className="bg-[#ff6b4d] hover:bg-[#fff0ed] hover:text-[#ff6b4d] text-white transition-colors">
+          <Button onClick={() => setIsDialogOpen(true)} className={learnerBtnPrimary}>
             <Plus className="w-4 h-4 mr-2" />
             Create Invite
           </Button>

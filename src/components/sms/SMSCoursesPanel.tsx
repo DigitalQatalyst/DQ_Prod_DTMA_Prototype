@@ -8,6 +8,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import {
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -64,64 +76,56 @@ export default function SMSCoursesPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Courses</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Course performance, completion health, and category trends.
-        </p>
-      </div>
-
       {/* KPI cards — courses only */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3">
-            <BookOpen className="w-5 h-5 text-sky-600" />
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 bg-sky-500/10")}>
+            <BookOpen className="h-5 w-5 text-sky-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{courses.length}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Courses Running</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">{categories.length} subject categories</div>
+          <div className={learnerKpiValue}>{courses.length}</div>
+          <div className={learnerKpiLabel}>Courses Running</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>{categories.length} subject categories</div>
         </div>
 
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center mb-3">
-            <Users className="w-5 h-5 text-[#ff6b4d]" />
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 bg-[#ff6b4d]/10")}>
+            <Users className="h-5 w-5 text-[#ff6b4d]" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{totalEnrollments.toLocaleString()}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Total Enrollments</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Across all courses</div>
+          <div className={learnerKpiValue}>{totalEnrollments.toLocaleString()}</div>
+          <div className={learnerKpiLabel}>Total Enrollments</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>Across all courses</div>
         </div>
 
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3">
-            <TrendingUp className="w-5 h-5 text-emerald-600" />
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 bg-emerald-500/10")}>
+            <TrendingUp className="h-5 w-5 text-emerald-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{avgCompletion}%</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+          <div className={learnerKpiValue}>{avgCompletion}%</div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Avg Completion Rate
             <Tip text="Average percentage of enrolled students who finished all required modules across all courses." />
           </div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Across all courses</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>Across all courses</div>
         </div>
 
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", atRiskCount > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
-            <Sparkles className="w-5 h-5 text-amber-500" />
+        <div className={cn(learnerKpiCard, atRiskCount > 0 ? "border-amber-200 bg-amber-50/30" : undefined)}>
+          <div className={cn(learnerIconWell, "mb-3 bg-amber-500/10")}>
+            <Sparkles className="h-5 w-5 text-amber-500" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", atRiskCount > 0 && "text-amber-700")}>{atRiskCount}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+          <div className={cn(learnerKpiValue, atRiskCount > 0 && "text-amber-700")}>{atRiskCount}</div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Courses At Risk
             <Tip text="Courses with a completion rate below 65% — students are dropping off before finishing." />
           </div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Completion below 65%</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>Completion below 65%</div>
         </div>
       </div>
 
       {/* Course Performance table */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>Course Performance</CardTitle>
-          <CardDescription>Enrollment, completion rate, rating, and revenue per course.</CardDescription>
+          <CardTitle className={learnerSectionHeading}>Course Performance</CardTitle>
+          <CardDescription className={learnerBodyMuted}>Enrollment, completion rate, rating, and revenue per course.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-hidden rounded-2xl border border-slate-200">
@@ -146,7 +150,7 @@ export default function SMSCoursesPanel() {
               <TableBody>
                 {courses.map((c) => (
                   <TableRow key={c.id} className={c.completionRate < 65 ? "bg-amber-50/20" : ""}>
-                    <TableCell className="font-medium">
+                    <TableCell className={learnerItemTitle}>
                       {c.title}
                       {c.completionRate < 65 && <Badge className="ml-2 border border-amber-200 bg-amber-50 text-amber-700 text-xs">At risk</Badge>}
                     </TableCell>
@@ -171,13 +175,13 @@ export default function SMSCoursesPanel() {
       </Card>
 
       {/* Drop-off watchlist */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className={cn(learnerSectionHeading, "flex items-center gap-2")}>
             Where Students Are Stopping
             <Tip text="The point in each course where the most students stopped progressing. Use the actions to notify the instructor to review the content, or alert the support team to follow up with stuck students." />
           </CardTitle>
-          <CardDescription>Two actions per course: notify the instructor to review the drop-off point, or alert the support team to follow up with stuck students.</CardDescription>
+          <CardDescription className={learnerBodyMuted}>Two actions per course: notify the instructor to review the drop-off point, or alert the support team to follow up with stuck students.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {courses.map((c) => {
@@ -189,12 +193,12 @@ export default function SMSCoursesPanel() {
               <div key={c.id} className={cn("rounded-2xl border p-4", isLowRisk ? "border-slate-200 bg-white" : "border-amber-200 bg-amber-50/20")}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-1">
-                    <div className="font-medium text-slate-900">{c.title}</div>
-                    <div className="text-xs text-slate-500">Drop-off point: <span className="font-medium text-slate-700">{c.dropOffPoint}</span></div>
+                    <div className={learnerItemTitle}>{c.title}</div>
+                    <div className={learnerCaption}>Drop-off point: <span className="font-medium text-slate-700">{c.dropOffPoint}</span></div>
                     {isLowRisk
-                      ? <div className="text-xs text-emerald-700 font-medium">No action needed — completion is healthy</div>
-                      : <div className="text-xs text-amber-700 font-medium">{stoppedCount} students haven't progressed past this point</div>}
-                    <div className="text-xs text-slate-400">Instructor: {c.owner}</div>
+                      ? <div className="text-xs font-medium text-emerald-700">No action needed — completion is healthy</div>
+                      : <div className="text-xs font-medium text-amber-700">{stoppedCount} students haven't progressed past this point</div>}
+                    <div className={cn(learnerCaption, "text-slate-400")}>Instructor: {c.owner}</div>
                   </div>
                   {!isLowRisk && (
                     <div className="flex flex-col items-end gap-2 shrink-0">
@@ -221,10 +225,10 @@ export default function SMSCoursesPanel() {
 
       {/* Categories & Trends */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="border-slate-200/80 shadow-sm">
+        <Card className={cn(learnerPanel, "border-slate-200/80")}>
           <CardHeader>
-            <CardTitle>Performance by Category</CardTitle>
-            <CardDescription>Enrollment and revenue by subject area. Flag fast-growing categories to the partnership manager to source more courses.</CardDescription>
+            <CardTitle className={learnerCardTitle}>Performance by Category</CardTitle>
+            <CardDescription className={learnerBodyMuted}>Enrollment and revenue by subject area. Flag fast-growing categories to the partnership manager to source more courses.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {categories.map((cat) => (
@@ -232,8 +236,8 @@ export default function SMSCoursesPanel() {
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-slate-100 rounded-xl text-slate-600"><Layers className="h-4 w-4" /></div>
                   <div>
-                    <div className="font-semibold text-slate-900">{cat.name}</div>
-                    <div className="text-xs text-slate-500">{cat.enrollments.toLocaleString()} enrollments</div>
+                    <div className={learnerItemTitle}>{cat.name}</div>
+                    <div className={learnerCaption}>{cat.enrollments.toLocaleString()} enrollments</div>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1.5">
@@ -251,18 +255,18 @@ export default function SMSCoursesPanel() {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200/80 shadow-sm">
+        <Card className={cn(learnerPanel, "border-slate-200/80")}>
           <CardHeader>
-            <CardTitle>In-Demand Topics</CardTitle>
-            <CardDescription>Topics students are searching for that don't yet have a course. Flag to the content team to commission one.</CardDescription>
+            <CardTitle className={learnerCardTitle}>In-Demand Topics</CardTitle>
+            <CardDescription className={learnerBodyMuted}>Topics students are searching for that don't yet have a course. Flag to the content team to commission one.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {trendTopics.map((t) => (
               <div key={t.topic} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <div className="font-medium text-slate-950">{t.topic}</div>
-                    <div className="text-xs text-slate-500">{t.source}</div>
+                    <div className={learnerItemTitle}>{t.topic}</div>
+                    <div className={learnerCaption}>{t.source}</div>
                   </div>
                   <div className="flex flex-col items-end gap-1.5 shrink-0">
                     <Badge className="border border-slate-200 bg-white text-slate-700">

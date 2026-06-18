@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronDown } from "lucide-react";
+import DTMALogo from "@/components/layout/DTMALogo";
 
 interface OnboardingData {
   learningGoal: string;
@@ -32,25 +30,12 @@ const LearnerOnboarding = () => {
   const skillLevels = ["Beginner", "Intermediate", "Advanced"];
 
   const preferredFormats = [
-    {
-      id: "self-paced",
-      title: "Self-paced (Recorded)",
-      description: "Learn on your own schedule",
-    },
-    {
-      id: "live-classes",
-      title: "Live Classes",
-      description: "Real-time interaction with instructors",
-    },
-    {
-      id: "audio",
-      title: "Audio",
-      description: "Listen and learn on the go",
-    },
+    { id: "self-paced", title: "Self-paced (Recorded)", description: "Learn on your own schedule" },
+    { id: "live-classes", title: "Live Classes", description: "Real-time interaction with instructors" },
+    { id: "audio", title: "Audio", description: "Listen and learn on the go" },
   ];
 
   const handleStartBrowsing = () => {
-    // Save onboarding data to localStorage or context
     localStorage.setItem("learnerOnboarding", JSON.stringify(formData));
     navigate("/dashboard");
   };
@@ -59,170 +44,149 @@ const LearnerOnboarding = () => {
     navigate("/dashboard");
   };
 
-  const isFormComplete =
-    formData.learningGoal && formData.skillLevel && formData.preferredFormat;
+  const isFormComplete = formData.learningGoal && formData.skillLevel && formData.preferredFormat;
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div className="min-h-screen bg-[#f5f4f0] font-sans flex flex-col">
+      {/* Minimal top bar */}
+      <header className="bg-white border-b border-[#e8e8ec] px-8 py-3 flex items-center justify-between">
+        <DTMALogo />
+        <button
+          onClick={handleSkip}
+          className="text-[13px] text-[#9a9aaa] hover:text-[#0a0f1e] transition-colors"
+        >
+          Skip for now
+        </button>
+      </header>
 
-      <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-2xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1e2348]/10 mb-6">
-                <span className="text-3xl">🎯</span>
-              </div>
-              <h1 className="text-3xl md:text-4xl font-semibold text-[#0B0C19] mb-4">
-                What do you want to learn?
-              </h1>
-              <p className="text-base text-[#4B5563]">
-                Help us personalize your digital transformation journey.
-              </p>
-            </div>
+      <div className="flex-1 flex items-center justify-center px-6 py-16">
+        <div className="w-full max-w-[560px]">
 
-            {/* Form Card */}
-            <div className="bg-white rounded-2xl border border-border p-8 lg:p-12">
-              <div className="space-y-8">
-                {/* Primary Learning Goal */}
-                <div>
-                  <label className="block text-sm font-semibold text-[#0B0C19] mb-4">
-                    Primary Learning Goal
-                  </label>
-                  <div className="relative">
-                    <button
-                      onClick={() => setIsGoalDropdownOpen(!isGoalDropdownOpen)}
-                      className="w-full px-4 py-3 border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff6b4d] bg-white text-left flex items-center justify-between hover:border-[#ff6b4d] transition-colors"
-                    >
-                      <span className="text-[#0B0C19]">{formData.learningGoal || "Select a goal..."}</span>
-                      <ChevronDown className={`w-5 h-5 text-[#4B5563] transition-transform ${isGoalDropdownOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {isGoalDropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-1 border border-[#E5E7EB] rounded-lg bg-white shadow-lg z-10">
-                        {learningGoals.map((goal) => (
-                          <button
-                            key={goal}
-                            onClick={() => {
-                              setFormData({ ...formData, learningGoal: goal });
-                              setIsGoalDropdownOpen(false);
-                            }}
-                            className="w-full px-4 py-3 text-left text-[#0B0C19] hover:bg-[#F5F6FA] transition-colors first:rounded-t-lg last:rounded-b-lg"
-                          >
-                            {goal}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+          {/* Header */}
+          <div className="mb-10">
+            <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-3">
+              Personalise your journey
+            </p>
+            <h1 className="text-[40px] leading-[1.1] font-bold text-[#0a0f1e] mb-3">
+              What do you want to <span className="text-[#ff4500]">learn?</span>
+            </h1>
+            <p className="text-[16px] text-[#4a4a5a]">
+              Help us personalise your digital transformation journey.
+            </p>
+          </div>
 
-                {/* Current Skill Level */}
-                <div>
-                  <label className="block text-sm font-semibold text-[#0B0C19] mb-4">
-                    Current Skill Level
-                  </label>
-                  <div className="flex gap-3">
-                    {skillLevels.map((level) => (
+          {/* Form */}
+          <div className="bg-white border border-[#e8e8ec] rounded-xl p-8 space-y-8">
+
+            {/* Primary Learning Goal */}
+            <div>
+              <label className="block text-[13px] font-semibold text-[#0a0f1e] mb-3 uppercase tracking-wide">
+                Primary Learning Goal
+              </label>
+              <div className="relative">
+                <button
+                  onClick={() => setIsGoalDropdownOpen(!isGoalDropdownOpen)}
+                  className="w-full px-4 py-3 border border-[#e8e8ec] rounded-xl bg-white text-left flex items-center justify-between hover:border-[#ff4500] transition-colors focus:outline-none focus:border-[#ff4500]"
+                >
+                  <span className={formData.learningGoal ? "text-[#0a0f1e] text-[14px]" : "text-[#9a9aaa] text-[14px]"}>
+                    {formData.learningGoal || "Select a goal..."}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-[#9a9aaa] transition-transform ${isGoalDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+                {isGoalDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-1 border border-[#e8e8ec] rounded-xl bg-white shadow-lg z-10 overflow-hidden">
+                    {learningGoals.map((goal) => (
                       <button
-                        key={level}
-                        onClick={() =>
-                          setFormData({ ...formData, skillLevel: level })
-                        }
-                        className={`flex-1 px-4 py-3 rounded-lg font-medium transition-all ${
-                          formData.skillLevel === level
-                            ? "bg-[#ff6b4d] text-white"
-                            : "border border-[#E5E7EB] text-[#0B0C19] hover:border-[#ff6b4d]"
-                        }`}
+                        key={goal}
+                        onClick={() => { setFormData({ ...formData, learningGoal: goal }); setIsGoalDropdownOpen(false); }}
+                        className="w-full px-4 py-3 text-left text-[14px] text-[#0a0f1e] hover:bg-[#f5f4f0] transition-colors"
                       >
-                        {level}
+                        {goal}
                       </button>
                     ))}
                   </div>
-                </div>
+                )}
+              </div>
+            </div>
 
-                {/* Preferred Format */}
-                <div>
-                  <label className="block text-sm font-semibold text-[#0B0C19] mb-4">
-                    Preferred Format
+            {/* Skill Level */}
+            <div>
+              <label className="block text-[13px] font-semibold text-[#0a0f1e] mb-3 uppercase tracking-wide">
+                Current Skill Level
+              </label>
+              <div className="flex gap-3">
+                {skillLevels.map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => setFormData({ ...formData, skillLevel: level })}
+                    className={`flex-1 px-3 py-2.5 rounded-full text-[13px] font-medium transition-all ${
+                      formData.skillLevel === level
+                        ? "bg-[#0a0f1e] text-white"
+                        : "border border-[#e8e8ec] text-[#4a4a5a] hover:border-[#0a0f1e]"
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Preferred Format */}
+            <div>
+              <label className="block text-[13px] font-semibold text-[#0a0f1e] mb-3 uppercase tracking-wide">
+                Preferred Format
+              </label>
+              <div className="space-y-2">
+                {preferredFormats.map((format) => (
+                  <label
+                    key={format.id}
+                    className={`flex items-start gap-4 p-4 rounded-xl border cursor-pointer transition-all ${
+                      formData.preferredFormat === format.id
+                        ? "border-[#ff4500] bg-[#ff4500]/5"
+                        : "border-[#e8e8ec] hover:border-[#ff4500]/50"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="format"
+                      value={format.id}
+                      checked={formData.preferredFormat === format.id}
+                      onChange={(e) => setFormData({ ...formData, preferredFormat: e.target.value })}
+                      className="mt-0.5 accent-[#ff4500]"
+                    />
+                    <div>
+                      <div className="text-[14px] font-semibold text-[#0a0f1e]">{format.title}</div>
+                      <div className="text-[13px] text-[#9a9aaa]">{format.description}</div>
+                    </div>
                   </label>
-                  <div className="space-y-3">
-                    {preferredFormats.map((format) => (
-                      <label
-                        key={format.id}
-                        className={`flex items-start gap-4 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          formData.preferredFormat === format.id
-                            ? "border-[#ff6b4d] bg-[#ff6b4d]/5"
-                            : "border-[#E5E7EB] hover:border-[#ff6b4d]/50"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="format"
-                          value={format.id}
-                          checked={formData.preferredFormat === format.id}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              preferredFormat: e.target.value,
-                            })
-                          }
-                          className="mt-1 accent-[#ff6b4d]"
-                        />
-                        <div>
-                          <div className="font-medium text-[#0B0C19]">
-                            {format.title}
-                          </div>
-                          <div className="text-sm text-[#4B5563]">
-                            {format.description}
-                          </div>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="mt-12 space-y-4">
-                <Button
-                  onClick={handleStartBrowsing}
-                  disabled={!isFormComplete}
-                  className="w-full gap-2 h-12 bg-[#ff6b4d] hover:bg-[#e56045] text-white"
-                  size="lg"
-                >
-                  Start Browsing
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 h-px bg-[#E5E7EB]" />
-                  <span className="text-sm text-[#9CA3AF]">Or</span>
-                  <div className="flex-1 h-px bg-[#E5E7EB]" />
-                </div>
-
-                <button
-                  onClick={handleSkip}
-                  className="w-full py-3 text-sm font-medium text-[#4B5563] hover:text-[#0B0C19] transition-colors"
-                >
-                  Skip for now
-                </button>
+                ))}
               </div>
             </div>
 
-            {/* Info Box */}
-            <div className="mt-8 bg-[#ff6b4d]/5 border border-[#ff6b4d]/20 rounded-lg p-6">
-              <p className="text-sm text-[#0B0C19]">
-                <strong>💡 Tip:</strong> Your preferences help us recommend the
-                best digital transformation courses tailored to your goals. You can update these
-                anytime in your profile settings.
-              </p>
-            </div>
+            {/* CTA */}
+            <button
+              onClick={handleStartBrowsing}
+              disabled={!isFormComplete}
+              className={`w-full flex items-center justify-center gap-2 py-3 rounded-full text-[14px] font-semibold transition-all ${
+                isFormComplete
+                  ? "bg-[#ff4500] hover:bg-[#cc3700] text-white"
+                  : "bg-[#e8e8ec] text-[#9a9aaa] cursor-not-allowed"
+              }`}
+            >
+              Start Browsing
+              <ArrowRight className="w-4 h-4" />
+            </button>
           </div>
-        </div>
-      </section>
 
-      <Footer />
+          {/* Tip */}
+          <div className="mt-6 p-5 bg-white border border-[#e8e8ec] rounded-xl">
+            <p className="text-[13px] text-[#4a4a5a] leading-relaxed">
+              <span className="font-semibold text-[#0a0f1e]">Tip:</span> Your preferences help us recommend the best digital transformation courses tailored to your goals. You can update these anytime in your profile settings.
+            </p>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 };

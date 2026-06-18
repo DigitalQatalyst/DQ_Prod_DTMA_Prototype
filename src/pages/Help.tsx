@@ -64,57 +64,58 @@ const Help = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-[var(--dq-navy-950)]">
-        <Navbar />
-        
-        {/* Hero Section */}
-        <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-4xl mx-auto text-center">
-              <p className="text-[12px] leading-[16px] font-semibold uppercase tracking-wide text-[var(--dq-orange-500)] mb-6">
-                Support & Resources
-              </p>
-              <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
-                Help Center
-              </h1>
-              <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
-                Find answers to common questions and get support
-              </p>
-            </div>
-          </div>
-        </section>
-      </div>
+    <div className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* Hero Section */}
+      <section className="bg-[#f5f4f0] pt-28 pb-20">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">
+            Support & Resources
+          </p>
+          <h1 className="text-[52px] md:text-[68px] leading-[1.05] font-bold text-[#0a0f1e] mb-6 max-w-2xl">
+            Help <span className="text-[#ff4500]">Center</span>
+          </h1>
+          <p className="text-[17px] text-[#4a4a5a] max-w-xl">
+            Find answers to common questions and get support
+          </p>
+        </div>
+      </section>
 
       <main>
         {/* FAQ Section */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Frequently Asked Questions</h2>
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-3">
+              FAQs
+            </p>
+            <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-[#0a0f1e] mb-12">
+              Frequently Asked Questions
+            </h2>
 
-            <div className="max-w-3xl space-y-4">
+            <div className="max-w-3xl space-y-3">
               {faqs.map((faq) => (
                 <div
                   key={faq.id}
-                  className="border border-[var(--dq-navy-100)] rounded-[12px] overflow-hidden hover:shadow-md transition-shadow"
+                  className="bg-white border border-[#e8e8ec] rounded-xl overflow-hidden hover:shadow-md transition-all"
                 >
                   <button
                     onClick={() => setExpandedFaq(expandedFaq === faq.id ? null : faq.id)}
-                    className="w-full px-6 py-4 flex items-center justify-between bg-[var(--dq-navy-50)] hover:bg-[var(--dq-navy-100)] transition-colors"
+                    className="w-full px-6 py-4 flex items-center justify-between hover:bg-[#f5f4f0] transition-colors"
                   >
-                    <span className="text-left font-semibold text-[var(--dq-navy-950)]">
+                    <span className="text-left font-semibold text-[#0a0f1e]">
                       {faq.question}
                     </span>
                     <ChevronDown
-                      className={`w-5 h-5 text-[var(--dq-orange-500)] transition-transform ${
+                      className={`w-5 h-5 text-[#ff4500] flex-shrink-0 ml-4 transition-transform ${
                         expandedFaq === faq.id ? "rotate-180" : ""
                       }`}
                     />
                   </button>
 
                   {expandedFaq === faq.id && (
-                    <div className="px-6 py-4 bg-white border-t border-[var(--dq-navy-100)]">
-                      <p className="text-[var(--dq-navy-600)] leading-relaxed">{faq.answer}</p>
+                    <div className="px-6 py-4 bg-white border-t border-[#e8e8ec]">
+                      <p className="text-[#4a4a5a] leading-relaxed">{faq.answer}</p>
                     </div>
                   )}
                 </div>
@@ -124,31 +125,36 @@ const Help = () => {
         </section>
 
         {/* Contact Methods */}
-        <section className="py-16 lg:py-24 bg-[var(--dq-navy-50)]">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Get in Touch</h2>
+        <section className="py-20 bg-[#050d1e]" style={{ backgroundImage: 'radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255, 69, 0, 0.2) 0%, transparent 70%)' }}>
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-3">
+              Contact
+            </p>
+            <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-white mb-12">
+              Get in Touch
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {contactMethods.map((method, index) => {
                 const Icon = method.icon;
                 return (
                   <div
                     key={index}
-                    className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-8 text-center hover:shadow-lg transition-shadow"
+                    className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all"
                   >
-                    <div className="w-12 h-12 bg-[var(--dq-orange-500)] rounded-[8px] flex items-center justify-center mx-auto mb-4">
+                    <div className="w-12 h-12 bg-[#ff4500] rounded-xl flex items-center justify-center mb-4">
                       <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-2">
+                    <h3 className="text-lg font-bold text-white mb-2">
                       {method.title}
                     </h3>
-                    <p className="text-sm text-[var(--dq-navy-600)] mb-4">
+                    <p className="text-sm text-white/60 mb-4">
                       {method.description}
                     </p>
-                    <p className="text-sm font-semibold text-[var(--dq-orange-500)] mb-2">
+                    <p className="text-sm font-semibold text-[#ff4500] mb-2">
                       {method.contact}
                     </p>
-                    <p className="text-xs text-[var(--dq-navy-500)]">
+                    <p className="text-xs text-white/40">
                       {method.responseTime}
                     </p>
                   </div>
@@ -159,27 +165,32 @@ const Help = () => {
         </section>
 
         {/* Additional Resources */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Additional Resources</h2>
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-3">
+              Resources
+            </p>
+            <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-[#0a0f1e] mb-12">
+              Additional Resources
+            </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)] rounded-[12px] p-8">
-                <h3 className="text-xl font-bold text-[var(--dq-navy-950)] mb-4">Documentation</h3>
-                <p className="text-[var(--dq-navy-600)] mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all">
+                <h3 className="text-xl font-bold text-[#0a0f1e] mb-4">Documentation</h3>
+                <p className="text-[#4a4a5a] mb-4">
                   Access comprehensive guides and documentation for all our courses and features.
                 </p>
-                <button className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold transition-colors">
+                <button className="text-[#ff4500] hover:text-[#cc3700] font-semibold transition-colors">
                   View Documentation →
                 </button>
               </div>
 
-              <div className="bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)] rounded-[12px] p-8">
-                <h3 className="text-xl font-bold text-[var(--dq-navy-950)] mb-4">Video Tutorials</h3>
-                <p className="text-[var(--dq-navy-600)] mb-4">
+              <div className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all">
+                <h3 className="text-xl font-bold text-[#0a0f1e] mb-4">Video Tutorials</h3>
+                <p className="text-[#4a4a5a] mb-4">
                   Watch step-by-step video tutorials to learn how to use our platform effectively.
                 </p>
-                <button className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold transition-colors">
+                <button className="text-[#ff4500] hover:text-[#cc3700] font-semibold transition-colors">
                   Watch Tutorials →
                 </button>
               </div>

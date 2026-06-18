@@ -16,11 +16,13 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type AppRole = 'learner' | 'instructor' | 'admin';
 
 interface RoleSwitcherProps {
   currentRole: 'instructor' | 'admin';
+  variant?: 'light' | 'dark';
 }
 
 const roleConfig = {
@@ -44,7 +46,7 @@ const roleConfig = {
   },
 };
 
-export function RoleSwitcher({ currentRole }: RoleSwitcherProps) {
+export function RoleSwitcher({ currentRole, variant = 'dark' }: RoleSwitcherProps) {
   const navigate = useNavigate();
   const { data: userRoles, isLoading } = useUserRoles();
 
@@ -72,14 +74,21 @@ export function RoleSwitcher({ currentRole }: RoleSwitcherProps) {
     }
   };
 
+  const isLight = variant === 'light';
+
   // Sidebar variant for admin/instructor dashboards
   return (
-    <div className="px-4 py-3 border-b border-primary-foreground/10">
+    <div className={cn("px-4 py-3 border-b", isLight ? "border-gray-100" : "border-primary-foreground/10")}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button 
             variant="ghost" 
-            className="w-full justify-between px-3 py-2 h-auto text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            className={cn(
+              "w-full justify-between px-3 py-2 h-auto",
+              isLight
+                ? "text-dq-navy hover:bg-gray-50 hover:text-dq-navy"
+                : "text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+            )}
           >
             <div className="flex items-center gap-2">
               <CurrentIcon className="w-4 h-4" />

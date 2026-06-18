@@ -1,185 +1,125 @@
 import { Link } from "react-router-dom";
-import { Linkedin, Youtube, Twitter, Award, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { Linkedin, Youtube, Twitter } from "lucide-react";
+import DTMALogo from "@/components/layout/DTMALogo";
+import { linkMuted, sectionPaddingX } from "@/lib/brandAccent";
+import { DQ_CORP_WEB_URL, EXPLORE_DQ_LABEL } from "@/lib/brandLinks";
 
 const Footer = () => {
-  const [email, setEmail] = useState("");
-
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle newsletter signup
-    console.log("Newsletter signup:", email);
-    setEmail("");
-  };
-
-  const footerLinks = {
-    getToKnowUs: [
-      { label: "About Us", href: "/about" },
-      { label: "Discover the 6XD", href: "/6xd" },
-      { label: "Faculty", href: "/faculty" },
-      { label: "Help Centre", href: "/help" },
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Use", href: "/terms" },
-      { label: "Accreditation & Credentials", href: "/accreditation" },
-      { label: "Admin", href: "/admin" },
-      { label: "School Manager", href: "/sms-admin" },
-      { label: "Instructor", href: "/auth/instructor" },
-    ],
-    forYou: [
-      { label: "Explore Courses", href: "/courses" },
-      { label: "For Organizational Leaders", href: "/personas/organizational-leaders" },
-      { label: "For Transformation Specialists", href: "/personas/transformation-specialists" },
-      { label: "For Digital Workers", href: "/personas/digital-workers" },
-      { label: "Blog & Insights", href: "/blog" },
-    ],
-  };
-
-  const socialLinks = [
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Youtube, href: "#", label: "YouTube" },
-    { icon: Twitter, href: "#", label: "X (Twitter)" },
-  ];
-
   return (
-    <footer className="bg-[var(--dq-navy-950)] text-white">
-      <div className="w-full">
-        {/* Top Border Line */}
-        <div className="bg-white/10" style={{ height: '0.8px' }}></div>
-        
-        {/* Main Footer */}
-        <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-            
-            {/* Column 1: Brand & Newsletter */}
-            <div className="lg:col-span-1">
-              <Link to="/" className="inline-block mb-4">
-                <img
-                  src="/dtma-logo.png"
-                  alt="DTMA"
-                  className="h-12 w-auto"
-                />
-              </Link>
-              <h3 className="text-base font-semibold mb-3">
-                DTMA | Digital Transformation Management Academy
-              </h3>
-              <p className="text-sm text-white/70 leading-relaxed mb-6">
-                Master the skills to lead, deliver, and thrive in the new digital economy.
-              </p>
-              
-              {/* Newsletter Signup */}
-              <form onSubmit={handleNewsletterSubmit} className="relative">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pr-12 bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:border-[#ff6b4d]"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] flex items-center justify-center transition-colors"
-                  aria-label="Submit"
+    <footer className={`border-t border-gray-100 bg-white pb-8 pt-14 ${sectionPaddingX}`}>
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-12 grid grid-cols-1 gap-10 lg:grid-cols-4 lg:gap-12">
+          <div className="lg:col-span-1">
+            <div className="mb-4">
+              <DTMALogo />
+            </div>
+            <p className="max-w-[320px] text-[14px] leading-relaxed text-gray-500">
+              Master the skills to lead, deliver, and thrive in the new digital economy.
+            </p>
+          </div>
+
+          <div>
+            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400">
+              Explore
+            </p>
+            <ul className="space-y-2.5 text-[14px] text-gray-600">
+              {[
+                { label: "Courses", href: "/courses" },
+                { label: "The 6XD Framework", href: "/6xd" },
+                { label: "Faculty", href: "/faculty" },
+                { label: "For Organizational Leaders", href: "/personas/organizational-leaders" },
+                { label: "For Transformation Specialists", href: "/personas/transformation-specialists" },
+                { label: "For Digital Workers", href: "/personas/digital-workers" },
+                { label: "Blog & Insights", href: "/blog" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link to={link.href} className={linkMuted}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400">
+              Company
+            </p>
+            <ul className="space-y-2.5 text-[14px] text-gray-600">
+              {[
+                { label: "About Us", href: "/about" },
+                { label: "Accreditation & Credentials", href: "/accreditation" },
+                { label: "Help Centre", href: "/help" },
+                { label: "Privacy Policy", href: "/privacy" },
+                { label: "Terms of Use", href: "/terms" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link to={link.href} className={linkMuted}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-gray-400">
+              Follow Us
+            </p>
+            <ul className="space-y-2.5">
+              <li>
+                <a
+                  href="https://www.linkedin.com/company/digitalqatalyst"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 text-[14px] text-gray-600 ${linkMuted}`}
                 >
-                  <ArrowRight className="w-4 h-4 text-white" />
-                </button>
-              </form>
-            </div>
-
-            {/* Column 2: Get to Know Us */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase tracking-wide text-white/90">
-                Get to Know Us
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.getToKnowUs.map((link) => (
-                  <li key={link.label}>
-                    <Link 
-                      to={link.href} 
-                      className="text-sm text-white/70 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 3: For You */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase tracking-wide text-white/90">
-                For You
-              </h4>
-              <ul className="space-y-3">
-                {footerLinks.forYou.map((link) => (
-                  <li key={link.label}>
-                    <Link 
-                      to={link.href} 
-                      className="text-sm text-white/70 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Column 4: Find Us */}
-            <div>
-              <h4 className="font-semibold text-sm mb-4 uppercase tracking-wide text-white/90">
-                Find Us
-              </h4>
-              <div className="flex gap-3 mb-6">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    aria-label={social.label}
-                    className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
-                  >
-                    <social.icon className="w-5 h-5" />
-                  </a>
-                ))}
-              </div>
-              <a 
-                href="#" 
-                className="text-sm text-white/70 hover:text-white transition-colors inline-block"
-              >
-                DTMA Website →
-              </a>
-            </div>
+                  <Linkedin className="h-4 w-4" /> LinkedIn
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://x.com/digitalqatalyst"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 text-[14px] text-gray-600 ${linkMuted}`}
+                >
+                  <Twitter className="h-4 w-4" /> X
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.youtube.com/@digitalqatalyst"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 text-[14px] text-gray-600 ${linkMuted}`}
+                >
+                  <Youtube className="h-4 w-4" /> YouTube
+                </a>
+              </li>
+              <li>
+                <a
+                  href={DQ_CORP_WEB_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 text-[14px] text-gray-600 ${linkMuted}`}
+                >
+                  {EXPLORE_DQ_LABEL}
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-white/10">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-6">
-            {/* Accreditation Strip */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-lg px-6 py-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
-                  <Award className="w-6 h-6 text-[var(--dq-orange-500)]" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-white">
-                    Licensed Training Institute — KHDA, Dubai
-                  </p>
-                  <p className="text-xs text-white/60">
-                    Training Institute Permit No. [TBD]
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Copyright */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/60">
-              <p>
-                © 2026 DTMA | Digital Transformation Management Academy. All rights reserved.
-              </p>
-              <p>Version v1.0</p>
-            </div>
+        <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-100 pt-6 text-[12px] text-gray-400 sm:flex-row">
+          <p>© 2026 DTMA | Digital Transformation Management Academy. All rights reserved.</p>
+          <div className="flex gap-5">
+            <Link to="/privacy" className="transition-colors hover:text-gray-700">
+              Privacy
+            </Link>
+            <Link to="/terms" className="transition-colors hover:text-gray-700">
+              Terms
+            </Link>
           </div>
         </div>
       </div>

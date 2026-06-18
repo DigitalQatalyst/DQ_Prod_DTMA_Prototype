@@ -1,6 +1,9 @@
 import { useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import Footer from "@/components/layout/Footer";
+import PublicPageLayout from "@/components/layout/PublicPageLayout";
+import MeshSection from "@/components/layout/MeshSection";
+import CourseCard from "@/components/marketing/CourseCard";
+import MarketingCtaBand from "@/components/marketing/MarketingCtaBand";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/Badge";
 import {
@@ -16,31 +19,90 @@ import {
   Award,
   Play,
   Download,
-  Users,
   Globe,
   CheckCircle,
   ChevronLeft,
   PlayCircle,
   FileText,
   Lock,
-  Loader2,
   ChevronRight,
 } from "lucide-react";
 import { useCourse, useIsEnrolled } from "@/hooks/useCourses";
 import { useAuth } from "@/contexts/AuthContext";
 import { EnrollmentModal } from "@/components/enrollment/EnrollmentModal";
 import { getCourseById } from "@/data/dtmaCoursesNew";
+import {
+  btnPrimary,
+  btnSecondary,
+  eyebrow,
+  sectionHeading,
+  sectionPaddingX,
+} from "@/lib/brandAccent";
+import { cn } from "@/lib/utils";
+import type { Course } from "@/data/dtmaCoursesNew";
 
-const CourseDetail = () => {
-  const { id } = useParams();
+const CATEGORY_LABELS: Record<string, string> = {
+  "digital-economy": "Digital Economy",
+  "digital-cognitive-organisation": "Digital Cognitive Organisation",
+  "digital-business-platform": "Digital Business Platform",
+  "digital-transformation": "Digital Transformation 2.0",
+  "digital-worker-workspace": "Digital Worker & Workspace",
+  "digital-accelerators": "Digital Accelerators",
+};
+
+const formatCategory = (slug: string) =>
+  CATEGORY_LABELS[slug] ??
+  slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+type DisplayCourse = Course & {
+  subtitle?: string;
+  whatYouWillLearn?: string[];
+  outcomes?: string[];
+  requirements?: string[];
+  curriculum?: Array<{
+    title: string;
+    duration: string;
+    lessons: Array<{ title: string; duration?: string; type: string; preview?: boolean }>;
+  }>;
+  includes?: Array<{ icon: typeof Play; text: string }>;
+  students?: number;
+  language?: string;
+};
+
+function getLearningOutcomes(course: DisplayCourse): string[] {
+  if (course.whatYouWillLearn?.length) return course.whatYouWillLearn;
+  if (course.outcomes?.length) return course.outcomes;
+  if (course.modules?.length) {
+    return course.modules.map((m) => m.description).filter(Boolean).slice(0, 6);
+  }
+  return [];
+}
+
+export type CourseDetailProps = {
+  embedded?: boolean;
+  courseId?: string;
+  onBack?: () => void;
+  onCourseSelect?: (courseId: string) => void;
+  onEnrolled?: (courseId: string) => void;
+};
+
+const CourseDetail = ({
+  embedded = false,
+  courseId: courseIdProp,
+  onBack,
+  onCourseSelect,
+  onEnrolled,
+}: CourseDetailProps = {}) => {
+  const { id: paramId } = useParams();
+  const id = courseIdProp ?? paramId;
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const carouselRef = useRef<HTMLDivElement>(null);
-  
+
   // Fetch real course data
-  const { data: courseData, isLoading: courseLoading } = useCourse(id || "");
+  const { data: _courseData, isLoading: _courseLoading } = useCourse(id || "");
   const { data: isEnrolled, isLoading: enrollmentLoading } = useIsEnrolled(id || "");
-  
+
   // Enrollment modal state
   const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
 
@@ -135,12 +197,16 @@ const CourseDetail = () => {
   };
 
   const handleEnrollmentComplete = () => {
+    if (embedded && onEnrolled) {
+      onEnrolled(id || "");
+      return;
+    }
     navigate(`/courses/${id}/learn`);
   };
 
   // Get course from new data structure
   const courseFromNew = getCourseById(id || "");
-  
+
   // Mock course data for fallback
   const mockCourse = {
     id: id || "digital-economy-1",
@@ -170,7 +236,7 @@ const CourseDetail = () => {
     lastUpdated: "January 2026",
     certificate: true,
     description: `Build a solid foundation in understanding the digital economy and Economy 4.0. Learn how digital technologies are transforming industries, creating new business models, and reshaping competitive dynamics. Gain the clarity needed to position your organization for success in the new digital landscape.`,
-    
+
     whatYouWillLearn: [
       "Understand the fundamental shifts driving Economy 4.0",
       "Identify how digital technologies are reshaping value chains",
@@ -179,13 +245,13 @@ const CourseDetail = () => {
       "Develop strategic thinking for digital economy positioning",
       "Apply 6XD framework principles to economic analysis",
     ],
-    
+
     requirements: [
       "Interest in digital transformation and organizational change",
       "Basic understanding of business concepts",
       "Willingness to think strategically about digital disruption",
     ],
-    
+
     curriculum: [
       {
         title: "Module 1: Understanding Economy 4.0",
@@ -218,7 +284,7 @@ const CourseDetail = () => {
         ],
       },
     ],
-    
+
     includes: [
       { icon: Play, text: "4 hours on-demand video" },
       { icon: FileText, text: "10 lessons with practical frameworks" },
@@ -228,258 +294,295 @@ const CourseDetail = () => {
     ],
   };
 
-  // Use real course data for display, with proper typing
-  const displayCourse: any = courseFromNew || mockCourse;
-  
-  const totalLessons = displayCourse.modules?.reduce((acc: number, mod: any) => acc + (mod.lessons?.length || 0), 0) || displayCourse.curriculum?.reduce((acc: number, mod: any) => acc + mod.lessons.length, 0) || 0;
+  // Use real course data for display
+  const displayCourse = (courseFromNew || mockCourse) as DisplayCourse;
 
-  return (
-    <div className="min-h-screen">
-      <main className="pb-20">
-        {/* Hero Section */}
-        <section className="text-white bg-gradient-to-br from-[#1e2348] via-[#2a3058] to-[#1e2348] pt-24">
-          {/* Breadcrumb */}
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 pt-6 pb-4">
-            <Link to="/courses" className="inline-flex items-center gap-2 text-[14px] leading-[20px] font-normal text-white/70 hover:text-white transition-colors">
-              <ChevronLeft className="w-4 h-4" />
-              Back to Courses
-            </Link>
-          </div>
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 pb-16">
-            <div className="grid lg:grid-cols-3 gap-12">
-              {/* Course Info */}
-              <div className="lg:col-span-2">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {displayCourse.badge && <Badge className="bg-[#ff6b4d] text-white">{displayCourse.badge}</Badge>}
-                  <Badge variant="outline" className="text-white border-white/30">
-                    {displayCourse.category}
-                  </Badge>
-                  <Badge variant="outline" className="text-white border-white/30">
-                    {displayCourse.level}
-                  </Badge>
-                </div>
+  const totalLessons =
+    displayCourse.modules?.reduce((acc, mod) => acc + (mod.lessons?.length || 0), 0) ||
+    displayCourse.curriculum?.reduce((acc, mod) => acc + mod.lessons.length, 0) ||
+    displayCourse.totalLessons ||
+    0;
 
-                <h1 style={{ fontSize: '32px', lineHeight: '40px', fontWeight: 600 }} className="text-white mb-4">
-                  {displayCourse.title}
-                </h1>
-                <p style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-white/80 mb-6">
-                  {displayCourse.description || (displayCourse as any).subtitle}
-                </p>
+  const moduleList = displayCourse.modules || displayCourse.curriculum || [];
+  const learningOutcomes = getLearningOutcomes(displayCourse);
+  const categoryLabel = formatCategory(displayCourse.category);
+  const instructorName =
+    typeof displayCourse.instructor === "string"
+      ? displayCourse.instructor
+      : displayCourse.instructor.name;
+  const instructorTitle =
+    typeof displayCourse.instructor === "string"
+      ? "Digital Transformation Experts"
+      : displayCourse.instructor.title;
+  const instructorImage =
+    typeof displayCourse.instructor === "string"
+      ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop"
+      : displayCourse.instructor.image;
+  const includesList =
+    displayCourse.includes ?? [
+      { icon: Play, text: `${displayCourse.duration} on-demand video` },
+      { icon: FileText, text: `${totalLessons} lessons across ${moduleList.length} modules` },
+      { icon: Globe, text: "Full lifetime access" },
+      { icon: Award, text: "KHDA-attested certificate" },
+    ];
 
-                {/* Meta */}
-                <div className="flex flex-wrap items-center gap-6 text-white/70 mb-8" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                  <div className="flex items-center gap-1.5">
-                    <Star className="w-5 h-5 text-[#ff6b4d] fill-[#ff6b4d]" />
-                    <span className="font-semibold text-white">{displayCourse.rating}</span>
-                    <span>({displayCourse.reviews} reviews)</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Users className="w-5 h-5" />
-                    <span>{((displayCourse as any).students || 12453).toLocaleString()} students</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-5 h-5" />
-                    <span>{displayCourse.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <BookOpen className="w-5 h-5" />
-                    <span>
-                      {displayCourse.comingSoon 
-                        ? 'Content coming soon' 
-                        : `${displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules • ${totalLessons} lessons`
-                      }
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Globe className="w-5 h-5" />
-                    <span>{(displayCourse as any).language || "English"}</span>
-                  </div>
-                </div>
+  const discountPct = Math.round(
+    (1 - displayCourse.price / displayCourse.originalPrice) * 100
+  );
 
-                {/* Instructor Preview */}
-                <div className="flex items-center gap-4">
-                  <img
-                    src={typeof displayCourse.instructor === 'string' ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop" : displayCourse.instructor.image}
-                    alt={typeof displayCourse.instructor === 'string' ? displayCourse.instructor : displayCourse.instructor.name}
-                    className="w-12 h-12 rounded-full object-cover ring-2 ring-[#ff6b4d]"
-                  />
-                  <div>
-                    <div style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }} className="text-white">
-                      Created by {typeof displayCourse.instructor === 'string' ? displayCourse.instructor : displayCourse.instructor.name}
-                    </div>
-                    <div style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-white/70">
-                      {typeof displayCourse.instructor === 'string' ? "DTMA Faculty" : displayCourse.instructor.title}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Course Card - Desktop */}
-              <div className="hidden lg:block">
-                <div className="bg-card text-card-foreground rounded-2xl overflow-hidden shadow-luxury sticky top-28">
-                  {/* Preview Image */}
-                  <div className="relative aspect-video">
-                    <img
-                      src={displayCourse.image}
-                      alt={displayCourse.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <div className="p-6">
-                    {/* Price */}
-                    <div className="flex items-baseline gap-3 mb-6">
-                      <span style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>${displayCourse.price}</span>
-                      <span style={{ fontSize: '18px', lineHeight: '28px', fontWeight: 400 }} className="text-muted-foreground line-through">${displayCourse.originalPrice}</span>
-                      <Badge className="bg-green-600 text-white" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                        {Math.round((1 - displayCourse.price / displayCourse.originalPrice) * 100)}% off
-                      </Badge>
-                    </div>
-
-                    {/* CTA Buttons */}
-                    <div className="space-y-3 mb-6">
-                      {displayCourse.comingSoon ? (
-                        <Button 
-                          className="w-full bg-gray-400 cursor-not-allowed" 
-                          size="lg"
-                          disabled
-                        >
-                          Coming Soon
-                        </Button>
-                      ) : (
-                        <>
-                          <Button 
-                            className="w-full bg-[#ff6b4d] hover:bg-[#e56045] text-white" 
-                            size="lg"
-                            onClick={handleEnroll}
-                            disabled={authLoading || enrollmentLoading}
-                          >
-                            {isEnrolled ? "Start Learning" : "Enroll Now"}
-                          </Button>
-                          {!isEnrolled && (
-                            <Button variant="outline" className="w-full border-[#E5E7EB] hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" size="lg">
-                              Add to Wishlist
-                            </Button>
-                          )}
-                        </>
-                      )}
-                    </div>
-
-                    <p className="text-center text-muted-foreground mb-6" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                      30-day money-back guarantee
-                    </p>
-
-                    {/* Includes */}
-                    <div>
-                      <h4 className="mb-4" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>This course includes:</h4>
-                      <ul className="space-y-3">
-                        {((displayCourse as any).includes || []).map((item: any, index: number) => (
-                          <li key={index} className="flex items-center gap-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                            <item.icon className="w-5 h-5 text-[#ff6b4d] flex-shrink-0" />
-                            <span>{item.text}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Mobile CTA Card */}
-        <div className="lg:hidden sticky top-20 z-40 bg-card border-b border-border shadow-md">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <div>
-              <div className="flex items-baseline gap-2">
-                <span style={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}>${displayCourse.price}</span>
-                <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }} className="text-muted-foreground line-through">${displayCourse.originalPrice}</span>
-              </div>
-            </div>
-            {displayCourse.comingSoon ? (
-              <Button 
-                className="bg-gray-400 cursor-not-allowed"
-                disabled
-              >
-                Coming Soon
-              </Button>
-            ) : (
-              <Button 
-                className="bg-[#ff6b4d] hover:bg-[#e56045] text-white"
+  const purchaseCard = (
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+      <div className="relative aspect-video">
+        <img src={displayCourse.image} alt={displayCourse.title} className="h-full w-full object-cover" />
+      </div>
+      <div className="p-6">
+        <div className="mb-6 flex flex-wrap items-baseline gap-2">
+          <span className="text-3xl font-semibold text-dq-navy">${displayCourse.price}</span>
+          <span className="text-lg text-gray-400 line-through">${displayCourse.originalPrice}</span>
+          {discountPct > 0 && (
+            <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-xs font-semibold text-dq-orange">
+              {discountPct}% off
+            </span>
+          )}
+        </div>
+        <div className="space-y-3">
+          {displayCourse.comingSoon ? (
+            <Button className="w-full cursor-not-allowed rounded-full bg-gray-400 text-white" disabled>
+              Coming Soon
+            </Button>
+          ) : (
+            <>
+              <Button
+                className={cn(btnPrimary, "w-full")}
                 onClick={handleEnroll}
                 disabled={authLoading || enrollmentLoading}
               >
                 {isEnrolled ? "Start Learning" : "Enroll Now"}
               </Button>
+              {!isEnrolled && (
+                <Button variant="outline" className={cn(btnSecondary, "w-full")}>
+                  Add to Wishlist
+                </Button>
+              )}
+            </>
+          )}
+        </div>
+        <p className="mb-6 mt-4 text-center text-[13px] text-gray-500">30-day money-back guarantee</p>
+        <h4 className={`${sectionHeading} mb-4`}>This course includes</h4>
+        <ul className="space-y-3">
+          {includesList.map((item, index) => (
+            <li key={index} className="flex items-center gap-3 text-sm text-gray-600">
+              <item.icon className="h-4 w-4 shrink-0 text-dq-orange" />
+              <span>{item.text}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+
+  const mainContent = (
+    <main className={cn(embedded ? "pb-4" : "pb-20")}>
+      {!embedded && (
+        <div className="sticky top-16 z-40 border-b border-gray-200 bg-white lg:hidden">
+          <div className={`mx-auto flex max-w-[1200px] items-center justify-between ${sectionPaddingX} py-3`}>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-semibold text-dq-navy">${displayCourse.price}</span>
+              <span className="text-sm text-gray-400 line-through">${displayCourse.originalPrice}</span>
+            </div>
+            {displayCourse.comingSoon ? (
+              <Button className="cursor-not-allowed rounded-full bg-gray-400 text-white" disabled>
+                Coming Soon
+              </Button>
+            ) : (
+              <Button className={btnPrimary} onClick={handleEnroll} disabled={authLoading || enrollmentLoading}>
+                {isEnrolled ? "Start Learning" : "Enroll Now"}
+              </Button>
             )}
           </div>
         </div>
+      )}
 
-        {/* Course Content */}
-        <section className="py-16">
-          <div className="container mx-auto px-4 lg:px-8">
-            <div className="lg:max-w-3xl">
-              {/* What You'll Learn */}
-              <div className="mb-12">
-                <h2 className="text-[#0B0C19] mb-6" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
-                  What you'll learn
-                </h2>
-                <div className="grid sm:grid-cols-2 gap-4 p-6 bg-[#F5F6FA] rounded-2xl">
-                  {((displayCourse as any).whatYouWillLearn || []).map((item: string, index: number) => (
-                    <div key={index} className="flex gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#ff6b4d] flex-shrink-0 mt-0.5" />
-                      <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{item}</span>
-                    </div>
-                  ))}
-                </div>
+      <div className={cn("mx-auto max-w-[1200px]", !embedded && sectionPaddingX)}>
+        {!embedded && (
+          <Link
+            to="/courses"
+            className="mb-8 inline-flex items-center gap-2 pt-20 text-sm text-gray-500 transition-colors hover:text-dq-navy md:pt-24"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Back to Courses
+          </Link>
+        )}
+
+          <div className={cn("grid", embedded ? "gap-6 lg:grid-cols-3 lg:gap-8" : "gap-10 lg:grid-cols-3 lg:gap-12")}>
+            {embedded && (
+              <div className="lg:hidden">
+                {purchaseCard}
               </div>
+            )}
+            <div className={cn(embedded ? "space-y-8" : "space-y-16", "lg:col-span-2")}>
+              <MeshSection variant="heroLight" grid className={cn(
+                embedded
+                  ? "rounded-xl border border-gray-200 bg-white px-5 py-6"
+                  : "rounded-none border-b border-gray-100 pb-10 -mx-5 px-5 md:-mx-8 md:px-8 lg:-mx-10 lg:rounded-2xl lg:border lg:px-10"
+              )}>
+                <div className="relative z-10">
+                  {!embedded && (
+                  <div className="mb-4 flex flex-wrap gap-2">
+                  {displayCourse.badge && (
+                    <Badge className="rounded-full border-0 bg-dq-orange px-3 text-white">
+                      {displayCourse.badge}
+                    </Badge>
+                  )}
+                  <Badge className="rounded-full border-0 bg-gray-100 px-3 text-dq-navy">
+                    {categoryLabel}
+                  </Badge>
+                  <Badge variant="outline" className="rounded-full border-gray-200 bg-white px-3 text-gray-600">
+                    {displayCourse.level}
+                  </Badge>
+                </div>
+                  )}
 
-              {/* Course Content/Curriculum */}
-              <div className="mb-12">
-                <h2 className="text-[#0B0C19] mb-2" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
-                  Course Content
-                </h2>
-                <p className="text-[#4B5563] mb-6" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                  {displayCourse.modules?.length || (displayCourse as any).curriculum?.length || 3} modules • {totalLessons} lessons • {displayCourse.duration} total
+                <h1 className={cn(
+                  "mb-3 font-semibold leading-[1.15] tracking-tight text-dq-navy",
+                  embedded ? "text-xl sm:text-2xl" : "mb-4 text-3xl sm:text-4xl lg:text-[2.75rem] leading-[1.1]"
+                )}>
+                  {displayCourse.title}
+                </h1>
+
+                <p className={cn(
+                  "max-w-2xl leading-relaxed text-[#667085]",
+                  embedded ? "mb-4 text-sm" : "mb-6 text-base leading-[1.7]"
+                )}>
+                  {displayCourse.description || displayCourse.subtitle}
                 </p>
 
-                <Accordion type="multiple" className="space-y-4">
-                  {(displayCourse.modules || (displayCourse as any).curriculum || []).map((module: any, moduleIndex: number) => (
+                <div className={cn(
+                  "flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600",
+                  embedded ? "mb-4" : "mb-6"
+                )}>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Star className="h-4 w-4 fill-dq-orange text-dq-orange" />
+                    <span className="font-semibold text-dq-navy">{displayCourse.rating}</span>
+                    <span className="text-gray-500">({displayCourse.reviews} reviews)</span>
+                  </span>
+                  <span className="hidden text-gray-300 sm:inline" aria-hidden>
+                    |
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock className="h-4 w-4 text-gray-400" />
+                    {displayCourse.duration}
+                  </span>
+                  {!displayCourse.comingSoon ? (
+                    <>
+                      <span className="hidden text-gray-300 sm:inline" aria-hidden>
+                        |
+                      </span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <BookOpen className="h-4 w-4 text-gray-400" />
+                        {`${moduleList.length} modules, ${totalLessons} lessons`}
+                      </span>
+                    </>
+                  ) : null}
+                  <span className="hidden text-gray-300 sm:inline" aria-hidden>
+                    |
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Globe className="h-4 w-4 text-gray-400" />
+                    {displayCourse.language ?? "English"}
+                  </span>
+                </div>
+
+                <div className={cn(
+                  "flex items-center gap-3 border-t border-gray-200/80",
+                  embedded ? "pt-4" : "pt-6"
+                )}>
+                  <img
+                    src={instructorImage}
+                    alt={instructorName}
+                    className={cn("rounded-full object-cover", embedded ? "h-9 w-9" : "h-11 w-11")}
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-dq-navy">
+                      Created by <span className="font-semibold">{instructorName}</span>
+                    </p>
+                    <p className="text-xs text-gray-500">{instructorTitle}</p>
+                  </div>
+                </div>
+                </div>
+              </MeshSection>
+
+              {learningOutcomes.length > 0 && (
+                <div>
+                  {!embedded && <p className={`${eyebrow} mb-3`}>Outcomes</p>}
+                  <h2 className={cn(sectionHeading, embedded ? "mb-4" : "mb-6")}>What you&apos;ll learn</h2>
+                  <div className={cn(
+                    "grid gap-3 rounded-2xl border border-gray-200 bg-gray-50 sm:grid-cols-2",
+                    embedded ? "p-4" : "p-6"
+                  )}>
+                    {learningOutcomes.map((item, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-dq-orange" />
+                        <span className="text-sm leading-relaxed text-gray-600">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                {!embedded && <p className={`${eyebrow} mb-3`}>Curriculum</p>}
+                <h2 className={cn(sectionHeading, "mb-2")}>Course content</h2>
+                <p className={cn("mb-4 text-sm text-gray-500", !embedded && "mb-6")}>
+                  {moduleList.length} modules · {totalLessons} lessons · {displayCourse.duration} total
+                </p>
+                <Accordion type="multiple" className="space-y-3">
+                  {moduleList.map((module, moduleIndex) => (
                     <AccordionItem
                       key={moduleIndex}
                       value={`module-${moduleIndex}`}
-                      className="border border-border rounded-xl px-6 bg-card"
+                      className="rounded-2xl border border-gray-200 bg-white px-5 transition-colors hover:border-dq-orange/40"
                     >
-                      <AccordionTrigger className="hover:no-underline py-5">
-                        <div className="flex items-center justify-between w-full pr-4">
-                          <span className="text-left" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{module.title}</span>
-                          <span className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                            {module.lessons.length} lessons • {module.duration}
+                      <AccordionTrigger className="py-4 hover:no-underline">
+                        <div className="flex w-full items-start justify-between gap-4 pr-2 text-left">
+                          <span className="text-base font-medium text-dq-navy">{module.title}</span>
+                          <span className="shrink-0 text-xs text-gray-500">
+                            {module.lessons.length} lessons · {module.duration}
                           </span>
                         </div>
                       </AccordionTrigger>
                       <AccordionContent>
-                        <ul className="space-y-3 pb-4">
+                        <ul className="space-y-1 border-t border-gray-100 pb-3 pt-2">
                           {module.lessons.map((lesson, lessonIndex) => (
                             <li
                               key={lessonIndex}
-                              className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-accent/50 transition-colors"
+                              className="flex items-center justify-between rounded-lg px-2 py-2.5 hover:bg-gray-50"
                             >
-                              <div className="flex items-center gap-3">
-                                {lesson.type === "video" && <PlayCircle className="w-4 h-4 text-[#ff6b4d]" />}
-                                {lesson.type === "file" && <FileText className="w-4 h-4 text-muted-foreground" />}
-                                {lesson.type === "quiz" && <Award className="w-4 h-4 text-[#ff6b4d]" />}
-                                <span style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>{lesson.title}</span>
+                              <div className="flex min-w-0 items-center gap-3">
+                                {lesson.type === "video" && (
+                                  <PlayCircle className="h-4 w-4 shrink-0 text-dq-orange" />
+                                )}
+                                {lesson.type === "reading" && (
+                                  <FileText className="h-4 w-4 shrink-0 text-gray-400" />
+                                )}
+                                {lesson.type === "quiz" && (
+                                  <Award className="h-4 w-4 shrink-0 text-dq-orange" />
+                                )}
+                                {!["video", "reading", "quiz"].includes(lesson.type) && (
+                                  <FileText className="h-4 w-4 shrink-0 text-gray-400" />
+                                )}
+                                <span className="truncate text-sm text-gray-600">{lesson.title}</span>
                                 {lesson.preview && (
-                                  <Badge variant="secondary" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>Preview</Badge>
+                                  <Badge variant="secondary" className="shrink-0 rounded-full text-[11px]">
+                                    Preview
+                                  </Badge>
                                 )}
                               </div>
-                              <div className="flex items-center gap-3">
+                              <div className="flex shrink-0 items-center gap-2 pl-3">
                                 {lesson.duration && (
-                                  <span className="text-muted-foreground" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>{lesson.duration}</span>
+                                  <span className="text-xs text-gray-400">{lesson.duration}</span>
                                 )}
-                                {!lesson.preview && <Lock className="w-3.5 h-3.5 text-muted-foreground" />}
+                                {!lesson.preview && <Lock className="h-3.5 w-3.5 text-gray-300" />}
                               </div>
                             </li>
                           ))}
@@ -490,178 +593,116 @@ const CourseDetail = () => {
                 </Accordion>
               </div>
 
-              {/* Requirements */}
-              <div className="mb-12">
-                <h2 className="text-[#0B0C19] mb-6" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
-                  Requirements
-                </h2>
-                <ul className="space-y-3">
-                  {((displayCourse as any).requirements || []).map((req: string, index: number) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#ff6b4d] mt-2" />
-                      <span style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>{req}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Description */}
-              <div className="mb-12">
-                <h2 className="text-[#0B0C19] mb-6" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
-                  Description
-                </h2>
-                <div className="prose prose-neutral max-w-none">
-                  {displayCourse.description.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="text-[#4B5563] mb-4" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
-                      {paragraph}
-                    </p>
-                  ))}
+              {displayCourse.requirements && displayCourse.requirements.length > 0 && (
+                <div>
+                  {!embedded && <p className={`${eyebrow} mb-3`}>Prerequisites</p>}
+                  <h2 className={cn(sectionHeading, embedded ? "mb-4" : "mb-6")}>Requirements</h2>
+                  <ul className="space-y-3">
+                    {displayCourse.requirements.map((req, index) => (
+                      <li key={index} className="flex items-start gap-3 text-sm leading-relaxed text-gray-600">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-dq-orange" />
+                        {req}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+              )}
 
-              {/* Instructor */}
-              <div className="mb-12">
-                <h2 className="text-[#0B0C19] mb-6" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
-                  Your Instructor
-                </h2>
-                <div className="bg-card border border-border rounded-2xl p-6">
-                  <div className="flex items-start gap-6">
+              <div>
+                {!embedded && <p className={`${eyebrow} mb-3`}>Faculty</p>}
+                <h2 className={cn(sectionHeading, embedded ? "mb-4" : "mb-6")}>Your instructor</h2>
+                <div className={cn("rounded-2xl border border-gray-200 bg-white", embedded ? "p-4" : "p-6")}>
+                  <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
                     <img
-                      src={typeof displayCourse.instructor === 'string' ? "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop" : displayCourse.instructor.image}
-                      alt={typeof displayCourse.instructor === 'string' ? displayCourse.instructor : displayCourse.instructor.name}
-                      className="w-24 h-24 rounded-xl object-cover"
+                      src={instructorImage}
+                      alt={instructorName}
+                      className="h-20 w-20 rounded-xl object-cover"
                     />
                     <div>
-                      <h3 className="text-[#0B0C19] mb-1" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
-                        {typeof displayCourse.instructor === 'string' ? displayCourse.instructor : displayCourse.instructor.name}
-                      </h3>
-                      <p className="text-[#ff6b4d] mb-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                        {typeof displayCourse.instructor === 'string' ? "DTMA Faculty" : displayCourse.instructor.title}
-                      </p>
-                      <div className="flex items-center gap-6 text-[#4B5563] mb-4" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                        <div className="flex items-center gap-1.5">
-                          <Users className="w-4 h-4" />
-                          {typeof displayCourse.instructor === 'string' ? "15,420" : displayCourse.instructor.students.toLocaleString()} students
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <BookOpen className="w-4 h-4" />
-                          {typeof displayCourse.instructor === 'string' ? "24" : displayCourse.instructor.courses} courses
-                        </div>
-                      </div>
-                      <p className="text-[#4B5563]" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
-                        {typeof displayCourse.instructor === 'string' ? "DTMA Faculty includes multidisciplinary educators with expertise in digital transformation." : displayCourse.instructor.bio}
+                      <h3 className="text-lg font-semibold text-dq-navy">{instructorName}</h3>
+                      <p className="mb-3 text-sm text-dq-orange">{instructorTitle}</p>
+                      <p className="text-sm leading-relaxed text-gray-600">
+                        {typeof displayCourse.instructor === "string"
+                          ? "DTMA Faculty includes multidisciplinary educators with expertise in digital transformation and the 6XD framework."
+                          : displayCourse.instructor.bio}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Recommended Courses */}
-        <section className="py-16 bg-[#F5F6FA]">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="flex items-center justify-between mb-8">
+            <div className="hidden lg:block">
+              <div className={cn("sticky", embedded ? "top-4" : "top-24")}>{purchaseCard}</div>
+            </div>
+          </div>
+        </div>
+
+        {!embedded && (
+        <section className={`bg-gray-50 py-16 ${sectionPaddingX}`}>
+          <div className="mx-auto max-w-[1200px]">
+            <div className="mb-8 flex items-center justify-between">
               <div>
-                <p className="uppercase tracking-wide text-[#ff6b4d] mb-2" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                  Continue Learning
-                </p>
-                <h2 className="text-[#0B0C19]" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
-                  Recommended Courses
-                </h2>
+                <p className={`${eyebrow} mb-2`}>Continue learning</p>
+                <h2 className={sectionHeading}>Recommended courses</h2>
               </div>
-              <div className="hidden md:flex gap-2">
+              <div className="hidden gap-2 md:flex">
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => scroll("left")}
-                  className="border-[#E5E7EB] hover:bg-white"
+                  className="rounded-full border border-gray-200 bg-white hover:border-dq-orange"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="h-5 w-5" />
                 </Button>
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => scroll("right")}
-                  className="border-[#E5E7EB] hover:bg-white"
+                  className="rounded-full border border-gray-200 bg-white hover:border-dq-orange"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="h-5 w-5" />
                 </Button>
               </div>
             </div>
 
             <div
               ref={carouselRef}
-              className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
+              className="flex gap-6 overflow-x-auto scroll-smooth pb-4 scrollbar-hide"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {recommendedCourses.map((recCourse) => (
-                <Link
-                  key={recCourse.id}
-                  to={recCourse.comingSoon ? '#' : `/courses/${recCourse.id}`}
-                  onClick={(e) => recCourse.comingSoon && e.preventDefault()}
-                  className={`flex-shrink-0 w-[300px] bg-white rounded-2xl overflow-hidden border border-[#E5E7EB] transition-all group ${
-                    recCourse.comingSoon ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg'
-                  }`}
-                >
-                  <div className="relative aspect-video overflow-hidden">
-                    <img
-                      src={recCourse.image}
-                      alt={recCourse.title}
-                      className={`w-full h-full object-cover transition-transform duration-300 ${
-                        !recCourse.comingSoon && 'group-hover:scale-105'
-                      }`}
-                    />
-                    {recCourse.comingSoon && (
-                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                        <Badge className="bg-white text-gray-900 text-sm px-4 py-2">
-                          Coming Soon
-                        </Badge>
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-5 h-[180px] flex flex-col">
-                    <h3 className={`text-[#0B0C19] transition-colors mb-3 h-14 line-clamp-2 ${
-                        !recCourse.comingSoon && 'group-hover:text-[#ff6b4d]'
-                      }`} style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
-                      {recCourse.title}
-                    </h3>
-                    <div className="flex items-center gap-4 text-[#4B5563] mb-3" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-[#ff6b4d] fill-[#ff6b4d]" />
-                        <span className="font-medium">{recCourse.rating}</span>
-                        <span className="text-[#9CA3AF]">({recCourse.reviews})</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        <span>{recCourse.duration}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between mt-auto">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-[#0B0C19]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>${recCourse.price}</span>
-                        <span className="text-[#9CA3AF] line-through" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>${recCourse.originalPrice}</span>
-                      </div>
-                      <Badge 
-                        className={recCourse.comingSoon ? 'bg-gray-200 text-gray-700' : 'border-[#E5E7EB]'}
-                        variant={recCourse.comingSoon ? 'default' : 'outline'}
-                        style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}
-                      >
-                        {recCourse.comingSoon ? recCourse.badge : recCourse.level}
-                      </Badge>
-                    </div>
-                  </div>
-                </Link>
+                <div key={recCourse.id} className="w-[300px] flex-shrink-0">
+                  <CourseCard
+                    course={{
+                      ...recCourse,
+                      category: recCourse.category,
+                      modules: recCourse.comingSoon ? undefined : { length: 3 },
+                    }}
+                  />
+                </div>
               ))}
             </div>
           </div>
         </section>
+        )}
+
+        {!embedded && (
+        <MarketingCtaBand
+          eyebrowText="Need guidance?"
+          title="Not sure if this is the right fit?"
+          description="Browse more courses or talk to our team about the best learning path for your role."
+          primaryCta={{ label: "Talk to our team", href: "/help" }}
+          secondaryCta={{ label: "Browse more courses", href: "/courses" }}
+        />
+        )}
       </main>
+  );
 
-      <Footer />
+  return (
+    <>
+      {embedded ? mainContent : <PublicPageLayout>{mainContent}</PublicPageLayout>}
 
-      {/* Enrollment Modal */}
       <EnrollmentModal
         open={showEnrollmentModal}
         onOpenChange={setShowEnrollmentModal}
@@ -674,7 +715,7 @@ const CourseDetail = () => {
         }}
         onEnrollmentComplete={handleEnrollmentComplete}
       />
-    </div>
+    </>
   );
 };
 

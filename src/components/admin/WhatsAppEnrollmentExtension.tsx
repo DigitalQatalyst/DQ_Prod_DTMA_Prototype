@@ -1,3 +1,19 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerBadge,
+  learnerIconWell,
+} from "@/lib/brandAccent";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
@@ -120,7 +136,7 @@ export const WhatsAppEnrollmentExtension = ({ learnerId, onSave }: WhatsAppEnrol
             </div>
           </div>
           
-          <p className="text-[12px] text-muted-foreground">
+          <p className={learnerCaption}>
             Enter the phone number registered with WhatsApp (without country code)
           </p>
 

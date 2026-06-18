@@ -1,3 +1,19 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerBadge,
+  learnerIconWell,
+} from "@/lib/brandAccent";
 import { useState } from 'react';
 import {
   Dialog,
@@ -190,30 +206,30 @@ export const CoursePreviewModal = ({ isOpen, onClose, course, onEdit }: CoursePr
                   <h3 className="text-lg font-semibold mb-3">Course Information</h3>
                   <div className="grid grid-cols-2 gap-4 p-4 bg-muted/30 rounded-lg">
                     <div>
-                      <p className="text-sm text-muted-foreground">Instructor</p>
+                      <p className={learnerBodyMuted}>Instructor</p>
                       <p className="font-medium">{course.instructor}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Category</p>
+                      <p className={learnerBodyMuted}>Category</p>
                       <p className="font-medium">{course.category}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Level</p>
+                      <p className={learnerBodyMuted}>Level</p>
                       <p className="font-medium capitalize">{course.level}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Last Updated</p>
+                      <p className={learnerBodyMuted}>Last Updated</p>
                       <p className="font-medium">{course.lastUpdated}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Language</p>
+                      <p className={learnerBodyMuted}>Language</p>
                       <p className="font-medium flex items-center gap-1">
                         <Globe className="w-4 h-4" />
                         {courseDetails.language}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Certificate</p>
+                      <p className={learnerBodyMuted}>Certificate</p>
                       <p className="font-medium flex items-center gap-1">
                         <Award className="w-4 h-4" />
                         {courseDetails.certificate ? 'Yes' : 'No'}
@@ -256,8 +272,8 @@ export const CoursePreviewModal = ({ isOpen, onClose, course, onEdit }: CoursePr
 
               <TabsContent value="curriculum" className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Course Curriculum</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <h3 className={learnerCardTitle}>Course Curriculum</h3>
+                  <p className={learnerBodyMuted}>
                     {courseDetails.modules.length} modules • {courseDetails.duration}
                   </p>
                 </div>
@@ -277,7 +293,7 @@ export const CoursePreviewModal = ({ isOpen, onClose, course, onEdit }: CoursePr
                             </div>
                             <div className="text-left">
                               <p className="font-medium">{module.title}</p>
-                              <p className="text-sm text-muted-foreground">
+                              <p className={learnerBodyMuted}>
                                 {module.lessons.length} lessons • {module.duration}
                               </p>
                             </div>
@@ -297,7 +313,7 @@ export const CoursePreviewModal = ({ isOpen, onClose, course, onEdit }: CoursePr
                                 </div>
                                 <span className="text-sm">{lesson.title}</span>
                               </div>
-                              <span className="text-sm text-muted-foreground">
+                              <span className={learnerBodyMuted}>
                                 {lesson.duration}
                               </span>
                             </div>
@@ -315,11 +331,11 @@ export const CoursePreviewModal = ({ isOpen, onClose, course, onEdit }: CoursePr
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-4 bg-card rounded-lg border">
                     <p className="text-sm text-muted-foreground mb-1">Total Enrollments</p>
-                    <p className="text-2xl font-bold">{course.enrollments.toLocaleString()}</p>
+                    <p className={learnerKpiValue}>{course.enrollments.toLocaleString()}</p>
                   </div>
                   <div className="p-4 bg-card rounded-lg border">
                     <p className="text-sm text-muted-foreground mb-1">Avg Completion Rate</p>
-                    <p className="text-2xl font-bold">{course.completion}%</p>
+                    <p className={learnerKpiValue}>{course.completion}%</p>
                   </div>
                   <div className="p-4 bg-card rounded-lg border">
                     <p className="text-sm text-muted-foreground mb-1">Course Rating</p>
@@ -330,13 +346,13 @@ export const CoursePreviewModal = ({ isOpen, onClose, course, onEdit }: CoursePr
                   </div>
                   <div className="p-4 bg-card rounded-lg border">
                     <p className="text-sm text-muted-foreground mb-1">Revenue Generated</p>
-                    <p className="text-2xl font-bold">${course.revenue.toLocaleString()}</p>
+                    <p className={learnerKpiValue}>${course.revenue.toLocaleString()}</p>
                   </div>
                 </div>
 
                 <div className="p-4 bg-muted/30 rounded-lg">
                   <h4 className="font-semibold mb-2">Performance Summary</h4>
-                  <p className="text-sm text-muted-foreground">
+                  <p className={learnerBodyMuted}>
                     This course has been {course.status} and has attracted {course.enrollments} learners. 
                     {course.completion > 0 && ` The average completion rate of ${course.completion}% indicates strong learner engagement.`}
                     {course.rating > 0 && ` With a rating of ${course.rating} stars, learners are finding value in the content.`}

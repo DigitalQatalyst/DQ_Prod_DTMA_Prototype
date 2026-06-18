@@ -7,6 +7,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import {
+  learnerBodyMuted,
+  learnerCaption,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 
 const monthlyRevenue = [
   { month: "Nov", amount: 38200 },
@@ -51,13 +60,7 @@ export default function SMSFinancePanel() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-[28px] leading-[36px] font-semibold">Finance</h2>
-          <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-            Revenue trends, course earnings, and subscription performance.
-          </p>
-        </div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
         <Button variant="outline" size="sm" onClick={() => toast({ title: "Executive Report Generated", description: "Compiling a PDF summary of Finance KPIs, Compliance status, and Faculty backlogs for board review." })}>
           <Download className="mr-2 h-4 w-4" /> Export Executive Summary
         </Button>
@@ -65,44 +68,44 @@ export default function SMSFinancePanel() {
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3">
-            <TrendingUp className="w-5 h-5 text-emerald-600" />
+        <div className={learnerKpiCard}>
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
+            <TrendingUp className="h-5 w-5 text-emerald-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{fmt(thisMonth)}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Revenue This Month</div>
-          <div className={cn("text-[12px] leading-[16px] mt-0.5", growth >= 0 ? "text-emerald-600" : "text-rose-600")}>
+          <div className={learnerKpiValue}>{fmt(thisMonth)}</div>
+          <div className={learnerKpiLabel}>Revenue This Month</div>
+          <div className={cn(learnerCaption, "mt-0.5", growth >= 0 ? "text-emerald-600" : "text-rose-600")}>
             {growth >= 0 ? "+" : ""}{growth}% vs last month
           </div>
         </div>
 
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3">
-            <RefreshCw className="w-5 h-5 text-sky-600" />
+        <div className={learnerKpiCard}>
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500/10">
+            <RefreshCw className="h-5 w-5 text-sky-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{fmt(subscriptionStats.mrr)}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+          <div className={learnerKpiValue}>{fmt(subscriptionStats.mrr)}</div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Monthly Recurring Revenue
             <Tip text="Revenue from active subscriptions that renews each month. Does not include one-time course purchases." />
           </div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">{subscriptionStats.renewalRate}% renewal rate</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>{subscriptionStats.renewalRate}% renewal rate</div>
         </div>
 
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-3">
-            <TrendingUp className="w-5 h-5 text-indigo-600" />
+        <div className={learnerKpiCard}>
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500/10">
+            <TrendingUp className="h-5 w-5 text-indigo-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">$64,200</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Projected Next Month</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Based on current MRR + 8% growth trend</div>
+          <div className={learnerKpiValue}>$64,200</div>
+          <div className={learnerKpiLabel}>Projected Next Month</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>Based on current MRR + 8% growth trend</div>
         </div>
       </div>
 
       {/* 6-Month Revenue Trend */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>6-Month Revenue Trend</CardTitle>
-          <CardDescription>
+          <CardTitle className={learnerSectionHeading}>6-Month Revenue Trend</CardTitle>
+          <CardDescription className={learnerBodyMuted}>
             {growth >= 0
               ? `Revenue is up ${growth}% from last month — ${fmt(thisMonth - lastMonth)} more collected.`
               : `Revenue is down ${Math.abs(growth)}% from last month — ${fmt(lastMonth - thisMonth)} less collected.`}
@@ -131,10 +134,10 @@ export default function SMSFinancePanel() {
       </Card>
 
       {/* Revenue by Course */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>Revenue by Course</CardTitle>
-          <CardDescription>Purchases and revenue per course. Free courses are included for enrolment visibility.</CardDescription>
+          <CardTitle className={learnerSectionHeading}>Revenue by Course</CardTitle>
+          <CardDescription className={learnerBodyMuted}>Purchases and revenue per course. Free courses are included for enrolment visibility.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>

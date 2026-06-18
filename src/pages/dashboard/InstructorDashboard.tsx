@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -12,8 +12,16 @@ import {
   useCourseStudents,
 } from "@/hooks/useInstructor";
 import { useQueryClient } from "@tanstack/react-query";
-import { RoleSwitcher } from "@/components/dashboard/RoleSwitcher";
+import {
+  InstructorDashboardSidebar,
+  type InstructorTabId,
+} from "@/components/dashboard/InstructorDashboardSidebar";
 import { LearnerManagementTable } from "@/components/instructor/LearnerManagementTable";
+import { InstructorCourseBuilderPanel } from "@/components/instructor/InstructorCourseBuilderPanel";
+import { LearnerOverviewPanel } from "@/components/dashboard/LearnerOverviewPanel";
+import { CourseCatalogPanel } from "@/components/dashboard/CourseCatalogPanel";
+import { TransactAI } from "@/components/mentor/TransactAI";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,7 +41,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -68,27 +75,74 @@ import {
   Edit,
   Eye,
   Send,
-  LogOut,
-  LayoutDashboard,
   Menu,
   X,
   Copy,
   Archive,
   Undo,
-  DollarSign,
   Star,
   Calendar,
-  Settings,
   TrendingUp,
   CheckCircle,
   AlertCircle,
-  Clock,
-  CheckSquare,
-  Square,
   Trash2,
   Upload,
   Award,
+  Camera,
+  Save,
+  FileText,
 } from "lucide-react";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerBtnPrimary,
+  learnerEmptyBody,
+  learnerEmptyTitle,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPageDescription,
+  learnerPageTitle,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerWorkspaceBg,
+} from "@/lib/brandAccent";
+import { cn } from "@/lib/utils";
+
+const TAB_LABELS: Record<InstructorTabId, string> = {
+  "getting-started": "Home",
+  overview: "Dashboard",
+  "ai-cockpit": "AI cockpit",
+  courses: "My Courses",
+  catalog: "Explore courses",
+  "course-builder": "Course builder",
+  learners: "Learners",
+  verification: "Verification & Compliance",
+  reviews: "Reviews & Reputation",
+  profile: "Profile & Settings",
+};
+
+const TAB_DESCRIPTIONS: Partial<Record<InstructorTabId, string>> = {
+  overview: "Here's your teaching dashboard overview",
+  "ai-cockpit": "Draft course outlines, modules, and marketplace-ready structures",
+  courses: "Create and manage your course content",
+  "course-builder": "Build and refine draft courses before marketplace submission",
+  learners: "Manage and track your learners",
+  verification: "Complete your verification to publish courses",
+  reviews: "Manage your course reviews and ratings",
+  profile: "Manage your instructor profile and certificate branding",
+};
+
+const getPageTitle = (activeTab: InstructorTabId, firstName: string) => {
+  if (activeTab === "getting-started") return "Home";
+  if (activeTab === "ai-cockpit") return "AI cockpit";
+  if (activeTab === "catalog") return "Explore courses";
+  if (activeTab === "course-builder") return "Course builder";
+  if (activeTab === "overview") return `Welcome back, ${firstName}`;
+  return TAB_LABELS[activeTab];
+};
 
 const InstructorDashboard = () => {
   const { profile, signOut, role } = useAuth();
@@ -96,7 +150,7 @@ const InstructorDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState<InstructorTabId>("overview");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [newCourse, setNewCourse] = useState({
     title: '',
@@ -109,21 +163,16 @@ const InstructorDashboard = () => {
   // Check for tab state from navigation
   useEffect(() => {
     if (location.state?.tab) {
-      setActiveTab(location.state.tab);
-      // Clear the state after using it
+      const tab = location.state.tab as InstructorTabId;
+      setActiveTab(tab);
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state, location.pathname, navigate]);
 
   // Check if instructor is in verification pending state
-  // For now, we'll use a flag from localStorage that gets set when they complete verification
-  const isVerificationPending = localStorage.getItem("instructor_verification_pending") === "true";
-
-  const [checklist, setChecklist] = useState({
-    profileComplete: false,
-    draftCourse: false,
-    uploadContent: false,
-  });
+  const [isVerificationPending, setIsVerificationPending] = useState(
+    () => localStorage.getItem("instructor_verification_pending") === "true"
+  );
 
   const { data: courses, isLoading } = useInstructorCourses();
   const createCourse = useCreateCourse();
@@ -296,258 +345,161 @@ const InstructorDashboard = () => {
     );
   }
 
+  const firstName = profile?.full_name?.split(" ")[0] || "Instructor";
+  const pageDescription = TAB_DESCRIPTIONS[activeTab];
+
+  const handleOverviewNavigate = (tab: "catalog" | "overview" | "courses") => {
+    setActiveTab(tab);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
   return (
-    <div className="min-h-screen bg-[var(--dq-gray-50)] flex">
-      {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[var(--dq-navy-950)] text-white transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300`}>
-        <div className="flex flex-col h-full">
-          <div className="p-4 border-b border-white/10">
-            <Link to="/" className="flex items-center gap-3">
-              <img
-                src="/dtma-logo.png"
-                alt="DTMA"
-                className="h-[32px] w-auto"
-              />
-            </Link>
-          </div>
+    <div className="flex h-screen w-screen overflow-hidden bg-gray-50">
+      <InstructorDashboardSidebar
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          setSidebarOpen(false);
+        }}
+        onSignOut={handleSignOut}
+        profileName={profile?.full_name ?? null}
+        profileEmail={profile?.email ?? null}
+        profileAvatar={profile?.avatar_url}
+        className={`${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } fixed left-0 top-0 z-50 transition-transform duration-200 lg:sticky lg:translate-x-0`}
+      />
 
-          <RoleSwitcher currentRole="instructor" />
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-          <nav className="flex-1 p-4 space-y-2">
-            <button 
-              onClick={() => { setActiveTab("overview"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "overview" ? "bg-[var(--dq-orange-500)] text-white" : "text-white/70 hover:bg-white/10"}`}
+      <main className={cn("flex-1 h-full overflow-y-auto", learnerWorkspaceBg)}>
+        <header className="sticky top-0 z-30 border-b border-gray-200 bg-white px-4 py-3 lg:px-8 lg:py-4">
+          <div className="flex items-start justify-between gap-4">
+            <button
+              type="button"
+              className="-ml-2 shrink-0 p-2 lg:hidden"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-              <LayoutDashboard className="w-5 h-5" />
-              <span>Dashboard</span>
+              {sidebarOpen ? (
+                <X className="h-6 w-6 text-dq-navy" />
+              ) : (
+                <Menu className="h-6 w-6 text-dq-navy" />
+              )}
             </button>
-            <button 
-              onClick={() => { setActiveTab("courses"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "courses" ? "bg-[var(--dq-orange-500)] text-white" : "text-white/70 hover:bg-white/10"}`}
-            >
-              <BookOpen className="w-5 h-5" />
-              <span>My Courses</span>
-            </button>
-            <button 
-              onClick={() => { setActiveTab("learners"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "learners" ? "bg-[var(--dq-orange-500)] text-white" : "text-white/70 hover:bg-white/10"}`}
-            >
-              <Users className="w-5 h-5" />
-              <span>Learners</span>
-            </button>
-            <button 
-              onClick={() => { setActiveTab("verification"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "verification" ? "bg-[var(--dq-orange-500)] text-white" : "text-white/70 hover:bg-white/10"}`}
-            >
-              <CheckCircle className="w-5 h-5" />
-              <span>Verification</span>
-            </button>
-            <button 
-              onClick={() => { setActiveTab("reviews"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "reviews" ? "bg-[var(--dq-orange-500)] text-white" : "text-white/70 hover:bg-white/10"}`}
-            >
-              <Star className="w-5 h-5" />
-              <span>Reviews</span>
-            </button>
-            <button 
-              onClick={() => { setActiveTab("profile"); setSidebarOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === "profile" ? "bg-[var(--dq-orange-500)] text-white" : "text-white/70 hover:bg-white/10"}`}
-            >
-              <Settings className="w-5 h-5" />
-              <span>Profile & Settings</span>
-            </button>
-          </nav>
 
-          <div className="p-4 border-t border-white/10">
-            <div className="flex items-center gap-3 mb-4 px-2">
-              <div className="w-10 h-10 rounded-full bg-[var(--dq-orange-500)] flex items-center justify-center text-sm font-semibold text-white">
-                {profile?.full_name?.charAt(0) || 'I'}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-medium truncate text-white">{profile?.full_name || 'Instructor'}</div>
-                <div className="text-xs text-white/70">Instructor</div>
-              </div>
+            <div className="min-w-0 flex-1">
+              <h2 className={learnerPageTitle}>{getPageTitle(activeTab, firstName)}</h2>
+              {pageDescription && (
+                <p className={cn(learnerPageDescription, "mt-0.5")}>{pageDescription}</p>
+              )}
             </div>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10"
-              onClick={signOut}
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
-        </div>
-      </aside>
 
-      {/* Mobile Header */}
-      <div className="flex-1 lg:ml-64">
-        <header className="lg:hidden sticky top-0 z-40 bg-white border-b border-[var(--dq-surface-border-default)] p-4 flex items-center justify-between shadow-sm">
-          <button onClick={() => setSidebarOpen(true)} className="p-2 hover:bg-[var(--dq-gray-50)] rounded-lg">
-            <Menu className="w-6 h-6 text-[var(--dq-text-primary)]" />
-          </button>
-          <span className="font-semibold text-[var(--dq-text-primary)]">Instructor Dashboard</span>
-          <div className="w-10" />
+            <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
+              <AvatarImage src={profile?.avatar_url || undefined} />
+              <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">
+                {profile?.full_name?.charAt(0) || "I"}
+              </AvatarFallback>
+            </Avatar>
+          </div>
         </header>
 
-        {sidebarOpen && (
-          <div className="fixed inset-0 z-40 bg-foreground/50 lg:hidden" onClick={() => setSidebarOpen(false)}>
-            <button className="absolute top-4 right-4 p-2 bg-background rounded-full" onClick={() => setSidebarOpen(false)}>
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-        )}
+        <div className={activeTab === "catalog" ? "bg-white" : "p-4 lg:p-6"}>
+          {activeTab === "getting-started" && (
+            <LearnerOverviewPanel onNavigate={handleOverviewNavigate} />
+          )}
 
-        <main className="p-6 lg:p-8">
-          {/* Overview Tab */}
+          {activeTab === "catalog" && <CourseCatalogPanel embedded />}
+
+          {activeTab === "ai-cockpit" && (
+            <TransactAI
+              embedded
+              variant="instructor"
+              draftCoursesCount={draftCount}
+              enrolledCourses={courses?.length || 0}
+            />
+          )}
+
+          {activeTab === "course-builder" && (
+            <InstructorCourseBuilderPanel
+              courses={courses}
+              isLoading={isLoading}
+              onCreateCourse={() => {
+                setActiveTab("courses");
+                setIsCreateOpen(true);
+              }}
+            />
+          )}
+
           {activeTab === "overview" && (
-            <div className="space-y-8">
-              {/* Verification Banner - Only shown on Dashboard tab */}
+            <div className="space-y-6">
               {isVerificationPending && (
-                <div className="bg-white border border-[var(--dq-surface-border-default)] rounded-xl p-6 shadow-sm">
+                <div className={cn(learnerPanel, "p-5")}>
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 mt-0.5">
-                      <div className="w-12 h-12 bg-[var(--dq-orange-100)] rounded-lg flex items-center justify-center shadow-sm">
-                        <Clock className="w-6 h-6 text-[var(--dq-orange-500)]" />
-                      </div>
+                    <div className={cn(learnerIconWell, "h-12 w-12 bg-orange-50")}>
+                      <AlertCircle className="h-6 w-6 text-dq-orange" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-[18px] leading-[24px] font-semibold text-[var(--dq-text-primary)] mb-2">Verification in Progress</h3>
-                      <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)] mb-4">
-                        We're reviewing your credentials. This typically takes 2-5 business days. In the meantime, you can prepare your courses and complete your profile.
+                      <h3 className={cn(learnerSectionHeading, "mb-2")}>Verification in Progress</h3>
+                      <p className={cn(learnerBody, "mb-4")}>
+                        We're reviewing your credentials. Course publishing is disabled until verification is complete.
                       </p>
-                      <div className="flex items-center gap-2 text-[13px] leading-[18px] font-medium text-[var(--dq-text-primary)] bg-[var(--dq-orange-50)] rounded-lg px-4 py-3 border border-[var(--dq-orange-200)] shadow-sm">
-                        <AlertCircle className="w-4 h-4 flex-shrink-0 text-[var(--dq-orange-500)]" />
-                        <span>Course publishing is disabled until verification is complete</span>
-                      </div>
                     </div>
                   </div>
                 </div>
               )}
 
-              <div>
-                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[var(--dq-text-primary)]">Welcome back, {profile?.full_name?.split(' ')[0]}!</h1>
-                <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)]">Here's your teaching dashboard overview</p>
-              </div>
-
-              {/* Verification Checklist */}
-              {isVerificationPending && (
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-[var(--dq-surface-border-default)]">
-                  <h3 className="text-[20px] leading-[28px] font-semibold mb-6 text-[var(--dq-text-primary)]">What you can do while waiting</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-4 p-4 rounded-lg hover:bg-[var(--dq-gray-50)] transition-colors cursor-pointer border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-200)] hover:shadow-sm">
-                      <button
-                        onClick={() => setChecklist({ ...checklist, profileComplete: !checklist.profileComplete })}
-                        className="flex-shrink-0"
-                      >
-                        {checklist.profileComplete ? (
-                          <CheckSquare className="w-6 h-6 text-[var(--dq-success)]" />
-                        ) : (
-                          <Square className="w-6 h-6 text-[var(--dq-text-disabled)]" />
-                        )}
-                      </button>
-                      <div className="flex-1">
-                        <p className={`text-[15px] leading-[22px] font-semibold ${checklist.profileComplete ? 'text-[var(--dq-text-disabled)] line-through' : 'text-[var(--dq-text-primary)]'}`}>
-                          Complete your provider profile
-                        </p>
-                        <p className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-tertiary)] mt-1">Add bio, photo, and expertise areas</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 p-4 rounded-lg hover:bg-[var(--dq-gray-50)] transition-colors cursor-pointer border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-200)] hover:shadow-sm">
-                      <button
-                        onClick={() => setChecklist({ ...checklist, draftCourse: !checklist.draftCourse })}
-                        className="flex-shrink-0"
-                      >
-                        {checklist.draftCourse ? (
-                          <CheckSquare className="w-6 h-6 text-[var(--dq-success)]" />
-                        ) : (
-                          <Square className="w-6 h-6 text-[var(--dq-text-disabled)]" />
-                        )}
-                      </button>
-                      <div className="flex-1">
-                        <p className={`text-[15px] leading-[22px] font-semibold ${checklist.draftCourse ? 'text-[var(--dq-text-disabled)] line-through' : 'text-[var(--dq-text-primary)]'}`}>
-                          Draft your first course
-                        </p>
-                        <p className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-tertiary)] mt-1">Create course outline and structure</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 p-4 rounded-lg hover:bg-[var(--dq-gray-50)] transition-colors cursor-pointer border border-[var(--dq-surface-border-default)] hover:border-[var(--dq-orange-200)] hover:shadow-sm">
-                      <button
-                        onClick={() => setChecklist({ ...checklist, uploadContent: !checklist.uploadContent })}
-                        className="flex-shrink-0"
-                      >
-                        {checklist.uploadContent ? (
-                          <CheckSquare className="w-6 h-6 text-[var(--dq-success)]" />
-                        ) : (
-                          <Square className="w-6 h-6 text-[var(--dq-text-disabled)]" />
-                        )}
-                      </button>
-                      <div className="flex-1">
-                        <p className={`text-[15px] leading-[22px] font-semibold ${checklist.uploadContent ? 'text-[var(--dq-text-disabled)] line-through' : 'text-[var(--dq-text-primary)]'}`}>
-                          Upload lesson content
-                        </p>
-                        <p className="text-[13px] leading-[18px] font-normal text-[var(--dq-text-tertiary)] mt-1">Add videos, materials, and resources</p>
-                      </div>
-                    </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className={learnerKpiCard}>
+                  <div className={cn(learnerIconWell, "mb-4 bg-orange-50")}>
+                    <Users className="h-5 w-5 text-dq-orange" />
                   </div>
-                </div>
-              )}
-
-              {/* Key Metrics */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 bg-[var(--dq-orange-50)] rounded-lg flex items-center justify-center shadow-sm">
-                      <Users className="w-7 h-7 text-[var(--dq-orange-500)]" />
-                    </div>
-                  </div>
-                  <div className="text-[36px] leading-[44px] font-bold mb-1 text-[var(--dq-text-primary)]">{totalEnrollments}</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Total Learners</div>
-                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-success)] font-medium">
-                    <TrendingUp className="w-4 h-4" />
+                  <div className={learnerKpiValue}>{totalEnrollments}</div>
+                  <div className={learnerKpiLabel}>Total Learners</div>
+                  <div className="mt-2 flex items-center gap-1 text-xs font-medium text-emerald-600">
+                    <TrendingUp className="h-3.5 w-3.5" />
                     <span>+12% this month</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 bg-[var(--dq-gray-100)] rounded-lg flex items-center justify-center shadow-sm">
-                      <BookOpen className="w-7 h-7 text-[var(--dq-text-primary)]" />
-                    </div>
+                <div className={learnerKpiCard}>
+                  <div className={cn(learnerIconWell, "mb-4")}>
+                    <BookOpen className="h-5 w-5 text-dq-navy" />
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold mb-1 text-[var(--dq-text-primary)]">{courses?.length || 0}</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Active Courses</div>
-                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-tertiary)] font-medium">
-                    <span>{publishedCount} published</span>
+                  <div className={learnerKpiValue}>{courses?.length || 0}</div>
+                  <div className={learnerKpiLabel}>Active Courses</div>
+                  <div className={cn(learnerBodyMuted, "mt-2 text-xs")}>
+                    {publishedCount} published
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-[var(--dq-surface-border-default)] hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 bg-[var(--dq-orange-50)] rounded-lg flex items-center justify-center shadow-sm">
-                      <Calendar className="w-7 h-7 text-[var(--dq-orange-500)]" />
-                    </div>
+                <div className={learnerKpiCard}>
+                  <div className={cn(learnerIconWell, "mb-4 bg-orange-50")}>
+                    <Calendar className="h-5 w-5 text-dq-orange" />
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold mb-1 text-[var(--dq-text-primary)]">0</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Upcoming Sessions</div>
-                  <div className="mt-3 flex items-center gap-1 text-[13px] text-[var(--dq-text-tertiary)] font-medium">
-                    <span>No sessions scheduled</span>
-                  </div>
+                  <div className={learnerKpiValue}>0</div>
+                  <div className={learnerKpiLabel}>Upcoming Sessions</div>
+                  <div className={cn(learnerBodyMuted, "mt-2 text-xs")}>No sessions scheduled</div>
                 </div>
               </div>
 
-              {/* Quick Actions */}
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-[var(--dq-surface-border-default)]">
-                <h3 className="text-[20px] leading-[28px] font-semibold mb-5 text-[var(--dq-text-primary)]">Quick Actions</h3>
+              <div className={cn(learnerPanel, "p-5")}>
+                <h3 className={cn(learnerSectionHeading, "mb-4")}>Quick Actions</h3>
                 <div className="flex flex-wrap gap-3">
-                  <Button variant="hero" onClick={() => setActiveTab("courses")} className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white shadow-sm">
-                    <Plus className="w-4 h-4 mr-2" />
+                  <Button className={learnerBtnPrimary} onClick={() => setActiveTab("course-builder")}>
+                    <Plus className="mr-2 h-4 w-4" />
                     Create Course
                   </Button>
-                  <Button variant="outline" onClick={() => setActiveTab("learners")} className="border-[var(--dq-surface-border-default)] text-[var(--dq-text-primary)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-200)]">
-                    <Users className="w-4 h-4 mr-2" />
+                  <Button variant="outline" onClick={() => setActiveTab("learners")} className="rounded-full border-gray-200">
+                    <Users className="mr-2 h-4 w-4" />
                     View Learners
                   </Button>
                 </div>
@@ -582,153 +534,63 @@ const InstructorDashboard = () => {
 
           {/* Learners Tab */}
           {activeTab === "learners" && (
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[var(--dq-text-primary)]">Learners</h1>
-                <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)]">Manage and track your learners</p>
-              </div>
+            <div className="space-y-4">
               <LearnerManagementTable />
             </div>
           )}
 
           {/* Verification Tab */}
           {activeTab === "verification" && (
-            <div className="space-y-8">
-              <div>
-                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[var(--dq-text-primary)]">Verification & Compliance</h1>
-                <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)]">Complete your verification to publish courses</p>
-              </div>
-              <div className="space-y-6">
-                <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-all">
-                  <div className="flex items-start gap-6">
-                    <div className="w-16 h-16 rounded-lg bg-[var(--dq-success-surface)] flex items-center justify-center flex-shrink-0 shadow-sm">
-                      <CheckCircle className="w-8 h-8 text-[var(--dq-success)]" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">Identity Verification</h3>
-                        <span className="px-4 py-1.5 rounded-full text-[13px] font-semibold bg-[var(--dq-success-surface)] text-[var(--dq-success-text)]">
-                          Verified
-                        </span>
-                      </div>
-                      <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)] mb-4">
-                        Your identity has been successfully verified. You can now proceed with credential submission.
-                      </p>
-                      <div className="flex items-center gap-2 text-[14px] text-[var(--dq-success)] font-medium">
-                        <CheckCircle className="w-4 h-4" />
-                        <span>Completed on {new Date().toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-all">
-                  <div className="flex items-start gap-6">
-                    <div className="w-16 h-16 rounded-lg bg-[var(--dq-warning-surface)] flex items-center justify-center flex-shrink-0 shadow-sm">
-                      <AlertCircle className="w-8 h-8 text-[var(--dq-warning)]" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">Professional Credentials</h3>
-                        <span className="px-4 py-1.5 rounded-full text-[13px] font-semibold bg-[var(--dq-warning-surface)] text-[var(--dq-warning-text)]">
-                          Pending Review
-                        </span>
-                      </div>
-                      <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)] mb-4">
-                        Upload your professional credentials, certifications, or qualifications to verify your expertise.
-                      </p>
-                      <div className="bg-[var(--dq-gray-50)] rounded-lg p-4 mb-4">
-                        <p className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-primary)] mb-2">Required Documents:</p>
-                        <ul className="space-y-1.5 text-[13px] leading-[18px] text-[var(--dq-text-tertiary)]">
-                          <li className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[var(--dq-orange-500)]" />
-                            Professional certifications or degrees
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[var(--dq-orange-500)]" />
-                            Proof of teaching experience (optional)
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[var(--dq-orange-500)]" />
-                            Industry credentials or licenses
-                          </li>
-                        </ul>
-                      </div>
-                      <Button className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white shadow-sm">
-                        <Upload className="w-4 h-4 mr-2" />
-                        Upload Credentials
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <VerificationSection onCredentialsUploaded={() => setIsVerificationPending(true)} />
           )}
 
           {/* Reviews Tab */}
           {activeTab === "reviews" && (
-            <div className="space-y-8">
-              <div>
-                <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[var(--dq-text-primary)]">Reviews & Reputation</h1>
-                <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)]">Manage your course reviews and ratings</p>
-              </div>
-
-              {/* Rating Overview Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 bg-[var(--dq-warning-surface)] rounded-lg flex items-center justify-center shadow-sm">
-                      <Star className="w-8 h-8 text-[var(--dq-warning)] fill-[var(--dq-warning)]" />
-                    </div>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className={learnerKpiCard}>
+                  <div className={cn(learnerIconWell, "mb-4 bg-amber-50")}>
+                    <Star className="h-5 w-5 fill-amber-500 text-amber-500" />
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-text-primary)] mb-1">0.0</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Average Rating</div>
-                  <div className="flex items-center gap-1 mt-3">
+                  <div className={learnerKpiValue}>0.0</div>
+                  <div className={learnerKpiLabel}>Average Rating</div>
+                  <div className="mt-2 flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="w-4 h-4 text-[var(--dq-surface-border-default)]" />
+                      <Star key={star} className="h-3.5 w-3.5 text-gray-300" />
                     ))}
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 bg-[var(--dq-orange-50)] rounded-lg flex items-center justify-center">
-                      <Users className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                    </div>
+                <div className={learnerKpiCard}>
+                  <div className={cn(learnerIconWell, "mb-4 bg-orange-50")}>
+                    <Users className="h-5 w-5 text-dq-orange" />
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-text-primary)] mb-1">0</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Total Reviews</div>
-                  <div className="mt-3 text-[13px] text-[var(--dq-text-tertiary)] font-medium">
-                    <span>Across all courses</span>
-                  </div>
+                  <div className={learnerKpiValue}>0</div>
+                  <div className={learnerKpiLabel}>Total Reviews</div>
+                  <div className={cn(learnerBodyMuted, "mt-2 text-xs")}>Across all courses</div>
                 </div>
 
-                <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-16 h-16 bg-[var(--dq-success-surface)] rounded-lg flex items-center justify-center shadow-sm">
-                      <TrendingUp className="w-8 h-8 text-[var(--dq-success)]" />
-                    </div>
+                <div className={learnerKpiCard}>
+                  <div className={cn(learnerIconWell, "mb-4 bg-emerald-50")}>
+                    <TrendingUp className="h-5 w-5 text-emerald-600" />
                   </div>
-                  <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-text-primary)] mb-1">0%</div>
-                  <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Response Rate</div>
-                  <div className="mt-3 text-[13px] text-[var(--dq-text-tertiary)] font-medium">
-                    <span>Last 30 days</span>
-                  </div>
+                  <div className={learnerKpiValue}>0%</div>
+                  <div className={learnerKpiLabel}>Response Rate</div>
+                  <div className={cn(learnerBodyMuted, "mt-2 text-xs")}>Last 30 days</div>
                 </div>
               </div>
 
-              {/* Empty State */}
-              <div className="bg-white rounded-xl p-12 text-center border border-[var(--dq-surface-border-default)] shadow-sm">
-                <div className="w-20 h-20 bg-[var(--dq-warning-surface)] rounded-lg flex items-center justify-center mx-auto mb-6 shadow-sm">
-                  <Star className="w-10 h-10 text-[var(--dq-warning)]" />
+              <div className={cn(learnerPanel, "p-10 text-center")}>
+                <div className={cn(learnerIconWell, "mx-auto mb-4 h-16 w-16 bg-amber-50")}>
+                  <Star className="h-8 w-8 text-amber-500" />
                 </div>
-                <h3 className="text-[20px] leading-[28px] font-semibold mb-3 text-[var(--dq-text-primary)]">No reviews yet</h3>
-                <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)] mb-6 max-w-md mx-auto">
+                <h3 className={cn(learnerEmptyTitle, "mb-2")}>No reviews yet</h3>
+                <p className={cn(learnerEmptyBody, "mx-auto mb-5 max-w-md")}>
                   Reviews will appear here as learners complete your courses and share their feedback
                 </p>
-                <div className="bg-[var(--dq-orange-50)] rounded-lg p-4 max-w-lg mx-auto border border-[var(--dq-orange-200)]">
-                  <p className="text-[14px] leading-[20px] text-[var(--dq-text-primary)] font-medium">
-                    💡 Tip: Encourage learners to leave reviews by providing excellent course content and support
+                <div className="mx-auto max-w-lg rounded-lg border border-orange-200 bg-orange-50 p-4">
+                  <p className={learnerBody}>
+                    Tip: Encourage learners to leave reviews by providing excellent course content and support
                   </p>
                 </div>
               </div>
@@ -736,17 +598,176 @@ const InstructorDashboard = () => {
           )}
 
           {/* Profile & Settings Tab */}
-          {activeTab === "profile" && (
-            <CertificateBrandingSection profile={profile} />
-          )}
-        </main>
+          {activeTab === "profile" && <CertificateBrandingSection />}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+const CREDENTIALS_STORAGE_KEY = "instructor_credentials_uploads";
+
+type UploadedCredential = {
+  name: string;
+  size: number;
+  uploadedAt: string;
+};
+
+function loadUploadedCredentials(): UploadedCredential[] {
+  try {
+    const raw = localStorage.getItem(CREDENTIALS_STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as UploadedCredential[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+const VerificationSection = ({
+  onCredentialsUploaded,
+}: {
+  onCredentialsUploaded?: () => void;
+}) => {
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedCredential[]>(loadUploadedCredentials);
+  const hasSubmittedCredentials = uploadedFiles.length > 0;
+
+  const handleUploadCredentials = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+
+    const newEntries: UploadedCredential[] = Array.from(files).map((file) => ({
+      name: file.name,
+      size: file.size,
+      uploadedAt: new Date().toISOString(),
+    }));
+
+    const next = [...uploadedFiles, ...newEntries];
+    setUploadedFiles(next);
+    localStorage.setItem(CREDENTIALS_STORAGE_KEY, JSON.stringify(next));
+    localStorage.setItem("instructor_verification_pending", "true");
+    onCredentialsUploaded?.();
+
+    toast({
+      title: "Credentials uploaded",
+      description: `${newEntries.length} file${newEntries.length === 1 ? "" : "s"} submitted for review.`,
+    });
+
+    e.target.value = "";
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className={cn(learnerPanel, "p-6")}>
+        <div className="flex items-start gap-5">
+          <div className={cn(learnerIconWell, "h-14 w-14 bg-emerald-50")}>
+            <CheckCircle className="h-7 w-7 text-emerald-600" />
+          </div>
+          <div className="flex-1">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h3 className={learnerSectionHeading}>Identity Verification</h3>
+              <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                Verified
+              </span>
+            </div>
+            <p className={cn(learnerBody, "mb-3")}>
+              Your identity has been successfully verified. You can now proceed with credential submission.
+            </p>
+            <div className="flex items-center gap-2 text-sm font-medium text-emerald-600">
+              <CheckCircle className="h-4 w-4" />
+              <span>Completed on {new Date().toLocaleDateString()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className={cn(learnerPanel, "p-6")}>
+        <div className="flex items-start gap-5">
+          <div className={cn(learnerIconWell, "h-14 w-14 bg-amber-50")}>
+            <AlertCircle className="h-7 w-7 text-amber-600" />
+          </div>
+          <div className="flex-1">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h3 className={learnerSectionHeading}>Professional Credentials</h3>
+              <span
+                className={cn(
+                  "rounded-full px-3 py-1 text-xs font-semibold",
+                  hasSubmittedCredentials
+                    ? "bg-amber-50 text-amber-700"
+                    : "bg-gray-100 text-gray-600"
+                )}
+              >
+                {hasSubmittedCredentials ? "Pending Review" : "Not Submitted"}
+              </span>
+            </div>
+            <p className={cn(learnerBody, "mb-4")}>
+              Upload your professional credentials, certifications, or qualifications to verify your expertise.
+            </p>
+            <div className="mb-4 rounded-lg bg-gray-50 p-4">
+              <p className={cn(learnerItemTitle, "mb-2 text-sm")}>Required Documents:</p>
+              <ul className={cn(learnerBodyMuted, "space-y-1.5 text-sm")}>
+                <li className="flex items-center gap-2">
+                  <div className="h-1.5 w-1.5 rounded-full bg-dq-orange" />
+                  Professional certifications or degrees
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="h-1.5 w-1.5 rounded-full bg-dq-orange" />
+                  Proof of teaching experience (optional)
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="h-1.5 w-1.5 rounded-full bg-dq-orange" />
+                  Industry credentials or licenses
+                </li>
+              </ul>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,.png,.jpg,.jpeg,.webp"
+              multiple
+              className="hidden"
+              onChange={handleUploadCredentials}
+            />
+            <Button
+              type="button"
+              className={learnerBtnPrimary}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Upload Credentials
+            </Button>
+
+            {hasSubmittedCredentials ? (
+              <div className="mt-4 space-y-2">
+                <p className={cn(learnerItemTitle, "text-sm")}>Submitted files</p>
+                {uploadedFiles.map((file, index) => (
+                  <div
+                    key={`${file.name}-${file.uploadedAt}-${index}`}
+                    className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600"
+                  >
+                    <FileText className="h-4 w-4 shrink-0 text-dq-orange" />
+                    <span className="min-w-0 flex-1 truncate">{file.name}</span>
+                    <span className="shrink-0 text-xs text-gray-400">
+                      {new Date(file.uploadedAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-const CertificateBrandingSection = ({ profile }: any) => {
+const CertificateBrandingSection = () => {
+  const { profile, updateProfile } = useAuth();
   const { toast } = useToast();
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(profile?.avatar_url ?? null);
   const [certificateSettings, setCertificateSettings] = useState({
     issuingEntityName: profile?.full_name || "",
     logo: null as File | null,
@@ -757,6 +778,73 @@ const CertificateBrandingSection = ({ profile }: any) => {
     accreditationNumber: "",
     footerText: "This certificate verifies that the above-named individual has successfully completed the course requirements.",
   });
+
+  useEffect(() => {
+    setAvatarPreview(profile?.avatar_url ?? null);
+  }, [profile?.avatar_url]);
+
+  const getInitials = (name: string | null) => {
+    if (!name) return "I";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Invalid file",
+        description: "Please upload an image file (PNG, JPG, or WebP).",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Profile picture must be under 2MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setAvatarPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
+  const handleSaveProfile = async () => {
+    const { error } = await updateProfile({ avatar_url: avatarPreview });
+    if (error) {
+      toast({
+        title: "Update failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsEditingProfile(false);
+    toast({
+      title: "Profile updated",
+      description: "Your profile picture has been saved.",
+    });
+  };
+
+  const handleCancelProfileEdit = () => {
+    setAvatarPreview(profile?.avatar_url ?? null);
+    setIsEditingProfile(false);
+  };
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -795,24 +883,51 @@ const CertificateBrandingSection = ({ profile }: any) => {
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-[28px] leading-[36px] font-semibold mb-2 text-[var(--dq-text-primary)]">Profile & Settings</h1>
-        <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)]">Manage your instructor profile and certificate branding</p>
-      </div>
-
-      {/* Basic Profile Information */}
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 bg-[var(--dq-orange-50)] rounded-lg flex items-center justify-center">
-            <User className="w-8 h-8 text-[var(--dq-orange-500)]" />
+    <div className="space-y-4">
+      <div className={cn(learnerPanel, "p-6")}>
+        <div className="mb-6 flex items-center gap-4">
+          <div className={cn(learnerIconWell, "h-14 w-14 bg-orange-50")}>
+            <User className="h-7 w-7 text-dq-orange" />
           </div>
           <div>
-            <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">Public Instructor Profile</h3>
-            <p className="text-[14px] leading-[20px] text-[var(--dq-text-tertiary)]">Your profile information visible to learners</p>
+            <h3 className={learnerSectionHeading}>Public Instructor Profile</h3>
+            <p className={learnerBodyMuted}>Your profile information visible to learners</p>
           </div>
         </div>
         <div className="space-y-5">
+          <div className="flex items-center gap-4">
+            <div className="relative shrink-0">
+              <Avatar className="h-16 w-16">
+                <AvatarImage src={avatarPreview || undefined} />
+                <AvatarFallback className="bg-dq-navy text-sm text-white">
+                  {getInitials(profile?.full_name ?? null)}
+                </AvatarFallback>
+              </Avatar>
+              {isEditingProfile ? (
+                <button
+                  type="button"
+                  onClick={() => avatarInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-dq-orange text-white hover:bg-[#E04020]"
+                  aria-label="Change profile picture"
+                >
+                  <Camera className="h-3.5 w-3.5" />
+                </button>
+              ) : null}
+            </div>
+            <div>
+              <p className={learnerItemTitle}>{profile?.full_name || "Instructor"}</p>
+              <p className={cn(learnerBodyMuted, "text-sm")}>{profile?.email}</p>
+            </div>
+          </div>
+
+          <input
+            ref={avatarInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            className="hidden"
+            onChange={handleAvatarChange}
+          />
+
           <div>
             <Label className="text-[14px] leading-[20px] font-semibold text-[var(--dq-text-primary)] mb-2 block">Full Name</Label>
             <Input 
@@ -829,27 +944,39 @@ const CertificateBrandingSection = ({ profile }: any) => {
               className="bg-[var(--dq-gray-50)] border-[var(--dq-surface-border-default)] text-[var(--dq-text-primary)] font-medium" 
             />
           </div>
-          <div className="pt-2">
-            <Button 
-              variant="outline" 
-              className="border-[var(--dq-surface-border-default)] text-[var(--dq-text-primary)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-200)] shadow-sm"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Edit Profile
-            </Button>
+          <div className="flex flex-wrap gap-2 pt-2">
+            {isEditingProfile ? (
+              <>
+                <Button className={learnerBtnPrimary} onClick={handleSaveProfile}>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Profile
+                </Button>
+                <Button variant="outline" onClick={handleCancelProfileEdit}>
+                  Cancel
+                </Button>
+              </>
+            ) : (
+              <Button 
+                variant="outline" 
+                className="border-[var(--dq-surface-border-default)] text-[var(--dq-text-primary)] hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)] hover:border-[var(--dq-orange-200)] shadow-sm"
+                onClick={() => setIsEditingProfile(true)}
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                Edit Profile
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Certificate Branding Settings */}
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] space-y-8 shadow-sm hover:shadow-md transition-shadow">
+      <div className={cn(learnerPanel, "space-y-6 p-6")}>
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-[var(--dq-gray-100)] rounded-lg flex items-center justify-center shadow-sm">
-            <Award className="w-8 h-8 text-[var(--dq-text-primary)]" />
+          <div className={learnerIconWell}>
+            <Award className="h-7 w-7 text-dq-navy" />
           </div>
           <div>
-            <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">Certificate Branding</h3>
-            <p className="text-[14px] leading-[20px] text-[var(--dq-text-tertiary)]">Configure how certificates issued by you will appear</p>
+            <h3 className={learnerSectionHeading}>Certificate Branding</h3>
+            <p className={learnerBodyMuted}>Configure how certificates issued by you will appear</p>
           </div>
         </div>
 
@@ -972,24 +1099,22 @@ const CertificateBrandingSection = ({ profile }: any) => {
           />
         </div>
 
-        {/* Save Button */}
-        <div className="flex justify-end pt-6 border-t border-[var(--dq-surface-border-default)]">
-          <Button onClick={handleSave} className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white text-[15px] leading-[22px] font-semibold px-8 shadow-sm">
-            <CheckCircle className="w-4 h-4 mr-2" />
+        <div className="flex justify-end border-t border-gray-200 pt-6">
+          <Button onClick={handleSave} className={learnerBtnPrimary}>
+            <CheckCircle className="mr-2 h-4 w-4" />
             Save Certificate Settings
           </Button>
         </div>
       </div>
 
-      {/* Certificate Preview */}
-      <div className="bg-white rounded-xl p-8 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-[var(--dq-orange-50)] rounded-lg flex items-center justify-center shadow-sm">
-            <Eye className="w-6 h-6 text-[var(--dq-orange-500)]" />
+      <div className={cn(learnerPanel, "p-6")}>
+        <div className="mb-6 flex items-center gap-3">
+          <div className={cn(learnerIconWell, "bg-orange-50")}>
+            <Eye className="h-5 w-5 text-dq-orange" />
           </div>
           <div>
-            <h3 className="text-[20px] leading-[28px] font-semibold text-[var(--dq-text-primary)]">Certificate Preview</h3>
-            <p className="text-[14px] leading-[20px] text-[var(--dq-text-tertiary)]">See how your certificate will look</p>
+            <h3 className={learnerSectionHeading}>Certificate Preview</h3>
+            <p className={learnerBodyMuted}>See how your certificate will look</p>
           </div>
         </div>
         <div className="border-2 border-[var(--dq-surface-border-default)] rounded-xl overflow-hidden bg-white shadow-lg">
@@ -1126,18 +1251,12 @@ const CoursesSection = ({
 
   return (
       <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-text-primary)]">My Courses</h1>
-          <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)]">Create and manage your course content</p>
-        </div>
+      <div className="flex items-center justify-end">
+        <Button className={learnerBtnPrimary} onClick={() => setIsCreateOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Create Course
+        </Button>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button variant="hero" className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)]">
-              <Plus className="w-4 h-4 mr-2" />
-              Create Course
-            </Button>
-          </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle className="text-[24px] leading-[32px] font-semibold text-[var(--dq-text-primary)]">Create New Course</DialogTitle>
@@ -1216,33 +1335,31 @@ const CoursesSection = ({
         </Dialog>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-6 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-text-primary)] mb-1">{courses?.length || 0}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Total Courses</div>
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className={learnerKpiCard}>
+          <div className={learnerKpiValue}>{courses?.length || 0}</div>
+          <div className={learnerKpiLabel}>Total Courses</div>
         </div>
-        <div className="bg-white rounded-xl p-6 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-success)] mb-1">{publishedCount}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Published</div>
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerKpiValue, "text-emerald-600")}>{publishedCount}</div>
+          <div className={learnerKpiLabel}>Published</div>
         </div>
-        <div className="bg-white rounded-xl p-6 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-warning)] mb-1">{underReviewCount}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Under Review</div>
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerKpiValue, "text-amber-600")}>{underReviewCount}</div>
+          <div className={learnerKpiLabel}>Under Review</div>
         </div>
-        <div className="bg-white rounded-xl p-6 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-[36px] leading-[44px] font-bold text-[var(--dq-text-disabled)] mb-1">{draftCount}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-[var(--dq-text-tertiary)]">Drafts</div>
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerKpiValue, "text-gray-500")}>{draftCount}</div>
+          <div className={learnerKpiLabel}>Drafts</div>
         </div>
       </div>
 
-      {/* Courses List */}
       {isLoading ? (
-        <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-tertiary)]">Loading your courses...</p>
+        <p className={learnerBodyMuted}>Loading your courses...</p>
       ) : courses && courses.length > 0 ? (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {courses.map((course: any) => (
-            <div key={course.id} className="bg-white rounded-xl p-6 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-all hover:border-[var(--dq-orange-200)]">
+            <div key={course.id} className={cn(learnerPanel, "p-5 transition-colors hover:border-dq-orange/30")}>
               <div className="flex items-start gap-6">
                 <div className="relative flex-shrink-0 group">
                   <img
@@ -1302,14 +1419,14 @@ const CoursesSection = ({
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-xl p-12 text-center border border-[var(--dq-surface-border-default)] shadow-sm">
-          <div className="w-20 h-20 bg-[var(--dq-orange-50)] rounded-lg flex items-center justify-center mx-auto mb-6">
-            <BookOpen className="w-10 h-10 text-[var(--dq-orange-500)]" />
+        <div className={cn(learnerPanel, "p-10 text-center")}>
+          <div className={cn(learnerIconWell, "mx-auto mb-4 h-16 w-16 bg-orange-50")}>
+            <BookOpen className="h-8 w-8 text-dq-orange" />
           </div>
-          <h3 className="text-[20px] leading-[28px] font-semibold mb-2 text-[var(--dq-text-primary)]">No courses yet</h3>
-          <p className="text-[15px] leading-[22px] font-normal text-[var(--dq-text-tertiary)] mb-6">Create your first course to start teaching.</p>
-          <Button variant="hero" onClick={() => setIsCreateOpen(true)} className="bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] shadow-sm">
-            <Plus className="w-4 h-4 mr-2" />
+          <h3 className={cn(learnerEmptyTitle, "mb-2")}>No courses yet</h3>
+          <p className={cn(learnerEmptyBody, "mb-5")}>Create your first course to start teaching.</p>
+          <Button className={learnerBtnPrimary} onClick={() => setIsCreateOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
             Create Course
           </Button>
         </div>

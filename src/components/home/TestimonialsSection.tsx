@@ -1,154 +1,131 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import MarketingSection from "@/components/marketing/MarketingSection";
+import SectionHeader from "@/components/marketing/SectionHeader";
+import { btnPrimary } from "@/lib/brandAccent";
 
 const TestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const testimonials = [
     {
-      quote: "The digital transformation courses at DTMA gave me the practical skills I needed to lead our company's modernization efforts. The instructors understand real-world challenges.",
+      quote:
+        "The digital transformation courses at DTMA gave me the practical skills I needed to lead our company's modernization efforts. The instructors understand real-world challenges.",
       author: "Jane M.",
       role: "Chief Digital Officer",
       organization: "TechCorp Industries",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
     },
     {
-      quote: "DTMA's approach to teaching digital leadership is unmatched. I've applied these frameworks directly to my team and seen immediate results in our transformation initiatives.",
+      quote:
+        "DTMA's approach to teaching digital leadership is unmatched. I've applied these frameworks directly to my team and seen immediate results in our transformation initiatives.",
       author: "David K.",
       role: "VP of Digital Strategy",
       organization: "Global Finance Group",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
     },
     {
-      quote: "As a transformation specialist, I needed cutting-edge knowledge. DTMA delivered exactly that - practical, relevant content that I use every day in my consulting work.",
+      quote:
+        "As a transformation specialist, I needed cutting-edge knowledge. DTMA delivered exactly that - practical, relevant content that I use every day in my consulting work.",
       author: "Sarah L.",
       role: "Digital Transformation Consultant",
       organization: "Innovation Partners",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
     },
     {
-      quote: "The courses helped me transition from traditional management to digital leadership. The skills I gained have been instrumental in driving change across our organization.",
+      quote:
+        "The courses helped me transition from traditional management to digital leadership. The skills I gained have been instrumental in driving change across our organization.",
       author: "Michael R.",
       role: "Director of Operations",
       organization: "Manufacturing Solutions Inc",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop",
     },
   ];
 
-  // Auto-advance carousel every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
     }, 5000);
-
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
-  };
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
-
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
-            Hear From Our Learners
+    <MarketingSection background="gray">
+      <SectionHeader align="center" eyebrowText="Hear From Our Learners" title="What learners say" />
+
+      <div className="relative mx-auto max-w-[900px]">
+        <button
+          type="button"
+          onClick={() =>
+            setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
+          }
+          className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-x-16 -translate-y-1/2 items-center justify-center rounded-full bg-white text-gray-600 shadow-md transition-shadow hover:text-dq-orange hover:shadow-lg"
+          aria-label="Previous testimonial"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() =>
+            setCurrentIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
+          }
+          className="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 translate-x-16 items-center justify-center rounded-full bg-white text-gray-600 shadow-md transition-shadow hover:text-dq-orange hover:shadow-lg"
+          aria-label="Next testimonial"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+
+        <div className="text-center">
+          <div className="mb-8 flex justify-center">
+            <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-white shadow-md">
+              <img
+                src={testimonials[currentIndex].image}
+                alt={testimonials[currentIndex].author}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          <p className="mb-8 text-xl font-medium leading-relaxed text-dq-navy md:text-2xl">
+            "{testimonials[currentIndex].quote}"
           </p>
-        </div>
 
-        {/* Testimonial Content */}
-        <div className="relative max-w-[900px] mx-auto">
-          {/* Navigation Buttons */}
-          <button
-            onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center text-[var(--dq-text-secondary)] hover:text-[var(--dq-orange-500)] z-10"
-            aria-label="Previous testimonial"
+          <div className="mb-8">
+            <p className="text-base text-gray-600">
+              — {testimonials[currentIndex].author}, {testimonials[currentIndex].role}
+            </p>
+            <p className="mt-1 text-sm text-gray-400">{testimonials[currentIndex].organization}</p>
+          </div>
+
+          <Link
+            to="/testimonials"
+            className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#ff4500] hover:bg-[#cc3700] text-white text-sm font-semibold rounded-full transition-colors mb-8"
           >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
+            Read More Stories
+          </Link>
 
-          <button
-            onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 w-10 h-10 rounded-full bg-white shadow-md hover:shadow-lg transition-shadow flex items-center justify-center text-[var(--dq-text-secondary)] hover:text-[var(--dq-orange-500)] z-10"
-            aria-label="Next testimonial"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-
-          {/* Testimonial Card */}
-          <div className="text-center">
-            {/* Avatar */}
-            <div className="flex justify-center mb-8">
-              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[var(--dq-gray-50)] shadow-md">
-                <img
-                  src={testimonials[currentIndex].image}
-                  alt={testimonials[currentIndex].author}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* Quote */}
-            <div className="mb-8">
-              <p className="text-xl md:text-2xl font-medium text-[var(--dq-navy-950)] leading-relaxed">
-                "{testimonials[currentIndex].quote}"
-              </p>
-            </div>
-
-            {/* Author Info */}
-            <div className="mb-8">
-              <p className="text-base text-[var(--dq-text-secondary)]">
-                — {testimonials[currentIndex].author}, {testimonials[currentIndex].role}
-              </p>
-              <p className="text-sm text-[var(--dq-text-disabled)] mt-1">
-                {testimonials[currentIndex].organization}
-              </p>
-            </div>
-
-            {/* CTA Button */}
-            <div className="mb-8">
-              <Link
-                to="/testimonials"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white rounded-lg font-medium transition-colors"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                  <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                </svg>
-                Read More Stories
-              </Link>
-            </div>
-
-            {/* Dots Navigation */}
-            <div className="flex justify-center gap-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                    index === currentIndex 
-                      ? 'bg-[var(--dq-orange-500)] w-8' 
-                      : 'bg-[var(--dq-surface-border-subtle)] hover:bg-[var(--dq-text-disabled)]'
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
+          <div className="flex justify-center gap-2">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => setCurrentIndex(index)}
+                className={`h-2.5 rounded-full transition-all duration-300 ${
+                  index === currentIndex ? "w-8 bg-dq-orange" : "w-2.5 bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </div>
-    </section>
+    </MarketingSection>
   );
 };
 

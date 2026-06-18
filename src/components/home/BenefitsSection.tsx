@@ -1,94 +1,66 @@
-import { AlertTriangle, Layers, Eye } from "lucide-react";
-
-const BenefitsSection = () => {
-  const benefits = [
-    {
-      icon: AlertTriangle,
-      title: "A 75% Digital Transformation Failure Rate",
-      description: "75% of digital transformation initiatives fail — not from poor strategy, but capability gaps. DTMA addresses the root causes: execution, culture, and alignment. Build the competencies that turn transformation ambition into measurable results.",
-      cta: "Understand Why",
-      link: "#",
-    },
-    {
-      icon: Layers,
-      title: "The 4x Parts of a DBP",
-      description: "The Digital Business Platform integrates technology, data, experience, and operations into one engine. Leading organizations use it to gain a decisive edge in Economy 4.0. Discover the four-part framework behind their competitive dominance.",
-      cta: "What Is It?",
-      link: "#",
-    },
-    {
-      icon: Eye,
-      title: "The 6X Digital Perspectives (6XD)",
-      description: "Six critical dimensions define how a Digital Cognitive Organization operates. These perspectives give you a structured lens to understand digital transformation holistically. Master them to build and thrive within the future of Economy 4.0.",
-      cta: "Upskill Now",
-      link: "#",
-    },
-  ];
-
-  return (
-    <section className="py-16 bg-white">
-      <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-        {/* Section Intro */}
-        <div className="text-center mb-16">
-          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
-            The DTMA Advantage
-          </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-[var(--dq-navy-950)] mb-6">
-            Ready for the Digital Economy?
-          </h2>
-          <p className="text-base text-[var(--dq-text-secondary)] max-w-3xl mx-auto leading-relaxed">
-            Learn what it takes to become a Digital Cognitive Organization and succeed in Economy 4.0.
-          </p>
-        </div>
-
-        {/* Benefits Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {benefits.map((benefit, index) => {
-            const Icon = benefit.icon;
-            return (
-              <div 
-                key={index}
-                className="flex flex-col items-start p-6 bg-white border border-[var(--dq-surface-border-default)] rounded-xl hover:shadow-md transition-all duration-300"
-              >
-                {/* Icon */}
-                <div className="w-12 h-12 bg-[var(--dq-navy-950)]/5 rounded-xl flex items-center justify-center mb-5">
-                  <Icon className="w-6 h-6 text-[var(--dq-navy-950)]" />
-                </div>
-
-                {/* Heading */}
-                <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-4">
-                  {benefit.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm text-[var(--dq-text-secondary)] leading-relaxed mb-4 flex-grow">
-                  {benefit.description}
-                </p>
-
-                {/* Credential Note (if exists) */}
-                {benefit.credential && (
-                  <p className="text-xs text-[var(--dq-text-secondary)] italic mb-4 p-3 bg-white rounded-lg border border-[var(--dq-surface-border-default)]">
-                    {(benefit as any).credential}
-                  </p>
-                )}
-
-                {/* CTA */}
-                <a 
-                  href={benefit.link}
-                  className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-medium text-sm transition-colors inline-flex items-center gap-2 mt-2"
-                >
-                  {benefit.cta}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default BenefitsSection;
+import { ClipboardList, Puzzle, RefreshCw, type LucideIcon } from "lucide-react";
+import MeshSection from "@/components/layout/MeshSection";
+import { eyebrowOnDark, marketingSectionHeading, sectionPaddingX, sectionPaddingY } from "@/lib/brandAccent";
+
+const BenefitsSection = () => {
+  const problems: { icon: LucideIcon; title: string; description: string }[] = [
+    {
+      icon: ClipboardList,
+      title: "Trained, never applied",
+      description:
+        "Courses delivered without connection to live transformation projects or real execution contexts.",
+    },
+    {
+      icon: Puzzle,
+      title: "Learning without a framework",
+      description:
+        "Skills taught in isolation, no structured methodology to connect strategy, technology, and people.",
+    },
+    {
+      icon: RefreshCw,
+      title: "No continuity",
+      description:
+        "One-off training events treated as disconnected interventions, with no capability-building system.",
+    },
+  ];
+
+  return (
+    <MeshSection variant="heroDark" className={`${sectionPaddingY} ${sectionPaddingX} text-white`}>
+      <div className="relative z-10 mx-auto max-w-[1200px]">
+        <p className={`${eyebrowOnDark} mb-5`}>Why DTMA exists</p>
+
+        <h2 className={`${marketingSectionHeading} mb-4 max-w-3xl text-white`}>
+          75% of digital transformation initiatives fail to deliver.
+        </h2>
+        <p className="mb-14 max-w-lg text-lg text-white/70">
+          The root cause isn't strategy. It's a capability gap. The fix is structured learning.
+        </p>
+
+        <div className="mb-14 grid grid-cols-1 gap-5 md:grid-cols-3">
+          {problems.map((p) => {
+            const Icon = p.icon;
+            return (
+              <div
+                key={p.title}
+                className="rounded-2xl border border-white/10 bg-white/[0.06] p-6 transition-colors hover:bg-white/[0.08]"
+              >
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                  <Icon className="h-5 w-5 text-dq-orange" aria-hidden />
+                </div>
+                <h3 className="mb-2 text-base font-semibold text-white">{p.title}</h3>
+                <p className="text-sm leading-relaxed text-white/70">{p.description}</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <p className="mx-auto max-w-xl text-center text-sm text-white/60">
+          DTMA was founded to close this gap, with a methodology that treats digital capability building
+          as a structured, continuous system.
+        </p>
+      </div>
+    </MeshSection>
+  );
+};
+
+export default BenefitsSection;

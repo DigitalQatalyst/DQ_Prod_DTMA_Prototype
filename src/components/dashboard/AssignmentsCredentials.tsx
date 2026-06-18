@@ -1,17 +1,25 @@
-import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
-import { 
-  Upload, 
-  Download, 
-  Award, 
-  FileText, 
+import {
+  Upload,
+  Download,
+  Award,
+  FileText,
   Calendar,
   CheckCircle,
   Clock,
-  Trophy
+  Trophy,
 } from 'lucide-react';
+import {
+  learnerBadge,
+  learnerBody,
+  learnerBodyMuted,
+  learnerBtnPrimary,
+  learnerItemTitle,
+  learnerPanel,
+} from '@/lib/brandAccent';
+import { cn } from '@/lib/utils';
 
 export const AssignmentsCredentials = () => {
   const assignments = [
@@ -22,7 +30,7 @@ export const AssignmentsCredentials = () => {
       dueDate: '2024-03-30',
       status: 'pending',
       description: 'Create a comprehensive digital transformation strategy for a traditional retail business.',
-      points: 100
+      points: 100,
     },
     {
       id: '2',
@@ -32,8 +40,7 @@ export const AssignmentsCredentials = () => {
       status: 'submitted',
       description: 'Analyze a real-world AI implementation and its business impact.',
       points: 80,
-      submittedDate: '2024-03-28',
-      grade: 85
+      grade: 85,
     },
     {
       id: '3',
@@ -43,9 +50,8 @@ export const AssignmentsCredentials = () => {
       status: 'graded',
       description: 'Reflect on your leadership style and how it applies to digital transformation.',
       points: 50,
-      submittedDate: '2024-03-24',
       grade: 92,
-      feedback: 'Excellent analysis of leadership principles. Great real-world examples.'
+      feedback: 'Excellent analysis of leadership principles. Great real-world examples.',
     },
   ];
 
@@ -62,116 +68,104 @@ export const AssignmentsCredentials = () => {
     }
   };
 
-  const getDaysUntilDue = (dueDate: string) => {
-    const due = new Date(dueDate);
-    const today = new Date();
-    const diffTime = due.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
+  const getDueLabel = (dueDate: string, status: string) => {
+    if (status !== 'pending') return null;
+    const days = Math.ceil((new Date(dueDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    if (days < 0) return 'Overdue';
+    if (days <= 3) return `${days} day${days === 1 ? '' : 's'} left`;
+    return null;
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold mb-2 !text-[#1e2348]" style={{ fontSize: '28px', lineHeight: '36px', fontWeight: 600 }}>
-          Assignments
-        </h2>
-        <p className="text-muted-foreground" style={{ fontSize: '16px', lineHeight: '24px', fontWeight: 400 }}>
-          Submit assignments, track your progress, and view feedback
-        </p>
-      </div>
+    <div className="space-y-3">
+      {assignments.map((assignment) => {
+        const dueLabel = getDueLabel(assignment.dueDate, assignment.status);
 
-      <div className="space-y-4">
-        {assignments.map((assignment) => (
-          <Card key={assignment.id} className="p-6 border border-border">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-              <div className="flex-1">
-                <div className="flex items-start gap-3 mb-2">
-                  <FileText className="w-5 h-5 text-[#ff6b4d] mt-1" />
-                  <div>
-                    <h3 className="font-semibold !text-[#1e2348]" style={{ fontSize: '20px', lineHeight: '28px', fontWeight: 500 }}>
-                      {assignment.title}
-                    </h3>
-                    <p className="text-muted-foreground" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                      {assignment.course}
-                    </p>
-                  </div>
+        return (
+          <Card key={assignment.id} className={cn(learnerPanel, 'p-4')}>
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-start gap-3">
+                <FileText className="mt-0.5 h-4 w-4 shrink-0 text-dq-orange" />
+                <div className="min-w-0">
+                  <h3 className={learnerItemTitle}>{assignment.title}</h3>
+                  <p className={learnerBodyMuted}>{assignment.course}</p>
                 </div>
-                <p className="text-muted-foreground ml-8" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                  {assignment.description}
-                </p>
               </div>
-              
-              <Badge className={getStatusColor(assignment.status)} style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                {assignment.status === 'pending' && <Clock className="w-3 h-3 mr-1" />}
-                {assignment.status === 'submitted' && <CheckCircle className="w-3 h-3 mr-1" />}
-                {assignment.status === 'graded' && <Award className="w-3 h-3 mr-1" />}
+              <Badge className={cn(getStatusColor(assignment.status), learnerBadge, 'shrink-0')}>
+                {assignment.status === 'pending' && <Clock className="mr-1 h-3 w-3" />}
+                {assignment.status === 'submitted' && <CheckCircle className="mr-1 h-3 w-3" />}
+                {assignment.status === 'graded' && <Award className="mr-1 h-3 w-3" />}
                 {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
               </Badge>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-4 mb-4 ml-8">
-              <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                <Calendar className="w-4 h-4 text-muted-foreground" />
-                <span>Due: {new Date(assignment.dueDate).toLocaleDateString()}</span>
-                {assignment.status === 'pending' && getDaysUntilDue(assignment.dueDate) <= 3 && (
-                  <Badge variant="destructive" className="ml-2" style={{ fontSize: '12px', lineHeight: '16px', fontWeight: 500 }}>
-                    {getDaysUntilDue(assignment.dueDate)} days left
-                  </Badge>
-                )}
-              </div>
-              <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                <Trophy className="w-4 h-4 text-muted-foreground" />
-                <span>Points: {assignment.points}</span>
-              </div>
-              {assignment.grade && (
-                <div className="flex items-center gap-2" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                  <Award className="w-4 h-4 text-muted-foreground" />
-                  <span className="font-semibold text-[#ff6b4d]">Grade: {assignment.grade}%</span>
-                </div>
+            <p className={cn(learnerBody, 'mb-3 line-clamp-2')}>{assignment.description}</p>
+
+            <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+              <span className="inline-flex items-center gap-1">
+                <Calendar className="h-3.5 w-3.5" />
+                Due {new Date(assignment.dueDate).toLocaleDateString()}
+              </span>
+              <span className="inline-flex items-center gap-1">
+                <Trophy className="h-3.5 w-3.5" />
+                {assignment.points} pts
+              </span>
+              {assignment.grade != null && (
+                <span className="inline-flex items-center gap-1 font-medium text-dq-orange">
+                  <Award className="h-3.5 w-3.5" />
+                  {assignment.grade}%
+                </span>
+              )}
+              {dueLabel && (
+                <Badge
+                  variant={dueLabel === 'Overdue' ? 'destructive' : 'secondary'}
+                  className={cn('text-[10px]', learnerBadge)}
+                >
+                  {dueLabel}
+                </Badge>
               )}
             </div>
 
             {assignment.feedback && (
-              <div className="ml-8 p-3 bg-green-50 border border-green-200 rounded-lg mb-4">
-                <p className="text-green-800" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+              <div className="mb-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2">
+                <p className="text-xs text-green-800">
                   <strong>Feedback:</strong> {assignment.feedback}
                 </p>
               </div>
             )}
 
-            <div className="ml-8 flex gap-3">
+            <div className="flex flex-wrap gap-2">
               {assignment.status === 'pending' && (
                 <>
-                  <Button className="bg-[#ff6b4d] hover:bg-[#e56045] text-white" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Submit Assignment
+                  <Button className={cn(learnerBtnPrimary, 'h-8 px-3 text-xs')}>
+                    <Upload className="mr-1.5 h-3.5 w-3.5" />
+                    Submit
                   </Button>
-                  <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  <Button variant="outline" size="sm" className="h-8 text-xs">
                     View Details
                   </Button>
                 </>
               )}
               {assignment.status === 'submitted' && (
-                <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                <Button variant="outline" size="sm" className="h-8 text-xs">
                   View Submission
                 </Button>
               )}
               {assignment.status === 'graded' && (
                 <>
-                  <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
+                  <Button variant="outline" size="sm" className="h-8 text-xs">
                     View Feedback
                   </Button>
-                  <Button variant="outline" className="hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]" style={{ fontSize: '14px', lineHeight: '20px', fontWeight: 400 }}>
-                    <Download className="w-4 h-4 mr-2" />
+                  <Button variant="outline" size="sm" className="h-8 text-xs">
+                    <Download className="mr-1.5 h-3.5 w-3.5" />
                     Download
                   </Button>
                 </>
               )}
             </div>
           </Card>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 };

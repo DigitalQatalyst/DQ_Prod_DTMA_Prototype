@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/Badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFlow } from "@/contexts/FlowContext";
 import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
-
-type SignInRole = "learner" | "instructor" | "admin";
+import DTMALogo from "@/components/layout/DTMALogo";
+import JourneyContextSwitcher from "@/components/layout/JourneyContextSwitcher";
+import { btnPrimary, btnSecondaryNavy } from "@/lib/brandAccent";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +54,12 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const navLinkClass = cn(
+    "text-sm font-medium text-gray-600 transition-colors hover:text-dq-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dq-orange focus-visible:ring-offset-2 rounded-sm"
+  );
+
+  const dropdownTriggerClass = cn(navLinkClass, "flex items-center gap-1");
+
   const handleSignOut = async () => {
     await signOut();
     setIsOpen(false);
@@ -64,25 +71,13 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--dq-navy-950)]/20 backdrop-blur-md">
-      <nav className="w-full relative">
-        <div className="flex items-center w-full px-8 md:px-12 lg:px-16 py-3 gap-8 lg:gap-16 xl:gap-24" style={{ maxWidth: '1600px', margin: '0 auto' }}>
-          {/* Left: Logo Area */}
-          <div className="flex items-center flex-shrink-0 gap-6">
-            <Link to="/" className="flex items-center gap-3 group">
-              <img
-                src="/dtma-logo.png"
-                alt="DTMA"
-                className="h-[40px] w-auto transition-transform duration-300 group-hover:scale-105"
-              />
-            </Link>
-            <div className="h-[40px] w-[1px] bg-white/20"></div>
-          </div>
+    <>
+      <header className="sticky top-0 z-40 border-b border-gray-100 bg-white">
+        <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between px-5 md:px-8 lg:px-10">
+          <div className="flex items-center gap-8">
+            <DTMALogo />
 
-          {/* Right: Single Row with Nav Links and Auth */}
-          <div className="flex items-center justify-between flex-grow">
-            {/* Navigation Links */}
-            <div className="hidden md:flex items-center gap-8">
+            <nav className="hidden items-center gap-6 md:flex">
                 
                 {/* Explore Dropdown */}
                 <div className="relative" ref={exploreRef}>
@@ -91,7 +86,7 @@ const Navbar = () => {
                       setIsExploreOpen(!isExploreOpen);
                       setIsForYouOpen(false);
                     }}
-                    className="text-sm font-medium transition-colors duration-200 hover:text-white text-white/90 flex items-center gap-1"
+                    className={dropdownTriggerClass}
                   >
                     Explore Courses
                     <ChevronDown className={`w-4 h-4 transition-transform ${isExploreOpen ? 'rotate-180' : ''}`} />
@@ -99,75 +94,49 @@ const Navbar = () => {
                   
                   {/* Full Screen Overlay Dropdown */}
                   {isExploreOpen && (
-                    <div className="fixed left-0 right-0 top-[80px] z-[9999] bg-white border-t border-b pointer-events-none" style={{ height: 'calc(100vh - 80px)', borderColor: 'var(--dq-navy-100)' }}>
-                      <div className="max-w-[1600px] mx-auto px-8 lg:px-16 py-12 pointer-events-auto">
-                        <div className="mb-8">
-                          <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-navy-950)] mb-2">6XD Framework Courses</h2>
-                          <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the six dimensions of digital transformation</p>
-                        </div>
-                        
-                        {/* First Row - 3 Courses */}
-                        <div className="grid grid-cols-3 gap-8 mb-8">
-                          {/* Course 1: Economy 4.0 */}
-                          <Link to="/courses/course-economy-40" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Mastering Economy 4.0</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the fundamentals of the digital economy and Economy 4.0</p>
-                            </div>
-                          </Link>
-
-                          {/* Course 2: Cognitive Organisations */}
-                          <Link to="/courses/course-cognitive-org" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Decoding Digital Cognitive Organisations</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Transform your organization into an intelligent, learning entity</p>
-                            </div>
-                          </Link>
-
-                          {/* Course 3: Business Platforms */}
-                          <Link to="/courses/course-business-platforms" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Building Powerful Digital Business Platforms</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master the architecture and design of scalable digital platforms</p>
-                            </div>
-                          </Link>
-                        </div>
-
-                        {/* Second Row - 3 Courses */}
-                        <div className="grid grid-cols-3 gap-8">
-                          {/* Course 4: Digital Transformation */}
-                          <Link to="/courses/course-transformation" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Navigating Digital Transformation 2.0</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Lead successful digital transformation initiatives</p>
-                            </div>
-                          </Link>
-
-                          {/* Course 5: Digital Workers */}
-                          <Link to="/courses/course-digital-workers" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Optimizing Digital Workers and Workspaces</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Master tools and practices for modern digital work</p>
-                            </div>
-                          </Link>
-
-                          {/* Course 6: Digital Accelerators */}
-                          <Link to="/courses/course-digital-accelerators" className="group">
-                            <div className="bg-[var(--dq-navy-50)] rounded-[12px] p-6 hover:shadow-lg transition-all border border-[var(--dq-navy-100)]">
-                              <h3 className="text-[16px] leading-[24px] font-semibold text-[var(--dq-navy-950)] mb-2 group-hover:text-[var(--dq-orange-500)] transition-colors">Leveraging Digital Accelerators for Growth</h3>
-                              <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)]">Harness AI, blockchain, IoT, and automation</p>
-                            </div>
-                          </Link>
-                        </div>
-
-                        {/* View All Link */}
-                        <div className="mt-8 text-center">
-                          <Link to="/courses" className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-semibold text-[14px] leading-[20px] transition-colors inline-flex items-center gap-2">
+                    <div className="pointer-events-none fixed left-0 right-0 top-16 z-[9999] border-t border-gray-100 bg-white shadow-lg">
+                      <div className="pointer-events-auto mx-auto max-w-[1200px] px-5 py-10 md:px-8 lg:px-10">
+                        {/* Header */}
+                        <div className="mb-8 flex items-end justify-between border-b border-gray-200 pb-6">
+                          <div>
+                            <p className="dq-eyebrow mb-2">6XD Framework</p>
+                            <h2 className="text-[28px] font-semibold text-dq-navy">Explore Courses</h2>
+                          </div>
+                          <Link
+                            to="/courses"
+                            className="inline-flex items-center gap-2 text-[13px] font-semibold text-dq-orange transition-colors hover:text-[#E04020]"
+                            onClick={() => setIsExploreOpen(false)}
+                          >
                             View All Courses
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
                           </Link>
+                        </div>
+
+                        {/* Course grid */}
+                        <div className="grid grid-cols-3 gap-x-10 gap-y-6">
+                          {[
+                            { num: "01", to: "/courses/course-economy-40", title: "Mastering Economy 4.0", desc: "Master the fundamentals of the digital economy and Economy 4.0" },
+                            { num: "02", to: "/courses/course-cognitive-org", title: "Decoding Digital Cognitive Organisations", desc: "Transform your organization into an intelligent, learning entity" },
+                            { num: "03", to: "/courses/course-business-platforms", title: "Building Powerful Digital Business Platforms", desc: "Master the architecture and design of scalable digital platforms" },
+                            { num: "04", to: "/courses/course-transformation", title: "Navigating Digital Transformation 2.0", desc: "Lead successful digital transformation initiatives" },
+                            { num: "05", to: "/courses/course-digital-workers", title: "Optimizing Digital Workers and Workspaces", desc: "Master tools and practices for modern digital work" },
+                            { num: "06", to: "/courses/course-digital-accelerators", title: "Leveraging Digital Accelerators for Growth", desc: "Harness AI, blockchain, IoT, and automation" },
+                          ].map((course) => (
+                            <Link
+                              key={course.num}
+                              to={course.to}
+                              className="group flex items-start gap-4 rounded-xl px-3 py-2 transition-colors hover:bg-gray-50"
+                              onClick={() => setIsExploreOpen(false)}
+                            >
+                              <span className="mt-0.5 w-8 flex-shrink-0 text-[22px] font-semibold leading-none text-gray-200">{course.num}</span>
+                                <div>
+                                <h3 className="mb-1 text-[14px] font-semibold leading-snug text-dq-navy transition-colors group-hover:text-dq-orange">{course.title}</h3>
+                                <p className="text-[13px] text-[#9a9aaa] leading-relaxed">{course.desc}</p>
+                              </div>
+                            </Link>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -181,7 +150,7 @@ const Navbar = () => {
                       setIsForYouOpen(!isForYouOpen);
                       setIsExploreOpen(false);
                     }}
-                    className="text-sm font-medium transition-colors duration-200 hover:text-white text-white/90 flex items-center gap-1"
+                    className={dropdownTriggerClass}
                   >
                     For You
                     <ChevronDown className={`w-4 h-4 transition-transform ${isForYouOpen ? 'rotate-180' : ''}`} />
@@ -209,227 +178,247 @@ const Navbar = () => {
                   )}
                 </div>
 
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className={`text-sm font-medium transition-colors duration-200 hover:text-white ${
-                      isActive(link.href) ? "text-white" : "text-white/90"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={cn(
+                    navLinkClass,
+                    isActive(link.href) && "font-semibold text-dq-orange"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-            {/* Auth / Right Side Actions */}
-            <div className="hidden md:flex items-center gap-6">
-              {!loading && user ? (
-                <>
+          <div className="flex items-center gap-3 md:gap-4">
+            {!loading && user ? (
+              <>
+                <div className="hidden items-center gap-3 md:flex">
                   <Link to="/dashboard">
-                    <Button variant="ghost" size="sm" className="gap-2 text-white hover:text-white/80 hover:bg-white/10">
+                    <Button variant="ghost" size="sm" className="gap-2 text-gray-600 hover:bg-gray-50 hover:text-dq-orange">
                       <LayoutDashboard className="w-4 h-4" />
                       Dashboard
                     </Button>
                   </Link>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#1e2348] flex items-center justify-center text-xs font-semibold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-dq-navy text-xs font-semibold text-white">
                       {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                     </div>
-                    <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-white hover:text-white/80 hover:bg-white/10">
+                    <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-gray-600 hover:bg-gray-50 hover:text-dq-orange">
                       <LogOut className="w-4 h-4" />
                     </Button>
                   </div>
-                </>
-              ) : (
-                <>
-                  <button 
-                    onClick={handleSignIn}
-                    className="text-sm font-semibold transition-colors duration-200 hover:text-white text-white/90"
-                  >
-                    Log In
-                  </button>
-                  <Button 
-                    variant="hero" 
-                    size="sm" 
-                    onClick={handleSignIn}
-                    className="px-6 bg-[#ff6b4d] hover:bg-[#e56045] text-white border-transparent"
-                  >
-                    Get Started
-                  </Button>
-                </>
-              )}
-            </div>
+                </div>
+                <JourneyContextSwitcher className="hidden md:inline-flex" />
+              </>
+            ) : (
+              <div className="hidden items-center gap-3 md:flex">
+                <JourneyContextSwitcher />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSignIn}
+                  className={btnSecondaryNavy}
+                >
+                  Log in
+                </Button>
+                <Button size="sm" onClick={handleSignIn} className={cn(btnPrimary, "px-5")}>
+                  Get Started
+                </Button>
+              </div>
+            )}
 
-            {/* Mobile Toggle */}
-            <div className="md:hidden flex items-center gap-4">
-              <button
-                className="p-1 rounded-lg hover:bg-white/10 transition-colors text-white"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
+            <button
+              type="button"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              className="rounded-md p-2 outline-none focus-visible:ring-2 focus-visible:ring-dq-navy focus-visible:ring-offset-2 md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden py-6 border-t border-border animate-fade-in">
-            <div className="flex flex-col gap-4">
-              {/* Explore Dropdown Mobile */}
-              <div>
-                <button
-                  onClick={() => setIsExploreOpen(!isExploreOpen)}
-                  className="text-base font-medium py-2 transition-colors text-muted-foreground hover:text-primary flex items-center gap-2 w-full"
-                >
-                  Explore
-                  <ChevronDown className={`w-4 h-4 transition-transform ${isExploreOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {isExploreOpen && (
-                  <div className="pl-4 space-y-3 mt-3 border-l-2 border-primary/30">
-                    <Link
-                      to="/categories"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsExploreOpen(false);
-                      }}
-                    >
-                      Course Categories
-                    </Link>
-                    <Link
-                      to="/masterclasses"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsExploreOpen(false);
-                      }}
-                    >
-                      In-Person Trainings
-                    </Link>
-                  </div>
-                )}
-              </div>
-
-              {/* For You Dropdown Mobile */}
-              <div>
-                <button
-                  onClick={() => setIsForYouOpen(!isForYouOpen)}
-                  className="text-base font-medium py-2 transition-colors text-muted-foreground hover:text-primary flex items-center gap-2 w-full"
-                >
-                  For You
-                  <ChevronDown className={`w-4 h-4 transition-transform ${isForYouOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {isForYouOpen && (
-                  <div className="pl-4 space-y-3 mt-3 border-l-2 border-primary/30">
-                    <Link
-                      to="/personas/digital-workers"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsForYouOpen(false);
-                      }}
-                    >
-                      Digital Workers
-                    </Link>
-                    <Link
-                      to="/personas/organizational-leaders"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsForYouOpen(false);
-                      }}
-                    >
-                      Organizational Leaders
-                    </Link>
-                    <Link
-                      to="/personas/transformation-specialists"
-                      className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                      onClick={() => {
-                        setIsOpen(false);
-                        setIsForYouOpen(false);
-                      }}
-                    >
-                      Transformation Specialists
-                    </Link>
-                    <div className="border-t border-primary/30 pt-3 mt-3">
-                      <Link
-                        to="/blog"
-                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                        onClick={() => {
-                          setIsOpen(false);
-                          setIsForYouOpen(false);
-                        }}
-                      >
-                        Blog & Insights
-                      </Link>
-                      <Link
-                        to="/help"
-                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                        onClick={() => {
-                          setIsOpen(false);
-                          setIsForYouOpen(false);
-                        }}
-                      >
-                        Help Center
-                      </Link>
-                      <Link
-                        to="/accreditation"
-                        className="block text-sm text-foreground hover:text-primary py-2 transition-colors font-medium"
-                        onClick={() => {
-                          setIsOpen(false);
-                          setIsForYouOpen(false);
-                        }}
-                      >
-                        Accreditation
-                      </Link>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  className={`text-base font-medium py-2 transition-colors ${
-                    isActive(link.href) ? "text-primary" : "text-muted-foreground"
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                {!loading && user ? (
-                  <>
-                    <Link to="/dashboard" onClick={() => setIsOpen(false)}>
-                      <Button variant="outline" className="w-full">
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                    <Button variant="ghost" className="w-full" onClick={handleSignOut}>
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Sign Out
-                    </Button>
-                  </>
-                ) : (
-                  <Button 
-                    variant="hero" 
-                    className="w-full px-6"
-                    onClick={handleSignIn}
-                  >
-                    Sign In
-                  </Button>
-                )}
-              </div>
+      {isOpen && (
+        <div className="fixed inset-0 top-16 z-30 flex flex-col gap-1 overflow-y-auto bg-white p-4 md:hidden">
+          <button
+            type="button"
+            onClick={() => setIsExploreOpen(!isExploreOpen)}
+            className="flex w-full items-center gap-2 border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
+          >
+            Explore Courses
+            <ChevronDown className={`h-4 w-4 transition-transform ${isExploreOpen ? "rotate-180" : ""}`} />
+          </button>
+          {isExploreOpen && (
+            <div className="space-y-2 pb-3 pl-4">
+              <Link
+                to="/courses"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsExploreOpen(false);
+                }}
+              >
+                View All Courses
+              </Link>
+              <Link
+                to="/categories"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsExploreOpen(false);
+                }}
+              >
+                Course Categories
+              </Link>
+              <Link
+                to="/masterclasses"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsExploreOpen(false);
+                }}
+              >
+                In-Person Trainings
+              </Link>
             </div>
-          </div>
-        )}
-      </nav>
-    </header>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setIsForYouOpen(!isForYouOpen)}
+            className="flex w-full items-center gap-2 border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
+          >
+            For You
+            <ChevronDown className={`h-4 w-4 transition-transform ${isForYouOpen ? "rotate-180" : ""}`} />
+          </button>
+          {isForYouOpen && (
+            <div className="space-y-2 pb-3 pl-4">
+              <Link
+                to="/personas/digital-workers"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Digital Workers
+              </Link>
+              <Link
+                to="/personas/organizational-leaders"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Organizational Leaders
+              </Link>
+              <Link
+                to="/personas/transformation-specialists"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Transformation Specialists
+              </Link>
+              <Link
+                to="/blog"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Blog & Insights
+              </Link>
+              <Link
+                to="/help"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Help Center
+              </Link>
+              <Link
+                to="/accreditation"
+                className="block py-2 text-sm font-medium text-gray-600 hover:text-dq-orange"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsForYouOpen(false);
+                }}
+              >
+                Accreditation
+              </Link>
+            </div>
+          )}
+
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className="border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
+              onClick={() => setIsOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          {!loading && user ? (
+            <>
+              <JourneyContextSwitcher
+                variant="mobile"
+                onNavigate={() => setIsOpen(false)}
+              />
+              <Link
+                to="/dashboard"
+                className="border-b border-gray-100 py-3 text-lg font-medium text-dq-navy"
+                onClick={() => setIsOpen(false)}
+              >
+                Dashboard
+              </Link>
+              <button
+                type="button"
+                className="mt-4 w-full rounded-full border border-gray-200 py-3 text-center font-semibold text-dq-navy"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <JourneyContextSwitcher
+                variant="mobile"
+                onNavigate={() => setIsOpen(false)}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className={cn(btnSecondaryNavy, "mt-2 w-full")}
+                onClick={() => {
+                  handleSignIn();
+                  setIsOpen(false);
+                }}
+              >
+                Log in
+              </Button>
+              <Button className={cn(btnPrimary, "mt-4 w-full py-3")} onClick={handleSignIn}>
+                Get Started
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 

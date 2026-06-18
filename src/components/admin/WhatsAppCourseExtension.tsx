@@ -1,3 +1,19 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerBadge,
+  learnerIconWell,
+} from "@/lib/brandAccent";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
@@ -81,7 +97,7 @@ export const WhatsAppCourseExtension = ({ courseId, onSave }: WhatsAppCourseExte
             </span>
           </div>
         </div>
-        <p className="text-[12px] text-muted-foreground">
+        <p className={learnerCaption}>
           💡 Tip: Keep it concise and actionable. Use emojis to make it engaging.
         </p>
       </div>
@@ -95,7 +111,7 @@ export const WhatsAppCourseExtension = ({ courseId, onSave }: WhatsAppCourseExte
               Deliver via WhatsApp
             </label>
           </div>
-          <p className="text-[12px] text-muted-foreground">
+          <p className={learnerCaption}>
             Enable WhatsApp delivery for this lesson or module
           </p>
         </div>

@@ -8,6 +8,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import {
+  learnerBodyMuted,
+  learnerCaption,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -85,42 +94,34 @@ export default function SMSStudentsPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Students</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Progress, access status, and engagement for all enrolled students.
-        </p>
-      </div>
-
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="text-[24px] leading-[32px] font-medium">{studentRecords.length}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Total Students</div>
+        <div className={learnerKpiCard}>
+          <div className={learnerKpiValue}>{studentRecords.length}</div>
+          <div className={learnerKpiLabel}>Total Students</div>
         </div>
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", inactive14d > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
-          <div className={cn("text-[24px] leading-[32px] font-medium", inactive14d > 0 && "text-amber-700")}>{inactive14d}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+        <div className={cn(learnerKpiCard, inactive14d > 0 && "border-amber-200 bg-amber-50/30")}>
+          <div className={cn(learnerKpiValue, inactive14d > 0 && "text-amber-700")}>{inactive14d}</div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Inactive 14d+
             <Tip text="Students with active access who haven't logged in or engaged with any course in the last 14 days." />
           </div>
         </div>
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", needsAttention > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
-          <div className={cn("text-[24px] leading-[32px] font-medium", needsAttention > 0 && "text-rose-700")}>{needsAttention}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+        <div className={cn(learnerKpiCard, needsAttention > 0 && "border-rose-200 bg-rose-50/30")}>
+          <div className={cn(learnerKpiValue, needsAttention > 0 && "text-rose-700")}>{needsAttention}</div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Needs Attention
             <Tip text="Students with lost access (payment failed or expired) plus students inactive for 14+ days." />
           </div>
-          {accessLost > 0 && <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600">{accessLost} lost access</div>}
+          {accessLost > 0 && <div className={cn(learnerCaption, "mt-0.5 text-rose-600")}>{accessLost} lost access</div>}
         </div>
       </div>
 
       {/* Student table */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>All Students</CardTitle>
-          <CardDescription>Progress, last activity, and access status per student.</CardDescription>
+          <CardTitle className={learnerSectionHeading}>All Students</CardTitle>
+          <CardDescription className={learnerBodyMuted}>Progress, last activity, and access status per student.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="relative max-w-sm">
@@ -161,13 +162,13 @@ export default function SMSStudentsPanel() {
                   return (
                     <TableRow key={s.id} className={lostAccess ? "bg-rose-50/40" : inactive ? "bg-amber-50/30" : ""}>
                       <TableCell>
-                        <div className="font-medium text-slate-900">{s.name}</div>
-                        <div className="text-xs text-slate-500">{s.email}</div>
+                        <div className="text-base font-medium text-dq-navy">{s.name}</div>
+                        <div className={learnerCaption}>{s.email}</div>
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-col gap-0.5">
                           <Badge className={`border text-xs font-semibold w-fit ${progressStatus.cls}`}>{progressStatus.label}</Badge>
-                          <span className="text-xs text-slate-400">{s.completed}/{s.enrolled} courses</span>
+                          <span className={cn(learnerCaption, "text-slate-400")}>{s.completed}/{s.enrolled} courses</span>
                         </div>
                       </TableCell>
                       <TableCell>

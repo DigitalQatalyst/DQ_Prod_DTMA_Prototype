@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import MarketingSection from "@/components/marketing/MarketingSection";
+import SectionHeader from "@/components/marketing/SectionHeader";
+import HorizontalTabs from "@/components/marketing/HorizontalTabs";
+import { btnSecondary, cardInteractive } from "@/lib/brandAccent";
 
 const humanFaculty = [
   {
@@ -32,49 +35,43 @@ const aiExperts = [
     name: "Eco",
     dimension: "Digital Economy",
     avatar: "/ai-leadership.png",
-    color: "var(--dq-navy-700)",
-    specialization: "Digital Economy Strategist. Your go-to AI for understanding Economy 4.0 dynamics, analyzing industry disruption, crafting competitive positioning strategies, and innovating digital business models to thrive in the digital economy.",
-    questions: "Why should organizations change? How is the digital economy reshaping industries?",
+    specialization:
+      "Digital Economy Strategist. Your go-to AI for understanding Economy 4.0 dynamics, analyzing industry disruption, crafting competitive positioning strategies, and innovating digital business models to thrive in the digital economy.",
   },
   {
     name: "Cognito",
     dimension: "Digital Cognitive Organisation",
     avatar: "/ai-operations.png",
-    color: "var(--dq-navy-600)",
-    specialization: "Cognitive Organization Architect. Your go-to AI for designing intelligent organizations, implementing data-driven decision systems, assessing cognitive maturity, and building AI-powered operational agility.",
-    questions: "Where are organizations headed? How do we build cognitive maturity?",
+    specialization:
+      "Cognitive Organization Architect. Your go-to AI for designing intelligent organizations, implementing data-driven decision systems, assessing cognitive maturity, and building AI-powered operational agility.",
   },
   {
     name: "Nexus",
     dimension: "Digital Business Platform",
     avatar: "/ai-technology.png",
-    color: "var(--dq-navy-500)",
-    specialization: "Platform Architecture Expert. Your go-to AI for designing digital business platforms, orchestrating enterprise integrations, managing API ecosystems, and building scalable digital infrastructure.",
-    questions: "What unifies value creation? How do we design and deploy digital platforms?",
+    specialization:
+      "Platform Architecture Expert. Your go-to AI for designing digital business platforms, orchestrating enterprise integrations, managing API ecosystems, and building scalable digital infrastructure.",
   },
   {
     name: "Transform",
     dimension: "Digital Transformation 2.0",
     avatar: "/ai-culture.png",
-    color: "var(--dq-navy-950)",
-    specialization: "Transformation Strategist. Your go-to AI for architecting target states, roadmapping transformation journeys, executing change methodologies, and delivering scaled transformation frameworks.",
-    questions: "How do we design the target? What approaches work for modern transformation?",
+    specialization:
+      "Transformation Strategist. Your go-to AI for architecting target states, roadmapping transformation journeys, executing change methodologies, and delivering scaled transformation frameworks.",
   },
   {
     name: "Catalyst",
     dimension: "Digital Worker & Workspace",
     avatar: "/ai-innovation.png",
-    color: "var(--dq-orange-500)",
-    specialization: "Workforce Transformation Specialist. Your go-to AI for transforming workforces, developing digital skills, designing hybrid work models, and building transformation-ready organizational cultures.",
-    questions: "Who are the orchestrators? How do we redesign workforce and workspace?",
+    specialization:
+      "Workforce Transformation Specialist. Your go-to AI for transforming workforces, developing digital skills, designing hybrid work models, and building transformation-ready organizational cultures.",
   },
   {
     name: "Velocity",
     dimension: "Digital Accelerators",
     avatar: "/ai-trust.png",
-    color: "var(--dq-navy-800)",
-    specialization: "Acceleration Expert. Your go-to AI for rapid delivery methodologies, transformation acceleration tools, agile execution frameworks, and time-compression strategies to speed up your transformation.",
-    questions: "When will we get there? How do we speed up transformation execution?",
+    specialization:
+      "Acceleration Expert. Your go-to AI for rapid delivery methodologies, transformation acceleration tools, agile execution frameworks, and time-compression strategies to speed up your transformation.",
   },
 ];
 
@@ -82,158 +79,95 @@ const FacultySection = () => {
   const [activeTab, setActiveTab] = useState<"human" | "ai">("ai");
 
   const tabs = [
-    { id: "ai" as const, label: "Artificial Intelligence" },
-    { id: "human" as const, label: "Human Intelligence" },
+    { id: "ai", label: "Artificial Intelligence" },
+    { id: "human", label: "Human Intelligence" },
   ];
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
-            Meet Your Trainers
-          </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-[var(--dq-navy-950)] mb-6">
-            Learn from a Hybrid HI + AI Faculty
-          </h2>
-          <p className="text-base text-[var(--dq-text-secondary)] max-w-3xl mx-auto leading-relaxed">
-            Human expertise meets AI specialists—one for each digital dimension.
-          </p>
-        </div>
+    <MarketingSection containerClassName="max-w-5xl">
+      <SectionHeader
+        align="center"
+        eyebrowText="Meet Your Trainers"
+        title="Learn from a Hybrid HI + AI Faculty"
+        description="Human expertise meets AI specialists, one for each digital dimension."
+      />
 
-        {/* Faculty Type Tabs & Cards Container */}
-        <div className="max-w-5xl mx-auto">
-          {/* Faculty Type Tabs - Left Aligned */}
-          <div className="mb-12">
-            <div className="flex gap-8 relative border-b border-[var(--dq-navy-100)]">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-0 py-4 text-[14px] leading-[20px] font-medium transition-all duration-200 relative ${
-                    activeTab === tab.id
-                      ? "text-[var(--dq-navy-950)]"
-                      : "text-[var(--dq-text-secondary)] hover:text-[var(--dq-navy-950)]"
-                  }`}
-                >
-                  {tab.label}
-                  {activeTab === tab.id && (
-                    <span className="absolute bottom-0 left-0 right-0 h-1 bg-[var(--dq-orange-500)]"></span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
+      <HorizontalTabs
+        tabs={tabs}
+        activeId={activeTab}
+        onChange={(id) => setActiveTab(id as "human" | "ai")}
+      />
 
-          {/* Human Faculty */}
-          {activeTab === "human" && (
-            <div className="mt-16 mb-20">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {humanFaculty.map((faculty) => (
-              <div
-                key={faculty.name}
-                className="bg-white rounded-xl overflow-hidden border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-all duration-300 group"
-              >
-                {/* Photo */}
-                <div className="h-64 overflow-hidden bg-[var(--dq-gray-50)] flex items-center justify-center">
-                  <img
-                    src={faculty.image}
-                    alt={faculty.name}
-                    className={`${
-                      faculty.name === "Stephane" 
-                        ? "w-full h-full object-contain" 
-                        : "w-full h-full object-cover scale-110"
-                    } group-hover:scale-[1.15] transition-transform duration-500`}
-                  />
-                </div>
-                {/* Info */}
-                <div className="p-6">
-                  <h4 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-1">
-                    {faculty.name}
-                  </h4>
-                  <p className="text-sm text-[var(--dq-orange-500)] font-medium mb-3">
-                    {faculty.title}
-                  </p>
-                  <p className="text-sm text-[var(--dq-text-secondary)] leading-relaxed mb-4">
-                    {faculty.bio}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {faculty.expertise.map((skill) => (
-                      <span
-                        key={skill}
-                        className="text-xs font-medium px-3 py-1 rounded-full bg-[var(--dq-navy-950)]/5 text-[var(--dq-navy-950)]"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        )}
-
-        {/* AI Faculty */}
-        {activeTab === "ai" && (
-          <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {aiExperts.map((expert) => (
-              <div
-                key={expert.dimension}
-                className="bg-white rounded-xl overflow-hidden border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-all duration-300 group"
-              >
-                {/* Avatar Image */}
-                <div className="h-48 overflow-hidden bg-[var(--dq-navy-950)]">
-                  <img
-                    src={expert.avatar}
-                    alt={`${expert.dimension} AI Expert`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                {/* Info */}
-                <div className="p-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: `var(${expert.color})` }}
-                    />
-                    <p className="text-xs font-medium text-[var(--dq-text-tertiary)] uppercase tracking-wide">
-                      {expert.dimension}
-                    </p>
-                  </div>
-                  <h4 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-3">
-                    {expert.name}
-                  </h4>
-                  <p className="text-sm text-[var(--dq-text-secondary)] leading-relaxed">
-                    {expert.specialization}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        )}
-        </div>
-
-        {/* CTA */}
-        <div className="text-center mt-12">
-          <Link to="/faculty">
-            <Button
-              variant="outline"
-              className="px-8 py-6 border-[var(--dq-orange-500)] text-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-500)] hover:text-white transition-all text-base gap-2"
-              style={{ borderWidth: '1.5px' }}
+      {activeTab === "human" ? (
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {humanFaculty.map((faculty) => (
+            <div
+              key={faculty.name}
+              className={`group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card ${cardInteractive}`}
             >
-              Discover More
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </Link>
+              <div className="flex h-64 items-center justify-center overflow-hidden bg-gray-50">
+                <img
+                  src={faculty.image}
+                  alt={faculty.name}
+                  className={`${
+                    faculty.name === "Stephane"
+                      ? "h-full w-full object-contain"
+                      : "h-full w-full scale-110 object-cover transition-transform duration-500 group-hover:scale-[1.15]"
+                  }`}
+                />
+              </div>
+              <div className="p-6">
+                <h4 className="mb-1 text-lg font-semibold text-dq-navy">{faculty.name}</h4>
+                <p className="mb-3 text-sm font-medium text-dq-orange">{faculty.title}</p>
+                <p className="mb-4 text-sm leading-relaxed text-gray-600">{faculty.bio}</p>
+                <div className="flex flex-wrap gap-2">
+                  {faculty.expertise.map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-full bg-navy-50 px-3 py-1 text-xs font-medium text-dq-navy"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {aiExperts.map((expert) => (
+            <div
+              key={expert.dimension}
+              className={`group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card ${cardInteractive}`}
+            >
+              <div className="h-48 overflow-hidden bg-dq-navy">
+                <img
+                  src={expert.avatar}
+                  alt={`${expert.dimension} AI Expert`}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-6">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-500">
+                  {expert.dimension}
+                </p>
+                <h4 className="mb-3 text-lg font-semibold text-dq-navy">{expert.name}</h4>
+                <p className="text-sm leading-relaxed text-gray-600">{expert.specialization}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-12 text-center">
+        <Link to="/faculty" className={btnSecondary}>
+          Discover More
+          <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
-    </section>
+    </MarketingSection>
   );
 };
 
 export default FacultySection;
-

@@ -7,6 +7,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import {
+  learnerBodyMuted,
+  learnerCaption,
+  learnerIconWell,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 
 type AccreditationStatus = "active" | "expiring-soon" | "renewal-in-progress" | "renewal-overdue" | "expired" | "pending";
 
@@ -58,43 +68,37 @@ export default function SMSCompliancePanel() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Accreditation</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Accreditation status for all courses. Escalate expiring or lapsed items to the compliance officer.
-        </p>
-      </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3">
-            <ShieldCheck className="w-5 h-5 text-emerald-600" />
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 bg-emerald-500/10")}>
+            <ShieldCheck className="h-5 w-5 text-emerald-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{active}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Active Accreditations</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">{accreditationBodies.length} total bodies</div>
+          <div className={learnerKpiValue}>{active}</div>
+          <div className={learnerKpiLabel}>Active Accreditations</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>{accreditationBodies.length} total bodies</div>
         </div>
 
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", atRisk > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
-            <AlertTriangle className="w-5 h-5 text-amber-600" />
+        <div className={cn(learnerKpiCard, atRisk > 0 && "border-amber-200 bg-amber-50/30")}>
+          <div className={cn(learnerIconWell, "mb-3 bg-amber-500/10")}>
+            <AlertTriangle className="h-5 w-5 text-amber-600" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", atRisk > 0 && "text-amber-700")}>{atRisk}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+          <div className={cn(learnerKpiValue, atRisk > 0 && "text-amber-700")}>{atRisk}</div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Accreditations at Risk
             <Tip text="Accreditations expiring within 60 days or already expired. Lapsed accreditation affects the official status of the courses it covers." />
           </div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Expiring or expired</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>Expiring or expired</div>
         </div>
 
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", pending > 0 ? "border-slate-200 bg-slate-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-slate-500/10 rounded-xl flex items-center justify-center mb-3">
-            <ShieldCheck className="w-5 h-5 text-slate-500" />
+        <div className={cn(learnerKpiCard, pending > 0 && "border-slate-200 bg-slate-50/30")}>
+          <div className={cn(learnerIconWell, "mb-3 bg-slate-500/10")}>
+            <ShieldCheck className="h-5 w-5 text-slate-500" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{pending}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Pending Applications</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Awaiting approval</div>
+          <div className={learnerKpiValue}>{pending}</div>
+          <div className={learnerKpiLabel}>Pending Applications</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>Awaiting approval</div>
         </div>
       </div>
 
@@ -107,10 +111,10 @@ export default function SMSCompliancePanel() {
       )}
 
       {/* Accreditation table */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>Accrediting Bodies</CardTitle>
-          <CardDescription>Bodies that certify DTMA courses. Accreditation is managed by the compliance officer — escalate expiring or lapsed items here.</CardDescription>
+          <CardTitle className={learnerSectionHeading}>Accrediting Bodies</CardTitle>
+          <CardDescription className={learnerBodyMuted}>Bodies that certify DTMA courses. Accreditation is managed by the compliance officer — escalate expiring or lapsed items here.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-hidden rounded-2xl border border-slate-200">
@@ -144,7 +148,7 @@ export default function SMSCompliancePanel() {
                   const needsAction = body.status === "expiring-soon" || body.status === "expired" || body.status === "renewal-overdue";
                   return (
                     <TableRow key={body.id} className={needsAction ? "bg-amber-50/30" : ""}>
-                      <TableCell className="font-medium">{body.name}</TableCell>
+                      <TableCell className="text-base font-medium text-dq-navy">{body.name}</TableCell>
                       <TableCell className="text-sm text-slate-600">{body.region}</TableCell>
                       <TableCell>
                         {body.courses.length === 0

@@ -6,6 +6,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import {
+  learnerBodyMuted,
+  learnerCaption,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 
 type PartnerStatus = "active" | "inactive" | "onboarding";
 
@@ -46,48 +57,42 @@ export default function SMSPartnersPanel() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Partners</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Content providers and schools contributing courses to the platform. Escalate inactive partners to the partnership manager.
-        </p>
-      </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3">
-            <Building2 className="w-5 h-5 text-sky-600" />
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 bg-sky-500/10")}>
+            <Building2 className="h-5 w-5 text-sky-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{activeCount}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Active Partners</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">{partners.length} total content providers</div>
+          <div className={learnerKpiValue}>{activeCount}</div>
+          <div className={learnerKpiLabel}>Active Partners</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>{partners.length} total content providers</div>
         </div>
 
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", inactiveCount > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3">
-            <Building2 className="w-5 h-5 text-rose-500" />
+        <div className={cn(learnerKpiCard, inactiveCount > 0 && "border-rose-200 bg-rose-50/30")}>
+          <div className={cn(learnerIconWell, "mb-3 bg-rose-500/10")}>
+            <Building2 className="h-5 w-5 text-rose-500" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", inactiveCount > 0 && "text-rose-700")}>{inactiveCount}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Inactive Partners</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">No active courses contributed</div>
+          <div className={cn(learnerKpiValue, inactiveCount > 0 && "text-rose-700")}>{inactiveCount}</div>
+          <div className={learnerKpiLabel}>Inactive Partners</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>No active courses contributed</div>
         </div>
 
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", onboardCount > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
-            <Building2 className="w-5 h-5 text-amber-500" />
+        <div className={cn(learnerKpiCard, onboardCount > 0 && "border-amber-200 bg-amber-50/30")}>
+          <div className={cn(learnerIconWell, "mb-3 bg-amber-500/10")}>
+            <Building2 className="h-5 w-5 text-amber-500" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", onboardCount > 0 && "text-amber-700")}>{onboardCount}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Onboarding</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">In progress</div>
+          <div className={cn(learnerKpiValue, onboardCount > 0 && "text-amber-700")}>{onboardCount}</div>
+          <div className={learnerKpiLabel}>Onboarding</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>In progress</div>
         </div>
       </div>
 
       {/* Partners table */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>Content Partners</CardTitle>
-          <CardDescription>Schools and content providers contributing courses. Escalate inactive partners to the partnership manager.</CardDescription>
+          <CardTitle className={learnerSectionHeading}>Content Partners</CardTitle>
+          <CardDescription className={learnerBodyMuted}>Schools and content providers contributing courses. Escalate inactive partners to the partnership manager.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="overflow-hidden rounded-2xl border border-slate-200">
@@ -105,8 +110,8 @@ export default function SMSPartnersPanel() {
                 {partners.map((p) => (
                   <TableRow key={p.id} className={p.status === "inactive" ? "bg-rose-50/30" : ""}>
                     <TableCell>
-                      <div className="font-medium text-slate-900">{p.name}</div>
-                      <div className="text-xs text-slate-500">{p.type}</div>
+                      <div className={learnerItemTitle}>{p.name}</div>
+                      <div className={learnerCaption}>{p.type}</div>
                     </TableCell>
                     <TableCell className="text-sm text-slate-600">{p.region}</TableCell>
                     <TableCell className="text-right">{p.coursesContributed}</TableCell>

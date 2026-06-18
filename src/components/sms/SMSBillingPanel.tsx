@@ -6,6 +6,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import {
+  learnerCaption,
+  learnerCardTitle,
+  learnerItemTitle,
+  learnerBodyMuted,
+  learnerIconWell,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
+import type { SMSTabId } from "@/components/dashboard/SMSDashboardSidebar";
 
 
 interface BillingIssue {
@@ -57,57 +70,54 @@ export default function SMSBillingPanel() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Billing</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Failed payments and refund requests. Escalate issues to the finance team.
-        </p>
-      </div>
-
       {/* KPI cards */}
-      <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", openIssues.length > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3">
-            <AlertCircle className="w-5 h-5 text-rose-500" />
+      <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
+        <div className={cn(learnerKpiCard, openIssues.length > 0 && "border-rose-200 bg-rose-50/30")}>
+          <div className={cn(learnerIconWell, "mb-3 bg-rose-500/10")}>
+            <AlertCircle className="h-5 w-5 text-rose-500" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", openIssues.length > 0 && "text-rose-700")}>{openIssues.filter(b => b.type === "failed-payment").length}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+          <div className={cn(learnerKpiValue, openIssues.length > 0 && "text-rose-700")}>
+            {openIssues.filter((b) => b.type === "failed-payment").length}
+          </div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Lost Access
             <Tip text="Students whose payment failed or subscription expired — they can no longer view course content." />
           </div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Failed payment or expired</div>
+          <p className={cn(learnerBodyMuted, "mt-1")}>Failed payment or expired</p>
         </div>
 
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", openIssues.length > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
-            <AlertCircle className="w-5 h-5 text-amber-500" />
+        <div className={cn(learnerKpiCard, openIssues.length > 0 && "border-amber-200 bg-amber-50/30")}>
+          <div className={cn(learnerIconWell, "mb-3 bg-amber-500/10")}>
+            <AlertCircle className="h-5 w-5 text-amber-500" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", openIssues.length > 0 && "text-amber-700")}>{openIssues.length}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+          <div className={cn(learnerKpiValue, openIssues.length > 0 && "text-amber-700")}>
+            {openIssues.length}
+          </div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Open Billing Issues
             <Tip text="Failed payments and refund requests that have not yet been resolved by the finance team." />
           </div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Awaiting finance team</div>
+          <p className={cn(learnerBodyMuted, "mt-1")}>Awaiting finance team</p>
         </div>
 
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-slate-500/10 rounded-xl flex items-center justify-center mb-3">
-            <AlertCircle className="w-5 h-5 text-slate-500" />
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 bg-gray-100")}>
+            <AlertCircle className="h-5 w-5 text-gray-500" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{fmt(openIssues.reduce((s, b) => s + b.amount, 0))}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Value at Risk</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Total open issue value</div>
+          <div className={learnerKpiValue}>{fmt(openIssues.reduce((s, b) => s + b.amount, 0))}</div>
+          <div className={learnerKpiLabel}>Value at Risk</div>
+          <p className={cn(learnerBodyMuted, "mt-1")}>Total open issue value</p>
         </div>
       </div>
 
       {/* Billing Issues */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle>Billing Issues</CardTitle>
-          <CardDescription>The finance team handles all resolutions. Flag an issue as urgent to notify them immediately.</CardDescription>
+          <CardTitle className={learnerSectionHeading}>Billing Issues</CardTitle>
+          <CardDescription className={learnerBodyMuted}>The finance team handles all resolutions. Flag an issue as urgent to notify them immediately.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+          <div className={cn(learnerPanel, "rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600")}>
             Need urgent help? Contact the finance team: <span className="font-medium">finance@academy.com</span> · ext. 204
           </div>
           {openIssues.length > 0 && (
@@ -120,7 +130,7 @@ export default function SMSBillingPanel() {
           {/* Failed Payments */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-slate-700">Failed Payments</h3>
+              <h3 className={cn(learnerCardTitle, "text-base")}>Failed Payments</h3>
               <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs font-medium text-rose-700">{failures.length}</span>
             </div>
             {failures.length === 0 && <p className="text-sm text-slate-400 py-2">No failed payments.</p>}
@@ -131,13 +141,13 @@ export default function SMSBillingPanel() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-slate-900">{b.name}</span>
+                        <span className={learnerItemTitle}>{b.name}</span>
                         {b.subType && <Badge className="border border-slate-200 bg-slate-50 text-slate-600 text-xs capitalize">{b.subType}</Badge>}
                         {flaggedIds.has(b.id) && <Badge className="border border-rose-200 bg-rose-50 text-rose-700 text-xs">Flagged urgent</Badge>}
                       </div>
                       <div className="text-sm text-slate-600">{b.course}</div>
-                      <div className="text-sm text-slate-500">{b.reason}</div>
-                      <div className="flex items-center gap-3 text-xs text-slate-400">
+                      <div className={learnerBodyMuted}>{b.reason}</div>
+                      <div className={cn(learnerCaption, "flex items-center gap-3 text-slate-400")}>
                         <span>Raised {fmtDate(b.dateRaised)}</span>
                         {daysOpen >= 5 && <span className="text-amber-600 font-medium">{daysOpen} days open</span>}
                       </div>
@@ -159,7 +169,7 @@ export default function SMSBillingPanel() {
           {/* Refund Requests */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-slate-700">Refund Requests</h3>
+              <h3 className={cn(learnerCardTitle, "text-base")}>Refund Requests</h3>
               <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">{refunds.length}</span>
             </div>
             {refunds.length === 0 && <p className="text-sm text-slate-400 py-2">No refund requests.</p>}
@@ -170,16 +180,16 @@ export default function SMSBillingPanel() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-slate-900">{b.name}</span>
+                        <span className={learnerItemTitle}>{b.name}</span>
                         {flaggedIds.has(b.id) && <Badge className="border border-rose-200 bg-rose-50 text-rose-700 text-xs">Flagged urgent</Badge>}
                       </div>
                       <div className="text-sm text-slate-600">{b.course}</div>
-                      <div className="text-sm text-slate-500">{b.reason}</div>
-                      <div className="flex items-center gap-3 text-xs text-slate-400">
+                      <div className={learnerBodyMuted}>{b.reason}</div>
+                      <div className={cn(learnerCaption, "flex items-center gap-3 text-slate-400")}>
                         <span>Raised {fmtDate(b.dateRaised)}</span>
                         {daysOpen >= 5 && <span className="text-amber-600 font-medium">{daysOpen} days open</span>}
                       </div>
-                      <div className="text-xs text-slate-400 italic">Approval handled by finance team.</div>
+                      <div className={cn(learnerCaption, "italic text-slate-400")}>Approval handled by finance team.</div>
                     </div>
                     <div className="flex flex-col items-end gap-2 shrink-0">
                       <Badge className={`border text-xs font-semibold capitalize ${issueBadge(b.status)}`}>{b.status.replace("-", " ")}</Badge>

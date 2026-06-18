@@ -1,4 +1,4 @@
-import { Zap, TrendingUp, Users, Lightbulb, Target, Layers, Brain, Rocket, ArrowRight } from "lucide-react";
+import { TrendingUp, Brain, Layers, Zap, Users, Rocket, ArrowRight } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
@@ -50,129 +50,111 @@ const SixXD = () => {
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Navy Background for Navbar and Hero */}
-      <div className="bg-[var(--dq-navy-950)]">
-        <Navbar />
-        
-        {/* Hero Section */}
-        <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-4xl mx-auto text-center">
-              <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[var(--dq-orange-500)] mb-4">
-                Framework & Methodology
+    <div className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* Hero */}
+      <section className="bg-[#f5f4f0] pt-28 pb-20">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">
+            Framework & Methodology
+          </p>
+          <h1 className="text-[52px] md:text-[68px] leading-[1.05] font-bold text-[#0a0f1e] mb-5 max-w-3xl">
+            The <span className="text-[#ff4500]">6XD Framework.</span>
+          </h1>
+          <p className="text-[17px] text-[#4a4a5a] max-w-2xl">
+            A comprehensive approach to digital transformation that addresses six critical dimensions of organizational change.
+          </p>
+        </div>
+      </section>
+
+      <main>
+        {/* Overview */}
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <div className="max-w-3xl mb-16">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">Overview</p>
+              <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-[#0a0f1e] mb-6">
+                Understanding the <span className="text-[#ff4500]">6XD</span>
+              </h2>
+              <p className="text-[17px] text-[#4a4a5a] leading-relaxed mb-4">
+                The 6XD framework represents six interconnected dimensions that organizations must address to successfully navigate digital transformation. Rather than viewing transformation as a single initiative, the 6XD recognizes that sustainable change requires coordinated efforts across multiple areas.
               </p>
-              <h1 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-white mb-6">
-                The 6XD Framework
-              </h1>
-              <p className="text-[16px] leading-[24px] font-normal text-white/90 max-w-2xl mx-auto">
-                A comprehensive approach to digital transformation that addresses six critical dimensions of organizational change.
+              <p className="text-[17px] text-[#4a4a5a] leading-relaxed">
+                Each dimension builds upon the others, creating a holistic approach to transformation that drives lasting competitive advantage and organizational resilience.
               </p>
+            </div>
+
+            {/* Dimensions Grid */}
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">The Dimensions</p>
+            <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-[#0a0f1e] mb-10">
+              The Six <span className="text-[#ff4500]">Dimensions</span>
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {dimensions.map((dimension, index) => (
+                <Link
+                  key={index}
+                  to={dimension.link}
+                  className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all flex flex-col group"
+                >
+                  <div className="mb-5">
+                    <dimension.icon className="w-7 h-7 text-[#ff4500]" strokeWidth={1.5} />
+                  </div>
+                  <h3 className="text-[17px] font-bold text-[#0a0f1e] mb-2">{dimension.title}</h3>
+                  <p className="text-[13px] font-semibold text-[#ff4500] mb-3">{dimension.subtitle}</p>
+                  <p className="text-[14px] text-[#4a4a5a] leading-relaxed mb-5 flex-grow">{dimension.description}</p>
+                  <span className="text-[13px] font-semibold text-[#ff4500] group-hover:text-[#cc3700] inline-flex items-center gap-1 transition-colors">
+                    Learn More <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
-      </div>
 
-      <main>
-
-        {/* Overview Section */}
-        <div className="max-w-[1600px] mx-auto px-8 py-16">
-          <div className="max-w-3xl mb-16">
-            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-6">Understanding the 6XD</h2>
-            <p className="text-[var(--dq-text-secondary)] leading-relaxed mb-4">
-              The 6XD framework represents six interconnected dimensions that organizations must address to successfully navigate digital transformation. Rather than viewing transformation as a single initiative, the 6XD recognizes that sustainable change requires coordinated efforts across multiple areas.
-            </p>
-            <p className="text-[var(--dq-text-secondary)] leading-relaxed">
-              Each dimension builds upon the others, creating a holistic approach to transformation that drives lasting competitive advantage and organizational resilience.
-            </p>
-          </div>
-
-          {/* Dimensions Grid */}
-          <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">The Six Dimensions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {dimensions.map((dimension, index) => (
-              <Link
-                key={index}
-                to={dimension.link}
-                className="bg-white rounded-xl p-6 border border-[var(--dq-surface-border-default)] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col"
-              >
-                {/* Icon */}
-                <div className="mb-6">
-                  <dimension.icon 
-                    className="w-8 h-8 text-[var(--dq-navy-950)]" 
-                    strokeWidth={1.5}
-                  />
-                </div>
-
-                {/* Title */}
-                <h3 className="text-lg font-semibold text-[var(--dq-navy-950)] mb-2">
-                  {dimension.title}
-                </h3>
-
-                {/* Subtitle */}
-                <p className="text-sm font-medium text-[var(--dq-orange-500)] mb-4">
-                  {dimension.subtitle}
-                </p>
-
-                {/* Description */}
-                <p className="text-sm text-[var(--dq-text-secondary)] leading-relaxed mb-6 flex-grow max-w-xs">
-                  {dimension.description}
-                </p>
-
-                {/* Learn More CTA */}
-                <span className="text-[var(--dq-orange-500)] hover:text-[var(--dq-orange-600)] font-medium text-sm transition-colors inline-flex items-center gap-2">
-                  Learn More
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Integration Section */}
-        <div className="bg-[var(--dq-navy-50)] py-16 px-8">
-          <div className="max-w-[1600px] mx-auto">
-            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-8">How the Dimensions Work Together</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-8">
-                <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-4">Interconnected Approach</h3>
-                <p className="text-[var(--dq-text-secondary)] leading-relaxed">
+        {/* Integration */}
+        <section className="py-20 bg-[#f5f4f0]">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">Integration</p>
+            <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-[#0a0f1e] mb-10">
+              How the Dimensions <span className="text-[#ff4500]">Work Together</span>
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all">
+                <h3 className="text-[18px] font-bold text-[#0a0f1e] mb-3">Interconnected Approach</h3>
+                <p className="text-[#4a4a5a] leading-relaxed">
                   The 6XD dimensions are not siloed initiatives but interconnected elements that reinforce each other. Success in one dimension enables progress in others, creating a virtuous cycle of transformation.
                 </p>
               </div>
-
-              <div className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-8">
-                <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-4">Holistic Transformation</h3>
-                <p className="text-[var(--dq-text-secondary)] leading-relaxed">
+              <div className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all">
+                <h3 className="text-[18px] font-bold text-[#0a0f1e] mb-3">Holistic Transformation</h3>
+                <p className="text-[#4a4a5a] leading-relaxed">
                   By addressing all six dimensions, organizations ensure that transformation is comprehensive and sustainable, rather than focusing narrowly on technology or process improvements alone.
                 </p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Learning Path */}
-        <div className="bg-[var(--dq-navy-950)] py-20 px-8">
-          <div className="max-w-[1600px] mx-auto">
-            <div className="max-w-3xl mx-auto text-center">
-              <p className="text-[12px] leading-[16px] font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
-                Learning Path
-              </p>
-              <h2 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-white mb-6">
-                Master the 6XD Framework
-              </h2>
-              <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-on-dark-secondary)] mb-10">
-                Explore our specialized courses designed to help you master each dimension of the 6XD framework and lead successful digital transformations.
-              </p>
-              <Link to="/courses">
-                <button className="px-8 py-3 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white font-semibold text-[16px] leading-[24px] rounded-[8px] transition-colors">
-                  Explore 6XD Courses
-                </button>
-              </Link>
-            </div>
+        {/* CTA */}
+        <section className="py-20 bg-[#050d1e] relative overflow-hidden">
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255, 69, 0, 0.2) 0%, transparent 70%)' }} />
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16 text-center relative z-10">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">Learning Path</p>
+            <h2 className="text-[40px] md:text-[52px] leading-[1.1] font-bold text-white mb-4 max-w-2xl mx-auto">
+              Master the 6XD Framework
+            </h2>
+            <p className="text-[16px] text-white/50 mb-8 max-w-xl mx-auto">
+              Explore our specialized courses designed to help you master each dimension of the 6XD framework and lead successful digital transformations.
+            </p>
+            <Link
+              to="/courses"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#ff4500] hover:bg-[#cc3700] text-white text-sm font-semibold rounded-full transition-colors"
+            >
+              Explore 6XD Courses
+            </Link>
           </div>
-        </div>
+        </section>
       </main>
 
       <Footer />

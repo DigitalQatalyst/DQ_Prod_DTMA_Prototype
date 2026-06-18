@@ -7,6 +7,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import {
+  learnerBodyMuted,
+  learnerCaption,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -67,63 +78,56 @@ export default function SMSFacultyPanel() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className="text-[28px] leading-[36px] font-semibold">Faculty</h2>
-        <p className="text-[14px] leading-[20px] text-muted-foreground mt-1">
-          Human instructors manage course content. AI agents handle all student Q&amp;A.
-        </p>
-      </div>
-
       {/* KPI cards — faculty only */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3">
-            <UserCheck className="w-5 h-5 text-sky-600" />
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 bg-sky-500/10")}>
+            <UserCheck className="h-5 w-5 text-sky-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{activeHuman}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">Active Instructors</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">{humanFaculty.length} total</div>
+          <div className={learnerKpiValue}>{activeHuman}</div>
+          <div className={learnerKpiLabel}>Active Instructors</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>{humanFaculty.length} total</div>
         </div>
 
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", needsAction > 0 ? "border-amber-200 bg-amber-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3">
-            <Users className="w-5 h-5 text-amber-500" />
+        <div className={cn(learnerKpiCard, needsAction > 0 && "border-amber-200 bg-amber-50/30")}>
+          <div className={cn(learnerIconWell, "mb-3 bg-amber-500/10")}>
+            <Users className="h-5 w-5 text-amber-500" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", needsAction > 0 && "text-amber-700")}>{needsAction}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+          <div className={cn(learnerKpiValue, needsAction > 0 && "text-amber-700")}>{needsAction}</div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             Needs Attention
             <Tip text="Instructors who are inactive or have stalled drafts pending publication." />
           </div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Inactive or overdue</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>Inactive or overdue</div>
         </div>
 
-        <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80">
-          <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3">
-            <Bot className="w-5 h-5 text-emerald-600" />
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 bg-emerald-500/10")}>
+            <Bot className="h-5 w-5 text-emerald-600" />
           </div>
-          <div className="text-[24px] leading-[32px] font-medium">{agentsHealthy}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700">AI Agents Operational</div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">{aiAgents.length} total agents</div>
+          <div className={learnerKpiValue}>{agentsHealthy}</div>
+          <div className={learnerKpiLabel}>AI Agents Operational</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>{aiAgents.length} total agents</div>
         </div>
 
-        <div className={cn("bg-card rounded-2xl p-6 shadow-sm border", agentsAtRisk > 0 ? "border-rose-200 bg-rose-50/30" : "border-slate-200/80")}>
-          <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3">
-            <Bot className="w-5 h-5 text-rose-500" />
+        <div className={cn(learnerKpiCard, agentsAtRisk > 0 && "border-rose-200 bg-rose-50/30")}>
+          <div className={cn(learnerIconWell, "mb-3 bg-rose-500/10")}>
+            <Bot className="h-5 w-5 text-rose-500" />
           </div>
-          <div className={cn("text-[24px] leading-[32px] font-medium", agentsAtRisk > 0 && "text-rose-700")}>{agentsAtRisk}</div>
-          <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+          <div className={cn(learnerKpiValue, agentsAtRisk > 0 && "text-rose-700")}>{agentsAtRisk}</div>
+          <div className={cn(learnerKpiLabel, "flex items-center")}>
             AI Agents At Risk
             <Tip text="Agents that are degraded or paused — student Q&A in those subject areas may be affected." />
           </div>
-          <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">Degraded or paused</div>
+          <div className={cn(learnerCaption, "mt-0.5")}>Degraded or paused</div>
         </div>
       </div>
 
       {/* Human Faculty table */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><UserCheck className="h-4 w-4 text-slate-500" />Human Faculty — Content Activity</CardTitle>
-          <CardDescription>Instructors create and publish course content. Flags appear when content is overdue or drafts are stalled.</CardDescription>
+          <CardTitle className={cn(learnerSectionHeading, "flex items-center gap-2")}><UserCheck className="h-4 w-4 text-slate-500" />Human Faculty — Content Activity</CardTitle>
+          <CardDescription className={learnerBodyMuted}>Instructors create and publish course content. Flags appear when content is overdue or drafts are stalled.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-hidden rounded-2xl border border-slate-200">
@@ -143,8 +147,8 @@ export default function SMSFacultyPanel() {
                 {humanFaculty.map((f) => (
                   <TableRow key={f.id} className={f.status !== "active" ? "bg-amber-50/20" : ""}>
                     <TableCell>
-                      <div className="font-medium text-slate-900">{f.name}</div>
-                      <div className="text-xs text-slate-500">Rating: {f.rating}</div>
+                      <div className={learnerItemTitle}>{f.name}</div>
+                      <div className={learnerCaption}>Rating: {f.rating}</div>
                     </TableCell>
                     <TableCell className="text-sm text-slate-600">{f.course}</TableCell>
                     <TableCell className="text-right text-slate-700">{f.activeStudents.toLocaleString()}</TableCell>
@@ -172,10 +176,10 @@ export default function SMSFacultyPanel() {
       </Card>
 
       {/* AI Faculty table */}
-      <Card className="border-slate-200/80 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200/80")}>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Bot className="h-4 w-4 text-slate-500" />AI Faculty — Agent Health</CardTitle>
-          <CardDescription>6 AI agents handle all student Q&amp;A, each trained on materials from the corresponding instructor. Escalate degraded or paused agents to the technical team.</CardDescription>
+          <CardTitle className={cn(learnerSectionHeading, "flex items-center gap-2")}><Bot className="h-4 w-4 text-slate-500" />AI Faculty — Agent Health</CardTitle>
+          <CardDescription className={learnerBodyMuted}>6 AI agents handle all student Q&amp;A, each trained on materials from the corresponding instructor. Escalate degraded or paused agents to the technical team.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-hidden rounded-2xl border border-slate-200">
@@ -198,7 +202,7 @@ export default function SMSFacultyPanel() {
                   const needsEscalation = a.status !== "operational" || a.escalationRate > 10 || a.coverageGaps > 2;
                   return (
                     <TableRow key={a.id} className={needsEscalation ? "bg-rose-50/20" : ""}>
-                      <TableCell className="font-medium text-slate-900">{a.name}</TableCell>
+                      <TableCell className={learnerItemTitle}>{a.name}</TableCell>
                       <TableCell className="text-sm text-slate-600">{a.subject}</TableCell>
                       <TableCell className="text-right text-slate-700">{a.qaVolume7d.toLocaleString()}</TableCell>
                       <TableCell className={cn("text-right font-medium", a.escalationRate > 10 ? "text-rose-600 font-bold" : "text-slate-700")}>

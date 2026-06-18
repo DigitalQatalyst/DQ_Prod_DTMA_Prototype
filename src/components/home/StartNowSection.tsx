@@ -1,45 +1,38 @@
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import MeshSection from "@/components/layout/MeshSection";
+import {
+  btnPrimaryOnDark,
+  btnSecondaryOnDark,
+  eyebrowOnDark,
+  marketingSectionHeading,
+  sectionPaddingX,
+  sectionPaddingY,
+} from "@/lib/brandAccent";
 
 const StartNowSection = () => {
   return (
-    <section className="py-20 bg-[var(--dq-navy-950)]">
-      <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-        {/* Section Header */}
-        <div className="text-center mb-10">
-          <p className="text-sm font-semibold text-[var(--dq-orange-500)] uppercase tracking-wide mb-4">
-            Start Now
-          </p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">
-            Get the Skills to Thrive in the Digital Economy
-          </h2>
-          <p className="text-base text-white/80 max-w-3xl mx-auto leading-relaxed">
-            DTMA equips talent for the digital economy through the 6XD framework and HI + AI learning.
-          </p>
-        </div>
-
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-          <Button
-            className="px-8 py-6 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white border-transparent text-base gap-2"
-          >
-            Begin Your Journey
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </div>
-
-        {/* Credential Reinforcement */}
-        <div className="max-w-3xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
-            <img src="/KHDA.png" alt="KHDA" className="h-14 w-auto flex-shrink-0" />
-            <div className="h-12 w-px bg-white/20 hidden sm:block"></div>
-            <p className="text-sm text-white/80 leading-relaxed text-center sm:text-left">
-              All DTMA courses award KHDA-attested, internationally recognized credentials.
-            </p>
-          </div>
+    <MeshSection variant="ctaOrange" grid className={`${sectionPaddingY} ${sectionPaddingX} text-center text-white`}>
+      <div className="relative z-10 mx-auto max-w-[720px]">
+        <p className={`${eyebrowOnDark} mb-6`}>Ready to begin</p>
+        <h2 className={`${marketingSectionHeading} mx-auto mb-6 max-w-3xl text-white`}>
+          Master digital transformation{" "}
+          <span className="text-dq-orange">skills.</span>
+        </h2>
+        <p className="mx-auto mb-10 max-w-md text-lg text-white/70">
+          From foundations to advanced practice. Every course KHDA-attested and ready to apply from day one.
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link to="/auth" className={btnPrimaryOnDark}>
+            Get Started Now
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link to="/courses" className={btnSecondaryOnDark}>
+            Explore Courses
+          </Link>
         </div>
       </div>
-    </section>
+    </MeshSection>
   );
 };
 

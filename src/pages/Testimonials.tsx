@@ -1,6 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Quote } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 const Testimonials = () => {
   const testimonials = [
@@ -70,64 +71,70 @@ const Testimonials = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white font-sans">
       <Navbar />
-      
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-gradient-to-br from-[var(--dq-navy-950)] via-[var(--dq-navy-800)] to-[var(--dq-navy-950)]">
-        <div className="max-w-[1600px] mx-auto px-8 lg:px-16 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-[12px] leading-[16px] font-medium uppercase tracking-wide text-[var(--dq-orange-500)] mb-4">
-              Hear From Our Learners
-            </p>
-            <h1 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-white mb-6">
-              Success Stories from Digital Leaders
-            </h1>
-            <p className="text-[16px] leading-[24px] font-normal text-white/90 max-w-3xl mx-auto">
-              Discover how professionals across industries are using DTMA to build the skills they need to thrive in the digital economy.
-            </p>
+
+      {/* Hero */}
+      <section className="bg-[#f5f4f0] pt-28 pb-20">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-4">
+            Hear from our learners
+          </p>
+          <h1 className="text-[52px] md:text-[68px] leading-[1.05] font-bold text-[#0a0f1e] mb-5 max-w-3xl">
+            Success stories from <span className="text-[#ff4500]">digital leaders.</span>
+          </h1>
+          <p className="text-[17px] text-[#4a4a5a] max-w-2xl">
+            Discover how professionals across industries are using DTMA to build the skills they need to thrive in the digital economy.
+          </p>
+        </div>
+      </section>
+
+      {/* Stats bar */}
+      <section className="py-12 bg-white border-b border-[#e8e8ec]">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <div className="grid grid-cols-3 gap-8">
+            {[
+              { value: "1,200+", label: "Professionals trained" },
+              { value: "95%", label: "Satisfaction rate" },
+              { value: "40+", label: "Countries represented" },
+            ].map((s) => (
+              <div key={s.label} className="flex flex-col border-l-2 border-[#ff4500] pl-4">
+                <span className="text-[36px] font-bold text-[#0a0f1e] leading-none mb-1">{s.value}</span>
+                <span className="text-[14px] text-[#6b6b7b]">{s.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials Grid */}
-      <section className="py-16 lg:py-24 bg-white">
-        <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Testimonials grid */}
+      <section className="py-20 bg-white">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className="bg-[#F5F6FA] rounded-2xl p-8 flex flex-col"
+                className="bg-white border border-[#e8e8ec] rounded-xl p-6 flex flex-col hover:shadow-md transition-all"
               >
-                {/* Quote Icon */}
-                <div className="mb-6">
-                  <Quote className="w-8 h-8 text-[var(--dq-orange-500)]" />
-                </div>
+                {/* Orange accent line */}
+                <div className="w-8 h-0.5 bg-[#ff4500] mb-5" />
 
                 {/* Quote */}
-                <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-navy-950)] mb-6 flex-grow">
+                <p className="text-[15px] leading-[1.7] text-[#4a4a5a] mb-6 flex-grow">
                   "{testimonial.quote}"
                 </p>
 
-                {/* Author Section */}
-                <div className="flex items-center gap-4 pt-6 border-t border-[#E5E7EB]">
-                  <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-                    <img
-                      src={testimonial.image}
-                      alt={testimonial.author}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+                {/* Author */}
+                <div className="flex items-center gap-3 pt-5 border-t border-[#e8e8ec]">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.author}
+                    className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                  />
                   <div>
-                    <p className="text-[14px] leading-[20px] font-normal text-[var(--dq-navy-950)]">
-                      {testimonial.author}
-                    </p>
-                    <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-text-secondary)]">
-                      {testimonial.role}
-                    </p>
-                    <p className="text-[12px] leading-[16px] font-medium text-[var(--dq-text-disabled)]">
-                      {testimonial.organization}
-                    </p>
+                    <p className="text-[14px] font-semibold text-[#0a0f1e]">{testimonial.author}</p>
+                    <p className="text-[12px] text-[#4a4a5a]">{testimonial.role}</p>
+                    <p className="text-[12px] text-[#9a9aaa]">{testimonial.organization}</p>
                   </div>
                 </div>
               </div>
@@ -136,35 +143,24 @@ const Testimonials = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-[#F5F6FA]">
-        <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <p className="text-[40px] leading-[48px] font-semibold text-[var(--dq-orange-500)] mb-2">
-                1,200+
-              </p>
-              <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)]">
-                Professionals Trained
-              </p>
-            </div>
-            <div>
-              <p className="text-[40px] leading-[48px] font-semibold text-[var(--dq-orange-500)] mb-2">
-                95%
-              </p>
-              <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)]">
-                Satisfaction Rate
-              </p>
-            </div>
-            <div>
-              <p className="text-[40px] leading-[48px] font-semibold text-[var(--dq-orange-500)] mb-2">
-                40+
-              </p>
-              <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-text-secondary)]">
-                Countries Represented
-              </p>
-            </div>
-          </div>
+      {/* CTA */}
+      <section className="py-20 bg-[#050d1e] relative overflow-hidden">
+        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255, 69, 0, 0.2) 0%, transparent 70%)' }} />
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16 text-center relative z-10">
+          <p className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest mb-4">Join them</p>
+          <h2 className="text-[40px] md:text-[52px] leading-[1.1] font-bold text-white mb-4 max-w-2xl mx-auto">
+            Start your digital transformation journey.
+          </h2>
+          <p className="text-[16px] text-white/50 mb-8 max-w-lg mx-auto">
+            Join thousands of professionals building the skills to thrive in Economy 4.0.
+          </p>
+          <Link
+            to="/courses"
+            className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#ff4500] hover:bg-[#cc3700] text-white text-sm font-semibold rounded-full transition-colors"
+          >
+            Explore Courses
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
 

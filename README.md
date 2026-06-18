@@ -1,4 +1,2 @@
 # DTMA-project
-Digital Transformation management academy.
-
-cscscscscs
+Digital Transformation management academy

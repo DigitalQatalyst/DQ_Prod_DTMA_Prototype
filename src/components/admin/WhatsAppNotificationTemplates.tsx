@@ -1,3 +1,19 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+  learnerBadge,
+  learnerIconWell,
+} from "@/lib/brandAccent";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/Badge';
@@ -149,7 +165,7 @@ export const WhatsAppNotificationTemplates = () => {
           {selectedTemplate ? (
             <div className="p-6 bg-card rounded-2xl border border-border space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-[16px] font-semibold text-foreground">
+                <h4 className={learnerItemTitle}>
                   {isEditing ? 'Edit Template' : 'Template Preview'}
                 </h4>
                 {!isEditing && (

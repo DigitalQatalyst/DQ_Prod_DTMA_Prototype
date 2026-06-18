@@ -1,3 +1,18 @@
+import { cn } from "@/lib/utils";
+import {
+  learnerBody,
+  learnerBodyMuted,
+  learnerBtnPrimary,
+  learnerCaption,
+  learnerCardTitle,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 import { useState } from "react";
 import {
   Bot,
@@ -68,11 +83,7 @@ export const AIUsageMonitoringDashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-[28px] leading-[36px] font-semibold text-[var(--dq-text-primary)]">AI Learning Analytics</h2>
-          <p className="text-[14px] leading-[20px] text-[var(--dq-text-secondary)] mt-1">Platform-wide AI usage, performance, and cost metrics</p>
-        </div>
+      <div className="flex items-center justify-end">
         <select
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value as any)}
@@ -87,46 +98,46 @@ export const AIUsageMonitoringDashboard = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[var(--dq-surface-border-default)]">
-          <div className="w-12 h-12 rounded-xl bg-[var(--dq-orange-50)] flex items-center justify-center mb-3">
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 h-12 w-12 bg-orange-50")}>
             <Bot className="w-6 h-6 text-[var(--dq-orange-500)]" />
           </div>
-          <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-text-primary)]">{MOCK_AI_ANALYTICS.totalInteractions.toLocaleString()}</div>
-          <div className="text-[13px] text-[var(--dq-text-secondary)] mt-1">AI Interactions</div>
-          <div className="text-[12px] text-[var(--dq-orange-500)] font-medium mt-2">
+          <div className={learnerKpiValue}>{MOCK_AI_ANALYTICS.totalInteractions.toLocaleString()}</div>
+          <div className={cn(learnerKpiLabel, "mt-1")}>AI Interactions</div>
+          <div className={cn(learnerCaption, "mt-2 font-medium text-dq-orange")}>
             {MOCK_AI_ANALYTICS.activeUsers} active users
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[var(--dq-surface-border-default)]">
+        <div className={learnerKpiCard}>
           <div className="w-12 h-12 rounded-xl bg-[var(--dq-success-surface)] flex items-center justify-center mb-3">
             <CheckCircle className="w-6 h-6 text-[var(--dq-success)]" />
           </div>
-          <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-text-primary)]">{MOCK_AI_ANALYTICS.successRate}%</div>
-          <div className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Success Rate</div>
-          <div className="text-[12px] text-[var(--dq-success)] font-medium mt-2">
+          <div className={learnerKpiValue}>{MOCK_AI_ANALYTICS.successRate}%</div>
+          <div className={cn(learnerKpiLabel, "mt-1")}>Success Rate</div>
+          <div className={cn(learnerCaption, "mt-2 font-medium text-emerald-600")}>
             Avg: {MOCK_AI_ANALYTICS.avgResponseTime}
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[var(--dq-surface-border-default)]">
+        <div className={learnerKpiCard}>
           <div className="w-12 h-12 rounded-xl bg-[var(--dq-gray-100)] flex items-center justify-center mb-3">
             <DollarSign className="w-6 h-6 text-[var(--dq-text-primary)]" />
           </div>
-          <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-text-primary)]">${MOCK_AI_ANALYTICS.totalCost.toFixed(2)}</div>
-          <div className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Total Cost</div>
-          <div className="text-[12px] text-[var(--dq-text-primary)] font-medium mt-2">
+          <div className={learnerKpiValue}>${MOCK_AI_ANALYTICS.totalCost.toFixed(2)}</div>
+          <div className={cn(learnerKpiLabel, "mt-1")}>Total Cost</div>
+          <div className={cn(learnerCaption, "mt-2 font-medium text-dq-navy")}>
             ${MOCK_AI_ANALYTICS.avgCostPerInteraction.toFixed(3)} per interaction
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-[var(--dq-surface-border-default)]">
-          <div className="w-12 h-12 rounded-xl bg-[var(--dq-orange-50)] flex items-center justify-center mb-3">
+        <div className={learnerKpiCard}>
+          <div className={cn(learnerIconWell, "mb-3 h-12 w-12 bg-orange-50")}>
             <Zap className="w-6 h-6 text-[var(--dq-orange-500)]" />
           </div>
-          <div className="text-[32px] leading-[40px] font-bold text-[var(--dq-text-primary)]">{MOCK_AI_ANALYTICS.coursesWithAI}</div>
-          <div className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Courses with AI</div>
-          <div className="text-[12px] text-[var(--dq-orange-500)] font-medium mt-2">
+          <div className={learnerKpiValue}>{MOCK_AI_ANALYTICS.coursesWithAI}</div>
+          <div className={cn(learnerKpiLabel, "mt-1")}>Courses with AI</div>
+          <div className={cn(learnerCaption, "mt-2 font-medium text-dq-orange")}>
             {((MOCK_AI_ANALYTICS.coursesWithAI / MOCK_AI_ANALYTICS.totalCourses) * 100).toFixed(0)}% adoption
           </div>
         </div>
@@ -136,8 +147,8 @@ export const AIUsageMonitoringDashboard = () => {
         {/* Course AI Usage */}
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-[var(--dq-surface-border-default)] overflow-hidden">
           <div className="px-6 py-5 border-b border-[var(--dq-surface-border-default)]">
-            <h3 className="text-[18px] font-semibold text-[var(--dq-text-primary)]">AI Usage by Course</h3>
-            <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Interactions, performance, and cost breakdown</p>
+            <h3 className={learnerSectionHeading}>AI Usage by Course</h3>
+            <p className={cn(learnerKpiLabel, "mt-1")}>Interactions, performance, and cost breakdown</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -155,7 +166,7 @@ export const AIUsageMonitoringDashboard = () => {
                 {MOCK_COURSE_AI_USAGE.map((course, idx) => (
                   <tr key={course.id} className={`border-t border-[var(--dq-surface-border-default)] hover:bg-[var(--dq-gray-50)] transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-[var(--dq-gray-50)]'}`}>
                     <td className="px-4 py-3">
-                      <div className="text-[13px] font-medium text-[var(--dq-text-primary)] max-w-[200px] truncate" title={course.courseName}>
+                      <div className={cn(learnerItemTitle, "max-w-[200px] truncate text-sm")} title={course.courseName}>
                         {course.courseName}
                       </div>
                     </td>
@@ -194,8 +205,8 @@ export const AIUsageMonitoringDashboard = () => {
           {/* AI Features */}
           <div className="bg-white rounded-2xl shadow-sm border border-[var(--dq-surface-border-default)]">
             <div className="px-5 py-4 border-b border-[var(--dq-surface-border-default)]">
-              <h3 className="text-[18px] font-semibold text-[var(--dq-text-primary)]">AI Features Usage</h3>
-              <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">By feature type</p>
+              <h3 className={learnerSectionHeading}>AI Features Usage</h3>
+              <p className={cn(learnerKpiLabel, "mt-1")}>By feature type</p>
             </div>
             <div className="p-5 space-y-4">
               {MOCK_AI_FEATURES.map((feature) => (
@@ -222,8 +233,8 @@ export const AIUsageMonitoringDashboard = () => {
           {/* AI Models */}
           <div className="bg-white rounded-2xl shadow-sm border border-[var(--dq-surface-border-default)]">
             <div className="px-5 py-4 border-b border-[var(--dq-surface-border-default)]">
-              <h3 className="text-[18px] font-semibold text-[var(--dq-text-primary)]">AI Models</h3>
-              <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Distribution & performance</p>
+              <h3 className={learnerSectionHeading}>AI Models</h3>
+              <p className={cn(learnerKpiLabel, "mt-1")}>Distribution & performance</p>
             </div>
             <div className="p-5 space-y-3">
               {MOCK_AI_MODELS.map((model) => (
@@ -254,8 +265,8 @@ export const AIUsageMonitoringDashboard = () => {
       {/* Common Queries */}
       <div className="bg-white rounded-2xl shadow-sm border border-[var(--dq-surface-border-default)]">
         <div className="px-6 py-5 border-b border-[var(--dq-surface-border-default)]">
-          <h3 className="text-[18px] font-semibold text-[var(--dq-text-primary)]">Most Common AI Queries</h3>
-          <p className="text-[13px] text-[var(--dq-text-secondary)] mt-1">Top learner questions and satisfaction ratings</p>
+          <h3 className={learnerSectionHeading}>Most Common AI Queries</h3>
+          <p className={cn(learnerKpiLabel, "mt-1")}>Top learner questions and satisfaction ratings</p>
         </div>
         <div className="p-6">
           <div className="space-y-3">
@@ -281,7 +292,7 @@ export const AIUsageMonitoringDashboard = () => {
       </div>
 
       {/* System Status */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[var(--dq-surface-border-default)]">
+      <div className={learnerKpiCard}>
         <h3 className="text-[18px] font-semibold text-[var(--dq-text-primary)] mb-5">AI System Status</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--dq-success-surface)] border border-[var(--dq-success)]">

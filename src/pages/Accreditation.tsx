@@ -59,54 +59,56 @@ const Accreditation = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-[var(--dq-navy-950)]">
-        <Navbar />
-        
-        {/* Hero Section */}
-        <section className="pt-32 pb-20 lg:pt-40 lg:pb-28">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <div className="max-w-4xl mx-auto text-center">
-              <img src="/KHDA.png" alt="KHDA" className="h-16 w-auto mx-auto mb-6" />
-              <p className="text-[12px] leading-[16px] font-semibold uppercase tracking-wide text-[var(--dq-orange-500)] mb-6">
-                Credentials & Recognition
-              </p>
-              <h1 className="text-[40px] leading-[48px] font-semibold text-white mb-6">
-                Accreditation & Credentials
-              </h1>
-              <p className="text-[18px] leading-[28px] font-normal text-white/90 max-w-3xl mx-auto">
-                Earn recognized credentials that validate your expertise in digital transformation and leadership.
-              </p>
-            </div>
-          </div>
-        </section>
-      </div>
+    <div className="min-h-screen bg-white">
+      <Navbar />
+
+      {/* Hero Section */}
+      <section className="bg-[#f5f4f0] pt-28 pb-20">
+        <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+          <img src="/KHDA.png" alt="KHDA" className="h-12 w-auto mb-6" />
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-4">
+            Credentials & Recognition
+          </p>
+          <h1 className="text-[52px] md:text-[68px] leading-[1.05] font-bold text-[#0a0f1e] mb-6 max-w-3xl">
+            Accreditation &{" "}
+            <span className="text-[#ff4500]">Credentials</span>
+          </h1>
+          <p className="text-[17px] text-[#4a4a5a] max-w-xl">
+            Earn recognized credentials that validate your expertise in digital transformation and leadership.
+          </p>
+        </div>
+      </section>
 
       <main>
         {/* Accreditations Section */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Our Accreditations</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section className="py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-3">
+              Recognition
+            </p>
+            <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-[#0a0f1e] mb-12">
+              Our Accreditations
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {accreditations.map((acc, index) => {
                 const Icon = acc.icon;
                 return (
                   <div
                     key={index}
-                    className="bg-[var(--dq-navy-50)] border border-[var(--dq-navy-100)] rounded-[12px] p-8 hover:shadow-md transition-shadow"
+                    className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all"
                   >
                     <div className="flex items-start gap-4">
                       {index === 0 ? (
                         <img src="/KHDA.png" alt="KHDA" className="h-6 w-auto flex-shrink-0 mt-1" />
                       ) : (
-                        <Icon className="w-6 h-6 text-[var(--dq-orange-500)] flex-shrink-0 mt-1" strokeWidth={1.5} />
+                        <Icon className="w-6 h-6 text-[#ff4500] flex-shrink-0 mt-1" strokeWidth={1.5} />
                       )}
                       <div>
-                        <h3 className="text-lg font-bold text-[var(--dq-navy-950)] mb-2">
+                        <h3 className="text-lg font-bold text-[#0a0f1e] mb-2">
                           {acc.title}
                         </h3>
-                        <p className="text-[var(--dq-navy-600)] mb-2">{acc.description}</p>
-                        <p className="text-sm text-[var(--dq-navy-500)]">{acc.details}</p>
+                        <p className="text-[#4a4a5a] mb-2">{acc.description}</p>
+                        <p className="text-sm text-[#6b6b7b]">{acc.details}</p>
                       </div>
                     </div>
                   </div>
@@ -117,31 +119,36 @@ const Accreditation = () => {
         </section>
 
         {/* Credentials Tiers */}
-        <section className="py-16 lg:py-24 bg-[var(--dq-navy-50)]">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16">
-            <h2 className="text-3xl font-bold text-[var(--dq-navy-950)] mb-12">Credential Tiers</h2>
+        <section className="py-20 bg-[#f5f4f0]">
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-3">
+              Pathways
+            </p>
+            <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-[#0a0f1e] mb-12">
+              Credential Tiers
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {credentials.map((cred, index) => (
                 <div
                   key={index}
-                  className="bg-white border border-[var(--dq-navy-100)] rounded-[12px] p-6 hover:shadow-lg transition-shadow"
+                  className="bg-white border border-[#e8e8ec] rounded-xl p-6 hover:shadow-md transition-all"
                 >
                   <div className="mb-4">
-                    <span className="text-xs font-bold text-[var(--dq-orange-500)] uppercase tracking-wide">
+                    <span className="text-[11px] font-semibold text-[#ff4500] uppercase tracking-widest">
                       {cred.tier}
                     </span>
-                    <h3 className="text-xl font-bold text-[var(--dq-navy-950)] mt-2">
+                    <h3 className="text-xl font-bold text-[#0a0f1e] mt-2">
                       {cred.name}
                     </h3>
                   </div>
-                  <p className="text-sm text-[var(--dq-navy-600)] mb-6">
+                  <p className="text-sm text-[#4a4a5a] mb-6">
                     {cred.description}
                   </p>
                   <div className="space-y-2">
                     {cred.benefits.map((benefit, i) => (
                       <div key={i} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-[var(--dq-orange-500)] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
-                        <span className="text-sm text-[var(--dq-navy-600)]">{benefit}</span>
+                        <CheckCircle2 className="w-4 h-4 text-[#ff4500] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                        <span className="text-sm text-[#4a4a5a]">{benefit}</span>
                       </div>
                     ))}
                   </div>
@@ -152,16 +159,19 @@ const Accreditation = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 lg:py-24 bg-white">
-          <div className="max-w-[1600px] mx-auto px-8 lg:px-16 text-center">
-            <h2 className="text-[32px] leading-[40px] md:text-[40px] md:leading-[48px] font-semibold text-[var(--dq-navy-950)] mb-4">
+        <section className="py-20 bg-[#050d1e]" style={{ backgroundImage: 'radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255, 69, 0, 0.2) 0%, transparent 70%)' }}>
+          <div className="max-w-[1200px] mx-auto px-8 lg:px-16 text-center">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-[#ff4500] mb-6">
+              Ready to begin
+            </p>
+            <h2 className="text-[36px] md:text-[44px] leading-[1.1] font-bold text-white mb-4 max-w-2xl mx-auto">
               Ready to Earn Your Credential?
             </h2>
-            <p className="text-[16px] leading-[24px] font-normal text-[var(--dq-navy-600)] mb-8 max-w-2xl mx-auto">
+            <p className="text-[17px] text-white/50 mb-10 max-w-lg mx-auto">
               Explore our courses and start your journey toward recognized expertise.
             </p>
             <Link to="/courses">
-              <button className="px-8 py-3 bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white font-semibold rounded-[8px] transition-colors">
+              <button className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#ff4500] hover:bg-[#cc3700] text-white text-sm font-semibold rounded-full transition-colors">
                 Explore Courses
               </button>
             </Link>

@@ -6,6 +6,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import {
+  learnerBodyMuted,
+  learnerCaption,
+  learnerCardTitle,
+  learnerGroupLabel,
+  learnerIconWell,
+  learnerItemTitle,
+  learnerKpiCard,
+  learnerKpiLabel,
+  learnerKpiValue,
+  learnerPanel,
+  learnerSectionHeading,
+} from "@/lib/brandAccent";
 import "@/styles/dq-design-tokens.css";
 
 const Tip = ({ text }: { text: string }) => (
@@ -15,7 +28,7 @@ const Tip = ({ text }: { text: string }) => (
   </Tooltip></TooltipProvider>
 );
 
-type SMSTab = 'overview' | 'courses' | 'faculty' | 'students' | 'finance' | 'billing' | 'partners' | 'compliance';
+import type { SMSTabId } from "@/components/dashboard/SMSDashboardSidebar";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -24,10 +37,10 @@ const fmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD",
 
 // Flags — Review link only, no action buttons (per expert recommendation)
 const flags = [
-  { id: "f1", label: "2 students with payment failures",                destination: "billing"    as SMSTab, autoEscalated: true },
-  { id: "f2", label: "KNQA accreditation expiring in 14 days",          destination: "compliance" as SMSTab },
-  { id: "f3", label: "Sofia Reyes hasn't published content in 16 days", destination: "faculty"    as SMSTab },
-  { id: "f4", label: "Sprint AI agent degraded — 18% escalation rate",  destination: "faculty"    as SMSTab },
+  { id: "f1", label: "2 students with payment failures",                destination: "billing"    as SMSTabId, autoEscalated: true },
+  { id: "f2", label: "KNQA accreditation expiring in 14 days",          destination: "compliance" as SMSTabId },
+  { id: "f3", label: "Sofia Reyes hasn't published content in 16 days", destination: "faculty"    as SMSTabId },
+  { id: "f4", label: "Sprint AI agent degraded — 18% escalation rate",  destination: "faculty"    as SMSTabId },
 ];
 
 // Snapshot data
@@ -57,96 +70,93 @@ const horizon = [
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMSTab) => void }) {
+export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMSTabId) => void }) {
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
 
   return (
     <div className="space-y-8">
-      {/* Header — title only */}
-      <h2 className="text-[28px] leading-[36px] font-semibold">Overview</h2>
-
       {/* 1. KPI Rail — standard portal card style, grouped */}
       <div className="space-y-5">
         {/* People */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-3">People</p>
+          <p className={cn(learnerGroupLabel, "mb-3")}>People</p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {/* Students */}
-            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('students')}>
-              <div className="w-10 h-10 bg-[#ff6b4d]/10 rounded-xl flex items-center justify-center mb-3"><Users className="w-5 h-5 text-[#ff6b4d]" /></div>
-              <div className="text-[24px] leading-[32px] font-medium">2,840</div>
-              <div className="text-[14px] leading-[20px] font-medium text-slate-700">Students</div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500 flex items-center">
+            <div className={cn(learnerKpiCard, "cursor-pointer transition-colors hover:border-slate-300")} onClick={() => onNavigate('students')}>
+              <div className={cn(learnerIconWell, "mb-3 bg-[#ff6b4d]/10")}><Users className="h-5 w-5 text-[#ff6b4d]" /></div>
+              <div className={learnerKpiValue}>2,840</div>
+              <div className={learnerKpiLabel}>Students</div>
+              <div className={cn(learnerCaption, "mt-0.5 flex items-center")}>
                 1,488 active this month (52%)
                 <Tip text="Active = logged in and engaged with at least one course in the last 30 days." />
               </div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600 font-medium">2 lost access</div>
+              <div className={cn(learnerCaption, "mt-0.5 font-medium text-rose-600")}>2 lost access</div>
             </div>
             {/* Faculty */}
-            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('faculty')}>
-              <div className="w-10 h-10 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-3"><UserCheck className="w-5 h-5 text-indigo-600" /></div>
-              <div className="text-[24px] leading-[32px] font-medium">10</div>
-              <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            <div className={cn(learnerKpiCard, "cursor-pointer transition-colors hover:border-slate-300")} onClick={() => onNavigate('faculty')}>
+              <div className={cn(learnerIconWell, "mb-3 bg-indigo-500/10")}><UserCheck className="h-5 w-5 text-indigo-600" /></div>
+              <div className={learnerKpiValue}>10</div>
+              <div className={cn(learnerKpiLabel, "flex items-center")}>
                 Faculty
                 <Tip text="Total faculty: 4 human instructors (content creators) + 6 AI agents (handle all student Q&A)." />
               </div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">4 instructors · 6 AI agents</div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">4 need attention</div>
+              <div className={cn(learnerCaption, "mt-0.5")}>4 instructors · 6 AI agents</div>
+              <div className={cn(learnerCaption, "mt-0.5 font-medium text-amber-700")}>4 need attention</div>
             </div>
             {/* Partners */}
-            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('partners')}>
-              <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3"><Globe className="w-5 h-5 text-sky-600" /></div>
-              <div className="text-[24px] leading-[32px] font-medium">2</div>
-              <div className="text-[14px] leading-[20px] font-medium text-slate-700">Partners</div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500">active content providers</div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600 font-medium">1 inactive</div>
+            <div className={cn(learnerKpiCard, "cursor-pointer transition-colors hover:border-slate-300")} onClick={() => onNavigate('partners')}>
+              <div className={cn(learnerIconWell, "mb-3 bg-sky-500/10")}><Globe className="h-5 w-5 text-sky-600" /></div>
+              <div className={learnerKpiValue}>2</div>
+              <div className={learnerKpiLabel}>Partners</div>
+              <div className={cn(learnerCaption, "mt-0.5")}>active content providers</div>
+              <div className={cn(learnerCaption, "mt-0.5 font-medium text-rose-600")}>1 inactive</div>
             </div>
           </div>
         </div>
 
         {/* Operations */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-3">Operations</p>
+          <p className={cn(learnerGroupLabel, "mb-3")}>Operations</p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {/* Courses */}
-            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('courses')}>
-              <div className="w-10 h-10 bg-sky-500/10 rounded-xl flex items-center justify-center mb-3"><BookOpen className="w-5 h-5 text-sky-600" /></div>
-              <div className="text-[24px] leading-[32px] font-medium">4</div>
-              <div className="text-[14px] leading-[20px] font-medium text-slate-700">Courses Running</div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-slate-500 flex items-center">
+            <div className={cn(learnerKpiCard, "cursor-pointer transition-colors hover:border-slate-300")} onClick={() => onNavigate('courses')}>
+              <div className={cn(learnerIconWell, "mb-3 bg-sky-500/10")}><BookOpen className="h-5 w-5 text-sky-600" /></div>
+              <div className={learnerKpiValue}>4</div>
+              <div className={learnerKpiLabel}>Courses Running</div>
+              <div className={cn(learnerCaption, "mt-0.5 flex items-center")}>
                 69% avg completion
                 <Tip text="Average percentage of enrolled students who finished all required modules across all active courses." />
               </div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">2 at risk</div>
+              <div className={cn(learnerCaption, "mt-0.5 font-medium text-amber-700")}>2 at risk</div>
             </div>
             {/* Finance */}
-            <div className="bg-card rounded-2xl p-6 shadow-sm border border-slate-200/80 cursor-pointer hover:border-slate-300 transition-colors" onClick={() => onNavigate('finance')}>
-              <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-3"><Banknote className="w-5 h-5 text-emerald-600" /></div>
-              <div className="text-[24px] leading-[32px] font-medium">$58,400</div>
-              <div className="text-[14px] leading-[20px] font-medium text-slate-700">Revenue This Month</div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-emerald-600 font-medium flex items-center gap-0.5">
+            <div className={cn(learnerKpiCard, "cursor-pointer transition-colors hover:border-slate-300")} onClick={() => onNavigate('finance')}>
+              <div className={cn(learnerIconWell, "mb-3 bg-emerald-500/10")}><Banknote className="h-5 w-5 text-emerald-600" /></div>
+              <div className={learnerKpiValue}>$58,400</div>
+              <div className={learnerKpiLabel}>Revenue This Month</div>
+              <div className={cn(learnerCaption, "mt-0.5 flex items-center gap-0.5 font-medium text-emerald-600")}>
                 <TrendingUp className="h-3 w-3" /> +12% vs last month
               </div>
             </div>
             {/* Billing */}
-            <div className="bg-card rounded-2xl p-6 shadow-sm border border-rose-200 bg-rose-50/30 cursor-pointer hover:border-rose-300 transition-colors" onClick={() => onNavigate('billing')}>
-              <div className="w-10 h-10 bg-rose-500/10 rounded-xl flex items-center justify-center mb-3"><CreditCard className="w-5 h-5 text-rose-500" /></div>
-              <div className="text-[24px] leading-[32px] font-medium text-rose-700">3</div>
-              <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            <div className={cn(learnerKpiCard, "cursor-pointer border-rose-200 bg-rose-50/30 transition-colors hover:border-rose-300")} onClick={() => onNavigate('billing')}>
+              <div className={cn(learnerIconWell, "mb-3 bg-rose-500/10")}><CreditCard className="h-5 w-5 text-rose-500" /></div>
+              <div className={cn(learnerKpiValue, "text-rose-700")}>3</div>
+              <div className={cn(learnerKpiLabel, "flex items-center")}>
                 Billing Issues
                 <Tip text="Failed payments and refund requests not yet resolved by the finance team." />
               </div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-rose-600 font-medium">$550 value at risk</div>
+              <div className={cn(learnerCaption, "mt-0.5 font-medium text-rose-600")}>$550 value at risk</div>
             </div>
             {/* Compliance */}
-            <div className="bg-card rounded-2xl p-6 shadow-sm border border-amber-200 bg-amber-50/30 cursor-pointer hover:border-amber-300 transition-colors" onClick={() => onNavigate('compliance')}>
-              <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-3"><ShieldCheck className="w-5 h-5 text-amber-600" /></div>
-              <div className="text-[24px] leading-[32px] font-medium text-amber-700">1</div>
-              <div className="text-[14px] leading-[20px] font-medium text-slate-700 flex items-center">
+            <div className={cn(learnerKpiCard, "cursor-pointer border-amber-200 bg-amber-50/30 transition-colors hover:border-amber-300")} onClick={() => onNavigate('compliance')}>
+              <div className={cn(learnerIconWell, "mb-3 bg-amber-500/10")}><ShieldCheck className="h-5 w-5 text-amber-600" /></div>
+              <div className={cn(learnerKpiValue, "text-amber-700")}>1</div>
+              <div className={cn(learnerKpiLabel, "flex items-center")}>
                 Accreditation
                 <Tip text="Accreditations expiring within 60 days or already expired. Lapsed accreditation affects the official status of the courses it covers." />
               </div>
-              <div className="text-[12px] leading-[16px] mt-0.5 text-amber-700 font-medium">14 days to KNQA expiry</div>
+              <div className={cn(learnerCaption, "mt-0.5 font-medium text-amber-700")}>14 days to KNQA expiry</div>
             </div>
           </div>
         </div>
@@ -183,9 +193,9 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
       {/* 3. Snapshot — one section, two columns */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Course Progress */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className={cn(learnerPanel, "border-slate-200")}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center justify-between">
+            <CardTitle className={cn(learnerCardTitle, "flex items-center justify-between text-base")}>
               Course Progress
               <Button variant="ghost" size="sm" className="text-xs h-7 text-slate-400 hover:text-slate-700 gap-1" onClick={() => onNavigate('courses')}>
                 All courses <ChevronRight className="h-3.5 w-3.5" />
@@ -196,7 +206,7 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
             {courseSnapshot.map((c) => (
               <div key={c.title}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm text-slate-800 truncate mr-2">{c.title}</span>
+                  <span className={cn(learnerItemTitle, "mr-2 truncate text-sm")}>{c.title}</span>
                   <div className="flex items-center gap-1.5 shrink-0">
                     {c.atRisk && <Badge className="border border-amber-200 bg-amber-50 text-amber-700 text-xs">At risk</Badge>}
                     <span className={cn("text-xs font-semibold", c.completion < 65 ? "text-amber-700" : "text-slate-600")}>{c.completion}%</span>
@@ -209,9 +219,9 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
         </Card>
 
         {/* Faculty Status */}
-        <Card className="border-slate-200 shadow-sm">
+        <Card className={cn(learnerPanel, "border-slate-200")}>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700 flex items-center justify-between">
+            <CardTitle className={cn(learnerCardTitle, "flex items-center justify-between text-base")}>
               Faculty Status
               <Button variant="ghost" size="sm" className="text-xs h-7 text-slate-400 hover:text-slate-700 gap-1" onClick={() => onNavigate('faculty')}>
                 All faculty <ChevronRight className="h-3.5 w-3.5" />
@@ -222,8 +232,8 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
             {facultySnapshot.map((f) => (
               <div key={f.label} className={cn("flex items-center justify-between rounded-xl px-3 py-2", !f.ok ? "bg-amber-50/50" : "bg-slate-50")}>
                 <div>
-                  <span className="text-sm font-medium text-slate-900">{f.label}</span>
-                  <span className="text-xs text-slate-400 ml-2 hidden sm:inline">{f.sub}</span>
+                  <span className={cn(learnerItemTitle, "text-sm")}>{f.label}</span>
+                  <span className={cn(learnerCaption, "ml-2 hidden sm:inline")}>{f.sub}</span>
                 </div>
                 <Badge className={cn("border text-xs font-semibold", f.ok ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-amber-200 bg-amber-50 text-amber-800")}>{f.status}</Badge>
               </div>
@@ -233,9 +243,9 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
       </div>
 
       {/* Staff snapshot — who to contact per team */}
-      <Card className="border-slate-200 shadow-sm">
+      <Card className={cn(learnerPanel, "border-slate-200")}>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center justify-between">
+          <CardTitle className={cn(learnerSectionHeading, "flex items-center justify-between")}>
             Staff — Who to Contact
             <Button variant="ghost" size="sm" className="text-xs h-7 text-slate-400 hover:text-slate-700 gap-1" onClick={() => onNavigate('staff')}>
               Full directory <ChevronRight className="h-3.5 w-3.5" />
@@ -252,8 +262,8 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
             ].map((s) => (
               <div key={s.team} className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 gap-3">
                 <div>
-                  <div className="text-sm font-medium text-slate-900">{s.contact}</div>
-                  <div className="text-xs text-slate-500">{s.purpose}</div>
+                  <div className={cn(learnerItemTitle, "text-sm")}>{s.contact}</div>
+                  <div className={learnerCaption}>{s.purpose}</div>
                 </div>
                 <Badge className={cn("border text-xs font-semibold shrink-0",
                   s.status === "available" ? "border-emerald-200 bg-emerald-50 text-emerald-700" :
@@ -269,8 +279,8 @@ export default function SMSOverviewPanel({ onNavigate }: { onNavigate: (tab: SMS
       </Card>
 
       {/* 4. Horizon — low-weight footer band */}
-      <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-3">Next 30 Days</p>
+      <div className={cn(learnerPanel, "rounded-2xl border-slate-200 bg-slate-50 px-5 py-4")}>
+        <p className={cn(learnerGroupLabel, "mb-3")}>Next 30 Days</p>
         <div className="flex flex-wrap gap-2">
           {horizon.map((h) => (
             <div key={h.label} className={cn(

@@ -56,33 +56,37 @@ export function LearnerOverviewPanel({
   onboardingData,
 }: LearnerOverviewPanelProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Landing hero summary */}
       <div className={cn(learnerPanel, "overflow-hidden p-6 lg:p-8")}>
         <p className={cn(eyebrow, "mb-3")}>Digital Transformation Management Academy</p>
-        <h2 className="mb-3 text-2xl font-semibold tracking-tight text-dq-navy lg:text-3xl">
+        <h2 className="mb-3 max-w-3xl text-2xl font-semibold tracking-tight text-dq-navy lg:text-3xl">
           Every skill to succeed in the{" "}
           <span className="text-dq-orange">digital economy.</span>
         </h2>
-        <p className={cn(learnerBody, "mb-6 max-w-2xl")}>
+        <p className={cn(learnerBody, "mb-8 max-w-2xl")}>
           DTMA equips leaders and digital teams with structured, KHDA-attested learning mapped to the
           6XD framework, so capability building connects to real transformation work.
         </p>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap items-center gap-3 border-t border-gray-100 pt-6">
           <button type="button" onClick={() => onNavigate("catalog")} className={btnPrimary}>
             Explore courses
             <ArrowRight className="h-4 w-4" />
           </button>
-          <button type="button" onClick={() => onNavigate("overview")} className={learnerLink}>
+          <button
+            type="button"
+            onClick={() => onNavigate("overview")}
+            className={cn(learnerLink, "px-1")}
+          >
             Go to dashboard
           </button>
         </div>
       </div>
 
       {/* Why DTMA */}
-      <div>
+      <section>
         <p className={cn(eyebrow, "mb-2")}>Why DTMA exists</p>
-        <h3 className={cn(learnerCardTitle, "mb-4 max-w-2xl")}>
+        <h3 className={cn(learnerCardTitle, "mb-5 max-w-2xl")}>
           75% of digital transformation initiatives fail to deliver.
         </h3>
         <div className="grid gap-4 md:grid-cols-3">
@@ -99,10 +103,10 @@ export function LearnerOverviewPanel({
             );
           })}
         </div>
-      </div>
+      </section>
 
       {/* 6XD framework */}
-      <div className={cn(learnerPanel, "p-6")}>
+      <section className={cn(learnerPanel, "p-6 lg:p-8")}>
         <p className={cn(eyebrow, "mb-2")}>The 6XD framework</p>
         <h3 className={cn(learnerCardTitle, "mb-2")}>Six dimensions. One transformation system.</h3>
         <p className={cn(learnerBody, "mb-5 max-w-2xl")}>
@@ -122,14 +126,14 @@ export function LearnerOverviewPanel({
         <button
           type="button"
           onClick={() => onNavigate("catalog")}
-          className={cn(learnerLink, "mt-5")}
+          className={cn(learnerLink, "mt-6")}
         >
           Browse courses by dimension <ArrowRight className="h-4 w-4" />
         </button>
-      </div>
+      </section>
 
       {/* Quick start */}
-      <div className="rounded-2xl bg-dq-navy p-6 text-white lg:p-8">
+      <section className="rounded-2xl bg-dq-navy p-6 text-white lg:p-8">
         <p className={cn(microLabel, "mb-2 text-dq-orange")}>Ready to begin</p>
         <h3 className="mb-2 text-xl font-semibold tracking-tight">
           Master digital transformation skills.
@@ -154,26 +158,26 @@ export function LearnerOverviewPanel({
             My courses
           </button>
         </div>
-      </div>
+      </section>
 
       {onboardingData && (
-        <div className={cn(learnerPanel, "p-6")}>
-          <h3 className={cn(learnerCardTitle, "mb-4")}>Your learning preferences</h3>
-          <dl className="grid gap-4 sm:grid-cols-3">
-            <div>
-              <dt className={cn(microLabel, "mb-1 block text-gray-400")}>Goal</dt>
+        <section className={cn(learnerPanel, "p-6 lg:p-8")}>
+          <h3 className={cn(learnerCardTitle, "mb-5")}>Your learning preferences</h3>
+          <dl className="grid gap-6 border-t border-gray-100 pt-5 sm:grid-cols-3">
+            <div className="space-y-1">
+              <dt className={cn(microLabel, "text-gray-400")}>Goal</dt>
               <dd className={learnerBody}>{onboardingData.learningGoal}</dd>
             </div>
-            <div>
-              <dt className={cn(microLabel, "mb-1 block text-gray-400")}>Level</dt>
+            <div className="space-y-1 sm:border-l sm:border-gray-100 sm:pl-6">
+              <dt className={cn(microLabel, "text-gray-400")}>Level</dt>
               <dd className={learnerBody}>{onboardingData.skillLevel}</dd>
             </div>
-            <div>
-              <dt className={cn(microLabel, "mb-1 block text-gray-400")}>Format</dt>
+            <div className="space-y-1 sm:border-l sm:border-gray-100 sm:pl-6">
+              <dt className={cn(microLabel, "text-gray-400")}>Format</dt>
               <dd className={learnerBody}>{onboardingData.preferredFormat}</dd>
             </div>
           </dl>
-        </div>
+        </section>
       )}
     </div>
   );

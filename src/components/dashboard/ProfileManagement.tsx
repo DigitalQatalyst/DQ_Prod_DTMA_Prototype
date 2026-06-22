@@ -5,12 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card } from '@/components/ui/card';
 import { User, Mail, Phone, MapPin, Briefcase, Save, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   learnerBodyMuted,
   learnerBtnPrimary,
+  learnerCaption,
   learnerCardTitle,
   learnerItemTitle,
   learnerPanel,
@@ -42,31 +42,48 @@ export const ProfileManagement = () => {
 
   const getInitials = (name: string | null) => {
     if (!name) return 'U';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
-    <div className="space-y-4">
-      <Card className={cn(learnerPanel, 'p-4 lg:p-5')}>
-        <div className="mb-4 flex items-center justify-between gap-3">
+    <div className="space-y-6">
+      <section className={cn(learnerPanel, 'overflow-hidden')}>
+        <div className="flex items-center justify-between gap-3 border-b border-gray-100 p-5 pb-4">
           <h3 className={learnerCardTitle}>Profile Information</h3>
-          <Button
-            onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-            className={cn(learnerBtnPrimary, 'h-8 shrink-0 px-3 text-xs')}
-          >
-            {isEditing ? (
-              <>
-                <Save className="mr-1.5 h-3.5 w-3.5" />
-                Save
-              </>
-            ) : (
-              'Edit Profile'
+          <div className="flex shrink-0 items-center gap-2">
+            {isEditing && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full border-gray-200"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </Button>
             )}
-          </Button>
+            <Button
+              onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
+              className={learnerBtnPrimary}
+            >
+              {isEditing ? (
+                <>
+                  <Save className="mr-1.5 h-4 w-4" />
+                  Save
+                </>
+              ) : (
+                'Edit Profile'
+              )}
+            </Button>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-5 lg:flex-row lg:gap-6">
-          <div className="flex items-center gap-4 lg:w-48 lg:flex-col lg:items-center lg:text-center">
+        <div className="flex flex-col gap-6 p-5 lg:flex-row lg:gap-8">
+          <div className="flex items-center gap-4 lg:w-52 lg:flex-col lg:items-center lg:text-center">
             <div className="relative shrink-0">
               <Avatar className="h-16 w-16 lg:h-20 lg:w-20">
                 <AvatarImage src={profile?.avatar_url || undefined} />
@@ -78,6 +95,7 @@ export const ProfileManagement = () => {
                 <button
                   type="button"
                   className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-dq-orange text-white hover:bg-[#E04020]"
+                  aria-label="Change profile photo"
                 >
                   <Camera className="h-3.5 w-3.5" />
                 </button>
@@ -85,12 +103,12 @@ export const ProfileManagement = () => {
             </div>
             <div className="min-w-0">
               <p className={learnerItemTitle}>{profile?.full_name || 'Learner'}</p>
-              <p className={cn(learnerBodyMuted, 'truncate text-xs')}>{profile?.email}</p>
+              <p className={cn(learnerCaption, 'truncate')}>{profile?.email}</p>
             </div>
           </div>
 
-          <div className="min-w-0 flex-1 space-y-3">
-            <div className="grid gap-3 sm:grid-cols-2">
+          <div className="min-w-0 flex-1 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <Label htmlFor="full_name" className={fieldLabel}>
                   <User className="h-3.5 w-3.5" />
@@ -165,28 +183,28 @@ export const ProfileManagement = () => {
                 value={formData.bio}
                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                 disabled={!isEditing}
-                className="min-h-[72px] text-sm"
+                className="min-h-[88px] resize-none text-sm"
                 placeholder="Tell us about yourself..."
               />
             </div>
           </div>
         </div>
-      </Card>
+      </section>
 
-      <Card className={cn(learnerPanel, 'p-4')}>
-        <h3 className={cn(learnerCardTitle, 'mb-3')}>Account Settings</h3>
-        <div className="grid gap-2 sm:grid-cols-3">
-          <Button variant="outline" className="h-9 justify-start text-xs">
+      <section className={cn(learnerPanel, 'p-5 lg:p-6')}>
+        <h3 className={cn(learnerCardTitle, 'mb-5 border-b border-gray-100 pb-4')}>Account Settings</h3>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" className="rounded-full border-gray-200">
             Change Password
           </Button>
-          <Button variant="outline" className="h-9 justify-start text-xs">
+          <Button variant="outline" size="sm" className="rounded-full border-gray-200">
             Privacy Settings
           </Button>
-          <Button variant="outline" className="h-9 justify-start text-xs">
+          <Button variant="outline" size="sm" className="rounded-full border-gray-200">
             Notification Preferences
           </Button>
         </div>
-      </Card>
+      </section>
     </div>
   );
 };

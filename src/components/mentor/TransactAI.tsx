@@ -27,6 +27,7 @@ import {
   ADMIN_AI_CAPABILITY_LABELS,
 } from '@/components/admin/adminAICapabilities';
 import { AdminAICapabilityContent, CAPABILITY_CONFIG } from '@/components/admin/AdminAICapabilityContent';
+import { cn } from '@/lib/utils';
 
 interface Message {
   id: string;
@@ -48,6 +49,7 @@ interface TransactAIProps {
   learningGoal?: string;
   skillLevel?: string;
   streak?: number;
+  contextualHint?: boolean;
   onCapabilitySelect?: (capability: AdminAICapabilityId) => void;
   adminCapability?: AdminAICapabilityId | null;
   onClearCapability?: () => void;
@@ -94,6 +96,7 @@ export const TransactAI = ({
   onCapabilitySelect,
   adminCapability = null,
   onClearCapability,
+  contextualHint = false,
 }: TransactAIProps) => {
   const isAdmin = variant === "admin";
   const isInstructor = variant === "instructor";
@@ -158,6 +161,20 @@ export const TransactAI = ({
       inputRef.current.focus();
     }
   }, [isOpen, isMinimized]);
+
+  useEffect(() => {
+    const handleOpenMentor = (event: Event) => {
+      const detail = (event as CustomEvent<{ prompt?: string }>).detail;
+      setIsOpen(true);
+      setIsMinimized(false);
+      if (detail?.prompt) {
+        setInputValue(detail.prompt);
+      }
+    };
+
+    window.addEventListener('dtma:open-ai-mentor', handleOpenMentor);
+    return () => window.removeEventListener('dtma:open-ai-mentor', handleOpenMentor);
+  }, []);
 
   const getPersonalizedGreeting = () => {
     const hour = new Date().getHours();
@@ -803,7 +820,10 @@ export const TransactAI = ({
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-dq-orange to-[#e56045] text-white shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-orange-500/20 group"
+        className={cn(
+          'fixed bottom-6 right-6 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-dq-orange to-[#e56045] text-white shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-orange-500/20 group',
+          contextualHint && 'ring-4 ring-dq-orange/25 ring-offset-2 animate-pulse',
+        )}
       >
         <Brain className="h-7 w-7 transition-transform group-hover:scale-110" />
         <span className="absolute -right-1 -top-1 h-4 w-4 animate-pulse rounded-full bg-green-500" />
@@ -815,7 +835,7 @@ export const TransactAI = ({
     <div
       className={`flex flex-col overflow-hidden border border-gray-200 bg-white ${
         embedded
-          ? "h-[calc(100vh-11rem)] min-h-[420px] rounded-xl shadow-sm"
+          ? "h-[calc(100vh-14rem)] min-h-[480px] rounded-xl shadow-sm"
           : `rounded-2xl shadow-2xl transition-all duration-300 ${isMinimized ? "h-16" : "h-[calc(100vh-120px)]"}`
       }`}
     >
@@ -885,12 +905,12 @@ export const TransactAI = ({
         {(embedded || !isMinimized) && (
           <>
             {/* Quick Insights */}
-            <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 border-b grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 border-b bg-gradient-to-r from-orange-50 to-red-50 p-3">
               {quickInsights.map((insight) => (
                 <button
                   key={insight.action}
                   onClick={() => handleQuickInsight(insight.action)}
-                  className="flex items-center gap-2 p-2 bg-white rounded-lg hover:shadow-md border border-transparent hover:border-orange-200 transition-all text-[14px] leading-[20px]"
+                  className="flex items-center gap-2 rounded-lg border border-transparent bg-white p-2.5 text-left text-sm leading-snug text-gray-700 transition-all hover:border-orange-200 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dq-orange"
                 >
                   <insight.icon className={`w-4 h-4 ${insight.color}`} />
                   <span className="text-gray-700">{insight.text}</span>

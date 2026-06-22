@@ -202,10 +202,13 @@ export function LearnerDashboardSidebar({
         type="button"
         onClick={() => onTabChange(item.id)}
         className={cn(
-          "flex w-full items-center justify-between py-2 text-left transition-colors",
+          "flex w-full items-center justify-between rounded-md py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dq-orange focus-visible:ring-offset-2",
           indented ? "pl-10 pr-3" : "px-3",
           isActive
-            ? cn(learnerNavSubItemActive, "rounded-md bg-gray-100")
+            ? cn(
+                learnerNavSubItemActive,
+                "relative bg-[#eef2f9] before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-[3px] before:rounded-full before:bg-dq-orange"
+              )
             : cn(learnerNavSubItem, "hover:bg-gray-50 hover:text-dq-navy")
         )}
       >
@@ -247,7 +250,7 @@ export function LearnerDashboardSidebar({
                       type="button"
                       onClick={() => toggleGroup(group.id)}
                       className={cn(
-                        "relative flex w-full items-center gap-2.5 rounded-lg px-2 py-2 transition-colors",
+                        "relative flex w-full items-center gap-2.5 rounded-lg px-2 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dq-orange focus-visible:ring-offset-2",
                         groupActive
                           ? cn(
                               learnerNavGroup,
@@ -288,7 +291,7 @@ export function LearnerDashboardSidebar({
                     type="button"
                     onClick={() => onTabChange(item.id)}
                     className={cn(
-                      "relative mb-0.5 flex w-full items-center gap-2.5 rounded-lg px-2 py-2 transition-colors",
+                      "relative mb-0.5 flex w-full items-center gap-2.5 rounded-lg px-2 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-dq-orange focus-visible:ring-offset-2",
                       isActive
                         ? cn(
                             learnerNavSubItemActive,

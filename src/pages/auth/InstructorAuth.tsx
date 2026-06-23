@@ -34,7 +34,7 @@ const InstructorAuth = () => {
         title: "Welcome!",
         description: "Let's set up your instructor profile.",
       });
-      navigate("/instructor-application");
+      navigate("/dashboard");
     } catch {
       toast({
         title: "Error",

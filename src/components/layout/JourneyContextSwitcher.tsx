@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useAuth, type AppRole } from "@/contexts/AuthContext";
+import { enterAppAsJourney } from "@/lib/enterApp";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -38,19 +39,19 @@ export const DTMA_JOURNEYS: Journey[] = [
     id: "learner",
     label: "Learner",
     description: "Browse courses and track your progress",
-    href: "/auth",
+    href: "/dashboard",
     dashboardHref: "/dashboard",
     icon: GraduationCap,
-    matchPaths: ["/auth", "/dashboard", "/learner-onboarding"],
+    matchPaths: ["/dashboard"],
   },
   {
     id: "instructor",
     label: "Instructor",
     description: "Create and deliver courses",
-    href: "/auth/instructor",
+    href: "/dashboard",
     dashboardHref: "/dashboard",
     icon: Presentation,
-    matchPaths: ["/auth/instructor", "/instructor-application", "/instructor"],
+    matchPaths: ["/dashboard", "/instructor"],
   },
   {
     id: "admin",
@@ -59,7 +60,7 @@ export const DTMA_JOURNEYS: Journey[] = [
     href: "/admin",
     dashboardHref: "/admin",
     icon: Shield,
-    matchPaths: ["/admin", "/auth/admin"],
+    matchPaths: ["/admin"],
   },
   {
     id: "academy-manager",
@@ -90,7 +91,7 @@ function journeyFromRole(
   return DTMA_JOURNEYS.find((journey) => journey.id === "learner") ?? DTMA_JOURNEYS[0];
 }
 
-function resolveActiveJourney(
+export function resolveActiveJourney(
   pathname: string,
   role: AppRole | null,
   providerType?: "individual" | "institution"
@@ -109,37 +110,15 @@ function resolveActiveJourney(
   return match ?? DTMA_JOURNEYS[0];
 }
 
-const DASHBOARD_PATHS = ["/dashboard", "/admin", "/sms-admin"];
-
-function isDashboardPath(pathname: string): boolean {
-  return DASHBOARD_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  );
-}
-
-function journeyDestination(journey: Journey, pathname: string): string {
-  return isDashboardPath(pathname) ? journey.dashboardHref : journey.href;
-}
-
-function destinationNeedsDemoSignIn(destination: string): boolean {
-  return (
-    destination === "/dashboard" ||
-    destination === "/admin" ||
-    destination === "/sms-admin"
-  );
-}
-
 type JourneyContextSwitcherProps = {
   className?: string;
   variant?: "navbar" | "mobile";
-  context?: "default" | "dashboard";
   onNavigate?: () => void;
 };
 
 const JourneyContextSwitcher = ({
   className,
   variant = "navbar",
-  context = "default",
   onNavigate,
 }: JourneyContextSwitcherProps) => {
   const location = useLocation();
@@ -150,23 +129,16 @@ const JourneyContextSwitcher = ({
     [location.pathname, role, profile?.provider_type]
   );
 
-  const pathname = context === "dashboard" ? "/dashboard" : location.pathname;
-
   const handleJourneySelect = async (journey: Journey) => {
     if (journey.id === activeJourney.id) {
       onNavigate?.();
       return;
     }
 
-    const destination = journeyDestination(journey, pathname);
-
-    if (destinationNeedsDemoSignIn(destination)) {
-      const { error } = await signInAsDemo(journey.id);
-      if (error) return;
-    }
+    const { error } = await enterAppAsJourney(journey.id, signInAsDemo, navigate);
+    if (error) return;
 
     onNavigate?.();
-    navigate(destination);
   };
 
   if (variant === "mobile") {

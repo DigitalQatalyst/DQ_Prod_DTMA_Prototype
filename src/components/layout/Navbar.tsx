@@ -5,8 +5,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useFlow } from "@/contexts/FlowContext";
 import { Menu, X, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
 import DTMALogo from "@/components/layout/DTMALogo";
-import JourneyContextSwitcher from "@/components/layout/JourneyContextSwitcher";
-import { btnPrimary, btnSecondaryNavy } from "@/lib/brandAccent";
+import JourneyContextSwitcher, { resolveActiveJourney } from "@/components/layout/JourneyContextSwitcher";
+import { enterAppAsJourney } from "@/lib/enterApp";
+import type { DemoJourneyId } from "@/contexts/AuthContext";
+import { btnSecondaryNavy } from "@/lib/brandAccent";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
@@ -15,7 +17,7 @@ const Navbar = () => {
   const [isForYouOpen, setIsForYouOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, profile, signOut, loading } = useAuth();
+  const { user, profile, signOut, signInAsDemo, loading } = useAuth();
   const { flow } = useFlow();
   const exploreRef = useRef<HTMLDivElement>(null);
   const forYouRef = useRef<HTMLDivElement>(null);
@@ -65,9 +67,12 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
-  const handleSignIn = () => {
-    const path = flow === "provider" ? "/auth/instructor" : "/auth";
-    navigate(path);
+  const handleSignIn = async () => {
+    const journeyId: DemoJourneyId =
+      flow === "provider"
+        ? "instructor"
+        : resolveActiveJourney(location.pathname, null, profile?.provider_type).id;
+    await enterAppAsJourney(journeyId, signInAsDemo, navigate);
   };
 
   return (
@@ -221,13 +226,10 @@ const Navbar = () => {
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={handleSignIn}
+                  onClick={() => void handleSignIn()}
                   className={btnSecondaryNavy}
                 >
                   Log in
-                </Button>
-                <Button size="sm" onClick={handleSignIn} className={cn(btnPrimary, "px-5")}>
-                  Get Started
                 </Button>
               </div>
             )}
@@ -405,14 +407,11 @@ const Navbar = () => {
                 variant="outline"
                 className={cn(btnSecondaryNavy, "mt-2 w-full")}
                 onClick={() => {
-                  handleSignIn();
+                  void handleSignIn();
                   setIsOpen(false);
                 }}
               >
                 Log in
-              </Button>
-              <Button className={cn(btnPrimary, "mt-4 w-full py-3")} onClick={handleSignIn}>
-                Get Started
               </Button>
             </>
           )}

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import "@/styles/dq-design-tokens.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
@@ -7,11 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { FlowProvider, useFlow } from "@/contexts/FlowContext";
-import { useEffect } from "react";
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import AdminAuth from "./pages/auth/AdminAuth";
-import InstructorAuth from "./pages/auth/InstructorAuth";
+import AuthRedirect from "./pages/AuthRedirect";
 import Categories from "./pages/Categories";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
@@ -53,22 +50,32 @@ const SuperAdminDashboard = lazy(() => import("./pages/dashboard/SuperAdminDashb
 
 const queryClient = new QueryClient();
 
-// Protected route wrapper
+// Protected route wrapper — auto signs in as learner for prototype
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  
-  if (loading) {
+  const { user, loading, signInAsDemo } = useAuth();
+  const [signingIn, setSigningIn] = useState(false);
+  const [attempted, setAttempted] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user && !attempted) {
+      setAttempted(true);
+      setSigningIn(true);
+      void signInAsDemo("learner").finally(() => setSigningIn(false));
+    }
+  }, [loading, user, attempted, signInAsDemo]);
+
+  if (loading || signingIn || (!user && !attempted)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
-  
+
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/" replace />;
   }
-  
+
   return <>{children}</>;
 }
 
@@ -125,9 +132,9 @@ const AppRoutes = () => (
     <FlowTracker />
     <Routes>
       <Route path="/" element={<Index />} />
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/auth/admin" element={<AdminAuth />} />
-      <Route path="/auth/instructor" element={<InstructorAuth />} />
+      <Route path="/auth" element={<AuthRedirect journey="learner" />} />
+      <Route path="/auth/admin" element={<AuthRedirect journey="admin" />} />
+      <Route path="/auth/instructor" element={<AuthRedirect journey="instructor" />} />
       <Route path="/categories" element={<Categories />} />
       <Route path="/courses" element={<Courses />} />
       <Route path="/courses/:id" element={<CourseDetail />} />

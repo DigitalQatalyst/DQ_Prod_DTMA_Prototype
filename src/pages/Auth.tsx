@@ -41,7 +41,7 @@ const Auth = () => {
   }, [user, authLoading, redirectPath, navigate]);
 
   useEffect(() => {
-    if (user && !authLoading && isNewSignup) navigate("/learner-onboarding");
+    if (user && !authLoading && isNewSignup) navigate("/dashboard");
     else if (user && !authLoading && redirectPath) navigate(redirectPath);
   }, [user, authLoading, isNewSignup, redirectPath, navigate]);
 
@@ -69,7 +69,7 @@ const Auth = () => {
             : "Let's personalise your learning journey.",
       });
       setIsNewSignup(true);
-      navigate("/learner-onboarding");
+      navigate("/dashboard");
     } catch {
       toast({
         title: "Error",

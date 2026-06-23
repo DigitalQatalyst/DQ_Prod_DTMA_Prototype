@@ -1977,7 +1977,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="flex shrink-0 items-center gap-3">
-              <JourneyContextSwitcher context="dashboard" className="inline-flex shrink-0" />
+              <JourneyContextSwitcher className="inline-flex shrink-0" />
               <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
               <AvatarImage src={profile?.avatar_url || undefined} />
               <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">

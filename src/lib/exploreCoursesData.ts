@@ -92,6 +92,30 @@ export const CERTIFICATION_PATHWAYS = [
   },
 ];
 
+export const FEATURED_COURSES_PUBLIC = [
+  {
+    id: 'feat-economy',
+    courseId: 'course-economy-40',
+    title: 'Mastering Economy 4.0',
+    description:
+      'A practical starting point for digital economy fundamentals, platforms, and workforce readiness.',
+  },
+  {
+    id: 'feat-cognitive',
+    courseId: 'course-cognitive-org',
+    title: 'Decoding Digital Cognitive Organisations',
+    description:
+      'Explore how AI-native operating models and cognitive capabilities reshape enterprise performance.',
+  },
+  {
+    id: 'feat-transformation',
+    courseId: 'course-transformation',
+    title: 'Navigating Digital Transformation 2.0',
+    description:
+      'Learn how to plan, govern, and deliver transformation programmes with measurable outcomes.',
+  },
+] as const;
+
 export const AI_RECOMMENDATIONS = [
   {
     id: 'rec-cognitive',

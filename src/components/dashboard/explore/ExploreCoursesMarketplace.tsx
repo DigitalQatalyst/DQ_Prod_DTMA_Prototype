@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Award,
@@ -24,6 +24,7 @@ import {
   AI_RECOMMENDATIONS,
   CAPABILITY_PATHWAYS,
   CERTIFICATION_PATHWAYS,
+  FEATURED_COURSES_PUBLIC,
   LEARNER_SUCCESS_STORY,
   SKILL_AREA_LABELS,
   TRENDING,
@@ -53,13 +54,19 @@ import {
 } from '@/lib/brandAccent';
 import { cn } from '@/lib/utils';
 
+export type ExploreViewerMode = 'public' | 'learner' | 'instructor';
+
+type ExploreWorkspaceTab = 'courses' | 'ai-cockpit' | 'course-builder';
+
 type ExploreCoursesMarketplaceProps = {
   embedded?: boolean;
+  /** Controls personalised learner UI vs browse-only catalog for guests and instructors. */
+  viewerMode?: ExploreViewerMode;
   userName?: string;
   enrollments?: Enrollment[];
   initialCategory?: string;
   onCourseClick?: (courseId: string) => void;
-  onNavigate?: (tab: 'courses' | 'ai-cockpit') => void;
+  onNavigate?: (tab: ExploreWorkspaceTab) => void;
 };
 
 const CATEGORIES = [
@@ -147,6 +154,94 @@ function FilterChip({
     >
       {label}
     </button>
+  );
+}
+
+function ExploreBrowseHero({
+  variant,
+  onNavigate,
+}: {
+  variant: 'public' | 'instructor';
+  onNavigate?: (tab: ExploreWorkspaceTab) => void;
+}) {
+  const isInstructor = variant === 'instructor';
+  const highlights = isInstructor
+    ? [
+        { label: 'Course library', value: 'Reference DTMA catalogue structure' },
+        { label: 'Learner pathways', value: 'See how capability tracks connect' },
+        { label: 'Certifications', value: 'Align teaching to DT credentials' },
+      ]
+    : [
+        { label: 'Structured courses', value: '6+ capability modules' },
+        { label: 'Learning pathways', value: 'Foundation to expert tracks' },
+        { label: 'Certifications', value: 'DT Foundation to Leader' },
+      ];
+
+  const headingId = isInstructor ? 'instructor-hero-heading' : 'public-hero-heading';
+
+  return (
+    <section
+      className={cn(
+        'overflow-hidden rounded-2xl border border-white/10 shadow-sm',
+        'bg-gradient-to-br from-[#030F35] via-[#0c1d52] to-[#1a2f6b] p-5 text-white lg:p-8',
+      )}
+      aria-labelledby={headingId}
+    >
+      <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-orange-200">
+        {isInstructor ? 'Instructor course reference' : 'Digital Transformation Management Academy'}
+      </p>
+      <h2 id={headingId} className="mb-3 text-xl font-semibold text-white lg:text-2xl">
+        {isInstructor
+          ? 'Browse the transformation course catalog'
+          : 'Build transformation capability at your pace'}
+      </h2>
+      <p className="mb-6 max-w-2xl text-sm text-white/85 lg:text-base">
+        {isInstructor
+          ? 'Explore learner pathways, module structure, and certification tracks to inform your teaching, course design, and marketplace submissions.'
+          : 'Browse structured courses, capability pathways, and certification tracks from DigitalQatalyst Academy. Create a free account to save progress and unlock personalised recommendations.'}
+      </p>
+      <div className="mb-6 grid gap-3 sm:grid-cols-3">
+        {highlights.map((item) => (
+          <div key={item.label} className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-orange-200">
+              {item.label}
+            </p>
+            <p className="text-sm font-medium text-white">{item.value}</p>
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {isInstructor ? (
+          <>
+            <Button className={learnerBtnPrimary} onClick={() => onNavigate?.('courses')}>
+              My courses
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full border-white/30 bg-white/10 text-white hover:bg-white/20"
+              onClick={() => onNavigate?.('course-builder')}
+            >
+              Open course builder
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button asChild className={learnerBtnPrimary}>
+              <Link to="/auth">Get started free</Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="rounded-full border-white/30 bg-white/10 text-white hover:bg-white/20"
+            >
+              <Link to="/auth">Sign in</Link>
+            </Button>
+          </>
+        )}
+      </div>
+    </section>
   );
 }
 
@@ -254,14 +349,60 @@ function matchesDuration(course: Course, duration: string): boolean {
   return hours > 8;
 }
 
+function FeaturedCourseRow({
+  title,
+  description,
+  courseId,
+  badge,
+  onCourseClick,
+}: {
+  title: string;
+  description: string;
+  courseId: string;
+  badge?: ReactNode;
+  onCourseClick?: (courseId: string) => void;
+}) {
+  return (
+    <article
+      className={cn(learnerPanel, 'flex flex-col gap-3 rounded-2xl p-4 sm:flex-row sm:items-center')}
+    >
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex flex-wrap items-center gap-2">
+          <h3 className={learnerItemTitle}>{title}</h3>
+          {badge}
+        </div>
+        <p className={learnerBodyMuted}>{description}</p>
+      </div>
+      {onCourseClick ? (
+        <Button
+          variant="outline"
+          size="sm"
+          className="shrink-0 rounded-full"
+          onClick={() => onCourseClick(courseId)}
+        >
+          View course
+        </Button>
+      ) : (
+        <Link to={`/courses/${courseId}`} className="shrink-0">
+          <Button variant="outline" size="sm" className="rounded-full">
+            View course
+          </Button>
+        </Link>
+      )}
+    </article>
+  );
+}
+
 export function ExploreCoursesMarketplace({
   embedded = false,
+  viewerMode = 'public',
   userName = 'Learner',
   enrollments = [],
   initialCategory = 'all',
   onCourseClick,
   onNavigate,
 }: ExploreCoursesMarketplaceProps) {
+  const isLearnerView = viewerMode === 'learner';
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState(initialCategory);
   const [level, setLevel] = useState('all');
@@ -272,18 +413,20 @@ export function ExploreCoursesMarketplace({
   const [activePathway, setActivePathway] = useState<string | null>(null);
 
   const snapshot = useMemo(() => {
+    if (!isLearnerView) return null;
+
     const base = getDefaultSnapshot();
     const active = enrollments.filter((e) => e.status === 'active');
     const completed = enrollments.filter((e) => e.status === 'completed');
     const primary = active[0];
     const primaryCourse = primary
       ? dtmaCoursesNew.find((c) => c.id === primary.course_id)
-      : dtmaCoursesNew[0];
+      : undefined;
 
     return {
       ...base,
-      coursesInProgress: active.length || base.coursesInProgress,
-      coursesCompleted: completed.length || base.coursesCompleted,
+      coursesInProgress: active.length > 0 ? active.length : base.coursesInProgress,
+      coursesCompleted: completed.length > 0 ? completed.length : base.coursesCompleted,
       currentCourse: primaryCourse?.title ?? base.currentCourse,
       certificationReadiness:
         active.length > 0
@@ -292,11 +435,14 @@ export function ExploreCoursesMarketplace({
             )
           : base.certificationReadiness,
     };
-  }, [enrollments]);
+  }, [enrollments, isLearnerView]);
 
-  const featuredProgress =
-    enrollments.find((e) => e.course_id === 'course-economy-40')?.progress ?? 65;
-  const featured = getFeaturedJourney(featuredProgress);
+  const activeEnrollment = enrollments.find((e) => e.status === 'active');
+  const featured = activeEnrollment
+    ? getFeaturedJourney(activeEnrollment.progress ?? 0)
+    : isLearnerView
+      ? getFeaturedJourney(65)
+      : null;
 
   const activeFilters = useMemo(() => {
     const pills: { key: string; label: string; clear: () => void }[] = [];
@@ -377,12 +523,19 @@ export function ExploreCoursesMarketplace({
       )}
 
       <div className={cn(embedded ? '' : 'mx-auto max-w-[1280px] px-5 md:px-8 lg:px-10')}>
-        <ExploreRecommendationBanner
-          userName={userName}
-          snapshot={snapshot}
-          onContinue={() => onNavigate?.('courses')}
-          onViewPlan={() => onNavigate?.('courses')}
-        />
+        {isLearnerView && snapshot ? (
+          <ExploreRecommendationBanner
+            userName={userName}
+            snapshot={snapshot}
+            onContinue={() => onNavigate?.('courses')}
+            onViewPlan={() => onNavigate?.('courses')}
+          />
+        ) : (
+          <ExploreBrowseHero
+            variant={viewerMode === 'instructor' ? 'instructor' : 'public'}
+            onNavigate={onNavigate}
+          />
+        )}
       </div>
 
       {/* Search & filters */}
@@ -519,34 +672,42 @@ export function ExploreCoursesMarketplace({
           </div>
         </section>
 
-        {/* Featured journey */}
-        <section
-          className={cn(
-            learnerPanel,
-            'mb-8 overflow-hidden rounded-2xl border-orange-100 bg-gradient-to-r from-orange-50/80 via-white to-white p-5 lg:p-6',
-          )}
-          aria-labelledby="featured-journey-heading"
-        >
-          <h2 id="featured-journey-heading" className={cn(learnerSectionHeading, 'mb-4')}>
-            Continue Your Learning Journey
-          </h2>
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-            <ProgressRing value={featured.progress} />
-            <div className="min-w-0 flex-1">
-              <h3 className={learnerCardTitle}>{featured.title}</h3>
-              <p className={cn(learnerBodyMuted, 'mt-1')}>{featured.moduleLabel}</p>
+        {isLearnerView && featured && (
+          <section
+            className={cn(
+              learnerPanel,
+              'mb-8 overflow-hidden rounded-2xl border-orange-100 bg-gradient-to-r from-orange-50/80 via-white to-white p-5 lg:p-6',
+            )}
+            aria-labelledby="featured-journey-heading"
+          >
+            <h2 id="featured-journey-heading" className={cn(learnerSectionHeading, 'mb-4')}>
+              Continue Your Learning Journey
+            </h2>
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <ProgressRing value={featured.progress} />
+              <div className="min-w-0 flex-1">
+                <h3 className={learnerCardTitle}>{featured.title}</h3>
+                <p className={cn(learnerBodyMuted, 'mt-1')}>{featured.moduleLabel}</p>
+              </div>
+              {embedded && onCourseClick ? (
+                <Button className={cn(learnerBtnPrimary, 'shrink-0')} onClick={() => onCourseClick(featured.courseId)}>
+                  <PlayCircle className="mr-1.5 h-4 w-4" />
+                  Resume learning
+                </Button>
+              ) : (
+                <Link to={featured.learnHref} className="shrink-0">
+                  <Button className={learnerBtnPrimary}>
+                    <PlayCircle className="mr-1.5 h-4 w-4" />
+                    Resume learning
+                  </Button>
+                </Link>
+              )}
             </div>
-            <Link to={featured.learnHref} className="shrink-0">
-              <Button className={learnerBtnPrimary}>
-                <PlayCircle className="mr-1.5 h-4 w-4" />
-                Resume Learning
-              </Button>
-            </Link>
-          </div>
-        </section>
+          </section>
+        )}
 
-        <div className="grid gap-8 lg:grid-cols-12">
-          <div className="space-y-8 lg:col-span-8">
+        <div className={cn('grid gap-8', isLearnerView && 'lg:grid-cols-12')}>
+          <div className={cn('space-y-8', isLearnerView && 'lg:col-span-8')}>
             {/* Catalog */}
             <section aria-labelledby="catalog-heading">
               <div className="mb-4 flex items-end justify-between">
@@ -598,76 +759,89 @@ export function ExploreCoursesMarketplace({
               )}
             </section>
 
-            {/* AI recommendations */}
-            <section aria-labelledby="ai-rec-heading">
-              <h2 id="ai-rec-heading" className={learnerSectionHeading}>
-                AI Recommended For You
-              </h2>
-              <p className={cn(learnerBodyMuted, 'mb-4 mt-1')}>
-                Personalized suggestions based on your learning progress, competency profile and
-                certification goals.
-              </p>
-              <div className="space-y-3">
-                {AI_RECOMMENDATIONS.map((rec) => (
-                  <article
-                    key={rec.id}
-                    className={cn(learnerPanel, 'flex flex-col gap-3 rounded-2xl p-4 sm:flex-row sm:items-center')}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="mb-1 flex flex-wrap items-center gap-2">
-                        <h3 className={learnerItemTitle}>{rec.title}</h3>
+            {isLearnerView ? (
+              <section aria-labelledby="ai-rec-heading">
+                <h2 id="ai-rec-heading" className={learnerSectionHeading}>
+                  AI Recommended For You
+                </h2>
+                <p className={cn(learnerBodyMuted, 'mb-4 mt-1')}>
+                  Personalised suggestions based on your learning progress, competency profile and
+                  certification goals.
+                </p>
+                <div className="space-y-3">
+                  {AI_RECOMMENDATIONS.map((rec) => (
+                    <FeaturedCourseRow
+                      key={rec.id}
+                      title={rec.title}
+                      description={rec.reason}
+                      courseId={rec.courseId}
+                      badge={
                         <Badge className={cn('gap-1 bg-orange-50 text-dq-orange', learnerBadge)}>
                           <Brain className="h-3 w-3" />
                           AI Pick
                         </Badge>
-                      </div>
-                      <p className={learnerBodyMuted}>{rec.reason}</p>
-                    </div>
-                    {onCourseClick ? (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="shrink-0 rounded-full"
-                        onClick={() => onCourseClick(rec.courseId)}
-                      >
-                        View Course
-                      </Button>
-                    ) : (
-                      <Link to={`/courses/${rec.courseId}`}>
-                        <Button variant="outline" size="sm" className="rounded-full">
-                          View Course
-                        </Button>
-                      </Link>
-                    )}
-                  </article>
-                ))}
-              </div>
-            </section>
+                      }
+                      onCourseClick={onCourseClick}
+                    />
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <section aria-labelledby="featured-courses-heading">
+                <h2 id="featured-courses-heading" className={learnerSectionHeading}>
+                  Featured Courses
+                </h2>
+                <p className={cn(learnerBodyMuted, 'mb-4 mt-1')}>
+                  Popular starting points for teams building digital transformation capability.
+                </p>
+                <div className="space-y-3">
+                  {FEATURED_COURSES_PUBLIC.map((course) => (
+                    <FeaturedCourseRow
+                      key={course.id}
+                      title={course.title}
+                      description={course.description}
+                      courseId={course.courseId}
+                      onCourseClick={onCourseClick}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
 
-            {/* Certifications */}
             <section aria-labelledby="cert-heading">
-              <div className="mb-4 flex items-center justify-between gap-3">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <h2 id="cert-heading" className={learnerSectionHeading}>
                   Certification Pathways
                 </h2>
-                <button type="button" className={cn(learnerLink, 'text-sm')}>
-                  View Certification Journey
-                </button>
+                {isLearnerView ? (
+                  <button type="button" className={cn(learnerLink, 'text-sm')}>
+                    View certification journey
+                  </button>
+                ) : viewerMode === 'public' ? (
+                  <Link to="/auth" className={cn(learnerLink, 'text-sm')}>
+                    Sign in to track progress
+                  </Link>
+                ) : null}
               </div>
               <div className="space-y-3">
                 {CERTIFICATION_PATHWAYS.map((cert) => (
                   <div key={cert.id} className={cn(learnerPanel, 'rounded-2xl p-4')}>
-                    <div className="mb-2 flex items-start justify-between gap-3">
+                    <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2">
                         <Award className="h-5 w-5 shrink-0 text-dq-orange" />
                         <div>
                           <p className={learnerItemTitle}>{cert.title}</p>
-                          <p className={learnerCaption}>{cert.requiredCourses} Required Courses</p>
+                          <p className={learnerCaption}>
+                            {cert.requiredCourses} required courses
+                            {!isLearnerView && viewerMode === 'public' && ' · Progress tracked when signed in'}
+                          </p>
                         </div>
                       </div>
-                      <span className="text-sm font-semibold text-dq-navy">{cert.progress}%</span>
+                      {isLearnerView && (
+                        <span className="text-sm font-semibold text-dq-navy">{cert.progress}%</span>
+                      )}
                     </div>
-                    <Progress value={cert.progress} className="h-1.5" />
+                    {isLearnerView && <Progress value={cert.progress} className="mt-2 h-1.5" />}
                   </div>
                 ))}
               </div>
@@ -716,15 +890,18 @@ export function ExploreCoursesMarketplace({
             </section>
           </div>
 
-          <div className="hidden lg:col-span-4 lg:block">
-            <LearningSnapshotCard snapshot={snapshot} />
-          </div>
+          {isLearnerView && snapshot && (
+            <div className="hidden lg:col-span-4 lg:block">
+              <LearningSnapshotCard snapshot={snapshot} />
+            </div>
+          )}
         </div>
 
-        {/* Mobile snapshot */}
-        <div className="mt-8 lg:hidden">
-          <LearningSnapshotCard snapshot={snapshot} />
-        </div>
+        {isLearnerView && snapshot && (
+          <div className="mt-8 lg:hidden">
+            <LearningSnapshotCard snapshot={snapshot} />
+          </div>
+        )}
       </div>
     </div>
   );

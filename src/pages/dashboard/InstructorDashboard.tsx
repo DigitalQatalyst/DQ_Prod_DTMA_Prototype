@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useRef } from "react";
+﻿import { useMemo, useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -18,9 +18,12 @@ import {
 } from "@/components/dashboard/InstructorDashboardSidebar";
 import { LearnerManagementTable } from "@/components/instructor/LearnerManagementTable";
 import { InstructorCourseBuilderPanel } from "@/components/instructor/InstructorCourseBuilderPanel";
+import { InstructorDashboardOverview } from "@/components/dashboard/instructor-overview/InstructorDashboardOverview";
 import { LearnerOverviewPanel } from "@/components/dashboard/LearnerOverviewPanel";
 import { CourseCatalogPanel } from "@/components/dashboard/CourseCatalogPanel";
-import { TransactAI } from "@/components/mentor/TransactAI";
+import { InstructorAICockpitWorkspace } from "@/components/dashboard/instructor-ai-cockpit/InstructorAICockpitWorkspace";
+import { InstructorCoursesHub } from "@/components/dashboard/instructor-courses/InstructorCoursesHub";
+import { InstructorReputationHub } from "@/components/dashboard/instructor-reputation/InstructorReputationHub";
 import JourneyContextSwitcher from "@/components/layout/JourneyContextSwitcher";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -92,6 +95,8 @@ import {
   Camera,
   Save,
   FileText,
+  Bell,
+  RefreshCw,
 } from "lucide-react";
 import {
   learnerBody,
@@ -127,21 +132,21 @@ const TAB_LABELS: Record<InstructorTabId, string> = {
 
 const TAB_DESCRIPTIONS: Partial<Record<InstructorTabId, string>> = {
   overview: "Here's your teaching dashboard overview",
-  "ai-cockpit": "Draft course outlines, modules, and marketplace-ready structures",
-  courses: "Create and manage your course content",
+  "ai-cockpit": "Your AI-powered teaching operations center",
+  courses: "Create, manage, publish, and optimize your course portfolio.",
   "course-builder": "Build and refine draft courses before marketplace submission",
   learners: "Manage and track your learners",
   verification: "Complete your verification to publish courses",
-  reviews: "Manage your course reviews and ratings",
+  reviews: "Monitor learner feedback, strengthen your reputation, and improve course quality.",
   profile: "Manage your instructor profile and certificate branding",
 };
 
 const getPageTitle = (activeTab: InstructorTabId, firstName: string) => {
   if (activeTab === "getting-started") return "Home";
-  if (activeTab === "ai-cockpit") return "AI cockpit";
+  if (activeTab === "ai-cockpit") return "AI Cockpit";
   if (activeTab === "catalog") return "Explore courses";
   if (activeTab === "course-builder") return "Course builder";
-  if (activeTab === "overview") return `Welcome back, ${firstName}`;
+  if (activeTab === "overview") return `Welcome back, ${firstName} ðŸ‘‹`;
   return TAB_LABELS[activeTab];
 };
 
@@ -317,20 +322,35 @@ const InstructorDashboard = () => {
     navigate(`/courses/${courseId}/builder`);
   };
 
-  const statusConfig = useMemo(
-    () => ({
-      draft: { label: "Draft", badge: <Badge variant="secondary">Draft</Badge> },
-      under_review: { label: "Under Review", badge: <Badge className="bg-[var(--dq-warning)] text-white">Under Review</Badge> },
-      published: { label: "Published", badge: <Badge className="bg-[var(--dq-success)] text-white">Published</Badge> },
-      archived: { label: "Archived", badge: <Badge variant="outline">Archived</Badge> },
-    }),
-    []
-  );
-
   const totalEnrollments = courses?.reduce((sum, c) => sum + (c._count?.enrollments || 0), 0) || 0;
   const publishedCount = courses?.filter((c) => c.status === "published").length || 0;
   const underReviewCount = courses?.filter((c) => c.status === "under_review").length || 0;
   const draftCount = courses?.filter((c) => c.status === "draft").length || 0;
+
+  const averageRating = useMemo(() => {
+    const rated = courses?.filter((c) => (c._avg?.rating ?? 0) > 0) ?? [];
+    if (rated.length === 0) return 0;
+    return rated.reduce((sum, c) => sum + (c._avg?.rating ?? 0), 0) / rated.length;
+  }, [courses]);
+
+  const formattedDate = useMemo(
+    () =>
+      new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }),
+    [],
+  );
+  const hasCredentials = useMemo(() => {
+    try {
+      const raw = localStorage.getItem("instructor_credentials_uploads");
+      return raw ? (JSON.parse(raw) as unknown[]).length > 0 : false;
+    } catch {
+      return false;
+    }
+  }, [isVerificationPending]);
 
   if (role !== 'instructor' && role !== 'admin') {
     return (
@@ -348,6 +368,11 @@ const InstructorDashboard = () => {
 
   const firstName = profile?.full_name?.split(" ")[0] || "Instructor";
   const pageDescription = TAB_DESCRIPTIONS[activeTab];
+
+  const handleDashboardRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["instructor-courses"] });
+    toast({ title: "Dashboard refreshed", description: "Latest data loaded." });
+  };
 
   const handleOverviewNavigate = (tab: "catalog" | "overview" | "courses") => {
     setActiveTab(tab);
@@ -399,14 +424,44 @@ const InstructorDashboard = () => {
 
             <div className="min-w-0 flex-1">
               <h2 className={learnerPageTitle}>{getPageTitle(activeTab, firstName)}</h2>
+              {activeTab === "overview" && (
+                <p className="mt-0.5 text-sm text-gray-400">{formattedDate}</p>
+              )}
               {pageDescription && (
                 <p className={cn(learnerPageDescription, "mt-0.5")}>{pageDescription}</p>
               )}
             </div>
 
-            <div className="flex shrink-0 items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+              {activeTab === "overview" && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hidden h-9 w-9 rounded-full sm:inline-flex"
+                    aria-label="Notifications"
+                  >
+                    <Bell className="h-4 w-4 text-dq-navy" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hidden h-9 w-9 rounded-full sm:inline-flex"
+                    aria-label="Refresh dashboard"
+                    onClick={handleDashboardRefresh}
+                  >
+                    <RefreshCw className="h-4 w-4 text-dq-navy" />
+                  </Button>
+                </>
+              )}
               <JourneyContextSwitcher context="dashboard" className="inline-flex shrink-0" />
-              <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange lg:hidden">
+              <Avatar className="hidden h-9 w-9 shrink-0 ring-2 ring-dq-orange sm:flex">
+                <AvatarImage src={profile?.avatar_url || undefined} />
+                <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">
+                  {profile?.full_name?.charAt(0) || "I"}
+                </AvatarFallback>
+              </Avatar>
+              <Avatar className="h-8 w-8 shrink-0 ring-2 ring-dq-orange sm:hidden">
               <AvatarImage src={profile?.avatar_url || undefined} />
               <AvatarFallback className="bg-gray-100 text-xs text-dq-navy">
                 {profile?.full_name?.charAt(0) || "I"}
@@ -421,14 +476,21 @@ const InstructorDashboard = () => {
             <LearnerOverviewPanel onNavigate={handleOverviewNavigate} />
           )}
 
-          {activeTab === "catalog" && <CourseCatalogPanel embedded />}
+          {activeTab === "catalog" && (
+            <CourseCatalogPanel
+              embedded
+              viewerMode="instructor"
+              onNavigate={(tab) => setActiveTab(tab as InstructorTabId)}
+            />
+          )}
 
           {activeTab === "ai-cockpit" && (
-            <TransactAI
-              embedded
-              variant="instructor"
-              draftCoursesCount={draftCount}
-              enrolledCourses={courses?.length || 0}
+            <InstructorAICockpitWorkspace
+              instructorName={firstName}
+              courseCount={courses?.length || 0}
+              publishedCount={publishedCount}
+              draftCount={draftCount}
+              totalEnrollments={totalEnrollments}
             />
           )}
 
@@ -444,78 +506,34 @@ const InstructorDashboard = () => {
           )}
 
           {activeTab === "overview" && (
-            <div className="space-y-6">
-              {isVerificationPending && (
-                <div className={cn(learnerPanel, "p-5")}>
-                  <div className="flex items-start gap-4">
-                    <div className={cn(learnerIconWell, "h-12 w-12 bg-orange-50")}>
-                      <AlertCircle className="h-6 w-6 text-dq-orange" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className={cn(learnerSectionHeading, "mb-2")}>Verification in Progress</h3>
-                      <p className={cn(learnerBody, "mb-4")}>
-                        We're reviewing your credentials. Course publishing is disabled until verification is complete.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <div className={learnerKpiCard}>
-                  <div className={cn(learnerIconWell, "mb-4 bg-orange-50")}>
-                    <Users className="h-5 w-5 text-dq-orange" />
-                  </div>
-                  <div className={learnerKpiValue}>{totalEnrollments}</div>
-                  <div className={learnerKpiLabel}>Total Learners</div>
-                  <div className="mt-2 flex items-center gap-1 text-xs font-medium text-emerald-600">
-                    <TrendingUp className="h-3.5 w-3.5" />
-                    <span>+12% this month</span>
-                  </div>
-                </div>
-
-                <div className={learnerKpiCard}>
-                  <div className={cn(learnerIconWell, "mb-4")}>
-                    <BookOpen className="h-5 w-5 text-dq-navy" />
-                  </div>
-                  <div className={learnerKpiValue}>{courses?.length || 0}</div>
-                  <div className={learnerKpiLabel}>Active Courses</div>
-                  <div className={cn(learnerBodyMuted, "mt-2 text-xs")}>
-                    {publishedCount} published
-                  </div>
-                </div>
-
-                <div className={learnerKpiCard}>
-                  <div className={cn(learnerIconWell, "mb-4 bg-orange-50")}>
-                    <Calendar className="h-5 w-5 text-dq-orange" />
-                  </div>
-                  <div className={learnerKpiValue}>0</div>
-                  <div className={learnerKpiLabel}>Upcoming Sessions</div>
-                  <div className={cn(learnerBodyMuted, "mt-2 text-xs")}>No sessions scheduled</div>
-                </div>
-              </div>
-
-              <div className={cn(learnerPanel, "p-5")}>
-                <h3 className={cn(learnerSectionHeading, "mb-4")}>Quick Actions</h3>
-                <div className="flex flex-wrap gap-3">
-                  <Button className={learnerBtnPrimary} onClick={() => setActiveTab("course-builder")}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create Course
-                  </Button>
-                  <Button variant="outline" onClick={() => setActiveTab("learners")} className="rounded-full border-gray-200">
-                    <Users className="mr-2 h-4 w-4" />
-                    View Learners
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <InstructorDashboardOverview
+              courseCount={courses?.length || 0}
+              publishedCount={publishedCount}
+              draftCount={draftCount}
+              totalEnrollments={totalEnrollments}
+              isVerificationPending={isVerificationPending}
+              hasCredentials={hasCredentials}
+              isLoading={isLoading}
+              onNavigate={setActiveTab}
+              onCreateCourse={() => {
+                setActiveTab("course-builder");
+                setIsCreateOpen(true);
+              }}
+            />
           )}
 
           {/* Courses Tab */}
           {activeTab === "courses" && (
-            <CoursesSection
+            <InstructorCoursesHub
               courses={courses}
               isLoading={isLoading}
+              publishedCount={publishedCount}
+              underReviewCount={underReviewCount}
+              draftCount={draftCount}
+              totalEnrollments={totalEnrollments}
+              averageRating={averageRating}
+              isVerificationPending={isVerificationPending}
+              hasCredentials={hasCredentials}
               isCreateOpen={isCreateOpen}
               setIsCreateOpen={setIsCreateOpen}
               newCourse={newCourse}
@@ -523,16 +541,10 @@ const InstructorDashboard = () => {
               handleCreateCourse={handleCreateCourse}
               handleSubmitForReview={handleSubmitForReview}
               handleArchive={handleArchive}
-              handleRestore={handleRestore}
               handleDuplicate={handleDuplicate}
-              handleDelete={handleDelete}
               handleEdit={handleEdit}
-              statusConfig={statusConfig}
-              createCourse={createCourse}
-              publishedCount={publishedCount}
-              underReviewCount={underReviewCount}
-              draftCount={draftCount}
-              isVerificationPending={isVerificationPending}
+              createCoursePending={createCourse.isPending}
+              onNavigate={setActiveTab}
             />
           )}
 
@@ -550,55 +562,12 @@ const InstructorDashboard = () => {
 
           {/* Reviews Tab */}
           {activeTab === "reviews" && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                <div className={learnerKpiCard}>
-                  <div className={cn(learnerIconWell, "mb-4 bg-amber-50")}>
-                    <Star className="h-5 w-5 fill-amber-500 text-amber-500" />
-                  </div>
-                  <div className={learnerKpiValue}>0.0</div>
-                  <div className={learnerKpiLabel}>Average Rating</div>
-                  <div className="mt-2 flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="h-3.5 w-3.5 text-gray-300" />
-                    ))}
-                  </div>
-                </div>
-
-                <div className={learnerKpiCard}>
-                  <div className={cn(learnerIconWell, "mb-4 bg-orange-50")}>
-                    <Users className="h-5 w-5 text-dq-orange" />
-                  </div>
-                  <div className={learnerKpiValue}>0</div>
-                  <div className={learnerKpiLabel}>Total Reviews</div>
-                  <div className={cn(learnerBodyMuted, "mt-2 text-xs")}>Across all courses</div>
-                </div>
-
-                <div className={learnerKpiCard}>
-                  <div className={cn(learnerIconWell, "mb-4 bg-emerald-50")}>
-                    <TrendingUp className="h-5 w-5 text-emerald-600" />
-                  </div>
-                  <div className={learnerKpiValue}>0%</div>
-                  <div className={learnerKpiLabel}>Response Rate</div>
-                  <div className={cn(learnerBodyMuted, "mt-2 text-xs")}>Last 30 days</div>
-                </div>
-              </div>
-
-              <div className={cn(learnerPanel, "p-10 text-center")}>
-                <div className={cn(learnerIconWell, "mx-auto mb-4 h-16 w-16 bg-amber-50")}>
-                  <Star className="h-8 w-8 text-amber-500" />
-                </div>
-                <h3 className={cn(learnerEmptyTitle, "mb-2")}>No reviews yet</h3>
-                <p className={cn(learnerEmptyBody, "mx-auto mb-5 max-w-md")}>
-                  Reviews will appear here as learners complete your courses and share their feedback
-                </p>
-                <div className="mx-auto max-w-lg rounded-lg border border-orange-200 bg-orange-50 p-4">
-                  <p className={learnerBody}>
-                    Tip: Encourage learners to leave reviews by providing excellent course content and support
-                  </p>
-                </div>
-              </div>
-            </div>
+            <InstructorReputationHub
+              courses={courses}
+              publishedCount={publishedCount}
+              averageRating={averageRating}
+              onNavigate={setActiveTab}
+            />
           )}
 
           {/* Profile & Settings Tab */}
@@ -1228,366 +1197,4 @@ const CertificateBrandingSection = () => {
     </div>
   );
 };
-
-const CoursesSection = ({
-  courses,
-  isLoading,
-  isCreateOpen,
-  setIsCreateOpen,
-  newCourse,
-  setNewCourse,
-  handleCreateCourse,
-  handleSubmitForReview,
-  handleArchive,
-  handleRestore,
-  handleDuplicate,
-  handleDelete,
-  handleEdit,
-  statusConfig,
-  createCourse,
-  publishedCount,
-  underReviewCount,
-  draftCount,
-  isVerificationPending,
-}: any) => {
-  const [studentCourseId, setStudentCourseId] = useState<string | null>(null);
-  const { data: studentList } = useCourseStudents(studentCourseId || "");
-
-  return (
-      <div className="space-y-6">
-      <div className="flex items-center justify-end">
-        <Button className={learnerBtnPrimary} onClick={() => setIsCreateOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Create Course
-        </Button>
-        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-[24px] leading-[32px] font-semibold text-[var(--dq-text-primary)]">Create New Course</DialogTitle>
-              <DialogDescription className="text-[14px] leading-[20px] font-normal text-[var(--dq-text-tertiary)]">Fill in the basic details to create a new course draft.</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 pt-4">
-              <div>
-                <Label htmlFor="title" className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-primary)]">Course Title *</Label>
-                <Input
-                  id="title"
-                  value={newCourse.title}
-                  onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
-                  placeholder="e.g., Digital Transformation Strategy Fundamentals"
-                  className="mt-1.5 focus:ring-[var(--dq-orange-500)] focus:ring-opacity-40"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-primary)]">Category *</Label>
-                  <Select value={newCourse.category} onValueChange={(v) => setNewCourse({ ...newCourse, category: v })}>
-                    <SelectTrigger className="mt-1.5">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="digital-transformation" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Digital Transformation</SelectItem>
-                      <SelectItem value="digital-business-platform" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Digital Business Platform</SelectItem>
-                      <SelectItem value="digital-accelerators" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Digital Accelerators</SelectItem>
-                      <SelectItem value="digital-workers" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Digital Workers</SelectItem>
-                      <SelectItem value="digital-economy" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Digital Economy</SelectItem>
-                      <SelectItem value="digital-cognitive-organisation" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Digital Cognitive Organisation</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-primary)]">Level *</Label>
-                  <Select value={newCourse.level} onValueChange={(v) => setNewCourse({ ...newCourse, level: v })}>
-                    <SelectTrigger className="mt-1.5">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="beginner" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Beginner</SelectItem>
-                      <SelectItem value="intermediate" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Intermediate</SelectItem>
-                      <SelectItem value="advanced" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Advanced</SelectItem>
-                      <SelectItem value="expert" className="hover:bg-[var(--dq-orange-50)] hover:text-[var(--dq-orange-500)]">Expert</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="price" className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-primary)]">Price ($)</Label>
-                <Input
-                  id="price"
-                  type="number"
-                  value={newCourse.price}
-                  onChange={(e) => setNewCourse({ ...newCourse, price: e.target.value })}
-                  placeholder="99"
-                  className="mt-1.5 focus:ring-[var(--dq-orange-500)] focus:ring-opacity-40"
-                />
-              </div>
-              <div>
-                <Label htmlFor="description" className="text-[13px] leading-[18px] font-medium text-[var(--dq-text-primary)]">Description</Label>
-                <Textarea
-                  id="description"
-                  value={newCourse.description}
-                  onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
-                  placeholder="Brief description of your course..."
-                  rows={3}
-                  className="mt-1.5 focus:ring-[var(--dq-orange-500)] focus:ring-opacity-40"
-                />
-              </div>
-              <Button className="w-full bg-[var(--dq-orange-500)] hover:bg-[var(--dq-orange-600)] text-white" onClick={handleCreateCourse} disabled={createCourse.isPending}>
-                {createCourse.isPending ? 'Creating...' : 'Create Course'}
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <div className={learnerKpiCard}>
-          <div className={learnerKpiValue}>{courses?.length || 0}</div>
-          <div className={learnerKpiLabel}>Total Courses</div>
-        </div>
-        <div className={learnerKpiCard}>
-          <div className={cn(learnerKpiValue, "text-emerald-600")}>{publishedCount}</div>
-          <div className={learnerKpiLabel}>Published</div>
-        </div>
-        <div className={learnerKpiCard}>
-          <div className={cn(learnerKpiValue, "text-amber-600")}>{underReviewCount}</div>
-          <div className={learnerKpiLabel}>Under Review</div>
-        </div>
-        <div className={learnerKpiCard}>
-          <div className={cn(learnerKpiValue, "text-gray-500")}>{draftCount}</div>
-          <div className={learnerKpiLabel}>Drafts</div>
-        </div>
-      </div>
-
-      {isLoading ? (
-        <p className={learnerBodyMuted}>Loading your courses...</p>
-      ) : courses && courses.length > 0 ? (
-        <div className="space-y-3">
-          {courses.map((course: any) => (
-            <div key={course.id} className={cn(learnerPanel, "p-5 transition-colors hover:border-dq-orange/30")}>
-              <div className="flex items-start gap-6">
-                <div className="relative flex-shrink-0 group">
-                  <img
-                    src={course.thumbnail_url || course.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop'}
-                    alt={course.title}
-                    className="w-48 h-32 object-cover rounded-xl shadow-sm group-hover:shadow-md transition-shadow"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-3">
-                        {statusConfig[course.status]?.badge}
-                        <Badge variant="secondary" className="capitalize bg-[#F5F6FA] text-[#1e2348] border border-[#E5E7EB]">{course.category}</Badge>
-                      </div>
-                      <h3 className="text-[20px] leading-[28px] font-semibold mb-3 text-[#1e2348]">{course.title}</h3>
-                      <div className="flex items-center gap-5 text-[14px] leading-[20px] font-medium text-[#4B5563]">
-                        <span className="capitalize flex items-center gap-1.5">
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#ff6b4d]" />
-                          {course.level}
-                        </span>
-                        <span className="text-[#ff6b4d] font-semibold text-[16px]">${course.price}</span>
-                        <span className="flex items-center gap-1.5">
-                          <BookOpen className="w-4 h-4 text-[#9CA3AF]" />
-                          {course._count?.lessons || 0} lessons
-                        </span>
-                        <button
-                          className="flex items-center gap-1.5 hover:text-[#ff6b4d] transition-colors"
-                          onClick={() => setStudentCourseId(course.id)}
-                        >
-                          <Users className="w-4 h-4 text-[#9CA3AF]" />
-                          {course._count?.enrollments || 0} students
-                        </button>
-                      </div>
-                      {course.review_feedback && (
-                        <div className="mt-3 bg-gradient-to-r from-[#fff0ed] to-[#ffe9e4] px-4 py-3 rounded-xl border border-[#ff6b4d]/20">
-                          <p className="text-[13px] leading-[18px] font-medium text-[#1e2348]">{course.review_feedback}</p>
-                        </div>
-                      )}
-                    </div>
-                    <CourseActions
-                      courseId={course.id}
-                      status={course.status}
-                      onSubmit={() => handleSubmitForReview(course.id)}
-                      onArchive={() => handleArchive(course.id)}
-                      onRestore={() => handleRestore(course.id)}
-                      onDuplicate={() => handleDuplicate(course.id)}
-                      onDelete={() => handleDelete(course.id)}
-                      onEdit={() => handleEdit(course.id)}
-                      isVerificationPending={isVerificationPending}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className={cn(learnerPanel, "p-10 text-center")}>
-          <div className={cn(learnerIconWell, "mx-auto mb-4 h-16 w-16 bg-orange-50")}>
-            <BookOpen className="h-8 w-8 text-dq-orange" />
-          </div>
-          <h3 className={cn(learnerEmptyTitle, "mb-2")}>No courses yet</h3>
-          <p className={cn(learnerEmptyBody, "mb-5")}>Create your first course to start teaching.</p>
-          <Button className={learnerBtnPrimary} onClick={() => setIsCreateOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Create Course
-          </Button>
-        </div>
-      )}
-
-      <Dialog open={!!studentCourseId} onOpenChange={(open) => !open && setStudentCourseId(null)}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="text-[24px] leading-[32px] font-semibold text-[#1e2348]">Learners</DialogTitle>
-            <DialogDescription className="text-[14px] leading-[20px] font-normal text-[#4B5563]">Enrolled learners and their progress.</DialogDescription>
-          </DialogHeader>
-          <div className="mt-4 space-y-3">
-            {studentList && studentList.length > 0 ? (
-              studentList.map((student: any) => (
-                <div key={student.id} className="flex items-center justify-between rounded-xl border border-[#E5E7EB] p-4 hover:bg-[#F5F6FA] transition-colors">
-                  <div>
-                    <div className="text-[16px] leading-[24px] font-medium text-[#1e2348]">{student.full_name}</div>
-                    <div className="text-[13px] leading-[18px] font-normal text-[#4B5563]">{student.email}</div>
-                  </div>
-                  <div className="text-right text-[14px] leading-[20px] font-normal text-[#4B5563]">
-                    <div>{student.progress_label || "In progress"}</div>
-                    <div className="text-[12px] leading-[16px]">Enrolled {new Date(student.enrolled_at).toLocaleDateString()}</div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-[14px] leading-[20px] font-normal text-[#4B5563] text-center py-8">No learners enrolled yet.</p>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-};
-
-interface CourseActionsProps {
-  courseId: string;
-  status: "draft" | "under_review" | "published" | "archived";
-  onSubmit: () => void;
-  onArchive: () => void;
-  onRestore: () => void;
-  onDuplicate: () => void;
-  onDelete: () => void;
-  onEdit: () => void;
-  isVerificationPending?: boolean;
-}
-
-const CourseActions = ({ status, onSubmit, onArchive, onRestore, onDuplicate, onDelete, onEdit, courseId, isVerificationPending }: CourseActionsProps) => {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const isDraft = status === "draft";
-  const isUnderReview = status === "under_review";
-  const isPublished = status === "published";
-  const isArchived = status === "archived";
-
-  const handleDeleteClick = () => {
-    setShowDeleteDialog(true);
-  };
-
-  const handleConfirmDelete = () => {
-    onDelete();
-    setShowDeleteDialog(false);
-  };
-
-  return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="border-[#E5E7EB] hover:bg-[#ff6b4d] hover:text-white hover:border-[#ff6b4d]">
-            Actions
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel className="text-[#1e2348]">Course</DropdownMenuLabel>
-          <DropdownMenuItem asChild className="hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
-            <Link to={`/courses/${courseId}`} className="flex items-center gap-2">
-              <Eye className="w-4 h-4" />
-              View (learner preview)
-            </Link>
-          </DropdownMenuItem>
-          {!isUnderReview && !isArchived && (
-          <DropdownMenuItem onClick={onEdit} className="flex items-center gap-2 hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
-            <Edit className="w-4 h-4" />
-            Edit
-          </DropdownMenuItem>
-          )}
-          <DropdownMenuItem onClick={onDuplicate} className="flex items-center gap-2 hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
-            <Copy className="w-4 h-4" />
-            Duplicate
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          {isDraft && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <DropdownMenuItem 
-                    onClick={onSubmit} 
-                    className="flex items-center gap-2 hover:bg-[#fff0ed] hover:text-[#ff6b4d]"
-                    disabled={isVerificationPending}
-                  >
-                    <Send className="w-4 h-4" />
-                    Submit for review
-                  </DropdownMenuItem>
-                </TooltipTrigger>
-                {isVerificationPending && (
-                  <TooltipContent>
-                    <p>Available after verification is complete</p>
-                  </TooltipContent>
-                )}
-              </Tooltip>
-            </TooltipProvider>
-          )}
-          {isPublished && (
-            <DropdownMenuItem onClick={onArchive} className="flex items-center gap-2 text-destructive hover:bg-red-50">
-              <Archive className="w-4 h-4" />
-              Archive / Unpublish
-            </DropdownMenuItem>
-          )}
-          {isArchived && (
-            <DropdownMenuItem onClick={onRestore} className="flex items-center gap-2 hover:bg-[#fff0ed] hover:text-[#ff6b4d]">
-              <Undo className="w-4 h-4" />
-              Restore to draft
-            </DropdownMenuItem>
-          )}
-          {isUnderReview && (
-            <DropdownMenuItem disabled className="flex items-center gap-2 text-[#9CA3AF]">
-              <Send className="w-4 h-4" />
-              Awaiting approval
-            </DropdownMenuItem>
-          )}
-          <DropdownMenuSeparator />
-          {isDraft && (
-            <DropdownMenuItem onClick={handleDeleteClick} className="flex items-center gap-2 text-destructive hover:bg-red-50">
-              <Trash2 className="w-4 h-4" />
-              Delete draft
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="text-[20px] leading-[28px] font-semibold text-[#1e2348]">Delete draft course?</AlertDialogTitle>
-            <AlertDialogDescription className="text-[14px] leading-[20px] text-[#4B5563]">
-              This action cannot be undone. This will permanently delete the draft course and all its content.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-[#E5E7EB] hover:bg-[#F5F6FA]">Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
-  );
-};
-
 export default InstructorDashboard;

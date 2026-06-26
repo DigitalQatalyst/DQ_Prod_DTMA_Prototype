@@ -7,7 +7,6 @@ Planned – Jan 16 Delivery
 
 ### Owner
 One Developer (End-to-End Ownership)
-
 ---
 
 ## 0. Objective
